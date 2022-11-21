@@ -1,0 +1,76 @@
+import { Types } from "aptos";
+import { NetworkName, WalletReadyState } from "./constants";
+
+// WalletName is a nominal type that wallet adapters should use, e.g. `'MyCryptoWallet' as WalletName<'MyCryptoWallet'>`
+export type WalletName<T extends string = string> = T & {
+  __brand__: "WalletName";
+};
+export type NetworkInfo = {
+  name: NetworkName | undefined;
+};
+
+export type AccountInfo = {
+  address: string;
+  publicKey: string;
+};
+
+export interface AdapterPluginEvents {
+  onNetworkChange(callback: any): Promise<any>;
+  onAccountChange(callback: any): Promise<any>;
+}
+
+export interface AdapterPluginProps<Name extends string = string> {
+  name: WalletName<Name>;
+  url: string;
+  icon: string;
+  provider: any;
+  connect(): Promise<any>;
+  disconnect: () => Promise<any>;
+  network: () => Promise<any>;
+  signAndSubmitTransaction<T extends Types.TransactionPayload, V>(
+    transaction: T,
+    options?: V
+  ): Promise<{ hash: Types.HexEncodedBytes }>;
+  signMessage<T extends SignMessagePayload>(
+    message: T
+  ): Promise<SignMessageResponse>;
+}
+
+export type AdapterPlugin<Name extends string = string> =
+  AdapterPluginProps<Name> & AdapterPluginEvents;
+
+export type Wallet<Name extends string = string> = AdapterPlugin<Name> & {
+  readyState?: WalletReadyState;
+};
+
+export type WalletInfo = {
+  name: WalletName;
+  icon: string;
+  url: string;
+};
+
+export declare interface WalletCoreEvents {
+  connect(account: AccountInfo | null): void;
+  disconnect(): void;
+  networkChange(network: NetworkInfo | null): void;
+  accountChange(account: AccountInfo | null): void;
+}
+
+export interface SignMessagePayload {
+  address?: boolean; // Should we include the address of the account in the message
+  application?: boolean; // Should we include the domain of the dapp
+  chainId?: boolean; // Should we include the current chain id the wallet is connected to
+  message: string; // The message to be signed and displayed to the user
+  nonce: string; // A nonce the dapp should generate
+}
+
+export interface SignMessageResponse {
+  address: string;
+  application: string;
+  chainId: number;
+  fullMessage: string; // The message that was generated to sign
+  message: string; // The message passed in by the user
+  nonce: string;
+  prefix: "APTOS"; // Should always be APTOS
+  signature: string; // The signed full message
+}

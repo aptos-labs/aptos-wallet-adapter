@@ -1,0 +1,9 @@
+{
+  "extends": "@aptos/wallet-adapter-tsconfig/base.json",
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"],
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["ES2015", "dom"]
+  }
+}

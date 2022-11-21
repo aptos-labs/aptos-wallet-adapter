@@ -9,19 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "aptos": "^1.3.17",
+    "@aptos/wallet-adapter-plugin": "workspace:*",
+    "@aptos/wallet-adapter-react": "workspace:*",
     "next": "13.0.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "ui": "workspace:*"
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@aptos/wallet-adapter-tsconfig": "workspace:*",
     "@babel/core": "^7.0.0",
-    "eslint-config-custom": "workspace:*",
-    "eslint": "7.32.0",
-    "tsconfig": "workspace:*",
     "@types/node": "^17.0.12",
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
+    "eslint": "7.32.0",
+    "eslint-config-adapter": "workspace:*",
     "typescript": "^4.5.3"
   }
 }

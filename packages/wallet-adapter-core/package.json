@@ -1,0 +1,32 @@
+{
+  "name": "@aptos/wallet-adapter-core",
+  "version": "0.0.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "license": "MIT",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+    "lint": "TIMING=1 eslint \"src/**/*.ts*\"",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@aptos/wallet-adapter-tsconfig": "workspace:*",
+    "eslint": "^8.15.0",
+    "eslint-config-adapter": "*",
+    "tsup": "^5.10.1",
+    "typescript": "^4.5.3"
+  },
+  "dependencies": {
+    "aptos": "^1.3.17",
+    "eventemitter3": "^4.0.7"
+  }
+}
