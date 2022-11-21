@@ -1,15 +1,16 @@
 import * as React from "react";
 import { FC, ReactNode, useCallback, useEffect, useState } from "react";
-import { Wallet, WalletInfo } from "@aptos/wallet-adapter-core/src/types";
 import { WalletContext } from "./useWallet";
 import { WalletCore } from "@aptos/wallet-adapter-core";
 import {
   AccountInfo,
   NetworkInfo,
   WalletName,
+  Wallet,
+  WalletInfo,
+  SignMessagePayload,
 } from "@aptos/wallet-adapter-core/src/types";
 import { Types } from "aptos";
-import { SignMessagePayload } from "@aptos/wallet-adapter-core/src/types";
 
 export type { Wallet, WalletName } from "@aptos/wallet-adapter-core/src/types";
 

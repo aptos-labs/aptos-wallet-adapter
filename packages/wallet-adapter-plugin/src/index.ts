@@ -23,9 +23,7 @@ interface IAptosWallet {
     transaction: any,
     options?: any
   ): Promise<{ hash: Types.HexEncodedBytes } | IApotsErrorResult>;
-  signMessage(
-    message: SignMessagePayload
-  ): Promise<SignMessageResponse | IApotsErrorResult>;
+  signMessage(message: SignMessagePayload): Promise<SignMessageResponse>;
   network(): Promise<NetworkName>;
   onAccountChange: (
     listener: (newAddress: AccountInfo) => Promise<void>
@@ -78,7 +76,7 @@ export class AptosWallet implements AdapterPlugin {
   async signAndSubmitTransaction(
     transaction: Types.TransactionPayload,
     options?: any
-  ): Promise<{ hash: Types.HexEncodedBytes } | IApotsErrorResult> {
+  ): Promise<{ hash: Types.HexEncodedBytes }> {
     try {
       const response = await this.provider?.signAndSubmitTransaction(
         transaction,
@@ -94,9 +92,7 @@ export class AptosWallet implements AdapterPlugin {
     }
   }
 
-  async signMessage(
-    message: SignMessagePayload
-  ): Promise<SignMessageResponse | IApotsErrorResult> {
+  async signMessage(message: SignMessagePayload): Promise<SignMessageResponse> {
     try {
       if (typeof message !== "object" || !message.nonce) {
         `${AptosWalletName} Invalid signMessage Payload`;
