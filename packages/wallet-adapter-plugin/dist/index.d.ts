@@ -14,7 +14,7 @@ interface IAptosWallet {
     signAndSubmitTransaction(transaction: any, options?: any): Promise<{
         hash: Types.HexEncodedBytes;
     } | IApotsErrorResult>;
-    signMessage(message: SignMessagePayload): Promise<SignMessageResponse | IApotsErrorResult>;
+    signMessage(message: SignMessagePayload): Promise<SignMessageResponse>;
     network(): Promise<NetworkName>;
     onAccountChange: (listener: (newAddress: AccountInfo) => Promise<void>) => Promise<void>;
     onNetworkChange: (listener: (network: {
@@ -32,8 +32,8 @@ declare class AptosWallet implements AdapterPlugin {
     disconnect(): Promise<void>;
     signAndSubmitTransaction(transaction: Types.TransactionPayload, options?: any): Promise<{
         hash: Types.HexEncodedBytes;
-    } | IApotsErrorResult>;
-    signMessage(message: SignMessagePayload): Promise<SignMessageResponse | IApotsErrorResult>;
+    }>;
+    signMessage(message: SignMessagePayload): Promise<SignMessageResponse>;
     onNetworkChange(callback: any): Promise<void>;
     onAccountChange(callback: any): Promise<void>;
     network(): Promise<NetworkInfo>;

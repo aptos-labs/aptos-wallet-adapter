@@ -1,13 +1,15 @@
 import { WalletName } from "../types";
 
+const LOCAL_STORAGE_ITEM_KEY = "AptosWalletName";
+
 export function setLocalStorage(walletName: WalletName) {
-  localStorage.setItem("wallet", walletName);
+  localStorage.setItem(LOCAL_STORAGE_ITEM_KEY, walletName);
 }
 
 export function removeLocalStorage() {
-  localStorage.removeItem("wallet");
+  localStorage.removeItem(LOCAL_STORAGE_ITEM_KEY);
 }
 
 export function getLocalStorage() {
-  localStorage.getItem("wallet");
+  localStorage.getItem(LOCAL_STORAGE_ITEM_KEY);
 }

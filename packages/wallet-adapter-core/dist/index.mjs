@@ -112,11 +112,12 @@ function scopePollingDetectionStrategy(detect) {
 }
 
 // src/utils/localStorage.ts
+var LOCAL_STORAGE_ITEM_KEY = "AptosWalletName";
 function setLocalStorage(walletName) {
-  localStorage.setItem("wallet", walletName);
+  localStorage.setItem(LOCAL_STORAGE_ITEM_KEY, walletName);
 }
 function removeLocalStorage() {
-  localStorage.removeItem("wallet");
+  localStorage.removeItem(LOCAL_STORAGE_ITEM_KEY);
 }
 
 // src/index.ts

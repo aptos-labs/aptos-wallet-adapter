@@ -74,8 +74,8 @@ var AptosWalletAdapterProvider = ({
   };
   useEffect(() => {
     if (autoConnect) {
-      if (localStorage.getItem("wallet")) {
-        connect(localStorage.getItem("wallet"));
+      if (localStorage.getItem("AptosWalletName")) {
+        connect(localStorage.getItem("AptosWalletName"));
       }
     }
   }, []);
