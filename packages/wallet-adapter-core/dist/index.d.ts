@@ -43,7 +43,7 @@ interface AdapterPluginEvents {
 interface AdapterPluginProps<Name extends string = string> {
     name: WalletName<Name>;
     url: string;
-    icon: string;
+    icon: `data:image/${"svg+xml" | "webp" | "png" | "gif"};base64,${string}`;
     provider: any;
     connect(): Promise<any>;
     disconnect: () => Promise<any>;
