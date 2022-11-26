@@ -78,7 +78,7 @@ var AptosWalletAdapterProvider = ({
         connect(localStorage.getItem("AptosWalletName"));
       }
     }
-  }, []);
+  }, [wallets]);
   useEffect(() => {
     if (connected) {
       walletCore.onAccountChange();
@@ -133,16 +133,21 @@ var AptosWalletAdapterProvider = ({
       };
     });
   }, [connected]);
+  const handleReadyStateChange = () => {
+    setWallets(walletCore.wallets);
+  };
   useEffect(() => {
     walletCore.on("connect", handleConnect);
     walletCore.on("disconnect", handleDisconnect);
     walletCore.on("accountChange", handleAccountChange);
     walletCore.on("networkChange", handleNetworkChange);
+    walletCore.on("readyState", handleReadyStateChange);
     return () => {
       walletCore.off("connect", handleConnect);
       walletCore.off("disconnect", handleDisconnect);
       walletCore.off("accountChange", handleAccountChange);
       walletCore.off("networkChange", handleNetworkChange);
+      walletCore.off("readyState", handleReadyStateChange);
     };
   }, [connected]);
   if (!isDone) {

@@ -155,12 +155,17 @@ var WalletCore = class extends import_eventemitter3.EventEmitter {
     this._connecting = false;
     this._connected = false;
     this._wallets = plugins;
-    this._wallets.forEach((wallet) => {
+    this.scopePollingDetectionStrategy();
+  }
+  scopePollingDetectionStrategy() {
+    var _a;
+    (_a = this._wallets) == null ? void 0 : _a.forEach((wallet) => {
       wallet.readyState = typeof window === "undefined" || typeof document === "undefined" ? "Unsupported" /* Unsupported */ : "NotDetected" /* NotDetected */;
       if (typeof window !== "undefined" && wallet.readyState !== "Unsupported" /* Unsupported */) {
         scopePollingDetectionStrategy(() => {
           if (Object.keys(window).includes(wallet.name.toLocaleLowerCase())) {
             wallet.readyState = "Installed" /* Installed */;
+            setTimeout(() => this.emit("readyState", wallet), 1);
             return true;
           }
           return false;

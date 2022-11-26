@@ -95,6 +95,7 @@ declare class WalletCore extends EventEmitter<WalletCoreEvents> {
     private _connecting;
     private _connected;
     constructor(plugins: Wallet[]);
+    private scopePollingDetectionStrategy;
     private isWalletExists;
     private clearData;
     setWallet(wallet: Wallet | null): void;

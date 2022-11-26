@@ -44,7 +44,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   constructor(plugins: Wallet[]) {
     super();
     this._wallets = plugins;
-    this._wallets.forEach((wallet: Wallet) => {
+    this.scopePollingDetectionStrategy();
+  }
+
+  private scopePollingDetectionStrategy() {
+    this._wallets?.forEach((wallet: Wallet) => {
       wallet.readyState =
         typeof window === "undefined" || typeof document === "undefined"
           ? WalletReadyState.Unsupported
@@ -56,7 +60,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         scopePollingDetectionStrategy(() => {
           if (Object.keys(window).includes(wallet.name.toLocaleLowerCase())) {
             wallet.readyState = WalletReadyState.Installed;
-            //setTimeout(() => this.emit("readyState", wallet), 1);
+            setTimeout(() => this.emit("readyState", wallet), 1);
             return true;
           }
           return false;
