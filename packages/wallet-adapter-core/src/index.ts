@@ -136,6 +136,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         (wallet: Wallet) => wallet.name === walletName
       );
       if (!selectedWallet) return;
+      if (selectedWallet.readyState !== WalletReadyState.Installed) return;
       this.setWallet(selectedWallet);
       const account = await selectedWallet.connect();
       this.setAccount({ ...account });

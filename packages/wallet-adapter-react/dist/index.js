@@ -129,7 +129,8 @@ var AptosWalletAdapterProvider = ({
         ...state,
         connected: false,
         account: walletCore.account,
-        network: walletCore.network
+        network: walletCore.network,
+        wallet: null
       };
     });
   }, [connected]);

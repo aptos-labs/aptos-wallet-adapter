@@ -205,6 +205,8 @@ var WalletCore = class extends EventEmitter {
       );
       if (!selectedWallet)
         return;
+      if (selectedWallet.readyState !== "Installed" /* Installed */)
+        return;
       this.setWallet(selectedWallet);
       const account = await selectedWallet.connect();
       this.setAccount({ ...account });

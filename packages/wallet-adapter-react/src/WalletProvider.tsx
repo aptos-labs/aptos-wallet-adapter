@@ -131,6 +131,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         connected: false,
         account: walletCore.account,
         network: walletCore.network,
+        wallet: null,
       };
     });
   }, [connected]);
