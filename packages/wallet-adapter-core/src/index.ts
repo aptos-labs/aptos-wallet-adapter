@@ -60,7 +60,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         scopePollingDetectionStrategy(() => {
           if (Object.keys(window).includes(wallet.name.toLocaleLowerCase())) {
             wallet.readyState = WalletReadyState.Installed;
-            setTimeout(() => this.emit("readyState", wallet), 1);
             return true;
           }
           return false;

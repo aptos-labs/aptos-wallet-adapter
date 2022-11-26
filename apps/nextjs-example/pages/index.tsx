@@ -11,7 +11,7 @@ export default function Web() {
   const wallets = [new PetraWallet(), new MartianWallet(), new RiseWallet()];
 
   return (
-    <AptosWalletAdapterProvider plugins={wallets} autoConnect={true}>
+    <AptosWalletAdapterProvider plugins={wallets}>
       <div className="container mx-auto">
         <h1 className="text-center text-3xl font-bold space-y-4">
           Aptos Wallet Adapter Demo

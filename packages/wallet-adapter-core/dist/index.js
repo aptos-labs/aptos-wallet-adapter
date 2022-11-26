@@ -165,7 +165,6 @@ var WalletCore = class extends import_eventemitter3.EventEmitter {
         scopePollingDetectionStrategy(() => {
           if (Object.keys(window).includes(wallet.name.toLocaleLowerCase())) {
             wallet.readyState = "Installed" /* Installed */;
-            setTimeout(() => this.emit("readyState", wallet), 1);
             return true;
           }
           return false;
