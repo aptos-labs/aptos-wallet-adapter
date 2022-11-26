@@ -2,16 +2,17 @@ name: nextjs-example
 
 on:
   push:
-    branches:
-      - main
+    branches: [main, gh-pages]
+    paths:
+      - "apps/nextjs-example/**"
+      - ".github/workflows/nextjs-example.yaml"
 
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
-    name: Build
+    name: Build and Deploy
     runs-on: ubuntu-latest
 
     strategy:
@@ -26,6 +27,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
 
       - name: Install global dependencies
         run: pnpm install --frozen-lockfile
@@ -46,10 +54,8 @@ jobs:
         working-directory: ./apps/nextjs-example
         run: touch ./out/.nojekyll
 
-  deploy:
-    name: Deploy
-    needs: build
-    uses: JamesIves/github-pages-deploy-action@v4
-    with:
-      branch: gh-pages
-      folder: out
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: ./apps/nextjs-example/out
