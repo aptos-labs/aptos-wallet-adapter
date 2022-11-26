@@ -3,6 +3,9 @@ name: nextjs-example
 on:
   push:
     branches: [main]
+    paths:
+      - "apps/nextjs-example/**"
+      - ".github/workflows/nextjs-example.yaml"
 
   pull_request:
     branches: [main]
