@@ -24,10 +24,12 @@ const initialState: {
   account: AccountInfo | null;
   network: NetworkInfo | null;
   connected: boolean;
+  wallet: WalletInfo | null;
 } = {
   connected: false,
   account: null,
   network: null,
+  wallet: null,
 };
 
 export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
@@ -36,7 +38,8 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   autoConnect = false,
 }: AptosWalletProviderProps) => {
   const [walletCore, _] = useState(new WalletCore(plugins));
-  const [{ connected, account, network }, setState] = useState(initialState);
+  const [{ connected, account, network, wallet }, setState] =
+    useState(initialState);
   const [isDone, setIsDone] = useState(false);
 
   /*
@@ -63,10 +66,6 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     } catch (e) {
       console.log("disconnect error", e);
     }
-  };
-
-  const getWallet = (): WalletInfo | null => {
-    return walletCore.wallet;
   };
 
   const signAndSubmitTransaction = async (
@@ -118,6 +117,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         connected: true,
         account: walletCore.account,
         network: walletCore.network,
+        wallet: walletCore.wallet,
       };
     });
   }, [connected]);
@@ -186,7 +186,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         network,
         connected,
         disconnect,
-        getWallet,
+        wallet,
         signAndSubmitTransaction,
         signTransaction,
         signMessage,

@@ -21,7 +21,8 @@ import { Fragment, jsx } from "react/jsx-runtime";
 var initialState = {
   connected: false,
   account: null,
-  network: null
+  network: null,
+  wallet: null
 };
 var AptosWalletAdapterProvider = ({
   children,
@@ -29,7 +30,7 @@ var AptosWalletAdapterProvider = ({
   autoConnect = false
 }) => {
   const [walletCore, _] = useState(new WalletCore(plugins));
-  const [{ connected, account, network }, setState] = useState(initialState);
+  const [{ connected, account, network, wallet }, setState] = useState(initialState);
   const [isDone, setIsDone] = useState(false);
   useEffect(() => {
     setIsDone(true);
@@ -47,9 +48,6 @@ var AptosWalletAdapterProvider = ({
     } catch (e) {
       console.log("disconnect error", e);
     }
-  };
-  const getWallet = () => {
-    return walletCore.wallet;
   };
   const signAndSubmitTransaction = async (transaction) => {
     try {
@@ -91,7 +89,8 @@ var AptosWalletAdapterProvider = ({
         ...state,
         connected: true,
         account: walletCore.account,
-        network: walletCore.network
+        network: walletCore.network,
+        wallet: walletCore.wallet
       };
     });
   }, [connected]);
@@ -155,7 +154,7 @@ var AptosWalletAdapterProvider = ({
       network,
       connected,
       disconnect,
-      getWallet,
+      wallet,
       signAndSubmitTransaction,
       signTransaction,
       signMessage

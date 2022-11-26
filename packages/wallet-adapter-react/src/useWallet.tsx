@@ -17,7 +17,7 @@ export interface WalletContextState {
   network: NetworkInfo | null;
   connect(walletName: WalletName): void;
   disconnect(): void;
-  getWallet(): WalletInfo | null;
+  wallet: WalletInfo | null;
   signAndSubmitTransaction<T extends Types.TransactionPayload, V>(
     transaction: T,
     options?: V
