@@ -101,6 +101,7 @@ declare class WalletCore extends EventEmitter<WalletCoreEvents> {
     setAccount(account: AccountInfo | null): void;
     setNetwork(network: NetworkInfo | null): void;
     isConnected(): boolean;
+    get wallets(): Wallet[] | null;
     get wallet(): WalletInfo | null;
     get account(): AccountInfo | null;
     get network(): NetworkInfo | null;

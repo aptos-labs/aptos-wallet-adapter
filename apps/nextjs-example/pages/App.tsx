@@ -9,17 +9,14 @@ const aptosClient = new AptosClient(DEVNET_NODE_URL, {
   WITH_CREDENTIALS: false,
 });
 
-type Props = {
-  wallets: Wallet[];
-};
-
-export default function App({ wallets }: Props) {
+export default function App() {
   const {
     connect,
     disconnect,
     account,
     network,
     wallet,
+    wallets,
     signAndSubmitTransaction,
     signTransaction,
     signMessage,

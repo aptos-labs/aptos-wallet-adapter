@@ -54,9 +54,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         wallet.readyState !== WalletReadyState.Unsupported
       ) {
         scopePollingDetectionStrategy(() => {
-          if ("provider" in wallet && wallet.provider) {
+          if (Object.keys(window).includes(wallet.name.toLocaleLowerCase())) {
             wallet.readyState = WalletReadyState.Installed;
-            this.emit("readyState", wallet);
+            //setTimeout(() => this.emit("readyState", wallet), 1);
             return true;
           }
           return false;
@@ -99,6 +99,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   isConnected(): boolean {
     return this._connected;
+  }
+
+  get wallets(): Wallet[] | null {
+    return this._wallets;
   }
 
   get wallet(): WalletInfo | null {

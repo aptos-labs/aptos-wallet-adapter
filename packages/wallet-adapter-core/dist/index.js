@@ -159,9 +159,8 @@ var WalletCore = class extends import_eventemitter3.EventEmitter {
       wallet.readyState = typeof window === "undefined" || typeof document === "undefined" ? "Unsupported" /* Unsupported */ : "NotDetected" /* NotDetected */;
       if (typeof window !== "undefined" && wallet.readyState !== "Unsupported" /* Unsupported */) {
         scopePollingDetectionStrategy(() => {
-          if ("provider" in wallet && wallet.provider) {
+          if (Object.keys(window).includes(wallet.name.toLocaleLowerCase())) {
             wallet.readyState = "Installed" /* Installed */;
-            this.emit("readyState", wallet);
             return true;
           }
           return false;
@@ -193,6 +192,9 @@ var WalletCore = class extends import_eventemitter3.EventEmitter {
   }
   isConnected() {
     return this._connected;
+  }
+  get wallets() {
+    return this._wallets;
   }
   get wallet() {
     try {

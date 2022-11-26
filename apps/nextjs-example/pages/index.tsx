@@ -16,7 +16,7 @@ export default function Web() {
         <h1 className="text-center text-3xl font-bold space-y-4">
           Aptos Wallet Adapter Demo
         </h1>
-        <App wallets={wallets} />
+        <App />
       </div>
     </AptosWalletAdapterProvider>
   );
