@@ -1,0 +1,53 @@
+name: nextjs-example
+
+on:
+  push:
+    branches: [main]
+
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install global dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install project's dependencies
+        working-directory: ./apps/nextjs-example
+        run: pnpm install
+
+      - name: Build
+        working-directory: ./apps/nextjs-example
+        run: pnpm run build
+
+      - name: Export
+        working-directory: ./apps/nextjs-example
+        run: pnpm run export
+
+      - name: Add .nojekyll file
+        working-directory: ./apps/nextjs-example
+        run: touch ./out/.nojekyll
+
+  deploy:
+    name: Deploy
+    needs: build
+    uses: JamesIves/github-pages-deploy-action@4.4.0
+    with:
+      branch: gh-pages
+      folder: out
