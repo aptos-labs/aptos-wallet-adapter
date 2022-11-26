@@ -56,6 +56,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         scopePollingDetectionStrategy(() => {
           if ("provider" in wallet && wallet.provider) {
             wallet.readyState = WalletReadyState.Installed;
+            this.emit("readyState", wallet);
             return true;
           }
           return false;

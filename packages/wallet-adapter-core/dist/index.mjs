@@ -137,6 +137,7 @@ var WalletCore = class extends EventEmitter {
         scopePollingDetectionStrategy(() => {
           if ("provider" in wallet && wallet.provider) {
             wallet.readyState = "Installed" /* Installed */;
+            this.emit("readyState", wallet);
             return true;
           }
           return false;

@@ -65,6 +65,7 @@ declare type WalletInfo = {
 declare interface WalletCoreEvents {
     connect(account: AccountInfo | null): void;
     disconnect(): void;
+    readyState(wallet: Wallet): void;
     networkChange(network: NetworkInfo | null): void;
     accountChange(account: AccountInfo | null): void;
 }

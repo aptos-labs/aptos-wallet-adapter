@@ -31,6 +31,7 @@ var AptosWalletAdapterProvider = ({
 }) => {
   const [walletCore, _] = useState(new WalletCore(plugins));
   const [{ connected, account, network, wallet }, setState] = useState(initialState);
+  const [wallets, setWallets] = useState(plugins);
   const [isDone, setIsDone] = useState(false);
   useEffect(() => {
     setIsDone(true);
@@ -131,17 +132,26 @@ var AptosWalletAdapterProvider = ({
       };
     });
   }, [connected]);
+  const handleReadyStateChange = (wallet2) => {
+    if (!connected)
+      return;
+    if (!walletCore.wallet)
+      return;
+    console.log("handleReadyStateChange", wallet2);
+  };
   useEffect(() => {
     if (walletCore) {
       walletCore.on("connect", handleConnect);
       walletCore.on("disconnect", handleDisconnect);
       walletCore.on("accountChange", handleAccountChange);
       walletCore.on("networkChange", handleNetworkChange);
+      walletCore.on("readyState", handleReadyStateChange);
       return () => {
         walletCore.off("connect", handleConnect);
         walletCore.off("disconnect", handleDisconnect);
         walletCore.off("accountChange", handleAccountChange);
         walletCore.off("networkChange", handleNetworkChange);
+        walletCore.off("readyState", handleReadyStateChange);
       };
     }
   }, [walletCore, connected]);
