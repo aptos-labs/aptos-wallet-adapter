@@ -161,7 +161,7 @@ var WalletCore = class extends import_eventemitter3.EventEmitter {
     var _a;
     (_a = this._wallets) == null ? void 0 : _a.forEach((wallet) => {
       wallet.readyState = typeof window === "undefined" || typeof document === "undefined" ? "Unsupported" /* Unsupported */ : "NotDetected" /* NotDetected */;
-      if (typeof window !== "undefined" && wallet.readyState !== "Unsupported" /* Unsupported */) {
+      if (typeof window !== "undefined") {
         scopePollingDetectionStrategy(() => {
           if (Object.keys(window).includes(wallet.name.toLocaleLowerCase())) {
             wallet.readyState = "Installed" /* Installed */;

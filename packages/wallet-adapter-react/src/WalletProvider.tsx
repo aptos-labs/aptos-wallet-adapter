@@ -40,7 +40,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const [walletCore, _] = useState(new WalletCore(plugins));
   const [{ connected, account, network, wallet }, setState] =
     useState(initialState);
-  const [wallets, setWallets] = useState<Wallet[] | null>(walletCore.wallets);
+  const [wallets, setWallets] = useState<Wallet[] | null>([]);
   const [isDone, setIsDone] = useState(false);
 
   /*
@@ -51,7 +51,10 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   */
   useEffect(() => {
     setIsDone(true);
+    console.log("walletCore.wallets", walletCore.wallets);
+    setWallets(walletCore.wallets);
   }, []);
+  console.log("AptosWalletAdapterProvider", wallets);
 
   const connect = (walletName: WalletName) => {
     try {

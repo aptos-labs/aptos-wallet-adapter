@@ -53,10 +53,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         typeof window === "undefined" || typeof document === "undefined"
           ? WalletReadyState.Unsupported
           : WalletReadyState.NotDetected;
-      if (
-        typeof window !== "undefined" &&
-        wallet.readyState !== WalletReadyState.Unsupported
-      ) {
+      if (typeof window !== "undefined") {
         scopePollingDetectionStrategy(() => {
           if (Object.keys(window).includes(wallet.name.toLocaleLowerCase())) {
             wallet.readyState = WalletReadyState.Installed;
