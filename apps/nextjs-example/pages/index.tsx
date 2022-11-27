@@ -78,7 +78,7 @@ export default function App() {
       setErrorAlertMessage(error);
     }
   };
-  console.log("wallets", wallets);
+  console.log("index wallets", wallets);
   return (
     <div>
       {successAlertMessage.length > 0 && (

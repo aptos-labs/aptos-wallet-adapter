@@ -17,7 +17,7 @@ function useWallet() {
 // src/WalletProvider.tsx
 import { useCallback, useEffect, useState } from "react";
 import { WalletCore } from "@aptos/wallet-adapter-core";
-import { Fragment, jsx } from "react/jsx-runtime";
+import { jsx } from "react/jsx-runtime";
 var initialState = {
   connected: false,
   account: null,
@@ -32,9 +32,7 @@ var AptosWalletAdapterProvider = ({
   const [walletCore, _] = useState(new WalletCore(plugins));
   const [{ connected, account, network, wallet }, setState] = useState(initialState);
   const [wallets, setWallets] = useState([]);
-  const [isDone, setIsDone] = useState(false);
   useEffect(() => {
-    setIsDone(true);
     console.log("walletCore.wallets", walletCore.wallets);
     setWallets(walletCore.wallets);
   }, []);
@@ -147,9 +145,6 @@ var AptosWalletAdapterProvider = ({
       walletCore.off("networkChange", handleNetworkChange);
     };
   }, [connected]);
-  if (!isDone) {
-    return /* @__PURE__ */ jsx(Fragment, {});
-  }
   return /* @__PURE__ */ jsx(WalletContext.Provider, {
     value: {
       connect,

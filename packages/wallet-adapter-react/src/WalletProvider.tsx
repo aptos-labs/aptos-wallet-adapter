@@ -41,7 +41,6 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const [{ connected, account, network, wallet }, setState] =
     useState(initialState);
   const [wallets, setWallets] = useState<Wallet[] | null>([]);
-  const [isDone, setIsDone] = useState(false);
 
   /*
   Handles server/client side hydration mis-match.
@@ -50,7 +49,6 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   This helps us to build the DOM based on client side render (like enable/disable a wallet in the wallet modal based on their ready state)
   */
   useEffect(() => {
-    setIsDone(true);
     console.log("walletCore.wallets", walletCore.wallets);
     setWallets(walletCore.wallets);
   }, []);
@@ -176,10 +174,6 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       walletCore.off("networkChange", handleNetworkChange);
     };
   }, [connected]);
-
-  if (!isDone) {
-    return <></>;
-  }
 
   return (
     <WalletContext.Provider
