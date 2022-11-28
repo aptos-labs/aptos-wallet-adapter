@@ -61,7 +61,7 @@ var AptosWalletAdapterProvider = ({
   const [wallets, setWallets] = (0, import_react2.useState)([]);
   (0, import_react2.useEffect)(() => {
     console.log("walletCore.wallets", walletCore.wallets);
-    setWallets(walletCore.wallets);
+    setWallets([...walletCore.wallets]);
   }, []);
   console.log("AptosWalletAdapterProvider", wallets);
   const connect = (walletName) => {

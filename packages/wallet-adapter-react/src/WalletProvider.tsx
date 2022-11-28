@@ -40,17 +40,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const [walletCore, _] = useState(new WalletCore(plugins));
   const [{ connected, account, network, wallet }, setState] =
     useState(initialState);
-  const [wallets, setWallets] = useState<Wallet[] | null>([]);
+  const [wallets, setWallets] = useState<Wallet[]>([]);
 
-  /*
-  Handles server/client side hydration mis-match.
-  The first render on the client needs to match the initial render on the server otherwise react will fail to hydrate the tree 
-  https://github.com/vercel/next.js/discussions/34982
-  This helps us to build the DOM based on client side render (like enable/disable a wallet in the wallet modal based on their ready state)
-  */
   useEffect(() => {
     console.log("walletCore.wallets", walletCore.wallets);
-    setWallets(walletCore.wallets);
+    setWallets([...walletCore.wallets]);
   }, []);
   console.log("AptosWalletAdapterProvider", wallets);
 

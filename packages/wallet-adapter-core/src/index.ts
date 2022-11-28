@@ -33,7 +33,7 @@ import {
 } from "./utils";
 
 export class WalletCore extends EventEmitter<WalletCoreEvents> {
-  private _wallets: Wallet[] | null = null;
+  private _wallets: Wallet[] = [];
   private _wallet: Wallet | null = null;
   private _account: AccountInfo | null = null;
   private _network: NetworkInfo | null = null;
@@ -101,7 +101,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     return this._connected;
   }
 
-  get wallets(): Wallet[] | null {
+  get wallets(): Wallet[] {
     return this._wallets;
   }
 

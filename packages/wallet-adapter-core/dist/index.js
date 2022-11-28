@@ -148,7 +148,7 @@ function removeLocalStorage() {
 var WalletCore = class extends import_eventemitter3.EventEmitter {
   constructor(plugins) {
     super();
-    this._wallets = null;
+    this._wallets = [];
     this._wallet = null;
     this._account = null;
     this._network = null;

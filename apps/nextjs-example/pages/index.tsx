@@ -78,7 +78,7 @@ export default function App() {
       setErrorAlertMessage(error);
     }
   };
-  console.log("index wallets", wallets);
+
   return (
     <div>
       {successAlertMessage.length > 0 && (
@@ -94,11 +94,6 @@ export default function App() {
             <td className="px-8 py-4 w-3/4">
               <div>
                 {wallets?.map((wallet) => {
-                  console.log("wallet", wallet);
-                  console.log(
-                    "wallet.readyState !== Installed",
-                    wallet.readyState !== "Installed"
-                  );
                   return (
                     <button
                       className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 ${
