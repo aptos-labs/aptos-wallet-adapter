@@ -7,8 +7,9 @@ import {
 } from "@aptos/wallet-adapter-plugin/src/wallets";
 import { AptosWalletAdapterProvider } from "@aptos/wallet-adapter-react/src";
 
+const wallets = [new PetraWallet(), new MartianWallet(), new RiseWallet()];
+
 function MyApp({ Component, pageProps }: AppProps) {
-  const wallets = [new PetraWallet(), new MartianWallet(), new RiseWallet()];
   return (
     <AptosWalletAdapterProvider plugins={wallets}>
       <Component {...pageProps} />

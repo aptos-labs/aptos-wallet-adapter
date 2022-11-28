@@ -19,7 +19,7 @@ export interface WalletContextState {
   connect(walletName: WalletName): void;
   disconnect(): void;
   wallet: WalletInfo | null;
-  wallets: Wallet[] | null;
+  wallets: Wallet[];
   signAndSubmitTransaction<T extends Types.TransactionPayload, V>(
     transaction: T,
     options?: V
