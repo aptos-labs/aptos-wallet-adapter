@@ -1,5 +1,5 @@
 import { AptosClient, Types } from "aptos";
-import { useWallet, WalletName } from "@aptos/wallet-adapter-react";
+import { useWallet } from "@aptos/wallet-adapter-react";
 import { useState } from "react";
 import { ErrorAlert, SuccessAlert } from "../components/Alert";
 import dynamic from "next/dynamic";
@@ -17,7 +17,6 @@ const aptosClient = new AptosClient(DEVNET_NODE_URL, {
 
 export default function App() {
   const {
-    connect,
     disconnect,
     account,
     network,
