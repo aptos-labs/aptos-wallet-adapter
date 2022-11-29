@@ -11,7 +11,7 @@ importers:
     devDependencies:
       '@changesets/cli': 2.25.2
       eslint-config-adapter: link:packages/eslint-config-adapter
-      prettier: 2.7.1
+      prettier: 2.8.0
       turbo: 1.6.3
 
   apps/docs:
@@ -52,7 +52,7 @@ importers:
       '@types/react-dom': ^18.0.7
       aptos: ^1.3.17
       autoprefixer: ^10.4.13
-      eslint: 7.32.0
+      eslint: ^8.15.0
       eslint-config-adapter: workspace:*
       next: 13.0.0
       postcss: ^8.4.19
@@ -74,7 +74,7 @@ importers:
       '@types/react': 18.0.25
       '@types/react-dom': 18.0.8
       autoprefixer: 10.4.13_postcss@8.4.19
-      eslint: 7.32.0
+      eslint: 8.27.0
       eslint-config-adapter: link:../../packages/eslint-config-adapter
       postcss: 8.4.19
       tailwindcss: 3.2.4_postcss@8.4.19
@@ -146,11 +146,11 @@ importers:
       '@types/react': ^18.0.17
       '@types/react-dom': ^18.0.6
       aptos: ^1.3.17
-      eslint: ^7.32.0
+      eslint: ^8.15.0
       eslint-config-adapter: workspace:*
       react: ^18.2.0
       tsup: ^5.10.1
-      typescript: ^4.5.2
+      typescript: ^4.5.3
     dependencies:
       '@aptos/wallet-adapter-core': link:../wallet-adapter-core
       '@aptos/wallet-adapter-plugin': link:../wallet-adapter-plugin
@@ -160,7 +160,7 @@ importers:
       '@aptos/wallet-adapter-tsconfig': link:../tsconfig
       '@types/react': 18.0.25
       '@types/react-dom': 18.0.8
-      eslint: 7.32.0
+      eslint: 8.27.0
       eslint-config-adapter: link:../eslint-config-adapter
       tsup: 5.12.9_typescript@4.8.4
       typescript: 4.8.4
@@ -378,7 +378,7 @@ packages:
       fs-extra: 7.0.1
       lodash.startcase: 4.4.0
       outdent: 0.5.0
-      prettier: 2.7.1
+      prettier: 2.8.0
       resolve-from: 5.0.0
       semver: 5.7.1
     dev: true
@@ -545,7 +545,7 @@ packages:
       '@changesets/types': 5.2.0
       fs-extra: 7.0.1
       human-id: 1.0.2
-      prettier: 2.7.1
+      prettier: 2.8.0
     dev: true
 
   /@esbuild/linux-loong64/0.14.54:
@@ -3353,8 +3353,8 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
-  /prettier/2.7.1:
-    resolution: {integrity: sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==}
+  /prettier/2.8.0:
+    resolution: {integrity: sha512-9Lmg8hTFZKG0Asr/kW9Bp8tJjRVluO8EJQVfY2T7FMw9T5jy4I/Uvx0Rca/XWf50QQ1/SS48+6IJWnrb+2yemA==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true

@@ -52,6 +52,7 @@ export type WalletInfo = {
 export declare interface WalletCoreEvents {
   connect(account: AccountInfo | null): void;
   disconnect(): void;
+  readyStateChange(wallet: Wallet): void;
   networkChange(network: NetworkInfo | null): void;
   accountChange(account: AccountInfo | null): void;
 }

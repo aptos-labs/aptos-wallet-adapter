@@ -1,5 +1,12 @@
 import * as React from "react";
-import { FC, ReactNode, useCallback, useEffect, useState } from "react";
+import {
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { WalletContext } from "./useWallet";
 import { WalletCore } from "@aptos/wallet-adapter-core";
 import {
@@ -37,20 +44,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   plugins,
   autoConnect = false,
 }: AptosWalletProviderProps) => {
-  const [walletCore, _] = useState(new WalletCore(plugins));
   const [{ connected, account, network, wallet }, setState] =
     useState(initialState);
-  const [isDone, setIsDone] = useState(false);
 
-  /*
-  Handles server/client side hydration mis-match.
-  The first render on the client needs to match the initial render on the server otherwise react will fail to hydrate the tree 
-  https://github.com/vercel/next.js/discussions/34982
-  This helps us to build the DOM based on client side render (like enable/disable a wallet in the wallet modal based on their ready state)
-  */
-  useEffect(() => {
-    setIsDone(true);
-  }, []);
+  const walletCore = useMemo(() => new WalletCore(plugins), []);
+  const [wallets, setWallets] = useState<Wallet[]>(walletCore.wallets);
 
   const connect = (walletName: WalletName) => {
     try {
@@ -100,17 +98,17 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         connect(localStorage.getItem("AptosWalletName") as WalletName);
       }
     }
-  }, []);
+  }, [wallets]);
 
   useEffect(() => {
     if (connected) {
       walletCore.onAccountChange();
       walletCore.onNetworkChange();
     }
-  }, [walletCore, connected]);
+  }, [wallets, connected]);
 
   // Handle the adapter's connect event
-  const handleConnect = useCallback(() => {
+  const handleConnect = () => {
     setState((state) => {
       return {
         ...state,
@@ -120,10 +118,10 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         wallet: walletCore.wallet,
       };
     });
-  }, [connected]);
+  };
 
   // Handle the adapter's disconnect event
-  const handleDisconnect = useCallback(() => {
+  const handleDisconnect = () => {
     if (!connected) return;
     setState((state) => {
       return {
@@ -131,9 +129,10 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         connected: false,
         account: walletCore.account,
         network: walletCore.network,
+        wallet: null,
       };
     });
-  }, [connected]);
+  };
 
   // Handle the adapter's account change event
   const handleAccountChange = useCallback(() => {
@@ -159,24 +158,36 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     });
   }, [connected]);
 
-  useEffect(() => {
-    if (walletCore) {
-      walletCore.on("connect", handleConnect);
-      walletCore.on("disconnect", handleDisconnect);
-      walletCore.on("accountChange", handleAccountChange);
-      walletCore.on("networkChange", handleNetworkChange);
-      return () => {
-        walletCore.off("connect", handleConnect);
-        walletCore.off("disconnect", handleDisconnect);
-        walletCore.off("accountChange", handleAccountChange);
-        walletCore.off("networkChange", handleNetworkChange);
-      };
-    }
-  }, [walletCore, connected]);
+  // Handle the adapter's ready state change event
+  const handleReadyStateChange = (wallet: Wallet) => {
+    setWallets((prevWallets) => {
+      const index = prevWallets.findIndex(
+        (currWallet) => currWallet === wallet
+      );
+      if (index === -1) return prevWallets;
 
-  if (!isDone) {
-    return <></>;
-  }
+      return [
+        ...prevWallets.slice(0, index),
+        wallet,
+        ...prevWallets.slice(index + 1),
+      ];
+    });
+  };
+
+  useEffect(() => {
+    walletCore.on("connect", handleConnect);
+    walletCore.on("disconnect", handleDisconnect);
+    walletCore.on("accountChange", handleAccountChange);
+    walletCore.on("networkChange", handleNetworkChange);
+    walletCore.on("readyStateChange", handleReadyStateChange);
+    return () => {
+      walletCore.off("connect", handleConnect);
+      walletCore.off("disconnect", handleDisconnect);
+      walletCore.off("accountChange", handleAccountChange);
+      walletCore.off("networkChange", handleNetworkChange);
+      walletCore.off("readyStateChange", handleReadyStateChange);
+    };
+  }, [wallets, connected]);
 
   return (
     <WalletContext.Provider
@@ -187,6 +198,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         connected,
         disconnect,
         wallet,
+        wallets,
         signAndSubmitTransaction,
         signTransaction,
         signMessage,

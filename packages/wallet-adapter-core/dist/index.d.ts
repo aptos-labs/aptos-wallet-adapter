@@ -65,6 +65,7 @@ declare type WalletInfo = {
 declare interface WalletCoreEvents {
     connect(account: AccountInfo | null): void;
     disconnect(): void;
+    readyStateChange(wallet: Wallet): void;
     networkChange(network: NetworkInfo | null): void;
     accountChange(account: AccountInfo | null): void;
 }
@@ -94,12 +95,14 @@ declare class WalletCore extends EventEmitter<WalletCoreEvents> {
     private _connecting;
     private _connected;
     constructor(plugins: Wallet[]);
+    private scopePollingDetectionStrategy;
     private isWalletExists;
     private clearData;
     setWallet(wallet: Wallet | null): void;
     setAccount(account: AccountInfo | null): void;
     setNetwork(network: NetworkInfo | null): void;
     isConnected(): boolean;
+    get wallets(): Wallet[];
     get wallet(): WalletInfo | null;
     get account(): AccountInfo | null;
     get network(): NetworkInfo | null;

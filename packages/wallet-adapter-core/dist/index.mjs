@@ -124,19 +124,25 @@ function removeLocalStorage() {
 var WalletCore = class extends EventEmitter {
   constructor(plugins) {
     super();
-    this._wallets = null;
+    this._wallets = [];
     this._wallet = null;
     this._account = null;
     this._network = null;
     this._connecting = false;
     this._connected = false;
     this._wallets = plugins;
-    this._wallets.forEach((wallet) => {
+    this.scopePollingDetectionStrategy();
+  }
+  scopePollingDetectionStrategy() {
+    var _a;
+    (_a = this._wallets) == null ? void 0 : _a.forEach((wallet) => {
       wallet.readyState = typeof window === "undefined" || typeof document === "undefined" ? "Unsupported" /* Unsupported */ : "NotDetected" /* NotDetected */;
-      if (typeof window !== "undefined" && wallet.readyState !== "Unsupported" /* Unsupported */) {
+      if (typeof window !== "undefined") {
         scopePollingDetectionStrategy(() => {
-          if ("provider" in wallet && wallet.provider) {
+          if (Object.keys(window).includes(wallet.name.toLowerCase())) {
             wallet.readyState = "Installed" /* Installed */;
+            wallet.provider = window[wallet.name.toLowerCase()];
+            this.emit("readyStateChange", wallet);
             return true;
           }
           return false;
@@ -168,6 +174,9 @@ var WalletCore = class extends EventEmitter {
   }
   isConnected() {
     return this._connected;
+  }
+  get wallets() {
+    return this._wallets;
   }
   get wallet() {
     try {
@@ -205,6 +214,8 @@ var WalletCore = class extends EventEmitter {
       );
       if (!selectedWallet)
         return;
+      if (selectedWallet.readyState !== "Installed" /* Installed */)
+        return;
       this.setWallet(selectedWallet);
       const account = await selectedWallet.connect();
       this.setAccount({ ...account });
@@ -223,6 +234,7 @@ var WalletCore = class extends EventEmitter {
   async disconnect() {
     var _a;
     try {
+      this.isWalletExists();
       await ((_a = this._wallet) == null ? void 0 : _a.disconnect());
       this._connected = false;
       this.clearData();

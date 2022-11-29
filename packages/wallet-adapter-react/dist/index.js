@@ -56,12 +56,9 @@ var AptosWalletAdapterProvider = ({
   plugins,
   autoConnect = false
 }) => {
-  const [walletCore, _] = (0, import_react2.useState)(new import_wallet_adapter_core.WalletCore(plugins));
   const [{ connected, account, network, wallet }, setState] = (0, import_react2.useState)(initialState);
-  const [isDone, setIsDone] = (0, import_react2.useState)(false);
-  (0, import_react2.useEffect)(() => {
-    setIsDone(true);
-  }, []);
+  const walletCore = (0, import_react2.useMemo)(() => new import_wallet_adapter_core.WalletCore(plugins), []);
+  const [wallets, setWallets] = (0, import_react2.useState)(walletCore.wallets);
   const connect = (walletName) => {
     try {
       walletCore.connect(walletName);
@@ -103,14 +100,14 @@ var AptosWalletAdapterProvider = ({
         connect(localStorage.getItem("AptosWalletName"));
       }
     }
-  }, []);
+  }, [wallets]);
   (0, import_react2.useEffect)(() => {
     if (connected) {
       walletCore.onAccountChange();
       walletCore.onNetworkChange();
     }
-  }, [walletCore, connected]);
-  const handleConnect = (0, import_react2.useCallback)(() => {
+  }, [wallets, connected]);
+  const handleConnect = () => {
     setState((state) => {
       return {
         ...state,
@@ -120,8 +117,8 @@ var AptosWalletAdapterProvider = ({
         wallet: walletCore.wallet
       };
     });
-  }, [connected]);
-  const handleDisconnect = (0, import_react2.useCallback)(() => {
+  };
+  const handleDisconnect = () => {
     if (!connected)
       return;
     setState((state) => {
@@ -129,10 +126,11 @@ var AptosWalletAdapterProvider = ({
         ...state,
         connected: false,
         account: walletCore.account,
-        network: walletCore.network
+        network: walletCore.network,
+        wallet: null
       };
     });
-  }, [connected]);
+  };
   const handleAccountChange = (0, import_react2.useCallback)(() => {
     if (!connected)
       return;
@@ -157,23 +155,34 @@ var AptosWalletAdapterProvider = ({
       };
     });
   }, [connected]);
+  const handleReadyStateChange = (wallet2) => {
+    setWallets((prevWallets) => {
+      const index = prevWallets.findIndex(
+        (currWallet) => currWallet === wallet2
+      );
+      if (index === -1)
+        return prevWallets;
+      return [
+        ...prevWallets.slice(0, index),
+        wallet2,
+        ...prevWallets.slice(index + 1)
+      ];
+    });
+  };
   (0, import_react2.useEffect)(() => {
-    if (walletCore) {
-      walletCore.on("connect", handleConnect);
-      walletCore.on("disconnect", handleDisconnect);
-      walletCore.on("accountChange", handleAccountChange);
-      walletCore.on("networkChange", handleNetworkChange);
-      return () => {
-        walletCore.off("connect", handleConnect);
-        walletCore.off("disconnect", handleDisconnect);
-        walletCore.off("accountChange", handleAccountChange);
-        walletCore.off("networkChange", handleNetworkChange);
-      };
-    }
-  }, [walletCore, connected]);
-  if (!isDone) {
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, {});
-  }
+    walletCore.on("connect", handleConnect);
+    walletCore.on("disconnect", handleDisconnect);
+    walletCore.on("accountChange", handleAccountChange);
+    walletCore.on("networkChange", handleNetworkChange);
+    walletCore.on("readyStateChange", handleReadyStateChange);
+    return () => {
+      walletCore.off("connect", handleConnect);
+      walletCore.off("disconnect", handleDisconnect);
+      walletCore.off("accountChange", handleAccountChange);
+      walletCore.off("networkChange", handleNetworkChange);
+      walletCore.off("readyStateChange", handleReadyStateChange);
+    };
+  }, [wallets, connected]);
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WalletContext.Provider, {
     value: {
       connect,
@@ -182,6 +191,7 @@ var AptosWalletAdapterProvider = ({
       connected,
       disconnect,
       wallet,
+      wallets,
       signAndSubmitTransaction,
       signTransaction,
       signMessage

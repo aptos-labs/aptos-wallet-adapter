@@ -33,7 +33,7 @@ import {
 } from "./utils";
 
 export class WalletCore extends EventEmitter<WalletCoreEvents> {
-  private _wallets: Wallet[] | null = null;
+  private _wallets: Wallet[] = [];
   private _wallet: Wallet | null = null;
   private _account: AccountInfo | null = null;
   private _network: NetworkInfo | null = null;
@@ -44,18 +44,21 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   constructor(plugins: Wallet[]) {
     super();
     this._wallets = plugins;
-    this._wallets.forEach((wallet: Wallet) => {
+    this.scopePollingDetectionStrategy();
+  }
+
+  private scopePollingDetectionStrategy() {
+    this._wallets?.forEach((wallet: Wallet) => {
       wallet.readyState =
         typeof window === "undefined" || typeof document === "undefined"
           ? WalletReadyState.Unsupported
           : WalletReadyState.NotDetected;
-      if (
-        typeof window !== "undefined" &&
-        wallet.readyState !== WalletReadyState.Unsupported
-      ) {
+      if (typeof window !== "undefined") {
         scopePollingDetectionStrategy(() => {
-          if ("provider" in wallet && wallet.provider) {
+          if (Object.keys(window).includes(wallet.name.toLowerCase())) {
             wallet.readyState = WalletReadyState.Installed;
+            wallet.provider = window[wallet.name.toLowerCase() as any];
+            this.emit("readyStateChange", wallet);
             return true;
           }
           return false;
@@ -100,6 +103,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     return this._connected;
   }
 
+  get wallets(): Wallet[] {
+    return this._wallets;
+  }
+
   get wallet(): WalletInfo | null {
     try {
       if (!this._wallet) return null;
@@ -136,6 +143,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         (wallet: Wallet) => wallet.name === walletName
       );
       if (!selectedWallet) return;
+      if (selectedWallet.readyState !== WalletReadyState.Installed) return;
       this.setWallet(selectedWallet);
       const account = await selectedWallet.connect();
       this.setAccount({ ...account });
@@ -154,6 +162,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   async disconnect(): Promise<void> {
     try {
+      this.isWalletExists();
       await this._wallet?.disconnect();
       this._connected = false;
       this.clearData();

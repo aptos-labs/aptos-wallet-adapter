@@ -5,6 +5,7 @@ import {
   WalletName,
   SignMessagePayload,
   SignMessageResponse,
+  Wallet,
 } from "@aptos/wallet-adapter-core/src/types";
 import { createContext, useContext } from "react";
 import { Types } from "aptos";
@@ -18,6 +19,7 @@ export interface WalletContextState {
   connect(walletName: WalletName): void;
   disconnect(): void;
   wallet: WalletInfo | null;
+  wallets: Wallet[];
   signAndSubmitTransaction<T extends Types.TransactionPayload, V>(
     transaction: T,
     options?: V

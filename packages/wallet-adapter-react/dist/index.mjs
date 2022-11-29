@@ -15,9 +15,14 @@ function useWallet() {
 }
 
 // src/WalletProvider.tsx
-import { useCallback, useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from "react";
 import { WalletCore } from "@aptos/wallet-adapter-core";
-import { Fragment, jsx } from "react/jsx-runtime";
+import { jsx } from "react/jsx-runtime";
 var initialState = {
   connected: false,
   account: null,
@@ -29,12 +34,9 @@ var AptosWalletAdapterProvider = ({
   plugins,
   autoConnect = false
 }) => {
-  const [walletCore, _] = useState(new WalletCore(plugins));
   const [{ connected, account, network, wallet }, setState] = useState(initialState);
-  const [isDone, setIsDone] = useState(false);
-  useEffect(() => {
-    setIsDone(true);
-  }, []);
+  const walletCore = useMemo(() => new WalletCore(plugins), []);
+  const [wallets, setWallets] = useState(walletCore.wallets);
   const connect = (walletName) => {
     try {
       walletCore.connect(walletName);
@@ -76,14 +78,14 @@ var AptosWalletAdapterProvider = ({
         connect(localStorage.getItem("AptosWalletName"));
       }
     }
-  }, []);
+  }, [wallets]);
   useEffect(() => {
     if (connected) {
       walletCore.onAccountChange();
       walletCore.onNetworkChange();
     }
-  }, [walletCore, connected]);
-  const handleConnect = useCallback(() => {
+  }, [wallets, connected]);
+  const handleConnect = () => {
     setState((state) => {
       return {
         ...state,
@@ -93,8 +95,8 @@ var AptosWalletAdapterProvider = ({
         wallet: walletCore.wallet
       };
     });
-  }, [connected]);
-  const handleDisconnect = useCallback(() => {
+  };
+  const handleDisconnect = () => {
     if (!connected)
       return;
     setState((state) => {
@@ -102,10 +104,11 @@ var AptosWalletAdapterProvider = ({
         ...state,
         connected: false,
         account: walletCore.account,
-        network: walletCore.network
+        network: walletCore.network,
+        wallet: null
       };
     });
-  }, [connected]);
+  };
   const handleAccountChange = useCallback(() => {
     if (!connected)
       return;
@@ -130,23 +133,34 @@ var AptosWalletAdapterProvider = ({
       };
     });
   }, [connected]);
+  const handleReadyStateChange = (wallet2) => {
+    setWallets((prevWallets) => {
+      const index = prevWallets.findIndex(
+        (currWallet) => currWallet === wallet2
+      );
+      if (index === -1)
+        return prevWallets;
+      return [
+        ...prevWallets.slice(0, index),
+        wallet2,
+        ...prevWallets.slice(index + 1)
+      ];
+    });
+  };
   useEffect(() => {
-    if (walletCore) {
-      walletCore.on("connect", handleConnect);
-      walletCore.on("disconnect", handleDisconnect);
-      walletCore.on("accountChange", handleAccountChange);
-      walletCore.on("networkChange", handleNetworkChange);
-      return () => {
-        walletCore.off("connect", handleConnect);
-        walletCore.off("disconnect", handleDisconnect);
-        walletCore.off("accountChange", handleAccountChange);
-        walletCore.off("networkChange", handleNetworkChange);
-      };
-    }
-  }, [walletCore, connected]);
-  if (!isDone) {
-    return /* @__PURE__ */ jsx(Fragment, {});
-  }
+    walletCore.on("connect", handleConnect);
+    walletCore.on("disconnect", handleDisconnect);
+    walletCore.on("accountChange", handleAccountChange);
+    walletCore.on("networkChange", handleNetworkChange);
+    walletCore.on("readyStateChange", handleReadyStateChange);
+    return () => {
+      walletCore.off("connect", handleConnect);
+      walletCore.off("disconnect", handleDisconnect);
+      walletCore.off("accountChange", handleAccountChange);
+      walletCore.off("networkChange", handleNetworkChange);
+      walletCore.off("readyStateChange", handleReadyStateChange);
+    };
+  }, [wallets, connected]);
   return /* @__PURE__ */ jsx(WalletContext.Provider, {
     value: {
       connect,
@@ -155,6 +169,7 @@ var AptosWalletAdapterProvider = ({
       connected,
       disconnect,
       wallet,
+      wallets,
       signAndSubmitTransaction,
       signTransaction,
       signMessage
