@@ -141,7 +141,7 @@ export default function App() {
                 {JSON.stringify(wallet?.name)}
               </div>
               <div>
-                <a target="_blank" href={wallet?.url}>
+                <a target="_blank" rel="noreferrer" href={wallet?.url}>
                   {wallet?.url}
                 </a>
               </div>
