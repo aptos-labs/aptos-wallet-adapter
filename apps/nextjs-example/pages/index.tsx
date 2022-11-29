@@ -3,6 +3,7 @@ import { useWallet } from "@aptos/wallet-adapter-react";
 import { useState } from "react";
 import { ErrorAlert, SuccessAlert } from "../components/Alert";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
 const WalletButtons = dynamic(() => import("../components/WalletButtons"), {
   suspense: false,
@@ -134,10 +135,14 @@ export default function App() {
             </td>
             <td className="px-8 py-4 border-t w-3/4">
               <div style={{ display: "flex" }}>
-                <img
-                  style={{ width: "25px", marginRight: "20px" }}
-                  src={wallet?.icon}
-                />
+                {wallet && (
+                  <Image
+                    src={wallet.icon}
+                    alt={wallet.name}
+                    width={25}
+                    height={25}
+                  />
+                )}
                 {JSON.stringify(wallet?.name)}
               </div>
               <div>
