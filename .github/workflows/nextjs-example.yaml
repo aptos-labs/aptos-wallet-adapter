@@ -2,7 +2,7 @@ name: nextjs-example
 
 on:
   push:
-    branches: [main, gh-pages]
+    branches: [main]
     paths:
       - "apps/nextjs-example/**"
       - ".github/workflows/nextjs-example.yaml"
@@ -38,15 +38,10 @@ jobs:
       - name: Install global dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install project's dependencies
-        working-directory: ./apps/nextjs-example
-        run: pnpm install
-
-      - name: Build
-        working-directory: ./apps/nextjs-example
+      - name: Build global project
         run: pnpm run build
 
-      - name: Export
+      - name: Export nextjs project
         working-directory: ./apps/nextjs-example
         run: pnpm run export
 
