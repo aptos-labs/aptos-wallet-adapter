@@ -55,8 +55,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           : WalletReadyState.NotDetected;
       if (typeof window !== "undefined") {
         scopePollingDetectionStrategy(() => {
-          if (Object.keys(window).includes(wallet.name.toLocaleLowerCase())) {
+          if (Object.keys(window).includes(wallet.name.toLowerCase())) {
             wallet.readyState = WalletReadyState.Installed;
+            wallet.provider = window[wallet.name.toLowerCase() as any];
+            this.emit("readyStateChange", wallet);
             return true;
           }
           return false;
@@ -160,6 +162,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   async disconnect(): Promise<void> {
     try {
+      this.isWalletExists();
       await this._wallet?.disconnect();
       this._connected = false;
       this.clearData();

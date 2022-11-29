@@ -5,13 +5,13 @@ import {
   MartianWallet,
   RiseWallet,
 } from "@aptos/wallet-adapter-plugin/src/wallets";
-import { AptosWalletAdapterProvider } from "@aptos/wallet-adapter-react/src";
+import { AptosWalletAdapterProvider } from "@aptos/wallet-adapter-react";
 
 const wallets = [new PetraWallet(), new MartianWallet(), new RiseWallet()];
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <AptosWalletAdapterProvider plugins={wallets}>
+    <AptosWalletAdapterProvider plugins={wallets} autoConnect={true}>
       <Component {...pageProps} />
     </AptosWalletAdapterProvider>
   );
