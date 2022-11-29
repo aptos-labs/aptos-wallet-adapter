@@ -15,6 +15,7 @@ module.exports = {
   reactStrictMode: true,
   assetPrefix: assetPrefix,
   basePath: basePath,
+  images: { unoptimized: true },
   experimental: {
     transpilePackages: ["wallet-adapter-react", "wallet-adapter-plugin"],
   },

@@ -146,11 +146,11 @@ importers:
       '@types/react': ^18.0.17
       '@types/react-dom': ^18.0.6
       aptos: ^1.3.17
-      eslint: ^7.32.0
+      eslint: ^8.15.0
       eslint-config-adapter: workspace:*
       react: ^18.2.0
       tsup: ^5.10.1
-      typescript: ^4.5.2
+      typescript: ^4.5.3
     dependencies:
       '@aptos/wallet-adapter-core': link:../wallet-adapter-core
       '@aptos/wallet-adapter-plugin': link:../wallet-adapter-plugin
@@ -160,7 +160,7 @@ importers:
       '@aptos/wallet-adapter-tsconfig': link:../tsconfig
       '@types/react': 18.0.25
       '@types/react-dom': 18.0.8
-      eslint: 7.32.0
+      eslint: 8.27.0
       eslint-config-adapter: link:../eslint-config-adapter
       tsup: 5.12.9_typescript@4.8.4
       typescript: 4.8.4
