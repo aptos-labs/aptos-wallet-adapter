@@ -18,13 +18,13 @@ interface IApotsErrorResult {
 interface IAptosWallet {
   connect: () => Promise<AccountInfo>;
   account: () => Promise<AccountInfo>;
-  disconnect(): Promise<void>;
-  signAndSubmitTransaction(
+  disconnect: () => Promise<void>;
+  signAndSubmitTransaction: (
     transaction: any,
     options?: any
-  ): Promise<{ hash: Types.HexEncodedBytes } | IApotsErrorResult>;
-  signMessage(message: SignMessagePayload): Promise<SignMessageResponse>;
-  network(): Promise<NetworkName>;
+  ) => Promise<{ hash: Types.HexEncodedBytes } | IApotsErrorResult>;
+  signMessage: (message: SignMessagePayload) => Promise<SignMessageResponse>;
+  network: () => Promise<NetworkName>;
   onAccountChange: (
     listener: (newAddress: AccountInfo) => Promise<void>
   ) => Promise<void>;
@@ -53,9 +53,9 @@ export class AptosWallet implements AdapterPlugin {
 
   async connect(): Promise<AccountInfo> {
     try {
-      const addressInfo = await this.provider?.connect();
-      if (!addressInfo) throw `${AptosWalletName} Address Info Error`;
-      return addressInfo;
+      const accountInfo = await this.provider?.connect();
+      if (!accountInfo) throw `${AptosWalletName} Address Info Error`;
+      return accountInfo;
     } catch (error: any) {
       throw error;
     }
@@ -111,6 +111,18 @@ export class AptosWallet implements AdapterPlugin {
     }
   }
 
+  async network(): Promise<NetworkInfo> {
+    try {
+      const response = await this.provider?.network();
+      if (!response) throw `${AptosWalletName} Network Error`;
+      return {
+        name: response as NetworkName,
+      };
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
   async onNetworkChange(callback: any): Promise<void> {
     try {
       const handleNetworkChange = async (newNetwork: {
@@ -152,18 +164,6 @@ export class AptosWallet implements AdapterPlugin {
       console.log(error);
       const errMsg = error.message;
       throw errMsg;
-    }
-  }
-
-  async network(): Promise<NetworkInfo> {
-    try {
-      const response = await this.provider?.network();
-      if (!response) throw `${AptosWalletName} Network Error`;
-      return {
-        name: response as NetworkName,
-      };
-    } catch (error: any) {
-      throw error;
     }
   }
 }
