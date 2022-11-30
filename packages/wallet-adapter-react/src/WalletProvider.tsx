@@ -8,18 +8,17 @@ import {
   useState,
 } from "react";
 import { WalletContext } from "./useWallet";
-import { WalletCore } from "@aptos/wallet-adapter-core";
-import {
+import type {
   AccountInfo,
   NetworkInfo,
-  WalletName,
+  SignMessagePayload,
   Wallet,
   WalletInfo,
-  SignMessagePayload,
-} from "@aptos/wallet-adapter-core/src/types";
-import { Types } from "aptos";
+  WalletName,
+} from "@aptos/wallet-adapter-core";
+import { WalletCore } from "@aptos/wallet-adapter-core";
 
-export type { Wallet, WalletName } from "@aptos/wallet-adapter-core/src/types";
+import { Types } from "aptos";
 
 export interface AptosWalletProviderProps {
   children: ReactNode;
