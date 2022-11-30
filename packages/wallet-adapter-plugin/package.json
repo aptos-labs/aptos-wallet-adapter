@@ -13,16 +13,17 @@
     "build": "tsup src/index.ts --format esm,cjs --dts",
     "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
     "lint": "TIMING=1 eslint \"src/**/*.ts*\"",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
-  },
-  "publishConfig": {
-    "access": "public"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "test": "jest"
   },
   "devDependencies": {
     "@aptos/wallet-adapter-core": "workspace:*",
     "@aptos/wallet-adapter-tsconfig": "workspace:*",
+    "@types/jest": "^29.2.3",
     "eslint": "^8.15.0",
     "eslint-config-adapter": "*",
+    "jest": "^29.3.1",
+    "ts-jest": "^29.0.3",
     "tsup": "^5.10.1",
     "typescript": "^4.5.3"
   },
