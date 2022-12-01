@@ -18,6 +18,7 @@ const aptosClient = new AptosClient(DEVNET_NODE_URL, {
 
 export default function App() {
   const {
+    connected,
     disconnect,
     account,
     network,
@@ -103,26 +104,46 @@ export default function App() {
             <td className="px-8 py-4 border-t break-all w-3/4">
               <div>
                 <button
-                  className="bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4"
+                  className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 ${
+                    !connected
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-blue-700"
+                  }`}
                   onClick={disconnect}
+                  disabled={!connected}
                 >
                   Disconnect
                 </button>
                 <button
-                  className="bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4"
+                  className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 ${
+                    !connected
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-blue-700"
+                  }`}
                   onClick={onSignAndSubmitTransaction}
+                  disabled={!connected}
                 >
                   Sign and submit transaction
                 </button>
                 <button
-                  className="bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4"
+                  className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 ${
+                    !connected
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-blue-700"
+                  }`}
                   onClick={onSignTransaction}
+                  disabled={!connected}
                 >
                   Sign transaction
                 </button>
                 <button
-                  className="bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4"
+                  className={`bg-blue-500 text-white font-bold py-2 px-4 rounded mr-4 ${
+                    !connected
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-blue-700"
+                  }`}
                   onClick={onSignMessage}
+                  disabled={!connected}
                 >
                   Sign Message
                 </button>
@@ -143,10 +164,15 @@ export default function App() {
                     height={25}
                   />
                 )}
-                {JSON.stringify(wallet?.name)}
+                {wallet?.name}
               </div>
               <div>
-                <a target="_blank" rel="noreferrer" href={wallet?.url}>
+                <a
+                  target="_blank"
+                  className="text-sky-600"
+                  rel="noreferrer"
+                  href={wallet?.url}
+                >
                   {wallet?.url}
                 </a>
               </div>
@@ -157,7 +183,7 @@ export default function App() {
               <h3>Account</h3>
             </td>
             <td className="px-8 py-4 border-t break-all">
-              <div>{JSON.stringify(account)}</div>
+              <div>{account ? JSON.stringify(account) : ""}</div>
             </td>
           </tr>
           <tr>
@@ -165,7 +191,7 @@ export default function App() {
               <h3>Network</h3>
             </td>
             <td className="px-8 py-4 border-t">
-              <div>{JSON.stringify(network)}</div>
+              <div>{network ? JSON.stringify(network) : ""}</div>
             </td>
           </tr>
         </tbody>
