@@ -81,6 +81,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   private clearData() {
+    this._connected = false;
     this.setWallet(null);
     this.setAccount(null);
     this.setNetwork(null);
@@ -138,12 +139,15 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   async connect(walletName: WalletName): Promise<void> {
     try {
-      this._connecting = true;
       const selectedWallet = this._wallets?.find(
         (wallet: Wallet) => wallet.name === walletName
       );
       if (!selectedWallet) return;
       if (selectedWallet.readyState !== WalletReadyState.Installed) return;
+      if (this._connected) {
+        await this.disconnect();
+      }
+      this._connecting = true;
       this.setWallet(selectedWallet);
       const account = await selectedWallet.connect();
       this.setAccount({ ...account });
@@ -164,7 +168,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     try {
       this.isWalletExists();
       await this._wallet?.disconnect();
-      this._connected = false;
       this.clearData();
       this.emit("disconnect");
     } catch (error: any) {
