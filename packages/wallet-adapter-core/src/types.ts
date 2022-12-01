@@ -7,6 +7,7 @@ export type WalletName<T extends string = string> = T & {
 };
 export type NetworkInfo = {
   name: NetworkName | undefined;
+  chainId: string | undefined;
 };
 
 export type AccountInfo = {
@@ -26,7 +27,7 @@ export interface AdapterPluginProps<Name extends string = string> {
   provider: any;
   connect(): Promise<any>;
   disconnect: () => Promise<any>;
-  network: () => Promise<any>;
+  getNetwork: () => Promise<NetworkInfo>;
   signAndSubmitTransaction<T extends Types.TransactionPayload, V>(
     transaction: T,
     options?: V

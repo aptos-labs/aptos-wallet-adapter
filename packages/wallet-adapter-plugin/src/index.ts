@@ -1,4 +1,3 @@
-import { NetworkName } from "@aptos/wallet-adapter-core";
 import type {
   AccountInfo,
   AdapterPlugin,
@@ -26,7 +25,7 @@ interface IAptosWallet {
     options?: any
   ) => Promise<{ hash: Types.HexEncodedBytes } | IAptosWalletErrorResult>;
   signMessage: (message: SignMessagePayload) => Promise<SignMessageResponse>;
-  network: () => Promise<NetworkName>;
+  getNetwork: () => Promise<NetworkInfo>;
   onAccountChange: (
     listener: (newAddress: AccountInfo) => Promise<void>
   ) => Promise<void>;
@@ -114,12 +113,13 @@ export class AptosWallet implements AdapterPlugin {
     }
   }
 
-  async network(): Promise<NetworkInfo> {
+  async getNetwork(): Promise<NetworkInfo> {
     try {
-      const response = await this.provider?.network();
+      const response = await this.provider?.getNetwork();
       if (!response) throw `${AptosWalletName} Network Error`; // CHANGE AptosWalletName
       return {
-        name: response as NetworkName,
+        name: response.name,
+        chainId: response.chainId,
       };
     } catch (error: any) {
       throw error;

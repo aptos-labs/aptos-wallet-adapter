@@ -49,6 +49,6 @@ describe("AptosWallet", () => {
   });
 
   test("defines network()", () => {
-    expect(typeof wallet.network).toBe("function");
+    expect(typeof wallet.getNetwork).toBe("function");
   });
 });
