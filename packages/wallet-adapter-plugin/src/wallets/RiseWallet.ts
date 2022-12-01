@@ -1,12 +1,12 @@
-import { NetworkName } from "@aptos/wallet-adapter-core/src/constants";
-import {
+import { NetworkName } from "@aptos/wallet-adapter-core";
+import type {
   AccountInfo,
   AdapterPlugin,
   NetworkInfo,
   SignMessagePayload,
   SignMessageResponse,
   WalletName,
-} from "@aptos/wallet-adapter-core/src/types";
+} from "@aptos/wallet-adapter-core";
 import { MaybeHexString, Types } from "aptos";
 
 interface IRiseErrorResult {
