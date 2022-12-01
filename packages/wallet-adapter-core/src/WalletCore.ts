@@ -151,7 +151,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.setWallet(selectedWallet);
       const account = await selectedWallet.connect();
       this.setAccount({ ...account });
-      const network = await selectedWallet.network();
+      const network = await selectedWallet.getNetwork();
       this.setNetwork({ ...network });
       setLocalStorage(selectedWallet.name);
       this._connected = true;

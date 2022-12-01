@@ -1,4 +1,3 @@
-import { NetworkName } from "@aptos/wallet-adapter-core";
 import type {
   AccountInfo,
   AdapterPlugin,
@@ -37,7 +36,7 @@ interface IMartianWallet {
   ): Promise<Uint8Array | IMartianErrorResult>;
   isConnected: () => Promise<boolean>;
   signMessage(message: SignMessagePayload): Promise<SignMessageResponse>;
-  network(): Promise<NetworkName>;
+  getNetwork(): Promise<NetworkInfo>;
   requestId: Promise<number>;
   onAccountChange: (
     listener: (newAddress: MartianAccount) => Promise<void>
@@ -195,12 +194,13 @@ export class MartianWallet implements AdapterPlugin {
     }
   }
 
-  async network(): Promise<NetworkInfo> {
+  async getNetwork(): Promise<NetworkInfo> {
     try {
-      const response = await this.provider?.network();
+      const response = await this.provider?.getNetwork();
       if (!response) throw `${MartianWalletName} Network Error`;
       return {
-        name: response as NetworkName,
+        name: response.name,
+        chainId: response.chainId,
       };
     } catch (error: any) {
       throw error;
