@@ -5,10 +5,10 @@ This package provides wallet builders a pre-made class with all required wallet 
 ### Usage
 
 ```
-git clone @aptos/wallet-adapter-plugin
+git clone @aptos/wallet-adapter
 ```
 
-- Open `src/index.ts`
+- Open `packages/wallet-adapter-plugin/src/index.ts`
 - Change all `ApotsWallet` appereances to `<Your-Wallet-Name>`
 - Change all AptosWindow appereances to `<Your-Wallet-Name>Window`
 - Change `WalletName` to be `<Your-Wallet-Name>`

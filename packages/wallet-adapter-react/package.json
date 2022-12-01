@@ -1,10 +1,10 @@
 {
   "name": "@aptos/wallet-adapter-react",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Aptos Wallet Adapter React Provider",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "sideEffects": false,
   "license": "MIT",
   "scripts": {
     "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
@@ -12,12 +12,23 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "lint": "TIMING=1 eslint \"src/**/*.ts*\""
   },
-  "files": [
-    "dist/**"
-  ],
-  "publishConfig": {
-    "access": "public"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aptos-labs/aptos-wallet-adapter.git"
   },
+  "homepage": "https://github.com/aptos-labs/aptos-wallet-adapter",
+  "bugs": {
+    "url": "https://github.com/aptos-labs/aptos-wallet-adapter/issues"
+  },
+  "author": "aptoslabs.com",
+  "keywords": [
+    "Aptos",
+    "Aptos Labs",
+    "Wallet",
+    "Wallet Adapter",
+    "Wallet Adapter Provider",
+    "React"
+  ],
   "devDependencies": {
     "@aptos/wallet-adapter-tsconfig": "workspace:*",
     "@types/react": "^18.0.17",

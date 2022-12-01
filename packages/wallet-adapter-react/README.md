@@ -6,9 +6,9 @@ Dapps that want to use the adapter should install this package and other support
 
 #### Supported wallet packages
 
-Petra
-Martian
-Rise
+- Petra
+- Martian
+- Rise
 
 ### Usage
 
