@@ -1,3 +1,3 @@
-The core adapter functionality
+# Aptos Wallet Adapter core functionality
 
-Holds and manage the adapter state, validations and interaction with the current connected wallet.
+The core functionality for the wallet adapter that holds and manages the adapter state, validations and interaction with the current connected wallet.

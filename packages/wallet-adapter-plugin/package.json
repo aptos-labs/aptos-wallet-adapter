@@ -1,14 +1,11 @@
 {
   "name": "@aptos/wallet-adapter-plugin",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Aptos Wallet Adapter Plugin",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "sideEffects": false,
   "license": "MIT",
-  "files": [
-    "dist/**"
-  ],
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts",
     "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
@@ -16,6 +13,22 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "test": "jest"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aptos-labs/aptos-wallet-adapter.git"
+  },
+  "homepage": "https://github.com/aptos-labs/aptos-wallet-adapter",
+  "bugs": {
+    "url": "https://github.com/aptos-labs/aptos-wallet-adapter/issues"
+  },
+  "author": "aptoslabs.com",
+  "keywords": [
+    "Aptos",
+    "Aptos Labs",
+    "Wallet",
+    "Wallet Adapter",
+    "Aptos Wallet"
+  ],
   "devDependencies": {
     "@aptos/wallet-adapter-core": "workspace:*",
     "@aptos/wallet-adapter-tsconfig": "workspace:*",
