@@ -14,6 +14,30 @@ export type AccountInfo = {
   publicKey: string;
 };
 
+export interface AptosWalletErrorResult {
+  code: number;
+  name: string;
+  message: string;
+}
+
+export interface PluginProvider {
+  connect: () => Promise<AccountInfo>;
+  account: () => Promise<AccountInfo>;
+  disconnect: () => Promise<void>;
+  signAndSubmitTransaction: (
+    transaction: any,
+    options?: any
+  ) => Promise<{ hash: Types.HexEncodedBytes } | AptosWalletErrorResult>;
+  signMessage: (message: SignMessagePayload) => Promise<SignMessageResponse>;
+  network: () => Promise<NetworkName>;
+  onAccountChange: (
+    listener: (newAddress: AccountInfo) => Promise<void>
+  ) => Promise<void>;
+  onNetworkChange: (
+    listener: (network: { networkName: NetworkInfo }) => Promise<void>
+  ) => Promise<void>;
+}
+
 export interface AdapterPluginEvents {
   onNetworkChange(callback: any): Promise<any>;
   onAccountChange(callback: any): Promise<any>;
