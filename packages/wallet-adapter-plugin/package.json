@@ -34,7 +34,7 @@
     "@aptos/wallet-adapter-tsconfig": "workspace:*",
     "@types/jest": "^29.2.3",
     "eslint": "^8.15.0",
-    "eslint-config-adapter": "*",
+    "@aptos/eslint-config-adapter": "*",
     "jest": "^29.3.1",
     "ts-jest": "^29.0.3",
     "tsup": "^5.10.1",

@@ -31,7 +31,7 @@
   "devDependencies": {
     "@aptos/wallet-adapter-tsconfig": "workspace:*",
     "eslint": "^8.15.0",
-    "eslint-config-adapter": "*",
+    "@aptos/eslint-config-adapter": "*",
     "tsup": "^5.10.1",
     "typescript": "^4.5.3"
   },

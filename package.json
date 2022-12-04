@@ -17,7 +17,7 @@
     "publish-packages": "changeset version && changeset publish"
   },
   "devDependencies": {
-    "eslint-config-adapter": "workspace:*",
+    "@aptos/eslint-config-adapter": "workspace:*",
     "@changesets/cli": "^2.22.0",
     "prettier": "latest",
     "turbo": "latest"
