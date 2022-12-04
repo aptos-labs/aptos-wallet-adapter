@@ -14,7 +14,7 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build --filter=docs^... && changeset publish"
+    "publish-packages": "turbo run build test && changeset version && changeset publish"
   },
   "devDependencies": {
     "eslint-config-adapter": "workspace:*",
