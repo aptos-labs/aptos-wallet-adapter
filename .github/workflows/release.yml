@@ -38,16 +38,6 @@ jobs:
       - name: Build global project
         run: pnpm run build
 
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16.x]
-
-    steps:
       - name: Export nextjs project
         working-directory: ./apps/nextjs-example
         run: pnpm run export
@@ -56,22 +46,12 @@ jobs:
         working-directory: ./apps/nextjs-example
         run: touch ./out/.nojekyll
 
-      - name: Deploy
+      - name: Deploy nextjs project
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: ./apps/nextjs-example/out
 
-  release:
-    name: Release
-    needs: [deploy, build]
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16.x]
-
-    steps:
       - name: Create Release Pull Request or Publish to npm
         uses: changesets/action@v1
         with:
