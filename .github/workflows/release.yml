@@ -39,44 +39,44 @@ jobs:
         run: pnpm run build
 
   deploy:
-      name: Deploy
-      needs: build
-      runs-on: ubuntu-latest
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
 
-      strategy:
-        matrix:
-          node-version: [16.x]
+    strategy:
+      matrix:
+        node-version: [16.x]
 
-      steps:
-        - name: Export nextjs project
-          working-directory: ./apps/nextjs-example
-          run: pnpm run export
+    steps:
+      - name: Export nextjs project
+        working-directory: ./apps/nextjs-example
+        run: pnpm run export
 
-        - name: Add .nojekyll file
-          working-directory: ./apps/nextjs-example
-          run: touch ./out/.nojekyll
+      - name: Add .nojekyll file
+        working-directory: ./apps/nextjs-example
+        run: touch ./out/.nojekyll
 
-        - name: Deploy
-          uses: JamesIves/github-pages-deploy-action@v4
-          with:
-            branch: gh-pages
-            folder: ./apps/nextjs-example/out
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: ./apps/nextjs-example/out
 
-    release:
-      name: Release
-      needs: [deploy,build]
-      runs-on: ubuntu-latest
+  release:
+    name: Release
+    needs: [deploy, build]
+    runs-on: ubuntu-latest
 
-      strategy:
-        matrix:
-          node-version: [16.x]
+    strategy:
+      matrix:
+        node-version: [16.x]
 
-      steps:
-        - name: Create Release Pull Request or Publish to npm
-          uses: changesets/action@v1
-          with:
-            publish: pnpm run publish-packages
-          env:
-            GITHUB_TOKEN: ${{ secrets.APTOS_WALLET_ADAPTER_GITHUB_TOKEN }}
-            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - name: Create Release Pull Request or Publish to npm
+        uses: changesets/action@v1
+        with:
+          publish: pnpm run publish-packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.APTOS_WALLET_ADAPTER_GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
