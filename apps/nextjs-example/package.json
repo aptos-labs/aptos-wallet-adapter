@@ -1,7 +1,8 @@
 {
   "name": "@aptos-labs/wallet-adapter-nextjs-example",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "private": true,
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,6 +13,7 @@
   "dependencies": {
     "@aptos-labs/wallet-adapter-plugin": "workspace:*",
     "@aptos-labs/wallet-adapter-react": "workspace:*",
+    "@aptos-labs/wallet-adapter-core": "workspace:*",
     "aptos": "^1.3.17",
     "next": "13.0.0",
     "react": "18.2.0",

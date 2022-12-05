@@ -17,6 +17,7 @@ importers:
   apps/nextjs-example:
     specifiers:
       '@aptos-labs/eslint-config-adapter': workspace:*
+      '@aptos-labs/wallet-adapter-core': workspace:*
       '@aptos-labs/wallet-adapter-plugin': workspace:*
       '@aptos-labs/wallet-adapter-react': workspace:*
       '@aptos-labs/wallet-adapter-tsconfig': workspace:*
@@ -34,6 +35,7 @@ importers:
       tailwindcss: ^3.2.4
       typescript: ^4.5.3
     dependencies:
+      '@aptos-labs/wallet-adapter-core': link:../../packages/wallet-adapter-core
       '@aptos-labs/wallet-adapter-plugin': link:../../packages/wallet-adapter-plugin
       '@aptos-labs/wallet-adapter-react': link:../../packages/wallet-adapter-react
       aptos: 1.3.17
@@ -105,10 +107,10 @@ importers:
       tsup: ^5.10.1
       typescript: ^4.5.3
     dependencies:
+      '@aptos-labs/wallet-adapter-core': link:../wallet-adapter-core
       aptos: 1.3.17
     devDependencies:
       '@aptos-labs/eslint-config-adapter': link:../eslint-config-adapter
-      '@aptos-labs/wallet-adapter-core': link:../wallet-adapter-core
       '@aptos-labs/wallet-adapter-tsconfig': link:../tsconfig
       '@types/jest': 29.2.3
       eslint: 8.27.0
@@ -119,7 +121,6 @@ importers:
 
   packages/wallet-adapter-react:
     specifiers:
-      '@aptos-labs/eslint-config-adapter': workspace:*
       '@aptos-labs/wallet-adapter-core': workspace:*
       '@aptos-labs/wallet-adapter-plugin': workspace:*
       '@aptos-labs/wallet-adapter-tsconfig': workspace:*
@@ -127,16 +128,13 @@ importers:
       '@types/react-dom': ^18.0.6
       aptos: ^1.3.17
       eslint: ^8.15.0
-      react: ^18.2.0
       tsup: ^5.10.1
       typescript: ^4.5.3
     dependencies:
       '@aptos-labs/wallet-adapter-core': link:../wallet-adapter-core
       '@aptos-labs/wallet-adapter-plugin': link:../wallet-adapter-plugin
       aptos: 1.3.17
-      react: 18.2.0
     devDependencies:
-      '@aptos-labs/eslint-config-adapter': link:../eslint-config-adapter
       '@aptos-labs/wallet-adapter-tsconfig': link:../tsconfig
       '@types/react': 18.0.25
       '@types/react-dom': 18.0.8

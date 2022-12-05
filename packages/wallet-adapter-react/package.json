@@ -1,16 +1,15 @@
 {
   "name": "@aptos-labs/wallet-adapter-react",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Aptos Wallet Adapter React Provider",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "license": "MIT",
-  "scripts": {
-    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
-    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "lint": "TIMING=1 eslint \"src/**/*.ts*\""
+  "license": "Apache-2.0",
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
   },
   "repository": {
     "type": "git",
@@ -29,19 +28,26 @@
     "Wallet Adapter Provider",
     "React"
   ],
+  "scripts": {
+    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
+    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "lint": "TIMING=1 eslint \"src/**/*.ts*\""
+  },
+  "peerDependencies": {
+    "react": "*"
+  },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "eslint": "^8.15.0",
-    "@aptos-labs/eslint-config-adapter": "workspace:*",
     "typescript": "^4.5.3",
     "tsup": "^5.10.1"
   },
   "dependencies": {
     "@aptos-labs/wallet-adapter-core": "workspace:*",
     "@aptos-labs/wallet-adapter-plugin": "workspace:*",
-    "aptos": "^1.3.17",
-    "react": "^18.2.0"
+    "aptos": "^1.3.17"
   }
 }
