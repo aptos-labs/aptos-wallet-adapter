@@ -1,8 +1,9 @@
 {
   "name": "@aptos-labs/eslint-config-adapter",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "main": "index.js",
-  "license": "MIT",
+  "private": true,
+  "license": "Apache-2.0",
   "dependencies": {
     "eslint": "^7.23.0",
     "eslint-config-next": "13.0.0",

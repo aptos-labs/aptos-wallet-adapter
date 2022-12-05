@@ -1,10 +1,6 @@
 import "../styles/global.css";
 import type { AppProps } from "next/app";
-import {
-  PetraWallet,
-  MartianWallet,
-  RiseWallet,
-} from "@aptos-labs/wallet-adapter-plugin/src/wallets";
+import { PetraWallet, MartianWallet, RiseWallet } from "../wallets";
 import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
 
 const wallets = [new PetraWallet(), new MartianWallet(), new RiseWallet()];
