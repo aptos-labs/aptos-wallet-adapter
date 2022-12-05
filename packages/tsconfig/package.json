@@ -1,5 +1,5 @@
 {
-  "name": "@aptos/wallet-adapter-tsconfig",
+  "name": "@aptos-labs/wallet-adapter-tsconfig",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",

@@ -1,5 +1,5 @@
 {
-  "name": "@aptos/eslint-config-adapter",
+  "name": "@aptos-labs/eslint-config-adapter",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",

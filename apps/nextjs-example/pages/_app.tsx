@@ -4,8 +4,8 @@ import {
   PetraWallet,
   MartianWallet,
   RiseWallet,
-} from "@aptos/wallet-adapter-plugin/src/wallets";
-import { AptosWalletAdapterProvider } from "@aptos/wallet-adapter-react";
+} from "@aptos-labs/wallet-adapter-plugin/src/wallets";
+import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
 
 const wallets = [new PetraWallet(), new MartianWallet(), new RiseWallet()];
 

@@ -2,7 +2,7 @@ import {
   AptosWalletErrorResult,
   NetworkName,
   PluginProvider,
-} from "@aptos/wallet-adapter-core";
+} from "@aptos-labs/wallet-adapter-core";
 import type {
   AccountInfo,
   AdapterPlugin,
@@ -10,7 +10,7 @@ import type {
   SignMessagePayload,
   SignMessageResponse,
   WalletName,
-} from "@aptos/wallet-adapter-core";
+} from "@aptos-labs/wallet-adapter-core";
 import { MaybeHexString, Types } from "aptos";
 interface MartianProvider
   extends Omit<PluginProvider, "signAndSubmitTransaction"> {
