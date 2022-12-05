@@ -1,18 +1,12 @@
 name: nextjs-example
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "apps/nextjs-example/**"
-      - ".github/workflows/nextjs-example.yaml"
-
   pull_request:
     branches: [main]
 
 jobs:
   build:
-    name: Build and Deploy
+    name: Build
     runs-on: ubuntu-latest
 
     strategy:
