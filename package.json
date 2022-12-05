@@ -1,5 +1,5 @@
 {
-  "name": "@aptos/wallet-adapter",
+  "name": "@aptos-labs/wallet-adapter",
   "version": "1.0.0",
   "private": true,
   "workspaces": [
@@ -17,7 +17,7 @@
     "publish-packages": "changeset version && changeset publish"
   },
   "devDependencies": {
-    "@aptos/eslint-config-adapter": "workspace:*",
+    "@aptos-labs/eslint-config-adapter": "workspace:*",
     "@changesets/cli": "^2.22.0",
     "prettier": "latest",
     "turbo": "latest"

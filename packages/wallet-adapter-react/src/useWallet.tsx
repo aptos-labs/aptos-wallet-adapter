@@ -6,7 +6,7 @@ import {
   SignMessagePayload,
   SignMessageResponse,
   Wallet,
-} from "@aptos/wallet-adapter-core/src/types";
+} from "@aptos-labs/wallet-adapter-core/src/types";
 import { createContext, useContext } from "react";
 import { Types } from "aptos";
 

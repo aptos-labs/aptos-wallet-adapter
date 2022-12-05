@@ -1,5 +1,5 @@
 {
-  "extends": "@aptos/wallet-adapter-tsconfig/react-library.json",
+  "extends": "@aptos-labs/wallet-adapter-tsconfig/react-library.json",
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
 }

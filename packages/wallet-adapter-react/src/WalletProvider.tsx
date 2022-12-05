@@ -15,8 +15,8 @@ import type {
   Wallet,
   WalletInfo,
   WalletName,
-} from "@aptos/wallet-adapter-core";
-import { WalletCore } from "@aptos/wallet-adapter-core";
+} from "@aptos-labs/wallet-adapter-core";
+import { WalletCore } from "@aptos-labs/wallet-adapter-core";
 
 import { Types } from "aptos";
 

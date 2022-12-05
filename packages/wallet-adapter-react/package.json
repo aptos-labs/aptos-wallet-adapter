@@ -1,5 +1,5 @@
 {
-  "name": "@aptos/wallet-adapter-react",
+  "name": "@aptos-labs/wallet-adapter-react",
   "version": "1.0.0",
   "description": "Aptos Wallet Adapter React Provider",
   "main": "./dist/index.js",
@@ -30,17 +30,17 @@
     "React"
   ],
   "devDependencies": {
-    "@aptos/wallet-adapter-tsconfig": "workspace:*",
+    "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "eslint": "^8.15.0",
-    "@aptos/eslint-config-adapter": "workspace:*",
+    "@aptos-labs/eslint-config-adapter": "workspace:*",
     "typescript": "^4.5.3",
     "tsup": "^5.10.1"
   },
   "dependencies": {
-    "@aptos/wallet-adapter-core": "workspace:*",
-    "@aptos/wallet-adapter-plugin": "workspace:*",
+    "@aptos-labs/wallet-adapter-core": "workspace:*",
+    "@aptos-labs/wallet-adapter-plugin": "workspace:*",
     "aptos": "^1.3.17",
     "react": "^18.2.0"
   }
