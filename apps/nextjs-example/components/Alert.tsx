@@ -8,7 +8,15 @@ export function SuccessAlert({ text }: Alert) {
       className="bg-teal-100 border border-teal-400 text-teal-900 px-4 py-3 rounded relative"
       role="alert"
     >
-      <span className="block sm:inline break-all right-3">{text}</span>
+      <span className="block sm:inline break-all right-3">
+        <a
+          className="underline"
+          target="_blank"
+          href={`${text}?network=devnet`}
+        >
+          {text}
+        </a>
+      </span>
       <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
         <svg
           className="fill-current h-6 w-6 text-teal-500"

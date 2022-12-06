@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ErrorAlert, SuccessAlert } from "../components/Alert";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useAutoConnect } from "../components/AutoConnectProvider";
 
 const WalletButtons = dynamic(() => import("../components/WalletButtons"), {
   suspense: false,
@@ -28,6 +29,7 @@ export default function App() {
     signMessage,
   } = useWallet();
 
+  const { autoConnect, setAutoConnect } = useAutoConnect();
   const [successAlertMessage, setSuccessAlertMessage] = useState<string>("");
   const [errorAlertMessage, setErrorAlertMessage] = useState<string>("");
 
@@ -42,7 +44,7 @@ export default function App() {
       const response = await signAndSubmitTransaction(payload);
       await aptosClient.waitForTransaction(response?.hash || "");
       setSuccessAlertMessage(
-        `https://explorer.devnet.aptos.dev/txn/${response?.hash}`
+        `https://explorer.aptoslabs.com/txn/${response?.hash}`
       );
     } catch (error: any) {
       console.log("error", error);
@@ -87,6 +89,9 @@ export default function App() {
         <SuccessAlert text={successAlertMessage} />
       )}
       {errorAlertMessage.length > 0 && <ErrorAlert text={errorAlertMessage} />}
+      <h1 className="flex justify-center mt-2 mb-4 text-4xl font-extrabold tracking-tight leading-none text-black">
+        Aptos Wallet Adapter Demo (Devnet)
+      </h1>
       <table className="table-auto w-full border-separate border-spacing-y-8 shadow-lg bg-white border-separate">
         <tbody>
           <tr>
@@ -192,6 +197,32 @@ export default function App() {
             </td>
             <td className="px-8 py-4 border-t">
               <div>{network ? JSON.stringify(network) : ""}</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td className="px-8 py-4 border-t">
+              <h3>auto connect</h3>
+            </td>
+            <td className="px-8 py-4 border-t">
+              <div className="relative flex flex-col overflow-hidden">
+                <div className="flex">
+                  <label className="inline-flex relative items-center mr-5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={autoConnect}
+                      readOnly
+                    />
+                    <div
+                      onClick={() => {
+                        setAutoConnect(!autoConnect);
+                      }}
+                      className="w-11 h-6 bg-gray-200 rounded-full peer  peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"
+                    ></div>
+                  </label>
+                </div>
+              </div>
             </td>
           </tr>
         </tbody>
