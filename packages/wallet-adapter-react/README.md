@@ -16,39 +16,55 @@ Dapps that want to use the adapter should install this package and other support
 
 Install wallet dependencies you want to include in your app. To do that, you can had to each of the wallet in the supported wallets list (each name is linked to the npm package page) above and follow the instructions.
 
-Next, install the `@aptos/wallet-adapter-react`
+Next, install the `@aptos-labs/wallet-adapter-react`
 
 ```
-pnpm i @aptos/wallet-adapter-react
+pnpm i @aptos-labs/wallet-adapter-react
+```
+
+using npm
+
+```
+npm i @aptos-labs/wallet-adapter-react
 ```
 
 #### Import dependencies
 
-Import the installed wallets and `AptosWalletAdapterProvider`.
+On the `App.jsx` file,
+
+Import the installed wallets.
+
+```js
+import { AptosWallet } from "some-aptos-wallet-package";
+```
+
+Import the `AptosWalletAdapterProvider`.
+
+```js
+import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
+```
+
 Wrap your app with the Provider, pass it the `plugins (wallets)` you want to have on your app as an array and a `autoConnect` option (set to false by default)
 
-```
-import { AptosWallet } from "aptos-wallet";
-import { AptosWalletAdapterProvider } from "@aptos/wallet-adapter-react";
-
+```js
 const wallets = [new AptosWallet()];
 
 <AptosWalletAdapterProvider plugins={wallets} autoConnect={true}>
   <App />
-</AptosWalletAdapterProvider>
+</AptosWalletAdapterProvider>;
 ```
 
 #### Use Wallet
 
-On any page you want to use the wallet props, import `useWallet` from `@aptos/wallet-adapter-react`
+On any page you want to use the wallet props, import `useWallet` from `@aptos-labs/wallet-adapter-react`
 
-```
-import { useWallet } from "@aptos/wallet-adapter-react";
+```js
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 ```
 
 Then you can use the exported properties
 
-```
+```js
 const {
   connect,
   account,
@@ -67,23 +83,19 @@ const {
 
 ##### connect(walletName)
 
-```
-<button onClick={() => connect(wallet.name)} >
-  {wallet.name}
-</button>
+```js
+<button onClick={() => connect(wallet.name)}>{wallet.name}</button>
 ```
 
 ##### disconnect()
 
-```
-<button onClick={disconnect}>
-  Disconnect
-</button>
+```js
+<button onClick={disconnect}>Disconnect</button>
 ```
 
 ##### signAndSubmitTransaction(payload)
 
-```
+```js
   const onSignAndSubmitTransaction = async () => {
     const payload: Types.TransactionPayload = {
       type: "entry_function_payload",
@@ -108,7 +120,7 @@ const {
 
 ##### signTransaction(payload)
 
-```
+```js
   const onSignTransaction = async () => {
     const payload: Types.TransactionPayload = {
       type: "entry_function_payload",
@@ -121,7 +133,6 @@ const {
       console.log("response", response);
     } catch (error: any) {
       console.log("error", error);
-      setErrorAlertMessage(error);
     }
   };
 
@@ -132,7 +143,7 @@ const {
 
 ##### signMessage(payload)
 
-```
+```js
   const onSignMessage = async () => {
     const payload = {
       message: "Hello from Aptos Wallet Adapter",
@@ -153,20 +164,20 @@ const {
 
 ##### Account
 
-```
+```js
 <div>{account?.address}</div>
 <div>{account?.publicKey}</div>
 ```
 
 ##### Network
 
-```
+```js
 <div>{network?.name}</div>
 ```
 
 ##### Wallet
 
-```
+```js
 <div>{wallet?.name}</div>
 <div>{wallet?.icon}</div>
 <div>{wallet?.url}</div>
@@ -174,8 +185,8 @@ const {
 
 ##### Wallets
 
-```
-{wallets.map((wallet) => (
-    <p>{wallet.name}</p>
-))}
+```js
+{
+  wallets.map((wallet) => <p>{wallet.name}</p>);
+}
 ```
