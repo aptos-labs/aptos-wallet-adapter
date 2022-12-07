@@ -121,7 +121,7 @@ importers:
 
   packages/wallet-adapter-react:
     specifiers:
-      '@aptos-labs/wallet-adapter-core': workspace:*
+      '@aptos-labs/wallet-adapter-core': '*'
       '@aptos-labs/wallet-adapter-tsconfig': workspace:*
       '@types/react': ^18.0.17
       '@types/react-dom': ^18.0.6
