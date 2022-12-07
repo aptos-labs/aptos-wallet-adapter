@@ -9,7 +9,7 @@ Dapps that want to use the adapter should install this package and other support
 #### Install Dependencies
 
 Install wallet dependencies you want to include in your app.
-To do that, you can look at our [supported wallets list](). Each wallet is a link to their npm package where you can install it from.
+To do that, you can look at our [supported wallets list](https://github.com/aptos-labs/aptos-wallet-adapter#supported-wallet-packages). Each wallet is a link to npm package where you can install it from.
 
 Next, install the `@aptos-labs/wallet-adapter-react`
 
