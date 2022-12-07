@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-core",
-  "version": "0.0.0",
+  "version": "0.1.3",
   "description": "Aptos Wallet Adapter Core",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -36,7 +36,7 @@
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
     "eslint": "^8.15.0",
-    "@aptos-labs/eslint-config-adapter": "*",
+    "@aptos-labs/eslint-config-adapter": "workspace:*",
     "tsup": "^5.10.1",
     "typescript": "^4.5.3"
   },

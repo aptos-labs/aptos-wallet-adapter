@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-react",
-  "version": "0.0.0",
+  "version": "0.1.3",
   "description": "Aptos Wallet Adapter React Provider",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -47,7 +47,6 @@
   },
   "dependencies": {
     "@aptos-labs/wallet-adapter-core": "workspace:*",
-    "@aptos-labs/wallet-adapter-plugin": "workspace:*",
     "aptos": "^1.3.17"
   }
 }
