@@ -108,6 +108,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     return this._wallets;
   }
 
+  /**
+   * Getter for the current connected wallet
+   * @return wallet info
+   * @throws WalletNotSelectedError
+   */
   get wallet(): WalletInfo | null {
     try {
       if (!this._wallet) return null;
@@ -121,6 +126,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
+  /**
+   * Getter for the current connected account
+   * @return account info
+   * @throws WalletAccountError
+   */
   get account(): AccountInfo | null {
     try {
       return this._account;
@@ -129,6 +139,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
+  /**
+   * Getter for the current wallet network
+   * @return network info
+   * @throws WalletGetNetworkError
+   */
   get network(): NetworkInfo | null {
     try {
       return this._network;
@@ -137,6 +152,16 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
+  /** 
+  Connects a wallet to the app. If a wallet is already connected,
+  we first disconnect the current connected wallet and then connect the selected wallet.
+  On connect success, we set the current account and the network, and keeping the selected wallet
+  name in LocalStorage to support autoConnect function.
+
+  @param walletName. The wallet name we want to connect as a WalletName type.
+  @emit emits "connect" event
+  @throws WalletConnectionError
+  */
   async connect(walletName: WalletName): Promise<void> {
     try {
       const selectedWallet = this._wallets?.find(
@@ -164,6 +189,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
+  /** 
+  Disconnect the exisitng wallet. On success, we clear the 
+  current account, current network and LocalStorage data.
+  @emit emits "disconnect" event
+  @throws WalletDisconnectionError
+  */
   async disconnect(): Promise<void> {
     try {
       this.isWalletExists();
@@ -175,6 +206,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
+  /** 
+  Sign and submit transaction to chain.
+  @param transaction
+  @return response from the wallet's signAndSubmitTransaction function
+  @throws WalletSignAndSubmitMessageError
+  */
   async signAndSubmitTransaction(
     transaction: Types.TransactionPayload
   ): Promise<any> {
@@ -191,6 +228,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
+  /** 
+  Sign transaction (doesnt submit to chain).
+  @param transaction
+  @return response from the wallet's signTransaction function
+  @throws WalletSignTransactionError
+  */
   async signTransaction(
     transaction: Types.TransactionPayload
   ): Promise<Uint8Array | null> {
@@ -206,6 +249,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
+  /** 
+  Sign message (doesnt submit to chain).
+  @param message
+  @return response from the wallet's signMessage function
+  @throws WalletSignMessageError
+  */
   async signMessage(
     message: SignMessagePayload
   ): Promise<SignMessageResponse | null> {
@@ -221,6 +270,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
+  /** 
+  Event for when account has changed on the wallet
+  @return the new account info
+  @throws WalletAccountChangeError
+  */
   async onAccountChange(): Promise<void> {
     try {
       this.isWalletExists();
@@ -235,6 +289,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
+  /** 
+  Event for when network has changed on the wallet
+  @return the new network info
+  @throws WalletNetworkChangeError
+  */
   async onNetworkChange(): Promise<void> {
     try {
       this.isWalletExists();
