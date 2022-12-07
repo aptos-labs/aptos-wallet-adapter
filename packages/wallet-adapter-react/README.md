@@ -4,15 +4,12 @@ A react provider wrapper for the Aptos Wallet Adapter
 
 Dapps that want to use the adapter should install this package and other supported wallet packages.
 
-#### Supported wallet packages
-
-- [Petra](https://www.npmjs.com/package/petra-plugin-wallet-adapter)
-
 ### Usage
 
 #### Install Dependencies
 
-Install wallet dependencies you want to include in your app. To do that, you can had to each of the wallet in the supported wallets list (each name is linked to the npm package page) above and follow the instructions.
+Install wallet dependencies you want to include in your app.
+To do that, you can look at our [supported wallets list](). Each wallet is a link to their npm package where you can install it from.
 
 Next, install the `@aptos-labs/wallet-adapter-react`
 
@@ -33,7 +30,7 @@ On the `App.jsx` file,
 Import the installed wallets.
 
 ```js
-import { AptosWallet } from "some-aptos-wallet-package";
+import { SomeAptosWallet } from "some-aptos-wallet-package";
 ```
 
 Import the `AptosWalletAdapterProvider`.
