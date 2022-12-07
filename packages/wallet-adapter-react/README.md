@@ -6,9 +6,7 @@ Dapps that want to use the adapter should install this package and other support
 
 #### Supported wallet packages
 
-- Petra
-- Martian
-- Rise
+- [Petra](https://www.npmjs.com/package/petra-plugin-wallet-adapter)
 
 ### Usage
 
