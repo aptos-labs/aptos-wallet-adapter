@@ -28,6 +28,7 @@ importers:
       autoprefixer: ^10.4.13
       eslint: ^8.15.0
       next: 13.0.0
+      petra-plugin-wallet-adapter: ^0.1.2
       postcss: ^8.4.19
       react: 18.2.0
       react-dom: 18.2.0
@@ -38,6 +39,7 @@ importers:
       '@aptos-labs/wallet-adapter-react': link:../../packages/wallet-adapter-react
       aptos: 1.3.17
       next: 13.0.0_mqvh5p7ejg4taogoj6tpk3gd5a
+      petra-plugin-wallet-adapter: 0.1.2
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -121,6 +123,15 @@ packages:
     dependencies:
       '@jridgewell/gen-mapping': 0.1.1
       '@jridgewell/trace-mapping': 0.3.17
+
+  /@aptos-labs/wallet-adapter-core/0.1.4:
+    resolution: {integrity: sha512-mNq0uKeqU9i3RwQ6rlKnhoJ1mDqWB76oqGgfaMdfHrf5M0nke1/bPxk672cqPig9+pqwIPBGU/LYtg4bS/YBJw==}
+    dependencies:
+      aptos: 1.4.0
+      eventemitter3: 4.0.7
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
   /@babel/code-frame/7.12.11:
     resolution: {integrity: sha512-Zt1yodBx1UcyiePMSkWnU4hPqhwq7hGi2nFL1LeA3EUl+q2LQx16MISgJ0+z7dnmgvP9QtIleuETGOiOH1RcIw==}
@@ -997,6 +1008,19 @@ packages:
 
   /aptos/1.3.17:
     resolution: {integrity: sha512-SPgWR9D0nHwLNpvxH943T9ieA2/Q0AVVsvT/qTUuWQSImxkxMVkb++XyWhiFyQpnZDqo6o2o0/fZakeUkqrc8w==}
+    engines: {node: '>=11.0.0'}
+    dependencies:
+      '@noble/hashes': 1.1.3
+      '@scure/bip39': 1.1.0
+      axios: 0.27.2
+      form-data: 4.0.0
+      tweetnacl: 1.0.3
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /aptos/1.4.0:
+    resolution: {integrity: sha512-D1yBXeyhiBKgJnUQX8iDXckZMPFwdJ9YfUZtRcDhUoR7qLX4hfmLQYemvLqtJvyTCf/Nggfp66hXX1Z8FdlEiQ==}
     engines: {node: '>=11.0.0'}
     dependencies:
       '@noble/hashes': 1.1.3
@@ -3179,6 +3203,15 @@ packages:
   /path-type/4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
+
+  /petra-plugin-wallet-adapter/0.1.2:
+    resolution: {integrity: sha512-aVXKXq8JRNVQjqxcLoNymJnO5aoaKnGu0sEWkS60EcfFvHteyg8auO9zLr7vFf5p14mLw3SeQb/pL0hD8fMR/g==}
+    dependencies:
+      '@aptos-labs/wallet-adapter-core': 0.1.4
+      aptos: 1.4.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
   /picocolors/1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
