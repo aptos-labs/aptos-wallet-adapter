@@ -26,8 +26,9 @@ You are welcome to create a pull reuqest against the `main` branch.
 
 Before creating a PR, on the root folder
 
-1. Run `pnpm install --force`
-2. Run `pnpm turbo run build`
+1. Make sure you are up to date with the `main` branch
+2. Run `pnpm install --force`
+3. Run `pnpm turbo run build`
 
 If everything passes, you should be able to create a PR.
 
