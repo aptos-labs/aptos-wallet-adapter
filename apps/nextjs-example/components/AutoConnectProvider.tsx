@@ -19,7 +19,7 @@ export function useAutoConnect(): AutoConnectContextState {
 export const AutoConnectProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [autoConnect, setAutoConnect] = useState<any>(() => {
+  const [autoConnect, setAutoConnect] = useState<boolean>(() => {
     try {
       const isAutoConnect = localStorage.getItem(
         AUTO_CONNECT_LOCAL_STORAGE_KEY
