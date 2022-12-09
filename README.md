@@ -10,3 +10,5 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 #### Supported wallet packages
 
 - [Petra](https://www.npmjs.com/package/petra-plugin-wallet-adapter)
+- [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
+
