@@ -1,5 +1,5 @@
 import { Types } from "aptos";
-import { EventEmitter } from "eventemitter3";
+import EventEmitter from "eventemitter3";
 
 import { WalletReadyState } from "./constants";
 import {
