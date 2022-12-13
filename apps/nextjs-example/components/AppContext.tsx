@@ -1,5 +1,6 @@
 import { MartianWallet, RiseWallet } from "../wallets";
 import { PetraWallet } from "petra-plugin-wallet-adapter";
+import { PontemWallet } from "@pontem/wallet-adapter-plugin";
 import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
 import {
   AutoConnectProvider,
@@ -10,7 +11,12 @@ import { FC, ReactNode } from "react";
 const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { autoConnect } = useAutoConnect();
 
-  const wallets = [new PetraWallet(), new MartianWallet(), new RiseWallet()];
+  const wallets = [
+    new PetraWallet(),
+    new MartianWallet(),
+    new RiseWallet(),
+    new PontemWallet(),
+  ];
 
   return (
     <AptosWalletAdapterProvider plugins={wallets} autoConnect={autoConnect}>
