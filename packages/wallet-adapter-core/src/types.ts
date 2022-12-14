@@ -90,12 +90,13 @@ export interface SignMessagePayload {
 }
 
 export interface SignMessageResponse {
-  address: string;
-  application: string;
-  chainId: number;
+  address?: string;
+  application?: string;
+  chainId?: number;
   fullMessage: string; // The message that was generated to sign
   message: string; // The message passed in by the user
   nonce: string;
   prefix: "APTOS"; // Should always be APTOS
-  signature: string; // The signed full message
+  signature: string | string[]; // The signed full message
+  bitmap?: Uint8Array; // a 4-byte (32 bits) bit-vector of length N
 }
