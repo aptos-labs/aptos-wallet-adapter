@@ -71,6 +71,10 @@ export class WalletSignMessageError extends WalletError {
   name = "WalletSignMessageError";
 }
 
+export class WalletSignMessageAndVerifyError extends WalletError {
+  name = "WalletSignMessageAndVerifyError";
+}
+
 export class WalletSignAndSubmitMessageError extends WalletError {
   name = "WalletSignAndSubmitMessageError";
 }

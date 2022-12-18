@@ -1,5 +1,7 @@
-import { Types } from "aptos";
+import { HexString, Types } from "aptos";
 import EventEmitter from "eventemitter3";
+import { sign } from "tweetnacl";
+import { Buffer } from "buffer";
 
 import { WalletReadyState } from "./constants";
 import {
@@ -13,6 +15,7 @@ import {
   WalletNotReadyError,
   WalletNotSelectedError,
   WalletSignAndSubmitMessageError,
+  WalletSignMessageAndVerifyError,
   WalletSignMessageError,
   WalletSignTransactionError,
 } from "./error";
@@ -305,6 +308,36 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       const errMsg =
         typeof error == "object" && "message" in error ? error.message : error;
       throw new WalletNetworkChangeError(errMsg).message;
+    }
+  }
+
+  async signMessageAndVerify(message: SignMessagePayload): Promise<boolean> {
+    try {
+      this.isWalletExists();
+      if (!this._account) throw new Error("No account found!");
+      const response = await this._wallet?.signMessage(message);
+      if (!response)
+        throw new WalletSignMessageAndVerifyError("No response").message;
+      // Verify that the bytes were signed using the private key that matches the known public key
+      let verified = false;
+      const key = this._account.publicKey.slice(2, 66);
+      // multi single sig wallets
+      if (Array.isArray(response.signature)) {
+        // TODO - implement multi sig wallets
+        console.log(response);
+      } else {
+        // single sig wallets
+        verified = sign.detached.verify(
+          Buffer.from(response.fullMessage),
+          Buffer.from(response.signature, "hex"),
+          Buffer.from(key, "hex")
+        );
+      }
+      return verified;
+    } catch (error: any) {
+      const errMsg =
+        typeof error == "object" && "message" in error ? error.message : error;
+      throw new WalletSignMessageAndVerifyError(errMsg).message;
     }
   }
 }

@@ -91,6 +91,14 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
+  const signMessageAndVerify = async (message: SignMessagePayload) => {
+    try {
+      return await walletCore.signMessageAndVerify(message);
+    } catch (error: any) {
+      throw error;
+    }
+  };
+
   useEffect(() => {
     if (autoConnect) {
       if (localStorage.getItem("AptosWalletName")) {
@@ -201,6 +209,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         signAndSubmitTransaction,
         signTransaction,
         signMessage,
+        signMessageAndVerify,
       }}
     >
       {children}
