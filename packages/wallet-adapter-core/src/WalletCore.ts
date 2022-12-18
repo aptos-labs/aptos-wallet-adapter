@@ -317,11 +317,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       if (!this._account) throw new Error("No account found!");
       const response = await this._wallet?.signMessage(message);
       if (!response)
-        throw new WalletSignMessageAndVerifyError("No response").message;
+        throw new WalletSignMessageAndVerifyError("Failed to sign a message")
+          .message;
       // Verify that the bytes were signed using the private key that matches the known public key
       let verified = false;
-      const key = this._account.publicKey.slice(2, 66);
-      // multi single sig wallets
+      // Remove the 0x prefix
+      const currentAccountPublicKey = this._account.publicKey.slice(2, 66);
+      // multi sig wallets
       if (Array.isArray(response.signature)) {
         // TODO - implement multi sig wallets
         console.log(response);
@@ -330,7 +332,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         verified = sign.detached.verify(
           Buffer.from(response.fullMessage),
           Buffer.from(response.signature, "hex"),
-          Buffer.from(key, "hex")
+          Buffer.from(currentAccountPublicKey, "hex")
         );
       }
       return verified;

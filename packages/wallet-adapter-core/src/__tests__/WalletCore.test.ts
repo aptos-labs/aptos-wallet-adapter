@@ -16,7 +16,7 @@ const signMessageResponseMock: SignMessageResponse = {
 };
 
 const mockSignMessagePayload: SignMessagePayload = {
-  message: "my-messae",
+  message: "my-message",
   nonce: Date.now().toString(),
 };
 
