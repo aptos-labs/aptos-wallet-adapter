@@ -86,7 +86,7 @@ describe("signMessageAndVerify", () => {
     expect(verified).toBeTruthy();
   });
 
-  it("it should fails in verify signed message", async () => {
+  it("it should fails to verify signed message", async () => {
     const account2 = new AptosAccount();
     const encoder = new TextEncoder();
     const messageBytes = encoder.encode(signMessageResponseMock.fullMessage);
