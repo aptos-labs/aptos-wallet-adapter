@@ -66,7 +66,7 @@ describe("signMessageAndVerify", () => {
   });
   signMessageResponseMock.fullMessage = `\nmessage: ${signMessageResponseMock.message} \nnonce: ${signMessageResponseMock.nonce}`;
   jest
-    .spyOn(walletCoreMock as any, "isWalletExists")
+    .spyOn(walletCoreMock as any, "doesWalletExist")
     .mockImplementation(() => true);
 
   it("it should verify a signed message", async () => {

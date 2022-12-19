@@ -70,7 +70,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     });
   }
 
-  private isWalletExists(): boolean | WalletNotConnectedError {
+  private doesWalletExist(): boolean | WalletNotConnectedError {
     if (!this._connected || this._connecting || !this._wallet)
       throw new WalletNotConnectedError().name;
     if (
@@ -200,7 +200,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   */
   async disconnect(): Promise<void> {
     try {
-      this.isWalletExists();
+      this.doesWalletExist();
       await this._wallet?.disconnect();
       this.clearData();
       this.emit("disconnect");
@@ -219,7 +219,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     transaction: Types.TransactionPayload
   ): Promise<any> {
     try {
-      this.isWalletExists();
+      this.doesWalletExist();
       const response = await this._wallet?.signAndSubmitTransaction(
         transaction
       );
@@ -242,7 +242,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   ): Promise<Uint8Array | null> {
     try {
       if (this._wallet && !("signTransaction" in this._wallet)) return null;
-      this.isWalletExists();
+      this.doesWalletExist();
       const response = await (this._wallet as any).signTransaction(transaction);
       return response;
     } catch (error: any) {
@@ -262,7 +262,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     message: SignMessagePayload
   ): Promise<SignMessageResponse | null> {
     try {
-      this.isWalletExists();
+      this.doesWalletExist();
       if (!this._wallet) return null;
       const response = await this._wallet?.signMessage(message);
       return response;
@@ -280,7 +280,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   */
   async onAccountChange(): Promise<void> {
     try {
-      this.isWalletExists();
+      this.doesWalletExist();
       await this._wallet?.onAccountChange((data: AccountInfo) => {
         this.setAccount({ ...data });
         this.emit("accountChange", this._account);
@@ -299,7 +299,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   */
   async onNetworkChange(): Promise<void> {
     try {
-      this.isWalletExists();
+      this.doesWalletExist();
       await this._wallet?.onNetworkChange((data: NetworkInfo) => {
         this.setNetwork({ ...data });
         this.emit("networkChange", this._network);
@@ -313,7 +313,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   async signMessageAndVerify(message: SignMessagePayload): Promise<boolean> {
     try {
-      this.isWalletExists();
+      this.doesWalletExist();
       if (!this._account) throw new Error("No account found!");
       const response = await this._wallet?.signMessage(message);
       if (!response)
@@ -322,7 +322,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       // Verify that the bytes were signed using the private key that matches the known public key
       let verified = false;
       // Remove the 0x prefix
-      const currentAccountPublicKey = this._account.publicKey.slice(2, 66);
+      const currentAccountPublicKey = new HexString(this._account.publicKey);
       // multi sig wallets
       if (Array.isArray(response.signature)) {
         // TODO - implement multi sig wallets
@@ -332,7 +332,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         verified = sign.detached.verify(
           Buffer.from(response.fullMessage),
           Buffer.from(response.signature, "hex"),
-          Buffer.from(currentAccountPublicKey, "hex")
+          Buffer.from(currentAccountPublicKey.noPrefix(), "hex")
         );
       }
       return verified;
