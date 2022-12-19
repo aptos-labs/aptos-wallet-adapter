@@ -24,18 +24,13 @@ You are welcome to add packages (vue-provider/UI frameworks/etc) in this workspa
 
 You are welcome to create a pull reuqest against the `main` branch.
 
-Before creating a PR, on the root folder
+Before creating a PR, on the `root` folder
 
 1. Make sure you are up to date with the `main` branch
-2. Run `pnpm install --force`
+2. Run `pnpm install`
 3. Run `pnpm turbo run build`
 
 If everything passes, you should be able to create a PR.
-
-Once your pull request is created
-
-- A workflow will run to try and build the nextjs app, this must pass before merging into main.
-- Please test and check the demo app once it was build to make sure nothing breaks.
 
 #### Changesets
 
