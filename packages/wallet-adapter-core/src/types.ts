@@ -11,7 +11,8 @@ export type NetworkInfo = {
 
 export type AccountInfo = {
   address: string;
-  publicKey: string;
+  publicKey: string | string[];
+  minKeysRequired?: number
 };
 
 export interface AptosWalletErrorResult {
