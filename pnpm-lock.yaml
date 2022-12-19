@@ -18,9 +18,7 @@ importers:
     specifiers:
       '@aptos-labs/wallet-adapter-core': workspace:*
       '@aptos-labs/wallet-adapter-react': workspace:*
-      '@aptos-labs/wallet-adapter-tailwind-ui': workspace:*
       '@babel/core': ^7.0.0
-      '@headlessui/react': ^1.7.7
       '@martianwallet/aptos-wallet-adapter': ^0.0.2
       '@pontem/wallet-adapter-plugin': ^0.1.4
       '@trustwallet/aptos-wallet-adapter': ^0.1.4
@@ -40,8 +38,6 @@ importers:
     dependencies:
       '@aptos-labs/wallet-adapter-core': link:../../packages/wallet-adapter-core
       '@aptos-labs/wallet-adapter-react': link:../../packages/wallet-adapter-react
-      '@aptos-labs/wallet-adapter-tailwind-ui': link:../../packages/wallet-adapter-tailwind-ui
-      '@headlessui/react': 1.7.7_biqbaboplfbrettd7655fr4n2y
       '@martianwallet/aptos-wallet-adapter': 0.0.2
       '@pontem/wallet-adapter-plugin': 0.1.4
       '@trustwallet/aptos-wallet-adapter': 0.1.4
@@ -588,18 +584,6 @@ packages:
       react-dom: ^16 || ^17 || ^18
     dependencies:
       client-only: 0.0.1
-    dev: false
-
-  /@headlessui/react/1.7.7_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-BqDOd/tB9u2tA0T3Z0fn18ktw+KbVwMnkxxsGPIH2hzssrQhKB5n/6StZOyvLYP/FsYtvuXfi9I0YowKPv2c1w==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      react: ^16 || ^17 || ^18
-      react-dom: ^16 || ^17 || ^18
-    dependencies:
-      client-only: 0.0.1
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /@humanwhocodes/config-array/0.11.7:
