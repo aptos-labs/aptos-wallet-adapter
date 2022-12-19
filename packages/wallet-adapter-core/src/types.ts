@@ -6,7 +6,9 @@ export type WalletName<T extends string = string> = T & {
   __brand__: "WalletName";
 };
 export type NetworkInfo = {
-  name: NetworkName | undefined;
+  name: NetworkName;
+  chainId: number;
+  url: string;
 };
 
 export type AccountInfo = {
