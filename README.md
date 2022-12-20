@@ -13,3 +13,4 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 - [Trust](https://www.npmjs.com/package/@trustwallet/aptos-wallet-adapter)
 - [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
 - [Martian](https://www.npmjs.com/package/@martianwallet/aptos-wallet-adapter)
+- [Rise](https://www.npmjs.com/package/@rise-wallet/wallet-adapter)

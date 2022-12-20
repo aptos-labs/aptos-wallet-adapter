@@ -1,4 +1,4 @@
-import { RiseWallet } from "../wallets";
+import { RiseWallet } from "@rise-wallet/wallet-adapter";
 import { PetraWallet } from "petra-plugin-wallet-adapter";
 import { MartianWallet } from "@martianwallet/aptos-wallet-adapter";
 import { PontemWallet } from "@pontem/wallet-adapter-plugin";
