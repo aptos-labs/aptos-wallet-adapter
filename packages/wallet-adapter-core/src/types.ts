@@ -7,7 +7,7 @@ export type WalletName<T extends string = string> = T & {
 };
 export type NetworkInfo = {
   name: NetworkName;
-  chainId: number;
+  chainId: string;
   url: string;
 };
 
