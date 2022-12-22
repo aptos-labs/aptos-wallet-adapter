@@ -321,15 +321,15 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           .message;
       // Verify that the bytes were signed using the private key that matches the known public key
       let verified = false;
-      // support for when address doesnt have hex prefix (0x)
-      const currentAccountPublicKey = new HexString(this._account.publicKey);
-
       if (Array.isArray(response.signature)) {
         // multi sig wallets
         // TODO - implement multi sig wallets
       } else {
         // single sig wallets
-
+        // support for when address doesnt have hex prefix (0x)
+        const currentAccountPublicKey = new HexString(
+          this._account.publicKey as string
+        );
         // support for when address doesnt have hex prefix (0x)
         const signature = new HexString(response.signature);
         verified = sign.detached.verify(
