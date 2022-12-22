@@ -3,6 +3,7 @@ import { PetraWallet } from "petra-plugin-wallet-adapter";
 import { MartianWallet } from "@martianwallet/aptos-wallet-adapter";
 import { PontemWallet } from "@pontem/wallet-adapter-plugin";
 import { TrustWallet } from "@trustwallet/aptos-wallet-adapter";
+import { SpikaWallet } from "@spika/aptos-plugin";
 import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
 import {
   AutoConnectProvider,
@@ -19,6 +20,7 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     new RiseWallet(),
     new PontemWallet(),
     new TrustWallet(),
+    new SpikaWallet(),
   ];
 
   return (

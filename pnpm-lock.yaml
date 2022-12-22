@@ -25,6 +25,7 @@ importers:
       '@martianwallet/aptos-wallet-adapter': ^0.0.2
       '@pontem/wallet-adapter-plugin': ^0.1.4
       '@rise-wallet/wallet-adapter': ^0.1.2
+      '@spika/aptos-plugin': ^0.1.2
       '@trustwallet/aptos-wallet-adapter': ^0.1.4
       '@types/node': ^17.0.12
       '@types/react': ^18.0.22
@@ -45,6 +46,7 @@ importers:
       '@martianwallet/aptos-wallet-adapter': 0.0.2
       '@pontem/wallet-adapter-plugin': 0.1.4
       '@rise-wallet/wallet-adapter': 0.1.2
+      '@spika/aptos-plugin': 0.1.2
       '@trustwallet/aptos-wallet-adapter': 0.1.4
       aptos: 1.3.17
       next: 13.0.0_mqvh5p7ejg4taogoj6tpk3gd5a
@@ -1223,6 +1225,15 @@ packages:
     dependencies:
       '@sinonjs/commons': 1.8.6
     dev: true
+
+  /@spika/aptos-plugin/0.1.2:
+    resolution: {integrity: sha512-eL8bZMQkHotn2B3hMa/eNATsk3NrJQOqn2ZYf8XWt85IC+mzr9HU/RYIFKO9AYA6Kxpz3o6X6HkHCzEzkssJoQ==}
+    dependencies:
+      '@aptos-labs/wallet-adapter-core': 0.1.7
+      aptos: 1.4.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
   /@swc/helpers/0.4.11:
     resolution: {integrity: sha512-rEUrBSGIoSFuYxwBYtlUFMlE2CwGhmW+w9355/5oduSw8e5h2+Tj4UrAGNNgP9915++wj5vkQo0UuOBqOAq4nw==}
