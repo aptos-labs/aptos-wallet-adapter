@@ -27,6 +27,7 @@ export default function App() {
     signAndSubmitTransaction,
     signTransaction,
     signMessage,
+    signMessageAndVerify,
   } = useWallet();
 
   const { autoConnect, setAutoConnect } = useAutoConnect();
@@ -80,6 +81,23 @@ export default function App() {
     } catch (error: any) {
       console.log("error", error);
       setErrorAlertMessage(error);
+    }
+  };
+
+  const onSignMessageAndVerify = async () => {
+    const payload = {
+      message: "Hello from Aptos Wallet Adapter",
+      nonce: "random_string",
+    };
+    try {
+      const response = await signMessageAndVerify(payload);
+      setSuccessAlertMessage(
+        JSON.stringify({ onSignMessageAndVerify: response })
+      );
+      console.log("response", response);
+    } catch (error: any) {
+      console.log("error", error);
+      setErrorAlertMessage(JSON.stringify({ onSignMessageAndVerify: error }));
     }
   };
 
@@ -151,6 +169,18 @@ export default function App() {
                   disabled={!connected}
                 >
                   Sign Message
+                </button>
+
+                <button
+                  className={`bg-orange-500 text-white font-bold py-2 px-4 rounded mr-4 ${
+                    !connected
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-orange-700"
+                  }`}
+                  onClick={onSignMessageAndVerify}
+                  disabled={!connected}
+                >
+                  Sign Message and Verify
                 </button>
               </div>
             </td>

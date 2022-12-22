@@ -1,5 +1,7 @@
-import { Types } from "aptos";
+import { HexString, Types } from "aptos";
 import EventEmitter from "eventemitter3";
+import { sign } from "tweetnacl";
+import { Buffer } from "buffer";
 
 import { WalletReadyState } from "./constants";
 import {
@@ -13,6 +15,7 @@ import {
   WalletNotReadyError,
   WalletNotSelectedError,
   WalletSignAndSubmitMessageError,
+  WalletSignMessageAndVerifyError,
   WalletSignMessageError,
   WalletSignTransactionError,
 } from "./error";
@@ -67,7 +70,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     });
   }
 
-  private isWalletExists(): boolean | WalletNotConnectedError {
+  private doesWalletExist(): boolean | WalletNotConnectedError {
     if (!this._connected || this._connecting || !this._wallet)
       throw new WalletNotConnectedError().name;
     if (
@@ -197,7 +200,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   */
   async disconnect(): Promise<void> {
     try {
-      this.isWalletExists();
+      this.doesWalletExist();
       await this._wallet?.disconnect();
       this.clearData();
       this.emit("disconnect");
@@ -216,7 +219,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     transaction: Types.TransactionPayload
   ): Promise<any> {
     try {
-      this.isWalletExists();
+      this.doesWalletExist();
       const response = await this._wallet?.signAndSubmitTransaction(
         transaction
       );
@@ -239,7 +242,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   ): Promise<Uint8Array | null> {
     try {
       if (this._wallet && !("signTransaction" in this._wallet)) return null;
-      this.isWalletExists();
+      this.doesWalletExist();
       const response = await (this._wallet as any).signTransaction(transaction);
       return response;
     } catch (error: any) {
@@ -259,7 +262,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     message: SignMessagePayload
   ): Promise<SignMessageResponse | null> {
     try {
-      this.isWalletExists();
+      this.doesWalletExist();
       if (!this._wallet) return null;
       const response = await this._wallet?.signMessage(message);
       return response;
@@ -277,7 +280,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   */
   async onAccountChange(): Promise<void> {
     try {
-      this.isWalletExists();
+      this.doesWalletExist();
       await this._wallet?.onAccountChange((data: AccountInfo) => {
         this.setAccount({ ...data });
         this.emit("accountChange", this._account);
@@ -296,7 +299,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   */
   async onNetworkChange(): Promise<void> {
     try {
-      this.isWalletExists();
+      this.doesWalletExist();
       await this._wallet?.onNetworkChange((data: NetworkInfo) => {
         this.setNetwork({ ...data });
         this.emit("networkChange", this._network);
@@ -305,6 +308,41 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       const errMsg =
         typeof error == "object" && "message" in error ? error.message : error;
       throw new WalletNetworkChangeError(errMsg).message;
+    }
+  }
+
+  async signMessageAndVerify(message: SignMessagePayload): Promise<boolean> {
+    try {
+      this.doesWalletExist();
+      if (!this._account) throw new Error("No account found!");
+      const response = await this._wallet?.signMessage(message);
+      if (!response)
+        throw new WalletSignMessageAndVerifyError("Failed to sign a message")
+          .message;
+      // Verify that the bytes were signed using the private key that matches the known public key
+      let verified = false;
+      // support for when address doesnt have hex prefix (0x)
+      const currentAccountPublicKey = new HexString(this._account.publicKey);
+
+      if (Array.isArray(response.signature)) {
+        // multi sig wallets
+        // TODO - implement multi sig wallets
+      } else {
+        // single sig wallets
+
+        // support for when address doesnt have hex prefix (0x)
+        const signature = new HexString(response.signature);
+        verified = sign.detached.verify(
+          Buffer.from(response.fullMessage),
+          Buffer.from(signature.noPrefix(), "hex"),
+          Buffer.from(currentAccountPublicKey.noPrefix(), "hex")
+        );
+      }
+      return verified;
+    } catch (error: any) {
+      const errMsg =
+        typeof error == "object" && "message" in error ? error.message : error;
+      throw new WalletSignMessageAndVerifyError(errMsg).message;
     }
   }
 }
