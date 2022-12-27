@@ -1,20 +1,9 @@
-const isGithubActions = process.env.GITHUB_ACTIONS || false;
-
-let assetPrefix = "";
-let basePath = "";
-
-if (isGithubActions) {
-  // trim off `<owner>/`
-  const repo = process.env.GITHUB_REPOSITORY.replace(/.*?\//, "");
-
-  assetPrefix = `/${repo}/`;
-  basePath = `/${repo}`;
-}
+const isProd = process.env.NODE_ENV === "production";
 
 module.exports = {
   reactStrictMode: true,
-  assetPrefix: assetPrefix,
-  basePath: basePath,
+  assetPrefix: isProd ? "/aptos-wallet-adapter" : "",
+  basePath: isProd ? "/aptos-wallet-adapter" : "",
   images: { unoptimized: true },
   experimental: {
     transpilePackages: ["wallet-adapter-react", "wallet-adapter-plugin"],

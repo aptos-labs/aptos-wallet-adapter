@@ -29,6 +29,7 @@ export interface WalletContextState {
     options?: V
   ): Promise<any>;
   signMessage(message: SignMessagePayload): Promise<SignMessageResponse | null>;
+  signMessageAndVerify(message: SignMessagePayload): Promise<boolean>;
 }
 
 const DEFAULT_COUNTEXT = {

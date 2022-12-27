@@ -4,6 +4,25 @@ A react provider wrapper for the Aptos Wallet Adapter
 
 Dapps that want to use the adapter should install this package and other supported wallet packages.
 
+### Support
+
+The react provider supports all [wallet standard](https://aptos.dev/guides/wallet-standard) functions and feature functions
+
+##### Standard functions
+
+connect
+disconnect
+connected
+account
+network
+signAndSubmitTransaction
+signMessage
+
+##### Feature functions
+
+signTransaction
+signMessageAndVerify
+
 ### Usage
 
 #### Install Dependencies
@@ -71,6 +90,7 @@ const {
   signAndSubmitTransaction,
   signTransaction,
   signMessage,
+  signMessageAndVerify,
 } = useWallet();
 ```
 
@@ -110,29 +130,6 @@ const {
 
 <button onClick={onSignAndSubmitTransaction}>
   Sign and submit transaction
-</button>
-```
-
-##### signTransaction(payload)
-
-```js
-  const onSignTransaction = async () => {
-    const payload: Types.TransactionPayload = {
-      type: "entry_function_payload",
-      function: "0x1::coin::transfer",
-      type_arguments: ["0x1::aptos_coin::AptosCoin"],
-      arguments: [account?.address, 1], // 1 is in Octas
-    };
-    try {
-      const response = await signTransaction(payload);
-      console.log("response", response);
-    } catch (error: any) {
-      console.log("error", error);
-    }
-  };
-
-<button onClick={onSignTransaction}>
-  Sign transaction
 </button>
 ```
 
@@ -184,4 +181,48 @@ const {
 {
   wallets.map((wallet) => <p>{wallet.name}</p>);
 }
+```
+
+##### signTransaction(payload)
+
+```js
+  const onSignTransaction = async () => {
+    const payload: Types.TransactionPayload = {
+      type: "entry_function_payload",
+      function: "0x1::coin::transfer",
+      type_arguments: ["0x1::aptos_coin::AptosCoin"],
+      arguments: [account?.address, 1], // 1 is in Octas
+    };
+    try {
+      const response = await signTransaction(payload);
+      console.log("response", response);
+    } catch (error: any) {
+      console.log("error", error);
+    }
+  };
+
+<button onClick={onSignTransaction}>
+  Sign transaction
+</button>
+```
+
+##### signMessageAndVerify(payload)
+
+```js
+const onSignMessageAndVerify = async () => {
+  const payload = {
+    message: "Hello from Aptos Wallet Adapter",
+    nonce: "random_string",
+  };
+  try {
+    const response = await signMessageAndVerify(payload);
+    console.log("response", response);
+  } catch (error: any) {
+    console.log("error", error);
+  }
+};
+
+<button onClick={onSignMessageAndVerify}>
+  Sign message and verify
+</button>
 ```

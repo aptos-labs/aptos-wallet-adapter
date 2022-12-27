@@ -6,12 +6,15 @@ export type WalletName<T extends string = string> = T & {
   __brand__: "WalletName";
 };
 export type NetworkInfo = {
-  name: NetworkName | undefined;
+  name: NetworkName;
+  chainId?: string;
+  url?: string;
 };
 
 export type AccountInfo = {
   address: string;
-  publicKey: string;
+  publicKey: string | string[];
+  minKeysRequired?: number
 };
 
 export interface AptosWalletErrorResult {
