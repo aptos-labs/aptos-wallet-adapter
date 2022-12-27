@@ -1,10 +1,12 @@
 import { AptosClient, Types } from "aptos";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { ErrorAlert, SuccessAlert } from "../components/Alert";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useAutoConnect } from "../components/AutoConnectProvider";
+import { WalletDropdown } from "@aptos-labs/wallet-adapter-tailwind-ui";
+import { Menu, Transition } from '@headlessui/react';
 
 const WalletButtons = dynamic(() => import("../components/WalletButtons"), {
   suspense: false,
@@ -28,6 +30,8 @@ export default function App() {
     signTransaction,
     signMessage,
     signMessageAndVerify,
+    wallets,
+    connect
   } = useWallet();
 
   const { autoConnect, setAutoConnect } = useAutoConnect();
@@ -118,6 +122,14 @@ export default function App() {
             </td>
             <td className="px-8 py-4 w-3/4">
               <WalletButtons />
+            </td>
+          </tr>
+          <tr>
+            <td className="px-8 py-4 w-1/4">
+              <h3>Tailwind Wallet Adapter</h3>
+            </td>
+            <td className="px-8 py-4 w-3/4">
+              <WalletDropdown />
             </td>
           </tr>
           <tr>

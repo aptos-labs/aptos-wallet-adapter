@@ -21,7 +21,9 @@ importers:
     specifiers:
       '@aptos-labs/wallet-adapter-core': workspace:*
       '@aptos-labs/wallet-adapter-react': workspace:*
+      '@aptos-labs/wallet-adapter-tailwind-ui': workspace:*
       '@babel/core': ^7.0.0
+      '@headlessui/react': ^1.7.7
       '@martianwallet/aptos-wallet-adapter': ^0.0.2
       '@pontem/wallet-adapter-plugin': ^0.1.4
       '@rise-wallet/wallet-adapter': ^0.1.2
@@ -43,6 +45,8 @@ importers:
     dependencies:
       '@aptos-labs/wallet-adapter-core': link:../../packages/wallet-adapter-core
       '@aptos-labs/wallet-adapter-react': link:../../packages/wallet-adapter-react
+      '@aptos-labs/wallet-adapter-tailwind-ui': link:../../packages/wallet-adapter-tailwind-ui
+      '@headlessui/react': 1.7.7_biqbaboplfbrettd7655fr4n2y
       '@martianwallet/aptos-wallet-adapter': 0.0.2
       '@pontem/wallet-adapter-plugin': 0.1.4
       '@rise-wallet/wallet-adapter': 0.1.2
@@ -136,6 +140,7 @@ importers:
 
   packages/wallet-adapter-tailwind-ui:
     specifiers:
+      '@aptos-labs/wallet-adapter-core': '*'
       '@aptos-labs/wallet-adapter-react': '*'
       '@aptos-labs/wallet-adapter-tsconfig': workspace:*
       '@headlessui/react': ^1.7.7
@@ -143,12 +148,17 @@ importers:
       '@types/react-dom': ^18.0.6
       aptos: ^1.3.17
       eslint: ^8.15.0
+      react: ^18
+      react-dom: ^18
       tsup: ^5.10.1
       typescript: ^4.5.3
     dependencies:
+      '@aptos-labs/wallet-adapter-core': link:../wallet-adapter-core
       '@aptos-labs/wallet-adapter-react': link:../wallet-adapter-react
-      '@headlessui/react': 1.7.7
+      '@headlessui/react': 1.7.7_biqbaboplfbrettd7655fr4n2y
       aptos: 1.4.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     devDependencies:
       '@aptos-labs/wallet-adapter-tsconfig': link:../tsconfig
       '@types/react': 18.0.25
@@ -731,7 +741,7 @@ packages:
       - supports-color
     dev: true
 
-  /@headlessui/react/1.7.7:
+  /@headlessui/react/1.7.7_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-BqDOd/tB9u2tA0T3Z0fn18ktw+KbVwMnkxxsGPIH2hzssrQhKB5n/6StZOyvLYP/FsYtvuXfi9I0YowKPv2c1w==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -739,6 +749,8 @@ packages:
       react-dom: ^16 || ^17 || ^18
     dependencies:
       client-only: 0.0.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /@humanwhocodes/config-array/0.11.7:
