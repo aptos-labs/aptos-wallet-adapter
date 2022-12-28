@@ -6,11 +6,13 @@ import {
   SignMessagePayload,
   SignMessageResponse,
   Wallet,
+  WalletReadyState,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
 import { Types } from "aptos";
 
 export type { WalletName };
+export { WalletReadyState };
 
 export interface WalletContextState {
   connected: boolean;

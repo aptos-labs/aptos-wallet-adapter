@@ -11,7 +11,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@aptos-labs/wallet-adapter-core": "workspace:*",
     "@aptos-labs/wallet-adapter-react": "workspace:*",
     "@martianwallet/aptos-wallet-adapter": "^0.0.2",
     "@pontem/wallet-adapter-plugin": "^0.1.4",

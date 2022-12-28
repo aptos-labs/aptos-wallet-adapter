@@ -19,7 +19,6 @@ importers:
 
   apps/nextjs-example:
     specifiers:
-      '@aptos-labs/wallet-adapter-core': workspace:*
       '@aptos-labs/wallet-adapter-react': workspace:*
       '@babel/core': ^7.0.0
       '@martianwallet/aptos-wallet-adapter': ^0.0.2
@@ -41,7 +40,6 @@ importers:
       tailwindcss: ^3.2.4
       typescript: ^4.5.3
     dependencies:
-      '@aptos-labs/wallet-adapter-core': link:../../packages/wallet-adapter-core
       '@aptos-labs/wallet-adapter-react': link:../../packages/wallet-adapter-react
       '@martianwallet/aptos-wallet-adapter': 0.0.2
       '@pontem/wallet-adapter-plugin': 0.1.4
