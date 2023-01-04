@@ -1,5 +1,13 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 0.1.1
+
+### Patch Changes
+
+- c3eb031: Export WalletReadyState enum from react package
+- Updated dependencies [c3eb031]
+  - @aptos-labs/wallet-adapter-react@0.2.1
+
 ## 0.1.0
 
 ### Minor Changes
