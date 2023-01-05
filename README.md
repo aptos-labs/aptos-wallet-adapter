@@ -25,4 +25,4 @@ You would need `pnpm@7.14.2` in order to bootstrap and test a local copy of this
 2. On the root folder, run `pnpm install` and `pnpm turbo run build`
 3. On the root folder, run `pnpm turbo run dev` - that would spin up a local server (`localhost:3000`) with the `nextjs` demoapp
 
-Looking how you can contribute? take a look on our [contribution guide](./CONTRIBUTING.md)
+Looking how you can contribute? Take a look at our [contribution guide](./CONTRIBUTING.md)
