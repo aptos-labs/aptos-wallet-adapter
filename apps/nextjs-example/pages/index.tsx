@@ -1,5 +1,6 @@
 import { AptosClient, Types } from "aptos";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
 import { useState } from "react";
 import { ErrorAlert, SuccessAlert } from "../components/Alert";
 import dynamic from "next/dynamic";
@@ -107,7 +108,7 @@ export default function App() {
         <SuccessAlert text={successAlertMessage} />
       )}
       {errorAlertMessage.length > 0 && <ErrorAlert text={errorAlertMessage} />}
-      <h1 className="flex justify-center mt-2 mb-4 text-4xl font-extrabold tracking-tight leading-none text-black">
+      <h1 className=" flex justify-center mt-2 mb-4 tw-text-4xl font-extrabold tracking-tight leading-none text-black">
         Aptos Wallet Adapter Demo (Devnet)
       </h1>
       <table className="table-auto w-full border-separate border-spacing-y-8 shadow-lg bg-white border-separate">
@@ -121,7 +122,15 @@ export default function App() {
             </td>
           </tr>
           <tr>
-            <td className="px-8 py-4 border-t w-1/4">
+            <td className="px-8 border-t py-4 w-1/4">
+              <h3>Wallet Selector</h3>
+            </td>
+            <td className="px-8 py-4 border-t w-3/4">
+              <WalletSelector />
+            </td>
+          </tr>
+          <tr>
+            <td className=" px-8 py-4 border-t w-1/4">
               <h3>Actions</h3>
             </td>
             <td className="px-8 py-4 border-t break-all w-3/4">
@@ -214,7 +223,7 @@ export default function App() {
             </td>
           </tr>
           <tr>
-            <td className="px-8 py-4 border-t">
+            <td className="!font-light  px-8 py-4 border-t">
               <h3>Account</h3>
             </td>
             <td className="px-8 py-4 border-t break-all">
@@ -222,16 +231,18 @@ export default function App() {
             </td>
           </tr>
           <tr>
-            <td className="px-8 py-4 border-t">
+            <td className=" px-8 py-4 border-t">
               <h3>Network</h3>
             </td>
-            <td className="px-8 py-4 border-t">
-              <div>{network ? JSON.stringify(network) : ""}</div>
+            <td className=" px-8 py-4 border-t">
+              <div>
+                <p>{network ? JSON.stringify(network) : ""}</p>
+              </div>
             </td>
           </tr>
 
           <tr>
-            <td className="px-8 py-4 border-t">
+            <td className=" px-8 py-4 border-t">
               <h3>auto connect</h3>
             </td>
             <td className="px-8 py-4 border-t">
