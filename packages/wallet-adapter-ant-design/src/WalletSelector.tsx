@@ -1,99 +1,83 @@
 import React, { useState } from "react";
-import { Button, Modal } from "antd";
+import { Button, Menu, Modal, Typography } from "antd";
 import {
   useWallet,
   WalletName,
   WalletReadyState,
 } from "@aptos-labs/wallet-adapter-react";
+import "./styles.css";
 import { truncateAddress } from "./utils";
+const { Text } = Typography;
 
 export function WalletSelector() {
-  const [modal2Open, setModal2Open] = useState(false);
+  const [walletSelectorModalOpen, setWalletSelectorModalOpen] = useState(false);
   const { connect, disconnect, account, wallets, connected } = useWallet();
 
   const onWalletButtonClick = () => {
     if (connected) {
       disconnect();
     } else {
-      setModal2Open(true);
+      setWalletSelectorModalOpen(true);
     }
+  };
+
+  const onWalletSelected = (wallet: WalletName) => {
+    connect(wallet);
+    setWalletSelectorModalOpen(false);
   };
 
   return (
     <>
-      <Button type="primary" onClick={() => onWalletButtonClick()}>
+      <Button className="wallet-button" onClick={() => onWalletButtonClick()}>
         {connected ? truncateAddress(account?.address) : "Connect Wallet"}
       </Button>
       <Modal
-        title={
-          <div style={{ textAlign: "center", fontSize: "1.5rem" }}>
-            <span>Connect Wallet</span>
-          </div>
-        }
+        title={<div className="wallet-modal-title">Connect Wallet</div>}
         centered
-        open={modal2Open}
-        onCancel={() => setModal2Open(false)}
+        open={walletSelectorModalOpen}
+        onCancel={() => setWalletSelectorModalOpen(false)}
         footer={[]}
         closable={false}
       >
-        {!connected &&
-          wallets.map((wallet) => {
-            if (wallet.readyState === WalletReadyState.Installed) {
+        {!connected && (
+          <Menu>
+            {wallets.map((wallet) => {
               return (
-                <div key={wallet.name}>
-                  {/* <button
-                          className={`${
-                            active
-                              ? 'btn-secondary text-black bg-black bg-opacity-5'
-                              : 'text-gray-900'
-                          } group flex w-full font-medium items-center group-[.disconnected]:justify-center px-3 py-2 text-sm`}
-                          onClick={() => {
-                            connect(wallet.name);
-                          }}
-                        >
-                          <>
-                            <img src={wallet.icon} width={25} style={{ marginRight: 10 }}/>
-                            {wallet.name}
-                          </>
-                        </button> */}
-                  <Button
-                    block
-                    onClick={() => {
-                      connect(wallet.name);
-                    }}
-                  >
-                    <>
+                <Menu.Item
+                  key={wallet.name}
+                  onClick={
+                    wallet.readyState === WalletReadyState.Installed
+                      ? () => onWalletSelected(wallet.name)
+                      : () => window.open(wallet.url)
+                  }
+                >
+                  <div className="wallet-menu-wrapper">
+                    <div className="wallet-name-wrapper">
                       <img
                         src={wallet.icon}
                         width={25}
                         style={{ marginRight: 10 }}
                       />
-                      {wallet.name}
-                    </>
-                  </Button>
-                </div>
+                      <Text className="wallet-selector-text">
+                        {wallet.name}
+                      </Text>
+                    </div>
+                    {wallet.readyState === WalletReadyState.Installed ? (
+                      <Button className="wallet-connect-button">
+                        <Text className="wallet-connect-text">Connect</Text>
+                      </Button>
+                    ) : (
+                      <span>
+                        <Text className="wallet-connect-install">Install</Text>
+                      </span>
+                    )}
+                  </div>
+                </Menu.Item>
               );
-            } else if (wallet.readyState === WalletReadyState.NotDetected) {
-              return (
-                <div key={wallet.name}>
-                  <Button
-                    block
-                    onClick={() => {
-                      window.open(wallet.url);
-                    }}
-                  >
-                    <img
-                      src={wallet.icon}
-                      width={25}
-                      style={{ marginRight: 10 }}
-                    />
-                    <div>{wallet.name}</div>
-                    <div style={{ marginLeft: "auto" }}>{"Install"}</div>
-                  </Button>
-                </div>
-              );
-            }
-          })}
+            })}
+            ;
+          </Menu>
+        )}
       </Modal>
     </>
   );
