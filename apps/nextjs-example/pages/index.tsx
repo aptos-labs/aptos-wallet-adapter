@@ -223,7 +223,7 @@ export default function App() {
             </td>
           </tr>
           <tr>
-            <td className="!font-light  px-8 py-4 border-t">
+            <td className="px-8 py-4 border-t">
               <h3>Account</h3>
             </td>
             <td className="px-8 py-4 border-t break-all">
@@ -231,18 +231,16 @@ export default function App() {
             </td>
           </tr>
           <tr>
-            <td className=" px-8 py-4 border-t">
+            <td className="px-8 py-4 border-t">
               <h3>Network</h3>
             </td>
-            <td className=" px-8 py-4 border-t">
-              <div>
-                <p>{network ? JSON.stringify(network) : ""}</p>
-              </div>
+            <td className="px-8 py-4 border-t">
+              <div>{network ? JSON.stringify(network) : ""}</div>
             </td>
           </tr>
 
           <tr>
-            <td className=" px-8 py-4 border-t">
+            <td className="px-8 py-4 border-t">
               <h3>auto connect</h3>
             </td>
             <td className="px-8 py-4 border-t">
