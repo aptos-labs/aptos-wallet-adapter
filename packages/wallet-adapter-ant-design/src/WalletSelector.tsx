@@ -75,7 +75,6 @@ export function WalletSelector() {
                 </Menu.Item>
               );
             })}
-            ;
           </Menu>
         )}
       </Modal>
