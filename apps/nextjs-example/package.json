@@ -16,7 +16,7 @@
     "@pontem/wallet-adapter-plugin": "^0.1.4",
     "@rise-wallet/wallet-adapter": "^0.1.2",
     "@spika/aptos-plugin": "^0.1.2",
-    "@trustwallet/aptos-wallet-adapter": "^0.1.4",
+    "@trustwallet/aptos-wallet-adapter": "^0.1.5",
     "aptos": "^1.3.17",
     "next": "13.0.0",
     "petra-plugin-wallet-adapter": "^0.1.2",
