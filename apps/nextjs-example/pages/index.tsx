@@ -108,7 +108,7 @@ export default function App() {
         <SuccessAlert text={successAlertMessage} />
       )}
       {errorAlertMessage.length > 0 && <ErrorAlert text={errorAlertMessage} />}
-      <h1 className=" flex justify-center mt-2 mb-4 tw-text-4xl font-extrabold tracking-tight leading-none text-black">
+      <h1 className=" flex justify-center mt-2 mb-4 text-4xl font-extrabold tracking-tight leading-none text-black">
         Aptos Wallet Adapter Demo (Devnet)
       </h1>
       <table className="table-auto w-full border-separate border-spacing-y-8 shadow-lg bg-white border-separate">
