@@ -6,6 +6,6 @@ module.exports = {
   basePath: isProd ? "/aptos-wallet-adapter" : "",
   images: { unoptimized: true },
   experimental: {
-    transpilePackages: ["wallet-adapter-react", "wallet-adapter-plugin"],
+    transpilePackages: ["wallet-adapter-react", "wallet-adapter-plugin", "wallet-adapter-tailwind-ui"],
   },
 };

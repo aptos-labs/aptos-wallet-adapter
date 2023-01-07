@@ -1,0 +1,1 @@
+# Wallet Adapter Tailwind UI
