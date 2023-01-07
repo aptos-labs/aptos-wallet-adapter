@@ -25,7 +25,7 @@ importers:
       '@pontem/wallet-adapter-plugin': ^0.1.4
       '@rise-wallet/wallet-adapter': ^0.1.2
       '@spika/aptos-plugin': ^0.1.2
-      '@trustwallet/aptos-wallet-adapter': ^0.1.4
+      '@trustwallet/aptos-wallet-adapter': ^0.1.5
       '@types/node': ^17.0.12
       '@types/react': ^18.0.22
       '@types/react-dom': ^18.0.7
@@ -45,7 +45,7 @@ importers:
       '@pontem/wallet-adapter-plugin': 0.1.4
       '@rise-wallet/wallet-adapter': 0.1.2
       '@spika/aptos-plugin': 0.1.2
-      '@trustwallet/aptos-wallet-adapter': 0.1.4
+      '@trustwallet/aptos-wallet-adapter': 0.1.5
       aptos: 1.3.17
       next: 13.0.0_mqvh5p7ejg4taogoj6tpk3gd5a
       petra-plugin-wallet-adapter: 0.1.2
@@ -1239,8 +1239,8 @@ packages:
       tslib: 2.4.1
     dev: false
 
-  /@trustwallet/aptos-wallet-adapter/0.1.4:
-    resolution: {integrity: sha512-n33/V60qqZo7lBtkQuilqvQQeGIOEnqcceyKOb9LsvNclH1wubw2ea6LrvmXBI4/MbNrVxY9LKGhvUYDwOSKTw==}
+  /@trustwallet/aptos-wallet-adapter/0.1.5:
+    resolution: {integrity: sha512-IkBiS7ZQjpbyfUG8KqSiaRyka249G3hfBSOQCzs1axS5/fMACwmWZbShB4BUwh6xOTgFV+ZUYBpQeJhWjsfhVA==}
     dependencies:
       '@aptos-labs/wallet-adapter-core': 0.1.7
       aptos: 1.4.0
