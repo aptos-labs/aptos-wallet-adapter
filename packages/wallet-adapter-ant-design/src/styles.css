@@ -18,6 +18,10 @@
   font-size: 14px;
 }
 
+.wallet-connect-button-text {
+  color: white;
+}
+
 .wallet-menu-wrapper {
   display: flex;
   justify-content: space-between;
@@ -31,14 +35,15 @@
 
 .wallet-connect-button {
   align-self: center;
-  background-color: #ffa447;
+  background-color: #3f67ff;
   height: auto;
 }
 
 .wallet-connect-install {
   align-self: center;
-  color: #ffa447;
+  color: #3f67ff;
   padding-right: 15px;
+  font-size: 16px;
 }
 
 .wallet-button {

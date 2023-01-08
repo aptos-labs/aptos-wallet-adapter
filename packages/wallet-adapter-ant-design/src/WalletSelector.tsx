@@ -64,7 +64,9 @@ export function WalletSelector() {
                     </div>
                     {wallet.readyState === WalletReadyState.Installed ? (
                       <Button className="wallet-connect-button">
-                        <Text className="wallet-connect-text">Connect</Text>
+                        <Text className="wallet-connect-button-text">
+                          Connect
+                        </Text>
                       </Button>
                     ) : (
                       <span>
