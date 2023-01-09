@@ -69,9 +69,7 @@ export function WalletSelector() {
                         </Text>
                       </Button>
                     ) : (
-                      <span>
-                        <Text className="wallet-connect-install">Install</Text>
-                      </span>
+                      <Text className="wallet-connect-install">Install</Text>
                     )}
                   </div>
                 </Menu.Item>
