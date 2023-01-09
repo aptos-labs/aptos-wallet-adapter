@@ -44,6 +44,8 @@
   color: #3f67ff;
   padding-right: 15px;
   font-size: 16px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 
 .wallet-button {
