@@ -63,6 +63,7 @@ export default function App() {
     };
     try {
       const response = await signTransaction(payload);
+      setSuccessAlertMessage(JSON.stringify(response));
       console.log("response", response);
     } catch (error: any) {
       console.log("error", error);

@@ -14,6 +14,7 @@ import {
   WalletNotConnectedError,
   WalletNotReadyError,
   WalletNotSelectedError,
+  WalletNotSupportedMethod,
   WalletSignAndSubmitMessageError,
   WalletSignMessageAndVerifyError,
   WalletSignMessageError,
@@ -240,8 +241,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   async signTransaction(
     transaction: Types.TransactionPayload
   ): Promise<Uint8Array | null> {
+    if (this._wallet && !("signTransaction" in this._wallet)) {
+      throw new WalletNotSupportedMethod(
+        `Sign Transaction is not supported by ${this.wallet?.name}`
+      ).message;
+    }
+
     try {
-      if (this._wallet && !("signTransaction" in this._wallet)) return null;
       this.doesWalletExist();
       const response = await (this._wallet as any).signTransaction(transaction);
       return response;

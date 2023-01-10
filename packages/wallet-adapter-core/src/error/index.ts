@@ -98,3 +98,7 @@ export class WalletWindowClosedError extends WalletError {
 export class WalletResponseError extends WalletError {
   name = "WalletResponseError";
 }
+
+export class WalletNotSupportedMethod extends WalletError {
+  name = "WalletNotSupportedMethod";
+}
