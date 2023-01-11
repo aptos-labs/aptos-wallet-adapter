@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 0.2.1
+
+### Patch Changes
+
+- 1c3576e: Throw Sign Transaction is not supported error
+
 ## 0.2.0
 
 ### Minor Changes
