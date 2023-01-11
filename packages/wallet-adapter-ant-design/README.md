@@ -51,3 +51,5 @@ For example, to override the `connect wallet` button background color, you can u
   background-color:red;
 }
 ```
+
+![walletSelector](../../walletselector.png)
