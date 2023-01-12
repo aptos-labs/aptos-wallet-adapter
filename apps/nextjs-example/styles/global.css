@@ -1,29 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@layer base {
-  h3 {
-    @apply text-base;
-    @apply font-light;
-    @apply font-sans;
-  }
-  button {
-    @apply border-none;
-    @apply px-4;
-    @apply py-2;
-    @apply font-bold;
-    @apply text-lg;
-  }
-  div {
-    @apply font-sans;
-  }
-}
-
-@layer utilities {
-  td {
-    @apply border-t-gray-300;
-    @apply border-solid;
-    @apply border-0;
-  }
-}

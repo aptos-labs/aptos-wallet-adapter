@@ -1,8 +1,9 @@
 import type { AppProps } from "next/app";
 import { AppContext } from "../components/AppContext";
 
-import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
+// order matters
 import "../styles/global.css";
+import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
