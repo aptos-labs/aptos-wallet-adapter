@@ -15,3 +15,14 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 - [Martian](https://www.npmjs.com/package/@martianwallet/aptos-wallet-adapter)
 - [Rise](https://www.npmjs.com/package/@rise-wallet/wallet-adapter)
 - [Spika](https://www.npmjs.com/package/@spika/aptos-plugin)
+- [Fewcha](https://www.npmjs.com/package/fewcha-plugin-wallet-adapter)
+
+#### Develop Locally
+
+You would need `pnpm@7.14.2` in order to bootstrap and test a local copy of this repo.
+
+1. Clone the repo with `git clone https://github.com/aptos-labs/aptos-wallet-adapter.git`
+2. On the root folder, run `pnpm install` and `pnpm turbo run build`
+3. On the root folder, run `pnpm turbo run dev` - that would spin up a local server (`localhost:3000`) with the `nextjs` demoapp
+
+Looking how you can contribute? Take a look at our [contribution guide](./CONTRIBUTING.md)

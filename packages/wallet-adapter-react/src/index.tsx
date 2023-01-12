@@ -1,3 +1,4 @@
 import * as React from "react";
-export { useWallet } from "./useWallet";
+export { useWallet, WalletReadyState } from "./useWallet";
+export type { WalletName } from "./useWallet";
 export * from "./WalletProvider";

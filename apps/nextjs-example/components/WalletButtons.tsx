@@ -1,4 +1,4 @@
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useWallet, WalletReadyState } from "@aptos-labs/wallet-adapter-react";
 
 const WalletButtons = () => {
   const { wallets, connect } = useWallet();
@@ -12,7 +12,7 @@ const WalletButtons = () => {
               ? "opacity-50 cursor-not-allowed"
               : "hover:bg-blue-700"
           }`}
-          disabled={wallet.readyState !== "Installed"}
+          disabled={wallet.readyState !== WalletReadyState.Installed}
           key={wallet.name}
           onClick={() => connect(wallet.name)}
         >

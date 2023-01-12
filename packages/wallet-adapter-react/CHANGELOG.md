@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-react
 
+## 0.2.2
+
+### Patch Changes
+
+- 552d255: Add react package as a dependency
+
+## 0.2.1
+
+### Patch Changes
+
+- c3eb031: Export WalletReadyState enum from react package
+
 ## 0.2.0
 
 ### Minor Changes
