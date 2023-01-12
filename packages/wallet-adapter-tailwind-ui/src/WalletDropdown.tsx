@@ -1,5 +1,5 @@
-import { WalletReadyState } from '@aptos-labs/wallet-adapter-core';
-import { useWallet } from '@aptos-labs/wallet-adapter-react';
+import './index.css'
+import { useWallet, WalletReadyState } from '@aptos-labs/wallet-adapter-react';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { truncateAddress } from './utils';
@@ -16,7 +16,7 @@ export function WalletDropdown() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-sm font-medium text-black hover:bg-opacity-80 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+        <Menu.Button className="inline-flex justify-center rounded-md bg-white px-4 py-2 text-sm font-medium text-black hover:bg-opacity-80 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
           {account?.address || account?.publicKey
             ? truncateAddress(account.address)
             : 'Connect Wallet'}
@@ -31,7 +31,7 @@ export function WalletDropdown() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items style={{ zIndex: 1 }} className="absolute right-0 mt-2 w-52 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden
+        <Menu.Items style={{ zIndex: 1, borderRadius: 6 }} className="absolute mt-2 w-60 origin-top-right divide-y divide-gray-100 bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden
           group-[.disconnected]:-right-[22px] group-[.disconnected]:origin-top max-md:-right-[22px] max-md:origin-top">
           {!connected &&
             wallets.map((wallet) => {
@@ -75,7 +75,7 @@ export function WalletDropdown() {
                           }}
                         >
                             <img src={wallet.icon} width={25} style={{ marginRight: 10 }}/>
-                            <div>
+                            <div style={{ marginRight: 15 }}>
                               {wallet.name}
                             </div>
                             <div style={{ marginLeft: 'auto' }}>

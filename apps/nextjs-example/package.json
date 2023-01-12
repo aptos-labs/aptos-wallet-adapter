@@ -15,7 +15,6 @@
     "@aptos-labs/wallet-adapter-tailwind-ui": "workspace:*",
     "@aptos-labs/wallet-adapter-ant-design": "workspace:*",
     "@martianwallet/aptos-wallet-adapter": "^0.0.2",
-    "@headlessui/react": "^1.7.7",
     "@pontem/wallet-adapter-plugin": "^0.1.4",
     "@rise-wallet/wallet-adapter": "^0.1.2",
     "@spika/aptos-plugin": "^0.1.2",
