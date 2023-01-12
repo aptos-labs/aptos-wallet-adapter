@@ -31,7 +31,7 @@ export default function App() {
     signMessage,
     signMessageAndVerify,
     wallets,
-    connect
+    connect,
   } = useWallet();
 
   const { autoConnect, setAutoConnect } = useAutoConnect();
@@ -126,7 +126,7 @@ export default function App() {
             </td>
           </tr>
           <tr>
-            <td className="px-8 py-4 w-1/4">
+            <td className="px-8 py-4 border-t w-1/4">
               <h3>Tailwind Wallet Adapter</h3>
             </td>
             <td className="px-8 py-4 border-t w-3/4">
