@@ -50,6 +50,7 @@ export interface AdapterPluginProps<Name extends string = string> {
   name: WalletName<Name>;
   url: string;
   icon: `data:image/${"svg+xml" | "webp" | "png" | "gif"};base64,${string}`;
+  providerName?: string
   provider: any;
   connect(): Promise<any>;
   disconnect: () => Promise<any>;

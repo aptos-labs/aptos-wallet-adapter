@@ -53,15 +53,18 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   private scopePollingDetectionStrategy() {
     this._wallets?.forEach((wallet: Wallet) => {
-      wallet.readyState =
-        typeof window === "undefined" || typeof document === "undefined"
-          ? WalletReadyState.Unsupported
-          : WalletReadyState.NotDetected;
+      if (!wallet.readyState) {
+        wallet.readyState =
+          typeof window === "undefined" || typeof document === "undefined"
+            ? WalletReadyState.Unsupported
+            : WalletReadyState.NotDetected;
+      }
       if (typeof window !== "undefined") {
         scopePollingDetectionStrategy(() => {
-          if (Object.keys(window).includes(wallet.name.toLowerCase())) {
+          const providerName = wallet.providerName || wallet.name.toLowerCase();
+          if (Object.keys(window).includes(providerName)) {
             wallet.readyState = WalletReadyState.Installed;
-            wallet.provider = window[wallet.name.toLowerCase() as any];
+            wallet.provider = window[providerName as any];
             this.emit("readyStateChange", wallet);
             return true;
           }
@@ -172,7 +175,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         (wallet: Wallet) => wallet.name === walletName
       );
       if (!selectedWallet) return;
-      if (selectedWallet.readyState !== WalletReadyState.Installed) return;
+      if (selectedWallet.readyState !== WalletReadyState.Installed && selectedWallet.readyState !== WalletReadyState.Loadable) return;
       if (this._connected) {
         await this.disconnect();
       }
