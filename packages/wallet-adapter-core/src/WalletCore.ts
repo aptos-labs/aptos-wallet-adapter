@@ -332,7 +332,40 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       let verified = false;
       if (Array.isArray(response.signature)) {
         // multi sig wallets
-        // TODO - implement multi sig wallets
+        const { fullMessage, signature, bitmap } = response
+        if (bitmap) {
+          const minKeysRequired = this._account.minKeysRequired as number;
+          if (signature.length < minKeysRequired) {
+            verified = false;
+          } else {
+            // Getting an array which marks the keys signing the message with 1, while marking 0 for the keys not being used.
+            const bits = Array.from(bitmap).flatMap(n =>
+              Array.from({ length: 8 }).map((_, i) => (n >> i) & 1)
+            )
+            // Filter out indexes of the keys we need
+            const index = bits.map((_, i) => i).filter((i) => bits[i])
+
+            const publicKeys = this._account.publicKey as string[]
+            const matchedPublicKeys = publicKeys.filter((_: string, i: number) => index.includes(i))
+
+            verified = true;
+            for (let i = 0; i < signature.length; i++) {
+              const isSigVerified = sign.detached.verify(
+                Buffer.from(fullMessage),
+                Buffer.from(signature[i], 'hex'),
+                Buffer.from(matchedPublicKeys[i], 'hex')
+              ); // `isSigVerified` should be `true` for every signature
+
+              if (!isSigVerified) {
+                verified = false;
+                break;
+              }
+            }
+          }
+        } else {
+          throw new WalletSignMessageAndVerifyError("Failed to get a bitmap")
+            .message;
+        }
       } else {
         // single sig wallets
         // support for when address doesnt have hex prefix (0x)
