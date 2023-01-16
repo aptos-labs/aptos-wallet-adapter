@@ -6,6 +6,7 @@ import { TrustWallet } from "@trustwallet/aptos-wallet-adapter";
 import { SpikaWallet } from "@spika/aptos-plugin";
 import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
 import { FewchaWallet } from "fewcha-plugin-wallet-adapter";
+import { MSafeWalletAdapter } from "msafe-plugin-wallet-adapter";
 import {
   AutoConnectProvider,
   useAutoConnect,
@@ -23,6 +24,7 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     new TrustWallet(),
     new SpikaWallet(),
     new FewchaWallet(),
+    new MSafeWalletAdapter(),
   ];
 
   return (
