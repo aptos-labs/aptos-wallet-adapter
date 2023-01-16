@@ -35,6 +35,7 @@ importers:
       autoprefixer: ^10.4.13
       eslint: ^8.15.0
       fewcha-plugin-wallet-adapter: ^0.1.1
+      msafe-plugin-wallet-adapter: ^0.1.0
       next: 13.0.0
       petra-plugin-wallet-adapter: ^0.1.2
       postcss: ^8.4.19
@@ -53,6 +54,7 @@ importers:
       antd: 5.1.4_biqbaboplfbrettd7655fr4n2y
       aptos: 1.3.17
       fewcha-plugin-wallet-adapter: 0.1.1
+      msafe-plugin-wallet-adapter: 0.1.0
       next: 13.0.0_mqvh5p7ejg4taogoj6tpk3gd5a
       petra-plugin-wallet-adapter: 0.1.2
       react: 18.2.0
@@ -237,6 +239,17 @@ packages:
     dependencies:
       aptos: 1.4.0
       eventemitter3: 4.0.7
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /@aptos-labs/wallet-adapter-core/0.2.1:
+    resolution: {integrity: sha512-KDdSq7Za+3c08dPyGbYbEbicAQgdPCt+nut7tvdIUY3MhMmhIybF6FJ1N/YrUO1Tg482/RK0HBNEfxTEsHKe3g==}
+    dependencies:
+      aptos: 1.4.0
+      buffer: 6.0.3
+      eventemitter3: 4.0.7
+      tweetnacl: 1.0.3
     transitivePeerDependencies:
       - debug
     dev: false
@@ -4422,6 +4435,13 @@ packages:
     resolution: {integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==}
     dev: true
 
+  /json-rpc-protocol/0.13.2:
+    resolution: {integrity: sha512-2InSi+c7wGESmvYcEVS0clctpJCodV7gLqLN1BIIPNK07wokXIwhOL8RQWU4O7oX5adChn6HJGtIU6JaUQ1P/A==}
+    engines: {node: '>=4'}
+    dependencies:
+      make-error: 1.3.6
+    dev: false
+
   /json-schema-traverse/0.4.1:
     resolution: {integrity: sha512-xbbCH5dCYU5T8LcEhhuh7HJ88HXuW3qsI3Y0zOZFKfZEHcpWiHU/Jxzk629Brsab/mMiHQti9wMP+845RPe3Vg==}
 
@@ -4601,7 +4621,6 @@ packages:
 
   /make-error/1.3.6:
     resolution: {integrity: sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==}
-    dev: true
 
   /makeerror/1.0.12:
     resolution: {integrity: sha512-JmqCvUhmt43madlpFzG4BQzG2Z3m6tvQDNKdClZnO3VbIudJYmxsT0FNJMeiB2+JTSlTQTSbU8QdesVmwJcmLg==}
@@ -4704,6 +4723,23 @@ packages:
 
   /ms/2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
+    dev: false
+
+  /msafe-plugin-wallet-adapter/0.1.0:
+    resolution: {integrity: sha512-N8xEClExInGpYoMO5IfMS34/MVz5BNCZAxwNh0nWamkuEJP48CI+D2BVIDbj0ESC7aINTq3zMSyCs7vxWrGa7Q==}
+    dependencies:
+      '@aptos-labs/wallet-adapter-core': 0.2.1
+      aptos: 1.4.0
+      msafe-wallet: 2.1.4
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /msafe-wallet/2.1.4:
+    resolution: {integrity: sha512-n27EGv34sMU12QufanlMn8NwCe8MgzIb7K1waDQVSS8icmmsruCrJCqAQMgjmgsSROeX2i4Y3zOuXVza2KJGXg==}
+    dependencies:
+      buffer: 6.0.3
+      json-rpc-protocol: 0.13.2
     dev: false
 
   /mz/2.7.0:
