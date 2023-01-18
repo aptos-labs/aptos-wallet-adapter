@@ -1,8 +1,8 @@
 # Aptos Wallet Adapter Selector Ant Design
 
-Package for wallet selector modal using [Ant Design](https://ant.design/). Includes a `wallet connect` button when clicked, opens up `wallet select modal`.
+Package for wallet selector modal using [Ant Design](https://ant.design/). Includes a `wallet connect` button when clicked, opens up a `wallet select modal`.
 
-If wallet is already connected, the button would display the connected account address truncated (i.e `0x123...abc`), in that case, clicking the button would disconect the wallet.
+If wallet is already connected, the button would display the connected account address truncated (i.e `0x123...abc`), in that case, clicking the button would disconnect the wallet.
 
 ### Usage
 
@@ -15,6 +15,9 @@ npm install @aptos-labs/wallet-adapter-ant-design
 on `index.tsx` / `_app.tsx` import the `ant-design` package `.css` file as
 
 ```
+// If you use a local css file in your app, import it before the package's file as order matters
+import "./my-style-file.css";
+
 import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 ```
 
