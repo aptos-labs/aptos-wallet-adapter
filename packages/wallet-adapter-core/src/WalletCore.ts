@@ -1,6 +1,6 @@
 import { HexString, Types } from "aptos";
 import EventEmitter from "eventemitter3";
-import { sign } from "tweetnacl";
+import nacl from "tweetnacl";
 import { Buffer } from "buffer";
 
 import { WalletReadyState } from "./constants";
@@ -374,7 +374,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         );
         // support for when address doesnt have hex prefix (0x)
         const signature = new HexString(response.signature);
-        verified = sign.detached.verify(
+        verified = nacl.sign.detached.verify(
           Buffer.from(response.fullMessage),
           Buffer.from(signature.noPrefix(), "hex"),
           Buffer.from(currentAccountPublicKey.noPrefix(), "hex")
