@@ -94,6 +94,11 @@ const {
 } = useWallet();
 ```
 
+### Use a UI package (recommended)
+
+As part of the wallet adapter repo we provide a wallet connect UI package that provides a wallet connect button and a wallet select modal.
+You can find it [here](../wallet-adapter-ant-design/) with instructions on how to use it.
+
 #### Examples
 
 ##### connect(walletName)
