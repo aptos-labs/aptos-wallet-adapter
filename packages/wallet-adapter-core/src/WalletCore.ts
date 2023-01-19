@@ -174,8 +174,16 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       const selectedWallet = this._wallets?.find(
         (wallet: Wallet) => wallet.name === walletName
       );
-      if (!selectedWallet) return;
-      if (selectedWallet.readyState !== WalletReadyState.Installed && selectedWallet.readyState !== WalletReadyState.Loadable) return;
+
+      if (
+        !selectedWallet ||
+        (selectedWallet.readyState !== WalletReadyState.Installed &&
+          selectedWallet.readyState !== WalletReadyState.Loadable)
+      ) {
+        throw new WalletConnectionError(`${walletName} wallet not found`)
+          .message;
+      }
+
       if (this._connected) {
         await this.disconnect();
       }
@@ -332,28 +340,30 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       let verified = false;
       if (Array.isArray(response.signature)) {
         // multi sig wallets
-        const { fullMessage, signature, bitmap } = response
+        const { fullMessage, signature, bitmap } = response;
         if (bitmap) {
           const minKeysRequired = this._account.minKeysRequired as number;
           if (signature.length < minKeysRequired) {
             verified = false;
           } else {
             // Getting an array which marks the keys signing the message with 1, while marking 0 for the keys not being used.
-            const bits = Array.from(bitmap).flatMap(n =>
+            const bits = Array.from(bitmap).flatMap((n) =>
               Array.from({ length: 8 }).map((_, i) => (n >> i) & 1)
-            )
+            );
             // Filter out indexes of the keys we need
-            const index = bits.map((_, i) => i).filter((i) => bits[i])
+            const index = bits.map((_, i) => i).filter((i) => bits[i]);
 
-            const publicKeys = this._account.publicKey as string[]
-            const matchedPublicKeys = publicKeys.filter((_: string, i: number) => index.includes(i))
+            const publicKeys = this._account.publicKey as string[];
+            const matchedPublicKeys = publicKeys.filter(
+              (_: string, i: number) => index.includes(i)
+            );
 
             verified = true;
             for (let i = 0; i < signature.length; i++) {
-              const isSigVerified = sign.detached.verify(
+              const isSigVerified = nacl.sign.detached.verify(
                 Buffer.from(fullMessage),
-                Buffer.from(signature[i], 'hex'),
-                Buffer.from(matchedPublicKeys[i], 'hex')
+                Buffer.from(signature[i], "hex"),
+                Buffer.from(matchedPublicKeys[i], "hex")
               ); // `isSigVerified` should be `true` for every signature
 
               if (!isSigVerified) {
