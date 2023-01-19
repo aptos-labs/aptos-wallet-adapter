@@ -1,5 +1,15 @@
 # @aptos-labs/wallet-adapter-core
 
+## 0.2.2
+
+### Patch Changes
+
+- d4e298f: Support Lodable wallet
+  Implement multi signature verification
+  Add a new optional property propertyName for multi-chain wallet
+- 5fc6981: Throw wallet not found error when trying to connect to an uninstalled wallet
+- d711f43: Import tweetnacl package via default export to support commonJS
+
 ## 0.2.1
 
 ### Patch Changes
