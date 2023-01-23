@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 0.2.3
+
+### Patch Changes
+
+- 017556c: connect() to simply return if wallet is not installed
+
 ## 0.2.2
 
 ### Patch Changes
