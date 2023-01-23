@@ -180,8 +180,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         (selectedWallet.readyState !== WalletReadyState.Installed &&
           selectedWallet.readyState !== WalletReadyState.Loadable)
       ) {
-        throw new WalletConnectionError(`${walletName} wallet not found`)
-          .message;
+        return;
       }
 
       if (this._connected) {
