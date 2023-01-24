@@ -5,20 +5,19 @@ const WalletButtons = () => {
 
   return (
     <>
-      {wallets.map((wallet) => (
-        <button
-          className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 ${
-            wallet.readyState !== "Installed"
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:bg-blue-700"
-          }`}
-          disabled={wallet.readyState !== WalletReadyState.Installed}
-          key={wallet.name}
-          onClick={() => connect(wallet.name)}
-        >
-          <>{wallet.name}</>
-        </button>
-      ))}
+      {wallets.map((wallet) => {
+        const isWalletReady = wallet.readyState === WalletReadyState.Installed || wallet.readyState === WalletReadyState.Loadable
+        return (
+          <button
+            className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 ${isWalletReady ? "hover:bg-blue-700" : "opacity-50 cursor-not-allowed"}`}
+            disabled={!isWalletReady}
+            key={wallet.name}
+            onClick={() => connect(wallet.name)}
+          >
+            <>{wallet.name}</>
+          </button>
+        )
+      })}
     </>
   );
 };

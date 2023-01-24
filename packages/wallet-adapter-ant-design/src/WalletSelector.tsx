@@ -46,7 +46,7 @@ export function WalletSelector() {
                 <Menu.Item
                   key={wallet.name}
                   onClick={
-                    wallet.readyState === WalletReadyState.Installed
+                    wallet.readyState === WalletReadyState.Installed || wallet.readyState === WalletReadyState.Loadable
                       ? () => onWalletSelected(wallet.name)
                       : () => window.open(wallet.url)
                   }
@@ -62,7 +62,7 @@ export function WalletSelector() {
                         {wallet.name}
                       </Text>
                     </div>
-                    {wallet.readyState === WalletReadyState.Installed ? (
+                    {wallet.readyState === WalletReadyState.Installed || wallet.readyState === WalletReadyState.Loadable ? (
                       <Button className="wallet-connect-button">
                         <Text className="wallet-connect-button-text">
                           Connect
