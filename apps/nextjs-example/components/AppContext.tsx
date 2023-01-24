@@ -4,9 +4,10 @@ import { MartianWallet } from "@martianwallet/aptos-wallet-adapter";
 import { PontemWallet } from "@pontem/wallet-adapter-plugin";
 import { TrustWallet } from "@trustwallet/aptos-wallet-adapter";
 import { SpikaWallet } from "@spika/aptos-plugin";
-import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
+import { AptosWalletAdapterProvider, NetworkName } from "@aptos-labs/wallet-adapter-react";
 import { FewchaWallet } from "fewcha-plugin-wallet-adapter";
 import { MSafeWalletAdapter } from "msafe-plugin-wallet-adapter";
+import { BloctoWallet } from "@blocto/aptos-wallet-adapter-plugin";
 import {
   AutoConnectProvider,
   useAutoConnect,
@@ -25,6 +26,8 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     new SpikaWallet(),
     new FewchaWallet(),
     new MSafeWalletAdapter(),
+    // Blocto supports Testnet/Mainnet for now.
+    new BloctoWallet({ network: NetworkName.Testnet, bloctoAppId: "6d85f56e-5f2e-46cd-b5f2-5cf9695b4d46" }),
   ];
 
   return (

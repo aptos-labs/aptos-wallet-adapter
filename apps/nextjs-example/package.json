@@ -13,6 +13,7 @@
   "dependencies": {
     "@aptos-labs/wallet-adapter-ant-design": "workspace:*",
     "@aptos-labs/wallet-adapter-react": "workspace:*",
+    "@blocto/aptos-wallet-adapter-plugin": "^0.1.1",
     "@martianwallet/aptos-wallet-adapter": "^0.0.2",
     "@pontem/wallet-adapter-plugin": "^0.1.4",
     "@rise-wallet/wallet-adapter": "^0.1.2",

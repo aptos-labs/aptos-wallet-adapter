@@ -18,6 +18,7 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 - [Spika](https://www.npmjs.com/package/@spika/aptos-plugin)
 - [Fewcha](https://www.npmjs.com/package/fewcha-plugin-wallet-adapter)
 - [MSafe](https://www.npmjs.com/package/msafe-plugin-wallet-adapter)
+- [Blocto](https://www.npmjs.com/package/@blocto/aptos-wallet-adapter-plugin)
 
 #### Develop Locally
 
