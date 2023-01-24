@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-react
 
+## 0.2.3
+
+### Patch Changes
+
+- 7498973: Support Loadable wallet for ant-design and export NetworkName
+
 ## 0.2.2
 
 ### Patch Changes
