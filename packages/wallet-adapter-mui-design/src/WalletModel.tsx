@@ -42,7 +42,7 @@ export default function WalletsModal({
       const option = wallet;
       const icon = option.icon;
       return (
-        <Grid key={option.name} xs={12} paddingY={0.5}>
+        <Grid key={option.name} xs={12} paddingY={0.5} item>
           {wallet.readyState === "Installed" ? (
             <ListItem disablePadding>
               <ListItemButton

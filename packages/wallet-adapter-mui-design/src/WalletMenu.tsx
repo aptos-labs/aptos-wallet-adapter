@@ -29,6 +29,11 @@ export default function WalletMenu({
     handlePopoverClose();
   };
 
+  const handleLogout = () => {
+    disconnect();
+    handlePopoverClose();
+  };
+
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
 
   const copyAddress = async (event: React.MouseEvent<HTMLDivElement>) => {
@@ -73,7 +78,7 @@ export default function WalletMenu({
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton onClick={() => disconnect()}>
+          <ListItemButton onClick={handleLogout}>
             <ListItemText primary="Logout" />
           </ListItemButton>
         </ListItem>

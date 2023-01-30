@@ -1,6 +1,7 @@
 import { AptosClient, Types } from "aptos";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
+import WalletConnector from "../../../packages/wallet-adapter-mui-design/src/WalletConnector";
 import { useState } from "react";
 import { ErrorAlert, SuccessAlert } from "../components/Alert";
 import dynamic from "next/dynamic";
@@ -126,8 +127,17 @@ export default function App() {
             <td className="px-8 border-t py-4 w-1/4">
               <h3>Wallet Selector</h3>
             </td>
-            <td className="px-8 py-4 border-t w-3/4">
+          </tr>
+          <tr>
+            <th>Ant Design</th>
+            <td className="px-8">
               <WalletSelector />
+            </td>
+          </tr>
+          <tr>
+            <th>MUI Design</th>
+            <td className="px-8">
+              <WalletConnector />
             </td>
           </tr>
           <tr>

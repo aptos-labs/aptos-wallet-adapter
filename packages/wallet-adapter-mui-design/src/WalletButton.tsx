@@ -1,4 +1,4 @@
-import { Avatar, Button, Stack, Typography } from "@mui/material";
+import { Avatar, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import WalletMenu from "./WalletMenu";
@@ -34,16 +34,16 @@ export default function WalletButton({
   };
 
   return (
-    <Stack justifyContent="center" alignItems="center">
-      {connected ? (
-        <>
-          <Button
-            size="large"
-            variant="contained"
-            onClick={handleClick}
-            className="wallet-button"
-            sx={{borderRadius: "10px"}}
-          >
+    <>
+      <Button
+        size="large"
+        variant="contained"
+        onClick={connected ? handleClick : onConnectWalletClick}
+        className="wallet-button"
+        sx={{ borderRadius: "10px" }}
+      >
+        {connected ? (
+          <>
             <Avatar
               alt={wallet?.name}
               src={wallet?.icon}
@@ -52,25 +52,19 @@ export default function WalletButton({
             <Typography noWrap ml={2}>
               {truncateAddress(account?.address!)}
             </Typography>
-          </Button>
-          <WalletMenu
-            popoverAnchor={popoverAnchor}
-            handlePopoverClose={handlePopoverClose}
-            handleNavigate={handleNavigate}
-          />
-        </>
-      ) : (
-        <Button
-          size="large"
-          variant="contained"
-          onClick={onConnectWalletClick}
-          className="wallet-button"
-          sx={{borderRadius: "10px"}}
-        >
-          <AccountBalanceWalletOutlinedIcon sx={{ marginRight: 1 }} />
-          <Typography noWrap>Connect Wallet</Typography>
-        </Button>
-      )}
-    </Stack>
+          </>
+        ) : (
+          <>
+            <AccountBalanceWalletOutlinedIcon sx={{ marginRight: 1 }} />
+            <Typography noWrap>Connect Wallet</Typography>
+          </>
+        )}
+      </Button>
+      <WalletMenu
+        popoverAnchor={popoverAnchor}
+        handlePopoverClose={handlePopoverClose}
+        handleNavigate={handleNavigate}
+      />
+    </>
   );
 }
