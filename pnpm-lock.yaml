@@ -25,6 +25,7 @@ importers:
       '@babel/core': ^7.0.0
       '@blocto/aptos-wallet-adapter-plugin': ^0.1.1
       '@martianwallet/aptos-wallet-adapter': ^0.0.2
+      '@nightlylabs/aptos-wallet-adapter-plugin': 0.2.12
       '@pontem/wallet-adapter-plugin': ^0.1.4
       '@rise-wallet/wallet-adapter': ^0.1.2
       '@spika/aptos-plugin': ^0.1.2
@@ -51,6 +52,7 @@ importers:
       '@aptos-labs/wallet-adapter-react': link:../../packages/wallet-adapter-react
       '@blocto/aptos-wallet-adapter-plugin': 0.1.1
       '@martianwallet/aptos-wallet-adapter': 0.0.2
+      '@nightlylabs/aptos-wallet-adapter-plugin': 0.2.12
       '@pontem/wallet-adapter-plugin': 0.1.4
       '@rise-wallet/wallet-adapter': 0.1.2
       '@spika/aptos-plugin': 0.1.2
@@ -1724,6 +1726,17 @@ packages:
     dev: false
     optional: true
 
+  /@nightlylabs/aptos-wallet-adapter-plugin/0.2.12:
+    resolution: {integrity: sha512-caDmoy3Az060YXHSmRibDDyUDd4YHGj87px+coJx2RSA7MSA5ufXXts4yNGH756WB32yP68FDaU4IZggJrlgAA==}
+    dependencies:
+      '@aptos-labs/wallet-adapter-core': 0.2.3
+      aptos: 1.4.0
+      bs58: 5.0.0
+      js-sha3: 0.8.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /@noble/hashes/1.1.3:
     resolution: {integrity: sha512-CE0FCR57H2acVI5UOzIGSSIYxZ6v/HOhDR0Ro9VLyhnzLwx0o8W1mmgaqlEUx4049qJDlIBRztv5k+MM8vbO3A==}
     dev: false
@@ -2531,6 +2544,10 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
+  /base-x/4.0.0:
+    resolution: {integrity: sha512-FuwxlW4H5kh37X/oW59pwTzzTKRzfrrQwhmyspRM7swOEZcHtDZSCt45U6oKgtuFE+WYPblePMVIPR4RZrh/hw==}
+    dev: false
+
   /base64-js/1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
     dev: false
@@ -2590,6 +2607,12 @@ packages:
     resolution: {integrity: sha512-Ok3Wdf5vOIlBrgCvTq96gBkJw+JUEzdBgyaza5HLtPm7yTHkjRy8+JzNyHF7BHa0bNWOQIp3m5YF0nnFcOIKLw==}
     dependencies:
       base-x: 3.0.9
+    dev: false
+
+  /bs58/5.0.0:
+    resolution: {integrity: sha512-r+ihvQJvahgYT50JD05dyJNKlmmSlMoOGwn1lCcEzanPglg7TxYjioQUYehQ9mAR/+hOSd2jRc/Z2y5UxBymvQ==}
+    dependencies:
+      base-x: 4.0.0
     dev: false
 
   /bser/2.1.1:
