@@ -7,7 +7,7 @@ type WalletConnectorProps = {
   handleNavigate?: () => void;
 };
 
-export default function WalletConnector({
+export function WalletConnector({
   networkSupport,
   handleNavigate,
 }: WalletConnectorProps) {

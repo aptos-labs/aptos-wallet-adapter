@@ -14,8 +14,9 @@ import {
 } from "@mui/material";
 import { useWallet, WalletName } from "@aptos-labs/wallet-adapter-react";
 import { grey } from "./aptosColorPalette";
-import LanOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
-import CloseIcon from "@mui/icons-material/Close";
+// reported bug with loading mui icons with esm, therefore need to import like this https://github.com/mui/material-ui/issues/35233
+import { LanOutlined as LanOutlinedIcon } from "@mui/icons-material";
+import { Close as CloseIcon } from "@mui/icons-material";
 
 type WalletsModalProps = {
   handleClose: () => void;

@@ -4,7 +4,7 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import WalletMenu from "./WalletMenu";
 import React from "react";
 import { truncateAddress } from "./utils";
-import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
+import { AccountBalanceWalletOutlined as AccountBalanceWalletOutlinedIcon } from "@mui/icons-material";
 
 type WalletButtonProps = {
   handleModalOpen: () => void;
