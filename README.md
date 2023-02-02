@@ -28,7 +28,7 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 | Petra    | T                      | T                      | F                | T                       |
 | Trust    | N                      | N                      | F                | T                       |
 | Pontem   | T                      | T                      | F                | F                       |
-| Martian  |                        |                        |                  |                         |
+| Martian  | T                      | T                      | T                | T                       |
 | Rise     | T                      | F                      | T                | T                       |
 | Fewcha   | T                      | T                      | F                | T                       |
 | MSafe    | can't test             | can't test             | can't test       | can't test              |
