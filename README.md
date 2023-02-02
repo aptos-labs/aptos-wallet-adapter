@@ -23,18 +23,18 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 
 ### Wallets Functionalities Audit
 
-| Wallet   | Support Network Change | Support Account Change | Sign Transaction | Sign Message And Verify |
-| -------- | ---------------------- | ---------------------- | ---------------- | ----------------------- |
-| Petra    | T                      | T                      | F                | T                       |
-| Trust    | N                      | N                      | F                | T                       |
-| Pontem   | T                      | T                      | F                | F                       |
-| Martian  | T                      | T                      | T                | T                       |
-| Rise     | T                      | F                      | T                | T                       |
-| Fewcha   | T                      | T                      | F                | T                       |
-| MSafe    | can't test             | can't test             | can't test       | can't test              |
-| Blocto   | can't test             | can't test             | can't test       | can't test              |
-| Nightly  | F                      | T                      | can't test       | can't test              |
-| WELLDONE | T                      | T                      |
+| Wallet   | Network Change Event | Account Change Event | Sign Transaction | Sign Message And Verify |
+| -------- | -------------------- | -------------------- | ---------------- | ----------------------- |
+| Petra    | T                    | T                    | F                | T                       |
+| Trust    | can't test           | can't test           | F                | T                       |
+| Pontem   | T                    | T                    | F                | F                       |
+| Martian  | T                    | T                    | T                | T                       |
+| Rise     | T                    | F                    | T                | T                       |
+| Fewcha   | T                    | T                    | F                | T                       |
+| MSafe    | can't test           | can't test           | can't test       | can't test              |
+| Blocto   | can't test           | can't test           | can't test       | can't test              |
+| Nightly  | F                    | T                    | can't test       | can't test              |
+| WELLDONE | T                    | T                    |
 
 ##### Standard functions
 
