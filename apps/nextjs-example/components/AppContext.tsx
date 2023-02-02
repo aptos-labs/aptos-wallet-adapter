@@ -8,6 +8,8 @@ import { AptosWalletAdapterProvider, NetworkName } from "@aptos-labs/wallet-adap
 import { FewchaWallet } from "fewcha-plugin-wallet-adapter";
 import { MSafeWalletAdapter } from "msafe-plugin-wallet-adapter";
 import { BloctoWallet } from "@blocto/aptos-wallet-adapter-plugin";
+import { NightlyWallet } from '@nightlylabs/aptos-wallet-adapter-plugin'
+
 import {
   AutoConnectProvider,
   useAutoConnect,
@@ -26,6 +28,7 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     new SpikaWallet(),
     new FewchaWallet(),
     new MSafeWalletAdapter(),
+    new NightlyWallet(),
     // Blocto supports Testnet/Mainnet for now.
     new BloctoWallet({ network: NetworkName.Testnet, bloctoAppId: "6d85f56e-5f2e-46cd-b5f2-5cf9695b4d46" }),
   ];
