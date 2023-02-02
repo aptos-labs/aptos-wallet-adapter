@@ -34,7 +34,7 @@ export const AutoConnectProvider: FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     try {
-      if (autoConnect === null) {
+      if (!autoConnect) {
         localStorage.removeItem(AUTO_CONNECT_LOCAL_STORAGE_KEY);
       } else {
         localStorage.setItem(
