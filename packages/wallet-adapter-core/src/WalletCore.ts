@@ -35,6 +35,7 @@ import {
   setLocalStorage,
   scopePollingDetectionStrategy,
 } from "./utils";
+import { getNameByAddress } from "./ans";
 
 export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private _wallets: Wallet[] = [];
@@ -192,6 +193,14 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.setAccount({ ...account });
       const network = await selectedWallet.network();
       this.setNetwork({ ...network });
+      if (this._network?.chainId && this._account) {
+        const name = await getNameByAddress(
+          this._network.chainId,
+          this._account.address
+        );
+        console.log(name);
+        this._account.ansName = name;
+      }
       setLocalStorage(selectedWallet.name);
       this._connected = true;
       this.emit("connect", account);
