@@ -33,6 +33,7 @@ importers:
       '@types/node': ^17.0.12
       '@types/react': ^18.0.22
       '@types/react-dom': ^18.0.7
+      '@welldone-studio/aptos-wallet-adapter': ^0.1.2
       antd: ^5.1.2
       aptos: ^1.3.17
       autoprefixer: ^10.4.13
@@ -57,6 +58,7 @@ importers:
       '@rise-wallet/wallet-adapter': 0.1.2
       '@spika/aptos-plugin': 0.1.2
       '@trustwallet/aptos-wallet-adapter': 0.1.6
+      '@welldone-studio/aptos-wallet-adapter': 0.1.2
       antd: 5.1.4_biqbaboplfbrettd7655fr4n2y
       aptos: 1.3.17
       fewcha-plugin-wallet-adapter: 0.1.1
@@ -2117,6 +2119,16 @@ packages:
     dependencies:
       '@typescript-eslint/types': 5.42.1
       eslint-visitor-keys: 3.3.0
+    dev: false
+
+  /@welldone-studio/aptos-wallet-adapter/0.1.2:
+    resolution: {integrity: sha512-PGmctJNJctmgmBzac2Wi/3O9mDBl1VjCKJ6AA8HZhot0oyit4wqnnzFQhcAHu9uo09XIdMhxqySs/rszOy8SLQ==}
+    dependencies:
+      '@aptos-labs/wallet-adapter-core': 0.2.3
+      '@noble/hashes': 1.1.3
+      aptos: 1.4.0
+    transitivePeerDependencies:
+      - debug
     dev: false
 
   /JSONStream/1.3.5:

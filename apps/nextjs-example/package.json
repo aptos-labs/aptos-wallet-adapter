@@ -21,6 +21,7 @@
     "@spika/aptos-plugin": "^0.1.2",
     "@trustwallet/aptos-wallet-adapter": "^0.1.6",
     "@nightlylabs/aptos-wallet-adapter-plugin": "0.2.12",
+    "@welldone-studio/aptos-wallet-adapter": "^0.1.2",
     "antd": "^5.1.2",
     "aptos": "^1.3.17",
     "fewcha-plugin-wallet-adapter": "^0.1.1",
