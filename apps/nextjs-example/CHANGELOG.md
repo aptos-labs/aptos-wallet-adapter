@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 0.4.0
+
+### Minor Changes
+
+- e03f79c: Update Blocto and Martian package version and fix a minor autoConnect bug
+
+### Patch Changes
+
+- Updated dependencies [e03f79c]
+  - @aptos-labs/wallet-adapter-react@0.2.4
+
 ## 0.3.0
 
 ### Minor Changes
