@@ -10,6 +10,7 @@ The react provider supports all [wallet standard](https://aptos.dev/guides/walle
 
 ##### Standard functions
 
+```
 connect
 disconnect
 connected
@@ -17,11 +18,14 @@ account
 network
 signAndSubmitTransaction
 signMessage
+```
 
 ##### Feature functions
 
+```
 signTransaction
 signMessageAndVerify
+```
 
 ### Usage
 

@@ -23,8 +23,8 @@ importers:
       '@aptos-labs/wallet-adapter-mui-design': workspace:*
       '@aptos-labs/wallet-adapter-react': workspace:*
       '@babel/core': ^7.0.0
-      '@blocto/aptos-wallet-adapter-plugin': ^0.1.1
-      '@martianwallet/aptos-wallet-adapter': ^0.0.2
+      '@blocto/aptos-wallet-adapter-plugin': ^0.1.2
+      '@martianwallet/aptos-wallet-adapter': ^0.0.3
       '@nightlylabs/aptos-wallet-adapter-plugin': 0.2.12
       '@pontem/wallet-adapter-plugin': ^0.1.4
       '@rise-wallet/wallet-adapter': ^0.1.2
@@ -51,8 +51,8 @@ importers:
       '@aptos-labs/wallet-adapter-ant-design': link:../../packages/wallet-adapter-ant-design
       '@aptos-labs/wallet-adapter-mui-design': link:../../packages/wallet-adapter-mui-design
       '@aptos-labs/wallet-adapter-react': link:../../packages/wallet-adapter-react
-      '@blocto/aptos-wallet-adapter-plugin': 0.1.1
-      '@martianwallet/aptos-wallet-adapter': 0.0.2
+      '@blocto/aptos-wallet-adapter-plugin': 0.1.2
+      '@martianwallet/aptos-wallet-adapter': 0.0.3
       '@nightlylabs/aptos-wallet-adapter-plugin': 0.2.12
       '@pontem/wallet-adapter-plugin': 0.1.4
       '@rise-wallet/wallet-adapter': 0.1.2
@@ -633,8 +633,8 @@ packages:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
 
-  /@blocto/aptos-wallet-adapter-plugin/0.1.1:
-    resolution: {integrity: sha512-dwBrn+k/9KLsp/NvmL+FsrJhOgRJps2iQFLSeCSOH98Na8KdyRG8VMYAm3ppGap5PANSwEObEQgrRf1DQTgjCw==}
+  /@blocto/aptos-wallet-adapter-plugin/0.1.2:
+    resolution: {integrity: sha512-1fYzjbwsXWMKiwguSQQ1ZbUwuqDTLkYKD+RrakExRYT+nxcsy2llUdECZGdIp5JBRmeE80sjWkKVcoD4tBt1dA==}
     dependencies:
       '@aptos-labs/wallet-adapter-core': 0.2.3
       '@blocto/sdk': 0.3.5_aptos@1.4.0
@@ -1388,10 +1388,10 @@ packages:
       read-yaml-file: 1.1.0
     dev: true
 
-  /@martianwallet/aptos-wallet-adapter/0.0.2:
-    resolution: {integrity: sha512-hKM0zPfw63XRDqeIhaysoR5D9d+oF2oXmN/mkJPQ9oM714MYrx3AhmG1xIJKJe5t6JOrkI8r+wpPgYfTVy8uhg==}
+  /@martianwallet/aptos-wallet-adapter/0.0.3:
+    resolution: {integrity: sha512-hR/KhXOeDv6tLGt+BAoJyGEhXKHevPEEw/7Z6hsyNTerHRrplguD7CLMbEY6cCakwzMqfV9+GxyZ+OYQsQ6mgg==}
     dependencies:
-      '@aptos-labs/wallet-adapter-core': 0.1.7
+      '@aptos-labs/wallet-adapter-core': 0.2.3
       aptos: 1.4.0
     transitivePeerDependencies:
       - debug
