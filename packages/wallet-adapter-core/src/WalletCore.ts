@@ -96,6 +96,16 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     removeLocalStorage();
   }
 
+  private async setAnsName() {
+    if (this._network?.chainId && this._account) {
+      const name = await getNameByAddress(
+        this._network.chainId,
+        this._account.address
+      );
+      this._account.ansName = name;
+    }
+  }
+
   setWallet(wallet: Wallet | null) {
     this._wallet = wallet;
   }
@@ -193,14 +203,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.setAccount({ ...account });
       const network = await selectedWallet.network();
       this.setNetwork({ ...network });
-      if (this._network?.chainId && this._account) {
-        const name = await getNameByAddress(
-          this._network.chainId,
-          this._account.address
-        );
-        console.log(name);
-        this._account.ansName = name;
-      }
+      await this.setAnsName();
       setLocalStorage(selectedWallet.name);
       this._connected = true;
       this.emit("connect", account);
@@ -306,8 +309,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   async onAccountChange(): Promise<void> {
     try {
       this.doesWalletExist();
-      await this._wallet?.onAccountChange((data: AccountInfo) => {
+      await this._wallet?.onAccountChange(async (data: AccountInfo) => {
         this.setAccount({ ...data });
+        await this.setAnsName();
         this.emit("accountChange", this._account);
       });
     } catch (error: any) {
@@ -325,8 +329,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   async onNetworkChange(): Promise<void> {
     try {
       this.doesWalletExist();
-      await this._wallet?.onNetworkChange((data: NetworkInfo) => {
+      await this._wallet?.onNetworkChange(async (data: NetworkInfo) => {
         this.setNetwork({ ...data });
+        await this.setAnsName();
         this.emit("networkChange", this._network);
       });
     } catch (error: any) {
