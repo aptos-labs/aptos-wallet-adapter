@@ -15,7 +15,6 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 - [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
 - [Martian](https://www.npmjs.com/package/@martianwallet/aptos-wallet-adapter)
 - [Rise](https://www.npmjs.com/package/@rise-wallet/wallet-adapter)
-- [Spika](https://www.npmjs.com/package/@spika/aptos-plugin)
 - [Fewcha](https://www.npmjs.com/package/fewcha-plugin-wallet-adapter)
 - [MSafe](https://www.npmjs.com/package/msafe-plugin-wallet-adapter)
 - [Blocto](https://www.npmjs.com/package/@blocto/aptos-wallet-adapter-plugin)
