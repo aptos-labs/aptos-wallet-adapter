@@ -26,7 +26,7 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 | Wallet   | Network Change Event | Account Change Event | Sign Transaction | Sign Message And Verify |
 | -------- | -------------------- | -------------------- | ---------------- | ----------------------- |
 | Petra    | T                    | T                    | F                | T                       |
-| Trust    | can't test           | can't test           | F                | T                       |
+| Trust    | can't test           | can't test           | can't test       | can't test              |
 | Pontem   | T                    | T                    | F                | F                       |
 | Martian  | T                    | T                    | T                | T                       |
 | Rise     | T                    | F                    | T                | T                       |
@@ -34,7 +34,7 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 | MSafe    | can't test           | can't test           | can't test       | can't test              |
 | Blocto   | can't test           | can't test           | can't test       | can't test              |
 | Nightly  | F                    | T                    | can't test       | can't test              |
-| WELLDONE | T                    | T                    |
+| WELLDONE | T                    | T                    | F                | T                       |
 
 ##### Standard functions
 
