@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-react
 
+## 0.2.4
+
+### Patch Changes
+
+- e03f79c: Update Blocto and Martian package version and fix a minor autoConnect bug
+
 ## 0.2.3
 
 ### Patch Changes
