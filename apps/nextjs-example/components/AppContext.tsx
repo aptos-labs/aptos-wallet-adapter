@@ -11,7 +11,8 @@ import { FewchaWallet } from "fewcha-plugin-wallet-adapter";
 import { MSafeWalletAdapter } from "msafe-plugin-wallet-adapter";
 import { BloctoWallet } from "@blocto/aptos-wallet-adapter-plugin";
 import { WelldoneWallet } from "@welldone-studio/aptos-wallet-adapter";
-import { NightlyWallet } from "@nightlylabs/aptos-wallet-adapter-plugin";
+import { NightlyWallet } from '@nightlylabs/aptos-wallet-adapter-plugin'
+import { TokenPocketWallet } from "@tp-lab/aptos-wallet-adapter";
 
 import {
   AutoConnectProvider,
@@ -37,6 +38,7 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
       bloctoAppId: "6d85f56e-5f2e-46cd-b5f2-5cf9695b4d46",
     }),
     new WelldoneWallet(),
+    new TokenPocketWallet(),
   ];
 
   return (
