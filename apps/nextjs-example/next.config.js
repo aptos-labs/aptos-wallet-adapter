@@ -8,4 +8,8 @@ module.exports = {
   experimental: {
     transpilePackages: ["wallet-adapter-react", "wallet-adapter-plugin"],
   },
+  webpack: (config) => {
+    config.resolve.fallback = { "@solana/web3.js": false };
+    return config;
+  },
 };
