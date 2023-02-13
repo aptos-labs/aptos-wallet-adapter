@@ -29,7 +29,8 @@
     "React"
   ],
   "scripts": {
-    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
+    "build": "pnpm build:clean && tsup src/index.tsx --format esm,cjs,iife --dts --minify --external react",
+    "build:clean": "rm -rf dist",
     "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "lint": "TIMING=1 eslint \"src/**/*.ts*\""
@@ -42,9 +43,11 @@
     "typescript": "^4.5.3",
     "tsup": "^5.10.1"
   },
-  "dependencies": {
-    "@aptos-labs/wallet-adapter-core": "*",
-    "aptos": "^1.3.17",
+  "peerDependencies": {
     "react": "^18"
+  },
+  "dependencies": {
+    "@aptos-labs/wallet-adapter-core": "latest",
+    "aptos": "^1.3.17"
   }
 }

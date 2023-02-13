@@ -28,7 +28,10 @@
     "Aptos Wallet"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "build": "pnpm build:clean && pnpm _build:node && pnpm _build:browser",
+    "build:clean": "rm -rf dist",
+    "_build:browser": "tsup --format iife --global-name aptosWalletAdapter --minify",
+    "_build:node": "tsup --format cjs,esm --dts",
     "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
     "test": "jest",
     "lint": "TIMING=1 eslint \"src/**/*.ts*\"",
