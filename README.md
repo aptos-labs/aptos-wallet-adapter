@@ -19,6 +19,7 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 - [MSafe](https://www.npmjs.com/package/msafe-plugin-wallet-adapter)
 - [Blocto](https://www.npmjs.com/package/@blocto/aptos-wallet-adapter-plugin)
 - [WELLDONE](https://www.npmjs.com/package/@welldone-studio/aptos-wallet-adapter)
+- [Nightly](https://www.npmjs.com/package/@nightlylabs/aptos-wallet-adapter-plugin)
 
 #### Develop Locally
 
