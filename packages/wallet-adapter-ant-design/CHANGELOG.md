@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 1.0.0
+
+### Major Changes
+
+- e10ea7b: Add ANS support
+
 ## 0.1.1
 
 ### Patch Changes
