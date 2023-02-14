@@ -1,4 +1,5 @@
 import { AptosAccount } from "aptos";
+import { getNameByAddress } from "../ans";
 import {
   SignMessagePayload,
   SignMessageResponse,
@@ -102,5 +103,15 @@ describe("signMessageAndVerify", () => {
       mockSignMessagePayload
     );
     expect(verified).toBeFalsy();
+  });
+});
+
+describe("ans", () => {
+  it("should fetch the correct name", async () => {
+    const name = await getNameByAddress(
+      "2",
+      "0x54fac6e5d52953c75e749a8ad260bc450cad0b8ed2f06c1e98707879e13956d1"
+    );
+    expect(name).toBe("adapter");
   });
 });

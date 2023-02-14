@@ -25,11 +25,13 @@ export function WalletSelector() {
     connect(wallet);
     setWalletSelectorModalOpen(false);
   };
-
+  const buttonText = account?.ansName
+    ? account?.ansName
+    : truncateAddress(account?.address);
   return (
     <>
       <Button className="wallet-button" onClick={() => onWalletButtonClick()}>
-        {connected ? truncateAddress(account?.address) : "Connect Wallet"}
+        {connected ? buttonText : "Connect Wallet"}
       </Button>
       <Modal
         title={<div className="wallet-modal-title">Connect Wallet</div>}
@@ -46,7 +48,8 @@ export function WalletSelector() {
                 <Menu.Item
                   key={wallet.name}
                   onClick={
-                    wallet.readyState === WalletReadyState.Installed || wallet.readyState === WalletReadyState.Loadable
+                    wallet.readyState === WalletReadyState.Installed ||
+                    wallet.readyState === WalletReadyState.Loadable
                       ? () => onWalletSelected(wallet.name)
                       : () => window.open(wallet.url)
                   }
@@ -62,7 +65,8 @@ export function WalletSelector() {
                         {wallet.name}
                       </Text>
                     </div>
-                    {wallet.readyState === WalletReadyState.Installed || wallet.readyState === WalletReadyState.Loadable ? (
+                    {wallet.readyState === WalletReadyState.Installed ||
+                    wallet.readyState === WalletReadyState.Loadable ? (
                       <Button className="wallet-connect-button">
                         <Text className="wallet-connect-button-text">
                           Connect
