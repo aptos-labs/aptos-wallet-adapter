@@ -28,6 +28,7 @@ importers:
       '@nightlylabs/aptos-wallet-adapter-plugin': 0.2.12
       '@pontem/wallet-adapter-plugin': ^0.1.4
       '@rise-wallet/wallet-adapter': ^0.1.2
+      '@tp-lab/aptos-wallet-adapter': ^1.0.1
       '@trustwallet/aptos-wallet-adapter': ^0.1.6
       '@types/node': ^17.0.12
       '@types/react': ^18.0.22
@@ -55,6 +56,7 @@ importers:
       '@nightlylabs/aptos-wallet-adapter-plugin': 0.2.12
       '@pontem/wallet-adapter-plugin': 0.1.4
       '@rise-wallet/wallet-adapter': 0.1.2
+      '@tp-lab/aptos-wallet-adapter': 1.0.1
       '@trustwallet/aptos-wallet-adapter': 0.1.6
       '@welldone-studio/aptos-wallet-adapter': 0.1.2
       antd: 5.1.4_biqbaboplfbrettd7655fr4n2y
@@ -1886,6 +1888,15 @@ packages:
     resolution: {integrity: sha512-rEUrBSGIoSFuYxwBYtlUFMlE2CwGhmW+w9355/5oduSw8e5h2+Tj4UrAGNNgP9915++wj5vkQo0UuOBqOAq4nw==}
     dependencies:
       tslib: 2.4.1
+    dev: false
+
+  /@tp-lab/aptos-wallet-adapter/1.0.1:
+    resolution: {integrity: sha512-/ZFeAiR6PZ3t9UP3P3hjxzc433fi40dWnMX13oemzOITz2ISrW3hqYIVHHGyDuOFx4kQsVydBzArX+GXSCh8Rg==}
+    dependencies:
+      '@aptos-labs/wallet-adapter-core': 0.2.3
+      aptos: 1.4.0
+    transitivePeerDependencies:
+      - debug
     dev: false
 
   /@trustwallet/aptos-wallet-adapter/0.1.6:
