@@ -7,7 +7,7 @@ import {
   SignMessageResponse,
   Wallet,
   WalletReadyState,
-  NetworkName
+  NetworkName,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
 import { Types } from "aptos";
@@ -17,6 +17,7 @@ export { WalletReadyState, NetworkName };
 
 export interface WalletContextState {
   connected: boolean;
+  isLoading: boolean;
   account: AccountInfo | null;
   network: NetworkInfo | null;
   connect(walletName: WalletName): void;
