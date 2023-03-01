@@ -45,14 +45,19 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const [{ connected, account, network, wallet }, setState] =
     useState(initialState);
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const walletCore = useMemo(() => new WalletCore(plugins), []);
   const [wallets, setWallets] = useState<Wallet[]>(walletCore.wallets);
 
   const connect = (walletName: WalletName) => {
     try {
+      setIsLoading(true);
       walletCore.connect(walletName);
     } catch (e) {
       console.log("connect error", e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -209,6 +214,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         signTransaction,
         signMessage,
         signMessageAndVerify,
+        isLoading,
       }}
     >
       {children}
