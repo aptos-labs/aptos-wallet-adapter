@@ -14,6 +14,7 @@ import type {
   Wallet,
   WalletInfo,
   WalletName,
+  WalletError,
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
 
@@ -23,6 +24,7 @@ export interface AptosWalletProviderProps {
   children: ReactNode;
   plugins: Wallet[];
   autoConnect?: boolean;
+  onError?: (error: WalletError) => void;
 }
 
 const initialState: {
@@ -41,31 +43,33 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   children,
   plugins,
   autoConnect = false,
+  onError,
 }: AptosWalletProviderProps) => {
   const [{ connected, account, network, wallet }, setState] =
     useState(initialState);
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const walletCore = useMemo(() => new WalletCore(plugins), []);
   const [wallets, setWallets] = useState<Wallet[]>(walletCore.wallets);
 
-  const connect = (walletName: WalletName) => {
+  const connect = async (walletName: WalletName) => {
     try {
       setIsLoading(true);
-      walletCore.connect(walletName);
-    } catch (e) {
-      console.log("connect error", e);
+      await walletCore.connect(walletName);
+      await walletCore.setAnsName();
+    } catch (error) {
+      (onError || console.error)(error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const disconnect = () => {
+  const disconnect = async () => {
     try {
-      walletCore.disconnect();
-    } catch (e) {
-      console.log("disconnect error", e);
+      await walletCore.disconnect();
+    } catch (error) {
+      (onError || console.error)(error);
     }
   };
 
@@ -75,7 +79,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     try {
       return await walletCore.signAndSubmitTransaction(transaction);
     } catch (error: any) {
-      throw error;
+      (onError || console.error)(error);
     }
   };
 
@@ -83,7 +87,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     try {
       return await walletCore.signTransaction(transaction);
     } catch (error: any) {
-      throw error;
+      (onError || console.error)(error);
     }
   };
 
@@ -91,7 +95,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     try {
       return await walletCore.signMessage(message);
     } catch (error: any) {
-      throw error;
+      (onError || console.error)(error);
     }
   };
 
@@ -99,14 +103,26 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     try {
       return await walletCore.signMessageAndVerify(message);
     } catch (error: any) {
-      throw error;
+      (onError || console.error)(error);
+    }
+  };
+
+  const fetchANSname = async () => {
+    try {
+      return await walletCore.setAnsName();
+    } catch (error: any) {
+      (onError || console.error)(error);
     }
   };
 
   useEffect(() => {
+    const tryAutoConnect = async () => {
+      await connect(localStorage.getItem("AptosWalletName") as WalletName);
+    };
+
     if (autoConnect) {
       if (localStorage.getItem("AptosWalletName")) {
-        connect(localStorage.getItem("AptosWalletName") as WalletName);
+        tryAutoConnect();
       }
     }
   }, [wallets]);
@@ -215,6 +231,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         signMessage,
         signMessageAndVerify,
         isLoading,
+        fetchANSname,
       }}
     >
       {children}

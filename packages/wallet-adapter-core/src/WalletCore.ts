@@ -5,10 +5,12 @@ import { Buffer } from "buffer";
 
 import { WalletReadyState } from "./constants";
 import {
+  FetchAnsNameError,
   WalletAccountChangeError,
   WalletAccountError,
   WalletConnectionError,
   WalletDisconnectionError,
+  WalletError,
   WalletGetNetworkError,
   WalletNetworkChangeError,
   WalletNotConnectedError,
@@ -77,14 +79,14 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   private doesWalletExist(): boolean | WalletNotConnectedError {
     if (!this._connected || this._connecting || !this._wallet)
-      throw new WalletNotConnectedError().name;
+      throw new WalletNotConnectedError("Wallet not connected");
     if (
       !(
         this._wallet.readyState === WalletReadyState.Loadable ||
         this._wallet.readyState === WalletReadyState.Installed
       )
     )
-      throw new WalletNotReadyError().name;
+      throw new WalletNotReadyError("Wallet not ready");
     return true;
   }
 
@@ -94,16 +96,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     this.setAccount(null);
     this.setNetwork(null);
     removeLocalStorage();
-  }
-
-  private async setAnsName() {
-    if (this._network?.chainId && this._account) {
-      const name = await getNameByAddress(
-        this._network.chainId,
-        this._account.address
-      );
-      this._account.ansName = name;
-    }
   }
 
   setWallet(wallet: Wallet | null) {
@@ -140,7 +132,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         url: this._wallet.url,
       };
     } catch (error: any) {
-      throw new WalletNotSelectedError(error).message;
+      throw new WalletNotSelectedError("Wallet not selected", error);
     }
   }
 
@@ -153,7 +145,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     try {
       return this._account;
     } catch (error: any) {
-      throw new WalletAccountError(error).message;
+      throw new WalletAccountError("Can't get account", error);
     }
   }
 
@@ -166,7 +158,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     try {
       return this._network;
     } catch (error: any) {
-      throw new WalletGetNetworkError(error).message;
+      throw new WalletGetNetworkError("Can't get network", error);
     }
   }
 
@@ -203,15 +195,28 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.setAccount({ ...account });
       const network = await selectedWallet.network();
       this.setNetwork({ ...network });
-      await this.setAnsName();
       setLocalStorage(selectedWallet.name);
       this._connected = true;
       this.emit("connect", account);
     } catch (error: any) {
       this.clearData();
-      throw new WalletConnectionError(error).message;
+      throw new WalletConnectionError("Failed to connect Wallet", error);
     } finally {
       this._connecting = false;
+    }
+  }
+
+  async setAnsName(): Promise<void> {
+    if (this._network?.chainId && this._account) {
+      try {
+        const name = await getNameByAddress(
+          this._network.chainId,
+          this._account.address
+        );
+        this._account.ansName = name;
+      } catch (error) {
+        throw new FetchAnsNameError("Failed to fetch ANS name", error);
+      }
     }
   }
 
@@ -228,7 +233,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.clearData();
       this.emit("disconnect");
     } catch (error: any) {
-      throw new WalletDisconnectionError(error).message;
+      throw new WalletDisconnectionError("Can't disconnect from wallet", error);
     }
   }
 
@@ -250,7 +255,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     } catch (error: any) {
       const errMsg =
         typeof error == "object" && "message" in error ? error.message : error;
-      throw new WalletSignAndSubmitMessageError(errMsg).message;
+      throw new WalletSignAndSubmitMessageError(errMsg, error);
     }
   }
 
@@ -266,7 +271,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     if (this._wallet && !("signTransaction" in this._wallet)) {
       throw new WalletNotSupportedMethod(
         `Sign Transaction is not supported by ${this.wallet?.name}`
-      ).message;
+      );
     }
 
     try {
@@ -276,7 +281,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     } catch (error: any) {
       const errMsg =
         typeof error == "object" && "message" in error ? error.message : error;
-      throw new WalletSignTransactionError(errMsg).message;
+      throw new WalletSignTransactionError(errMsg, error);
     }
   }
 
@@ -297,7 +302,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     } catch (error: any) {
       const errMsg =
         typeof error == "object" && "message" in error ? error.message : error;
-      throw new WalletSignMessageError(errMsg).message;
+      throw new WalletSignMessageError(errMsg, error);
     }
   }
 
@@ -317,7 +322,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     } catch (error: any) {
       const errMsg =
         typeof error == "object" && "message" in error ? error.message : error;
-      throw new WalletAccountChangeError(errMsg).message;
+      throw new WalletAccountChangeError(errMsg, error);
     }
   }
 
@@ -337,18 +342,17 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     } catch (error: any) {
       const errMsg =
         typeof error == "object" && "message" in error ? error.message : error;
-      throw new WalletNetworkChangeError(errMsg).message;
+      throw new WalletNetworkChangeError(errMsg, error);
     }
   }
 
   async signMessageAndVerify(message: SignMessagePayload): Promise<boolean> {
     try {
       this.doesWalletExist();
-      if (!this._account) throw new Error("No account found!");
+      if (!this._account) throw new WalletError("No account found!");
       const response = await this._wallet?.signMessage(message);
       if (!response)
-        throw new WalletSignMessageAndVerifyError("Failed to sign a message")
-          .message;
+        throw new WalletSignMessageAndVerifyError("Failed to sign a message");
       // Verify that the bytes were signed using the private key that matches the known public key
       let verified = false;
       if (Array.isArray(response.signature)) {
@@ -386,8 +390,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
             }
           }
         } else {
-          throw new WalletSignMessageAndVerifyError("Failed to get a bitmap")
-            .message;
+          throw new WalletSignMessageAndVerifyError("Failed to get a bitmap");
         }
       } else {
         // single sig wallets
@@ -407,7 +410,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     } catch (error: any) {
       const errMsg =
         typeof error == "object" && "message" in error ? error.message : error;
-      throw new WalletSignMessageAndVerifyError(errMsg).message;
+      throw new WalletSignMessageAndVerifyError(errMsg, error);
     }
   }
 }
