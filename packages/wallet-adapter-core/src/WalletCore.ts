@@ -206,6 +206,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
+  /** 
+  Fetches AND name for the current connected account based on the current connected network,
+  and sets the account.ansName if the account has a ANS name.
+  @throws FetchAnsNameError
+  */
   async setAnsName(): Promise<void> {
     if (this._network?.chainId && this._account) {
       try {
