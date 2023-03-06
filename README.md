@@ -21,6 +21,7 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 - [WELLDONE](https://www.npmjs.com/package/@welldone-studio/aptos-wallet-adapter)
 - [Nightly](https://www.npmjs.com/package/@nightlylabs/aptos-wallet-adapter-plugin)
 - [TokenPocket](https://www.npmjs.com/package/@tp-lab/aptos-wallet-adapter)
+- [OpenBlock](https://www.npmjs.com/package/@openblockhq/aptos-wallet-adapter)
 
 #### Develop Locally
 

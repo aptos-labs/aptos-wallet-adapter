@@ -11,8 +11,9 @@ import { FewchaWallet } from "fewcha-plugin-wallet-adapter";
 import { MSafeWalletAdapter } from "msafe-plugin-wallet-adapter";
 import { BloctoWallet } from "@blocto/aptos-wallet-adapter-plugin";
 import { WelldoneWallet } from "@welldone-studio/aptos-wallet-adapter";
-import { NightlyWallet } from '@nightlylabs/aptos-wallet-adapter-plugin'
+import { NightlyWallet } from "@nightlylabs/aptos-wallet-adapter-plugin";
 import { TokenPocketWallet } from "@tp-lab/aptos-wallet-adapter";
+import { OpenBlockWallet } from "@openblockhq/aptos-wallet-adapter";
 
 import {
   AutoConnectProvider,
@@ -39,6 +40,7 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }),
     new WelldoneWallet(),
     new TokenPocketWallet(),
+    new OpenBlockWallet(),
   ];
 
   return (
