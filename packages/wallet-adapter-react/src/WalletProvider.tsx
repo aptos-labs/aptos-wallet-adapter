@@ -11,13 +11,12 @@ import type {
   AccountInfo,
   NetworkInfo,
   SignMessagePayload,
+  TransactionPayload,
   Wallet,
   WalletInfo,
   WalletName,
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
-
-import { Types } from "aptos";
 
 export interface AptosWalletProviderProps {
   children: ReactNode;
@@ -69,9 +68,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const signAndSubmitTransaction = async (
-    transaction: Types.TransactionPayload
-  ) => {
+  const signAndSubmitTransaction = async (transaction: TransactionPayload) => {
     try {
       return await walletCore.signAndSubmitTransaction(transaction);
     } catch (error: any) {
@@ -79,7 +76,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const signTransaction = async (transaction: Types.TransactionPayload) => {
+  const signTransaction = async (transaction: TransactionPayload) => {
     try {
       return await walletCore.signTransaction(transaction);
     } catch (error: any) {

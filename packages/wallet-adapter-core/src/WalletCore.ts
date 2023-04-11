@@ -1,4 +1,4 @@
-import { HexString, Types } from "aptos";
+import { HexString } from "aptos";
 import EventEmitter from "eventemitter3";
 import nacl from "tweetnacl";
 import { Buffer } from "buffer";
@@ -29,6 +29,7 @@ import {
   Wallet,
   WalletInfo,
   WalletCoreEvents,
+  TransactionPayload,
 } from "./types";
 import {
   removeLocalStorage,
@@ -239,7 +240,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   @throws WalletSignAndSubmitMessageError
   */
   async signAndSubmitTransaction(
-    transaction: Types.TransactionPayload
+    transaction: TransactionPayload
   ): Promise<any> {
     try {
       this.doesWalletExist();
@@ -261,7 +262,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   @throws WalletSignTransactionError
   */
   async signTransaction(
-    transaction: Types.TransactionPayload
+    transaction: TransactionPayload
   ): Promise<Uint8Array | null> {
     if (this._wallet && !("signTransaction" in this._wallet)) {
       throw new WalletNotSupportedMethod(
