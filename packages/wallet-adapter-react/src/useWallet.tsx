@@ -8,9 +8,9 @@ import {
   Wallet,
   WalletReadyState,
   NetworkName,
+  TransactionPayload,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
-import { Types } from "aptos";
 
 export type { WalletName };
 export { WalletReadyState, NetworkName };
@@ -24,11 +24,11 @@ export interface WalletContextState {
   disconnect(): void;
   wallet: WalletInfo | null;
   wallets: Wallet[];
-  signAndSubmitTransaction<T extends Types.TransactionPayload, V>(
+  signAndSubmitTransaction<T extends TransactionPayload, V>(
     transaction: T,
     options?: V
   ): Promise<any>;
-  signTransaction<T extends Types.TransactionPayload, V>(
+  signTransaction<T extends TransactionPayload, V>(
     transaction: T,
     options?: V
   ): Promise<any>;
