@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 2.0.0
+
+### Major Changes
+
+- 06a2e0d: Add support to submit BCS transaction
+
 ## 1.0.0
 
 ### Major Changes
