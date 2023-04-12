@@ -20,6 +20,17 @@ The packages workspace holds 2 main packages
 
 You are welcome to add packages (vue-provider/UI frameworks/etc) in this workspace (make sure you are following turbo best pratices on how to do it)
 
+Other than those packages, this repo holds
+
+- `@aptos-labs/wallet-adapter-mui-design` mui based UI package that provides a styled connect wallet button and a wallet selector modal
+- `@aptos-labs/wallet-adapter-antd-design` ant design based UI package that provides a styled connect wallet button and a wallet selector modal
+
+#### Wallet plugin example
+
+In this repo you can find an example fora wallet plugin interface the supports the most up to date adapter core package. This can help wallets
+to make sure they are compatible with the latest adapter version and for dapp creators to understand how their wallet plugin acts.
+In addition, it helps with local developing.
+
 ### Develop Locally
 
 You would need `pnpm@7.14.2` in order to bootstrap and test a local copy of this repo.
