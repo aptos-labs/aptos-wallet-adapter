@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/aptos-wallet-plugin",
-  "version": "1.0.0",
+  "version": "0.1.3",
   "description": "Aptos plugin to use with Aptos Wallet Adapter",
   "author": "Aptos",
   "main": "./dist/index.js",

@@ -1,18 +1,5 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
-## 1.0.0
-
-### Major Changes
-
-- 06a2e0d: Add support to submit BCS transaction
-
-### Patch Changes
-
-- 5f8bd57: Use example plugin in demo app
-- Updated dependencies [06a2e0d]
-  - @aptos-labs/aptos-wallet-plugin@1.0.0
-  - @aptos-labs/wallet-adapter-react@1.0.0
-
 ## 0.4.2
 
 ### Patch Changes
