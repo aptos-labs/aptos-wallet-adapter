@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 1.0.2
+
+### Patch Changes
+
+- 960d2d8: Use example plugin in demo app
+
 ## 0.4.2
 
 ### Patch Changes
