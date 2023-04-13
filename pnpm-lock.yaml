@@ -19,7 +19,6 @@ importers:
 
   apps/nextjs-example:
     specifiers:
-      '@aptos-labs/aptos-wallet-plugin': workspace:*
       '@aptos-labs/wallet-adapter-ant-design': workspace:*
       '@aptos-labs/wallet-adapter-mui-design': workspace:*
       '@aptos-labs/wallet-adapter-react': workspace:*
@@ -50,7 +49,6 @@ importers:
       tailwindcss: ^3.2.4
       typescript: ^4.5.3
     dependencies:
-      '@aptos-labs/aptos-wallet-plugin': link:../../packages/aptos-wallet-plugin-example
       '@aptos-labs/wallet-adapter-ant-design': link:../../packages/wallet-adapter-ant-design
       '@aptos-labs/wallet-adapter-mui-design': link:../../packages/wallet-adapter-mui-design
       '@aptos-labs/wallet-adapter-react': link:../../packages/wallet-adapter-react
