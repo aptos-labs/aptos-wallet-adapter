@@ -10,7 +10,6 @@ import { TokenPocketWallet } from "@tp-lab/aptos-wallet-adapter";
 import { TrustWallet } from "@trustwallet/aptos-wallet-adapter";
 import { MSafeWalletAdapter } from "msafe-plugin-wallet-adapter";
 import { WelldoneWallet } from "@welldone-studio/aptos-wallet-adapter";
-import { AptosWallet } from "@aptos-labs/aptos-wallet-plugin";
 import {
   AptosWalletAdapterProvider,
   NetworkName,
@@ -26,23 +25,22 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { autoConnect } = useAutoConnect();
 
   const wallets = [
-    new AptosWallet(),
     // Blocto supports Testnet/Mainnet for now.
-    // new BloctoWallet({
-    //   network: NetworkName.Testnet,
-    //   bloctoAppId: "6d85f56e-5f2e-46cd-b5f2-5cf9695b4d46",
-    // }),
-    // new FewchaWallet(),
-    // new MartianWallet(),
-    // new MSafeWalletAdapter(),
-    // new NightlyWallet(),
-    // new OpenBlockWallet(),
-    // new PetraWallet(),
-    // new PontemWallet(),
-    // new RiseWallet(),
-    // new TokenPocketWallet(),
-    // new TrustWallet(),
-    // new WelldoneWallet(),
+    new BloctoWallet({
+      network: NetworkName.Testnet,
+      bloctoAppId: "6d85f56e-5f2e-46cd-b5f2-5cf9695b4d46",
+    }),
+    new FewchaWallet(),
+    new MartianWallet(),
+    new MSafeWalletAdapter(),
+    new NightlyWallet(),
+    new OpenBlockWallet(),
+    new PetraWallet(),
+    new PontemWallet(),
+    new RiseWallet(),
+    new TokenPocketWallet(),
+    new TrustWallet(),
+    new WelldoneWallet(),
   ];
 
   return (

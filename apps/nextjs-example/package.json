@@ -14,7 +14,6 @@
     "@aptos-labs/wallet-adapter-ant-design": "workspace:*",
     "@aptos-labs/wallet-adapter-mui-design": "workspace:*",
     "@aptos-labs/wallet-adapter-react": "workspace:*",
-    "@aptos-labs/aptos-wallet-plugin": "workspace:*",
     "@blocto/aptos-wallet-adapter-plugin": "^0.1.2",
     "@martianwallet/aptos-wallet-adapter": "^0.0.3",
     "@nightlylabs/aptos-wallet-adapter-plugin": "0.2.12",
