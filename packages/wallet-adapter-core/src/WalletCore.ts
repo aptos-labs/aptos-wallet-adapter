@@ -1,4 +1,4 @@
-import { HexString, Types } from "aptos";
+import { HexString, TxnBuilderTypes, Types } from "aptos";
 import EventEmitter from "eventemitter3";
 import nacl from "tweetnacl";
 import { Buffer } from "buffer";
@@ -29,7 +29,6 @@ import {
   Wallet,
   WalletInfo,
   WalletCoreEvents,
-  TransactionPayload,
 } from "./types";
 import {
   removeLocalStorage,
@@ -257,22 +256,23 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   /** 
-  Sign and submit transaction to chain.
-  This function supports submitting a bcs serialized transaction and non-bcs serialized transaction
+  Sign and submit a bcs serialized transaction to chain.
   @param transaction a bcs serialized transaction or non-bcs serialized transaction
   @return response from the wallet's submitTransaction function
   @throws WalletSignAndSubmitMessageError
   */
-  async submitTransaction(transaction: TransactionPayload): Promise<any> {
-    if (this._wallet && !("submitTransaction" in this._wallet)) {
+  async signAndSubmitBCSTransaction(
+    transaction: TxnBuilderTypes.TransactionPayload
+  ): Promise<any> {
+    if (this._wallet && !("signAndSubmitBCSTransaction" in this._wallet)) {
       throw new WalletNotSupportedMethod(
-        `Submit Transaction is not supported by ${this.wallet?.name}`
+        `Submit a BCS Transaction is not supported by ${this.wallet?.name}`
       ).message;
     }
 
     try {
       this.doesWalletExist();
-      const response = await (this._wallet as any).submitTransaction(
+      const response = await (this._wallet as any).signAndSubmitBCSTransaction(
         transaction
       );
       return response;
