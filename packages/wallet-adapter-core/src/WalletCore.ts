@@ -233,8 +233,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   /** 
-  Sign and submit transaction to chain.
-  This function supports submitting a non-bcs serialized transaction
+  Sign and submit an entry (not bcs serialized) transaction type to chain.
   @param transaction a non-bcs serialized transaction
   @return response from the wallet's signAndSubmitTransaction function
   @throws WalletSignAndSubmitMessageError
@@ -256,7 +255,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   /** 
-  Sign and submit a bcs serialized transaction to chain.
+  Sign and submit a bsc serialized transaction type to chain.
   @param transaction a bcs serialized transaction
   @return response from the wallet's signAndSubmitBCSTransaction function
   @throws WalletSignAndSubmitMessageError
