@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-react
 
+## 1.0.3
+
+### Patch Changes
+
+- 03eb0f5: Define core package version to use
+
 ## 0.2.4
 
 ### Patch Changes
