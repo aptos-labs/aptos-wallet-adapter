@@ -1,5 +1,13 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 0.1.2
+
+### Patch Changes
+
+- 03eb0f5: Define core package version to use
+- Updated dependencies [03eb0f5]
+  - @aptos-labs/wallet-adapter-react@1.0.3
+
 ## 0.1.1
 
 ### Patch Changes
