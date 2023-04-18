@@ -29,6 +29,7 @@ import {
   Wallet,
   WalletInfo,
   WalletCoreEvents,
+  TransactionPayload,
 } from "./types";
 import {
   removeLocalStorage,
@@ -234,7 +235,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   /** 
   Sign and submit transaction to chain.
-  @param transaction
+  This function supports submitting a non-bcs serialized transaction
+  @param transaction a non-bcs serialized transaction
   @return response from the wallet's signAndSubmitTransaction function
   @throws WalletSignAndSubmitMessageError
   */
@@ -244,6 +246,33 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     try {
       this.doesWalletExist();
       const response = await this._wallet?.signAndSubmitTransaction(
+        transaction
+      );
+      return response;
+    } catch (error: any) {
+      const errMsg =
+        typeof error == "object" && "message" in error ? error.message : error;
+      throw new WalletSignAndSubmitMessageError(errMsg).message;
+    }
+  }
+
+  /** 
+  Sign and submit transaction to chain.
+  This function supports submitting a bcs serialized transaction and non-bcs serialized transaction
+  @param transaction a bcs serialized transaction or non-bcs serialized transaction
+  @return response from the wallet's submitTransaction function
+  @throws WalletSignAndSubmitMessageError
+  */
+  async submitTransaction(transaction: TransactionPayload): Promise<any> {
+    if (this._wallet && !("submitTransaction" in this._wallet)) {
+      throw new WalletNotSupportedMethod(
+        `Submit Transaction is not supported by ${this.wallet?.name}`
+      ).message;
+    }
+
+    try {
+      this.doesWalletExist();
+      const response = await (this._wallet as any).submitTransaction(
         transaction
       );
       return response;

@@ -1,4 +1,4 @@
-import { Types } from "aptos";
+import { TxnBuilderTypes, Types } from "aptos";
 import { NetworkName, WalletReadyState } from "./constants";
 
 // WalletName is a nominal type that wallet adapters should use, e.g. `'MyCryptoWallet' as WalletName<'MyCryptoWallet'>`
@@ -24,6 +24,9 @@ export interface AptosWalletErrorResult {
   message: string;
 }
 
+export type TransactionPayload =
+  | Types.TransactionPayload
+  | TxnBuilderTypes.TransactionPayload;
 export interface PluginProvider {
   connect: () => Promise<AccountInfo>;
   account: () => Promise<AccountInfo>;
