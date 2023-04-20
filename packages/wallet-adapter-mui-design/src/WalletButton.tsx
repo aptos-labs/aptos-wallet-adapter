@@ -50,7 +50,9 @@ export default function WalletButton({
               sx={{ width: 24, height: 24 }}
             />
             <Typography noWrap ml={2}>
-              {truncateAddress(account?.address!)}
+              {account?.ansName
+                ? account?.ansName
+                : truncateAddress(account?.address!)}
             </Typography>
           </>
         ) : (
