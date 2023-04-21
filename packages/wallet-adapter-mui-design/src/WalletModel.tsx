@@ -44,7 +44,8 @@ export default function WalletsModal({
       const icon = option.icon;
       return (
         <Grid key={option.name} xs={12} paddingY={0.5} item>
-          {wallet.readyState === "Installed" || wallet.readyState === "Loadable" ? (
+          {wallet.readyState === "Installed" ||
+          wallet.readyState === "Loadable" ? (
             <ListItem disablePadding>
               <ListItemButton
                 alignItems="center"
@@ -53,8 +54,8 @@ export default function WalletsModal({
                 sx={{
                   background:
                     theme.palette.mode === "dark" ? grey[700] : grey[200],
-                  padding: "1rem 3rem",
-                  borderRadius: "10px",
+                  padding: "1rem 2rem",
+                  borderRadius: `${theme.shape.borderRadius}px`,
                   display: "flex",
                   gap: "1rem",
                 }}
@@ -97,7 +98,7 @@ export default function WalletsModal({
                 borderRadius: `${theme.shape.borderRadius}px`,
                 background:
                   theme.palette.mode === "dark" ? grey[700] : grey[200],
-                padding: "1rem 3rem",
+                padding: "1rem 2rem",
                 gap: "1rem",
               }}
             >
@@ -148,7 +149,9 @@ export default function WalletsModal({
       onClose={handleClose}
       aria-labelledby="wallet selector modal"
       aria-describedby="select a wallet to connect"
-      sx={{ borderRadius: "5px" }}
+      sx={{ borderRadius: `${theme.shape.borderRadius}px` }}
+      maxWidth="xs"
+      fullWidth
     >
       <Stack
         sx={{
@@ -156,7 +159,6 @@ export default function WalletsModal({
           flexDirection: "column",
           top: "50%",
           left: "50%",
-          width: 500,
           bgcolor: "background.paper",
           boxShadow: 24,
           p: 3,
