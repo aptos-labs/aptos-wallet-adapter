@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 0.2.0
+
+### Minor Changes
+
+- be2e1ac: enable ans name display on mui package
+
 ## 0.1.2
 
 ### Patch Changes
