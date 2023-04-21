@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 0.3.0
+
+### Minor Changes
+
+- 55727e0: Update mui package design layout
+
 ## 0.2.0
 
 ### Minor Changes
