@@ -195,6 +195,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       }
 
       if (this._connected) {
+        // if the selected wallet is already connected, we don't need to connect again
+        if (this.wallet?.name === walletName) return;
+
         await this.disconnect();
       }
       this._connecting = true;
