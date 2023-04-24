@@ -109,14 +109,14 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         connect(localStorage.getItem("AptosWalletName") as WalletName);
       }
     }
-  }, [wallets]);
+  }, wallets);
 
   useEffect(() => {
     if (connected) {
       walletCore.onAccountChange();
       walletCore.onNetworkChange();
     }
-  }, [wallets, connected]);
+  }, [...wallets, connected]);
 
   // Handle the adapter's connect event
   const handleConnect = () => {
@@ -169,20 +169,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     });
   }, [connected]);
 
-  // Handle the adapter's ready state change event
+  // Whenever the readyState of any supported wallet changes we produce a new wallets state array
+  // which in turn causes consumers of the `useWallet` hook to re-render.
+  // See https://github.com/aptos-labs/aptos-wallet-adapter/pull/129#issuecomment-1519026572 for reasoning.
   const handleReadyStateChange = (wallet: Wallet) => {
-    setWallets((prevWallets) => {
-      const index = prevWallets.findIndex(
-        (currWallet) => currWallet === wallet
-      );
-      if (index === -1) return prevWallets;
-
-      return [
-        ...prevWallets.slice(0, index),
-        wallet,
-        ...prevWallets.slice(index + 1),
-      ];
-    });
+    setWallets((wallets) => [...wallets]);
   };
 
   useEffect(() => {
@@ -198,7 +189,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       walletCore.off("networkChange", handleNetworkChange);
       walletCore.off("readyStateChange", handleReadyStateChange);
     };
-  }, [wallets, connected]);
+  }, [...wallets, connected]);
 
   return (
     <WalletContext.Provider
