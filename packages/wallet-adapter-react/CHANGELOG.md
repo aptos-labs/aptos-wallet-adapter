@@ -1,5 +1,14 @@
 # @aptos-labs/wallet-adapter-react
 
+## 1.0.4
+
+### Patch Changes
+
+- 8dea640: Fix wallet adapter auto reconnect on page refresh
+- Updated dependencies [50968c4]
+- Updated dependencies [8dea640]
+  - @aptos-labs/wallet-adapter-core@2.1.0
+
 ## 1.0.3
 
 ### Patch Changes

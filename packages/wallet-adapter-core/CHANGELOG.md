@@ -1,5 +1,15 @@
 # @aptos-labs/wallet-adapter-core
 
+## 2.1.0
+
+### Minor Changes
+
+- 50968c4: Support to submit bcs serialized transactions
+
+### Patch Changes
+
+- 8dea640: Fix wallet adapter auto reconnect on page refresh
+
 ## 1.0.0
 
 ### Major Changes
