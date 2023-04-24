@@ -1,11 +1,14 @@
-name: Release
+name: Build
 
 on:
   push:
     branches:
       - main
+  pull_request:
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -21,8 +24,6 @@ jobs:
           node-version-file: .node-version
 
       - uses: pnpm/action-setup@v2
-        name: Install pnpm
-        id: pnpm-install
         with:
           version: 7
 
@@ -31,12 +32,3 @@ jobs:
 
       - name: Build global project
         run: pnpm run build
-
-      - name: Create Release Pull Request or Publish to npm
-        uses: changesets/action@v1
-        with:
-          publish: pnpm run publish-packages
-        env:
-          GITHUB_TOKEN: ${{ secrets.APTOS_WALLET_ADAPTER_GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
