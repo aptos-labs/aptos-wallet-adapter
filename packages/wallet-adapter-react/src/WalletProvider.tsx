@@ -17,7 +17,7 @@ import type {
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
 
-import { Types } from "aptos";
+import { TxnBuilderTypes, Types } from "aptos";
 
 export interface AptosWalletProviderProps {
   children: ReactNode;
@@ -74,6 +74,16 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   ) => {
     try {
       return await walletCore.signAndSubmitTransaction(transaction);
+    } catch (error: any) {
+      throw error;
+    }
+  };
+
+  const signAndSubmitBCSTransaction = async (
+    transaction: TxnBuilderTypes.TransactionPayload
+  ) => {
+    try {
+      return await walletCore.signAndSubmitBCSTransaction(transaction);
     } catch (error: any) {
       throw error;
     }
@@ -202,6 +212,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         wallet,
         wallets,
         signAndSubmitTransaction,
+        signAndSubmitBCSTransaction,
         signTransaction,
         signMessage,
         signMessageAndVerify,
