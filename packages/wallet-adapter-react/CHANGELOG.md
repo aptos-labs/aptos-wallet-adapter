@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-react
 
+## 1.0.5
+
+### Patch Changes
+
+- 56a3f9f: BCS transaction support in react provider package
+
 ## 1.0.4
 
 ### Patch Changes
