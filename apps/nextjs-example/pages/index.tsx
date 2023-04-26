@@ -1,4 +1,4 @@
-import { AptosClient, Types } from "aptos";
+import { AptosClient, BCS, TxnBuilderTypes, Types } from "aptos";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
 import { WalletConnector } from "@aptos-labs/wallet-adapter-mui-design";
@@ -27,6 +27,7 @@ export default function App() {
     network,
     wallet,
     signAndSubmitTransaction,
+    signAndSubmitBCSTransaction,
     signTransaction,
     signMessage,
     signMessageAndVerify,
@@ -45,6 +46,39 @@ export default function App() {
     };
     try {
       const response = await signAndSubmitTransaction(payload);
+      await aptosClient.waitForTransaction(response?.hash || "");
+      setSuccessAlertMessage(
+        `https://explorer.aptoslabs.com/txn/${response?.hash}`
+      );
+    } catch (error: any) {
+      console.log("error", error);
+      setErrorAlertMessage(error);
+    }
+  };
+
+  const onSignAndSubmitBCSTransaction = async () => {
+    const token = new TxnBuilderTypes.TypeTagStruct(
+      TxnBuilderTypes.StructTag.fromString("0x1::aptos_coin::AptosCoin")
+    );
+    const entryFunctionBCSPayload =
+      new TxnBuilderTypes.TransactionPayloadEntryFunction(
+        TxnBuilderTypes.EntryFunction.natural(
+          "0x1::coin",
+          "transfer",
+          [token],
+          [
+            BCS.bcsToBytes(
+              TxnBuilderTypes.AccountAddress.fromHex(account!.address)
+            ),
+            BCS.bcsSerializeUint64(2),
+          ]
+        )
+      );
+
+    try {
+      const response = await signAndSubmitBCSTransaction(
+        entryFunctionBCSPayload
+      );
       await aptosClient.waitForTransaction(response?.hash || "");
       setSuccessAlertMessage(
         `https://explorer.aptoslabs.com/txn/${response?.hash}`
@@ -172,6 +206,18 @@ export default function App() {
                   disabled={!connected}
                 >
                   Sign and submit transaction
+                </button>
+
+                <button
+                  className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 ${
+                    !connected
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-blue-700"
+                  }`}
+                  onClick={onSignAndSubmitBCSTransaction}
+                  disabled={!connected}
+                >
+                  Sign and submit BCS transaction
                 </button>
                 <button
                   className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 ${

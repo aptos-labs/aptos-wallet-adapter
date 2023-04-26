@@ -10,7 +10,7 @@ import {
   NetworkName,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
-import { Types } from "aptos";
+import { TxnBuilderTypes, Types } from "aptos";
 
 export type { WalletName };
 export { WalletReadyState, NetworkName };
@@ -25,6 +25,10 @@ export interface WalletContextState {
   wallet: WalletInfo | null;
   wallets: Wallet[];
   signAndSubmitTransaction<T extends Types.TransactionPayload, V>(
+    transaction: T,
+    options?: V
+  ): Promise<any>;
+  signAndSubmitBCSTransaction<T extends TxnBuilderTypes.TransactionPayload, V>(
     transaction: T,
     options?: V
   ): Promise<any>;
