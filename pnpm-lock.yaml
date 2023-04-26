@@ -102,7 +102,7 @@ importers:
 
   packages/wallet-adapter-ant-design:
     specifiers:
-      '@aptos-labs/wallet-adapter-react': 1.0.4
+      '@aptos-labs/wallet-adapter-react': 1.0.5
       '@aptos-labs/wallet-adapter-tsconfig': workspace:*
       '@types/react': ^18.0.17
       '@types/react-dom': ^18.0.6
@@ -158,7 +158,7 @@ importers:
 
   packages/wallet-adapter-mui-design:
     specifiers:
-      '@aptos-labs/wallet-adapter-react': 1.0.4
+      '@aptos-labs/wallet-adapter-react': 1.0.5
       '@aptos-labs/wallet-adapter-tsconfig': workspace:*
       '@babel/core': ^7.0.0
       '@emotion/react': ^11.10.5
@@ -301,8 +301,8 @@ packages:
       - debug
     dev: false
 
-  /@aptos-labs/wallet-adapter-core/2.0.1:
-    resolution: {integrity: sha512-z1EgrytSPzOtuCzzgu/wD4NLtpJW8I5pdR1suExmEHDRnSV8mIdVMZSwMYfnC53fZkgqELdc7Cy2gVyCAocmlA==}
+  /@aptos-labs/wallet-adapter-core/2.1.0:
+    resolution: {integrity: sha512-ZSCCsFt2heEh9IDaObbzw8EwqfzJGCWGBoaGouBtOYn2DVkh5R0P9xRj6ryF9cuO+tkfP+8KZmZ9m4c+xsJN2g==}
     dependencies:
       aptos: 1.4.0
       buffer: 6.0.3
@@ -6138,7 +6138,7 @@ packages:
   /petra-plugin-wallet-adapter/0.1.2:
     resolution: {integrity: sha512-aVXKXq8JRNVQjqxcLoNymJnO5aoaKnGu0sEWkS60EcfFvHteyg8auO9zLr7vFf5p14mLw3SeQb/pL0hD8fMR/g==}
     dependencies:
-      '@aptos-labs/wallet-adapter-core': 2.0.1
+      '@aptos-labs/wallet-adapter-core': 2.1.0
       aptos: 1.4.0
     transitivePeerDependencies:
       - debug
