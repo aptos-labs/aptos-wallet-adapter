@@ -1,7 +1,9 @@
 import {
   useWallet,
   WalletReadyState,
+  isdRedirectable,
   isMobile,
+  isInAppBrowser,
   Wallet,
 } from "@aptos-labs/wallet-adapter-react";
 
@@ -14,7 +16,7 @@ const WalletButtons = () => {
         const isWalletReady =
           wallet.readyState === WalletReadyState.Installed ||
           wallet.readyState === WalletReadyState.Loadable;
-        return isMobile() && !wallet.deepLink ? (
+        return !isWalletReady && isdRedirectable() && !wallet.deepLink ? (
           <button
             className={`bg-blue-500 text-white font-bold py-2 px-4 rounded mr-4 opacity-50 cursor-not-allowed`}
             disabled={true}

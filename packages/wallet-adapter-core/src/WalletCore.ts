@@ -34,7 +34,7 @@ import {
   removeLocalStorage,
   setLocalStorage,
   scopePollingDetectionStrategy,
-  isMobile,
+  isdRedirectable,
 } from "./utils";
 import { getNameByAddress } from "./ans";
 
@@ -201,11 +201,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
         await this.disconnect();
       }
-      if (isMobile()) {
+      if (isdRedirectable()) {
         // use wallet deep link
         if (selectedWallet.deepLink) {
-          const cuurentUrl = window.location.href;
-          window.location.href = `${selectedWallet.deepLink}?url=${cuurentUrl}`;
+          const url = encodeURIComponent(window.location.href);
+          window.location.href = `${selectedWallet.deepLink}?url=${url}`;
         } else {
           return;
         }
