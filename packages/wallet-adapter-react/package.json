@@ -43,7 +43,7 @@
     "tsup": "^5.10.1"
   },
   "dependencies": {
-    "@aptos-labs/wallet-adapter-core": "workspace:*",
+    "@aptos-labs/wallet-adapter-core": "2.1.0",
     "aptos": "^1.3.17",
     "react": "^18"
   }
