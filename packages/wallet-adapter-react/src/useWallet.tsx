@@ -8,21 +8,12 @@ import {
   Wallet,
   WalletReadyState,
   NetworkName,
-  isRedirectable,
-  isMobile,
-  isInAppBrowser,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
 import { TxnBuilderTypes, Types } from "aptos";
 
-export type { WalletName, Wallet };
-export {
-  WalletReadyState,
-  NetworkName,
-  isRedirectable,
-  isMobile,
-  isInAppBrowser,
-};
+export type { WalletName };
+export { WalletReadyState, NetworkName };
 
 export interface WalletContextState {
   connected: boolean;
