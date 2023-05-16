@@ -3,7 +3,7 @@ export {
   useWallet,
   WalletReadyState,
   NetworkName,
-  isdRedirectable,
+  isRedirectable,
   isMobile,
   isInAppBrowser,
 } from "./useWallet";

@@ -8,7 +8,7 @@ import {
   Wallet,
   WalletReadyState,
   NetworkName,
-  isdRedirectable,
+  isRedirectable,
   isMobile,
   isInAppBrowser,
 } from "@aptos-labs/wallet-adapter-core";
@@ -19,7 +19,7 @@ export type { WalletName, Wallet };
 export {
   WalletReadyState,
   NetworkName,
-  isdRedirectable,
+  isRedirectable,
   isMobile,
   isInAppBrowser,
 };

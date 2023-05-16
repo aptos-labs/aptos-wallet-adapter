@@ -52,7 +52,7 @@ export interface AdapterPluginProps<Name extends string = string> {
   url: string;
   icon: `data:image/${"svg+xml" | "webp" | "png" | "gif"};base64,${string}`;
   providerName?: string;
-  deepLink?: string;
+  deeplink?: string;
   provider: any;
   connect(): Promise<any>;
   disconnect: () => Promise<any>;

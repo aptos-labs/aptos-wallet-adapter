@@ -16,7 +16,7 @@ export function isInAppBrowser(): boolean {
   return isIphone || isAndroid;
 }
 
-export function isdRedirectable(): boolean {
+export function isRedirectable(): boolean {
   // SSR: return false
   if (!navigator) return false;
 
