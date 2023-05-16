@@ -203,9 +203,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       }
       if (isRedirectable()) {
         // use wallet deep link
-        if (selectedWallet.deeplink) {
+        if (selectedWallet.deeplinkProvider) {
           const url = encodeURIComponent(window.location.href);
-          window.location.href = `${selectedWallet.deeplink}?url=${url}`;
+          const location = selectedWallet.deeplinkProvider({ url });
+          window.location.href = location;
         } else {
           return;
         }
