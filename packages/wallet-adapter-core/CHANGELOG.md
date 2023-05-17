@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 2.2.0
+
+### Minor Changes
+
+- 814939c: Add deeplink support
+
 ## 2.1.0
 
 ### Minor Changes
