@@ -28,7 +28,7 @@
     "fewcha-plugin-wallet-adapter": "^0.1.2",
     "msafe-plugin-wallet-adapter": "^0.1.0",
     "next": "13.0.0",
-    "petra-plugin-wallet-adapter": "^0.1.2",
+    "petra-plugin-wallet-adapter": "^0.1.5",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
