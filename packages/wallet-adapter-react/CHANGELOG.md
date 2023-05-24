@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-react
 
+## 1.1.0
+
+### Minor Changes
+
+- d8d5a8a: Support deeplink on React Provider and Nextjs demo app
+
 ## 1.0.6
 
 ### Patch Changes
