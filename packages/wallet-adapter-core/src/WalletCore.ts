@@ -39,7 +39,7 @@ import {
 import { getNameByAddress } from "./ans";
 
 export class WalletCore extends EventEmitter<WalletCoreEvents> {
-  private _wallets: Wallet[] = [];
+  private _wallets: ReadonlyArray<Wallet> = [];
   private _wallet: Wallet | null = null;
   private _account: AccountInfo | null = null;
   private _network: NetworkInfo | null = null;
@@ -47,7 +47,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private _connecting: boolean = false;
   private _connected: boolean = false;
 
-  constructor(plugins: Wallet[]) {
+  constructor(plugins: ReadonlyArray<Wallet>) {
     super();
     this._wallets = plugins;
     this.scopePollingDetectionStrategy();
@@ -123,7 +123,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     return this._connected;
   }
 
-  get wallets(): Wallet[] {
+  get wallets(): ReadonlyArray<Wallet> {
     return this._wallets;
   }
 
