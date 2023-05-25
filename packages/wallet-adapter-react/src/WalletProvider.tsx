@@ -21,7 +21,7 @@ import { TxnBuilderTypes, Types } from "aptos";
 
 export interface AptosWalletProviderProps {
   children: ReactNode;
-  plugins: Wallet[];
+  plugins: ReadonlyArray<Wallet>;
   autoConnect?: boolean;
 }
 
@@ -48,7 +48,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const walletCore = useMemo(() => new WalletCore(plugins), []);
-  const [wallets, setWallets] = useState<Wallet[]>(walletCore.wallets);
+  const [wallets, setWallets] = useState<ReadonlyArray<Wallet>>(walletCore.wallets);
 
   const connect = (walletName: WalletName) => {
     try {
