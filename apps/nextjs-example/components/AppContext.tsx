@@ -10,6 +10,7 @@ import { TokenPocketWallet } from "@tp-lab/aptos-wallet-adapter";
 import { TrustWallet } from "@trustwallet/aptos-wallet-adapter";
 import { MSafeWalletAdapter } from "msafe-plugin-wallet-adapter";
 import { WelldoneWallet } from "@welldone-studio/aptos-wallet-adapter";
+import { Magic } from 'magic-sdk';
 import {
   AptosWalletAdapterProvider,
   NetworkName,
@@ -20,6 +21,19 @@ import {
   useAutoConnect,
 } from "../components/AutoConnectProvider";
 import { FC, ReactNode } from "react";
+import { AptosExtension, MagicAptosWallet } from "@magic-ext/aptos";
+import { DEVNET_NODE_URL } from "../pages";
+
+const createMagic = () => {
+  if (typeof window === 'undefined') return;
+  return  new Magic('pk_live_9588CEEABA893EBD', {
+      endpoint: 'http://localhost:3014/',
+      extensions: [new AptosExtension({
+        nodeUrl: DEVNET_NODE_URL,
+      })],
+    })
+  
+};
 
 const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { autoConnect } = useAutoConnect();
@@ -41,6 +55,9 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     new TokenPocketWallet(),
     new TrustWallet(),
     new WelldoneWallet(),
+    new MagicAptosWallet(createMagic(), {
+      loginWith: 'magicLink'
+    })
   ];
 
   return (
