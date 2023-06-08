@@ -1,6 +1,5 @@
 import { AptosClient, BCS, TxnBuilderTypes, Types } from "aptos";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
 import { WalletConnector } from "@aptos-labs/wallet-adapter-mui-design";
 import { useState } from "react";
 import { ErrorAlert, SuccessAlert } from "../components/Alert";
@@ -12,6 +11,14 @@ const WalletButtons = dynamic(() => import("../components/WalletButtons"), {
   suspense: false,
   ssr: false,
 });
+
+const WalletSelectorAntDesign = dynamic(
+  () => import("../components/WalletSelectorAntDesign"),
+  {
+    suspense: false,
+    ssr: false,
+  }
+);
 
 export const DEVNET_NODE_URL = "https://fullnode.devnet.aptoslabs.com/v1";
 
@@ -168,7 +175,7 @@ export default function App() {
               <h3>Ant Design</h3>
             </td>
             <td className="px-8 py-4 w-3/4">
-              <WalletSelector />
+              <WalletSelectorAntDesign />
             </td>
           </tr>
           <tr>

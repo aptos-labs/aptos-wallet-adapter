@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Button, Menu, Modal, Typography } from "antd";
 import {
+  isRedirectable,
   useWallet,
+  Wallet,
   WalletName,
   WalletReadyState,
 } from "@aptos-labs/wallet-adapter-react";
@@ -43,41 +45,8 @@ export function WalletSelector() {
       >
         {!connected && (
           <Menu>
-            {wallets.map((wallet) => {
-              return (
-                <Menu.Item
-                  key={wallet.name}
-                  onClick={
-                    wallet.readyState === WalletReadyState.Installed ||
-                    wallet.readyState === WalletReadyState.Loadable
-                      ? () => onWalletSelected(wallet.name)
-                      : () => window.open(wallet.url)
-                  }
-                >
-                  <div className="wallet-menu-wrapper">
-                    <div className="wallet-name-wrapper">
-                      <img
-                        src={wallet.icon}
-                        width={25}
-                        style={{ marginRight: 10 }}
-                      />
-                      <Text className="wallet-selector-text">
-                        {wallet.name}
-                      </Text>
-                    </div>
-                    {wallet.readyState === WalletReadyState.Installed ||
-                    wallet.readyState === WalletReadyState.Loadable ? (
-                      <Button className="wallet-connect-button">
-                        <Text className="wallet-connect-button-text">
-                          Connect
-                        </Text>
-                      </Button>
-                    ) : (
-                      <Text className="wallet-connect-install">Install</Text>
-                    )}
-                  </div>
-                </Menu.Item>
-              );
+            {wallets.map((wallet: Wallet) => {
+              return walletView(wallet, onWalletSelected);
             })}
           </Menu>
         )}
@@ -85,3 +54,72 @@ export function WalletSelector() {
     </>
   );
 }
+
+const walletView = (
+  wallet: Wallet,
+  onWalletSelected: (wallet: WalletName) => void
+) => {
+  const isWalletReady =
+    wallet.readyState === WalletReadyState.Installed ||
+    wallet.readyState === WalletReadyState.Loadable;
+  const mobileSupport = wallet.deeplinkProvider;
+
+  if (!isWalletReady && isRedirectable()) {
+    if (mobileSupport) {
+      return (
+        <Menu.Item
+          key={wallet.name}
+          onClick={() => onWalletSelected(wallet.name)}
+        >
+          <div className="wallet-menu-wrapper">
+            <div className="wallet-name-wrapper">
+              <img src={wallet.icon} width={25} style={{ marginRight: 10 }} />
+              <Text className="wallet-selector-text">{wallet.name}</Text>
+            </div>
+            <Button className="wallet-connect-button">
+              <Text className="wallet-connect-button-text">Connect</Text>
+            </Button>
+          </div>
+        </Menu.Item>
+      );
+    } else {
+      return (
+        <Menu.Item key={wallet.name} disabled={true}>
+          <div className="wallet-menu-wrapper">
+            <div className="wallet-name-wrapper">
+              <img src={wallet.icon} width={25} style={{ marginRight: 10 }} />
+              <Text className="wallet-selector-text">{wallet.name}</Text>
+            </div>
+          </div>
+        </Menu.Item>
+      );
+    }
+  } else {
+    return (
+      <Menu.Item
+        key={wallet.name}
+        onClick={
+          wallet.readyState === WalletReadyState.Installed ||
+          wallet.readyState === WalletReadyState.Loadable
+            ? () => onWalletSelected(wallet.name)
+            : () => window.open(wallet.url)
+        }
+      >
+        <div className="wallet-menu-wrapper">
+          <div className="wallet-name-wrapper">
+            <img src={wallet.icon} width={25} style={{ marginRight: 10 }} />
+            <Text className="wallet-selector-text">{wallet.name}</Text>
+          </div>
+          {wallet.readyState === WalletReadyState.Installed ||
+          wallet.readyState === WalletReadyState.Loadable ? (
+            <Button className="wallet-connect-button">
+              <Text className="wallet-connect-button-text">Connect</Text>
+            </Button>
+          ) : (
+            <Text className="wallet-connect-install">Install</Text>
+          )}
+        </div>
+      </Menu.Item>
+    );
+  }
+};
