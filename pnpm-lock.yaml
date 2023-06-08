@@ -15,7 +15,7 @@ importers:
       '@aptos-labs/eslint-config-adapter': link:packages/eslint-config-adapter
       '@changesets/cli': 2.25.2
       prettier: 2.8.8
-      turbo: 1.9.9
+      turbo: 1.10.2
 
   apps/nextjs-example:
     specifiers:
@@ -27,7 +27,7 @@ importers:
       '@martianwallet/aptos-wallet-adapter': ^0.0.3
       '@nightlylabs/aptos-wallet-adapter-plugin': 0.2.12
       '@openblockhq/aptos-wallet-adapter': ^0.1.5
-      '@pontem/wallet-adapter-plugin': ^0.1.4
+      '@pontem/wallet-adapter-plugin': ^0.2.0
       '@rise-wallet/wallet-adapter': ^0.1.2
       '@tp-lab/aptos-wallet-adapter': ^1.0.1
       '@trustwallet/aptos-wallet-adapter': ^0.1.6
@@ -56,13 +56,13 @@ importers:
       '@martianwallet/aptos-wallet-adapter': 0.0.3
       '@nightlylabs/aptos-wallet-adapter-plugin': 0.2.12
       '@openblockhq/aptos-wallet-adapter': 0.1.5
-      '@pontem/wallet-adapter-plugin': 0.1.4
+      '@pontem/wallet-adapter-plugin': 0.2.0
       '@rise-wallet/wallet-adapter': 0.1.2
       '@tp-lab/aptos-wallet-adapter': 1.0.1
       '@trustwallet/aptos-wallet-adapter': 0.1.6
       '@welldone-studio/aptos-wallet-adapter': 0.1.2
       antd: 5.1.4_biqbaboplfbrettd7655fr4n2y
-      aptos: 1.3.17
+      aptos: 1.10.0
       fewcha-plugin-wallet-adapter: 0.1.2
       msafe-plugin-wallet-adapter: 0.1.0
       next: 13.0.0_mqvh5p7ejg4taogoj6tpk3gd5a
@@ -92,7 +92,7 @@ importers:
       eslint: 7.32.0
       eslint-config-next: 13.0.0_3rubbgt5ekhqrcgx4uwls3neim
       eslint-config-prettier: 8.5.0_eslint@7.32.0
-      eslint-config-turbo: 1.9.9_eslint@7.32.0
+      eslint-config-turbo: 1.10.2_eslint@7.32.0
       eslint-plugin-react: 7.31.8_eslint@7.32.0
     devDependencies:
       typescript: 4.8.4
@@ -142,7 +142,7 @@ importers:
       tweetnacl: ^1.0.3
       typescript: ^4.5.3
     dependencies:
-      aptos: 1.3.17
+      aptos: 1.10.0
       buffer: 6.0.3
       eventemitter3: 4.0.7
       tweetnacl: 1.0.3
@@ -206,7 +206,7 @@ importers:
       typescript: ^4.5.3
     dependencies:
       '@aptos-labs/wallet-adapter-core': link:../wallet-adapter-core
-      aptos: 1.3.17
+      aptos: 1.10.0
       react: 18.2.0
     devDependencies:
       '@aptos-labs/wallet-adapter-tsconfig': link:../tsconfig
@@ -284,7 +284,7 @@ packages:
   /@aptos-labs/wallet-adapter-core/0.1.7:
     resolution: {integrity: sha512-g3HvX31kuFT5HqEe9Vh0ZgV1u0Otsfx54yeAwL7RO8CioBVBjYELhMsOYz0BOjecmAKhQ14G60VU8MqDyzYkIA==}
     dependencies:
-      aptos: 1.4.0
+      aptos: 1.10.0
       eventemitter3: 4.0.7
     transitivePeerDependencies:
       - debug
@@ -293,7 +293,7 @@ packages:
   /@aptos-labs/wallet-adapter-core/0.2.3:
     resolution: {integrity: sha512-QjUVRYSL05pxdjYo2bScxEZ8wi6ww4sf5mBW5w89F5mDfnDz2XEmZQYfQtV3bxoyqnNWPEjagTds4tKMXDhF1w==}
     dependencies:
-      aptos: 1.4.0
+      aptos: 1.10.0
       buffer: 6.0.3
       eventemitter3: 4.0.7
       tweetnacl: 1.0.3
@@ -304,7 +304,7 @@ packages:
   /@aptos-labs/wallet-adapter-core/2.2.0:
     resolution: {integrity: sha512-JL0zTXXoSQba1EDGqY5yTJxZVKMKwgMKZNA1JyV54s5loWzE2tinwg002EB+ONodkVmMhKbWnajCFFOgvgk+NQ==}
     dependencies:
-      aptos: 1.4.0
+      aptos: 1.10.0
       buffer: 6.0.3
       eventemitter3: 4.0.7
       tweetnacl: 1.0.3
@@ -650,8 +650,8 @@ packages:
     resolution: {integrity: sha512-1fYzjbwsXWMKiwguSQQ1ZbUwuqDTLkYKD+RrakExRYT+nxcsy2llUdECZGdIp5JBRmeE80sjWkKVcoD4tBt1dA==}
     dependencies:
       '@aptos-labs/wallet-adapter-core': 0.2.3
-      '@blocto/sdk': 0.3.5_aptos@1.4.0
-      aptos: 1.4.0
+      '@blocto/sdk': 0.3.5_aptos@1.10.0
+      aptos: 1.10.0
     transitivePeerDependencies:
       - '@solana/web3.js'
       - bufferutil
@@ -659,7 +659,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@blocto/sdk/0.3.5_aptos@1.4.0:
+  /@blocto/sdk/0.3.5_aptos@1.10.0:
     resolution: {integrity: sha512-uvnkkFx/aVczkVZHrE8GeV90514SQ1tl8F1MVEjhRoP/31AiA/VNZSeIxI0muX4RppbpDBgeC9gtPFFgTf+2tw==}
     peerDependencies:
       '@solana/web3.js': ^1.30.2
@@ -670,7 +670,7 @@ packages:
       aptos:
         optional: true
     dependencies:
-      aptos: 1.4.0
+      aptos: 1.10.0
       bs58: 4.0.1
       buffer: 6.0.3
       eip1193-provider: 1.0.1
@@ -1367,7 +1367,7 @@ packages:
     resolution: {integrity: sha512-tBHQxe0ln6u1A6mJ/2q6ThUZ4p/bmRX8RznlNTAIZ8x/igDera47usCkDXnRX3NDDmFUURr2ktHIyfHE4Y0ydw==}
     dependencies:
       '@mysten/sui.js': 0.13.0
-      aptos: 1.4.0
+      aptos: 1.10.0
       buffer: 6.0.3
     transitivePeerDependencies:
       - bufferutil
@@ -1720,7 +1720,7 @@ packages:
     resolution: {integrity: sha512-hR/KhXOeDv6tLGt+BAoJyGEhXKHevPEEw/7Z6hsyNTerHRrplguD7CLMbEY6cCakwzMqfV9+GxyZ+OYQsQ6mgg==}
     dependencies:
       '@aptos-labs/wallet-adapter-core': 0.2.3
-      aptos: 1.4.0
+      aptos: 1.10.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -2098,7 +2098,7 @@ packages:
     resolution: {integrity: sha512-caDmoy3Az060YXHSmRibDDyUDd4YHGj87px+coJx2RSA7MSA5ufXXts4yNGH756WB32yP68FDaU4IZggJrlgAA==}
     dependencies:
       '@aptos-labs/wallet-adapter-core': 0.2.3
-      aptos: 1.4.0
+      aptos: 1.10.0
       bs58: 5.0.0
       js-sha3: 0.8.0
     transitivePeerDependencies:
@@ -2140,7 +2140,7 @@ packages:
     dependencies:
       '@aptos-labs/wallet-adapter-core': 0.2.3
       '@openblockhq/dappsdk': 5.0.7
-      aptos: 1.4.0
+      aptos: 1.10.0
       regenerator-runtime: 0.13.11
     transitivePeerDependencies:
       - bufferutil
@@ -2167,11 +2167,11 @@ packages:
     resolution: {integrity: sha512-HaW78NszGzRZd9SeoI3JD11JqY+lubnaOx7Pewj5pfjqWXOEATpeKIFb9Z4t2WBUK2iryiXX3lzWwmYWgUL0Ug==}
     dev: false
 
-  /@pontem/wallet-adapter-plugin/0.1.4:
-    resolution: {integrity: sha512-AHbclQx2rorD0CBKdQQfF6ifWTQUBmRstnj6M/l0e5n8GmcstX8RJUGx8l8o8BBv5B87aFAmYTXgNZQOTyKE+Q==}
+  /@pontem/wallet-adapter-plugin/0.2.0:
+    resolution: {integrity: sha512-w3to33CzjYvunWUbK86DNWmKK4YNbIpRuKZ8y47dq78k0v8NwwjcEatVknSS0k9TpbISCMSP06IMVPYk7GJ9iw==}
     dependencies:
-      '@aptos-labs/wallet-adapter-core': 0.1.7
-      aptos: 1.4.0
+      '@aptos-labs/wallet-adapter-core': 2.2.0
+      aptos: 1.10.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -2238,7 +2238,7 @@ packages:
     resolution: {integrity: sha512-x32ocKBKQ6uBDhnRcChYzcSrjLxHfjLGuHn/A2vgks+qKl5sGAqMymmYNEtlV4y5z5mBdYMSDVBHnCHBmUolBQ==}
     dependencies:
       '@aptos-labs/wallet-adapter-core': 0.1.7
-      aptos: 1.4.0
+      aptos: 1.10.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -2296,7 +2296,7 @@ packages:
     resolution: {integrity: sha512-/ZFeAiR6PZ3t9UP3P3hjxzc433fi40dWnMX13oemzOITz2ISrW3hqYIVHHGyDuOFx4kQsVydBzArX+GXSCh8Rg==}
     dependencies:
       '@aptos-labs/wallet-adapter-core': 0.2.3
-      aptos: 1.4.0
+      aptos: 1.10.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -2309,7 +2309,7 @@ packages:
     resolution: {integrity: sha512-vlu5JuxqMpGMLanayNKQpTC87zn4NMRo3k96iVI+IdwEeyIgiJbbFq+XqUAezzQG/U88u4jv3vK2x7cbPnNFIw==}
     dependencies:
       '@aptos-labs/wallet-adapter-core': 0.1.7
-      aptos: 1.4.0
+      aptos: 1.10.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -2568,7 +2568,7 @@ packages:
     dependencies:
       '@aptos-labs/wallet-adapter-core': 0.2.3
       '@noble/hashes': 1.1.3
-      aptos: 1.4.0
+      aptos: 1.10.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -2745,8 +2745,8 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /aptos/1.3.17:
-    resolution: {integrity: sha512-SPgWR9D0nHwLNpvxH943T9ieA2/Q0AVVsvT/qTUuWQSImxkxMVkb++XyWhiFyQpnZDqo6o2o0/fZakeUkqrc8w==}
+  /aptos/1.10.0:
+    resolution: {integrity: sha512-iapFseSv1GQn9nVXZzuk9LyrFCN/3/lg/kPgjbAeM2M66Fb2TZkN8khbTat4ol5qo4TXPWoMJdyzR8PwE6KlXA==}
     engines: {node: '>=11.0.0'}
     dependencies:
       '@noble/hashes': 1.1.3
@@ -3914,13 +3914,13 @@ packages:
       eslint: 7.32.0
     dev: false
 
-  /eslint-config-turbo/1.9.9_eslint@7.32.0:
-    resolution: {integrity: sha512-OQLvRK9Ej/8HIEAW6e9hPu3nk1nCYWJ76voB4eOIaI2fYeIKC++0/r0zJPMOD8puo5V1DH+Gkd0XioKpL14ncg==}
+  /eslint-config-turbo/1.10.2_eslint@7.32.0:
+    resolution: {integrity: sha512-BaCnpn2GM0rTFLuTVplqY8n+3ttWcu/vEmfjJ2BNBVmwX6ALZoJQfL26ZW6VucRk0psTUJALeo+aPrf3VKEJXA==}
     peerDependencies:
       eslint: '>6.6.0'
     dependencies:
       eslint: 7.32.0
-      eslint-plugin-turbo: 1.9.9_eslint@7.32.0
+      eslint-plugin-turbo: 1.10.2_eslint@7.32.0
     dev: false
 
   /eslint-import-resolver-node/0.3.6:
@@ -4065,8 +4065,8 @@ packages:
       string.prototype.matchall: 4.0.8
     dev: false
 
-  /eslint-plugin-turbo/1.9.9_eslint@7.32.0:
-    resolution: {integrity: sha512-BgtBMcgNd2YKiHbn1clRiEAmnlpSl19kt9yfIhFEsNIVPg2Gx0O1H++vWXGzMtT19mjHG4Unx0uIMRENKnDYLg==}
+  /eslint-plugin-turbo/1.10.2_eslint@7.32.0:
+    resolution: {integrity: sha512-Kxsy4zlKLrGkEqZgcAQtu16YqU/g0mV1vYa9/VweF+MSnWWQsEzsJ1qlzTfXV6N9VqGmkuLiyWOA84sRUklOOg==}
     peerDependencies:
       eslint: '>6.6.0'
     dependencies:
@@ -4394,7 +4394,7 @@ packages:
     dependencies:
       '@aptos-labs/wallet-adapter-core': 0.1.7
       '@fewcha/web3': 0.1.37
-      aptos: 1.4.0
+      aptos: 1.10.0
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -5844,7 +5844,7 @@ packages:
     resolution: {integrity: sha512-N8xEClExInGpYoMO5IfMS34/MVz5BNCZAxwNh0nWamkuEJP48CI+D2BVIDbj0ESC7aINTq3zMSyCs7vxWrGa7Q==}
     dependencies:
       '@aptos-labs/wallet-adapter-core': 0.2.3
-      aptos: 1.4.0
+      aptos: 1.10.0
       msafe-wallet: 2.1.4
     transitivePeerDependencies:
       - debug
@@ -6139,7 +6139,7 @@ packages:
     resolution: {integrity: sha512-+PQyVP2xkp36IZcau1dxPGz9XBT+Awen6Z2rtVsLHMPVktZXnp+ChjjERvYm46ICpyWowZAsbjeCz/2UfAlNXA==}
     dependencies:
       '@aptos-labs/wallet-adapter-core': 2.2.0
-      aptos: 1.4.0
+      aptos: 1.10.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -7722,65 +7722,65 @@ packages:
       yargs: 17.6.2
     dev: true
 
-  /turbo-darwin-64/1.9.9:
-    resolution: {integrity: sha512-UDGM9E21eCDzF5t1F4rzrjwWutcup33e7ZjNJcW/mJDPorazZzqXGKEPIy9kXwKhamUUXfC7668r6ZuA1WXF2Q==}
+  /turbo-darwin-64/1.10.2:
+    resolution: {integrity: sha512-sVLpVVANByfMgqf7OYPcZM4KiDnjGu7ITvAzBSa9Iwe14yoWLn8utrNsWCRaQEB6kEqBGLPmvL7AKwkl8M2Gqg==}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-darwin-arm64/1.9.9:
-    resolution: {integrity: sha512-VyfkXzTJpYLTAQ9krq2myyEq7RPObilpS04lgJ4OO1piq76RNmSpX9F/t9JCaY9Pj/4TL7i0d8PM7NGhwEA5Ag==}
+  /turbo-darwin-arm64/1.10.2:
+    resolution: {integrity: sha512-TKG91DSoYQjsCft4XBx4lYycVT5n3UQB/nOKgv/WJCSfwshLWulya3yhP8JT5erv9rPF8gwgnx87lrCmT4EAVA==}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-64/1.9.9:
-    resolution: {integrity: sha512-Fu1MY29Odg8dHOqXcpIIGC3T63XLOGgnGfbobXMKdrC7JQDvtJv8TUCYciRsyknZYjyyKK1z6zKuYIiDjf3KeQ==}
+  /turbo-linux-64/1.10.2:
+    resolution: {integrity: sha512-ZIzAkfrzjJFkSM/uEfxU6JjseCsT5PHRu0s0lmYce37ApQbv/HC7tI0cFhuosI30+O8109/mkyZykKE7AQfgqA==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-arm64/1.9.9:
-    resolution: {integrity: sha512-50LI8NafPuJxdnMCBeDdzgyt1cgjQG7FwkyY336v4e95WJPUVjrHdrKH6jYXhOUyrv9+jCJxwX1Yrg02t5yJ1g==}
+  /turbo-linux-arm64/1.10.2:
+    resolution: {integrity: sha512-G4uZA+RBQ5S1X/oUxO5KoLL2NDMkrrBZF52+00jQv6UEb9lWDgwzqSwoAGjdXxeDCrqMW5rBVwb/IBIF2/yhwA==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-64/1.9.9:
-    resolution: {integrity: sha512-9IsTReoLmQl1IRsy3WExe2j2RKWXQyXujfJ4fXF+jp08KxjVF4/tYP2CIRJx/A7UP/7keBta27bZqzAjsmbSTA==}
+  /turbo-windows-64/1.10.2:
+    resolution: {integrity: sha512-ObfQO37kGu1jBzFs/L+hybrCXBwdnimotJwzg7pCoSyGijKITlugrpJoPDKlg0eMr3/1Y6KUeHy26vZaDXrbuQ==}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-arm64/1.9.9:
-    resolution: {integrity: sha512-CUu4hpeQo68JjDr0V0ygTQRLbS+/sNfdqEVV+Xz9136vpKn2WMQLAuUBVZV0Sp0S/7i+zGnplskT0fED+W46wQ==}
+  /turbo-windows-arm64/1.10.2:
+    resolution: {integrity: sha512-7S6dx4738R/FIT2cxbsunqgHN5LelXzuzkcaZgdkU33oswRf/6KOfOABzQLdTX7Uos59cBSdwayf6KQJxuOXUg==}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo/1.9.9:
-    resolution: {integrity: sha512-+ZS66LOT7ahKHxh6XrIdcmf2Yk9mNpAbPEj4iF2cs0cAeaDU3xLVPZFF0HbSho89Uxwhx7b5HBgPbdcjQTwQkg==}
+  /turbo/1.10.2:
+    resolution: {integrity: sha512-m9sR5XHhuzxUQACf0vI2qCG5OqDYAZiPTaAsTwECnwUF4/cXwEmcYddbLJnO+K9orNvcnjjent5oBNBVQ/o0ow==}
     hasBin: true
     requiresBuild: true
     optionalDependencies:
-      turbo-darwin-64: 1.9.9
-      turbo-darwin-arm64: 1.9.9
-      turbo-linux-64: 1.9.9
-      turbo-linux-arm64: 1.9.9
-      turbo-windows-64: 1.9.9
-      turbo-windows-arm64: 1.9.9
+      turbo-darwin-64: 1.10.2
+      turbo-darwin-arm64: 1.10.2
+      turbo-linux-64: 1.10.2
+      turbo-linux-arm64: 1.10.2
+      turbo-windows-64: 1.10.2
+      turbo-windows-arm64: 1.10.2
     dev: true
 
   /tweetnacl/1.0.3:
