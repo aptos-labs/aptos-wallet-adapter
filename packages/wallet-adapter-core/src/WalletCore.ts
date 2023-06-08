@@ -201,14 +201,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
         await this.disconnect();
       }
+      // check if we are in a redirectable view (i.e on mobile AND not in an in-app browser) and
       if (isRedirectable()) {
         // use wallet deep link
         if (selectedWallet.deeplinkProvider) {
           const url = encodeURIComponent(window.location.href);
           const location = selectedWallet.deeplinkProvider({ url });
           window.location.href = location;
-        } else {
-          return;
         }
       }
       this._connecting = true;
