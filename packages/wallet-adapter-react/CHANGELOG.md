@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-react
 
+## 1.2.0
+
+### Minor Changes
+
+- 1605d28: Support ReadonlyArray of Wallets in AptosWalletAdapterProvider and WalletCore
+
+### Patch Changes
+
+- Updated dependencies [bb1595e]
+- Updated dependencies [1605d28]
+  - @aptos-labs/wallet-adapter-core@2.3.0
+
 ## 1.1.0
 
 ### Minor Changes
