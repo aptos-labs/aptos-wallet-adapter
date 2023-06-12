@@ -187,13 +187,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         (wallet: Wallet) => wallet.name === walletName
       );
 
-      if (
-        !selectedWallet ||
-        (selectedWallet.readyState !== WalletReadyState.Installed &&
-          selectedWallet.readyState !== WalletReadyState.Loadable)
-      ) {
-        return;
-      }
+      if (!selectedWallet) return;
 
       if (this._connected) {
         // if the selected wallet is already connected, we don't need to connect again
@@ -201,7 +195,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
         await this.disconnect();
       }
+
       // check if we are in a redirectable view (i.e on mobile AND not in an in-app browser) and
+      // since wallet readyState can be NotDetected, we check it before the next check
       if (isRedirectable()) {
         // use wallet deep link
         if (selectedWallet.deeplinkProvider) {
@@ -210,6 +206,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           window.location.href = location;
         }
       }
+      if (
+        selectedWallet.readyState !== WalletReadyState.Installed &&
+        selectedWallet.readyState !== WalletReadyState.Loadable
+      ) {
+        return;
+      }
+
       this._connecting = true;
       this.setWallet(selectedWallet);
       const account = await selectedWallet.connect();
