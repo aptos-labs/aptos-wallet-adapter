@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 1.2.0
+
+### Minor Changes
+
+- 1672a0e: Add mobile wallet support on Ant Design wallet selector modal
+
+### Patch Changes
+
+- Updated dependencies [1672a0e]
+  - @aptos-labs/wallet-adapter-ant-design@1.1.0
+
 ## 1.1.1
 
 ### Patch Changes

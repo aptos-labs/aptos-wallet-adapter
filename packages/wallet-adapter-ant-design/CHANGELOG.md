@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 1.1.0
+
+### Minor Changes
+
+- 1672a0e: Add mobile wallet support on Ant Design wallet selector modal
+
 ## 1.0.6
 
 ### Patch Changes
