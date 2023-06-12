@@ -1,5 +1,12 @@
 # @aptos-labs/wallet-adapter-core
 
+## 2.3.0
+
+### Minor Changes
+
+- bb1595e: Fix deeplink redirect
+- 1605d28: Support ReadonlyArray of Wallets in AptosWalletAdapterProvider and WalletCore
+
 ## 2.2.0
 
 ### Minor Changes
