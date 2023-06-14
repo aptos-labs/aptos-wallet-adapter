@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-core
 
+## 2.3.1
+
+### Patch Changes
+
+- 06f334f: @aptos-labs/wallet-adapter-core:
+  Fixes ssr issue with checking for mobile wallets
+
+  @aptos-labs/wallet-adapter-mui-design:
+  Breaking:
+  When on a mobile phone on the native browser, we removed all wallets that are not able to be deep linked to.
+  The previous functionally would take them to the extension, which would not help users on mobile phones.
+
 ## 2.3.0
 
 ### Minor Changes
