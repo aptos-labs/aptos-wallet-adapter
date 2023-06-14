@@ -18,7 +18,7 @@ export function isInAppBrowser(): boolean {
 
 export function isRedirectable(): boolean {
   // SSR: return false
-  if (!navigator) return false;
+  if (typeof navigator === 'undefined' || !navigator) return false;
 
   // if we are on mobile and NOT in a in-app browser we will redirect to a wallet app
 
