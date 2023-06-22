@@ -181,7 +181,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   @emit emits "connect" event
   @throws WalletConnectionError
   */
-  async connect(walletName: WalletName): Promise<void> {
+  async connect(walletName: WalletName): Promise<void | string> {
     try {
       const selectedWallet = this._wallets?.find(
         (wallet: Wallet) => wallet.name === walletName
@@ -191,7 +191,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
       if (this._connected) {
         // if the selected wallet is already connected, we don't need to connect again
-        if (this.wallet?.name === walletName) return;
+        if (this.wallet?.name === walletName)
+          throw new WalletConnectionError(
+            `${walletName} wallet is already connected`
+          ).message;
 
         await this.disconnect();
       }

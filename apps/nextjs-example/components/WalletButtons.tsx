@@ -3,26 +3,44 @@ import {
   WalletReadyState,
   Wallet,
   isRedirectable,
+  WalletName,
 } from "@aptos-labs/wallet-adapter-react";
+import { Dispatch, SetStateAction } from "react";
 
-const WalletButtons = () => {
+interface WalletButtonsProps {
+  setErrorAlertMessage: Dispatch<SetStateAction<string>>;
+}
+
+const WalletButtons = (props: WalletButtonsProps) => {
   const { wallets } = useWallet();
 
   return (
     <>
       {wallets.map((wallet: Wallet) => {
-        return walletView(wallet);
+        return walletView(wallet, props.setErrorAlertMessage);
       })}
     </>
   );
 };
 
-const walletView = (wallet: Wallet) => {
+const walletView = (
+  wallet: Wallet,
+  setErrorAlertMessage: Dispatch<SetStateAction<string>>
+) => {
   const { connect } = useWallet();
   const isWalletReady =
     wallet.readyState === WalletReadyState.Installed ||
     wallet.readyState === WalletReadyState.Loadable;
   const mobileSupport = wallet.deeplinkProvider;
+
+  const onWalletConnectRequest = async (walletName: WalletName) => {
+    try {
+      await connect(walletName);
+    } catch (error: any) {
+      setErrorAlertMessage(error);
+    }
+  };
+
   /**
    * If we are on a mobile browser, adapter checks whether a wallet has a `deeplinkProvider` property
    * a. If it does, on connect it should redirect the user to the app by using the wallet's deeplink url
@@ -41,7 +59,7 @@ const walletView = (wallet: Wallet) => {
           className={`bg-blue-500 text-white font-bold py-2 px-4 rounded mr-4 hover:bg-blue-700`}
           disabled={false}
           key={wallet.name}
-          onClick={() => connect(wallet.name)}
+          onClick={() => onWalletConnectRequest(wallet.name)}
         >
           <>{wallet.name}</>
         </button>
@@ -66,7 +84,7 @@ const walletView = (wallet: Wallet) => {
         }`}
         disabled={!isWalletReady}
         key={wallet.name}
-        onClick={() => connect(wallet.name)}
+        onClick={() => onWalletConnectRequest(wallet.name)}
       >
         <>{wallet.name}</>
       </button>

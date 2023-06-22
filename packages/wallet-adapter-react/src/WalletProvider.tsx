@@ -58,8 +58,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     try {
       setIsLoading(true);
       await walletCore.connect(walletName);
-    } catch (e) {
-      console.log("connect error", e);
+    } catch (error: any) {
+      console.log("connect error", error);
+      throw error;
     } finally {
       setIsLoading(false);
     }
