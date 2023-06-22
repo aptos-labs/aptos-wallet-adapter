@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 2.3.2
+
+### Patch Changes
+
+- 22ecf6a: Throw `wallet already connected` error when trying to connect to an already connected wallet
+
 ## 2.3.1
 
 ### Patch Changes

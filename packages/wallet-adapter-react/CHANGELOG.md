@@ -1,5 +1,14 @@
 # @aptos-labs/wallet-adapter-react
 
+## 1.2.2
+
+### Patch Changes
+
+- 22ecf6a: Throw `wallet already connected` error when trying to connect to an already connected wallet
+- e4b06de: Await for wallet connect request before setting isLoading state
+- Updated dependencies [22ecf6a]
+  - @aptos-labs/wallet-adapter-core@2.3.2
+
 ## 1.2.1
 
 ### Patch Changes

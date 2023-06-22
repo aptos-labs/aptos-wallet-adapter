@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-mui-design",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Aptos Wallet Adapter mui design",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -43,7 +43,7 @@
     "typescript": "^4.5.3"
   },
   "dependencies": {
-    "@aptos-labs/wallet-adapter-react": "1.2.1",
+    "@aptos-labs/wallet-adapter-react": "1.2.2",
     "@babel/core": "^7.0.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",

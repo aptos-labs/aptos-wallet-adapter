@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 1.2.2
+
+### Patch Changes
+
+- 22ecf6a: Throw `wallet already connected` error when trying to connect to an already connected wallet
+- Updated dependencies [22ecf6a]
+- Updated dependencies [e4b06de]
+  - @aptos-labs/wallet-adapter-react@1.2.2
+  - @aptos-labs/wallet-adapter-ant-design@1.1.2
+  - @aptos-labs/wallet-adapter-mui-design@1.0.1
+
 ## 1.2.1
 
 ### Patch Changes
