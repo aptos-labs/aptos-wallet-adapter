@@ -45,15 +45,19 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const [{ connected, account, network, wallet }, setState] =
     useState(initialState);
 
+  // a local state to track whether wallet connect request is loading
+  // https://github.com/aptos-labs/aptos-wallet-adapter/issues/94
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const walletCore = useMemo(() => new WalletCore(plugins), []);
-  const [wallets, setWallets] = useState<ReadonlyArray<Wallet>>(walletCore.wallets);
+  const [wallets, setWallets] = useState<ReadonlyArray<Wallet>>(
+    walletCore.wallets
+  );
 
-  const connect = (walletName: WalletName) => {
+  const connect = async (walletName: WalletName) => {
     try {
       setIsLoading(true);
-      walletCore.connect(walletName);
+      await walletCore.connect(walletName);
     } catch (e) {
       console.log("connect error", e);
     } finally {
@@ -61,9 +65,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const disconnect = () => {
+  const disconnect = async () => {
     try {
-      walletCore.disconnect();
+      await walletCore.disconnect();
     } catch (e) {
       console.log("disconnect error", e);
     }
@@ -117,6 +121,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     if (autoConnect) {
       if (localStorage.getItem("AptosWalletName")) {
         connect(localStorage.getItem("AptosWalletName") as WalletName);
+      } else {
+        // if we dont use autoconnect set the connect is loading to false
+        setIsLoading(false);
       }
     }
   }, wallets);
