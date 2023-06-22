@@ -161,7 +161,7 @@ export default function App() {
               <h3>Connect a Wallet</h3>
             </td>
             <td className="px-8 py-4 w-3/4">
-              <WalletButtons />
+              <WalletButtons setErrorAlertMessage={setErrorAlertMessage} />
             </td>
           </tr>
           <tr>
