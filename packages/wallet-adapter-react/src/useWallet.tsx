@@ -40,11 +40,11 @@ export interface WalletContextState {
   ): Promise<any>;
   signAndSubmitBCSTransaction<T extends TxnBuilderTypes.TransactionPayload, V>(
     transaction: T,
-    options?: V
+    options?: TransactionOptions
   ): Promise<any>;
   signTransaction<T extends Types.TransactionPayload, V>(
     transaction: T,
-    options?: V
+    options?: TransactionOptions
   ): Promise<any>;
   signMessage(message: SignMessagePayload): Promise<SignMessageResponse | null>;
   signMessageAndVerify(message: SignMessagePayload): Promise<boolean>;

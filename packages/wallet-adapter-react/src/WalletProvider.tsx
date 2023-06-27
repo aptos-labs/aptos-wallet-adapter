@@ -89,19 +89,29 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const signAndSubmitBCSTransaction = async (
-    transaction: TxnBuilderTypes.TransactionPayload
+  const signAndSubmitBCSTransaction = async <
+    T extends TxnBuilderTypes.TransactionPayload,
+    V extends TransactionOptions | undefined
+  >(
+    transaction: T,
+    options?: V
   ) => {
     try {
-      return await walletCore.signAndSubmitBCSTransaction(transaction);
+      return await walletCore.signAndSubmitBCSTransaction(transaction, options);
     } catch (error: any) {
       throw error;
     }
   };
 
-  const signTransaction = async (transaction: Types.TransactionPayload) => {
+  const signTransaction = async <
+    T extends Types.TransactionPayload,
+    V extends TransactionOptions | undefined
+  >(
+    transaction: T,
+    options?: V
+  ) => {
     try {
-      return await walletCore.signTransaction(transaction);
+      return await walletCore.signTransaction(transaction, options);
     } catch (error: any) {
       throw error;
     }
