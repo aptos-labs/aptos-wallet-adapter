@@ -254,16 +254,22 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   /** 
   Sign and submit an entry (not bcs serialized) transaction type to chain.
   @param transaction a non-bcs serialized transaction
+  @param options max_gas_amount and gas_unit_limit
   @return response from the wallet's signAndSubmitTransaction function
   @throws WalletSignAndSubmitMessageError
   */
   async signAndSubmitTransaction(
-    transaction: Types.TransactionPayload
+    transaction: Types.TransactionPayload,
+    options?: {
+      max_gas_amount?: string,
+      gas_unit_price?: string,
+    }
   ): Promise<any> {
     try {
       this.doesWalletExist();
       const response = await this._wallet?.signAndSubmitTransaction(
-        transaction
+        transaction,
+        options
       );
       return response;
     } catch (error: any) {

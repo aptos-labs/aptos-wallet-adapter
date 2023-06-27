@@ -24,6 +24,11 @@ export {
   isMobile,
 };
 
+export interface TransactionOptions {
+  max_gas_amount?: string;
+  gas_unit_price?: string;
+}
+
 export interface WalletContextState {
   connected: boolean;
   isLoading: boolean;
@@ -35,7 +40,7 @@ export interface WalletContextState {
   wallets: ReadonlyArray<Wallet>;
   signAndSubmitTransaction<T extends Types.TransactionPayload, V>(
     transaction: T,
-    options?: V
+    options?: TransactionOptions
   ): Promise<any>;
   signAndSubmitBCSTransaction<T extends TxnBuilderTypes.TransactionPayload, V>(
     transaction: T,

@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { WalletContext } from "./useWallet";
+import { WalletContext, TransactionOptions } from "./useWallet";
 import type {
   AccountInfo,
   NetworkInfo,
@@ -74,11 +74,15 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const signAndSubmitTransaction = async (
-    transaction: Types.TransactionPayload
+  const signAndSubmitTransaction = async <
+    T extends Types.TransactionPayload,
+    V extends TransactionOptions | undefined
+  >(
+    transaction: T,
+    options?: V
   ) => {
     try {
-      return await walletCore.signAndSubmitTransaction(transaction);
+      return await walletCore.signAndSubmitTransaction(transaction, options);
     } catch (error: any) {
       throw error;
     }
