@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { WalletContext, TransactionOptions } from "./useWallet";
+import { WalletContext } from "./useWallet";
 import type {
   AccountInfo,
   NetworkInfo,
@@ -14,6 +14,7 @@ import type {
   Wallet,
   WalletInfo,
   WalletName,
+  TransactionOptions,
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
 

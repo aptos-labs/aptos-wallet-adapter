@@ -11,6 +11,7 @@ import {
   isInAppBrowser,
   isRedirectable,
   isMobile,
+  TransactionOptions,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
 import { TxnBuilderTypes, Types } from "aptos";
@@ -23,11 +24,6 @@ export {
   isRedirectable,
   isMobile,
 };
-
-export interface TransactionOptions {
-  max_gas_amount?: string;
-  gas_unit_price?: string;
-}
 
 export interface WalletContextState {
   connected: boolean;

@@ -1,6 +1,8 @@
 import { Types } from "aptos";
 import { NetworkName, WalletReadyState } from "./constants";
 
+type Uint64 = bigint
+
 // WalletName is a nominal type that wallet adapters should use, e.g. `'MyCryptoWallet' as WalletName<'MyCryptoWallet'>`
 export type WalletName<T extends string = string> = T & {
   __brand__: "WalletName";
@@ -105,4 +107,9 @@ export interface SignMessageResponse {
   prefix: "APTOS"; // Should always be APTOS
   signature: string | string[]; // The signed full message
   bitmap?: Uint8Array; // a 4-byte (32 bits) bit-vector of length N
+}
+
+export interface TransactionOptions {
+  max_gas_amount?: Uint64;
+  gas_unit_price?: Uint64;
 }

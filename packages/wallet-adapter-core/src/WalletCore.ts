@@ -29,6 +29,7 @@ import {
   Wallet,
   WalletInfo,
   WalletCoreEvents,
+  TransactionOptions,
 } from "./types";
 import {
   removeLocalStorage,
@@ -260,10 +261,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   */
   async signAndSubmitTransaction(
     transaction: Types.TransactionPayload,
-    options?: {
-      max_gas_amount?: string,
-      gas_unit_price?: string,
-    }
+    options?: TransactionOptions
   ): Promise<any> {
     try {
       this.doesWalletExist();
