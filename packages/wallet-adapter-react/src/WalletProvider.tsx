@@ -14,6 +14,7 @@ import type {
   Wallet,
   WalletInfo,
   WalletName,
+  TransactionOptions,
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
 
@@ -75,28 +76,33 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signAndSubmitTransaction = async (
-    transaction: Types.TransactionPayload
+    transaction: Types.TransactionPayload,
+    options?: TransactionOptions
   ) => {
     try {
-      return await walletCore.signAndSubmitTransaction(transaction);
+      return await walletCore.signAndSubmitTransaction(transaction, options);
     } catch (error: any) {
       throw error;
     }
   };
 
   const signAndSubmitBCSTransaction = async (
-    transaction: TxnBuilderTypes.TransactionPayload
+    transaction: TxnBuilderTypes.TransactionPayload,
+    options?: TransactionOptions
   ) => {
     try {
-      return await walletCore.signAndSubmitBCSTransaction(transaction);
+      return await walletCore.signAndSubmitBCSTransaction(transaction, options);
     } catch (error: any) {
       throw error;
     }
   };
 
-  const signTransaction = async (transaction: Types.TransactionPayload) => {
+  const signTransaction = async (
+    transaction: Types.TransactionPayload,
+    options?: TransactionOptions
+  ) => {
     try {
-      return await walletCore.signTransaction(transaction);
+      return await walletCore.signTransaction(transaction, options);
     } catch (error: any) {
       throw error;
     }
