@@ -34,15 +34,15 @@ export interface WalletContextState {
   disconnect(): void;
   wallet: WalletInfo | null;
   wallets: ReadonlyArray<Wallet>;
-  signAndSubmitTransaction<T extends Types.TransactionPayload, V>(
+  signAndSubmitTransaction<T extends Types.TransactionPayload>(
     transaction: T,
     options?: TransactionOptions
   ): Promise<any>;
-  signAndSubmitBCSTransaction<T extends TxnBuilderTypes.TransactionPayload, V>(
+  signAndSubmitBCSTransaction<T extends TxnBuilderTypes.TransactionPayload>(
     transaction: T,
     options?: TransactionOptions
   ): Promise<any>;
-  signTransaction<T extends Types.TransactionPayload, V>(
+  signTransaction<T extends Types.TransactionPayload>(
     transaction: T,
     options?: TransactionOptions
   ): Promise<any>;

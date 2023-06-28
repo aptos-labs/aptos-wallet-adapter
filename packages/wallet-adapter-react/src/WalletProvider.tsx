@@ -75,12 +75,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const signAndSubmitTransaction = async <
-    T extends Types.TransactionPayload,
-    V extends TransactionOptions | undefined
-  >(
-    transaction: T,
-    options?: V
+  const signAndSubmitTransaction = async (
+    transaction: Types.TransactionPayload,
+    options?: TransactionOptions | undefined
   ) => {
     try {
       return await walletCore.signAndSubmitTransaction(transaction, options);
@@ -89,12 +86,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const signAndSubmitBCSTransaction = async <
-    T extends TxnBuilderTypes.TransactionPayload,
-    V extends TransactionOptions | undefined
-  >(
-    transaction: T,
-    options?: V
+  const signAndSubmitBCSTransaction = async (
+    transaction: TxnBuilderTypes.TransactionPayload,
+    options?: TransactionOptions | undefined
   ) => {
     try {
       return await walletCore.signAndSubmitBCSTransaction(transaction, options);
@@ -103,12 +97,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const signTransaction = async <
-    T extends Types.TransactionPayload,
-    V extends TransactionOptions | undefined
-  >(
-    transaction: T,
-    options?: V
+  const signTransaction = async (
+    transaction: Types.TransactionPayload,
+    options?: TransactionOptions | undefined
   ) => {
     try {
       return await walletCore.signTransaction(transaction, options);
