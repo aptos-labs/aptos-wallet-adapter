@@ -27,7 +27,7 @@ jobs:
           version: 7
 
       - name: Install global dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build global project
         run: pnpm run build
