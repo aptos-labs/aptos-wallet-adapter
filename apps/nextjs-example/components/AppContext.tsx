@@ -1,4 +1,5 @@
 import { BloctoWallet } from "@blocto/aptos-wallet-adapter-plugin";
+import { FaceWallet } from "@haechi-labs/face-aptos-adapter-plugin";
 import { FewchaWallet } from "fewcha-plugin-wallet-adapter";
 import { MartianWallet } from "@martianwallet/aptos-wallet-adapter";
 import { NightlyWallet } from "@nightlylabs/aptos-wallet-adapter-plugin";
@@ -18,8 +19,9 @@ import {
 import {
   AutoConnectProvider,
   useAutoConnect,
-} from "../components/AutoConnectProvider";
+} from "./AutoConnectProvider";
 import { FC, ReactNode } from "react";
+import face from "../lib/faceInitialization";
 
 const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { autoConnect } = useAutoConnect();
@@ -30,6 +32,7 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
       network: NetworkName.Testnet,
       bloctoAppId: "6d85f56e-5f2e-46cd-b5f2-5cf9695b4d46",
     }),
+    new FaceWallet(face!),
     new FewchaWallet(),
     new MartianWallet(),
     new MSafeWalletAdapter(),
