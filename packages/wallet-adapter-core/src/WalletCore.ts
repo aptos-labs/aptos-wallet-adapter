@@ -29,6 +29,7 @@ import {
   Wallet,
   WalletInfo,
   WalletCoreEvents,
+  TransactionOptions,
 } from "./types";
 import {
   removeLocalStorage,
@@ -254,16 +255,19 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   /** 
   Sign and submit an entry (not bcs serialized) transaction type to chain.
   @param transaction a non-bcs serialized transaction
+  @param options max_gas_amount and gas_unit_limit
   @return response from the wallet's signAndSubmitTransaction function
   @throws WalletSignAndSubmitMessageError
   */
   async signAndSubmitTransaction(
-    transaction: Types.TransactionPayload
+    transaction: Types.TransactionPayload,
+    options?: TransactionOptions
   ): Promise<any> {
     try {
       this.doesWalletExist();
       const response = await this._wallet?.signAndSubmitTransaction(
-        transaction
+        transaction,
+        options
       );
       return response;
     } catch (error: any) {
@@ -276,11 +280,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   /** 
   Sign and submit a bsc serialized transaction type to chain.
   @param transaction a bcs serialized transaction
+  @param options max_gas_amount and gas_unit_limit
   @return response from the wallet's signAndSubmitBCSTransaction function
   @throws WalletSignAndSubmitMessageError
   */
   async signAndSubmitBCSTransaction(
-    transaction: TxnBuilderTypes.TransactionPayload
+    transaction: TxnBuilderTypes.TransactionPayload,
+    options?: TransactionOptions
   ): Promise<any> {
     if (this._wallet && !("signAndSubmitBCSTransaction" in this._wallet)) {
       throw new WalletNotSupportedMethod(
@@ -291,7 +297,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     try {
       this.doesWalletExist();
       const response = await (this._wallet as any).signAndSubmitBCSTransaction(
-        transaction
+        transaction,
+        options
       );
       return response;
     } catch (error: any) {
@@ -304,11 +311,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   /** 
   Sign transaction (doesnt submit to chain).
   @param transaction
+  @param options max_gas_amount and gas_unit_limit
   @return response from the wallet's signTransaction function
   @throws WalletSignTransactionError
   */
   async signTransaction(
-    transaction: Types.TransactionPayload
+    transaction: Types.TransactionPayload,
+    options?: TransactionOptions
   ): Promise<Uint8Array | null> {
     if (this._wallet && !("signTransaction" in this._wallet)) {
       throw new WalletNotSupportedMethod(
@@ -318,7 +327,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
     try {
       this.doesWalletExist();
-      const response = await (this._wallet as any).signTransaction(transaction);
+      const response = await (this._wallet as any).signTransaction(transaction, options);
       return response;
     } catch (error: any) {
       const errMsg =

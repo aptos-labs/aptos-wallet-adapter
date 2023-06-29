@@ -106,3 +106,8 @@ export interface SignMessageResponse {
   signature: string | string[]; // The signed full message
   bitmap?: Uint8Array; // a 4-byte (32 bits) bit-vector of length N
 }
+
+export interface TransactionOptions {
+  max_gas_amount?: bigint;
+  gas_unit_price?: bigint;
+}

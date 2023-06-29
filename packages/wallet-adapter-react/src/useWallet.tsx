@@ -11,6 +11,7 @@ import {
   isInAppBrowser,
   isRedirectable,
   isMobile,
+  TransactionOptions,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
 import { TxnBuilderTypes, Types } from "aptos";
@@ -33,17 +34,17 @@ export interface WalletContextState {
   disconnect(): void;
   wallet: WalletInfo | null;
   wallets: ReadonlyArray<Wallet>;
-  signAndSubmitTransaction<T extends Types.TransactionPayload, V>(
+  signAndSubmitTransaction<T extends Types.TransactionPayload>(
     transaction: T,
-    options?: V
+    options?: TransactionOptions
   ): Promise<any>;
-  signAndSubmitBCSTransaction<T extends TxnBuilderTypes.TransactionPayload, V>(
+  signAndSubmitBCSTransaction<T extends TxnBuilderTypes.TransactionPayload>(
     transaction: T,
-    options?: V
+    options?: TransactionOptions
   ): Promise<any>;
-  signTransaction<T extends Types.TransactionPayload, V>(
+  signTransaction<T extends Types.TransactionPayload>(
     transaction: T,
-    options?: V
+    options?: TransactionOptions
   ): Promise<any>;
   signMessage(message: SignMessagePayload): Promise<SignMessageResponse | null>;
   signMessageAndVerify(message: SignMessagePayload): Promise<boolean>;
