@@ -1,5 +1,13 @@
 # @aptos-labs/wallet-adapter-react
 
+## 1.2.3
+
+### Patch Changes
+
+- dc98bf4: fix sendAndSubmitTransaction params
+- Updated dependencies [dc98bf4]
+  - @aptos-labs/wallet-adapter-core@2.3.3
+
 ## 1.2.2
 
 ### Patch Changes
