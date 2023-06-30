@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 1.2.0
+
+### Minor Changes
+
+- 927cfc6: Add an optional prop for WalletSelector to handle modal open
+
 ## 1.1.3
 
 ### Patch Changes
