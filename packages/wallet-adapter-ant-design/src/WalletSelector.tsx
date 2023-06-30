@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Menu, Modal, Typography } from "antd";
 import {
   isRedirectable,
@@ -11,8 +11,19 @@ import "./styles.css";
 import { truncateAddress } from "./utils";
 const { Text } = Typography;
 
-export function WalletSelector() {
+type WalletSelectorProps = {
+  isModalOpen?: boolean;
+};
+
+export function WalletSelector({ isModalOpen }: WalletSelectorProps) {
   const [walletSelectorModalOpen, setWalletSelectorModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (isModalOpen !== undefined) {
+      setWalletSelectorModalOpen(isModalOpen);
+    }
+  }, [isModalOpen]);
+
   const { connect, disconnect, account, wallets, connected } = useWallet();
 
   const onWalletButtonClick = () => {
