@@ -188,7 +188,7 @@ export default function App() {
           </tr>
           <tr>
             <td className="px-8 py-4 border-t w-1/4">
-              <h3>Actions</h3>
+              <h3>Standard functions</h3>
             </td>
             <td className="px-8 py-4 border-t break-all w-3/4">
               <div>
@@ -226,17 +226,7 @@ export default function App() {
                 >
                   Sign and submit BCS transaction
                 </button>
-                <button
-                  className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 ${
-                    !connected
-                      ? "opacity-50 cursor-not-allowed"
-                      : "hover:bg-blue-700"
-                  }`}
-                  onClick={onSignTransaction}
-                  disabled={!connected}
-                >
-                  Sign transaction
-                </button>
+
                 <button
                   className={`bg-blue-500 text-white font-bold py-2 px-4 rounded mr-4 ${
                     !connected
@@ -248,19 +238,34 @@ export default function App() {
                 >
                   Sign Message
                 </button>
-
-                <button
-                  className={`bg-orange-500 text-white font-bold py-2 px-4 rounded mr-4 ${
-                    !connected
-                      ? "opacity-50 cursor-not-allowed"
-                      : "hover:bg-orange-700"
-                  }`}
-                  onClick={onSignMessageAndVerify}
-                  disabled={!connected}
-                >
-                  Sign Message and Verify
-                </button>
               </div>
+            </td>
+          </tr>
+          <tr>
+            <td className="px-8 py-4 border-t w-1/4">Feature functions</td>
+            <td className="px-8 py-4 border-t w-3/4">
+              <button
+                className={`bg-orange-500 text-white font-bold py-2 px-4 rounded mr-4 ${
+                  !connected
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-orange-700"
+                }`}
+                onClick={onSignMessageAndVerify}
+                disabled={!connected}
+              >
+                Sign Message and Verify
+              </button>
+              <button
+                className={`bg-orange-500 text-white font-bold py-2 px-4 rounded mr-4 ${
+                  !connected
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-orange-700"
+                }`}
+                onClick={onSignTransaction}
+                disabled={!connected}
+              >
+                Sign transaction
+              </button>
             </td>
           </tr>
           <tr>

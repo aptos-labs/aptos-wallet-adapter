@@ -229,7 +229,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.emit("connect", account);
     } catch (error: any) {
       this.clearData();
-      throw new WalletConnectionError(error).message;
+      const errMsg =
+        typeof error == "object" && "message" in error ? error.message : error;
+      throw new WalletConnectionError(errMsg).message;
     } finally {
       this._connecting = false;
     }
@@ -248,7 +250,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.clearData();
       this.emit("disconnect");
     } catch (error: any) {
-      throw new WalletDisconnectionError(error).message;
+      const errMsg =
+        typeof error == "object" && "message" in error ? error.message : error;
+      throw new WalletDisconnectionError(errMsg).message;
     }
   }
 
@@ -327,7 +331,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
     try {
       this.doesWalletExist();
-      const response = await (this._wallet as any).signTransaction(transaction, options);
+      const response = await (this._wallet as any).signTransaction(
+        transaction,
+        options
+      );
       return response;
     } catch (error: any) {
       const errMsg =
