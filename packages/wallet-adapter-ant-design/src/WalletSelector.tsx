@@ -53,6 +53,7 @@ export function WalletSelector({ isModalOpen }: WalletSelectorProps) {
         onCancel={() => setWalletSelectorModalOpen(false)}
         footer={[]}
         closable={false}
+        zIndex={9999}
       >
         {!connected && (
           <Menu>
