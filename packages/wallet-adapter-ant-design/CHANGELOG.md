@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 1.2.1
+
+### Patch Changes
+
+- ae47ccd: give wallet adapter ant design modal higher zindex to make sure it always shows up on screen
+
 ## 1.2.0
 
 ### Minor Changes
