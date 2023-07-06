@@ -172,51 +172,58 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
-  Connects a wallet to the app. If a wallet is already connected,
-  we first disconnect the current connected wallet and then connect the selected wallet.
-  On connect success, we set the current account and the network, and keeping the selected wallet
-  name in LocalStorage to support autoConnect function.
-
-  @param walletName. The wallet name we want to connect as a WalletName type.
-  @emit emits "connect" event
-  @throws WalletConnectionError
-  */
+  /**
+   * We first make sure we can connect a dapp to a wallet.
+   * If all good, we connect the wallet by calling `this.connectWallet`
+   * @param walletName. The wallet name we want to connect.
+   */
   async connect(walletName: WalletName): Promise<void | string> {
+    const selectedWallet = this._wallets?.find(
+      (wallet: Wallet) => wallet.name === walletName
+    );
+
+    if (!selectedWallet) return;
+
+    if (this._connected) {
+      // if the selected wallet is already connected, we don't need to connect again
+      if (selectedWallet.name === walletName)
+        throw new WalletConnectionError(
+          `${walletName} wallet is already connected`
+        ).message;
+    }
+
+    // check if we are in a redirectable view (i.e on mobile AND not in an in-app browser) and
+    // since wallet readyState can be NotDetected, we check it before the next check
+    if (isRedirectable()) {
+      // use wallet deep link
+      if (selectedWallet.deeplinkProvider) {
+        const url = encodeURIComponent(window.location.href);
+        const location = selectedWallet.deeplinkProvider({ url });
+        window.location.href = location;
+      }
+    }
+    if (
+      selectedWallet.readyState !== WalletReadyState.Installed &&
+      selectedWallet.readyState !== WalletReadyState.Loadable
+    ) {
+      return;
+    }
+
+    // Now we can connect to the wallet
+    await this.connectWallet(selectedWallet);
+  }
+
+  /**
+   * Connects a wallet to the dapp.
+   * On connect success, we set the current account and the network, and keeping the selected wallet
+   * name in LocalStorage to support autoConnect function.
+   *
+   * @param selectedWallet. The wallet we want to connect.
+   * @emit emits "connect" event
+   * @throws WalletConnectionError
+   */
+  async connectWallet(selectedWallet: Wallet) {
     try {
-      const selectedWallet = this._wallets?.find(
-        (wallet: Wallet) => wallet.name === walletName
-      );
-
-      if (!selectedWallet) return;
-
-      if (this._connected) {
-        // if the selected wallet is already connected, we don't need to connect again
-        if (this.wallet?.name === walletName)
-          throw new WalletConnectionError(
-            `${walletName} wallet is already connected`
-          ).message;
-
-        await this.disconnect();
-      }
-
-      // check if we are in a redirectable view (i.e on mobile AND not in an in-app browser) and
-      // since wallet readyState can be NotDetected, we check it before the next check
-      if (isRedirectable()) {
-        // use wallet deep link
-        if (selectedWallet.deeplinkProvider) {
-          const url = encodeURIComponent(window.location.href);
-          const location = selectedWallet.deeplinkProvider({ url });
-          window.location.href = location;
-        }
-      }
-      if (
-        selectedWallet.readyState !== WalletReadyState.Installed &&
-        selectedWallet.readyState !== WalletReadyState.Loadable
-      ) {
-        return;
-      }
-
       this._connecting = true;
       this.setWallet(selectedWallet);
       const account = await selectedWallet.connect();
