@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Button, Menu, Modal, Typography } from "antd";
 import {
   isRedirectable,
@@ -13,9 +13,13 @@ const { Text } = Typography;
 
 type WalletSelectorProps = {
   isModalOpen?: boolean;
+  setModalOpen?: Dispatch<SetStateAction<boolean>>;
 };
 
-export function WalletSelector({ isModalOpen }: WalletSelectorProps) {
+export function WalletSelector({
+  isModalOpen,
+  setModalOpen,
+}: WalletSelectorProps) {
   const [walletSelectorModalOpen, setWalletSelectorModalOpen] = useState(false);
 
   useEffect(() => {
@@ -37,6 +41,15 @@ export function WalletSelector({ isModalOpen }: WalletSelectorProps) {
   const onWalletSelected = (wallet: WalletName) => {
     connect(wallet);
     setWalletSelectorModalOpen(false);
+    if (setModalOpen) {
+      setModalOpen(false);
+    }
+  };
+  const onCancel = () => {
+    setWalletSelectorModalOpen(false);
+    if (setModalOpen) {
+      setModalOpen(false);
+    }
   };
   const buttonText = account?.ansName
     ? account?.ansName
@@ -50,7 +63,7 @@ export function WalletSelector({ isModalOpen }: WalletSelectorProps) {
         title={<div className="wallet-modal-title">Connect Wallet</div>}
         centered
         open={walletSelectorModalOpen}
-        onCancel={() => setWalletSelectorModalOpen(false)}
+        onCancel={onCancel}
         footer={[]}
         closable={false}
         zIndex={9999}
