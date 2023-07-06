@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 1.2.2
+
+### Patch Changes
+
+- a42a197: add action to control modal open or not
+
 ## 1.2.1
 
 ### Patch Changes
