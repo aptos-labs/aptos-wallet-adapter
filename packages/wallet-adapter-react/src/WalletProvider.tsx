@@ -1,4 +1,5 @@
 import {
+  ErrorInfo,
   FC,
   ReactNode,
   useCallback,
@@ -24,6 +25,7 @@ export interface AptosWalletProviderProps {
   children: ReactNode;
   plugins: ReadonlyArray<Wallet>;
   autoConnect?: boolean;
+  onError?: (error: any) => void;
 }
 
 const initialState: {
@@ -42,6 +44,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   children,
   plugins,
   autoConnect = false,
+  onError,
 }: AptosWalletProviderProps) => {
   const [{ connected, account, network, wallet }, setState] =
     useState(initialState);
@@ -61,7 +64,8 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       await walletCore.connect(walletName);
     } catch (error: any) {
       console.log("connect error", error);
-      throw error;
+      if (onError) onError(error);
+      else throw error;
     } finally {
       setIsLoading(false);
     }
@@ -72,6 +76,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       await walletCore.disconnect();
     } catch (e) {
       console.log("disconnect error", e);
+      if (onError) onError(e);
     }
   };
 
@@ -82,7 +87,8 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     try {
       return await walletCore.signAndSubmitTransaction(transaction, options);
     } catch (error: any) {
-      throw error;
+      if (onError) onError(error);
+      else throw error;
     }
   };
 
@@ -104,7 +110,8 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     try {
       return await walletCore.signTransaction(transaction, options);
     } catch (error: any) {
-      throw error;
+      if (onError) onError(error);
+      else throw error;
     }
   };
 
@@ -112,7 +119,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     try {
       return await walletCore.signMessage(message);
     } catch (error: any) {
-      throw error;
+      if (onError) onError(error);
+      else throw error;
+      return null;
     }
   };
 
@@ -120,7 +129,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     try {
       return await walletCore.signMessageAndVerify(message);
     } catch (error: any) {
-      throw error;
+      if (onError) onError(error);
+      else throw error;
+      return false;
     }
   };
 
