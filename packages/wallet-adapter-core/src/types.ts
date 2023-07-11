@@ -24,7 +24,7 @@ export interface AptosWalletErrorResult {
   message: string;
 }
 
-type OnNetworkChange = (
+export type OnNetworkChange = (
   callBack: (networkInfo: NetworkInfo) => Promise<void>
 ) => Promise<void>;
 
