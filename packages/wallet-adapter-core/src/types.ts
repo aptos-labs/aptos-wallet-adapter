@@ -24,6 +24,20 @@ export interface AptosWalletErrorResult {
   message: string;
 }
 
+type OnNetworkChange = (
+  callBack: (
+    networkInfo: NetworkInfo & {
+      /**
+       * @deprecated Use the root level `networkInfo` instead because
+       * `networkName` will not be read in by the `WalletCore` provider.
+       * Historically, this was an unused type and is now left in for backwards
+       * compatibility.
+       */
+      networkName: NetworkInfo;
+    }
+  ) => Promise<void>
+) => Promise<void>;
+
 export interface PluginProvider {
   connect: () => Promise<AccountInfo>;
   account: () => Promise<AccountInfo>;
@@ -37,13 +51,11 @@ export interface PluginProvider {
   onAccountChange: (
     listener: (newAddress: AccountInfo) => Promise<void>
   ) => Promise<void>;
-  onNetworkChange: (
-    listener: (network: { networkName: NetworkInfo }) => Promise<void>
-  ) => Promise<void>;
+  onNetworkChange: OnNetworkChange;
 }
 
 export interface AdapterPluginEvents {
-  onNetworkChange(callback: any): Promise<any>;
+  onNetworkChange: OnNetworkChange;
   onAccountChange(callback: any): Promise<any>;
 }
 
