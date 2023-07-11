@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 2.5.0
+
+### Minor Changes
+
+- c95933a: Update the `onNetworkChange` type interface to conform with `WalletCore`'s usage of the callback
+
 ## 2.4.0
 
 ### Minor Changes
