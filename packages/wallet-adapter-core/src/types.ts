@@ -25,17 +25,7 @@ export interface AptosWalletErrorResult {
 }
 
 type OnNetworkChange = (
-  callBack: (
-    networkInfo: NetworkInfo & {
-      /**
-       * @deprecated Use the root level `networkInfo` instead because
-       * `networkName` will not be read in by the `WalletCore` provider.
-       * Historically, this was an unused type and is now left in for backwards
-       * compatibility.
-       */
-      networkName: NetworkInfo;
-    }
-  ) => Promise<void>
+  callBack: (networkInfo: NetworkInfo) => Promise<void>
 ) => Promise<void>;
 
 export interface PluginProvider {
