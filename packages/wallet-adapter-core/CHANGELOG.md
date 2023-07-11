@@ -1,5 +1,15 @@
 # @aptos-labs/wallet-adapter-core
 
+## 2.4.0
+
+### Minor Changes
+
+- d2a0bbd: Support error message on connect and disconnect functions
+
+### Patch Changes
+
+- b0586e8: Separate connect and connectWallet for SRP
+
 ## 2.3.3
 
 ### Patch Changes
