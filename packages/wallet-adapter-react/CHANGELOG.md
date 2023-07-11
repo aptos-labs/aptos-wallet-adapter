@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-react
 
+## 1.3.0
+
+### Minor Changes
+
+- 3834890: Add an optional `onError` prop to error handle wallet callbacks
+
+### Patch Changes
+
+- Updated dependencies [d2a0bbd]
+- Updated dependencies [b0586e8]
+  - @aptos-labs/wallet-adapter-core@2.4.0
+
 ## 1.2.3
 
 ### Patch Changes
