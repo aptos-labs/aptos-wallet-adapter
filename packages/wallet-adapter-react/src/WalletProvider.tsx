@@ -1,5 +1,4 @@
 import {
-  ErrorInfo,
   FC,
   ReactNode,
   useCallback,
