@@ -16,10 +16,7 @@ import {
   NetworkName,
 } from "@aptos-labs/wallet-adapter-react";
 
-import {
-  AutoConnectProvider,
-  useAutoConnect,
-} from "./AutoConnectProvider";
+import { AutoConnectProvider, useAutoConnect } from "./AutoConnectProvider";
 import { FC, ReactNode } from "react";
 import face from "../lib/faceInitialization";
 
@@ -47,7 +44,14 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   ];
 
   return (
-    <AptosWalletAdapterProvider plugins={wallets} autoConnect={autoConnect}>
+    <AptosWalletAdapterProvider
+      plugins={wallets}
+      autoConnect={autoConnect}
+      onError={(error) => {
+        console.log("Custom error handling", error);
+        throw new Error(error.message);
+      }}
+    >
       {children}
     </AptosWalletAdapterProvider>
   );
