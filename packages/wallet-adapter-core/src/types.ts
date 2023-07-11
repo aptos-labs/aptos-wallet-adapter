@@ -24,6 +24,10 @@ export interface AptosWalletErrorResult {
   message: string;
 }
 
+export type OnNetworkChange = (
+  callBack: (networkInfo: NetworkInfo) => Promise<void>
+) => Promise<void>;
+
 export interface PluginProvider {
   connect: () => Promise<AccountInfo>;
   account: () => Promise<AccountInfo>;
@@ -37,13 +41,11 @@ export interface PluginProvider {
   onAccountChange: (
     listener: (newAddress: AccountInfo) => Promise<void>
   ) => Promise<void>;
-  onNetworkChange: (
-    listener: (network: { networkName: NetworkInfo }) => Promise<void>
-  ) => Promise<void>;
+  onNetworkChange: OnNetworkChange;
 }
 
 export interface AdapterPluginEvents {
-  onNetworkChange(callback: any): Promise<any>;
+  onNetworkChange: OnNetworkChange;
   onAccountChange(callback: any): Promise<any>;
 }
 
