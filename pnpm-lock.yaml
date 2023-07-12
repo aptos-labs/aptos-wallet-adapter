@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: false
+  excludeLinksFromLockfile: false
+
 importers:
 
   .:
@@ -84,8 +88,8 @@ importers:
         specifier: 13.0.0
         version: 13.0.0(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
       petra-plugin-wallet-adapter:
-        specifier: ^0.1.5
-        version: 0.1.5
+        specifier: ^0.2.1
+        version: 0.2.1
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -401,8 +405,8 @@ packages:
       - debug
     dev: false
 
-  /@aptos-labs/wallet-adapter-core@2.3.2:
-    resolution: {integrity: sha512-ocZiZhqaNDhqmLXzq7swZFTx1nDBLFI3vLPOJPee5pDjL/egBsk+JaGFc7kfPH7Io7T3JShZHME9HaDMUeqndA==}
+  /@aptos-labs/wallet-adapter-core@2.5.0:
+    resolution: {integrity: sha512-+OFQ51vdsBzYu9U281yvuOTaj/Qbo3D26ai3m+S0vKX2QdaDSMlpzDPz1NHVNU4nJnq0yk2ukfIA5fq2FgTPeA==}
     dependencies:
       aptos: 1.10.0
       buffer: 6.0.3
@@ -1495,7 +1499,7 @@ packages:
       '@haechi-labs/face-types': ^1.7.0
       ethers: ^5.6.8
     dependencies:
-      '@aptos-labs/wallet-adapter-core': 2.3.2
+      '@aptos-labs/wallet-adapter-core': 2.5.0
       '@haechi-labs/face-types': 1.10.4
       '@noble/hashes': 1.3.1
       '@solana/web3.js': 1.77.3
@@ -6471,10 +6475,10 @@ packages:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
 
-  /petra-plugin-wallet-adapter@0.1.5:
-    resolution: {integrity: sha512-+PQyVP2xkp36IZcau1dxPGz9XBT+Awen6Z2rtVsLHMPVktZXnp+ChjjERvYm46ICpyWowZAsbjeCz/2UfAlNXA==}
+  /petra-plugin-wallet-adapter@0.2.1:
+    resolution: {integrity: sha512-R9s5d5UEsajRnsYPg5qbk1k5gDXBuJa2mLP6IhVWZcZ13v8P+yt7YJdptPnks26DlQiv+M/cSHlfumcN4AAS6A==}
     dependencies:
-      '@aptos-labs/wallet-adapter-core': 2.3.2
+      '@aptos-labs/wallet-adapter-core': 2.5.0
       aptos: 1.10.0
     transitivePeerDependencies:
       - debug
@@ -8501,7 +8505,3 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
-
-settings:
-  autoInstallPeers: false
-  excludeLinksFromLockfile: false

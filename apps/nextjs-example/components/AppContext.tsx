@@ -35,9 +35,7 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     new MSafeWalletAdapter(),
     new NightlyWallet(),
     new OpenBlockWallet(),
-    // TODO: Depends on [this PR](https://github.com/aptos-labs/petra-plugin-wallet-adapter/pull/7)
-    // to re-enable
-    // new PetraWallet(),
+    new PetraWallet(),
     new PontemWallet(),
     new RiseWallet(),
     new TokenPocketWallet(),
