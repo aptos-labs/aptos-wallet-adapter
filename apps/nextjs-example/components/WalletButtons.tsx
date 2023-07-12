@@ -5,29 +5,23 @@ import {
   isRedirectable,
   WalletName,
 } from "@aptos-labs/wallet-adapter-react";
-import { Dispatch, SetStateAction } from "react";
+import { useAlert } from "./AlertProvider";
 
-interface WalletButtonsProps {
-  setErrorAlertMessage: Dispatch<SetStateAction<string>>;
-}
-
-const WalletButtons = (props: WalletButtonsProps) => {
+const WalletButtons = () => {
   const { wallets } = useWallet();
 
   return (
     <>
       {wallets.map((wallet: Wallet) => {
-        return walletView(wallet, props.setErrorAlertMessage);
+        return walletView(wallet);
       })}
     </>
   );
 };
 
-const walletView = (
-  wallet: Wallet,
-  setErrorAlertMessage: Dispatch<SetStateAction<string>>
-) => {
+const walletView = (wallet: Wallet) => {
   const { connect } = useWallet();
+  const { setErrorAlertMessage } = useAlert();
   const isWalletReady =
     wallet.readyState === WalletReadyState.Installed ||
     wallet.readyState === WalletReadyState.Loadable;
