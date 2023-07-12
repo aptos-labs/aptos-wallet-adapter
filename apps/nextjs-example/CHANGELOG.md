@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 1.2.9
+
+### Patch Changes
+
+- 13a0b37: Add PetraWallet back into the example dApp
+
 ## 1.2.8
 
 ### Patch Changes
