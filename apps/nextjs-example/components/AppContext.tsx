@@ -19,9 +19,11 @@ import {
 import { AutoConnectProvider, useAutoConnect } from "./AutoConnectProvider";
 import { FC, ReactNode } from "react";
 import face from "../lib/faceInitialization";
+import { AlertProvider, useAlert } from "./AlertProvider";
 
 const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { autoConnect } = useAutoConnect();
+  const { setErrorAlertMessage } = useAlert();
 
   const wallets = [
     // Blocto supports Testnet/Mainnet for now.
@@ -49,7 +51,7 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
       autoConnect={autoConnect}
       onError={(error) => {
         console.log("Custom error handling", error);
-        throw new Error(error.message);
+        setErrorAlertMessage(error)
       }}
     >
       {children}
@@ -60,7 +62,9 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
 export const AppContext: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <AutoConnectProvider>
-      <WalletContextProvider>{children}</WalletContextProvider>
+      <AlertProvider>
+        <WalletContextProvider>{children}</WalletContextProvider>
+      </AlertProvider>
     </AutoConnectProvider>
   );
 };

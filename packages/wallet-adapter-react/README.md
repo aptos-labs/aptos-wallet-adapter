@@ -20,11 +20,12 @@ signAndSubmitTransaction
 signMessage
 ```
 
-##### Feature functions
+##### Feature functions - functions that may not be supported by all wallets
 
 ```
 signTransaction
 signMessageAndVerify
+signAndSubmitBCSTransaction
 ```
 
 ### Usage
@@ -67,7 +68,13 @@ Wrap your app with the Provider, pass it the `plugins (wallets)` you want to hav
 ```js
 const wallets = [new AptosWallet()];
 
-<AptosWalletAdapterProvider plugins={wallets} autoConnect={true}>
+<AptosWalletAdapterProvider
+  plugins={wallets}
+  autoConnect={true}
+  onError={(error) => {
+    console.log("error", error);
+  }}
+>
   <App />
 </AptosWalletAdapterProvider>;
 ```
@@ -92,6 +99,7 @@ const {
   wallet,
   wallets,
   signAndSubmitTransaction,
+  signAndSubmitBCSTransaction,
   signTransaction,
   signMessage,
   signMessageAndVerify,
@@ -108,7 +116,11 @@ You can find it [here](../wallet-adapter-ant-design/) with instructions on how t
 ##### connect(walletName)
 
 ```js
-<button onClick={() => connect(wallet.name)}>{wallet.name}</button>
+const onConnect = async (walletName) => {
+  await connect(walletName);
+};
+
+<button onClick={() => onConnect(wallet.name)}>{wallet.name}</button>;
 ```
 
 ##### disconnect()
@@ -127,13 +139,12 @@ You can find it [here](../wallet-adapter-ant-design/) with instructions on how t
       type_arguments: ["0x1::aptos_coin::AptosCoin"],
       arguments: [account?.address, 1], // 1 is in Octas
     };
+    const response = await signAndSubmitTransaction(payload);
+    // if you want to wait for transaction
     try {
-      const response = await signAndSubmitTransaction(payload);
-      // if you want to wait for transaction
       await aptosClient.waitForTransaction(response?.hash || "");
-      console.log(response?.hash)
-    } catch (error: any) {
-      console.log("error", error);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -142,25 +153,54 @@ You can find it [here](../wallet-adapter-ant-design/) with instructions on how t
 </button>
 ```
 
-##### signMessage(payload)
+##### signAndSubmitBCSTransaction(payload)
 
 ```js
-  const onSignMessage = async () => {
-    const payload = {
-      message: "Hello from Aptos Wallet Adapter",
-      nonce: "random_string",
-    };
+   const onSignAndSubmitBCSTransaction = async () => {
+    const token = new TxnBuilderTypes.TypeTagStruct(
+      TxnBuilderTypes.StructTag.fromString("0x1::aptos_coin::AptosCoin")
+    );
+    const entryFunctionBCSPayload =
+      new TxnBuilderTypes.TransactionPayloadEntryFunction(
+        TxnBuilderTypes.EntryFunction.natural(
+          "0x1::coin",
+          "transfer",
+          [token],
+          [
+            BCS.bcsToBytes(
+              TxnBuilderTypes.AccountAddress.fromHex(account!.address)
+            ),
+            BCS.bcsSerializeUint64(2),
+          ]
+        )
+      );
+
+    const response = await signAndSubmitBCSTransaction(entryFunctionBCSPayload);
+    // if you want to wait for transaction
     try {
-      const response = await signMessage(payload);
-      console.log("response", response);
-    } catch (error: any) {
-      console.log("error", error);
+      await aptosClient.waitForTransaction(response?.hash || "");
+    } catch (error) {
+      console.error(error);
     }
   };
 
-<button onClick={onSignMessage}>
-  Sign message
+<button onClick={onSignAndSubmitTransaction}>
+  Sign and submit BCS transaction
 </button>
+```
+
+##### signMessage(payload)
+
+```js
+const onSignMessage = async () => {
+  const payload = {
+    message: "Hello from Aptos Wallet Adapter",
+    nonce: "random_string",
+  };
+  const response = await signMessage(payload);
+};
+
+<button onClick={onSignMessage}>Sign message</button>;
 ```
 
 ##### Account
@@ -202,12 +242,7 @@ You can find it [here](../wallet-adapter-ant-design/) with instructions on how t
       type_arguments: ["0x1::aptos_coin::AptosCoin"],
       arguments: [account?.address, 1], // 1 is in Octas
     };
-    try {
-      const response = await signTransaction(payload);
-      console.log("response", response);
-    } catch (error: any) {
-      console.log("error", error);
-    }
+    const response = await signTransaction(payload);
   };
 
 <button onClick={onSignTransaction}>
@@ -223,15 +258,8 @@ const onSignMessageAndVerify = async () => {
     message: "Hello from Aptos Wallet Adapter",
     nonce: "random_string",
   };
-  try {
-    const response = await signMessageAndVerify(payload);
-    console.log("response", response);
-  } catch (error: any) {
-    console.log("error", error);
-  }
+  const response = await signMessageAndVerify(payload);
 };
 
-<button onClick={onSignMessageAndVerify}>
-  Sign message and verify
-</button>
+<button onClick={onSignMessageAndVerify}>Sign message and verify</button>;
 ```

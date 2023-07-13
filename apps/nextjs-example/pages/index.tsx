@@ -1,11 +1,10 @@
 import { AptosClient, BCS, TxnBuilderTypes, Types } from "aptos";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { WalletConnector } from "@aptos-labs/wallet-adapter-mui-design";
-import { useState } from "react";
-import { ErrorAlert, SuccessAlert } from "../components/Alert";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useAutoConnect } from "../components/AutoConnectProvider";
+import { useAlert } from "../components/AlertProvider";
 
 const WalletButtons = dynamic(() => import("../components/WalletButtons"), {
   suspense: false,
@@ -41,8 +40,7 @@ export default function App() {
   } = useWallet();
 
   const { autoConnect, setAutoConnect } = useAutoConnect();
-  const [successAlertMessage, setSuccessAlertMessage] = useState<string>("");
-  const [errorAlertMessage, setErrorAlertMessage] = useState<string>("");
+  const { setSuccessAlertMessage } = useAlert();
 
   const onSignAndSubmitTransaction = async () => {
     const payload: Types.TransactionPayload = {
@@ -51,15 +49,14 @@ export default function App() {
       type_arguments: ["0x1::aptos_coin::AptosCoin"],
       arguments: [account?.address, 1], // 1 is in Octas
     };
+    const response = await signAndSubmitTransaction(payload);
     try {
-      const response = await signAndSubmitTransaction(payload);
       await aptosClient.waitForTransaction(response?.hash || "");
       setSuccessAlertMessage(
         `https://explorer.aptoslabs.com/txn/${response?.hash}`
       );
-    } catch (error: any) {
-      console.log("error", error);
-      setErrorAlertMessage(error);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -82,17 +79,14 @@ export default function App() {
         )
       );
 
+    const response = await signAndSubmitBCSTransaction(entryFunctionBCSPayload);
     try {
-      const response = await signAndSubmitBCSTransaction(
-        entryFunctionBCSPayload
-      );
       await aptosClient.waitForTransaction(response?.hash || "");
       setSuccessAlertMessage(
         `https://explorer.aptoslabs.com/txn/${response?.hash}`
       );
-    } catch (error: any) {
-      console.log("error", error);
-      setErrorAlertMessage(error);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -103,14 +97,8 @@ export default function App() {
       type_arguments: ["0x1::aptos_coin::AptosCoin"],
       arguments: [account?.address, 1], // 1 is in Octas
     };
-    try {
-      const response = await signTransaction(payload);
-      setSuccessAlertMessage(JSON.stringify(response));
-      console.log("response", response);
-    } catch (error: any) {
-      console.log("error", error);
-      setErrorAlertMessage(error);
-    }
+    const response = await signTransaction(payload);
+    setSuccessAlertMessage(JSON.stringify(response));
   };
 
   const onSignMessage = async () => {
@@ -118,14 +106,8 @@ export default function App() {
       message: "Hello from Aptos Wallet Adapter",
       nonce: "random_string",
     };
-    try {
-      const response = await signMessage(payload);
-      setSuccessAlertMessage(JSON.stringify(response));
-      console.log("response", response);
-    } catch (error: any) {
-      console.log("error", error);
-      setErrorAlertMessage(error);
-    }
+    const response = await signMessage(payload);
+    setSuccessAlertMessage(JSON.stringify(response));
   };
 
   const onSignMessageAndVerify = async () => {
@@ -133,24 +115,14 @@ export default function App() {
       message: "Hello from Aptos Wallet Adapter",
       nonce: "random_string",
     };
-    try {
-      const response = await signMessageAndVerify(payload);
-      setSuccessAlertMessage(
-        JSON.stringify({ onSignMessageAndVerify: response })
-      );
-      console.log("response", response);
-    } catch (error: any) {
-      console.log("error", error);
-      setErrorAlertMessage(JSON.stringify({ onSignMessageAndVerify: error }));
-    }
+    const response = await signMessageAndVerify(payload);
+    setSuccessAlertMessage(
+      JSON.stringify({ onSignMessageAndVerify: response })
+    );
   };
 
   return (
     <div>
-      {successAlertMessage.length > 0 && (
-        <SuccessAlert text={successAlertMessage} />
-      )}
-      {errorAlertMessage.length > 0 && <ErrorAlert text={errorAlertMessage} />}
       <h1 className="flex justify-center mt-2 mb-4 text-4xl font-extrabold tracking-tight leading-none text-black">
         Aptos Wallet Adapter Demo (Devnet)
       </h1>
@@ -161,7 +133,7 @@ export default function App() {
               <h3>Connect a Wallet</h3>
             </td>
             <td className="px-8 py-4 w-3/4">
-              <WalletButtons setErrorAlertMessage={setErrorAlertMessage} />
+              <WalletButtons />
             </td>
           </tr>
           <tr>
@@ -216,18 +188,6 @@ export default function App() {
                 </button>
 
                 <button
-                  className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 ${
-                    !connected
-                      ? "opacity-50 cursor-not-allowed"
-                      : "hover:bg-blue-700"
-                  }`}
-                  onClick={onSignAndSubmitBCSTransaction}
-                  disabled={!connected}
-                >
-                  Sign and submit BCS transaction
-                </button>
-
-                <button
                   className={`bg-blue-500 text-white font-bold py-2 px-4 rounded mr-4 ${
                     !connected
                       ? "opacity-50 cursor-not-allowed"
@@ -265,6 +225,17 @@ export default function App() {
                 disabled={!connected}
               >
                 Sign transaction
+              </button>
+              <button
+                className={`bg-orange-500 text-white font-bold py-2 px-4 rounded mr-4 ${
+                  !connected
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-orange-700"
+                }`}
+                onClick={onSignAndSubmitBCSTransaction}
+                disabled={!connected}
+              >
+                Sign and submit BCS transaction
               </button>
             </td>
           </tr>
