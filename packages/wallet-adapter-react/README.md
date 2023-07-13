@@ -20,7 +20,7 @@ signAndSubmitTransaction
 signMessage
 ```
 
-##### Feature functions - functions that not all wallets must support
+##### Feature functions - functions that may not be supported by all wallets
 
 ```
 signTransaction
@@ -120,7 +120,7 @@ const onConnect = async (walletName) => {
   await connect(walletName);
 };
 
-<button onClick={onConnect(wallet.name)}>{wallet.name}</button>;
+<button onClick={() => onConnect(wallet.name)}>{wallet.name}</button>;
 ```
 
 ##### disconnect()

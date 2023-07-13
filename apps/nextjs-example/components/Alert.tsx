@@ -2,17 +2,10 @@ import { Dispatch, SetStateAction } from "react";
 
 type Alert = {
   text: string;
+  setText: Dispatch<SetStateAction<string | null>>;
 };
 
-type SuccessAlert = Alert & {
-  setSuccessAlertMessage: Dispatch<SetStateAction<string>>;
-};
-
-type ErrorAlert = Alert & {
-  setErrorAlertMessage: Dispatch<SetStateAction<string>>;
-};
-
-export function SuccessAlert({ text, setSuccessAlertMessage }: SuccessAlert) {
+export function SuccessAlert({ text, setText }: Alert) {
   return (
     <div
       className="bg-teal-100 border border-teal-400 text-teal-900 px-4 py-3 rounded relative"
@@ -29,7 +22,7 @@ export function SuccessAlert({ text, setSuccessAlertMessage }: SuccessAlert) {
       </span>
       <span
         className="absolute top-0 bottom-0 right-0 px-4 py-3"
-        onClick={() => setSuccessAlertMessage("")}
+        onClick={() => setText(null)}
       >
         <svg
           className="fill-current h-6 w-6 text-teal-500"
@@ -45,7 +38,7 @@ export function SuccessAlert({ text, setSuccessAlertMessage }: SuccessAlert) {
   );
 }
 
-export function ErrorAlert({ text, setErrorAlertMessage }: ErrorAlert) {
+export function ErrorAlert({ text, setText }: Alert) {
   return (
     <div
       className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
@@ -54,7 +47,7 @@ export function ErrorAlert({ text, setErrorAlertMessage }: ErrorAlert) {
       <span className="block sm:inline break-all">{text}</span>
       <span
         className="absolute top-0 bottom-0 right-0 px-4 py-3"
-        onClick={() => setErrorAlertMessage("")}
+        onClick={() => setText(null)}
       >
         <svg
           className="fill-current h-6 w-6 text-red-500"

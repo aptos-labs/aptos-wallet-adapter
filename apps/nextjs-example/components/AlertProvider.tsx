@@ -10,23 +10,30 @@ import {
 import { ErrorAlert, SuccessAlert } from "./Alert";
 
 interface AlertContextState {
-  successAlertMessage: string;
-  setSuccessAlertMessage: Dispatch<SetStateAction<string>>;
-  errorAlertMessage: string;
-  setErrorAlertMessage: Dispatch<SetStateAction<string>>;
+  successAlertMessage: string | null;
+  setSuccessAlertMessage: Dispatch<SetStateAction<string | null>>;
+  errorAlertMessage: string | null;
+  setErrorAlertMessage: Dispatch<SetStateAction<string | null>>;
 }
 
-export const AlertContext = createContext<AlertContextState>(
-  {} as AlertContextState
+export const AlertContext = createContext<AlertContextState | undefined>(
+  undefined
 );
 
 export function useAlert(): AlertContextState {
-  return useContext(AlertContext);
+  const context = useContext(AlertContext);
+  if (!context)
+    throw new Error("useAlert must be used within an AlertProvider");
+  return context;
 }
 
 export const AlertProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [successAlertMessage, setSuccessAlertMessage] = useState<string>("");
-  const [errorAlertMessage, setErrorAlertMessage] = useState<string>("");
+  const [successAlertMessage, setSuccessAlertMessage] = useState<string | null>(
+    null
+  );
+  const [errorAlertMessage, setErrorAlertMessage] = useState<string | null>(
+    null
+  );
 
   return (
     <AlertContext.Provider
@@ -37,17 +44,14 @@ export const AlertProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setErrorAlertMessage,
       }}
     >
-      {successAlertMessage && successAlertMessage.length > 0 && (
+      {successAlertMessage && (
         <SuccessAlert
           text={successAlertMessage}
-          setSuccessAlertMessage={setSuccessAlertMessage}
+          setText={setSuccessAlertMessage}
         />
       )}
-      {errorAlertMessage && errorAlertMessage.length > 0 && (
-        <ErrorAlert
-          text={errorAlertMessage}
-          setErrorAlertMessage={setErrorAlertMessage}
-        />
+      {errorAlertMessage && (
+        <ErrorAlert text={errorAlertMessage} setText={setErrorAlertMessage} />
       )}
       {children}
     </AlertContext.Provider>

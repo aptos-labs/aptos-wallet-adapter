@@ -23,7 +23,7 @@ import { AlertProvider, useAlert } from "./AlertProvider";
 
 const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { autoConnect } = useAutoConnect();
-  const {setErrorAlertMessage} = useAlert();
+  const { setErrorAlertMessage } = useAlert();
 
   const wallets = [
     // Blocto supports Testnet/Mainnet for now.
