@@ -4,16 +4,16 @@ import {
   FC,
   ReactNode,
   SetStateAction,
+  useCallback,
   useContext,
   useState,
 } from "react";
 import { ErrorAlert, SuccessAlert } from "./Alert";
 
 interface AlertContextState {
-  successAlertMessage: string | null;
-  setSuccessAlertMessage: Dispatch<SetStateAction<string | null>>;
-  errorAlertMessage: string | null;
-  setErrorAlertMessage: Dispatch<SetStateAction<string | null>>;
+  setSuccessAlertHash: (hash: string, networkName?: string) => void;
+  setSuccessAlertMessage: Dispatch<SetStateAction<ReactNode | null>>;
+  setErrorAlertMessage: Dispatch<SetStateAction<ReactNode | null>>;
 }
 
 export const AlertContext = createContext<AlertContextState | undefined>(
@@ -28,19 +28,34 @@ export function useAlert(): AlertContextState {
 }
 
 export const AlertProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [successAlertMessage, setSuccessAlertMessage] = useState<string | null>(
+  const [successAlertMessage, setSuccessAlertMessage] =
+    useState<ReactNode | null>(null);
+  const [errorAlertMessage, setErrorAlertMessage] = useState<ReactNode | null>(
     null
   );
-  const [errorAlertMessage, setErrorAlertMessage] = useState<string | null>(
-    null
+
+  const setSuccessAlertHash = useCallback(
+    (hash: string, networkName?: string) => {
+      const explorerLink = `https://explorer.aptoslabs.com/txn/${hash}${
+        networkName ? `?network=${networkName.toLowerCase()}` : ""
+      }`;
+      setSuccessAlertMessage(
+        <>
+          View on Explorer:{" "}
+          <a className="underline" target="_blank" href={explorerLink}>
+            {explorerLink}
+          </a>
+        </>
+      );
+    },
+    []
   );
 
   return (
     <AlertContext.Provider
       value={{
-        successAlertMessage,
+        setSuccessAlertHash,
         setSuccessAlertMessage,
-        errorAlertMessage,
         setErrorAlertMessage,
       }}
     >

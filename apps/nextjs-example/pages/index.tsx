@@ -40,7 +40,7 @@ export default function App() {
   } = useWallet();
 
   const { autoConnect, setAutoConnect } = useAutoConnect();
-  const { setSuccessAlertMessage } = useAlert();
+  const { setSuccessAlertMessage, setSuccessAlertHash } = useAlert();
 
   const onSignAndSubmitTransaction = async () => {
     const payload: Types.TransactionPayload = {
@@ -51,10 +51,8 @@ export default function App() {
     };
     const response = await signAndSubmitTransaction(payload);
     try {
-      await aptosClient.waitForTransaction(response?.hash || "");
-      setSuccessAlertMessage(
-        `https://explorer.aptoslabs.com/txn/${response?.hash}`
-      );
+      await aptosClient.waitForTransaction(response.hash);
+      setSuccessAlertHash(response.hash, network?.name);
     } catch (error) {
       console.error(error);
     }
@@ -81,10 +79,8 @@ export default function App() {
 
     const response = await signAndSubmitBCSTransaction(entryFunctionBCSPayload);
     try {
-      await aptosClient.waitForTransaction(response?.hash || "");
-      setSuccessAlertMessage(
-        `https://explorer.aptoslabs.com/txn/${response?.hash}`
-      );
+      await aptosClient.waitForTransaction(response.hash);
+      setSuccessAlertHash(response.hash, network?.name);
     } catch (error) {
       console.error(error);
     }
