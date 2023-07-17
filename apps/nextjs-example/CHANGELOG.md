@@ -1,5 +1,12 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 1.2.10
+
+### Patch Changes
+
+- 0a60c6f: Refactor to use onError adapter provider prop
+- 63cf617: Use ReactNode for the AlertProvider success/error text
+
 ## 1.2.9
 
 ### Patch Changes
