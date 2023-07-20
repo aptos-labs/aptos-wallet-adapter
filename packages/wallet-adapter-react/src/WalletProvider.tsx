@@ -62,7 +62,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       setIsLoading(true);
       await walletCore.connect(walletName);
     } catch (error: any) {
-      console.log("connect error", error);
+      console.log(`connect error ${JSON.stringify(error)}`);
       if (onError) onError(error);
       else throw error;
     } finally {
@@ -73,9 +73,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const disconnect = async () => {
     try {
       await walletCore.disconnect();
-    } catch (e) {
-      console.log("disconnect error", e);
-      if (onError) onError(e);
+    } catch (error: any) {
+      console.log(`disconnect error ${JSON.stringify(error)}`);
+      if (onError) onError(error);
     }
   };
 
