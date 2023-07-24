@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 2.5.1
+
+### Patch Changes
+
+- 7e314e5: Update aptos dependency
+
 ## 2.5.0
 
 ### Minor Changes
