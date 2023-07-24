@@ -15,10 +15,10 @@ import type {
   WalletInfo,
   WalletName,
   TransactionOptions,
+  TxnBuilderTypes,
+  Types,
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
-
-import { TxnBuilderTypes, Types } from "aptos";
 
 export interface AptosWalletProviderProps {
   children: ReactNode;
