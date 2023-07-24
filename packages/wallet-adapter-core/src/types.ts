@@ -1,6 +1,7 @@
 import { Types } from "aptos";
 import { NetworkName, WalletReadyState } from "./constants";
 
+export { TxnBuilderTypes, Types } from "aptos";
 // WalletName is a nominal type that wallet adapters should use, e.g. `'MyCryptoWallet' as WalletName<'MyCryptoWallet'>`
 export type WalletName<T extends string = string> = T & {
   __brand__: "WalletName";

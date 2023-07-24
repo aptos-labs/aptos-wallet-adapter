@@ -12,9 +12,10 @@ import {
   isRedirectable,
   isMobile,
   TransactionOptions,
+  TxnBuilderTypes,
+  Types,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
-import { TxnBuilderTypes, Types } from "aptos";
 
 export type { WalletName, Wallet };
 export {

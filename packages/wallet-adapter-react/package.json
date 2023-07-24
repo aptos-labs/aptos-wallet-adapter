@@ -44,7 +44,6 @@
   },
   "dependencies": {
     "@aptos-labs/wallet-adapter-core": "2.5.0",
-    "aptos": "^1.3.17",
     "react": "^18"
   }
 }
