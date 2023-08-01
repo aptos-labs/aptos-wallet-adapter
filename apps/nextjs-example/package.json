@@ -18,6 +18,7 @@
     "@haechi-labs/face-aptos-adapter-plugin": "^0.0.4",
     "@haechi-labs/face-sdk": "^1.10.4",
     "@haechi-labs/face-types": "^1.10.4",
+    "@identity-connect/wallet-adapter-plugin": "^0.0.10",
     "@martianwallet/aptos-wallet-adapter": "^0.0.3",
     "@nightlylabs/aptos-wallet-adapter-plugin": "0.2.12",
     "@openblockhq/aptos-wallet-adapter": "^0.1.5",

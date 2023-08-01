@@ -11,6 +11,7 @@ import { TokenPocketWallet } from "@tp-lab/aptos-wallet-adapter";
 import { TrustWallet } from "@trustwallet/aptos-wallet-adapter";
 import { MSafeWalletAdapter } from "msafe-plugin-wallet-adapter";
 import { WelldoneWallet } from "@welldone-studio/aptos-wallet-adapter";
+import { IdentityConnectWallet } from "@identity-connect/wallet-adapter-plugin";
 import {
   AptosWalletAdapterProvider,
   NetworkName,
@@ -33,6 +34,9 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }),
     new FaceWallet(face!),
     new FewchaWallet(),
+    new IdentityConnectWallet("f3cb0bd1-4c10-4aa4-9d06-ed6cae1752ad", {
+      networkName: NetworkName.Devnet,
+    }),
     new MartianWallet(),
     new MSafeWalletAdapter(),
     new NightlyWallet(),
