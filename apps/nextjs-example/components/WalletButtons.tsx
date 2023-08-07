@@ -13,13 +13,13 @@ const WalletButtons = () => {
   return (
     <>
       {wallets.map((wallet: Wallet) => {
-        return walletView(wallet);
+        return WalletView(wallet);
       })}
     </>
   );
 };
 
-const walletView = (wallet: Wallet) => {
+const WalletView = (wallet: Wallet) => {
   const { connect } = useWallet();
   const { setErrorAlertMessage } = useAlert();
   const isWalletReady =

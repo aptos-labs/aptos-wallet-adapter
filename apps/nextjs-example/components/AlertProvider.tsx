@@ -42,7 +42,7 @@ export const AlertProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setSuccessAlertMessage(
         <>
           View on Explorer:{" "}
-          <a className="underline" target="_blank" href={explorerLink}>
+          <a className="underline" target="_blank" href={explorerLink} rel={"noreferrer"}>
             {explorerLink}
           </a>
         </>
