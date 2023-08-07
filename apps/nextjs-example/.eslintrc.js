@@ -1,4 +1,4 @@
 module.exports = {
   root: true,
-  extends: ["adapter"],
+  extends: ["@aptos-labs/eslint-config-adapter"],
 };
