@@ -30,6 +30,9 @@ importers:
       '@aptos-labs/wallet-adapter-ant-design':
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-ant-design
+      '@aptos-labs/wallet-adapter-core':
+        specifier: workspace:*
+        version: link:../../packages/wallet-adapter-core
       '@aptos-labs/wallet-adapter-mui-design':
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-mui-design
@@ -37,25 +40,25 @@ importers:
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-react
       '@blocto/aptos-wallet-adapter-plugin':
-        specifier: ^0.1.2
-        version: 0.1.2
+        specifier: ^0.2.2
+        version: 0.2.2
       '@flipperplatform/wallet-adapter-plugin':
         specifier: ^0.1.0
         version: 0.1.0
       '@haechi-labs/face-aptos-adapter-plugin':
         specifier: ^0.0.4
-        version: 0.0.4(@haechi-labs/face-sdk@1.10.4)(@haechi-labs/face-types@1.10.4)(aptos@1.17.0)
+        version: 0.0.4(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(@haechi-labs/face-sdk@1.10.8)(@haechi-labs/face-types@1.10.8)(aptos@1.17.0)
       '@haechi-labs/face-sdk':
-        specifier: ^1.10.4
-        version: 1.10.4(@haechi-labs/face-types@1.10.4)
+        specifier: ^1.10.8
+        version: 1.10.8(@haechi-labs/face-types@1.10.8)(ethers@5.7.2)
       '@haechi-labs/face-types':
-        specifier: ^1.10.4
-        version: 1.10.4
+        specifier: ^1.10.8
+        version: 1.10.8(ethers@5.7.2)
       '@martianwallet/aptos-wallet-adapter':
-        specifier: ^0.0.3
-        version: 0.0.3
+        specifier: ^0.0.4
+        version: 0.0.4
       '@nightlylabs/aptos-wallet-adapter-plugin':
-        specifier: 0.2.12
+        specifier: ^0.2.12
         version: 0.2.12
       '@openblockhq/aptos-wallet-adapter':
         specifier: ^0.1.5
@@ -73,17 +76,20 @@ importers:
         specifier: ^0.1.6
         version: 0.1.6
       '@welldone-studio/aptos-wallet-adapter':
-        specifier: ^0.1.2
-        version: 0.1.2
+        specifier: ^0.1.4
+        version: 0.1.4
       antd:
         specifier: ^5.1.2
         version: 5.1.4(react-dom@18.2.0)(react@18.2.0)
       aptos:
         specifier: ^1.17.0
         version: 1.17.0
+      ethers:
+        specifier: ^5.7.2
+        version: 5.7.2
       fewcha-plugin-wallet-adapter:
-        specifier: ^0.1.2
-        version: 0.1.2
+        specifier: ^0.1.3
+        version: 0.1.3
       msafe-plugin-wallet-adapter:
         specifier: ^0.1.0
         version: 0.1.0
@@ -389,6 +395,17 @@ packages:
 
   /@aptos-labs/wallet-adapter-core@0.2.3:
     resolution: {integrity: sha512-QjUVRYSL05pxdjYo2bScxEZ8wi6ww4sf5mBW5w89F5mDfnDz2XEmZQYfQtV3bxoyqnNWPEjagTds4tKMXDhF1w==}
+    dependencies:
+      aptos: 1.17.0
+      buffer: 6.0.3
+      eventemitter3: 4.0.7
+      tweetnacl: 1.0.3
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /@aptos-labs/wallet-adapter-core@2.1.0:
+    resolution: {integrity: sha512-ZSCCsFt2heEh9IDaObbzw8EwqfzJGCWGBoaGouBtOYn2DVkh5R0P9xRj6ryF9cuO+tkfP+8KZmZ9m4c+xsJN2g==}
     dependencies:
       aptos: 1.17.0
       buffer: 6.0.3
@@ -754,11 +771,11 @@ packages:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
 
-  /@blocto/aptos-wallet-adapter-plugin@0.1.2:
-    resolution: {integrity: sha512-1fYzjbwsXWMKiwguSQQ1ZbUwuqDTLkYKD+RrakExRYT+nxcsy2llUdECZGdIp5JBRmeE80sjWkKVcoD4tBt1dA==}
+  /@blocto/aptos-wallet-adapter-plugin@0.2.2:
+    resolution: {integrity: sha512-IyS/DdGLsnzmwc94X4W58CANoGjKhVq6HCnbElsm2+S04Z+BEBr0rWrpEjC35au/wzqCZTISx2D/LV54vxiSNw==}
     dependencies:
-      '@aptos-labs/wallet-adapter-core': 0.2.3
-      '@blocto/sdk': 0.3.5(aptos@1.17.0)
+      '@aptos-labs/wallet-adapter-core': 2.5.1
+      '@blocto/sdk': 0.5.4(aptos@1.17.0)
       aptos: 1.17.0
     transitivePeerDependencies:
       - '@solana/web3.js'
@@ -767,8 +784,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@blocto/sdk@0.3.5(aptos@1.17.0):
-    resolution: {integrity: sha512-uvnkkFx/aVczkVZHrE8GeV90514SQ1tl8F1MVEjhRoP/31AiA/VNZSeIxI0muX4RppbpDBgeC9gtPFFgTf+2tw==}
+  /@blocto/sdk@0.5.4(aptos@1.17.0):
+    resolution: {integrity: sha512-VjzkT3tpz5YkjXNbx6Au4C0sphHeI+DRoTWMKX3N01U+XLl04/dn+Ao5Hsb4ZU7uS4Lw6mUjNfq+z3Fm5eZKaw==}
     peerDependencies:
       '@solana/web3.js': ^1.30.2
       aptos: ^1.3.14
@@ -779,7 +796,7 @@ packages:
         optional: true
     dependencies:
       aptos: 1.17.0
-      bs58: 4.0.1
+      bs58: 5.0.0
       buffer: 6.0.3
       eip1193-provider: 1.0.1
       js-sha3: 0.8.0
@@ -1471,8 +1488,8 @@ packages:
       '@ethersproject/strings': 5.7.0
     dev: false
 
-  /@fewcha/web3@0.1.37:
-    resolution: {integrity: sha512-tBHQxe0ln6u1A6mJ/2q6ThUZ4p/bmRX8RznlNTAIZ8x/igDera47usCkDXnRX3NDDmFUURr2ktHIyfHE4Y0ydw==}
+  /@fewcha/web3@0.1.38:
+    resolution: {integrity: sha512-t39g9V5zAiYZPGSahp4a0B4WM5IqxQJxr5ednv0f0l5amJZMPyOinFeZDgkLqTIzhe7yq6yIndKbqzPfdu1rng==}
     dependencies:
       '@mysten/sui.js': 0.13.0
       aptos: 1.17.0
@@ -1493,7 +1510,7 @@ packages:
       - debug
     dev: false
 
-  /@haechi-labs/face-aptos-adapter-plugin@0.0.4(@haechi-labs/face-sdk@1.10.4)(@haechi-labs/face-types@1.10.4)(aptos@1.17.0):
+  /@haechi-labs/face-aptos-adapter-plugin@0.0.4(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(@haechi-labs/face-sdk@1.10.8)(@haechi-labs/face-types@1.10.8)(aptos@1.17.0):
     resolution: {integrity: sha512-5uI5Hg2rMiUUiHGuheK0/QDwJUruA0aruUReC8FO3NuBeZ5GyBisgdL6JrZC3kf7s/NZOrk33HMkVNPx6aEk8A==}
     peerDependencies:
       '@aptos-labs/wallet-adapter-core': ^2.2.0
@@ -1501,22 +1518,24 @@ packages:
       '@haechi-labs/face-types': ^1.10.4
       aptos: ^1.9.1
     dependencies:
-      '@haechi-labs/face-sdk': 1.10.4(@haechi-labs/face-types@1.10.4)
-      '@haechi-labs/face-types': 1.10.4
+      '@aptos-labs/wallet-adapter-core': link:packages/wallet-adapter-core
+      '@haechi-labs/face-sdk': 1.10.8(@haechi-labs/face-types@1.10.8)(ethers@5.7.2)
+      '@haechi-labs/face-types': 1.10.8(ethers@5.7.2)
       aptos: 1.17.0
     dev: false
 
-  /@haechi-labs/face-sdk@1.10.4(@haechi-labs/face-types@1.10.4):
-    resolution: {integrity: sha512-eXzetKA4UItTymTxRykSs58YSOHZeIiFTA48r/wI68dfkyaFv/VWfLZ0JSSPXtoKASBJEu8XpaTKRefBWbQ1Fw==}
+  /@haechi-labs/face-sdk@1.10.8(@haechi-labs/face-types@1.10.8)(ethers@5.7.2):
+    resolution: {integrity: sha512-jSgzwFTmWslM2jRYFH7EepgObCwu0QYbEHOvB5hJkuRz2j4xr61IIxRD/R2DuiBOErJKdr4f33QXd+uPwCIKdQ==}
     peerDependencies:
       '@haechi-labs/face-types': ^1.7.0
       ethers: ^5.6.8
     dependencies:
       '@aptos-labs/wallet-adapter-core': 2.5.1
-      '@haechi-labs/face-types': 1.10.4
+      '@haechi-labs/face-types': 1.10.8(ethers@5.7.2)
       '@noble/hashes': 1.3.1
       '@solana/web3.js': 1.77.3
       aptos: 1.6.0
+      ethers: 5.7.2
       near-api-js: 1.1.0
     transitivePeerDependencies:
       - bufferutil
@@ -1526,10 +1545,12 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@haechi-labs/face-types@1.10.4:
-    resolution: {integrity: sha512-o44zd2ocKrNwBZkoh1zgqZsnrFjh8fetThm+ClMaGre6SOV+Acw11WMpos30/101PTPWugvQ9DXY2KQc0kv5Mg==}
+  /@haechi-labs/face-types@1.10.8(ethers@5.7.2):
+    resolution: {integrity: sha512-+j6zrERj3HPVgUld19ipMUAxH7qmLRsqLJ6buD6zu/5YKWiDmddhjrQGkQe/idTnAOAf1v/nm/ofSOBbPJGUyw==}
     peerDependencies:
       ethers: '>=5.6.8'
+    dependencies:
+      ethers: 5.7.2
     dev: false
 
   /@humanwhocodes/config-array@0.11.7:
@@ -1872,10 +1893,10 @@ packages:
       read-yaml-file: 1.1.0
     dev: true
 
-  /@martianwallet/aptos-wallet-adapter@0.0.3:
-    resolution: {integrity: sha512-hR/KhXOeDv6tLGt+BAoJyGEhXKHevPEEw/7Z6hsyNTerHRrplguD7CLMbEY6cCakwzMqfV9+GxyZ+OYQsQ6mgg==}
+  /@martianwallet/aptos-wallet-adapter@0.0.4:
+    resolution: {integrity: sha512-B7z+Ff87L0cs4IMTF9+LCXGAWwQecihwN0QVI6NtJLWjV85A9MdlBC6oXiIC5J0ob3mtAMX2iOb2z2Xp37lxww==}
     dependencies:
-      '@aptos-labs/wallet-adapter-core': 0.2.3
+      '@aptos-labs/wallet-adapter-core': 2.1.0
       aptos: 1.17.0
     transitivePeerDependencies:
       - debug
@@ -2081,7 +2102,7 @@ packages:
       jayson: 3.7.0
       js-sha3: 0.8.0
       lossless-json: 1.0.5
-      rpc-websockets: 7.5.0
+      rpc-websockets: 7.5.1
       tweetnacl: 1.0.3
     transitivePeerDependencies:
       - bufferutil
@@ -2795,10 +2816,10 @@ packages:
       '@wallet-standard/base': 1.0.1
     dev: false
 
-  /@welldone-studio/aptos-wallet-adapter@0.1.2:
-    resolution: {integrity: sha512-PGmctJNJctmgmBzac2Wi/3O9mDBl1VjCKJ6AA8HZhot0oyit4wqnnzFQhcAHu9uo09XIdMhxqySs/rszOy8SLQ==}
+  /@welldone-studio/aptos-wallet-adapter@0.1.4:
+    resolution: {integrity: sha512-RDOgb4hxZVjzPori5vG418YafEVkYkH7Hgba2SARA5lPtqoxJ0G1lAFxwAdvYRurdrGLd+71rtHV60YwyS+E4Q==}
     dependencies:
-      '@aptos-labs/wallet-adapter-core': 0.2.3
+      '@aptos-labs/wallet-adapter-core': 2.2.0
       '@noble/hashes': 1.1.3
       aptos: 1.17.0
     transitivePeerDependencies:
@@ -3873,6 +3894,7 @@ packages:
 
   /eip1193-provider@1.0.1:
     resolution: {integrity: sha512-kSuqwQ26d7CzuS/t3yRXo2Su2cVH0QfvyKbr2H7Be7O5YDyIq4hQGCNTo5wRdP07bt+E2R/8nPCzey4ojBHf7g==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     dependencies:
       '@json-rpc-tools/provider': 1.7.6
     transitivePeerDependencies:
@@ -4733,11 +4755,11 @@ packages:
       bser: 2.1.1
     dev: true
 
-  /fewcha-plugin-wallet-adapter@0.1.2:
-    resolution: {integrity: sha512-y1G1EhrgR9whFeQ/quE3+iUevs+x+97vfp9amc63g9aD+P6LicRAJEIE80a7/5ljPOVukEw8KUGH1jVESfandw==}
+  /fewcha-plugin-wallet-adapter@0.1.3:
+    resolution: {integrity: sha512-Ek59XhrkjVN+Yj1eBNI/SLGLgo9Sn1LVh8uDKgBaNix7nNAAJrgo2CoPCk/L595TSoO5FJtkBFdlnvRPAGJlAQ==}
     dependencies:
-      '@aptos-labs/wallet-adapter-core': 0.1.7
-      '@fewcha/web3': 0.1.37
+      '@aptos-labs/wallet-adapter-core': 2.2.0
+      '@fewcha/web3': 0.1.38
       aptos: 1.17.0
     transitivePeerDependencies:
       - bufferutil
