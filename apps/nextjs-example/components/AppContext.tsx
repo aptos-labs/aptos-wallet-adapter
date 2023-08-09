@@ -33,6 +33,7 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }),
     new FaceWallet(face!),
     new FewchaWallet(),
+    new FlipperWallet(),
     new MartianWallet(),
     new MSafeWalletAdapter(),
     new NightlyWallet(),
@@ -43,7 +44,6 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     new TokenPocketWallet(),
     new TrustWallet(),
     new WelldoneWallet(),
-    new FlipperWallet()
   ];
 
   return (
