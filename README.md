@@ -17,6 +17,7 @@ Note: These are in alphabetical order, any new wallets must be in alphabetical o
 - [Blocto](https://www.npmjs.com/package/@blocto/aptos-wallet-adapter-plugin)
 - [FaceWallet](https://www.npmjs.com/package/@haechi-labs/face-aptos-adapter-plugin)
 - [Fewcha](https://www.npmjs.com/package/fewcha-plugin-wallet-adapter)
+- [Flipper](https://www.npmjs.com/package/@flipperplatform/wallet-adapter-plugin)
 - [Martian](https://www.npmjs.com/package/@martianwallet/aptos-wallet-adapter)
 - [MSafe](https://www.npmjs.com/package/msafe-plugin-wallet-adapter)
 - [Nightly](https://www.npmjs.com/package/@nightlylabs/aptos-wallet-adapter-plugin)

@@ -1,6 +1,7 @@
 import { BloctoWallet } from "@blocto/aptos-wallet-adapter-plugin";
 import { FaceWallet } from "@haechi-labs/face-aptos-adapter-plugin";
 import { FewchaWallet } from "fewcha-plugin-wallet-adapter";
+import { FlipperWallet } from "@flipperplatform/wallet-adapter-plugin";
 import { MartianWallet } from "@martianwallet/aptos-wallet-adapter";
 import { NightlyWallet } from "@nightlylabs/aptos-wallet-adapter-plugin";
 import { OpenBlockWallet } from "@openblockhq/aptos-wallet-adapter";
@@ -15,7 +16,6 @@ import {
   AptosWalletAdapterProvider,
   NetworkName,
 } from "@aptos-labs/wallet-adapter-react";
-
 import { AutoConnectProvider, useAutoConnect } from "./AutoConnectProvider";
 import { FC, ReactNode } from "react";
 import face from "../lib/faceInitialization";
@@ -43,6 +43,7 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     new TokenPocketWallet(),
     new TrustWallet(),
     new WelldoneWallet(),
+    new FlipperWallet()
   ];
 
   return (
