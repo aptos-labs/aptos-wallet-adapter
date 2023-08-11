@@ -1,4 +1,4 @@
-import {AptosClient, BCS, TxnBuilderTypes, Types} from "aptos";
+import {AptosClient, BCS, Network, Provider, TxnBuilderTypes, Types} from "aptos";
 import {NetworkName, useWallet} from "@aptos-labs/wallet-adapter-react";
 import {WalletConnector} from "@aptos-labs/wallet-adapter-mui-design";
 import dynamic from "next/dynamic";
@@ -8,21 +8,17 @@ import {useAlert} from "../components/AlertProvider";
 import {AccountInfo, NetworkInfo, WalletInfo} from "@aptos-labs/wallet-adapter-core";
 
 const WalletButtons = dynamic(() => import("../components/WalletButtons"), {
-  suspense: false,
-  ssr: false,
+    suspense: false,
+    ssr: false,
 });
 
 const WalletSelectorAntDesign = dynamic(
-  () => import("../components/WalletSelectorAntDesign"),
-  {
-    suspense: false,
-    ssr: false,
-  }
+    () => import("../components/WalletSelectorAntDesign"),
+    {
+        suspense: false,
+        ssr: false,
+    }
 );
-
-export const DEVNET_NODE_URL = "https://fullnode.devnet.aptoslabs.com/v1";
-export const TESTNET_NODE_URL = "https://fullnode.testnet.aptoslabs.com/v1";
-export const MAINNET_NODE_URL = "https://fullnode.mainnet.aptoslabs.com/v1";
 
 const aptosClient = (network?: string) => {
     if (network === NetworkName.Devnet.toLowerCase()) {
@@ -36,164 +32,173 @@ const aptosClient = (network?: string) => {
     }
 }
 
-const DEVNET_CLIENT = new AptosClient(DEVNET_NODE_URL, {
-    WITH_CREDENTIALS: false,
-});
-const TESTNET_CLIENT = new AptosClient(TESTNET_NODE_URL, {
-    WITH_CREDENTIALS: false,
-});
-const MAINNET_CLIENT = new AptosClient(MAINNET_NODE_URL, {
-    WITH_CREDENTIALS: false,
-});
+const DEVNET_CLIENT = new Provider(Network.DEVNET);
+const TESTNET_CLIENT = new Provider(Network.TESTNET);
+const MAINNET_CLIENT = new Provider(Network.MAINNET);
 
-const isGood =(good: boolean) => {
-    if (good) {
-        return { color: 'green'}
-    } else {
-        return {color: 'black', border: '2px solid red'}
-    }
+const isSendableNetwork = (connected: boolean, network?: string): boolean => {
+    return connected && (network?.toLowerCase() === NetworkName.Devnet.toLowerCase()
+        || network?.toLowerCase() === NetworkName.Testnet.toLowerCase())
 }
 
 export default function App() {
-  const {
-    account,
-      connected,
-    network,
-    wallet,
-  } = useWallet();
+    const {
+        account,
+        connected,
+        network,
+        wallet,
+    } = useWallet();
 
-  return (
-    <div>
-      <h1 className="flex justify-center mt-2 mb-4 text-4xl font-extrabold tracking-tight leading-none text-black">
-        Aptos Wallet Adapter Tester ({network?.name ?? ""})
-      </h1>
-      <table className="table-auto w-full border-separate border-spacing-y-8 shadow-lg bg-white border-separate">
-        <tbody>
-          <WalletSelect/>
-          <AutoConnect/>
-          {connected && <WalletProps wallet={wallet} network={network} account={account}/>}
-          {connected && <RequiredFunctionality/>}
-          {connected && <OptionalFunctionality/>}
-        </tbody>
-      </table>
-    </div>
-  );
+    return (
+        <div>
+            <h1 className="flex justify-center mt-2 mb-4 text-4xl font-extrabold tracking-tight leading-none text-black">
+                Aptos Wallet Adapter Tester ({network?.name ?? ""})
+            </h1>
+            <table className="table-auto w-full border-separate border-spacing-y-8 shadow-lg bg-white border-separate">
+                <tbody>
+                <WalletSelect/>
+                <AutoConnect/>
+                {connected && <Row><Col title={true} border={true}>
+                    <h3><b>Wallet Information</b></h3>
+                </Col>
+                    <Col border={true}/>
+                </Row>}
+                {connected && <WalletProps wallet={wallet} network={network} account={account}/>}
+                {connected && <RequiredFunctionality/>}
+                {connected && <OptionalFunctionality/>}
+                </tbody>
+            </table>
+        </div>
+    );
 }
 
 function WalletSelect() {
-  return <>
-      <tr>
-          <td className="px-8 py-4 border-t w-1/4">
-              <h2><b>Wallet Select</b></h2>
-          </td>
-          <td className="px-8 py-4 border-t w-3/4"></td>
-      </tr>
-      <tr>
-          <td className="px-8 py-4 w-1/4">
-              <h3>Connect a Wallet</h3>
-          </td>
-          <td className="px-8 py-4 w-3/4">
-              <WalletButtons/>
-          </td>
-      </tr>
-      <tr>
-          <td className="px-8 py-4 w-1/4">
-              <h3>Ant Design</h3>
-          </td>
-          <td className="px-8 py-4 w-3/4">
-              <WalletSelectorAntDesign/>
-          </td>
-      </tr>
-      <tr>
-          <td className="px-8 py-4 w-1/4">
-              <h3>MUI Design</h3>
-          </td>
-          <td className="px-8 py-4 w-3/4">
-              <WalletConnector/>
-          </td>
-      </tr>
-  </>;
+    return <>
+        <Row>
+            <Col title={true} border={true}>
+                <h2><b>Wallet Select</b></h2>
+            </Col>
+            <Col border={true}/>
+        </Row>
+        <Row>
+            <Col title={true}>
+                <h3>Connect a Wallet</h3>
+            </Col>
+            <Col>
+                <WalletButtons/>
+            </Col>
+        </Row>
+        <Row>
+            <Col title={true}>
+                <h3>Ant Design</h3>
+            </Col>
+            <Col>
+                <WalletSelectorAntDesign/>
+            </Col>
+        </Row>
+        <Row>
+            <Col title={true}>
+                <h3>MUI Design</h3>
+            </Col>
+            <Col>
+                <WalletConnector/>
+            </Col>
+        </Row>
+    </>;
 }
 
-function WalletProps(props: {account: AccountInfo | null, network: NetworkInfo | null, wallet: WalletInfo | null}) {
-
+// TODO: Verify public key matches account
+function WalletProps(props: { account: AccountInfo | null, network: NetworkInfo | null, wallet: WalletInfo | null }) {
+    const {account, network, wallet} = props;
     const isValidNetworkName = () => {
+        // TODO: Do we allow non lowercase
         return Object.values<string | undefined>(NetworkName).includes(props.network?.name);
     }
 
     return <>
         <tr>
-            <td className="px-8 py-4 border-t w-1/4">
+            <Col title={true}>
                 <h3>Wallet Name</h3>
-            </td>
-            <td className="px-8 py-4 border-t w-3/4">
-                <div>
-                    <b>Icon: </b>
-                    {props.wallet && (
-                        <Image
-                            src={props.wallet.icon}
-                            alt={props.wallet.name}
-                            width={25}
-                            height={25}
-                        />
-                    )}
-                </div>
-                <div>
-                    <b>Name: </b>
-                    {props.wallet?.name}
-                </div>
-                <div>
-                    <b>URL: </b>
-                    <a
-                        target="_blank"
-                        className="text-sky-600"
-                        rel="noreferrer"
-                        href={props.wallet?.url}
-                    >
-                        {props.wallet?.url}
-                    </a>
-                </div>
-            </td>
+            </Col>
+            <Col>
+                <b>Icon: </b>
+                {props.wallet && (
+                    <Image
+                        src={wallet?.icon ?? ""}
+                        alt={wallet?.name ?? ""}
+                        width={25}
+                        height={25}
+                    />
+                )}
+                <b> Name: </b>
+                {wallet?.name}
+                <b> URL: </b>
+                <a
+                    target="_blank"
+                    className="text-sky-600"
+                    rel="noreferrer"
+                    href={wallet?.url}
+                >
+                    {wallet?.url}
+                </a>
+            </Col>
         </tr>
-        <tr>
-            <td className="px-8 py-4 border-t">
+        <Row>
+            <Col title={true}>
                 <h3>Account Info</h3>
-            </td>
-            <td className="px-8 py-4 border-t break-all">
-                <DisplayRequiredValue name={"Address"} isGood={ !!props.account?.address} value={props.account?.address}/>
-                <DisplayRequiredValue name={"Public key"} isGood={!!props.account?.publicKey} value={props.account?.publicKey?.toString()}/>
-                <DisplayOptionalValue name={"ANS Name (only if attached)"} value={props.account?.ansName}/>
-                <DisplayOptionalValue name={"Min keys required (only for multisig)"} value={props.account?.minKeysRequired?.toString()}/>
-            </td>
-        </tr>
-        <tr>
-            <td className="px-8 py-4 border-t">
+            </Col>
+            <Col>
+                <DisplayRequiredValue name={"Address"} isCorrect={!!account?.address}
+                                      value={account?.address}/>
+                <DisplayRequiredValue name={"Public key"} isCorrect={!!account?.publicKey}
+                                      value={account?.publicKey?.toString()}/>
+                <DisplayOptionalValue name={"ANS Name (only if attached)"} value={account?.ansName}/>
+                <DisplayOptionalValue name={"Min keys required (only for multisig)"}
+                                      value={account?.minKeysRequired?.toString()}/>
+            </Col>
+        </Row>
+        <Row>
+            <Col title={true}>
                 <h3>Network Info</h3>
-            </td>
-            <td className="px-8 py-4 border-t">
-                <DisplayRequiredValue name={"Network Name"} isGood={isValidNetworkName()} value={props.network?.name} expected={"one of: " + Object.values<string>(NetworkName).join(", ")}/>
-                <DisplayOptionalValue name={"URL"} value={props.network?.url} />
-                <DisplayOptionalValue name={"ChainId"} value={props.network?.chainId} />
-            </td>
-        </tr>
+            </Col>
+            <Col>
+                <DisplayRequiredValue name={"Network Name"} isCorrect={isValidNetworkName()} value={network?.name}
+                                      expected={"one of: " + Object.values<string>(NetworkName).join(", ")}/>
+                <DisplayOptionalValue name={"URL"} value={network?.url}/>
+                <DisplayOptionalValue name={"ChainId"} value={network?.chainId}/>
+            </Col>
+        </Row>
     </>;
 }
 
-function DisplayRequiredValue(props: {name: string, isGood: boolean, value?: string, expected?: string}) {
-    return <div style={isGood(props.isGood)}><p><b>{props.name}:</b> {props.value ?? "Not present"} {!props.isGood && props.expected && <><b>Expected:</b> {props.expected}</>}</p></div>
+function DisplayRequiredValue(props: { name: string, isCorrect: boolean, value?: string, expected?: string }) {
+    const {name, isCorrect, value, expected} = props;
+
+    const successStyling = () => {
+        if (isCorrect) {
+            return {color: 'green'}
+        } else {
+            return {color: 'black', border: '2px solid red'}
+        }
+    }
+
+    return <div style={successStyling()}><p>
+        <b>{name}:</b> {value ?? "Not present"} {!isCorrect && expected && <>
+        <b>Expected:</b> {expected}</>}</p></div>
 }
-function DisplayOptionalValue(props: {name: string, value?: string | null}) {
+
+function DisplayOptionalValue(props: { name: string, value?: string | null }) {
     return <div><p><b>{props.name}:</b> {props.value ?? "Not present"}</p></div>
 }
 
 function AutoConnect() {
-    const { autoConnect, setAutoConnect } = useAutoConnect();
+    const {autoConnect, setAutoConnect} = useAutoConnect();
     return <>
-        <tr>
-            <td className="px-8 py-4 border-t">
+        <Row>
+            <Col title={true} border={true}>
                 <h3>Auto reconnect on page open</h3>
-            </td>
-            <td className="px-8 py-4 border-t">
+            </Col>
+            <Col border={true}>
                 <div className="relative flex flex-col overflow-hidden">
                     <div className="flex">
                         <label className="inline-flex relative items-center mr-5 cursor-pointer">
@@ -212,13 +217,14 @@ function AutoConnect() {
                         </label>
                     </div>
                 </div>
-            </td>
-        </tr>
+            </Col>
+        </Row>
     </>;
 }
 
 function RequiredFunctionality() {
-    const { setSuccessAlertMessage, setSuccessAlertHash } = useAlert();
+    const {setSuccessAlertMessage, setSuccessAlertHash} = useAlert();
+
     // TODO: pass as props
     const {
         connected,
@@ -228,6 +234,7 @@ function RequiredFunctionality() {
         signAndSubmitTransaction,
         signMessage,
     } = useWallet();
+    let sendable = isSendableNetwork(connected, network?.name)
 
     const onSignMessage = async () => {
         const payload = {
@@ -257,53 +264,21 @@ function RequiredFunctionality() {
         }
     };
 
-    return <tr>
-        <td className="px-8 py-4 border-t w-1/4">
-            <h3>Standard functions</h3>
-        </td>
-        <td className="px-8 py-4 border-t break-all w-3/4">
-            <div>
-                <button
-                    className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 ${
-                        !connected
-                            ? "opacity-50 cursor-not-allowed"
-                            : "hover:bg-blue-700"
-                    }`}
-                    onClick={disconnect}
-                    disabled={!connected}
-                >
-                    Disconnect
-                </button>
-                <button
-                    className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 ${
-                        !connected
-                            ? "opacity-50 cursor-not-allowed"
-                            : "hover:bg-blue-700"
-                    }`}
-                    onClick={onSignAndSubmitTransaction}
-                    disabled={!connected}
-                >
-                    Sign and submit transaction
-                </button>
-
-                <button
-                    className={`bg-blue-500 text-white font-bold py-2 px-4 rounded mr-4 ${
-                        !connected
-                            ? "opacity-50 cursor-not-allowed"
-                            : "hover:bg-blue-700"
-                    }`}
-                    onClick={onSignMessage}
-                    disabled={!connected}
-                >
-                    Sign Message
-                </button>
-            </div>
-        </td>
-    </tr>;
+    return <Row>
+        <Col title={true} border={true}>
+            <h3>Standard Functions</h3>
+        </Col>
+        <Col border={true}>
+            <Button color={"blue"} onClick={disconnect} disabled={!connected} message={"Disconnect"}/>
+            <Button color={"blue"} onClick={onSignAndSubmitTransaction} disabled={!sendable}
+                    message={"Sign and submit transaction"}/>
+            <Button color={"blue"} onClick={onSignMessage} disabled={!sendable} message={"Sign message"}/>
+        </Col>
+    </Row>;
 }
 
 function OptionalFunctionality() {
-    const { setSuccessAlertMessage, setSuccessAlertHash } = useAlert();
+    const {setSuccessAlertMessage, setSuccessAlertHash} = useAlert();
     // TODO: pass as props
     const {
         connected,
@@ -313,6 +288,7 @@ function OptionalFunctionality() {
         signTransaction,
         signMessageAndVerify,
     } = useWallet();
+    let sendable = isSendableNetwork(connected, network?.name)
 
     const onSignAndSubmitBCSTransaction = async () => {
         const token = new TxnBuilderTypes.TypeTagStruct(
@@ -360,46 +336,45 @@ function OptionalFunctionality() {
         };
         const response = await signMessageAndVerify(payload);
         setSuccessAlertMessage(
-            JSON.stringify({ onSignMessageAndVerify: response })
+            JSON.stringify({onSignMessageAndVerify: response})
         );
     };
 
+    return <Row>
+        <Col title={true} border={true}>
+            <h3>Optional Feature Functions</h3>
+        </Col>
+        <Col border={true}>
+            <Button color={"blue"} onClick={onSignMessageAndVerify} disabled={!sendable}
+                    message={"Sign message and verify"}/>
+            <Button color={"blue"} onClick={onSignTransaction} disabled={!sendable} message={"Sign transaction"}/>
+            <Button color={"blue"} onClick={onSignAndSubmitBCSTransaction} disabled={!sendable}
+                    message={"Sign and submit BCS transaction"}/>
+        </Col>
+    </Row>;
+}
+
+function Row(props: { children?: React.ReactNode }) {
     return <tr>
-        <td className="px-8 py-4 border-t w-1/4">Feature functions</td>
-        <td className="px-8 py-4 border-t w-3/4">
-            <button
-                className={`bg-orange-500 text-white font-bold py-2 px-4 rounded mr-4 ${
-                    !connected
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-orange-700"
-                }`}
-                onClick={onSignMessageAndVerify}
-                disabled={!connected}
-            >
-                Sign Message and Verify
-            </button>
-            <button
-                className={`bg-orange-500 text-white font-bold py-2 px-4 rounded mr-4 ${
-                    !connected
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-orange-700"
-                }`}
-                onClick={onSignTransaction}
-                disabled={!connected}
-            >
-                Sign transaction
-            </button>
-            <button
-                className={`bg-orange-500 text-white font-bold py-2 px-4 rounded mr-4 ${
-                    !connected
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-orange-700"
-                }`}
-                onClick={onSignAndSubmitBCSTransaction}
-                disabled={!connected}
-            >
-                Sign and submit BCS transaction
-            </button>
-        </td>
-    </tr>;
+        {props.children}
+    </tr>
+}
+
+function Col(props: { title?: boolean, border?: boolean, children?: React.ReactNode }) {
+    return <td className={`px-8 py-4 ${props.border ? "border-t" : ""} w-${props.title ? "1/4" : "3/4"}`}>
+        {props.children}
+    </td>
+}
+
+function Button(props: { color: string | undefined, onClick: () => void, disabled: boolean, message: string }) {
+    const {color, onClick, disabled, message} = props;
+    return <button
+        className={`bg-${color}-500 text-white font-bold py-2 px-4 rounded mr-4 ${
+            disabled
+                ? "opacity-50 cursor-not-allowed"
+                : `hover:bg-${color}-700`
+        }`}
+        onClick={onClick}
+        disabled={disabled}
+    >{message}</button>
 }
