@@ -314,9 +314,6 @@ function OptionalFunctionality() {
         signAndSubmitBCSTransaction,
         signTransaction,
         signMessageAndVerify,
-        prepareFeePayerTransaction,
-        prepareMultiAgentTransaction,
-        signAndSubmitMultiAgentTransaction,
         signAndSubmitFeePayerTransaction
     } = useWallet();
     let sendable = isSendableNetwork(connected, network?.name)
@@ -430,17 +427,30 @@ function OptionalFunctionality() {
 
         const payload: Types.TransactionPayload = {
             type: "entry_function_payload",
-            function: "0x1::coin::transfer",
-            type_arguments: ["0x1::aptos_coin::AptosCoin"],
+            function: "0x1::aptos_account::transfer",
+            type_arguments: [],
             arguments: [account.address, 1], // 1 is in Octas
         };
 
-        let prepResponse = await prepareFeePayerTransaction(payload, feePayerAccount.address().hex(), feePayerAccount.pubKey().hex());
-        if (!prepResponse) {
-            // TODO: Handle error
-            throw new Error("Failed to prepare fee payer transaction");
-        }
-        let prepTxn = prepResponse as TxnBuilderTypes.FeePayerRawTransaction;
+        let chainId = await provider.getChainId();
+        let accountResource = await provider.getAccount(account.address);
+        let now = Date.now() / 1000;
+        let rawTxn = new TxnBuilderTypes.RawTransaction(
+            TxnBuilderTypes.AccountAddress.fromHex(account.address),
+            BigInt(accountResource.sequence_number),
+            new TxnBuilderTypes.TransactionPayloadEntryFunction(
+                new TxnBuilderTypes.EntryFunction(
+                    new TxnBuilderTypes.ModuleId(TxnBuilderTypes.AccountAddress.fromHex("0x1"),
+                        new TxnBuilderTypes.Identifier("aptos_account")),
+                    new TxnBuilderTypes.Identifier("transfer"),
+                    [],
+                    [BCS.bcsToBytes(TxnBuilderTypes.AccountAddress.fromHex(account.address)), BCS.bcsSerializeUint64(1)])),
+            BigInt(1000000),
+            BigInt(100),
+        BigInt(now) + BigInt(60000),
+            new TxnBuilderTypes.ChainId(chainId)
+        );
+        let prepTxn = new TxnBuilderTypes.FeePayerRawTransaction(rawTxn, [], TxnBuilderTypes.AccountAddress.fromHex(feePayerAccount.address().hex()));
 
         // This would normally be provided by the service or a server
         let feePayerSignature = await provider.signMultiTransaction(feePayerAccount, prepTxn);

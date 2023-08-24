@@ -481,35 +481,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  async prepareFeePayerTransaction<T extends Types.TransactionPayload>(
-      transaction: T,
-      feePayerAddress: string,
-      feePayerPublicKey: string,
-      additionalSignerAddresses?: string[],
-      additionalSignerPublicKeys?: string[],
-      options?: TransactionOptions
-  ): Promise<TxnBuilderTypes.FeePayerRawTransaction | undefined> {
-    if (this._wallet && !("prepareFeePayerTransaction" in this._wallet)) {
-      throw new WalletNotSupportedMethod(
-          `Fee payer transactions are not supported by ${this.wallet?.name}`
-      ).message;
-    }
-
-    try {
-      this.doesWalletExist();
-      const response = await (this._wallet as any).prepareFeePayerTransaction(
-          transaction,
-          options
-      );
-      return response;
-    } catch (error: any) {
-      const errMsg =
-          typeof error == "object" && "message" in error ? error.message : error;
-      // TODO: Maybe change error type
-      throw new WalletSignTransactionError(errMsg).message;
-    }
-  }
-
   async signAndSubmitFeePayerTransaction(
       transaction: TxnBuilderTypes.FeePayerRawTransaction,
       feePayerSignature: TxnBuilderTypes.AccountAuthenticator,
@@ -535,34 +506,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           // TODO: Maybe change error type
           throw new WalletSignTransactionError(errMsg).message;
       }
-  }
-
-  async prepareMultiAgentTransaction<T extends Types.TransactionPayload>(
-      transaction: T,
-      additionalSignerAddresses?: string[],
-      additionalSignerPublicKeys?: string[],
-      options?: TransactionOptions
-  ): Promise<TxnBuilderTypes.MultiAgentRawTransaction | undefined>{
-
-    if (this._wallet && !("prepareMultiAgentTransaction" in this._wallet)) {
-      throw new WalletNotSupportedMethod(
-          `Multi agent transactions are not supported by ${this.wallet?.name}`
-      ).message;
-    }
-
-    try {
-      this.doesWalletExist();
-      const response = await (this._wallet as any).prepareMultiAgentTransaction(
-          transaction,
-          options
-      );
-      return response;
-    } catch (error: any) {
-      const errMsg =
-          typeof error == "object" && "message" in error ? error.message : error;
-      // TODO: Maybe change error type
-      throw new WalletSignTransactionError(errMsg).message;
-    }
   }
 
   async signAndSubmitMultiAgentTransaction(
