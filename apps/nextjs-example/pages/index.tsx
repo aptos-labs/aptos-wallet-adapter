@@ -1,4 +1,14 @@
-import {AptosClient, BCS, Network, Provider, TxnBuilderTypes, Types} from "aptos";
+import {
+    AptosAccount,
+    AptosClient,
+    BCS,
+    CoinClient,
+    FaucetClient,
+    Network,
+    Provider,
+    TxnBuilderTypes,
+    Types
+} from "aptos";
 import {NetworkName, useWallet} from "@aptos-labs/wallet-adapter-react";
 import {WalletConnector} from "@aptos-labs/wallet-adapter-mui-design";
 import dynamic from "next/dynamic";
@@ -6,6 +16,9 @@ import Image from "next/image";
 import {useAutoConnect} from "../components/AutoConnectProvider";
 import {useAlert} from "../components/AlertProvider";
 import {AccountInfo, NetworkInfo, WalletInfo} from "@aptos-labs/wallet-adapter-core";
+
+let feePayerAccount: AptosAccount | undefined = undefined;
+const DO_NOTHING_SCRIPT = "a11ceb0b0600000001050001000000000102";
 
 const WalletButtons = dynamic(() => import("../components/WalletButtons"), {
     suspense: false,
@@ -26,7 +39,19 @@ const aptosClient = (network?: string) => {
     } else if (network === NetworkName.Testnet.toLowerCase()) {
         return TESTNET_CLIENT;
     } else if (network === NetworkName.Mainnet.toLowerCase()) {
-        return MAINNET_CLIENT;
+        throw new Error("Please use devnet or testnet for testing");
+    } else {
+        throw new Error(`Unknown network: ${network}`);
+    }
+}
+
+const faucet = (network?: string) => {
+    if (network === NetworkName.Devnet.toLowerCase()) {
+        return DEVNET_FAUCET;
+    } else if (network === NetworkName.Testnet.toLowerCase()) {
+        return TESTNET_FAUCET;
+    } else if (network === NetworkName.Mainnet.toLowerCase()) {
+        throw new Error("Please use devnet or testnet for testing");
     } else {
         throw new Error(`Unknown network: ${network}`);
     }
@@ -34,7 +59,8 @@ const aptosClient = (network?: string) => {
 
 const DEVNET_CLIENT = new Provider(Network.DEVNET);
 const TESTNET_CLIENT = new Provider(Network.TESTNET);
-const MAINNET_CLIENT = new Provider(Network.MAINNET);
+const DEVNET_FAUCET = new FaucetClient("https://fullnode.devnet.aptoslabs.com/v1", "https://faucet.devnet.aptoslbas.com/");
+const TESTNET_FAUCET = new FaucetClient("https://fullnode.testnet.aptoslabs.com/v1", "https://faucet.testnet.aptoslbas.com/");
 
 const isSendableNetwork = (connected: boolean, network?: string): boolean => {
     return connected && (network?.toLowerCase() === NetworkName.Devnet.toLowerCase()
@@ -284,9 +310,14 @@ function OptionalFunctionality() {
         connected,
         account,
         network,
+        signAndSubmitTransaction,
         signAndSubmitBCSTransaction,
         signTransaction,
         signMessageAndVerify,
+        prepareFeePayerTransaction,
+        prepareMultiAgentTransaction,
+        signAndSubmitMultiAgentTransaction,
+        signAndSubmitFeePayerTransaction
     } = useWallet();
     let sendable = isSendableNetwork(connected, network?.name)
 
@@ -340,6 +371,95 @@ function OptionalFunctionality() {
         );
     };
 
+    const onSubmitScript = async () => {
+        const payload = {
+            type: "script_payload",
+            code: {
+                bytecode: DO_NOTHING_SCRIPT
+            },
+            type_arguments: [],
+            arguments: []
+        };
+
+        const response = await signAndSubmitTransaction(payload);
+        try {
+            if (response?.hash === undefined) {
+                throw new Error(`No response given ${response}`)
+            }
+            await aptosClient(network?.name.toLowerCase()).waitForTransaction(response.hash);
+            setSuccessAlertHash(response.hash, network?.name);
+        } catch (error) {
+            console.error(error);
+        }
+        setSuccessAlertMessage(
+            JSON.stringify({signAndSubmitTransaction: response})
+        );
+    };
+
+    // TODO: Let's put this into a cookie or local storage so it only happens once
+    const createFeePayerAccount = async (client: AptosClient) => {
+        // Already exists, so lets not fund it
+        if (feePayerAccount) {
+            return feePayerAccount;
+        }
+
+        let newAccount = new AptosAccount();
+        let feePayerAddress = newAccount.address();
+
+        try {
+            let coinClient = new CoinClient(client);
+            let balance = await coinClient.checkBalance(feePayerAddress);
+            if (Number(balance) > 10000) {
+                return newAccount;
+            }
+        } catch (error: any) {
+            // Swallow errors, likely due to account not existing
+        }
+        await faucet(network?.name.toLowerCase()).fundAccount(feePayerAddress, 100000);
+
+        return newAccount;
+    }
+
+    const onSubmitFeePayer = async () => {
+        if (!account) {
+            throw new Error("Not connected");
+        }
+        let provider = aptosClient(network?.name.toLowerCase());
+        // Generate an account and fund it
+        let feePayerAccount = await createFeePayerAccount(provider);
+
+        const payload: Types.TransactionPayload = {
+            type: "entry_function_payload",
+            function: "0x1::coin::transfer",
+            type_arguments: ["0x1::aptos_coin::AptosCoin"],
+            arguments: [account.address, 1], // 1 is in Octas
+        };
+
+        let prepResponse = await prepareFeePayerTransaction(payload, feePayerAccount.address().hex(), []);
+        if (!prepResponse) {
+            // TODO: Handle error
+            throw new Error("Failed to prepare fee payer transaction");
+        }
+        let prepTxn = prepResponse as TxnBuilderTypes.FeePayerRawTransaction;
+
+        // This would normally be provided by the service or a server
+        let feePayerSignature = await provider.signMultiTransaction(feePayerAccount, prepTxn);
+
+        const response = await signAndSubmitFeePayerTransaction(prepTxn, feePayerSignature);
+        try {
+            if (response?.hash === undefined) {
+                throw new Error(`No response given ${response}`)
+            }
+            await aptosClient(network?.name.toLowerCase()).waitForTransaction(response.hash);
+            setSuccessAlertHash(response.hash, network?.name);
+        } catch (error) {
+            console.error(error);
+        }
+        setSuccessAlertMessage(
+            JSON.stringify({signAndSubmitTransaction: response})
+        );
+    };
+
     return <Row>
         <Col title={true} border={true}>
             <h3>Optional Feature Functions</h3>
@@ -350,6 +470,10 @@ function OptionalFunctionality() {
             <Button color={"blue"} onClick={onSignTransaction} disabled={!sendable} message={"Sign transaction"}/>
             <Button color={"blue"} onClick={onSignAndSubmitBCSTransaction} disabled={!sendable}
                     message={"Sign and submit BCS transaction"}/>
+            <Button color={"blue"} onClick={onSubmitScript} disabled={!sendable}
+                    message={"Sign and submit move script"}/>
+            <Button color={"blue"} onClick={onSubmitFeePayer} disabled={!sendable}
+                    message={"Sign and submit fee payer"}/>
         </Col>
     </Row>;
 }

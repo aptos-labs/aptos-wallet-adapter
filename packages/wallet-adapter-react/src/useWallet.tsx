@@ -49,6 +49,32 @@ export interface WalletContextState {
   ): Promise<any>;
   signMessage(message: SignMessagePayload): Promise<SignMessageResponse | null>;
   signMessageAndVerify(message: SignMessagePayload): Promise<boolean>;
+
+  prepareFeePayerTransaction<T extends Types.TransactionPayload>(
+      transaction: T,
+      feePayerAddress: string,
+      additionalSignerAddresses?: string[],
+      options?: TransactionOptions
+  ): Promise<TxnBuilderTypes.FeePayerRawTransaction | undefined>;
+
+  signAndSubmitFeePayerTransaction(
+      transaction: TxnBuilderTypes.FeePayerRawTransaction,
+      feePayerSignature: TxnBuilderTypes.AccountAuthenticator,
+      additionalSignatures?: TxnBuilderTypes.AccountAuthenticator[],
+      options?: TransactionOptions
+  ): Promise<any>;
+
+  prepareMultiAgentTransaction<T extends Types.TransactionPayload>(
+      transaction: T,
+      additionalSignerAddresses?: string[],
+      options?: TransactionOptions
+  ): Promise<TxnBuilderTypes.MultiAgentRawTransaction | undefined>;
+
+  signAndSubmitMultiAgentTransaction(
+      transaction: TxnBuilderTypes.FeePayerRawTransaction,
+      additionalSignatures?: TxnBuilderTypes.AccountAuthenticator[],
+      options?: TransactionOptions
+  ): Promise<any>;
 }
 
 const DEFAULT_COUNTEXT = {

@@ -1,4 +1,4 @@
-import { HexString, TxnBuilderTypes, Types } from "aptos";
+import {HexString, TxnBuilderTypes, Types} from "aptos";
 import EventEmitter from "eventemitter3";
 import nacl from "tweetnacl";
 import { Buffer } from "buffer";
@@ -244,8 +244,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
-  Disconnect the exisitng wallet. On success, we clear the 
+  /**
+  Disconnect the exisitng wallet. On success, we clear the
   current account, current network and LocalStorage data.
   @emit emits "disconnect" event
   @throws WalletDisconnectionError
@@ -263,7 +263,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
+  /**
   Sign and submit an entry (not bcs serialized) transaction type to chain.
   @param transaction a non-bcs serialized transaction
   @param options max_gas_amount and gas_unit_limit
@@ -288,7 +288,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
+  /**
   Sign and submit a bsc serialized transaction type to chain.
   @param transaction a bcs serialized transaction
   @param options max_gas_amount and gas_unit_limit
@@ -319,7 +319,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
+  /**
   Sign transaction (doesnt submit to chain).
   @param transaction
   @param options max_gas_amount and gas_unit_limit
@@ -350,7 +350,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
+  /**
   Sign message (doesnt submit to chain).
   @param message
   @return response from the wallet's signMessage function
@@ -371,7 +371,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
+  /**
   Event for when account has changed on the wallet
   @return the new account info
   @throws WalletAccountChangeError
@@ -391,7 +391,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
+  /**
   Event for when network has changed on the wallet
   @return the new network info
   @throws WalletNetworkChangeError
@@ -479,5 +479,112 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         typeof error == "object" && "message" in error ? error.message : error;
       throw new WalletSignMessageAndVerifyError(errMsg).message;
     }
+  }
+
+  async prepareFeePayerTransaction<T extends Types.TransactionPayload>(
+      transaction: T,
+      feePayerAddress: string,
+      additionalSignerAddresses?: string[],
+      options?: TransactionOptions
+  ): Promise<TxnBuilderTypes.FeePayerRawTransaction | undefined> {
+    if (this._wallet && !("prepareFeePayerTransaction" in this._wallet)) {
+      throw new WalletNotSupportedMethod(
+          `Fee payer transactions are not supported by ${this.wallet?.name}`
+      ).message;
+    }
+
+    try {
+      this.doesWalletExist();
+      const response = await (this._wallet as any).prepareFeePayerTransaction(
+          transaction,
+          options
+      );
+      return response;
+    } catch (error: any) {
+      const errMsg =
+          typeof error == "object" && "message" in error ? error.message : error;
+      // TODO: Maybe change error type
+      throw new WalletSignTransactionError(errMsg).message;
+    }
+  }
+
+  async signAndSubmitFeePayerTransaction(
+      transaction: TxnBuilderTypes.FeePayerRawTransaction,
+      feePayerSignature: TxnBuilderTypes.AccountAuthenticator,
+      additionalSignatures?: TxnBuilderTypes.AccountAuthenticator[],
+      options?: TransactionOptions
+  ): Promise<any> {
+      if (this._wallet && !("signAndSubmitFeePayerTransaction" in this._wallet)) {
+          throw new WalletNotSupportedMethod(
+              `Fee payer transactions are not supported by ${this.wallet?.name}`
+          ).message;
+      }
+
+      try {
+          this.doesWalletExist();
+          const response = await (this._wallet as any).signAndSubmitFeePayerTransaction(
+              transaction,
+              options
+          );
+          return response;
+      } catch (error: any) {
+          const errMsg =
+              typeof error == "object" && "message" in error ? error.message : error;
+          // TODO: Maybe change error type
+          throw new WalletSignTransactionError(errMsg).message;
+      }
+  }
+
+  async prepareMultiAgentTransaction<T extends Types.TransactionPayload>(
+      transaction: T,
+      additionalSignerAddresses?: string[],
+      options?: TransactionOptions
+  ): Promise<TxnBuilderTypes.MultiAgentRawTransaction | undefined>{
+
+    if (this._wallet && !("prepareMultiAgentTransaction" in this._wallet)) {
+      throw new WalletNotSupportedMethod(
+          `Multi agent transactions are not supported by ${this.wallet?.name}`
+      ).message;
+    }
+
+    try {
+      this.doesWalletExist();
+      const response = await (this._wallet as any).prepareMultiAgentTransaction(
+          transaction,
+          options
+      );
+      return response;
+    } catch (error: any) {
+      const errMsg =
+          typeof error == "object" && "message" in error ? error.message : error;
+      // TODO: Maybe change error type
+      throw new WalletSignTransactionError(errMsg).message;
+    }
+  }
+
+  async signAndSubmitMultiAgentTransaction(
+      transaction: TxnBuilderTypes.FeePayerRawTransaction,
+      additionalSignatures?: TxnBuilderTypes.AccountAuthenticator[],
+      options?: TransactionOptions
+  ): Promise<any> {
+      if (this._wallet && !("signAndSubmitMultiAgentTransaction" in this._wallet)) {
+          throw new WalletNotSupportedMethod(
+              `Multi agent transactions are not supported by ${this.wallet?.name}`
+          ).message;
+      }
+
+      try {
+          this.doesWalletExist();
+          const response = await (this._wallet as any).signAndSubmitMultiAgentTransaction(
+              transaction,
+              options
+          );
+          return response;
+      } catch (error: any) {
+          const errMsg =
+              typeof error == "object" && "message" in error ? error.message : error;
+          // TODO: Maybe change error type
+          throw new WalletSignTransactionError(errMsg).message;
+      }
   }
 }
