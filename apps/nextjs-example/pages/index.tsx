@@ -59,8 +59,8 @@ const faucet = (network?: string) => {
 
 const DEVNET_CLIENT = new Provider(Network.DEVNET);
 const TESTNET_CLIENT = new Provider(Network.TESTNET);
-const DEVNET_FAUCET = new FaucetClient("https://fullnode.devnet.aptoslabs.com/v1", "https://faucet.devnet.aptoslbas.com/");
-const TESTNET_FAUCET = new FaucetClient("https://fullnode.testnet.aptoslabs.com/v1", "https://faucet.testnet.aptoslbas.com/");
+const DEVNET_FAUCET = new FaucetClient("https://fullnode.devnet.aptoslabs.com", "https://faucet.devnet.aptoslabs.com");
+const TESTNET_FAUCET = new FaucetClient("https://fullnode.testnet.aptoslabs.com", "https://faucet.testnet.aptoslabs.com");
 
 const isSendableNetwork = (connected: boolean, network?: string): boolean => {
     return connected && (network?.toLowerCase() === NetworkName.Devnet.toLowerCase()
@@ -415,7 +415,7 @@ function OptionalFunctionality() {
         } catch (error: any) {
             // Swallow errors, likely due to account not existing
         }
-        await faucet(network?.name.toLowerCase()).fundAccount(feePayerAddress, 100000);
+        await (faucet(network?.name.toLowerCase()).fundAccount(feePayerAddress, 100000));
 
         return newAccount;
     }
@@ -435,7 +435,7 @@ function OptionalFunctionality() {
             arguments: [account.address, 1], // 1 is in Octas
         };
 
-        let prepResponse = await prepareFeePayerTransaction(payload, feePayerAccount.address().hex(), []);
+        let prepResponse = await prepareFeePayerTransaction(payload, feePayerAccount.address().hex(), feePayerAccount.pubKey().hex());
         if (!prepResponse) {
             // TODO: Handle error
             throw new Error("Failed to prepare fee payer transaction");

@@ -137,11 +137,13 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const prepareFeePayerTransaction = async (
       transaction: Types.TransactionPayload,
       feePayerAddress: string,
+      feePayerPublicKey: string,
       additionalSignerAddresses?: string[],
+      additionalSignerPublicKeys?: string[],
       options?: TransactionOptions
   ) => {
     try {
-      return await walletCore.prepareFeePayerTransaction(transaction, feePayerAddress, additionalSignerAddresses, options);
+      return await walletCore.prepareFeePayerTransaction(transaction, feePayerAddress, feePayerPublicKey, additionalSignerAddresses, additionalSignerPublicKeys, options);
     } catch (error: any) {
       if (onError) onError(error);
       else throw error;
@@ -165,10 +167,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const prepareMultiAgentTransaction = async (
       transaction: Types.TransactionPayload,
       additionalSignerAddresses?: string[],
+      additionalSignerPublicKeys?: string[],
       options?: TransactionOptions
   ) => {
       try {
-          return await walletCore.prepareMultiAgentTransaction(transaction, additionalSignerAddresses, options);
+          return await walletCore.prepareMultiAgentTransaction(transaction, additionalSignerAddresses, additionalSignerPublicKeys, options);
       } catch (error: any) {
           if (onError) onError(error);
           else throw error;
@@ -176,7 +179,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signAndSubmitMultiAgentTransaction = async (
-      transaction: TxnBuilderTypes.FeePayerRawTransaction,
+      transaction: TxnBuilderTypes.MultiAgentRawTransaction,
       additionalSignatures?: TxnBuilderTypes.AccountAuthenticator[],
       options?: TransactionOptions
   ) => {

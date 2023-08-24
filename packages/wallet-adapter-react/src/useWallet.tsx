@@ -53,7 +53,9 @@ export interface WalletContextState {
   prepareFeePayerTransaction<T extends Types.TransactionPayload>(
       transaction: T,
       feePayerAddress: string,
+      feePayerPublicKey: string,
       additionalSignerAddresses?: string[],
+      additionalSignerPublicKeys?: string[],
       options?: TransactionOptions
   ): Promise<TxnBuilderTypes.FeePayerRawTransaction | undefined>;
 
@@ -67,11 +69,12 @@ export interface WalletContextState {
   prepareMultiAgentTransaction<T extends Types.TransactionPayload>(
       transaction: T,
       additionalSignerAddresses?: string[],
+      additionalSignerPublicKeys?: string[],
       options?: TransactionOptions
   ): Promise<TxnBuilderTypes.MultiAgentRawTransaction | undefined>;
 
   signAndSubmitMultiAgentTransaction(
-      transaction: TxnBuilderTypes.FeePayerRawTransaction,
+      transaction: TxnBuilderTypes.MultiAgentRawTransaction,
       additionalSignatures?: TxnBuilderTypes.AccountAuthenticator[],
       options?: TransactionOptions
   ): Promise<any>;

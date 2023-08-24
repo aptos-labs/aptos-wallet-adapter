@@ -484,7 +484,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   async prepareFeePayerTransaction<T extends Types.TransactionPayload>(
       transaction: T,
       feePayerAddress: string,
+      feePayerPublicKey: string,
       additionalSignerAddresses?: string[],
+      additionalSignerPublicKeys?: string[],
       options?: TransactionOptions
   ): Promise<TxnBuilderTypes.FeePayerRawTransaction | undefined> {
     if (this._wallet && !("prepareFeePayerTransaction" in this._wallet)) {
@@ -538,6 +540,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   async prepareMultiAgentTransaction<T extends Types.TransactionPayload>(
       transaction: T,
       additionalSignerAddresses?: string[],
+      additionalSignerPublicKeys?: string[],
       options?: TransactionOptions
   ): Promise<TxnBuilderTypes.MultiAgentRawTransaction | undefined>{
 
@@ -563,7 +566,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   async signAndSubmitMultiAgentTransaction(
-      transaction: TxnBuilderTypes.FeePayerRawTransaction,
+      transaction: TxnBuilderTypes.MultiAgentRawTransaction,
       additionalSignatures?: TxnBuilderTypes.AccountAuthenticator[],
       options?: TransactionOptions
   ): Promise<any> {
