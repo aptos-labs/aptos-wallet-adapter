@@ -134,31 +134,17 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const signAndSubmitFeePayerTransaction = async (
-      transaction: TxnBuilderTypes.FeePayerRawTransaction,
-      feePayerSignature: TxnBuilderTypes.AccountAuthenticator,
-      additionalSignatures?: TxnBuilderTypes.AccountAuthenticator[],
-      options?: TransactionOptions
-  ) => {
-      try {
-          return await walletCore.signAndSubmitFeePayerTransaction(transaction, feePayerSignature, additionalSignatures, options);
-      } catch (error: any) {
-          if (onError) onError(error);
-          else throw error;
-      }
-  }
 
-  const signAndSubmitMultiAgentTransaction = async (
-      transaction: TxnBuilderTypes.MultiAgentRawTransaction,
-      additionalSignatures?: TxnBuilderTypes.AccountAuthenticator[],
-      options?: TransactionOptions
+  const signMultiAgentTransaction = async (
+      transaction: TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction,
   ) => {
-      try {
-          return await walletCore.signAndSubmitMultiAgentTransaction(transaction, additionalSignatures, options);
-      } catch (error: any) {
-          if (onError) onError(error);
-          else throw error;
-      }
+    try {
+      return await walletCore.signMultiAgentTransaction(transaction);
+    } catch (error: any) {
+      if (onError) onError(error);
+      else throw error;
+      return false;
+    }
   }
 
   useEffect(() => {
@@ -267,8 +253,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         signTransaction,
         signMessage,
         signMessageAndVerify,
-        signAndSubmitFeePayerTransaction,
-        signAndSubmitMultiAgentTransaction,
+        signMultiAgentTransaction,
         isLoading,
       }}
     >

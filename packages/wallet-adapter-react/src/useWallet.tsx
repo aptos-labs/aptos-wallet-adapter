@@ -50,17 +50,8 @@ export interface WalletContextState {
   signMessage(message: SignMessagePayload): Promise<SignMessageResponse | null>;
   signMessageAndVerify(message: SignMessagePayload): Promise<boolean>;
 
-  signAndSubmitFeePayerTransaction(
-      transaction: TxnBuilderTypes.FeePayerRawTransaction,
-      feePayerSignature: TxnBuilderTypes.AccountAuthenticator,
-      additionalSignatures?: TxnBuilderTypes.AccountAuthenticator[],
-      options?: TransactionOptions
-  ): Promise<any>;
-
-  signAndSubmitMultiAgentTransaction(
-      transaction: TxnBuilderTypes.MultiAgentRawTransaction,
-      additionalSignatures?: TxnBuilderTypes.AccountAuthenticator[],
-      options?: TransactionOptions
+  signMultiAgentTransaction(
+      transaction: TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction,
   ): Promise<any>;
 }
 

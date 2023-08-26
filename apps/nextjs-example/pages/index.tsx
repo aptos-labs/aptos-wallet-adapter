@@ -3,7 +3,7 @@ import {
     AptosClient,
     BCS,
     CoinClient,
-    FaucetClient,
+    FaucetClient, HexString,
     Network,
     Provider,
     TxnBuilderTypes,
@@ -314,7 +314,7 @@ function OptionalFunctionality() {
         signAndSubmitBCSTransaction,
         signTransaction,
         signMessageAndVerify,
-        signAndSubmitFeePayerTransaction
+        signMultiAgentTransaction,
     } = useWallet();
     let sendable = isSendableNetwork(connected, network?.name)
 
@@ -406,13 +406,13 @@ function OptionalFunctionality() {
         try {
             let coinClient = new CoinClient(client);
             let balance = await coinClient.checkBalance(feePayerAddress);
-            if (Number(balance) > 10000) {
+            if (Number(balance) >= 100000000) {
                 return newAccount;
             }
         } catch (error: any) {
             // Swallow errors, likely due to account not existing
         }
-        await (faucet(network?.name.toLowerCase()).fundAccount(feePayerAddress, 100000));
+        await (faucet(network?.name.toLowerCase()).fundAccount(feePayerAddress, 100000000));
 
         return newAccount;
     }
@@ -421,6 +421,12 @@ function OptionalFunctionality() {
         if (!account) {
             throw new Error("Not connected");
         }
+
+        // TODO: MultiSig isn't supported here properly
+        if (typeof account.minKeysRequired !== undefined) {
+            throw new Error("MultiSig not supported");
+        }
+
         let provider = aptosClient(network?.name.toLowerCase());
         // Generate an account and fund it
         let feePayerAccount = await createFeePayerAccount(provider);
@@ -432,41 +438,36 @@ function OptionalFunctionality() {
             arguments: [account.address, 1], // 1 is in Octas
         };
 
-        let chainId = await provider.getChainId();
-        let accountResource = await provider.getAccount(account.address);
-        let now = Math.floor(Date.now() / 1000);
-        let rawTxn = new TxnBuilderTypes.RawTransaction(
-            TxnBuilderTypes.AccountAddress.fromHex(account.address),
-            BigInt(accountResource.sequence_number),
-            new TxnBuilderTypes.TransactionPayloadEntryFunction(
-                new TxnBuilderTypes.EntryFunction(
-                    new TxnBuilderTypes.ModuleId(TxnBuilderTypes.AccountAddress.fromHex("0x1"),
-                        new TxnBuilderTypes.Identifier("aptos_account")),
-                    new TxnBuilderTypes.Identifier("transfer"),
-                    [],
-                    [BCS.bcsToBytes(TxnBuilderTypes.AccountAddress.fromHex(account.address)), BCS.bcsSerializeUint64(1)])),
-            BigInt(1000000),
-            BigInt(100),
-        BigInt(now) + BigInt(60000),
-            new TxnBuilderTypes.ChainId(chainId)
-        );
-        let prepTxn = new TxnBuilderTypes.FeePayerRawTransaction(rawTxn, [], TxnBuilderTypes.AccountAddress.fromHex(feePayerAccount.address().hex()));
-
         // This would normally be provided by the service or a server
-        let feePayerSignature = await provider.signMultiTransaction(feePayerAccount, prepTxn);
+        // We need to increase the default timeout
+        let expiration_timestamp_secs = Math.floor(Date.now() / 1000) + 60000;
 
-        const response = await signAndSubmitFeePayerTransaction(prepTxn, feePayerSignature);
-        try {
+        const rawTxn = await provider.generateFeePayerTransaction(account.address, payload, feePayerAccount.address().hex(), [], {expiration_timestamp_secs: expiration_timestamp_secs.toString()})
+
+        // Sign with fee payer
+        const feePayerAuthenticator = await provider.signMultiTransaction(feePayerAccount, rawTxn);
+
+        // Sign with user
+        const userSignature  = await signMultiAgentTransaction(rawTxn);
+
+        // TODO: This extra code here needs to be put into the wallet adapter
+        let userAuthenticator = new TxnBuilderTypes.AccountAuthenticatorEd25519(
+            new TxnBuilderTypes.Ed25519PublicKey(HexString.ensure(account.publicKey as string).toUint8Array()),
+            new TxnBuilderTypes.Ed25519Signature(HexString.ensure(userSignature as string).toUint8Array())
+        );
+
+        // Submit it TODO: the wallet possibly should send it instead?
+        let response: undefined | Types.PendingTransaction = undefined;
+            response = await provider.submitFeePayerTransaction(rawTxn, userAuthenticator, feePayerAuthenticator);
+            console.log(`HASH : ${response?.hash}`)
             if (response?.hash === undefined) {
                 throw new Error(`No response given ${response}`)
             }
             await aptosClient(network?.name.toLowerCase()).waitForTransaction(response.hash);
             setSuccessAlertHash(response.hash, network?.name);
-        } catch (error) {
-            console.error(error);
-        }
+
         setSuccessAlertMessage(
-            JSON.stringify({signAndSubmitTransaction: response})
+            JSON.stringify({signAndSubmitTransaction: response ?? "No response"})
         );
     };
 
