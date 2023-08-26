@@ -434,7 +434,7 @@ function OptionalFunctionality() {
 
         let chainId = await provider.getChainId();
         let accountResource = await provider.getAccount(account.address);
-        let now = Date.now() / 1000;
+        let now = Math.floor(Date.now() / 1000);
         let rawTxn = new TxnBuilderTypes.RawTransaction(
             TxnBuilderTypes.AccountAddress.fromHex(account.address),
             BigInt(accountResource.sequence_number),
