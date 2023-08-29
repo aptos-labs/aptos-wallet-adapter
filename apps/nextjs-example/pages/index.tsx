@@ -368,31 +368,6 @@ function OptionalFunctionality() {
         );
     };
 
-    const onSubmitScript = async () => {
-        const payload = {
-            type: "script_payload",
-            code: {
-                bytecode: DO_NOTHING_SCRIPT
-            },
-            type_arguments: [],
-            arguments: []
-        };
-
-        const response = await signAndSubmitTransaction(payload);
-        try {
-            if (response?.hash === undefined) {
-                throw new Error(`No response given ${response}`)
-            }
-            await aptosClient(network?.name.toLowerCase()).waitForTransaction(response.hash);
-            setSuccessAlertHash(response.hash, network?.name);
-        } catch (error) {
-            console.error(error);
-        }
-        setSuccessAlertMessage(
-            JSON.stringify({signAndSubmitTransaction: response})
-        );
-    };
-
     // TODO: Let's put this into a cookie or local storage so it only happens once
     const createFeePayerAccount = async (client: AptosClient) => {
         // Already exists, so lets not fund it
@@ -459,7 +434,6 @@ function OptionalFunctionality() {
         // Submit it TODO: the wallet possibly should send it instead?
         let response: undefined | Types.PendingTransaction = undefined;
             response = await provider.submitFeePayerTransaction(rawTxn, userAuthenticator, feePayerAuthenticator);
-            console.log(`HASH : ${response?.hash}`)
             if (response?.hash === undefined) {
                 throw new Error(`No response given ${response}`)
             }
@@ -481,8 +455,6 @@ function OptionalFunctionality() {
             <Button color={"blue"} onClick={onSignTransaction} disabled={!sendable} message={"Sign transaction"}/>
             <Button color={"blue"} onClick={onSignAndSubmitBCSTransaction} disabled={!sendable}
                     message={"Sign and submit BCS transaction"}/>
-            <Button color={"blue"} onClick={onSubmitScript} disabled={!sendable}
-                    message={"Sign and submit move script"}/>
             <Button color={"blue"} onClick={onSubmitFeePayer} disabled={!sendable}
                     message={"Sign and submit fee payer"}/>
         </Col>
