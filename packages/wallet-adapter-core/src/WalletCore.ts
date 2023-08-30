@@ -1,4 +1,4 @@
-import { HexString, TxnBuilderTypes, Types } from "aptos";
+import {HexString, TxnBuilderTypes, Types} from "aptos";
 import EventEmitter from "eventemitter3";
 import nacl from "tweetnacl";
 import { Buffer } from "buffer";
@@ -244,8 +244,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
-  Disconnect the exisitng wallet. On success, we clear the 
+  /**
+  Disconnect the exisitng wallet. On success, we clear the
   current account, current network and LocalStorage data.
   @emit emits "disconnect" event
   @throws WalletDisconnectionError
@@ -263,7 +263,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
+  /**
   Sign and submit an entry (not bcs serialized) transaction type to chain.
   @param transaction a non-bcs serialized transaction
   @param options max_gas_amount and gas_unit_limit
@@ -288,7 +288,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
+  /**
   Sign and submit a bsc serialized transaction type to chain.
   @param transaction a bcs serialized transaction
   @param options max_gas_amount and gas_unit_limit
@@ -319,7 +319,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
+  /**
   Sign transaction (doesnt submit to chain).
   @param transaction
   @param options max_gas_amount and gas_unit_limit
@@ -350,7 +350,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
+  /**
   Sign message (doesnt submit to chain).
   @param message
   @return response from the wallet's signMessage function
@@ -371,7 +371,28 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
+  async signMultiAgentTransaction(
+    transaction: TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction
+  ): Promise<string | null> {
+    if (this._wallet && !("signMultiAgentTransaction" in this._wallet)) {
+      throw new WalletNotSupportedMethod(
+          `Multi agent & Fee payer transactions are not supported by ${this.wallet?.name}`
+      ).message;
+    }
+    try {
+      this.doesWalletExist();
+      const response = await (this._wallet as any).signMultiAgentTransaction(
+          transaction
+      );
+      return response;
+    } catch (error: any) {
+      const errMsg =
+          typeof error == "object" && "message" in error ? error.message : error;
+      throw new WalletSignTransactionError(errMsg).message;
+    }
+  }
+
+  /**
   Event for when account has changed on the wallet
   @return the new account info
   @throws WalletAccountChangeError
@@ -391,7 +412,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  /** 
+  /**
   Event for when network has changed on the wallet
   @return the new network info
   @throws WalletNetworkChangeError

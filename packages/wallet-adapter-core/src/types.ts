@@ -1,4 +1,4 @@
-import { Types } from "aptos";
+import { TxnBuilderTypes, Types } from "aptos";
 import { NetworkName, WalletReadyState } from "./constants";
 
 export { TxnBuilderTypes, Types } from "aptos";
@@ -43,6 +43,9 @@ export interface PluginProvider {
     listener: (newAddress: AccountInfo) => Promise<void>
   ) => Promise<void>;
   onNetworkChange: OnNetworkChange;
+  signMultiAgentTransaction: (
+      rawTxn: TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction
+  ) => Promise<string>;
 }
 
 export interface AdapterPluginEvents {

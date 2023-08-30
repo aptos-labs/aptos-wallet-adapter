@@ -134,6 +134,19 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
+
+  const signMultiAgentTransaction = async (
+      transaction: TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction,
+  ) => {
+    try {
+      return await walletCore.signMultiAgentTransaction(transaction);
+    } catch (error: any) {
+      if (onError) onError(error);
+      else throw error;
+      return false;
+    }
+  }
+
   useEffect(() => {
     if (autoConnect) {
       if (localStorage.getItem("AptosWalletName")) {
@@ -240,6 +253,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         signTransaction,
         signMessage,
         signMessageAndVerify,
+        signMultiAgentTransaction,
         isLoading,
       }}
     >

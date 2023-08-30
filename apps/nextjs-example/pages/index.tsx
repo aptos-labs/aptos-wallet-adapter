@@ -1,4 +1,14 @@
-import {AptosClient, BCS, Network, Provider, TxnBuilderTypes, Types} from "aptos";
+import {
+    AptosAccount,
+    AptosClient,
+    BCS,
+    CoinClient,
+    FaucetClient, HexString,
+    Network,
+    Provider,
+    TxnBuilderTypes,
+    Types
+} from "aptos";
 import {NetworkName, useWallet} from "@aptos-labs/wallet-adapter-react";
 import {WalletConnector} from "@aptos-labs/wallet-adapter-mui-design";
 import dynamic from "next/dynamic";
@@ -6,6 +16,10 @@ import Image from "next/image";
 import {useAutoConnect} from "../components/AutoConnectProvider";
 import {useAlert} from "../components/AlertProvider";
 import {AccountInfo, NetworkInfo, WalletInfo} from "@aptos-labs/wallet-adapter-core";
+import {useState} from "react";
+
+const FEE_PAYER_ACCOUNT_KEY = "feePayerAccountPrivateKey";
+const DO_NOTHING_SCRIPT = "a11ceb0b0600000001050001000000000102";
 
 const WalletButtons = dynamic(() => import("../components/WalletButtons"), {
     suspense: false,
@@ -26,7 +40,19 @@ const aptosClient = (network?: string) => {
     } else if (network === NetworkName.Testnet.toLowerCase()) {
         return TESTNET_CLIENT;
     } else if (network === NetworkName.Mainnet.toLowerCase()) {
-        return MAINNET_CLIENT;
+        throw new Error("Please use devnet or testnet for testing");
+    } else {
+        throw new Error(`Unknown network: ${network}`);
+    }
+}
+
+const faucet = (network?: string) => {
+    if (network === NetworkName.Devnet.toLowerCase()) {
+        return DEVNET_FAUCET;
+    } else if (network === NetworkName.Testnet.toLowerCase()) {
+        return TESTNET_FAUCET;
+    } else if (network === NetworkName.Mainnet.toLowerCase()) {
+        throw new Error("Please use devnet or testnet for testing");
     } else {
         throw new Error(`Unknown network: ${network}`);
     }
@@ -34,7 +60,8 @@ const aptosClient = (network?: string) => {
 
 const DEVNET_CLIENT = new Provider(Network.DEVNET);
 const TESTNET_CLIENT = new Provider(Network.TESTNET);
-const MAINNET_CLIENT = new Provider(Network.MAINNET);
+const DEVNET_FAUCET = new FaucetClient("https://fullnode.devnet.aptoslabs.com", "https://faucet.devnet.aptoslabs.com");
+const TESTNET_FAUCET = new FaucetClient("https://fullnode.testnet.aptoslabs.com", "https://faucet.testnet.aptoslabs.com");
 
 const isSendableNetwork = (connected: boolean, network?: string): boolean => {
     return connected && (network?.toLowerCase() === NetworkName.Devnet.toLowerCase()
@@ -278,15 +305,18 @@ function RequiredFunctionality() {
 }
 
 function OptionalFunctionality() {
+    const [initializedFeePayer, setInitializedFeePayer] = useState<boolean>(false);
     const {setSuccessAlertMessage, setSuccessAlertHash} = useAlert();
     // TODO: pass as props
     const {
         connected,
         account,
         network,
+        signAndSubmitTransaction,
         signAndSubmitBCSTransaction,
         signTransaction,
         signMessageAndVerify,
+        signMultiAgentTransaction,
     } = useWallet();
     let sendable = isSendableNetwork(connected, network?.name)
 
@@ -340,6 +370,103 @@ function OptionalFunctionality() {
         );
     };
 
+    const loadFeePayerAccount = (): AptosAccount => {
+        // Check if it exists in local storage
+        let maybeFeePayer = window.localStorage.getItem(FEE_PAYER_ACCOUNT_KEY);
+        if (!maybeFeePayer) {
+            let feePayerAccount = new AptosAccount();
+            window.localStorage.setItem(FEE_PAYER_ACCOUNT_KEY, feePayerAccount.toPrivateKeyObject().privateKeyHex)
+            return feePayerAccount;
+        } else {
+            let key = HexString.ensure(maybeFeePayer).toUint8Array();
+            return new AptosAccount(key);
+        }
+    }
+
+    // TODO: Let's put this into a cookie or local storage so it only happens once
+    const fundAndSetFeePayer = async (client: AptosClient): Promise<AptosAccount> => {
+        // Check if it exists in local storage
+        let feePayerAccount = loadFeePayerAccount();
+        let feePayerAddress = feePayerAccount.address();
+
+        if (initializedFeePayer) {
+            return feePayerAccount;
+        }
+
+        try {
+            let coinClient = new CoinClient(client);
+            let balance = await coinClient.checkBalance(feePayerAddress);
+            if (Number(balance) >= 100000000) {
+                setInitializedFeePayer(true);
+                return feePayerAccount;
+            }
+        } catch (error: any) {
+            // Swallow errors, likely due to account not existing
+        }
+        await (faucet(network?.name.toLowerCase()).fundAccount(feePayerAddress, 100000000));
+
+        setInitializedFeePayer(true);
+        return feePayerAccount;
+    }
+
+    const onSubmitFeePayer = async () => {
+        if (!account) {
+            throw new Error("Not connected");
+        }
+
+        // TODO: MultiSig isn't supported here properly
+        // This is not supporting multi sig, if 0 or undefined
+        if (account.minKeysRequired) {
+            throw new Error("MultiSig not supported");
+        }
+
+        let provider = aptosClient(network?.name.toLowerCase());
+        // Generate an account and fund it
+        let feePayerAccount = await fundAndSetFeePayer(provider);
+
+        const payload: Types.TransactionPayload = {
+            type: "entry_function_payload",
+            function: "0x1::aptos_account::transfer",
+            type_arguments: [],
+            arguments: [account.address, 1], // 1 is in Octas
+        };
+
+        // This would normally be provided by the service or a server
+        // We need to increase the default timeout
+        let expiration_timestamp_secs = Math.floor(Date.now() / 1000) + 60000;
+
+        const rawTxn = await provider.generateFeePayerTransaction(account.address, payload, feePayerAccount.address().hex(), [], {expiration_timestamp_secs: expiration_timestamp_secs.toString()})
+
+        // Sign with fee payer
+        const feePayerAuthenticator = await provider.signMultiTransaction(feePayerAccount, rawTxn);
+
+        // Sign with user
+        const userSignature  = await signMultiAgentTransaction(rawTxn);
+        // TODO: Why do we need to check this when the error should fail?
+        if (!userSignature) {
+            return;
+        }
+
+        // TODO: This extra code here needs to be put into the wallet adapter
+        let userAuthenticator = new TxnBuilderTypes.AccountAuthenticatorEd25519(
+            new TxnBuilderTypes.Ed25519PublicKey(HexString.ensure(account.publicKey as string).toUint8Array()),
+            new TxnBuilderTypes.Ed25519Signature(HexString.ensure(userSignature as string).toUint8Array())
+        );
+
+        // Submit it TODO: the wallet possibly should send it instead?
+        let response: undefined | Types.PendingTransaction = undefined;
+            response = await provider.submitFeePayerTransaction(rawTxn, userAuthenticator, feePayerAuthenticator);
+            if (response?.hash === undefined) {
+                throw new Error(`No response given ${response}`)
+            }
+            await aptosClient(network?.name.toLowerCase()).waitForTransaction(response.hash);
+            setSuccessAlertHash(response.hash, network?.name);
+
+        setSuccessAlertMessage(
+            JSON.stringify({signAndSubmitTransaction: response ?? "No response"})
+        );
+    };
+
     return <Row>
         <Col title={true} border={true}>
             <h3>Optional Feature Functions</h3>
@@ -350,6 +477,8 @@ function OptionalFunctionality() {
             <Button color={"blue"} onClick={onSignTransaction} disabled={!sendable} message={"Sign transaction"}/>
             <Button color={"blue"} onClick={onSignAndSubmitBCSTransaction} disabled={!sendable}
                     message={"Sign and submit BCS transaction"}/>
+            <Button color={"blue"} onClick={onSubmitFeePayer} disabled={!sendable}
+                    message={"Sign and submit fee payer"}/>
         </Col>
     </Row>;
 }
