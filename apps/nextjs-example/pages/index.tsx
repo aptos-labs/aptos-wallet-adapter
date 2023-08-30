@@ -16,8 +16,9 @@ import Image from "next/image";
 import {useAutoConnect} from "../components/AutoConnectProvider";
 import {useAlert} from "../components/AlertProvider";
 import {AccountInfo, NetworkInfo, WalletInfo} from "@aptos-labs/wallet-adapter-core";
+import {useState} from "react";
 
-let feePayerAccount: AptosAccount | undefined = undefined;
+const FEE_PAYER_ACCOUNT_KEY = "feePayerAccountPrivateKey";
 const DO_NOTHING_SCRIPT = "a11ceb0b0600000001050001000000000102";
 
 const WalletButtons = dynamic(() => import("../components/WalletButtons"), {
@@ -304,6 +305,7 @@ function RequiredFunctionality() {
 }
 
 function OptionalFunctionality() {
+    const [initializedFeePayer, setInitializedFeePayer] = useState<boolean>(false);
     const {setSuccessAlertMessage, setSuccessAlertHash} = useAlert();
     // TODO: pass as props
     const {
@@ -368,28 +370,43 @@ function OptionalFunctionality() {
         );
     };
 
+    const loadFeePayerAccount = (): AptosAccount => {
+        // Check if it exists in local storage
+        let maybeFeePayer = window.localStorage.getItem(FEE_PAYER_ACCOUNT_KEY);
+        if (!maybeFeePayer) {
+            let feePayerAccount = new AptosAccount();
+            window.localStorage.setItem(FEE_PAYER_ACCOUNT_KEY, feePayerAccount.toPrivateKeyObject().privateKeyHex)
+            return feePayerAccount;
+        } else {
+            let key = HexString.ensure(maybeFeePayer).toUint8Array();
+            return new AptosAccount(key);
+        }
+    }
+
     // TODO: Let's put this into a cookie or local storage so it only happens once
-    const createFeePayerAccount = async (client: AptosClient) => {
-        // Already exists, so lets not fund it
-        if (feePayerAccount) {
+    const fundAndSetFeePayer = async (client: AptosClient): Promise<AptosAccount> => {
+        // Check if it exists in local storage
+        let feePayerAccount = loadFeePayerAccount();
+        let feePayerAddress = feePayerAccount.address();
+
+        if (initializedFeePayer) {
             return feePayerAccount;
         }
-
-        let newAccount = new AptosAccount();
-        let feePayerAddress = newAccount.address();
 
         try {
             let coinClient = new CoinClient(client);
             let balance = await coinClient.checkBalance(feePayerAddress);
             if (Number(balance) >= 100000000) {
-                return newAccount;
+                setInitializedFeePayer(true);
+                return feePayerAccount;
             }
         } catch (error: any) {
             // Swallow errors, likely due to account not existing
         }
         await (faucet(network?.name.toLowerCase()).fundAccount(feePayerAddress, 100000000));
 
-        return newAccount;
+        setInitializedFeePayer(true);
+        return feePayerAccount;
     }
 
     const onSubmitFeePayer = async () => {
@@ -398,13 +415,14 @@ function OptionalFunctionality() {
         }
 
         // TODO: MultiSig isn't supported here properly
-        if (typeof account.minKeysRequired !== undefined) {
+        // This is not supporting multi sig, if 0 or undefined
+        if (account.minKeysRequired) {
             throw new Error("MultiSig not supported");
         }
 
         let provider = aptosClient(network?.name.toLowerCase());
         // Generate an account and fund it
-        let feePayerAccount = await createFeePayerAccount(provider);
+        let feePayerAccount = await fundAndSetFeePayer(provider);
 
         const payload: Types.TransactionPayload = {
             type: "entry_function_payload",
@@ -424,6 +442,10 @@ function OptionalFunctionality() {
 
         // Sign with user
         const userSignature  = await signMultiAgentTransaction(rawTxn);
+        // TODO: Why do we need to check this when the error should fail?
+        if (!userSignature) {
+            return;
+        }
 
         // TODO: This extra code here needs to be put into the wallet adapter
         let userAuthenticator = new TxnBuilderTypes.AccountAuthenticatorEd25519(
