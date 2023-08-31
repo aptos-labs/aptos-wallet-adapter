@@ -15,7 +15,11 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import {useAutoConnect} from "../components/AutoConnectProvider";
 import {useAlert} from "../components/AlertProvider";
-import {AccountInfo, NetworkInfo, WalletInfo} from "@aptos-labs/wallet-adapter-core";
+import {
+    AccountInfo,
+    NetworkInfo,
+    WalletInfo
+} from "@aptos-labs/wallet-adapter-core";
 import {useState} from "react";
 
 const FEE_PAYER_ACCOUNT_KEY = "feePayerAccountPrivateKey";
@@ -35,11 +39,13 @@ const WalletSelectorAntDesign = dynamic(
 );
 
 const aptosClient = (network?: string) => {
-    if (network === NetworkName.Devnet.toLowerCase()) {
+    if (isDevnet(network)) {
         return DEVNET_CLIENT;
-    } else if (network === NetworkName.Testnet.toLowerCase()) {
+    }else if (isTestnet(network)) {
         return TESTNET_CLIENT;
-    } else if (network === NetworkName.Mainnet.toLowerCase()) {
+    } else if (isLocal(network)) {
+        return LOCAL_CLIENT;
+    } else if (isMainnet(network)) {
         throw new Error("Please use devnet or testnet for testing");
     } else {
         throw new Error(`Unknown network: ${network}`);
@@ -47,12 +53,14 @@ const aptosClient = (network?: string) => {
 }
 
 const faucet = (network?: string) => {
-    if (network === NetworkName.Devnet.toLowerCase()) {
+    if (isDevnet(network)) {
         return DEVNET_FAUCET;
-    } else if (network === NetworkName.Testnet.toLowerCase()) {
+    } else if (isTestnet(network)) {
         return TESTNET_FAUCET;
-    } else if (network === NetworkName.Mainnet.toLowerCase()) {
+    } else if (isMainnet(network)) {
         throw new Error("Please use devnet or testnet for testing");
+    } else if (isLocal(network)) {
+        return LOCAL_FAUCET;
     } else {
         throw new Error(`Unknown network: ${network}`);
     }
@@ -60,12 +68,33 @@ const faucet = (network?: string) => {
 
 const DEVNET_CLIENT = new Provider(Network.DEVNET);
 const TESTNET_CLIENT = new Provider(Network.TESTNET);
+const LOCAL_CLIENT = new Provider(Network.LOCAL);
 const DEVNET_FAUCET = new FaucetClient("https://fullnode.devnet.aptoslabs.com", "https://faucet.devnet.aptoslabs.com");
 const TESTNET_FAUCET = new FaucetClient("https://fullnode.testnet.aptoslabs.com", "https://faucet.testnet.aptoslabs.com");
+const LOCAL_FAUCET = new FaucetClient("http://localhost:8080", "http://localhost:8081");
+
+const isDevnet = (network?: string): boolean => {
+    let net = network?.toLowerCase();
+    return net === Network.DEVNET.toLowerCase()
+}
+const isTestnet = (network?: string): boolean => {
+    let net = network?.toLowerCase();
+    return net === Network.TESTNET.toLowerCase()
+}
+const isMainnet = (network?: string): boolean => {
+    let net = network?.toLowerCase();
+    return net === Network.MAINNET.toLowerCase()
+}
+
+const isLocal = (network?: string): boolean => {
+    let net = network?.toLowerCase();
+    return net === "localhost" || net === "local"
+}
 
 const isSendableNetwork = (connected: boolean, network?: string): boolean => {
-    return connected && (network?.toLowerCase() === NetworkName.Devnet.toLowerCase()
-        || network?.toLowerCase() === NetworkName.Testnet.toLowerCase())
+    return connected && (isDevnet(network)
+        || isTestnet(network)
+        || isLocal(network))
 }
 
 export default function App() {
@@ -312,11 +341,12 @@ function OptionalFunctionality() {
         connected,
         account,
         network,
-        signAndSubmitTransaction,
         signAndSubmitBCSTransaction,
         signTransaction,
         signMessageAndVerify,
-        signMultiAgentTransaction,
+        prepRawTransaction,
+        signRawTransaction,
+        signAndSubmitRawTransaction,
     } = useWallet();
     let sendable = isSendableNetwork(connected, network?.name)
 
@@ -409,7 +439,56 @@ function OptionalFunctionality() {
         return feePayerAccount;
     }
 
-    const onSubmitFeePayer = async () => {
+    const signAndSubmitFeePayerTransaction = async () => {
+        if (!account) {
+            throw new Error("Not connected");
+        }
+
+        let provider = aptosClient(network?.name.toLowerCase());
+        // Generate an account and fund it
+        let feePayerAccount = await fundAndSetFeePayer(provider);
+
+        const payload: Types.TransactionPayload = {
+            type: "entry_function_payload",
+            function: "0x1::aptos_account::transfer",
+            type_arguments: [],
+            arguments: [account.address, 1], // 1 is in Octas
+        };
+
+        // Get the information about gas & expiration from the wallet
+        let rawTxn = await prepRawTransaction({
+            payload: payload,
+            feePayer: {
+                publicKey: feePayerAccount.pubKey().hex(),
+                address: feePayerAccount.address().hex()
+            },
+        });
+
+        if (!rawTxn) {
+            console.log("Failed to prep transaction");
+            return;
+        }
+
+        // Sign with fee payer
+        const feePayerAuthenticator = await provider.signMultiTransaction(feePayerAccount, (rawTxn as TxnBuilderTypes.FeePayerRawTransaction));
+
+        // Sign and submit with wallet
+        const response = await signAndSubmitRawTransaction({
+            rawTransaction: rawTxn,
+            feePayerAuthenticator: feePayerAuthenticator,
+        });
+        if (!response?.hash) {
+            throw new Error(`No response given ${response}`)
+        }
+        await aptosClient(network?.name.toLowerCase()).waitForTransaction(response.hash);
+        setSuccessAlertHash(response.hash, network?.name);
+
+        setSuccessAlertMessage(
+            JSON.stringify({signAndSubmitTransaction: response ?? "No response"})
+        );
+    };
+
+    const signFeePayerTransaction = async () => {
         if (!account) {
             throw new Error("Not connected");
         }
@@ -441,26 +520,25 @@ function OptionalFunctionality() {
         const feePayerAuthenticator = await provider.signMultiTransaction(feePayerAccount, rawTxn);
 
         // Sign with user
-        const userSignature  = await signMultiAgentTransaction(rawTxn);
-        // TODO: Why do we need to check this when the error should fail?
+        const userSignature = await signRawTransaction(rawTxn);
         if (!userSignature) {
             return;
         }
 
         // TODO: This extra code here needs to be put into the wallet adapter
         let userAuthenticator = new TxnBuilderTypes.AccountAuthenticatorEd25519(
-            new TxnBuilderTypes.Ed25519PublicKey(HexString.ensure(account.publicKey as string).toUint8Array()),
-            new TxnBuilderTypes.Ed25519Signature(HexString.ensure(userSignature as string).toUint8Array())
+            new TxnBuilderTypes.Ed25519PublicKey(HexString.ensure(userSignature.publicKey as string).toUint8Array()),
+            new TxnBuilderTypes.Ed25519Signature(HexString.ensure(userSignature.signature as string).toUint8Array())
         );
 
         // Submit it TODO: the wallet possibly should send it instead?
         let response: undefined | Types.PendingTransaction = undefined;
-            response = await provider.submitFeePayerTransaction(rawTxn, userAuthenticator, feePayerAuthenticator);
-            if (response?.hash === undefined) {
-                throw new Error(`No response given ${response}`)
-            }
-            await aptosClient(network?.name.toLowerCase()).waitForTransaction(response.hash);
-            setSuccessAlertHash(response.hash, network?.name);
+        response = await provider.submitFeePayerTransaction(rawTxn, userAuthenticator, feePayerAuthenticator);
+        if (response?.hash === undefined) {
+            throw new Error(`No response given ${response}`)
+        }
+        await aptosClient(network?.name.toLowerCase()).waitForTransaction(response.hash);
+        setSuccessAlertHash(response.hash, network?.name);
 
         setSuccessAlertMessage(
             JSON.stringify({signAndSubmitTransaction: response ?? "No response"})
@@ -477,8 +555,10 @@ function OptionalFunctionality() {
             <Button color={"blue"} onClick={onSignTransaction} disabled={!sendable} message={"Sign transaction"}/>
             <Button color={"blue"} onClick={onSignAndSubmitBCSTransaction} disabled={!sendable}
                     message={"Sign and submit BCS transaction"}/>
-            <Button color={"blue"} onClick={onSubmitFeePayer} disabled={!sendable}
-                    message={"Sign and submit fee payer"}/>
+            <Button color={"blue"} onClick={signFeePayerTransaction} disabled={!sendable}
+                    message={"Sign and submit fee payer by application"}/>
+            <Button color={"blue"} onClick={signAndSubmitFeePayerTransaction} disabled={!sendable}
+                    message={"Sign and submit fee payer by wallet"}/>
         </Col>
     </Row>;
 }

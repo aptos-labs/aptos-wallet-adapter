@@ -16,9 +16,10 @@ import type {
   WalletName,
   TransactionOptions,
   TxnBuilderTypes,
-  Types,
+  Types, RawTransactionPrepPayload, RawTransactionRequest,
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
+import {AnyRawTransaction} from "@aptos-labs/wallet-adapter-core/src";
 
 export interface AptosWalletProviderProps {
   children: ReactNode;
@@ -135,15 +136,34 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
 
-  const signMultiAgentTransaction = async (
-      transaction: TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction,
+  const signRawTransaction = async (
+      transaction: AnyRawTransaction,
   ) => {
     try {
-      return await walletCore.signMultiAgentTransaction(transaction);
+      return await walletCore.signRawTransaction(transaction);
     } catch (error: any) {
       if (onError) onError(error);
       else throw error;
-      return false;
+      return null;
+    }
+  }
+
+  const prepRawTransaction = async (
+      input: RawTransactionPrepPayload
+  ) => {
+    // TODO: Probably move to SDK
+    return await walletCore.prepRawTransaction(input);
+  }
+
+  const signAndSubmitRawTransaction = async (
+      input: RawTransactionRequest,
+  ) => {
+    try {
+      return await walletCore.signAndSubmitRawTransaction(input);
+    } catch (error: any) {
+      if (onError) onError(error);
+      else throw error;
+      return null;
     }
   }
 
@@ -253,7 +273,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         signTransaction,
         signMessage,
         signMessageAndVerify,
-        signMultiAgentTransaction,
+        signRawTransaction,
+        signAndSubmitRawTransaction,
+        prepRawTransaction,
         isLoading,
       }}
     >

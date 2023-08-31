@@ -1,4 +1,11 @@
-import {HexString, TxnBuilderTypes, Types} from "aptos";
+import {
+  AnyRawTransaction,
+  HexString,
+  Network,
+  Provider,
+  TxnBuilderTypes,
+  Types
+} from "aptos";
 import EventEmitter from "eventemitter3";
 import nacl from "tweetnacl";
 import { Buffer } from "buffer";
@@ -29,7 +36,7 @@ import {
   Wallet,
   WalletInfo,
   WalletCoreEvents,
-  TransactionOptions,
+  TransactionOptions, RawTransactionRequest, RawTransactionPrepPayload, SignRawTransactionResponse,
 } from "./types";
 import {
   removeLocalStorage,
@@ -371,27 +378,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  async signMultiAgentTransaction(
-    transaction: TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction
-  ): Promise<string | null> {
-    if (this._wallet && !("signMultiAgentTransaction" in this._wallet)) {
-      throw new WalletNotSupportedMethod(
-          `Multi agent & Fee payer transactions are not supported by ${this.wallet?.name}`
-      ).message;
-    }
-    try {
-      this.doesWalletExist();
-      const response = await (this._wallet as any).signMultiAgentTransaction(
-          transaction
-      );
-      return response;
-    } catch (error: any) {
-      const errMsg =
-          typeof error == "object" && "message" in error ? error.message : error;
-      throw new WalletSignTransactionError(errMsg).message;
-    }
-  }
-
   /**
   Event for when account has changed on the wallet
   @return the new account info
@@ -500,5 +486,125 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         typeof error == "object" && "message" in error ? error.message : error;
       throw new WalletSignMessageAndVerifyError(errMsg).message;
     }
+  }
+
+  /**
+   * Provides a raw transaction for wallets to sign.
+   *
+   * This includes building a transaction for multi-agent and fee payer transactions.  It pulls the address,
+   * sequence number, and chain id from the wallet directly.
+   *
+   * @param input Raw transaction arguments and fee payer / multiagent signers
+   */
+  async prepRawTransaction(input: RawTransactionPrepPayload): Promise<AnyRawTransaction> {
+    try {
+      this.doesWalletExist();
+    } catch (error: any) {
+      const errMsg =
+          typeof error == "object" && "message" in error ? error.message : error;
+      throw new WalletSignTransactionError(errMsg).message;
+    }
+    if (!this._account?.address) {
+      throw new WalletNotSupportedMethod(`Wallet not providing address of account`).message;
+    }
+
+    const provider = this.getClient();
+
+    // If there is a fee payer, then it's a fee payer transaction
+    // Default expiration time is 60 seconds because there are more actions
+    const expiration_timestamp_secs = Math.floor(Date.now() / 1000) + (input.options?.expiration_milliseconds ?? 60000);
+    const additional_signers = input.additionalSigners?.map((value) => {return value.address}) ?? [];
+
+    // TODO: Add simulation for gas estimation
+    if (!input.feePayer && !input.additionalSigners) {
+      return await provider.generateTransaction(HexString.ensure(this._account.address), input.payload)
+    } else if (input.feePayer) {
+      return await provider.generateFeePayerTransaction(this._account.address, input.payload, input.feePayer.address, additional_signers, {
+        max_gas_amount: input.options?.max_gas_amount?.toString(),
+        gas_unit_price: input.options?.gas_unit_price?.toString(),
+        expiration_timestamp_secs: expiration_timestamp_secs.toString()
+      })
+    } else {
+      // TODO: Support multiagent without fee payer
+      throw new WalletNotSupportedMethod(`Multiagent without fee payer is not supported yet`).message;
+    }
+  }
+
+  /**
+   * Signs a raw transaction of any type.
+   *
+   * This handles signing for single signer, fee payer, and multi-agent transactions.
+   * @param rawTransaction any raw transaction for signing
+   */
+  async signRawTransaction(
+      rawTransaction: AnyRawTransaction
+  ): Promise<SignRawTransactionResponse | null> {
+    if (this._wallet && !("signRawTransaction" in this._wallet)) {
+      throw new WalletNotSupportedMethod(
+          `SignRawTransaction is not supported by ${this.wallet?.name}`
+      ).message;
+    }
+    try {
+      this.doesWalletExist();
+      const response = await (this._wallet as any).signRawTransaction(
+          rawTransaction
+      );
+      return response;
+    } catch (error: any) {
+      const errMsg =
+          typeof error == "object" && "message" in error ? error.message : error;
+      throw new WalletSignTransactionError(errMsg).message;
+    }
+  }
+
+  /**
+   * Signs a raw transaction of any type and submits it to the blockchain.
+   *
+   * Similar to `signRawTransaction` but with submission to the blockchain.
+   * @param input The raw transaction to be submitted to the blockchain and associated options
+   */
+  async signAndSubmitRawTransaction(input: RawTransactionRequest): Promise<any> {
+    if (this._wallet && !("signAndSubmitRawTransaction" in this._wallet)) {
+      throw new WalletNotSupportedMethod(`signAndSubmitRawTransaction not supported by ${this.wallet?.name}`).message;
+    }
+    try {
+      this.doesWalletExist();
+      return await (this._wallet as any).signAndSubmitRawTransaction(input);
+    } catch (error: any) {
+      throw this.convertError(error);
+    }
+  }
+
+  private getClient(): Provider {
+    let network = this._network;
+    if (!network) {
+      throw new WalletNotSupportedMethod(`Function not supported by ${this.wallet?.name} due to network() not being supported`).message;
+    }
+
+    // TODO: All wallets need to support nodeUrl properly
+    // Now the fun about estimating a proper URL for the node
+    if (network.url) {
+      // We have a URL, let's use it
+      return new Provider({fullnodeUrl: network.url})
+    } else if (network.name) {
+      // We don't have a URL, let's use the default for the network
+      if (network.name.toLowerCase() === Network.MAINNET.toLowerCase()) {
+        return new Provider(Network.MAINNET);
+      } else if (network.name.toLowerCase() === Network.TESTNET.toLowerCase()) {
+        return new Provider(Network.TESTNET);
+      } else if (network.name.toLowerCase() === Network.DEVNET.toLowerCase()) {
+        return new Provider(Network.DEVNET);
+      } else {
+        throw new WalletNotSupportedMethod(`Invalid network ${network.name} without node URL for ${this.wallet?.name}`).message;
+      }
+    } else {
+      throw new WalletNotSupportedMethod(`Function not supported by ${this.wallet?.name} due to network() not being supported`).message;
+    }
+  }
+
+  private convertError(error: any) {
+      const errMsg =
+          typeof error == "object" && "message" in error ? error.message : error;
+      return new WalletSignTransactionError(errMsg).message;
   }
 }

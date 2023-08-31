@@ -1,4 +1,4 @@
-import { TxnBuilderTypes, Types } from "aptos";
+import {TxnBuilderTypes, Types} from "aptos";
 import { NetworkName, WalletReadyState } from "./constants";
 
 export { TxnBuilderTypes, Types } from "aptos";
@@ -43,9 +43,10 @@ export interface PluginProvider {
     listener: (newAddress: AccountInfo) => Promise<void>
   ) => Promise<void>;
   onNetworkChange: OnNetworkChange;
-  signMultiAgentTransaction: (
-      rawTxn: TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction
-  ) => Promise<string>;
+  signRawTransaction: (
+      rawTransaction: AnyRawTransaction
+  ) => Promise<SignRawTransactionResponse | null>;
+  signAndSubmitRawTransaction: (input: RawTransactionRequest) => Promise<SignAndSubmitRawTransactionResponse | null>;
 }
 
 export interface AdapterPluginEvents {
@@ -116,4 +117,42 @@ export interface SignMessageResponse {
 export interface TransactionOptions {
   max_gas_amount?: bigint;
   gas_unit_price?: bigint;
+}
+
+// TODO: Support MultiEd25519?
+export interface SignRawTransactionResponse {
+  signature: string;
+  publicKey: string;
+}
+
+
+
+export interface SignAndSubmitRawTransactionResponse {
+  hash: string
+}
+
+export interface RawTransactionOptions {
+  max_gas_amount?: bigint;
+  gas_unit_price?: bigint;
+  expiration_milliseconds?: number;
+}
+
+export type AnyRawTransaction = TxnBuilderTypes.RawTransaction | TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction;
+
+export interface RawTransactionRequest {
+  rawTransaction: AnyRawTransaction,
+  feePayerAuthenticator?: TxnBuilderTypes.AccountAuthenticator,
+  additionalAuthenticators?: TxnBuilderTypes.AccountAuthenticator,
+}
+
+export interface RawTransactionPrepPayload {
+  payload: Types.EntryFunctionPayload,
+  feePayer?: SignerIdentity,
+  additionalSigners?: SignerIdentity[],
+  options?: RawTransactionOptions
+}
+
+export interface SignerIdentity {
+  publicKey: string,
+  address: string,
 }

@@ -263,3 +263,63 @@ const onSignMessageAndVerify = async () => {
 
 <button onClick={onSignMessageAndVerify}>Sign message and verify</button>;
 ```
+
+##### Building and signing a sponsored transaction
+
+You can submit a transaction for sponsored transactions in two ways.  This first way is *highly recommended*.
+
+Sending a sponsored transaction is 3 steps.  First to prepare a transaction, there is a convenience function on the wallet
+adapter for this specifically `prepRawTransaction`.  This function will take a payload with the fee payer and return a
+RawTransaction.  Lastly, the wallet will submit the transaction with the `signAndSubmitRawTransaction` to ensure the user
+approves the action.
+
+```typescript
+import {AptosAccount} from "aptos";
+
+// This is a mock of having a separate server that has the secret for fee payer
+const signOnOtherServer = async (rawTransaction: RawTransaction) => {
+    const accountOnDifferentServer = AptosAccount.generate();
+    const authenticator: AccountAuthenticator = accountOnDifferentServer.sign(rawTransaction)
+    return authenticator;
+};
+
+const signAndSubmitSponsoredTransaction = async () => {
+    const payload: Types.TransactionPayload = {
+        type: "entry_function_payload",
+        function: "0x1::coin::transfer",
+        type_arguments: ["0x1::aptos_coin::AptosCoin"],
+        arguments: [account?.address, 1], // 1 is in Octas
+        feePayer: accountOnDifferentServer.address,
+    }
+    const rawTransaction = await prepRawTransaction(payload);
+    const feePayerAuthenticator = await signOnOtherServer(rawTransaction)
+    
+    const pendingTransaction = signAndSubmitRawTransaction({ rawTransaction, feePayerAuthenticator});
+}
+```
+
+The second way to submit a sponsored transaction is to have the fee payer server to submit the transaction.  The client
+needs to then handle the response back from the server to ensure that the transaction was submitted successfully.
+```typescript
+import {AptosAccount} from "aptos";
+
+// This is a mock of having a separate server that has the secret for fee payer
+const signAndSubmitOnOtherServer = async (rawTransaction: RawTransaction, senderAuthenticator: AccountAuthenticator) => {
+    const accountOnDifferentServer = AptosAccount.generate();
+    const pendingTransaction = accountOnDifferentServer.signAndSubmitRawTransaction(rawTransaction)
+    return pendingTransaction;
+};
+
+const signAndSubmitSponsoredTransaction = async () => {
+    const payload: Types.TransactionPayload = {
+        type: "entry_function_payload",
+        function: "0x1::coin::transfer",
+        type_arguments: ["0x1::aptos_coin::AptosCoin"],
+        arguments: [account?.address, 1], // 1 is in Octas
+        feePayer: accountOnDifferentServer.address,
+    }
+    const rawTransaction = await prepRawTransaction(payload);
+    const senderAuthenticator = await signRawTransaction(rawTransaction);
+    const pendingTransaction = await signAndSubmitOnOtherServer(rawTransaction, senderAuthenticator);
+}
+```

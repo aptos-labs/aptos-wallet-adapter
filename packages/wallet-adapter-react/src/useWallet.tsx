@@ -13,9 +13,14 @@ import {
   isMobile,
   TransactionOptions,
   TxnBuilderTypes,
-  Types,
+  Types, RawTransactionPrepPayload, RawTransactionRequest,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
+import {
+  AnyRawTransaction,
+  SignAndSubmitRawTransactionResponse,
+  SignRawTransactionResponse
+} from "@aptos-labs/wallet-adapter-core/src";
 
 export type { WalletName, Wallet };
 export {
@@ -50,9 +55,11 @@ export interface WalletContextState {
   signMessage(message: SignMessagePayload): Promise<SignMessageResponse | null>;
   signMessageAndVerify(message: SignMessagePayload): Promise<boolean>;
 
-  signMultiAgentTransaction(
-      transaction: TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction,
-  ): Promise<any>;
+  signRawTransaction(
+      transaction: AnyRawTransaction,
+  ): Promise<SignRawTransactionResponse | null>;
+  prepRawTransaction(input: RawTransactionPrepPayload): Promise<AnyRawTransaction>;
+  signAndSubmitRawTransaction(input: RawTransactionRequest): Promise<SignAndSubmitRawTransactionResponse>;
 }
 
 const DEFAULT_COUNTEXT = {
