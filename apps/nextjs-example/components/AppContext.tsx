@@ -10,7 +10,7 @@ import { PontemWallet } from "@pontem/wallet-adapter-plugin";
 import { RiseWallet } from "@rise-wallet/wallet-adapter";
 import { TokenPocketWallet } from "@tp-lab/aptos-wallet-adapter";
 import { TrustWallet } from "@trustwallet/aptos-wallet-adapter";
-import { MSafeWalletAdapter } from "msafe-plugin-wallet-adapter";
+import { MSafeWalletAdapter } from "@msafe/aptos-wallet-adapter";
 import { WelldoneWallet } from "@welldone-studio/aptos-wallet-adapter";
 import {
   AptosWalletAdapterProvider,
