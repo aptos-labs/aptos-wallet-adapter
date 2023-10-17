@@ -19,7 +19,7 @@ Note: These are in alphabetical order, any new wallets must be in alphabetical o
 - [Fewcha](https://www.npmjs.com/package/fewcha-plugin-wallet-adapter)
 - [Flipper](https://www.npmjs.com/package/@flipperplatform/wallet-adapter-plugin)
 - [Martian](https://www.npmjs.com/package/@martianwallet/aptos-wallet-adapter)
-- [MSafe](https://www.npmjs.com/package/msafe-plugin-wallet-adapter)
+- [MSafe](https://www.npmjs.com/package/@msafe/aptos-wallet-adapter) 
 - [Nightly](https://www.npmjs.com/package/@nightlylabs/aptos-wallet-adapter-plugin)
 - [OpenBlock](https://www.npmjs.com/package/@openblockhq/aptos-wallet-adapter)
 - [Petra](https://www.npmjs.com/package/petra-plugin-wallet-adapter)
