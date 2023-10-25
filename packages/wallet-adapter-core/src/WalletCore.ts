@@ -1,4 +1,5 @@
-import {HexString, TxnBuilderTypes, Types} from "aptos";
+import { HexString, TxnBuilderTypes, Types } from "aptos";
+import { GenerateTransactionInput, TransactionBuilderTypes } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
 import nacl from "tweetnacl";
 import { Buffer } from "buffer";
@@ -38,6 +39,8 @@ import {
   isRedirectable,
 } from "./utils";
 import { getNameByAddress } from "./ans";
+import { AccountAuthenticator } from "@aptos-labs/ts-sdk";
+import { convertToBCSPayload } from "./conversion";
 
 export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private _wallets: ReadonlyArray<Wallet> = [];
@@ -288,87 +291,132 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
+  
   /**
-  Sign and submit a bsc serialized transaction type to chain.
-  @param transaction a bcs serialized transaction
-  @param options max_gas_amount and gas_unit_limit
-  @return response from the wallet's signAndSubmitBCSTransaction function
-  @throws WalletSignAndSubmitMessageError
-  */
-  async signAndSubmitBCSTransaction(
-    transaction: TxnBuilderTypes.TransactionPayload,
-    options?: TransactionOptions
-  ): Promise<any> {
-    if (this._wallet && !("signAndSubmitBCSTransaction" in this._wallet)) {
-      throw new WalletNotSupportedMethod(
-        `Submit a BCS Transaction is not supported by ${this.wallet?.name}`
-      ).message;
-    }
-
-    try {
-      this.doesWalletExist();
-      const response = await (this._wallet as any).signAndSubmitBCSTransaction(
-        transaction,
-        options
-      );
-      return response;
-    } catch (error: any) {
-      const errMsg =
-        typeof error == "object" && "message" in error ? error.message : error;
-      throw new WalletSignAndSubmitMessageError(errMsg).message;
-    }
-  }
-
-  /**
-  Sign transaction (doesnt submit to chain).
-  @param transaction
-  @param options max_gas_amount and gas_unit_limit
-  @return response from the wallet's signTransaction function
-  @throws WalletSignTransactionError
-  */
+   Sign transaction (doesnt submit to chain).
+   @param transaction
+   @param options max_gas_amount and gas_unit_limit
+   @return response from the wallet's signTransaction function
+   @throws WalletSignTransactionError
+   */
   async signTransaction(
     transaction: Types.TransactionPayload,
     options?: TransactionOptions
-  ): Promise<Uint8Array | null> {
+    ): Promise<Uint8Array | null> {
     if (this._wallet && !("signTransaction" in this._wallet)) {
       throw new WalletNotSupportedMethod(
         `Sign Transaction is not supported by ${this.wallet?.name}`
-      ).message;
+        ).message;
     }
-
+    
     try {
       this.doesWalletExist();
       const response = await (this._wallet as any).signTransaction(
         transaction,
         options
-      );
+        );
+        return response;
+      } catch (error: any) {
+        const errMsg =
+        typeof error == "object" && "message" in error ? error.message : error;
+        throw new WalletSignTransactionError(errMsg).message;
+      }
+    }
+
+    /**
+     Sign message (doesnt submit to chain).
+     @param message
+     @return response from the wallet's signMessage function
+     @throws WalletSignMessageError
+     */
+    async signMessage(
+      message: SignMessagePayload
+      ): Promise<SignMessageResponse | null> {
+        try {
+          this.doesWalletExist();
+      if (!this._wallet) return null;
+      const response = await this._wallet?.signMessage(message);
       return response;
     } catch (error: any) {
       const errMsg =
+      typeof error == "object" && "message" in error ? error.message : error;
+      throw new WalletSignMessageError(errMsg).message;
+    }
+  }
+
+  /**
+   Sign and submit a bsc serialized transaction type to chain.
+   @param transaction a bcs serialized transaction
+   @param options max_gas_amount and gas_unit_limit
+   @return response from the wallet's signAndSubmitBCSTransaction function
+   @throws WalletSignAndSubmitMessageError
+   */
+   async signAndSubmitBCSTransaction(
+     transaction: TxnBuilderTypes.TransactionPayload,
+     options?: TransactionOptions
+   ): Promise<any> {
+     if (this._wallet && !("signAndSubmitBCSTransaction" in this._wallet)) {
+       throw new WalletNotSupportedMethod(
+         `Submit a BCS Transaction is not supported by ${this.wallet?.name}`
+       ).message;
+     }
+  
+     try {
+       this.doesWalletExist();
+       const response = await (this._wallet as any).signAndSubmitBCSTransaction(
+         transaction,
+         options
+       );
+       return response;
+     } catch (error: any) {
+       const errMsg =
+         typeof error == "object" && "message" in error ? error.message : error;
+       throw new WalletSignAndSubmitMessageError(errMsg).message;
+     }
+   }
+
+  // TODO: Implement later. Wallets don't support this right now.
+  async signAnyTransaction(
+    transaction: GenerateTransactionInput,
+  ): Promise<AccountAuthenticator> {
+    const payloadData = transaction.data;
+    const newPayload = await TransactionBuilderTypes.generateTransactionPayload(payloadData);
+
+    if (this._wallet && !("signAnyTransaction" in this._wallet)) {
+      throw new WalletNotSupportedMethod(
+          `Sign any transaction is not supported by ${this.wallet?.name}`
+      ).message;
+    }
+    try {
+      this.doesWalletExist();
+      const response = await (this._wallet as any).signAnyTransaction(
+          newPayload
+      );
+      return response;
+    } catch (error: any) {
+      const errMsg = 
         typeof error == "object" && "message" in error ? error.message : error;
       throw new WalletSignTransactionError(errMsg).message;
     }
   }
 
   /**
-  Sign message (doesnt submit to chain).
-  @param message
-  @return response from the wallet's signMessage function
-  @throws WalletSignMessageError
-  */
-  async signMessage(
-    message: SignMessagePayload
-  ): Promise<SignMessageResponse | null> {
-    try {
-      this.doesWalletExist();
-      if (!this._wallet) return null;
-      const response = await this._wallet?.signMessage(message);
-      return response;
-    } catch (error: any) {
-      const errMsg =
-        typeof error == "object" && "message" in error ? error.message : error;
-      throw new WalletSignMessageError(errMsg).message;
-    }
+   * This function is for signing and submitting a transaction using the `@aptos-labs/ts-sdk` input types.
+   * Under the hood, it converts the input to `aptos` types and calls signAndSubmitBCSTransaction with it.
+   * 
+   * @param transactionInput the transaction input
+   * @param options max_gas_amount and gas_unit_limit
+   * @returns the response from the wallet's signAndSubmitBCSTransaction function
+   */
+  async submitTransaction(
+    transactionInput: GenerateTransactionInput,
+    options?: TransactionOptions,
+  ): Promise<any> {
+    const payloadData = transactionInput.data;
+    const newPayload = await TransactionBuilderTypes.generateTransactionPayload(payloadData);
+    const oldTransactionPayload = convertToBCSPayload(newPayload);
+    const response = await this.signAndSubmitBCSTransaction(oldTransactionPayload, options);
+    return response;
   }
 
   async signMultiAgentTransaction(

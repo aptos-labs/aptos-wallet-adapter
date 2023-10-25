@@ -14,6 +14,7 @@ import {
   TransactionOptions,
   TxnBuilderTypes,
   Types,
+  GenerateTransactionInput,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
 
@@ -49,7 +50,7 @@ export interface WalletContextState {
   ): Promise<any>;
   signMessage(message: SignMessagePayload): Promise<SignMessageResponse | null>;
   signMessageAndVerify(message: SignMessagePayload): Promise<boolean>;
-
+  submitTransaction(transaction: GenerateTransactionInput): Promise<any>;
   signMultiAgentTransaction(
       transaction: TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction,
   ): Promise<any>;

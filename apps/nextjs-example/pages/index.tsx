@@ -1,4 +1,5 @@
 import {
+    APTOS_COIN,
     AptosAccount,
     AptosClient,
     BCS,
@@ -7,8 +8,10 @@ import {
     Network,
     Provider,
     TxnBuilderTypes,
+    TypeTagParser,
     Types
 } from "aptos";
+import { AccountAddress, U64 } from "@aptos-labs/ts-sdk";
 import {NetworkName, useWallet} from "@aptos-labs/wallet-adapter-react";
 import {WalletConnector} from "@aptos-labs/wallet-adapter-mui-design";
 import dynamic from "next/dynamic";
@@ -317,6 +320,7 @@ function OptionalFunctionality() {
         signTransaction,
         signMessageAndVerify,
         signMultiAgentTransaction,
+        submitTransaction,
     } = useWallet();
     let sendable = isSendableNetwork(connected, network?.name)
 
@@ -467,6 +471,23 @@ function OptionalFunctionality() {
         );
     };
 
+    const onSubmitTransaction = async () => {
+        const response = await submitTransaction({
+            sender: account?.address,
+            data: {
+                function: "0x1::coin::transfer",
+                typeArguments: [new TypeTagParser(APTOS_COIN).parseTypeTag()],
+                functionArguments: [AccountAddress.fromHexInput(account!.address), new U64(1)], // 1 is in Octas
+            }
+        });
+        try {
+            await aptosClient(network?.name.toLowerCase()).waitForTransaction(response.hash);
+            setSuccessAlertHash(response.hash, network?.name);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return <Row>
         <Col title={true} border={true}>
             <h3>Optional Feature Functions</h3>
@@ -479,6 +500,8 @@ function OptionalFunctionality() {
                     message={"Sign and submit BCS transaction"}/>
             <Button color={"blue"} onClick={onSubmitFeePayer} disabled={!sendable}
                     message={"Sign and submit fee payer"}/>
+            <Button color={"blue"} onClick={onSubmitTransaction} disabled={!sendable}
+                    message={"Sign and submit with the @aptos-labs/ts-sdk"}/>
         </Col>
     </Row>;
 }
