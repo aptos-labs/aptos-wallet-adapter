@@ -291,7 +291,37 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  
+  /**
+   Sign and submit a bsc serialized transaction type to chain.
+   @param transaction a bcs serialized transaction
+   @param options max_gas_amount and gas_unit_limit
+   @return response from the wallet's signAndSubmitBCSTransaction function
+   @throws WalletSignAndSubmitMessageError
+   */
+  async signAndSubmitBCSTransaction(
+    transaction: TxnBuilderTypes.TransactionPayload,
+    options?: TransactionOptions
+  ): Promise<any> {
+    if (this._wallet && !("signAndSubmitBCSTransaction" in this._wallet)) {
+      throw new WalletNotSupportedMethod(
+        `Submit a BCS Transaction is not supported by ${this.wallet?.name}`
+      ).message;
+    }
+
+    try {
+      this.doesWalletExist();
+      const response = await (this._wallet as any).signAndSubmitBCSTransaction(
+        transaction,
+        options
+      );
+      return response;
+    } catch (error: any) {
+      const errMsg =
+        typeof error == "object" && "message" in error ? error.message : error;
+      throw new WalletSignAndSubmitMessageError(errMsg).message;
+    }
+  }
+
   /**
    Sign transaction (doesnt submit to chain).
    @param transaction
@@ -302,78 +332,47 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   async signTransaction(
     transaction: Types.TransactionPayload,
     options?: TransactionOptions
-    ): Promise<Uint8Array | null> {
+  ): Promise<Uint8Array | null> {
     if (this._wallet && !("signTransaction" in this._wallet)) {
       throw new WalletNotSupportedMethod(
         `Sign Transaction is not supported by ${this.wallet?.name}`
-        ).message;
+      ).message;
     }
-    
+
     try {
       this.doesWalletExist();
       const response = await (this._wallet as any).signTransaction(
         transaction,
         options
-        );
-        return response;
-      } catch (error: any) {
-        const errMsg =
+      );
+      return response;
+    } catch (error: any) {
+      const errMsg =
         typeof error == "object" && "message" in error ? error.message : error;
-        throw new WalletSignTransactionError(errMsg).message;
-      }
+      throw new WalletSignTransactionError(errMsg).message;
     }
+  }
 
-    /**
-     Sign message (doesnt submit to chain).
-     @param message
-     @return response from the wallet's signMessage function
-     @throws WalletSignMessageError
-     */
-    async signMessage(
-      message: SignMessagePayload
-      ): Promise<SignMessageResponse | null> {
-        try {
-          this.doesWalletExist();
+  /**
+   Sign message (doesnt submit to chain).
+   @param message
+   @return response from the wallet's signMessage function
+   @throws WalletSignMessageError
+   */
+  async signMessage(
+    message: SignMessagePayload
+  ): Promise<SignMessageResponse | null> {
+    try {
+      this.doesWalletExist();
       if (!this._wallet) return null;
       const response = await this._wallet?.signMessage(message);
       return response;
     } catch (error: any) {
       const errMsg =
-      typeof error == "object" && "message" in error ? error.message : error;
+        typeof error == "object" && "message" in error ? error.message : error;
       throw new WalletSignMessageError(errMsg).message;
     }
   }
-
-  /**
-   Sign and submit a bsc serialized transaction type to chain.
-   @param transaction a bcs serialized transaction
-   @param options max_gas_amount and gas_unit_limit
-   @return response from the wallet's signAndSubmitBCSTransaction function
-   @throws WalletSignAndSubmitMessageError
-   */
-   async signAndSubmitBCSTransaction(
-     transaction: TxnBuilderTypes.TransactionPayload,
-     options?: TransactionOptions
-   ): Promise<any> {
-     if (this._wallet && !("signAndSubmitBCSTransaction" in this._wallet)) {
-       throw new WalletNotSupportedMethod(
-         `Submit a BCS Transaction is not supported by ${this.wallet?.name}`
-       ).message;
-     }
-  
-     try {
-       this.doesWalletExist();
-       const response = await (this._wallet as any).signAndSubmitBCSTransaction(
-         transaction,
-         options
-       );
-       return response;
-     } catch (error: any) {
-       const errMsg =
-         typeof error == "object" && "message" in error ? error.message : error;
-       throw new WalletSignAndSubmitMessageError(errMsg).message;
-     }
-   }
 
   // TODO: Implement later. Wallets don't support this right now.
   async signAnyTransaction(
@@ -384,17 +383,17 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
     if (this._wallet && !("signAnyTransaction" in this._wallet)) {
       throw new WalletNotSupportedMethod(
-          `Sign any transaction is not supported by ${this.wallet?.name}`
+        `Sign any transaction is not supported by ${this.wallet?.name}`
       ).message;
     }
     try {
       this.doesWalletExist();
       const response = await (this._wallet as any).signAnyTransaction(
-          newPayload
+        newPayload
       );
       return response;
     } catch (error: any) {
-      const errMsg = 
+      const errMsg =
         typeof error == "object" && "message" in error ? error.message : error;
       throw new WalletSignTransactionError(errMsg).message;
     }
@@ -424,18 +423,18 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   ): Promise<string | null> {
     if (this._wallet && !("signMultiAgentTransaction" in this._wallet)) {
       throw new WalletNotSupportedMethod(
-          `Multi agent & Fee payer transactions are not supported by ${this.wallet?.name}`
+        `Multi agent & Fee payer transactions are not supported by ${this.wallet?.name}`
       ).message;
     }
     try {
       this.doesWalletExist();
       const response = await (this._wallet as any).signMultiAgentTransaction(
-          transaction
+        transaction
       );
       return response;
     } catch (error: any) {
       const errMsg =
-          typeof error == "object" && "message" in error ? error.message : error;
+        typeof error == "object" && "message" in error ? error.message : error;
       throw new WalletSignTransactionError(errMsg).message;
     }
   }
