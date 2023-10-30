@@ -471,12 +471,15 @@ function OptionalFunctionality() {
     };
 
     const onSubmitTransaction = async () => {
+        if(!account){
+            throw new Error("Account not connected");
+        }
         const response = await submitTransaction({
-            sender: account?.address,
+            sender: account.address,
             data: {
                 function: "0x1::coin::transfer",
                 typeArguments: [new TypeTagParser(APTOS_COIN).parseTypeTag()],
-                functionArguments: [AccountAddress.fromHexInput(account!.address).toString(), 1], // 1 is in Octas
+                functionArguments: [AccountAddress.fromHexInput(account.address).toString(), 1], // 1 is in Octas
             }
         });
         try {
