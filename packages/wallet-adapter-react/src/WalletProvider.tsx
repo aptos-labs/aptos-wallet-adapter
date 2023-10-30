@@ -17,7 +17,7 @@ import type {
   TransactionOptions,
   TxnBuilderTypes,
   Types,
-  GenerateTransactionInput,
+  InputGenerateTransactionData,
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
 
@@ -148,7 +148,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   }
 
   const submitTransaction = async (
-      transaction: GenerateTransactionInput,
+      transaction: InputGenerateTransactionData,
   ) => {
     try {
       return await walletCore.submitTransaction(transaction);

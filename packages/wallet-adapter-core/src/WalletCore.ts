@@ -1,5 +1,5 @@
 import { HexString, TxnBuilderTypes, Types } from "aptos";
-import { GenerateTransactionInput, TransactionBuilderTypes } from "@aptos-labs/ts-sdk";
+import { AptosConfig, InputGenerateTransactionData, generateTransactionPayload } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
 import nacl from "tweetnacl";
 import { Buffer } from "buffer";
@@ -40,7 +40,7 @@ import {
 } from "./utils";
 import { getNameByAddress } from "./ans";
 import { AccountAuthenticator } from "@aptos-labs/ts-sdk";
-import { convertToBCSPayload } from "./conversion";
+import { convertNetwork, convertToBCSPayload } from "./conversion";
 
 export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private _wallets: ReadonlyArray<Wallet> = [];
@@ -376,10 +376,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   // TODO: Implement later. Wallets don't support this right now.
   async signAnyTransaction(
-    transaction: GenerateTransactionInput,
+    transactionInput: InputGenerateTransactionData,
   ): Promise<AccountAuthenticator> {
-    const payloadData = transaction.data;
-    const newPayload = await TransactionBuilderTypes.generateTransactionPayload(payloadData);
+    const payloadData = transactionInput.data;
+    const aptosConfig = new AptosConfig({network: convertNetwork(this._network)});
+    // TODO: Refactor this any, and remove the need for it by fixing the if ("bytecode" in data) stuff in `generateTransaction` in the v2 SDK
+    const newPayload = await generateTransactionPayload({ ...payloadData as any, aptosConfig: aptosConfig });
 
     if (this._wallet && !("signAnyTransaction" in this._wallet)) {
       throw new WalletNotSupportedMethod(
@@ -408,11 +410,14 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @returns the response from the wallet's signAndSubmitBCSTransaction function
    */
   async submitTransaction(
-    transactionInput: GenerateTransactionInput,
+    transactionInput: InputGenerateTransactionData,
     options?: TransactionOptions,
   ): Promise<any> {
     const payloadData = transactionInput.data;
-    const newPayload = await TransactionBuilderTypes.generateTransactionPayload(payloadData);
+    const aptosConfig = new AptosConfig({network: convertNetwork(this._network)});
+    // TODO: Refactor this any, and remove the need for it by fixing the if ("bytecode" in data) stuff in `generateTransaction` in the v2 SDK
+    const newPayload = await generateTransactionPayload({ ...payloadData as any, aptosConfig: aptosConfig });
+    console.log(newPayload);
     const oldTransactionPayload = convertToBCSPayload(newPayload);
     const response = await this.signAndSubmitBCSTransaction(oldTransactionPayload, options);
     return response;

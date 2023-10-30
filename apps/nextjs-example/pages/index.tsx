@@ -477,7 +477,7 @@ function OptionalFunctionality() {
             data: {
                 function: "0x1::coin::transfer",
                 typeArguments: [new TypeTagParser(APTOS_COIN).parseTypeTag()],
-                functionArguments: [AccountAddress.fromHexInput(account!.address), new U64(1)], // 1 is in Octas
+                functionArguments: [AccountAddress.fromHexInput(account!.address).toString(), 1], // 1 is in Octas
             }
         });
         try {
