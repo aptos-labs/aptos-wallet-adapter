@@ -402,7 +402,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   ): Promise<string | null> {
     if (this._wallet && !("signMultiAgentTransaction" in this._wallet)) {
       throw new WalletNotSupportedMethod(
-        `Multi agent & Fee payer transactions are not supported by ${this.wallet?.name}`
+        `Multi-agent & sponsored transactions are not supported by ${this.wallet?.name}`
       ).message;
     }
     try {
