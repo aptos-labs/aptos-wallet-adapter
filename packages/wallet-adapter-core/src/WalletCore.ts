@@ -402,8 +402,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   /**
-   * This function is for signing and submitting a transaction using the `@aptos-labs/ts-sdk` input types.
-   * Under the hood, it converts the input to `aptos` types and calls signAndSubmitBCSTransaction with it.
+   * This function is for signing and submitting a transaction using the `@aptos-labs/ts-sdk` (aka the v2 SDK)
+   * input types. It's internally converting the input types to the old SDK input types and then calling
+   * the v1 SDK's `signAndSubmitBCSTransaction` with it.
    * 
    * @param transactionInput the transaction input
    * @param options max_gas_amount and gas_unit_limit
