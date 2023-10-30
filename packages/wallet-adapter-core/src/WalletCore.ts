@@ -374,33 +374,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  // TODO: Implement later. Wallets don't support this right now.
-  async signAnyTransaction(
-    transactionInput: InputGenerateTransactionData,
-  ): Promise<AccountAuthenticator> {
-    const payloadData = transactionInput.data;
-    const aptosConfig = new AptosConfig({network: convertNetwork(this._network)});
-    // TODO: Refactor this any, and remove the need for it by fixing the if ("bytecode" in data) stuff in `generateTransaction` in the v2 SDK
-    const newPayload = await generateTransactionPayload({ ...payloadData as any, aptosConfig: aptosConfig });
-
-    if (this._wallet && !("signAnyTransaction" in this._wallet)) {
-      throw new WalletNotSupportedMethod(
-        `Sign any transaction is not supported by ${this.wallet?.name}`
-      ).message;
-    }
-    try {
-      this.doesWalletExist();
-      const response = await (this._wallet as any).signAnyTransaction(
-        newPayload
-      );
-      return response;
-    } catch (error: any) {
-      const errMsg =
-        typeof error == "object" && "message" in error ? error.message : error;
-      throw new WalletSignTransactionError(errMsg).message;
-    }
-  }
-
   /**
    * This function is for signing and submitting a transaction using the `@aptos-labs/ts-sdk` (aka the v2 SDK)
    * input types. It's internally converting the input types to the old SDK input types and then calling
