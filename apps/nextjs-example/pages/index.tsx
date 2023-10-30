@@ -8,10 +8,9 @@ import {
     Network,
     Provider,
     TxnBuilderTypes,
-    TypeTagParser,
     Types
 } from "aptos";
-import { AccountAddress, U64 } from "@aptos-labs/ts-sdk";
+import { AccountAddress, TypeTagParser } from "@aptos-labs/ts-sdk";
 import {NetworkName, useWallet} from "@aptos-labs/wallet-adapter-react";
 import {WalletConnector} from "@aptos-labs/wallet-adapter-mui-design";
 import dynamic from "next/dynamic";
