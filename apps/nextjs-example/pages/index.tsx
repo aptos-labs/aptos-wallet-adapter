@@ -10,7 +10,7 @@ import {
     TxnBuilderTypes,
     Types
 } from "aptos";
-import { AccountAddress, TypeTagParser } from "@aptos-labs/ts-sdk";
+import { AccountAddress, parseTypeTag } from "@aptos-labs/ts-sdk";
 import {NetworkName, useWallet} from "@aptos-labs/wallet-adapter-react";
 import {WalletConnector} from "@aptos-labs/wallet-adapter-mui-design";
 import dynamic from "next/dynamic";
@@ -478,7 +478,7 @@ function OptionalFunctionality() {
             sender: account.address,
             data: {
                 function: "0x1::coin::transfer",
-                typeArguments: [new TypeTagParser(APTOS_COIN).parseTypeTag()],
+                typeArguments: [parseTypeTag(APTOS_COIN)],
                 functionArguments: [AccountAddress.fromHexInput(account.address).toString(), 1], // 1 is in Octas
             }
         });
