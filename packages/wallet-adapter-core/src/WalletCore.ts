@@ -386,15 +386,15 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   async submitTransaction(
     transactionInput: InputGenerateTransactionData,
     options?: TransactionOptions,
-  ): Promise<any> {
+  ): Promise<{ hash: string, output?: any }> {
     const payloadData = transactionInput.data;
     const aptosConfig = new AptosConfig({network: convertNetwork(this._network)});
     // TODO: Refactor this any, and remove the need for it by fixing the if ("bytecode" in data) stuff in `generateTransaction` in the v2 SDK
     const newPayload = await generateTransactionPayload({ ...payloadData as any, aptosConfig: aptosConfig });
-    console.log(newPayload);
     const oldTransactionPayload = convertToBCSPayload(newPayload);
     const response = await this.signAndSubmitBCSTransaction(oldTransactionPayload, options);
-    return response;
+    const { hash, ...output } = response;
+    return { hash, output };
   }
 
   async signMultiAgentTransaction(
