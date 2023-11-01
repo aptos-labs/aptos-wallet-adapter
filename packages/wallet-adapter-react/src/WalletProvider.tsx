@@ -17,6 +17,7 @@ import type {
   TransactionOptions,
   TxnBuilderTypes,
   Types,
+  InputGenerateTransactionData,
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
 
@@ -134,12 +135,23 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-
   const signMultiAgentTransaction = async (
       transaction: TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction,
   ) => {
     try {
       return await walletCore.signMultiAgentTransaction(transaction);
+    } catch (error: any) {
+      if (onError) onError(error);
+      else throw error;
+      return false;
+    }
+  }
+
+  const submitTransaction = async (
+      transaction: InputGenerateTransactionData,
+  ) => {
+    try {
+      return await walletCore.submitTransaction(transaction);
     } catch (error: any) {
       if (onError) onError(error);
       else throw error;
@@ -254,6 +266,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         signMessage,
         signMessageAndVerify,
         signMultiAgentTransaction,
+        submitTransaction,
         isLoading,
       }}
     >

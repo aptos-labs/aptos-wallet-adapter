@@ -1,4 +1,5 @@
-import {HexString, TxnBuilderTypes, Types} from "aptos";
+import { HexString, TxnBuilderTypes, Types } from "aptos";
+import { AptosConfig, InputGenerateTransactionData, generateTransactionPayload } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
 import nacl from "tweetnacl";
 import { Buffer } from "buffer";
@@ -38,6 +39,8 @@ import {
   isRedirectable,
 } from "./utils";
 import { getNameByAddress } from "./ans";
+import { AccountAuthenticator } from "@aptos-labs/ts-sdk";
+import { convertNetwork, convertToBCSPayload } from "./conversion";
 
 export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private _wallets: ReadonlyArray<Wallet> = [];
@@ -289,12 +292,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   /**
-  Sign and submit a bsc serialized transaction type to chain.
-  @param transaction a bcs serialized transaction
-  @param options max_gas_amount and gas_unit_limit
-  @return response from the wallet's signAndSubmitBCSTransaction function
-  @throws WalletSignAndSubmitMessageError
-  */
+   Sign and submit a bsc serialized transaction type to chain.
+   @param transaction a bcs serialized transaction
+   @param options max_gas_amount and gas_unit_limit
+   @return response from the wallet's signAndSubmitBCSTransaction function
+   @throws WalletSignAndSubmitMessageError
+   */
   async signAndSubmitBCSTransaction(
     transaction: TxnBuilderTypes.TransactionPayload,
     options?: TransactionOptions
@@ -320,12 +323,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   /**
-  Sign transaction (doesnt submit to chain).
-  @param transaction
-  @param options max_gas_amount and gas_unit_limit
-  @return response from the wallet's signTransaction function
-  @throws WalletSignTransactionError
-  */
+   Sign transaction (doesnt submit to chain).
+   @param transaction
+   @param options max_gas_amount and gas_unit_limit
+   @return response from the wallet's signTransaction function
+   @throws WalletSignTransactionError
+   */
   async signTransaction(
     transaction: Types.TransactionPayload,
     options?: TransactionOptions
@@ -351,11 +354,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   /**
-  Sign message (doesnt submit to chain).
-  @param message
-  @return response from the wallet's signMessage function
-  @throws WalletSignMessageError
-  */
+   Sign message (doesnt submit to chain).
+   @param message
+   @return response from the wallet's signMessage function
+   @throws WalletSignMessageError
+   */
   async signMessage(
     message: SignMessagePayload
   ): Promise<SignMessageResponse | null> {
@@ -371,23 +374,46 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
+  /**
+   * This function is for signing and submitting a transaction using the `@aptos-labs/ts-sdk` (aka the v2 SDK)
+   * input types. It's internally converting the input types to the old SDK input types and then calling
+   * the v1 SDK's `signAndSubmitBCSTransaction` with it.
+   * 
+   * @param transactionInput the transaction input
+   * @param options max_gas_amount and gas_unit_limit
+   * @returns the response from the wallet's signAndSubmitBCSTransaction function
+   */
+  async submitTransaction(
+    transactionInput: InputGenerateTransactionData,
+    options?: TransactionOptions,
+  ): Promise<{ hash: string, output?: any }> {
+    const payloadData = transactionInput.data;
+    const aptosConfig = new AptosConfig({network: convertNetwork(this._network)});
+    // TODO: Refactor this any, and remove the need for it by fixing the if ("bytecode" in data) stuff in `generateTransaction` in the v2 SDK
+    const newPayload = await generateTransactionPayload({ ...payloadData as any, aptosConfig: aptosConfig });
+    const oldTransactionPayload = convertToBCSPayload(newPayload);
+    const response = await this.signAndSubmitBCSTransaction(oldTransactionPayload, options);
+    const { hash, ...output } = response;
+    return { hash, output };
+  }
+
   async signMultiAgentTransaction(
     transaction: TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction
   ): Promise<string | null> {
     if (this._wallet && !("signMultiAgentTransaction" in this._wallet)) {
       throw new WalletNotSupportedMethod(
-          `Multi agent & Fee payer transactions are not supported by ${this.wallet?.name}`
+        `Multi-agent & sponsored transactions are not supported by ${this.wallet?.name}`
       ).message;
     }
     try {
       this.doesWalletExist();
       const response = await (this._wallet as any).signMultiAgentTransaction(
-          transaction
+        transaction
       );
       return response;
     } catch (error: any) {
       const errMsg =
-          typeof error == "object" && "message" in error ? error.message : error;
+        typeof error == "object" && "message" in error ? error.message : error;
       throw new WalletSignTransactionError(errMsg).message;
     }
   }
