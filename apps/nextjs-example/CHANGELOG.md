@@ -1,5 +1,20 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 1.3.0
+
+### Minor Changes
+
+- 7acfa69: Adding support for the new Typescript SDK in the package `@aptos-labs/ts-sdk`. The wallet adapter now supports submitting a basic transaction with the new SDK types.
+
+### Patch Changes
+
+- Updated dependencies [7acfa69]
+- Updated dependencies [dd6e1ed]
+  - @aptos-labs/wallet-adapter-react@1.4.0
+  - @aptos-labs/wallet-adapter-core@2.6.0
+  - @aptos-labs/wallet-adapter-ant-design@1.2.7
+  - @aptos-labs/wallet-adapter-mui-design@1.0.7
+
 ## 1.2.11
 
 ### Patch Changes

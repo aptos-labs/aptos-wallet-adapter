@@ -1,5 +1,14 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 1.0.7
+
+### Patch Changes
+
+- dd6e1ed: Moves dependencies to peer dependencies as needed
+- Updated dependencies [7acfa69]
+- Updated dependencies [dd6e1ed]
+  - @aptos-labs/wallet-adapter-react@1.4.0
+
 ## 1.0.5
 
 ### Patch Changes

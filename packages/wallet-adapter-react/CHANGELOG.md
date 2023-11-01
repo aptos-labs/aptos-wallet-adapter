@@ -1,5 +1,18 @@
 # @aptos-labs/wallet-adapter-react
 
+## 1.4.0
+
+### Minor Changes
+
+- 7acfa69: Adding support for the new Typescript SDK in the package `@aptos-labs/ts-sdk`. The wallet adapter now supports submitting a basic transaction with the new SDK types.
+
+### Patch Changes
+
+- dd6e1ed: Moves dependencies to peer dependencies as needed
+- Updated dependencies [7acfa69]
+- Updated dependencies [dd6e1ed]
+  - @aptos-labs/wallet-adapter-core@2.6.0
+
 ## 1.3.2
 
 ### Patch Changes
