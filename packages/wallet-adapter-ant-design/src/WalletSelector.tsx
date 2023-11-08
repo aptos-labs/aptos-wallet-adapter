@@ -4,8 +4,8 @@ import {
   isRedirectable,
   useWallet,
   Wallet,
-  WalletName,
   WalletReadyState,
+  WalletName,
 } from "@aptos-labs/wallet-adapter-react";
 import "./styles.css";
 import { truncateAddress } from "./utils";

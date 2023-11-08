@@ -7,5 +7,5 @@ export {
   isMobile,
   isRedirectable,
 } from "./useWallet";
-export type { WalletName, Wallet } from "./useWallet";
+export type { Wallet, WalletName } from "./useWallet";
 export * from "./WalletProvider";
