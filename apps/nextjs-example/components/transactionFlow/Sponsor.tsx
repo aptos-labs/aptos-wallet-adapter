@@ -71,7 +71,10 @@ export default function SponsorTransaction({
       throw new Error("No Transaction to sign");
     }
     try {
-      const authenticator = await signTransaction(transactionToSubmit);
+      const authenticator = await signTransaction(
+        transactionToSubmit,
+        asSponsor
+      );
       if (asSponsor) {
         setFeepayerAuthenticator(authenticator);
       } else {

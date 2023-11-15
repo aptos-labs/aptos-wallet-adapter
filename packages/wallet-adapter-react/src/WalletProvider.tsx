@@ -86,10 +86,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
 
   const signTransaction = async (
     transaction: AnyRawTransaction | Types.TransactionPayload,
+    asFeePayer?: boolean,
     options?: InputGenerateTransactionOptions
   ): Promise<AccountAuthenticator> => {
     try {
-      return await walletCore.signTransaction(transaction, options);
+      return await walletCore.signTransaction(transaction, asFeePayer, options);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);

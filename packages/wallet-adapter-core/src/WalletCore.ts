@@ -47,6 +47,7 @@ import {
   setLocalStorage,
   scopePollingDetectionStrategy,
   isRedirectable,
+  generalizedErrorMessage,
 } from "./utils";
 import { getNameByAddress } from "./ans";
 import {
@@ -254,8 +255,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.emit("connect", account);
     } catch (error: any) {
       this.clearData();
-      const errMsg =
-        typeof error == "object" && "message" in error ? error.message : error;
+
+      const errMsg = generalizedErrorMessage(error);
       throw new WalletConnectionError(errMsg).message;
     } finally {
       this._connecting = false;
@@ -275,8 +276,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.clearData();
       this.emit("disconnect");
     } catch (error: any) {
-      const errMsg =
-        typeof error == "object" && "message" in error ? error.message : error;
+      const errMsg = generalizedErrorMessage(error);
       throw new WalletDisconnectionError(errMsg).message;
     }
   }
@@ -324,7 +324,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           convertV2TransactionPayloadToV1BCSPayload(newPayload);
         const response = await this.waletCoreV1.signAndSubmitBCSTransaction(
           oldTransactionPayload,
-          this._wallet,
+          this._wallet!,
           {
             max_gas_amount: options?.maxGasAmount
               ? BigInt(options?.maxGasAmount)
@@ -344,7 +344,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         convertV2PayloadToV1JSONPayload(payloadData);
       const response = await this.waletCoreV1.signAndSubmitTransaction(
         oldTransactionPayload,
-        this._wallet,
+        this._wallet!,
         {
           max_gas_amount: options?.maxGasAmount
             ? BigInt(options?.maxGasAmount)
@@ -357,8 +357,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       const { hash, ...output } = response;
       return { hash, output };
     } catch (error: any) {
-      const errMsg =
-        typeof error == "object" && "message" in error ? error.message : error;
+      const errMsg = generalizedErrorMessage(error);
       throw new WalletSignAndSubmitMessageError(errMsg).message;
     }
   }
@@ -375,6 +374,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    */
   async signTransaction(
     transactionOrPayload: AnyRawTransaction | Types.TransactionPayload,
+    asFeePayer?: boolean,
     options?: InputGenerateTransactionOptions
   ): Promise<AccountAuthenticator> {
     try {
@@ -387,7 +387,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           ).message;
         }
         const accountAuthenticator = (this._wallet as any).signTransaction(
-          transactionOrPayload
+          transactionOrPayload,
+          asFeePayer
         );
 
         return accountAuthenticator;
@@ -402,7 +403,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
       const response = await this.waletCoreV1.signTransaction(
         transactionOrPayload as Types.TransactionPayload,
-        this._wallet,
+        this._wallet!,
         {
           max_gas_amount: options?.maxGasAmount
             ? BigInt(options?.maxGasAmount)
@@ -432,8 +433,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       );
       return accountAuthenticator;
     } catch (error: any) {
-      const errMsg =
-        typeof error == "object" && "message" in error ? error.message : error;
+      const errMsg = generalizedErrorMessage(error);
       throw new WalletSignTransactionError(errMsg).message;
     }
   }
@@ -450,8 +450,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       const response = await this._wallet!.signMessage(message);
       return response;
     } catch (error: any) {
-      const errMsg =
-        typeof error == "object" && "message" in error ? error.message : error;
+      const errMsg = generalizedErrorMessage(error);
       throw new WalletSignMessageError(errMsg).message;
     }
   }
@@ -472,8 +471,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
       return pendingTransaction;
     } catch (error: any) {
-      const errMsg =
-        typeof error == "object" && "message" in error ? error.message : error;
+      const errMsg = generalizedErrorMessage(error);
       throw new WalletSignTransactionError(errMsg).message;
     }
   }
@@ -492,8 +490,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         this.emit("accountChange", this._account);
       });
     } catch (error: any) {
-      const errMsg =
-        typeof error == "object" && "message" in error ? error.message : error;
+      const errMsg = generalizedErrorMessage(error);
       throw new WalletAccountChangeError(errMsg).message;
     }
   }
@@ -512,8 +509,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         this.emit("networkChange", this._network);
       });
     } catch (error: any) {
-      const errMsg =
-        typeof error == "object" && "message" in error ? error.message : error;
+      const errMsg = generalizedErrorMessage(error);
       throw new WalletNetworkChangeError(errMsg).message;
     }
   }
@@ -587,8 +583,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       }
       return verified;
     } catch (error: any) {
-      const errMsg =
-        typeof error == "object" && "message" in error ? error.message : error;
+      const errMsg = generalizedErrorMessage(error);
       throw new WalletSignMessageAndVerifyError(errMsg).message;
     }
   }

@@ -45,6 +45,7 @@ export interface WalletContextState {
   ): Promise<any>;
   signTransaction(
     transactionOrPayload: AnyRawTransaction | Types.TransactionPayload,
+    asFeePayer?: boolean,
     options?: InputGenerateTransactionOptions
   ): Promise<AccountAuthenticator>;
   submitTransaction(

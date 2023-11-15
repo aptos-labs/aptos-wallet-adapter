@@ -51,6 +51,6 @@
   },
   "peerDependencies": {
     "aptos": "^1.19.0",
-    "@aptos-labs/ts-sdk": "^0.0.5"
+    "@aptos-labs/ts-sdk": "^0.0.6"
   }
 }

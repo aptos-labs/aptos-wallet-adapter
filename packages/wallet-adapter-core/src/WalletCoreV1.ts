@@ -17,7 +17,7 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
   */
   async signAndSubmitTransaction(
     transaction: Types.TransactionPayload,
-    wallet: Wallet | null,
+    wallet: Wallet,
     options?: TransactionOptions
   ): Promise<any> {
     try {
@@ -42,7 +42,7 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
    */
   async signAndSubmitBCSTransaction(
     transaction: TxnBuilderTypes.TransactionPayload,
-    wallet: Wallet | null,
+    wallet: Wallet,
     options?: TransactionOptions
   ): Promise<any> {
     try {
@@ -67,7 +67,7 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
    */
   async signTransaction(
     transaction: Types.TransactionPayload,
-    wallet: Wallet | null,
+    wallet: Wallet,
     options?: TransactionOptions
   ): Promise<Uint8Array | null> {
     try {
@@ -75,7 +75,6 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
         transaction,
         options
       );
-      console.log("response v1", response);
       return response;
     } catch (error: any) {
       const errMsg =
