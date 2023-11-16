@@ -164,7 +164,7 @@ importers:
   packages/wallet-adapter-ant-design:
     dependencies:
       '@aptos-labs/wallet-adapter-react':
-        specifier: ^1.4.0
+        specifier: ^2.0.0
         version: link:../wallet-adapter-react
       antd:
         specifier: ^5.1.2
@@ -241,7 +241,7 @@ importers:
   packages/wallet-adapter-mui-design:
     dependencies:
       '@aptos-labs/wallet-adapter-react':
-        specifier: ^1.4.0
+        specifier: ^2.0.0
         version: link:../wallet-adapter-react
       '@babel/core':
         specifier: ^7.0.0
