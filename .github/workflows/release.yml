@@ -10,6 +10,10 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   build:
     name: Build
+    permissions:
+      actions: write
+      pull-requests: write
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -32,10 +36,6 @@ jobs:
         run: pnpm run build
 
       - name: Create Release Pull Request or Publish to npm
-        permissions:
-          actions: write
-          pull-requests: write
-          contents: write
         uses: changesets/action@v1
         with:
           publish: pnpm run publish-packages
