@@ -14,6 +14,9 @@ import MultiAgentTransaction from "../components/transactionFlow/MultiAgent";
 import Row from "../components/Row";
 import Col from "../components/Col";
 import { Network } from "@aptos-labs/ts-sdk";
+import { Typography } from "antd";
+
+const { Link } = Typography;
 
 const WalletButtons = dynamic(() => import("../components/WalletButtons"), {
   suspense: false,
@@ -44,6 +47,13 @@ export default function App() {
       <h1 className="flex justify-center mt-2 mb-4 text-4xl font-extrabold tracking-tight leading-none text-black">
         Aptos Wallet Adapter Tester ({network?.name ?? ""})
       </h1>
+      <Link
+        href="https://github.com/aptos-labs/aptos-wallet-adapter/tree/main/apps/nextjs-example"
+        target="_blank"
+        className="flex justify-center tracking-tight leading-none text-black"
+      >
+        Demo app source code
+      </Link>
       <table className="table-auto w-full border-separate border-spacing-y-8 shadow-lg bg-white border-separate">
         <tbody>
           <WalletSelect />

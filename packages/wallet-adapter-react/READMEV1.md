@@ -1,4 +1,4 @@
-> **_NOTE:_** This documentation is for Wallet Adapter `v2.0.0` and up that is fully comatible with the Aptos TypeScript SDK V2. For Wallet Adapter `v^1.*.*` refer to [this guide](./READMEV1.md)
+> **_NOTE:_** This documentation is for Wallet Adapter `v^1.*.*`
 
 # Wallet Adapter React Provider
 
@@ -28,7 +28,6 @@ signMessage
 signTransaction
 signMessageAndVerify
 signAndSubmitBCSTransaction
-submitTransaction
 ```
 
 ### Usage
@@ -116,13 +115,6 @@ You can find it [here](../wallet-adapter-ant-design/) with instructions on how t
 
 #### Examples
 
-##### Initialize Aptos
-
-```js
-const aptosConfig = new AptosConfig({ network: Network.TESTNET });
-const aptos = new Aptos(aptosConfig);
-```
-
 ##### connect(walletName)
 
 ```js
@@ -142,51 +134,61 @@ const onConnect = async (walletName) => {
 ##### signAndSubmitTransaction(payload)
 
 ```js
-const onSignAndSubmitTransaction = async () => {
-  const response = await signAndSubmitTransaction({
-    sender: account.address,
-    data: {
+  const onSignAndSubmitTransaction = async () => {
+    const payload: Types.TransactionPayload = {
+      type: "entry_function_payload",
       function: "0x1::coin::transfer",
-      typeArguments: ["0x1::aptos_coin::AptosCoin"],
-      functionArguments: [account.address, 1],
-    },
-  });
-  // if you want to wait for transaction
-  try {
-    await aptos.waitForTransaction({ transactionHash: response.hash });
-  } catch (error) {
-    console.error(error);
-  }
-};
+      type_arguments: ["0x1::aptos_coin::AptosCoin"],
+      arguments: [account?.address, 1], // 1 is in Octas
+    };
+    const response = await signAndSubmitTransaction(payload);
+    // if you want to wait for transaction
+    try {
+      await aptosClient.waitForTransaction(response?.hash || "");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
 <button onClick={onSignAndSubmitTransaction}>
   Sign and submit transaction
-</button>;
+</button>
 ```
 
 ##### signAndSubmitBCSTransaction(payload)
 
 ```js
-const onSignAndSubmitBCSTransaction = async () => {
-  const response = await signAndSubmitTransaction({
-    sender: account.address,
-    data: {
-      function: "0x1::coin::transfer",
-      typeArguments: [parseTypeTag(APTOS_COIN)],
-      functionArguments: [AccountAddress.from(account.address), new U64(1)],
-    },
-  });
-  // if you want to wait for transaction
-  try {
-    await aptos.waitForTransaction({ transactionHash: response.hash });
-  } catch (error) {
-    console.error(error);
-  }
-};
+   const onSignAndSubmitBCSTransaction = async () => {
+    const token = new TxnBuilderTypes.TypeTagStruct(
+      TxnBuilderTypes.StructTag.fromString("0x1::aptos_coin::AptosCoin")
+    );
+    const entryFunctionBCSPayload =
+      new TxnBuilderTypes.TransactionPayloadEntryFunction(
+        TxnBuilderTypes.EntryFunction.natural(
+          "0x1::coin",
+          "transfer",
+          [token],
+          [
+            BCS.bcsToBytes(
+              TxnBuilderTypes.AccountAddress.fromHex(account!.address)
+            ),
+            BCS.bcsSerializeUint64(2),
+          ]
+        )
+      );
+
+    const response = await signAndSubmitBCSTransaction(entryFunctionBCSPayload);
+    // if you want to wait for transaction
+    try {
+      await aptosClient.waitForTransaction(response?.hash || "");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
 <button onClick={onSignAndSubmitTransaction}>
   Sign and submit BCS transaction
-</button>;
+</button>
 ```
 
 ##### signMessage(payload)
@@ -235,17 +237,19 @@ const onSignMessage = async () => {
 ##### signTransaction(payload)
 
 ```js
-const onSignTransaction = async () => {
-  const payload = {
-    type: "entry_function_payload",
-    function: "0x1::coin::transfer",
-    type_arguments: ["0x1::aptos_coin::AptosCoin"],
-    arguments: [account?.address, 1], // 1 is in Octas
+  const onSignTransaction = async () => {
+    const payload: Types.TransactionPayload = {
+      type: "entry_function_payload",
+      function: "0x1::coin::transfer",
+      type_arguments: ["0x1::aptos_coin::AptosCoin"],
+      arguments: [account?.address, 1], // 1 is in Octas
+    };
+    const response = await signTransaction(payload);
   };
-  const response = await signTransaction(payload);
-};
 
-<button onClick={onSignTransaction}>Sign transaction</button>;
+<button onClick={onSignTransaction}>
+  Sign transaction
+</button>
 ```
 
 ##### signMessageAndVerify(payload)
