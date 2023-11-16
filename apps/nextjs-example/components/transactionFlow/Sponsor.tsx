@@ -36,9 +36,9 @@ export default function SponsorTransaction({
     const generate = async (): Promise<AnyRawTransaction> => {
       const transactionToSign = await aptosClient(
         network?.name.toLowerCase()
-      ).generateTransaction({
+      ).build.transaction({
         sender: account.address,
-        hasFeePayer: true,
+        withFeePayer: true,
         data: {
           function: "0x1::coin::transfer",
           typeArguments: [APTOS_COIN],

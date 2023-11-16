@@ -46,7 +46,7 @@ export default function MultiAgentTransaction({
     const generate = async (): Promise<AnyRawTransaction> => {
       const transactionToSign = await aptosClient(
         network?.name.toLowerCase()
-      ).generateTransaction({
+      ).build.multiAgentTransaction({
         sender: account.address,
         secondarySignerAddresses: [secondarySigner.accountAddress],
         data: {

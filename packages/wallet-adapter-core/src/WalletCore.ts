@@ -11,6 +11,7 @@ import {
   generateTransactionPayload,
   InputSubmitTransactionData,
   PendingTransactionResponse,
+  InputEntryFunctionDataWithRemoteABI,
 } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
 import nacl from "tweetnacl";
@@ -317,7 +318,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           network: convertNetwork(this._network),
         });
         const newPayload = await generateTransactionPayload({
-          ...(payloadData as any),
+          ...(payloadData as InputEntryFunctionDataWithRemoteABI),
           aptosConfig: aptosConfig,
         });
         const oldTransactionPayload =

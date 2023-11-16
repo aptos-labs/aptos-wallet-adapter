@@ -16,4 +16,4 @@ but with a full SDK V2 support for the dapp.
 - Convert wallet `SignedTransaction` response from `signTransaction()` to TS SDK V2 `AccountAuthenticator`
 - Demo app to demonstrate different trnsaction flows - single signer, sponsor and multi agent transactions
 - Reject promise on core and/or provider errors instead of just returning `false`
-- Use `@aptos-labs/ts-sdk@experimental` version `0.0.6`
+- Use `@aptos-labs/ts-sdk@experimental` version `0.0.7`
