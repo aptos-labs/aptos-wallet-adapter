@@ -1,5 +1,26 @@
 # @aptos-labs/wallet-adapter-react
 
+## 2.0.0
+
+### Major Changes
+
+- 31e0084: Support TypeScript SDK V2. Fully compatible with existing SDK V1 and Wallet Adapter V1
+  but with a full SDK V2 support for the dapp.
+
+  - Add support for SDK V2 input types
+  - `signAndSubmitTransaction()` accept only SDK V2 transaction input type
+  - Implement a `submitTransaction()` function for multi signers transactions
+  - `signTransaction()` to support both SDK V1 and V2 versions
+  - Convert wallet `SignedTransaction` response from `signTransaction()` to TS SDK V2 `AccountAuthenticator`
+  - Demo app to demonstrate different trnsaction flows - single signer, sponsor and multi agent transactions
+  - Reject promise on core and/or provider errors instead of just returning `false`
+  - Use `@aptos-labs/ts-sdk@experimental` version `0.0.7`
+
+### Patch Changes
+
+- Updated dependencies [31e0084]
+  - @aptos-labs/wallet-adapter-core@3.0.0
+
 ## 1.4.0
 
 ### Minor Changes
