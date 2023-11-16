@@ -2,7 +2,6 @@ import {
   AccountInfo,
   NetworkInfo,
   WalletInfo,
-  WalletName,
   SignMessagePayload,
   SignMessageResponse,
   Wallet,
@@ -11,20 +10,24 @@ import {
   isInAppBrowser,
   isRedirectable,
   isMobile,
-  TransactionOptions,
-  TxnBuilderTypes,
-  Types,
+  InputGenerateTransactionOptions,
   InputGenerateTransactionData,
+  AnyRawTransaction,
+  InputSubmitTransactionData,
+  PendingTransactionResponse,
+  AccountAuthenticator,
+  Types,
+  WalletName,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
 
-export type { WalletName, Wallet };
+export type { Wallet, WalletName };
 export {
   WalletReadyState,
-  NetworkName,
   isInAppBrowser,
   isRedirectable,
   isMobile,
+  NetworkName,
 };
 
 export interface WalletContextState {
@@ -36,32 +39,28 @@ export interface WalletContextState {
   disconnect(): void;
   wallet: WalletInfo | null;
   wallets: ReadonlyArray<Wallet>;
-  signAndSubmitTransaction<T extends Types.TransactionPayload>(
-    transaction: T,
-    options?: TransactionOptions
+  signAndSubmitTransaction(
+    transaction: InputGenerateTransactionData,
+    options?: InputGenerateTransactionOptions
   ): Promise<any>;
-  signAndSubmitBCSTransaction<T extends TxnBuilderTypes.TransactionPayload>(
-    transaction: T,
-    options?: TransactionOptions
-  ): Promise<any>;
-  signTransaction<T extends Types.TransactionPayload>(
-    transaction: T,
-    options?: TransactionOptions
-  ): Promise<any>;
-  signMessage(message: SignMessagePayload): Promise<SignMessageResponse | null>;
+  signTransaction(
+    transactionOrPayload: AnyRawTransaction | Types.TransactionPayload,
+    asFeePayer?: boolean,
+    options?: InputGenerateTransactionOptions
+  ): Promise<AccountAuthenticator>;
+  submitTransaction(
+    transaction: InputSubmitTransactionData
+  ): Promise<PendingTransactionResponse>;
+  signMessage(message: SignMessagePayload): Promise<SignMessageResponse>;
   signMessageAndVerify(message: SignMessagePayload): Promise<boolean>;
-  submitTransaction(transaction: InputGenerateTransactionData): Promise<any>;
-  signMultiAgentTransaction(
-      transaction: TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction,
-  ): Promise<any>;
 }
 
-const DEFAULT_COUNTEXT = {
+const DEFAULT_CONTEXT = {
   connected: false,
 };
 
 export const WalletContext = createContext<WalletContextState>(
-  DEFAULT_COUNTEXT as WalletContextState
+  DEFAULT_CONTEXT as WalletContextState
 );
 
 export function useWallet(): WalletContextState {

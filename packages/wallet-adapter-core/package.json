@@ -45,12 +45,12 @@
     "typescript": "^4.5.3"
   },
   "dependencies": {
-    "@aptos-labs/ts-sdk": "^0.0.3",
     "buffer": "^6.0.3",
     "eventemitter3": "^4.0.7",
     "tweetnacl": "^1.0.3"
   },
   "peerDependencies": {
-    "aptos": "^1.19.0"
+    "aptos": "^1.19.0",
+    "@aptos-labs/ts-sdk": "^0.0.7"
   }
 }

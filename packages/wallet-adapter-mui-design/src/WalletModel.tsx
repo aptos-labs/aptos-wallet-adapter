@@ -16,8 +16,8 @@ import {
   isRedirectable,
   useWallet,
   Wallet,
-  WalletName,
   WalletReadyState,
+  WalletName,
 } from "@aptos-labs/wallet-adapter-react";
 import { grey } from "./aptosColorPalette";
 // reported bug with loading mui icons with esm, therefore need to import like this https://github.com/mui/material-ui/issues/35233
@@ -42,7 +42,8 @@ const ConnectWalletRow: React.FC<{
           borderRadius: `${theme.shape.borderRadius}px`,
           display: "flex",
           gap: "1rem",
-        }}>
+        }}
+      >
         <ListItemAvatar
           sx={{
             display: "flex",
@@ -51,7 +52,8 @@ const ConnectWalletRow: React.FC<{
             height: "2rem",
             minWidth: "0",
             color: `${theme.palette.text.primary}`,
-          }}>
+          }}
+        >
           <Box
             component="img"
             src={wallet.icon}
@@ -67,7 +69,8 @@ const ConnectWalletRow: React.FC<{
         <Button
           variant="contained"
           size="small"
-          className="wallet-connect-button">
+          className="wallet-connect-button"
+        >
           Connect
         </Button>
       </ListItemButton>
@@ -86,7 +89,8 @@ const InstallWalletRow: React.FC<{ wallet: Wallet }> = ({ wallet }) => {
         background: theme.palette.mode === "dark" ? grey[700] : grey[200],
         padding: "1rem 1rem",
         gap: "1rem",
-      }}>
+      }}
+    >
       <ListItemAvatar
         sx={{
           display: "flex",
@@ -95,7 +99,8 @@ const InstallWalletRow: React.FC<{ wallet: Wallet }> = ({ wallet }) => {
           height: "2rem",
           minWidth: "0",
           opacity: "0.25",
-        }}>
+        }}
+      >
         <Box
           component="img"
           src={wallet.icon}
@@ -116,7 +121,8 @@ const InstallWalletRow: React.FC<{ wallet: Wallet }> = ({ wallet }) => {
         href={wallet.url}
         target="_blank"
         size="small"
-        className="wallet-connect-install">
+        className="wallet-connect-install"
+      >
         Install
       </Button>
     </ListItem>
@@ -200,7 +206,8 @@ export default function WalletsModal({
       aria-describedby="select a wallet to connect"
       sx={{ borderRadius: `${theme.shape.borderRadius}px` }}
       maxWidth="xs"
-      fullWidth>
+      fullWidth
+    >
       <Stack
         sx={{
           display: "flex",
@@ -210,7 +217,8 @@ export default function WalletsModal({
           bgcolor: "background.paper",
           boxShadow: 24,
           p: 3,
-        }}>
+        }}
+      >
         <IconButton
           onClick={handleClose}
           sx={{
@@ -218,7 +226,8 @@ export default function WalletsModal({
             right: 12,
             top: 12,
             color: grey[450],
-          }}>
+          }}
+        >
           <CloseIcon />
         </IconButton>
         <Typography align="center" variant="h5" pt={2}>
@@ -231,7 +240,8 @@ export default function WalletsModal({
             alignItems: "center",
             justifyContent: "center",
             mb: 4,
-          }}>
+          }}
+        >
           {networkSupport && (
             <>
               <LanOutlinedIcon
@@ -246,7 +256,8 @@ export default function WalletsModal({
                   fontSize: "0.9rem",
                   color: grey[400],
                 }}
-                align="center">
+                align="center"
+              >
                 {networkSupport} only
               </Typography>
             </>

@@ -13,11 +13,15 @@ import type {
   SignMessagePayload,
   Wallet,
   WalletInfo,
-  WalletName,
-  TransactionOptions,
-  TxnBuilderTypes,
-  Types,
+  InputGenerateTransactionOptions,
+  AnyRawTransaction,
   InputGenerateTransactionData,
+  InputSubmitTransactionData,
+  AccountAuthenticator,
+  PendingTransactionResponse,
+  SignMessageResponse,
+  WalletName,
+  Types,
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
 
@@ -65,7 +69,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     } catch (error: any) {
       console.log("connect error", error);
       if (onError) onError(error);
-      else throw error;
+      return Promise.reject(error);
     } finally {
       setIsLoading(false);
     }
@@ -74,90 +78,69 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const disconnect = async () => {
     try {
       await walletCore.disconnect();
-    } catch (e) {
-      console.log("disconnect error", e);
-      if (onError) onError(e);
+    } catch (error) {
+      if (onError) onError(error);
+      return Promise.reject(error);
+    }
+  };
+
+  const signTransaction = async (
+    transaction: AnyRawTransaction | Types.TransactionPayload,
+    asFeePayer?: boolean,
+    options?: InputGenerateTransactionOptions
+  ): Promise<AccountAuthenticator> => {
+    try {
+      return await walletCore.signTransaction(transaction, asFeePayer, options);
+    } catch (error: any) {
+      if (onError) onError(error);
+      return Promise.reject(error);
+    }
+  };
+
+  const signMessage = async (
+    message: SignMessagePayload
+  ): Promise<SignMessageResponse> => {
+    try {
+      return await walletCore.signMessage(message);
+    } catch (error: any) {
+      if (onError) onError(error);
+      return Promise.reject(error);
+    }
+  };
+
+  const signMessageAndVerify = async (
+    message: SignMessagePayload
+  ): Promise<boolean> => {
+    try {
+      return await walletCore.signMessageAndVerify(message);
+    } catch (error: any) {
+      if (onError) onError(error);
+      return Promise.reject(error);
+    }
+  };
+
+  const submitTransaction = async (
+    transaction: InputSubmitTransactionData
+  ): Promise<PendingTransactionResponse> => {
+    try {
+      return await walletCore.submitTransaction(transaction);
+    } catch (error: any) {
+      if (onError) onError(error);
+      return Promise.reject(error);
     }
   };
 
   const signAndSubmitTransaction = async (
-    transaction: Types.TransactionPayload,
-    options?: TransactionOptions
+    transaction: InputGenerateTransactionData,
+    options?: InputGenerateTransactionOptions
   ) => {
     try {
       return await walletCore.signAndSubmitTransaction(transaction, options);
     } catch (error: any) {
       if (onError) onError(error);
-      else throw error;
+      return Promise.reject(error);
     }
   };
-
-  const signAndSubmitBCSTransaction = async (
-    transaction: TxnBuilderTypes.TransactionPayload,
-    options?: TransactionOptions
-  ) => {
-    try {
-      return await walletCore.signAndSubmitBCSTransaction(transaction, options);
-    } catch (error: any) {
-      throw error;
-    }
-  };
-
-  const signTransaction = async (
-    transaction: Types.TransactionPayload,
-    options?: TransactionOptions
-  ) => {
-    try {
-      return await walletCore.signTransaction(transaction, options);
-    } catch (error: any) {
-      if (onError) onError(error);
-      else throw error;
-    }
-  };
-
-  const signMessage = async (message: SignMessagePayload) => {
-    try {
-      return await walletCore.signMessage(message);
-    } catch (error: any) {
-      if (onError) onError(error);
-      else throw error;
-      return null;
-    }
-  };
-
-  const signMessageAndVerify = async (message: SignMessagePayload) => {
-    try {
-      return await walletCore.signMessageAndVerify(message);
-    } catch (error: any) {
-      if (onError) onError(error);
-      else throw error;
-      return false;
-    }
-  };
-
-  const signMultiAgentTransaction = async (
-      transaction: TxnBuilderTypes.MultiAgentRawTransaction | TxnBuilderTypes.FeePayerRawTransaction,
-  ) => {
-    try {
-      return await walletCore.signMultiAgentTransaction(transaction);
-    } catch (error: any) {
-      if (onError) onError(error);
-      else throw error;
-      return false;
-    }
-  }
-
-  const submitTransaction = async (
-      transaction: InputGenerateTransactionData,
-  ) => {
-    try {
-      return await walletCore.submitTransaction(transaction);
-    } catch (error: any) {
-      if (onError) onError(error);
-      else throw error;
-      return false;
-    }
-  }
 
   useEffect(() => {
     if (autoConnect) {
@@ -261,13 +244,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         wallet,
         wallets,
         signAndSubmitTransaction,
-        signAndSubmitBCSTransaction,
         signTransaction,
         signMessage,
         signMessageAndVerify,
-        signMultiAgentTransaction,
-        submitTransaction,
         isLoading,
+        submitTransaction,
       }}
     >
       {children}
