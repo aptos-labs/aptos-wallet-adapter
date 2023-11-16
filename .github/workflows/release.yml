@@ -11,7 +11,6 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
@@ -33,6 +32,10 @@ jobs:
         run: pnpm run build
 
       - name: Create Release Pull Request or Publish to npm
+        permissions:
+          actions: write
+          pull-requests: write
+          contents: write
         uses: changesets/action@v1
         with:
           publish: pnpm run publish-packages
