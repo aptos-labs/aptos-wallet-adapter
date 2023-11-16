@@ -44,9 +44,7 @@ export default function SingleSignerTransaction({
       nonce: Math.random().toString(16),
     };
     const response = await signMessage(payload);
-    setSuccessAlertMessage(
-      JSON.stringify({ onSignMessageAndVerify: response })
-    );
+    setSuccessAlertMessage(JSON.stringify({ onSignMessage: response }));
   };
 
   const onSignAndSubmitTransaction = async () => {
