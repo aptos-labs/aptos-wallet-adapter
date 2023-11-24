@@ -30,6 +30,7 @@ Note: These are in alphabetical order, any new wallets must be in alphabetical o
 - [TokenPocket](https://www.npmjs.com/package/@tp-lab/aptos-wallet-adapter)
 - [Trust](https://www.npmjs.com/package/@trustwallet/aptos-wallet-adapter)
 - [WELLDONE](https://www.npmjs.com/package/@welldone-studio/aptos-wallet-adapter)
+- [OKX](https://www.npmjs.com/package/@okwallet/aptos-wallet-adapter)
 
 #### Develop Locally
 
