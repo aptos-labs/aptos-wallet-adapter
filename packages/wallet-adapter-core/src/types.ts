@@ -5,6 +5,7 @@ import {
   InputGenerateTransactionOptions,
   InputSubmitTransactionData,
   PendingTransactionResponse,
+  AccountAddressInput,
 } from "@aptos-labs/ts-sdk";
 import { WalletReadyState } from "./constants";
 
@@ -126,3 +127,9 @@ export interface TransactionOptions {
   max_gas_amount?: bigint;
   gas_unit_price?: bigint;
 }
+
+// Omit the ts-sdk InputGenerateTransactionData type to make "sender" optional
+export type InputTransactionData = Omit<
+  InputGenerateTransactionData,
+  "sender"
+> & { sender?: AccountAddressInput };

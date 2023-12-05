@@ -15,13 +15,13 @@ import type {
   WalletInfo,
   InputGenerateTransactionOptions,
   AnyRawTransaction,
-  InputGenerateTransactionData,
   InputSubmitTransactionData,
   AccountAuthenticator,
   PendingTransactionResponse,
   SignMessageResponse,
   WalletName,
   Types,
+  InputTransactionData,
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
 
@@ -131,7 +131,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signAndSubmitTransaction = async (
-    transaction: InputGenerateTransactionData,
+    transaction: InputTransactionData,
     options?: InputGenerateTransactionOptions
   ) => {
     try {

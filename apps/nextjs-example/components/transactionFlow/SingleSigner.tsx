@@ -52,14 +52,12 @@ export default function SingleSignerTransaction({
 
     try {
       const response = await signAndSubmitTransaction({
-        sender: account.address,
         data: {
           function: "0x1::coin::transfer",
           typeArguments: [APTOS_COIN],
           functionArguments: [account.address, 1], // 1 is in Octas
         },
       });
-      console.log("response", response);
       await aptosClient(network?.name.toLowerCase()).waitForTransaction({
         transactionHash: response.hash,
       });
@@ -74,7 +72,6 @@ export default function SingleSignerTransaction({
 
     try {
       const response = await signAndSubmitTransaction({
-        sender: account.address,
         data: {
           function: "0x1::coin::transfer",
           typeArguments: [parseTypeTag(APTOS_COIN)],
@@ -90,6 +87,7 @@ export default function SingleSignerTransaction({
     }
   };
 
+  // Legacy typescript sdk support
   const onSignTransaction = async () => {
     try {
       const payload = {
