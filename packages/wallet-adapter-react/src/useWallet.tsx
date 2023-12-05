@@ -11,8 +11,8 @@ import {
   isRedirectable,
   isMobile,
   InputGenerateTransactionOptions,
-  InputGenerateTransactionData,
   AnyRawTransaction,
+  InputTransactionData,
   InputSubmitTransactionData,
   PendingTransactionResponse,
   AccountAuthenticator,
@@ -40,7 +40,7 @@ export interface WalletContextState {
   wallet: WalletInfo | null;
   wallets: ReadonlyArray<Wallet>;
   signAndSubmitTransaction(
-    transaction: InputGenerateTransactionData,
+    transaction: InputTransactionData,
     options?: InputGenerateTransactionOptions
   ): Promise<any>;
   signTransaction(

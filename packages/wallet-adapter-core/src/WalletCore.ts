@@ -1,6 +1,5 @@
 import { HexString, TxnBuilderTypes, Types, BCS } from "aptos";
 import {
-  InputGenerateTransactionData,
   AnyRawTransaction,
   AccountAuthenticator,
   AccountAuthenticatorEd25519,
@@ -42,6 +41,7 @@ import {
   WalletInfo,
   WalletCoreEvents,
   SignMessageResponse,
+  InputTransactionData,
 } from "./types";
 import {
   removeLocalStorage,
@@ -285,12 +285,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   /**
    * Signs and submits a transaction to chain
    *
-   * @param transactionInput InputGenerateTransactionData
+   * @param transactionInput InputTransactionData
    * @param options optional. A configuration object to generate a transaction by
    * @returns The pending transaction hash (V1 output) | PendingTransactionResponse (V2 output)
    */
   async signAndSubmitTransaction(
-    transactionInput: InputGenerateTransactionData,
+    transactionInput: InputTransactionData,
     options?: InputGenerateTransactionOptions
   ): Promise<
     { hash: Types.HexEncodedBytes; output?: any } | PendingTransactionResponse
@@ -301,7 +301,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       // wallet supports sdk v2
       if (this._wallet?.version === "v2") {
         const response = await this._wallet.signAndSubmitTransaction(
-          transactionInput,
+          {
+            ...transactionInput,
+            sender: transactionInput.sender ?? this._account!.address,
+          },
           options
         );
         // response should be PendingTransactionResponse
