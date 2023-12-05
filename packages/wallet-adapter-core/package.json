@@ -50,7 +50,7 @@
     "tweetnacl": "^1.0.3"
   },
   "peerDependencies": {
-    "aptos": "^1.19.0",
-    "@aptos-labs/ts-sdk": "^0.0.7"
+    "aptos": "^1.20.0",
+    "@aptos-labs/ts-sdk": "^1.0.0"
   }
 }

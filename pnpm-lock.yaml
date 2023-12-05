@@ -28,8 +28,8 @@ importers:
   apps/nextjs-example:
     dependencies:
       '@aptos-labs/ts-sdk':
-        specifier: ^0.0.7
-        version: 0.0.7
+        specifier: 1.0.0
+        version: 1.0.0
       '@aptos-labs/wallet-adapter-ant-design':
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-ant-design
@@ -201,10 +201,10 @@ importers:
   packages/wallet-adapter-core:
     dependencies:
       '@aptos-labs/ts-sdk':
-        specifier: ^0.0.7
-        version: 0.0.7
+        specifier: ^1.0.0
+        version: 1.0.0
       aptos:
-        specifier: ^1.19.0
+        specifier: ^1.20.0
         version: 1.20.0
       buffer:
         specifier: ^6.0.3
@@ -406,8 +406,8 @@ packages:
       - debug
     dev: false
 
-  /@aptos-labs/ts-sdk@0.0.7:
-    resolution: {integrity: sha512-6YRVRrrKFIo2wiYVmrgcl6oj87B2LW+AhgrAQGIvwHPzr+ihQl2woFpC/UmygG9dv+n8Ow9XOhuFGlg60Xwngw==}
+  /@aptos-labs/ts-sdk@1.0.0:
+    resolution: {integrity: sha512-WE7rBlQM+rEwBUmG4zOcTaLi47frs+gOb5ZuAdJB37wqNLwbo143tgAYq63bsvmb6x41i0bq+rL7rkvcBjvIpQ==}
     engines: {node: '>=11.0.0'}
     dependencies:
       '@aptos-labs/aptos-client': 0.0.2
