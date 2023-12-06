@@ -1,5 +1,12 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.1.0
+
+### Minor Changes
+
+- 6257015: [deps] Updated aptos and @aptos-labs/ts-sdk dependencies to latest versions
+- aa3d15a: Make sender optional when sign and submit single signer transaction
+
 ## 3.0.0
 
 ### Major Changes

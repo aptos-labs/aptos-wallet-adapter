@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-react
 
+## 2.1.0
+
+### Minor Changes
+
+- aa3d15a: Make sender optional when sign and submit single signer transaction
+
+### Patch Changes
+
+- Updated dependencies [6257015]
+- Updated dependencies [aa3d15a]
+  - @aptos-labs/wallet-adapter-core@3.1.0
+
 ## 2.0.0
 
 ### Major Changes
