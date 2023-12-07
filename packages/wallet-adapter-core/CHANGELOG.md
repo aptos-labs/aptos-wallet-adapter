@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.1.1
+
+### Patch Changes
+
+- 6266a29: Consolidate options argument on signAndSubmitTransaction
+
 ## 3.1.0
 
 ### Minor Changes
