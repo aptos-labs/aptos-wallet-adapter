@@ -131,11 +131,10 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signAndSubmitTransaction = async (
-    transaction: InputTransactionData,
-    options?: InputGenerateTransactionOptions
+    transaction: InputTransactionData
   ) => {
     try {
-      return await walletCore.signAndSubmitTransaction(transaction, options);
+      return await walletCore.signAndSubmitTransaction(transaction);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
