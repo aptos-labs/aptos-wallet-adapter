@@ -1,4 +1,4 @@
-> **_NOTE:_** Use the Wallet Adapter v2.0.0 and up with the Aptos TypeScript SDK V2
+> **_NOTE:_** Use the Wallet Adapter v2.0.0 and up with the new Aptos TypeScript SDK [@aptos-labs/ts-sdk](https://www.npmjs.com/package/@aptos-labs/ts-sdk)
 
 # Aptos Wallet Adapter
 
