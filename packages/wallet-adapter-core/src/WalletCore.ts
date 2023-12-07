@@ -290,8 +290,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @returns The pending transaction hash (V1 output) | PendingTransactionResponse (V2 output)
    */
   async signAndSubmitTransaction(
-    transactionInput: InputTransactionData,
-    options?: InputGenerateTransactionOptions
+    transactionInput: InputTransactionData
   ): Promise<
     { hash: Types.HexEncodedBytes; output?: any } | PendingTransactionResponse
   > {
@@ -300,13 +299,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
       // wallet supports sdk v2
       if (this._wallet?.version === "v2") {
-        const response = await this._wallet.signAndSubmitTransaction(
-          {
-            ...transactionInput,
-            sender: transactionInput.sender ?? this._account!.address,
-          },
-          options
-        );
+        const response = await this._wallet.signAndSubmitTransaction({
+          ...transactionInput,
+          sender: transactionInput.sender ?? this._account!.address,
+        });
         // response should be PendingTransactionResponse
         return response;
       }
@@ -330,11 +326,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           oldTransactionPayload,
           this._wallet!,
           {
-            max_gas_amount: options?.maxGasAmount
-              ? BigInt(options?.maxGasAmount)
+            max_gas_amount: transactionInput.options?.maxGasAmount
+              ? BigInt(transactionInput.options?.maxGasAmount)
               : undefined,
-            gas_unit_price: options?.gasUnitPrice
-              ? BigInt(options?.gasUnitPrice)
+            gas_unit_price: transactionInput.options?.gasUnitPrice
+              ? BigInt(transactionInput.options?.gasUnitPrice)
               : undefined,
           }
         );
@@ -350,11 +346,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         oldTransactionPayload,
         this._wallet!,
         {
-          max_gas_amount: options?.maxGasAmount
-            ? BigInt(options?.maxGasAmount)
+          max_gas_amount: transactionInput.options?.maxGasAmount
+            ? BigInt(transactionInput.options?.maxGasAmount)
             : undefined,
-          gas_unit_price: options?.gasUnitPrice
-            ? BigInt(options?.gasUnitPrice)
+          gas_unit_price: transactionInput.options?.gasUnitPrice
+            ? BigInt(transactionInput.options?.gasUnitPrice)
             : undefined,
         }
       );

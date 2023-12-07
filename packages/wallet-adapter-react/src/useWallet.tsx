@@ -39,10 +39,7 @@ export interface WalletContextState {
   disconnect(): void;
   wallet: WalletInfo | null;
   wallets: ReadonlyArray<Wallet>;
-  signAndSubmitTransaction(
-    transaction: InputTransactionData,
-    options?: InputGenerateTransactionOptions
-  ): Promise<any>;
+  signAndSubmitTransaction(transaction: InputTransactionData): Promise<any>;
   signTransaction(
     transactionOrPayload: AnyRawTransaction | Types.TransactionPayload,
     asFeePayer?: boolean,
