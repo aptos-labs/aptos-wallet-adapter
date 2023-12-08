@@ -5,11 +5,6 @@ import {
   SignMessagePayload,
   SignMessageResponse,
   Wallet,
-  WalletReadyState,
-  NetworkName,
-  isInAppBrowser,
-  isRedirectable,
-  isMobile,
   InputGenerateTransactionOptions,
   AnyRawTransaction,
   InputTransactionData,
@@ -20,15 +15,6 @@ import {
   WalletName,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
-
-export type { Wallet, WalletName };
-export {
-  WalletReadyState,
-  isInAppBrowser,
-  isRedirectable,
-  isMobile,
-  NetworkName,
-};
 
 export interface WalletContextState {
   connected: boolean;
