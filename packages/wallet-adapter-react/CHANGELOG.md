@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-react
 
+## 2.1.2
+
+### Patch Changes
+
+- a1c08cc: Export missing InputTransactionData type
+
 ## 2.1.1
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 2.2.2
+
+### Patch Changes
+
+- a1c08cc: Export missing InputTransactionData type
+- Updated dependencies [a1c08cc]
+  - @aptos-labs/wallet-adapter-react@2.1.2
+
 ## 2.2.1
 
 ### Patch Changes
