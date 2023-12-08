@@ -1,5 +1,8 @@
 import { parseTypeTag, AccountAddress, U64 } from "@aptos-labs/ts-sdk";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import {
+  useWallet,
+  InputTransactionData,
+} from "@aptos-labs/wallet-adapter-react";
 
 import { aptosClient } from "../../utils";
 import { useAlert } from "../AlertProvider";
@@ -49,15 +52,15 @@ export default function SingleSignerTransaction({
 
   const onSignAndSubmitTransaction = async () => {
     if (!account) return;
-
+    const transaction: InputTransactionData = {
+      data: {
+        function: "0x1::coin::transfer",
+        typeArguments: [APTOS_COIN],
+        functionArguments: [account.address, 1], // 1 is in Octas
+      },
+    };
     try {
-      const response = await signAndSubmitTransaction({
-        data: {
-          function: "0x1::coin::transfer",
-          typeArguments: [APTOS_COIN],
-          functionArguments: [account.address, 1], // 1 is in Octas
-        },
-      });
+      const response = await signAndSubmitTransaction(transaction);
       await aptosClient(network?.name.toLowerCase()).waitForTransaction({
         transactionHash: response.hash,
       });
