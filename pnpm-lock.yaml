@@ -61,8 +61,8 @@ importers:
         specifier: ^0.0.14
         version: 0.0.14
       '@martianwallet/aptos-wallet-adapter':
-        specifier: ^0.0.4
-        version: 0.0.4
+        specifier: ^0.0.5
+        version: 0.0.5
       '@msafe/aptos-wallet-adapter':
         specifier: ^1.0.11
         version: 1.0.11
@@ -1989,8 +1989,8 @@ packages:
       read-yaml-file: 1.1.0
     dev: true
 
-  /@martianwallet/aptos-wallet-adapter@0.0.4:
-    resolution: {integrity: sha512-B7z+Ff87L0cs4IMTF9+LCXGAWwQecihwN0QVI6NtJLWjV85A9MdlBC6oXiIC5J0ob3mtAMX2iOb2z2Xp37lxww==}
+  /@martianwallet/aptos-wallet-adapter@0.0.5:
+    resolution: {integrity: sha512-x6Q3bM7HSltCAD8Zl0AeU1AFhu0M+Ho22QP+oOXWhdb4TledVVLNfGIAx1jP4slqfcpDGOjnibPtPt8Bm32wmg==}
     dependencies:
       '@aptos-labs/wallet-adapter-core': 2.1.0
       aptos: 1.20.0
