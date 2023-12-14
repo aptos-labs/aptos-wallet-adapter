@@ -36,7 +36,7 @@ export default function SponsorTransaction({
     const generate = async (): Promise<AnyRawTransaction> => {
       const transactionToSign = await aptosClient(
         network?.name.toLowerCase()
-      ).build.transaction({
+      ).transaction.build.simple({
         sender: account.address,
         withFeePayer: true,
         data: {
