@@ -50,7 +50,7 @@ importers:
         version: 0.1.0
       '@haechi-labs/face-aptos-adapter-plugin':
         specifier: ^0.0.4
-        version: 0.0.4(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(@haechi-labs/face-sdk@1.10.14)(@haechi-labs/face-types@1.10.14)(aptos@1.20.0)
+        version: 0.0.4(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(@haechi-labs/face-sdk@1.10.14)(@haechi-labs/face-types@1.10.14)(aptos@1.21.0)
       '@haechi-labs/face-sdk':
         specifier: ^1.10.8
         version: 1.10.14(@haechi-labs/face-types@1.10.14)(ethers@5.7.2)
@@ -246,9 +246,6 @@ importers:
       '@aptos-labs/wallet-adapter-react':
         specifier: ^2.0.0
         version: link:../wallet-adapter-react
-      '@babel/core':
-        specifier: ^7.0.0
-        version: 7.23.2
       '@emotion/react':
         specifier: ^11.10.5
         version: 11.11.1(@types/react@18.2.31)(react@18.2.0)
@@ -1575,7 +1572,7 @@ packages:
     resolution: {integrity: sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==}
     dev: false
 
-  /@haechi-labs/face-aptos-adapter-plugin@0.0.4(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(@haechi-labs/face-sdk@1.10.14)(@haechi-labs/face-types@1.10.14)(aptos@1.20.0):
+  /@haechi-labs/face-aptos-adapter-plugin@0.0.4(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(@haechi-labs/face-sdk@1.10.14)(@haechi-labs/face-types@1.10.14)(aptos@1.21.0):
     resolution: {integrity: sha512-5uI5Hg2rMiUUiHGuheK0/QDwJUruA0aruUReC8FO3NuBeZ5GyBisgdL6JrZC3kf7s/NZOrk33HMkVNPx6aEk8A==}
     peerDependencies:
       '@aptos-labs/wallet-adapter-core': ^2.2.0
@@ -1586,7 +1583,7 @@ packages:
       '@aptos-labs/wallet-adapter-core': link:packages/wallet-adapter-core
       '@haechi-labs/face-sdk': 1.10.14(@haechi-labs/face-types@1.10.14)(ethers@5.7.2)
       '@haechi-labs/face-types': 1.10.14(ethers@5.7.2)
-      aptos: 1.20.0
+      aptos: 1.21.0
     dev: false
 
   /@haechi-labs/face-sdk@1.10.14(@haechi-labs/face-types@1.10.14)(ethers@5.7.2):
@@ -2937,8 +2934,8 @@ packages:
     resolution: {integrity: sha512-ehPtgRgaULsFG8x0NeYJvmyH1hmlfsNLujHe9dQEia/7MAJYdzMSi19JtchUHjmBA6XC/75dK55mzZH+RyieSg==}
     dev: true
 
-  /@types/parse-json@4.0.1:
-    resolution: {integrity: sha512-3YmXzzPAdOTVljVMkTMBdBEvlOLg2cDQaDhnnhT3nT9uDbnJzjWhKlzb+desT12Y7tGqaN6d+AbozcKzyL36Ng==}
+  /@types/parse-json@4.0.2:
+    resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
     dev: false
 
   /@types/prop-types@15.7.9:
@@ -3983,7 +3980,7 @@ packages:
     resolution: {integrity: sha512-AdmX6xUzdNASswsFtmwSt7Vj8po9IuqXm0UXz7QKPuEUmPB4XyjGfaAr2PSuELMwkRMVH1EpIkX5bTZGRB3eCA==}
     engines: {node: '>=10'}
     dependencies:
-      '@types/parse-json': 4.0.1
+      '@types/parse-json': 4.0.2
       import-fresh: 3.3.0
       parse-json: 5.2.0
       path-type: 4.0.0

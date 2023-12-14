@@ -44,7 +44,6 @@
   },
   "dependencies": {
     "@aptos-labs/wallet-adapter-react": "^2.0.0",
-    "@babel/core": "^7.0.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.11.0",
