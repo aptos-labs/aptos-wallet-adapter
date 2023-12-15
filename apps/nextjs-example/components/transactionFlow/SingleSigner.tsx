@@ -112,7 +112,7 @@ export default function SingleSignerTransaction({
     try {
       const transactionToSign = await aptosClient(
         network?.name.toLowerCase()
-      ).build.transaction({
+      ).transaction.build.simple({
         sender: account.address,
         data: {
           function: "0x1::coin::transfer",

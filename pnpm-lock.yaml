@@ -28,8 +28,8 @@ importers:
   apps/nextjs-example:
     dependencies:
       '@aptos-labs/ts-sdk':
-        specifier: 1.0.0
-        version: 1.0.0
+        specifier: 1.2.0
+        version: 1.2.0
       '@aptos-labs/wallet-adapter-ant-design':
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-ant-design
@@ -50,7 +50,7 @@ importers:
         version: 0.1.0
       '@haechi-labs/face-aptos-adapter-plugin':
         specifier: ^0.0.4
-        version: 0.0.4(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(@haechi-labs/face-sdk@1.10.14)(@haechi-labs/face-types@1.10.14)(aptos@1.20.0)
+        version: 0.0.4(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(@haechi-labs/face-sdk@1.10.14)(@haechi-labs/face-types@1.10.14)(aptos@1.21.0)
       '@haechi-labs/face-sdk':
         specifier: ^1.10.8
         version: 1.10.14(@haechi-labs/face-types@1.10.14)(ethers@5.7.2)
@@ -201,11 +201,11 @@ importers:
   packages/wallet-adapter-core:
     dependencies:
       '@aptos-labs/ts-sdk':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.2.0
+        version: 1.2.0
       aptos:
-        specifier: ^1.20.0
-        version: 1.20.0
+        specifier: ^1.21.0
+        version: 1.21.0
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
@@ -246,9 +246,6 @@ importers:
       '@aptos-labs/wallet-adapter-react':
         specifier: ^2.0.0
         version: link:../wallet-adapter-react
-      '@babel/core':
-        specifier: ^7.0.0
-        version: 7.23.2
       '@emotion/react':
         specifier: ^11.10.5
         version: 11.11.1(@types/react@18.2.31)(react@18.2.0)
@@ -406,14 +403,24 @@ packages:
       - debug
     dev: false
 
-  /@aptos-labs/ts-sdk@1.0.0:
-    resolution: {integrity: sha512-WE7rBlQM+rEwBUmG4zOcTaLi47frs+gOb5ZuAdJB37wqNLwbo143tgAYq63bsvmb6x41i0bq+rL7rkvcBjvIpQ==}
+  /@aptos-labs/aptos-client@0.1.0:
+    resolution: {integrity: sha512-q3s6pPq8H2buGp+tPuIRInWsYOuhSEwuNJPwd2YnsiID3YSLihn2ug39ktDJAcSOprUcp7Nid8WK7hKqnUmSdA==}
+    engines: {node: '>=15.10.0'}
+    dependencies:
+      axios: 1.6.2
+      got: 11.8.6
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /@aptos-labs/ts-sdk@1.2.0:
+    resolution: {integrity: sha512-pe7MhSmyZ6ez4tPud8Q3KOsthdJOR8SNUT/c0gPUIET2yVOf/cmx9TT/dIBm8kwX7hVWZGX4aBWDvZJbeY6dRg==}
     engines: {node: '>=11.0.0'}
     dependencies:
-      '@aptos-labs/aptos-client': 0.0.2
+      '@aptos-labs/aptos-client': 0.1.0
       '@noble/curves': 1.2.0
-      '@noble/hashes': 1.3.2
-      '@scure/bip32': 1.3.2
+      '@noble/hashes': 1.3.3
+      '@scure/bip32': 1.3.3
       '@scure/bip39': 1.2.1
       form-data: 4.0.0
       tweetnacl: 1.0.3
@@ -1565,7 +1572,7 @@ packages:
     resolution: {integrity: sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==}
     dev: false
 
-  /@haechi-labs/face-aptos-adapter-plugin@0.0.4(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(@haechi-labs/face-sdk@1.10.14)(@haechi-labs/face-types@1.10.14)(aptos@1.20.0):
+  /@haechi-labs/face-aptos-adapter-plugin@0.0.4(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(@haechi-labs/face-sdk@1.10.14)(@haechi-labs/face-types@1.10.14)(aptos@1.21.0):
     resolution: {integrity: sha512-5uI5Hg2rMiUUiHGuheK0/QDwJUruA0aruUReC8FO3NuBeZ5GyBisgdL6JrZC3kf7s/NZOrk33HMkVNPx6aEk8A==}
     peerDependencies:
       '@aptos-labs/wallet-adapter-core': ^2.2.0
@@ -1576,7 +1583,7 @@ packages:
       '@aptos-labs/wallet-adapter-core': link:packages/wallet-adapter-core
       '@haechi-labs/face-sdk': 1.10.14(@haechi-labs/face-types@1.10.14)(ethers@5.7.2)
       '@haechi-labs/face-types': 1.10.14(ethers@5.7.2)
-      aptos: 1.20.0
+      aptos: 1.21.0
     dev: false
 
   /@haechi-labs/face-sdk@1.10.14(@haechi-labs/face-types@1.10.14)(ethers@5.7.2):
@@ -2434,6 +2441,12 @@ packages:
       '@noble/hashes': 1.3.2
     dev: false
 
+  /@noble/curves@1.3.0:
+    resolution: {integrity: sha512-t01iSXPuN+Eqzb4eBX0S5oubSqXbK/xXa1Ne18Hj8f9pStxztHCE2gfboSp/dZRLSqfuLpRK2nDXDK+W9puocA==}
+    dependencies:
+      '@noble/hashes': 1.3.3
+    dev: false
+
   /@noble/hashes@1.1.3:
     resolution: {integrity: sha512-CE0FCR57H2acVI5UOzIGSSIYxZ6v/HOhDR0Ro9VLyhnzLwx0o8W1mmgaqlEUx4049qJDlIBRztv5k+MM8vbO3A==}
     dev: false
@@ -2445,6 +2458,11 @@ packages:
 
   /@noble/hashes@1.3.2:
     resolution: {integrity: sha512-MVC8EAQp7MvEcm30KWENFjgR+Mkmf+D189XJTkFIlwohU5hcBbn1ZkKq7KVTi2Hme3PMGF390DaL52beVrIihQ==}
+    engines: {node: '>= 16'}
+    dev: false
+
+  /@noble/hashes@1.3.3:
+    resolution: {integrity: sha512-V7/fPHgl+jsVPXqqeOzT8egNj2iBIVt+ECeMMG8TdcnTikP3oaBtUVqpT/gYCR68aEBJSF+XbYUxStjbFMqIIA==}
     engines: {node: '>= 16'}
     dev: false
 
@@ -2659,6 +2677,10 @@ packages:
     resolution: {integrity: sha512-/+SgoRjLq7Xlf0CWuLHq2LUZeL/w65kfzAPG5NH9pcmBhs+nunQTn4gvdwgMTIXnt9b2C/1SeL2XiysZEyIC9Q==}
     dev: false
 
+  /@scure/base@1.1.5:
+    resolution: {integrity: sha512-Brj9FiG2W1MRQSTB212YVPRrcbjkv48FoZi/u4l/zds/ieRrqsh7aUf6CLwkAq61oKXr/ZlTzlY66gLIj3TFTQ==}
+    dev: false
+
   /@scure/bip32@1.3.1:
     resolution: {integrity: sha512-osvveYtyzdEVbt3OfwwXFr4P2iVBL5u1Q3q4ONBfDY/UpOuXmOlbgwc1xECEboY8wIays8Yt6onaWMUdUbfl0A==}
     dependencies:
@@ -2675,6 +2697,14 @@ packages:
       '@scure/base': 1.1.3
     dev: false
 
+  /@scure/bip32@1.3.3:
+    resolution: {integrity: sha512-LJaN3HwRbfQK0X1xFSi0Q9amqOgzQnnDngIt+ZlsBC3Bm7/nE7K0kwshZHyaru79yIVRv/e1mQAjZyuZG6jOFQ==}
+    dependencies:
+      '@noble/curves': 1.3.0
+      '@noble/hashes': 1.3.3
+      '@scure/base': 1.1.5
+    dev: false
+
   /@scure/bip39@1.1.0:
     resolution: {integrity: sha512-pwrPOS16VeTKg98dYXQyIjJEcWfz7/1YJIwxUEPFfQPtc86Ym/1sVgQ2RLoD43AazMk2l/unK4ITySSpW2+82w==}
     dependencies:
@@ -2685,7 +2715,7 @@ packages:
   /@scure/bip39@1.2.1:
     resolution: {integrity: sha512-Z3/Fsz1yr904dduJD0NpiyRHhRYHdcnyh73FZWiV+/qhWi83wNJ3NWolYqCEN+ZWsUz2TWwajJggcRE9r1zUYg==}
     dependencies:
-      '@noble/hashes': 1.3.2
+      '@noble/hashes': 1.3.3
       '@scure/base': 1.1.3
     dev: false
 
@@ -2822,7 +2852,7 @@ packages:
     dependencies:
       '@types/http-cache-semantics': 4.0.3
       '@types/keyv': 3.1.4
-      '@types/node': 20.8.8
+      '@types/node': 17.0.45
       '@types/responselike': 1.0.2
     dev: false
 
@@ -2878,7 +2908,7 @@ packages:
   /@types/keyv@3.1.4:
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
     dependencies:
-      '@types/node': 20.8.8
+      '@types/node': 17.0.45
     dev: false
 
   /@types/minimist@1.2.4:
@@ -2890,7 +2920,6 @@ packages:
 
   /@types/node@17.0.45:
     resolution: {integrity: sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==}
-    dev: true
 
   /@types/node@18.15.13:
     resolution: {integrity: sha512-N+0kuo9KgrUQ1Sn/ifDXsvg0TTleP7rIy4zOBGECxAljqvqfqpTfzx0Q1NUedOixRMBfe2Whhb056a42cWs26Q==}
@@ -2905,8 +2934,8 @@ packages:
     resolution: {integrity: sha512-ehPtgRgaULsFG8x0NeYJvmyH1hmlfsNLujHe9dQEia/7MAJYdzMSi19JtchUHjmBA6XC/75dK55mzZH+RyieSg==}
     dev: true
 
-  /@types/parse-json@4.0.1:
-    resolution: {integrity: sha512-3YmXzzPAdOTVljVMkTMBdBEvlOLg2cDQaDhnnhT3nT9uDbnJzjWhKlzb+desT12Y7tGqaN6d+AbozcKzyL36Ng==}
+  /@types/parse-json@4.0.2:
+    resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
     dev: false
 
   /@types/prop-types@15.7.9:
@@ -2934,7 +2963,7 @@ packages:
   /@types/responselike@1.0.2:
     resolution: {integrity: sha512-/4YQT5Kp6HxUDb4yhRkm0bJ7TbjvTddqX7PZ5hz6qV3pxSo72f/6YPRo+Mu2DU307tm9IioO69l7uAwn5XNcFA==}
     dependencies:
-      '@types/node': 20.8.8
+      '@types/node': 17.0.45
     dev: false
 
   /@types/scheduler@0.16.5:
@@ -3264,6 +3293,20 @@ packages:
       - debug
     dev: false
 
+  /aptos@1.21.0:
+    resolution: {integrity: sha512-PRKjoFgL8tVEc9+oS7eJUv8GNxx8n3+0byH2+m7CP3raYOD6yFKOecuwjVMIJmgfpjp6xH0P0HDMGZAXmSyU0Q==}
+    engines: {node: '>=11.0.0'}
+    dependencies:
+      '@aptos-labs/aptos-client': 0.1.0
+      '@noble/hashes': 1.3.3
+      '@scure/bip39': 1.2.1
+      eventemitter3: 5.0.1
+      form-data: 4.0.0
+      tweetnacl: 1.0.3
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /aptos@1.6.0:
     resolution: {integrity: sha512-5khjDwrDeNMDBFRcZAmETW20D+V2AqTdsgqkh6bvvl70BtRXdkitN0saM05gf1rK3atnO9PyUKO8iRaBDG5qtA==}
     engines: {node: '>=11.0.0'}
@@ -3455,6 +3498,16 @@ packages:
 
   /axios@1.5.1:
     resolution: {integrity: sha512-Q28iYCWzNHjAm+yEAot5QaAMxhMghWLFVf7rRdwhUI+c2jix2DUXjAHXVi+s1ibs3mjPO/cCgbA++3BjD0vP/A==}
+    dependencies:
+      follow-redirects: 1.15.3
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /axios@1.6.2:
+    resolution: {integrity: sha512-7i24Ri4pmDRfJTR7LDBhsOTtcm+9kjX5WiY1X3wIisx6G9So3pfMkEiU7emUBe46oceVImccTEM3k6C5dbVW8A==}
     dependencies:
       follow-redirects: 1.15.3
       form-data: 4.0.0
@@ -3927,7 +3980,7 @@ packages:
     resolution: {integrity: sha512-AdmX6xUzdNASswsFtmwSt7Vj8po9IuqXm0UXz7QKPuEUmPB4XyjGfaAr2PSuELMwkRMVH1EpIkX5bTZGRB3eCA==}
     engines: {node: '>=10'}
     dependencies:
-      '@types/parse-json': 4.0.1
+      '@types/parse-json': 4.0.2
       import-fresh: 3.3.0
       parse-json: 5.2.0
       path-type: 4.0.0
