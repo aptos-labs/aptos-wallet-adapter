@@ -1,3 +1,5 @@
+import { Serializable } from "@aptos-labs/ts-sdk";
+
 export function isMobile(): boolean {
   return /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/i.test(
     navigator.userAgent
@@ -30,3 +32,11 @@ export function generalizedErrorMessage(error: any): string {
     ? error.message
     : error;
 }
+
+// Helper function to check if input arguments are BCS serialized arguments.
+// In @aptos-labs/ts-sdk each move representative class extends
+// Serializable, so if each argument is of an instance of a class
+// the extends Serializable - we know these are BCS arguments
+export const areBCSArguments = (args: any): boolean => {
+  return args.every((arg: any) => arg instanceof Serializable);
+};

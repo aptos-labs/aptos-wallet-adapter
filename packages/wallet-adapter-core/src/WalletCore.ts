@@ -49,6 +49,7 @@ import {
   scopePollingDetectionStrategy,
   isRedirectable,
   generalizedErrorMessage,
+  areBCSArguments,
 } from "./utils";
 import { getNameByAddress } from "./ans";
 import {
@@ -310,9 +311,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       // get the payload piece from the input
       const payloadData = transactionInput.data;
 
-      // if first function arguments is an object (i.e a bcs serialized argument)
-      // we assume the transaction should be a bcs serialized transaction
-      if (typeof payloadData.functionArguments[0] === "object") {
+      // first check if each argument is a BCS serialized argument
+      if (areBCSArguments(payloadData.functionArguments)) {
         const aptosConfig = new AptosConfig({
           network: convertNetwork(this._network),
         });
@@ -337,7 +337,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         const { hash, ...output } = response;
         return { hash, output };
       }
-
       // if it is not a bcs serialized arguments transaction, convert to the old
       // json format
       const oldTransactionPayload =
