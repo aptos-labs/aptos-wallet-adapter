@@ -1,5 +1,15 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.2.0
+
+### Minor Changes
+
+- 12163ca: Updated SDK dependencies
+
+### Patch Changes
+
+- a6f0e46: Fix is bcs argument types check
+
 ## 3.1.1
 
 ### Patch Changes
