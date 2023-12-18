@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.2.1
+
+### Patch Changes
+
+- 3f38c51: Return false from areBCSArguments function if array is empty
+
 ## 3.2.0
 
 ### Minor Changes
