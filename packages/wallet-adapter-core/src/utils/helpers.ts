@@ -38,5 +38,8 @@ export function generalizedErrorMessage(error: any): string {
 // Serializable, so if each argument is of an instance of a class
 // the extends Serializable - we know these are BCS arguments
 export const areBCSArguments = (args: any): boolean => {
+  // `every` returns true if the array is empty, so
+  // first check the array length
+  if (args.length === 0) return false;
   return args.every((arg: any) => arg instanceof Serializable);
 };
