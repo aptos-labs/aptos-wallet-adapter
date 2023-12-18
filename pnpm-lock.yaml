@@ -244,7 +244,7 @@ importers:
   packages/wallet-adapter-mui-design:
     dependencies:
       '@aptos-labs/wallet-adapter-react':
-        specifier: ^2.0.0
+        specifier: ^2.1.3
         version: link:../wallet-adapter-react
       '@emotion/react':
         specifier: ^11.10.5
