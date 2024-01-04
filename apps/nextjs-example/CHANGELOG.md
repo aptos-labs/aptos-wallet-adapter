@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 2.4.0
+
+### Minor Changes
+
+- 570cbda: Update @aptos-labs/ts-sdk package version to 1.3.0
+
+### Patch Changes
+
+- Updated dependencies [570cbda]
+  - @aptos-labs/wallet-adapter-core@3.3.0
+  - @aptos-labs/wallet-adapter-react@2.1.5
+
 ## 2.3.1
 
 ### Patch Changes
