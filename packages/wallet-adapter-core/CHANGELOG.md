@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.3.0
+
+### Minor Changes
+
+- 570cbda: Update @aptos-labs/ts-sdk package version to 1.3.0
+
 ## 3.2.1
 
 ### Patch Changes
