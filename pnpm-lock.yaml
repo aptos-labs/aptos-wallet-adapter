@@ -72,6 +72,9 @@ importers:
       '@okwallet/aptos-wallet-adapter':
         specifier: ^0.0.3
         version: 0.0.3
+      '@onekeyfe/aptos-wallet-adapter':
+        specifier: ^0.1.2
+        version: 0.1.2
       '@openblockhq/aptos-wallet-adapter':
         specifier: ^0.1.5
         version: 0.1.5
@@ -2629,6 +2632,15 @@ packages:
     dependencies:
       '@aptos-labs/wallet-adapter-core': 2.1.0
       aptos: 1.20.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /@onekeyfe/aptos-wallet-adapter@0.1.2:
+    resolution: {integrity: sha512-tnx31Cv4moynqmkEZSyZ4bPRFxYgzobDkg/J3wzAWl+6a78IQvzGzB/tAkDqKNjYDoHh942Eka5Z1xBGEk9SHQ==}
+    dependencies:
+      '@aptos-labs/wallet-adapter-core': 2.5.1
+      aptos: 1.21.0
     transitivePeerDependencies:
       - debug
     dev: false
