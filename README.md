@@ -31,6 +31,7 @@ Note: These are in alphabetical order, any new wallets must be in alphabetical o
 - [Trust](https://www.npmjs.com/package/@trustwallet/aptos-wallet-adapter)
 - [WELLDONE](https://www.npmjs.com/package/@welldone-studio/aptos-wallet-adapter)
 - [OKX](https://www.npmjs.com/package/@okwallet/aptos-wallet-adapter)
+- [OneKey](https://www.npmjs.com/package/@onekeyfe/aptos-wallet-adapter)
 
 #### Develop Locally
 
