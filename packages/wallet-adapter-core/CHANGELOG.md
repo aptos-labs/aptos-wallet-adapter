@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.4.0
+
+### Minor Changes
+
+- e1e9eb2: ['Bug fix'] Use current connected wallet to compare to the selected wallet before connecting to a wallet
+
 ## 3.3.0
 
 ### Minor Changes
