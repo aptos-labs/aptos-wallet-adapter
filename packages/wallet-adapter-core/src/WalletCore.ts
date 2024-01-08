@@ -207,7 +207,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
     if (this._connected) {
       // if the selected wallet is already connected, we don't need to connect again
-      if (selectedWallet.name === walletName)
+      if (this._wallet?.name === walletName)
         throw new WalletConnectionError(
           `${walletName} wallet is already connected`
         ).message;
