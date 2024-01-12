@@ -103,7 +103,7 @@ export interface AdapterPluginProps<Name extends string = string> {
   connect(): Promise<any>;
   disconnect: () => Promise<any>;
   network: () => Promise<any>;
-  signAndSubmitTransaction<V>(
+  signAndSubmitTransaction(
     transaction: Types.TransactionPayload | InputGenerateTransactionData,
     options?: InputGenerateTransactionOptions
   ): Promise<
@@ -134,3 +134,20 @@ export type InputTransactionData = {
   data: InputGenerateTransactionPayloadData;
   options?: InputGenerateTransactionOptions;
 };
+
+// To be used by a wallet plugin
+export interface PluginProvider {
+  connect: () => Promise<AccountInfo>;
+  account: () => Promise<AccountInfo>;
+  disconnect: () => Promise<void>;
+  signAndSubmitTransaction: (
+    transaction: any,
+    options?: any
+  ) => Promise<{ hash: Types.HexEncodedBytes } | AptosWalletErrorResult>;
+  signMessage: (message: SignMessagePayload) => Promise<SignMessageResponse>;
+  network: () => Promise<NetworkInfo>;
+  onAccountChange: (
+    listener: (newAddress: AccountInfo) => Promise<void>
+  ) => Promise<void>;
+  onNetworkChange: OnNetworkChange;
+}

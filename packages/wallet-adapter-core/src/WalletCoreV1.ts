@@ -2,6 +2,7 @@ import { TxnBuilderTypes, Types } from "aptos";
 import EventEmitter from "eventemitter3";
 
 import {
+  WalletNotSupportedMethod,
   WalletSignAndSubmitMessageError,
   WalletSignTransactionError,
 } from "./error";
@@ -45,6 +46,11 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
     wallet: Wallet,
     options?: TransactionOptions
   ): Promise<any> {
+    if (!("signAndSubmitBCSTransaction" in wallet)) {
+      throw new WalletNotSupportedMethod(
+        `Submit a BCS Transaction is not supported by ${wallet.name}`
+      ).message;
+    }
     try {
       const response = await (wallet as any).signAndSubmitBCSTransaction(
         transaction,
