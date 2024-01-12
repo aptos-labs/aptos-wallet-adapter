@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.5.0
+
+### Minor Changes
+
+- 4ca4201: Export PluginProvider type
+
 ## 3.4.0
 
 ### Minor Changes
