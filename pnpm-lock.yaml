@@ -7245,7 +7245,7 @@ packages:
     resolution: {integrity: sha512-snhhP/qKXLg4foKsDVvy0Jus3H7o46L75aDCXiiSAonty2CnZe1+4cpB8azc7khaMgig+xj9gZbZXKmKtB+HqA==}
     dependencies:
       '@aptos-labs/wallet-adapter-core': 2.5.1
-      aptos: 1.20.0
+      aptos: 1.21.0
     transitivePeerDependencies:
       - debug
     dev: false
