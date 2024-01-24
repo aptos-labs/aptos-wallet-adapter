@@ -1,4 +1,4 @@
-import { AccountAuthenticator, AnyRawTransaction } from "@aptos-labs/ts-sdk";
+import { AccountAddress, AccountAuthenticator, AnyRawTransaction } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useState, useEffect } from "react";
 import { aptosClient } from "../../utils";
@@ -24,6 +24,8 @@ export default function SponsorTransaction({
     useState<AccountAuthenticator>();
   const [feepayerAuthenticator, setFeepayerAuthenticator] =
     useState<AccountAuthenticator>();
+  const [feepayerAddress, setFeepayerAddress] =
+    useState<AccountAddress>();
 
   let sendable = isSendableNetwork(connected, network?.name);
 
@@ -77,6 +79,7 @@ export default function SponsorTransaction({
       );
       if (asSponsor) {
         setFeepayerAuthenticator(authenticator);
+        setFeepayerAddress(AccountAddress.from(account!.address));
       } else {
         setSenderAuthenticator(authenticator);
       }
@@ -95,6 +98,7 @@ export default function SponsorTransaction({
     if (!feepayerAuthenticator) {
       throw new Error("No feepayerAuthenticator");
     }
+    transactionToSubmit.feePayerAddress = feepayerAddress;
     try {
       const response = await submitTransaction({
         transaction: transactionToSubmit,
