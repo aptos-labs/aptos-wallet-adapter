@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-nextjs-example",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "private": true,
   "license": "Apache-2.0",
   "scripts": {
@@ -37,7 +37,7 @@
     "ethers": "^5.7.2",
     "fewcha-plugin-wallet-adapter": "^0.1.3",
     "next": "13.0.0",
-    "petra-plugin-wallet-adapter": "^0.3.0",
+    "petra-plugin-wallet-adapter": "^0.4.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },

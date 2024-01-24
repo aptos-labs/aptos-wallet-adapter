@@ -10,7 +10,7 @@ import {
   generateTransactionPayload,
   InputSubmitTransactionData,
   PendingTransactionResponse,
-  InputEntryFunctionDataWithRemoteABI,
+  InputEntryFunctionDataWithRemoteABI, Aptos,
 } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
 import nacl from "tweetnacl";
@@ -385,7 +385,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
             `Sign Transaction V2 is not supported by ${this.wallet?.name}`
           ).message;
         }
-        const accountAuthenticator = (this._wallet as any).signTransaction(
+        const accountAuthenticator = await (this._wallet as any).signTransaction(
           transactionOrPayload,
           asFeePayer
         );
@@ -457,14 +457,26 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   async submitTransaction(
     transaction: InputSubmitTransactionData
   ): Promise<PendingTransactionResponse> {
-    if (this._wallet && !("submitTransaction" in this._wallet)) {
-      throw new WalletNotSupportedMethod(
-        `Submit Transaction is not supported by ${this.wallet?.name}`
-      ).message;
-    }
     try {
       this.doesWalletExist();
-      const pendingTransaction = (this._wallet as any).submitTransaction(
+      if (this._wallet && !("submitTransaction" in this._wallet)) {
+        const { additionalSignersAuthenticators } = transaction;
+        const aptosConfig = new AptosConfig({
+          network: convertNetwork(this.network),
+        });
+        const aptos = new Aptos(aptosConfig);
+        if (additionalSignersAuthenticators !== undefined) {
+          const multiAgentTxn = {
+            ...transaction,
+            additionalSignersAuthenticators,
+          };
+          return aptos.transaction.submit.multiAgent(multiAgentTxn);
+        } else {
+          return aptos.transaction.submit.simple(transaction);
+        }
+      }
+
+      const pendingTransaction = await (this._wallet as any).submitTransaction(
         transaction
       );
 
