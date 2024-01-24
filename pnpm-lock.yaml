@@ -106,8 +106,8 @@ importers:
         specifier: 13.0.0
         version: 13.0.0(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
       petra-plugin-wallet-adapter:
-        specifier: ^0.4.1
-        version: 0.4.1(@aptos-labs/ts-sdk@1.3.0)(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(aptos@1.21.0)
+        specifier: ^0.4.3
+        version: 0.4.3(@aptos-labs/ts-sdk@1.3.0)(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(aptos@1.21.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -7241,8 +7241,8 @@ packages:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
 
-  /petra-plugin-wallet-adapter@0.4.1(@aptos-labs/ts-sdk@1.3.0)(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(aptos@1.21.0):
-    resolution: {integrity: sha512-VU+lhpdLk+5TK00GpLeW//bclbyVKv19loi6xo1c0EF0askq70SYhLtlV661pKUGpowjoVypA2cUV22xkvnbsg==}
+  /petra-plugin-wallet-adapter@0.4.3(@aptos-labs/ts-sdk@1.3.0)(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(aptos@1.21.0):
+    resolution: {integrity: sha512-MP16ALtIY/VFMq+o8WhRKn/I5ntTGd7vBQwzvLH+fRGbmOu/Tsnd2bSXzM5d2duhhNemKUc9B0y5Gd5um9IXag==}
     peerDependencies:
       '@aptos-labs/ts-sdk': ^1.3.0
       '@aptos-labs/wallet-adapter-core': ^3.5.0
