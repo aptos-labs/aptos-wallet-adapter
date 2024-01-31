@@ -10,7 +10,8 @@ import {
   generateTransactionPayload,
   InputSubmitTransactionData,
   PendingTransactionResponse,
-  InputEntryFunctionDataWithRemoteABI, Aptos,
+  InputEntryFunctionDataWithRemoteABI,
+  Aptos,
 } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
 import nacl from "tweetnacl";
@@ -58,6 +59,12 @@ import {
   convertV2PayloadToV1JSONPayload,
 } from "./conversion";
 import { WalletCoreV1 } from "./WalletCoreV1";
+import {
+  Wallet as AptosWallet,
+  UserResponse,
+  AptosConnectOutput,
+} from "@aptos-labs/wallet-standard";
+import { WaletStandardCore } from "./WalletStandardCore";
 
 export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private _wallets: ReadonlyArray<Wallet> = [];
@@ -65,6 +72,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private _account: AccountInfo | null = null;
   private _network: NetworkInfo | null = null;
   private readonly waletCoreV1: WalletCoreV1 = new WalletCoreV1();
+  private readonly walletStandardCore: WaletStandardCore =
+    new WaletStandardCore();
 
   private _connecting: boolean = false;
   private _connected: boolean = false;
@@ -198,20 +207,33 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * If all good, we connect the wallet by calling `this.connectWallet`
    * @param walletName. The wallet name we want to connect.
    */
-  async connect(walletName: string): Promise<void | string> {
-    const selectedWallet = this._wallets?.find(
-      (wallet: Wallet) => wallet.name === walletName
-    );
-
-    if (!selectedWallet) return;
-
+  async connect(
+    walletName: string
+  ): Promise<void | string | UserResponse<AptosConnectOutput>> {
+    // if the selected wallet is already connected, if it does we don't need to connect again
     if (this._connected) {
-      // if the selected wallet is already connected, we don't need to connect again
       if (this._wallet?.name === walletName)
         throw new WalletConnectionError(
           `${walletName} wallet is already connected`
         ).message;
     }
+
+    const selectedStandardWallets = this.walletStandardCore.wallets.find(
+      (wallet: AptosWallet) => wallet.name === walletName
+    );
+
+    if (selectedStandardWallets) {
+      console.log("selectedStandardWallets", selectedStandardWallets);
+
+      await this.walletStandardCore.connect(selectedStandardWallets);
+      return;
+    }
+
+    const selectedWallet = this._wallets?.find(
+      (wallet: Wallet) => wallet.name === walletName
+    );
+
+    if (!selectedWallet) return;
 
     // check if we are in a redirectable view (i.e on mobile AND not in an in-app browser) and
     // since wallet readyState can be NotDetected, we check it before the next check
@@ -273,6 +295,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   */
   async disconnect(): Promise<void> {
     try {
+      if (this.walletStandardCore.wallet) {
+        this.walletStandardCore.disconnect();
+        return;
+      }
       this.doesWalletExist();
       await this._wallet?.disconnect();
       this.clearData();
@@ -296,6 +322,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     { hash: Types.HexEncodedBytes; output?: any } | PendingTransactionResponse
   > {
     try {
+      // if (this.walletStandardCore.wallet) {
+      //   return await this.walletStandardCore.disconnect();
+      // }
+
       this.doesWalletExist();
 
       // wallet supports sdk v2
@@ -385,10 +415,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
             `Sign Transaction V2 is not supported by ${this.wallet?.name}`
           ).message;
         }
-        const accountAuthenticator = await (this._wallet as any).signTransaction(
-          transactionOrPayload,
-          asFeePayer
-        );
+        const accountAuthenticator = await (
+          this._wallet as any
+        ).signTransaction(transactionOrPayload, asFeePayer);
 
         return accountAuthenticator;
       }

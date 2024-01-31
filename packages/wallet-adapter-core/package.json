@@ -45,6 +45,7 @@
     "typescript": "^4.5.3"
   },
   "dependencies": {
+    "@aptos-labs/wallet-standard": "/Users/maayansavir/work/aptos-wallet-standard",
     "buffer": "^6.0.3",
     "eventemitter3": "^4.0.7",
     "tweetnacl": "^1.0.3"

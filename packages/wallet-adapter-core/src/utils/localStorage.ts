@@ -2,7 +2,7 @@ import { WalletName } from "../types";
 
 const LOCAL_STORAGE_ITEM_KEY = "AptosWalletName";
 
-export function setLocalStorage(walletName: WalletName) {
+export function setLocalStorage(walletName: WalletName | string) {
   localStorage.setItem(LOCAL_STORAGE_ITEM_KEY, walletName);
 }
 
