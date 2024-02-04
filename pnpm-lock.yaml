@@ -42,6 +42,9 @@ importers:
       '@aptos-labs/wallet-adapter-react':
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-react
+      '@bitget-wallet/aptos-wallet-adapter':
+        specifier: ^0.1.0
+        version: 0.1.1(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(aptos@1.21.0)
       '@blocto/aptos-wallet-adapter-plugin':
         specifier: ^0.2.2
         version: 0.2.5
@@ -939,6 +942,16 @@ packages:
   /@bcoe/v8-coverage@0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
+
+  /@bitget-wallet/aptos-wallet-adapter@0.1.1(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(aptos@1.21.0):
+    resolution: {integrity: sha512-wb5TalhFH9a/pexlB3aH2z32rUgGsDNx8lDQnzGLV+3Nkfw/FgiILTbE1OEAcAF53ZbBKDizPvb4JJeWzHJhBg==}
+    peerDependencies:
+      '@aptos-labs/wallet-adapter-core': 3.5.0
+      aptos: ^1.21.0
+    dependencies:
+      '@aptos-labs/wallet-adapter-core': link:packages/wallet-adapter-core
+      aptos: 1.21.0
+    dev: false
 
   /@blocto/aptos-wallet-adapter-plugin@0.2.5:
     resolution: {integrity: sha512-OOvrkRjcwGhvRS57aLSMDRjZDD1JFswCb2ZmRDPsZBtrKH9gXoxtACwrhwGl5NEhfwEPn3BaLl1xl+4DesOsGA==}
