@@ -1,21 +1,25 @@
-import { HexString, TxnBuilderTypes, Types, BCS } from "aptos";
+import {
+  AptosConnectOutput,
+  UserResponse,
+  AccountInfo,
+  NetworkInfo,
+  getAptosWallets,
+  AptosSignTransactionOutput,
+  AptosSignMessageOutput,
+  AptosSignMessageInput,
+  AptosWallet,
+  UserResponseStatus,
+} from "@aptos-labs/wallet-standard";
 import {
   AnyRawTransaction,
-  AccountAuthenticator,
-  AccountAuthenticatorEd25519,
-  Ed25519PublicKey,
-  InputGenerateTransactionOptions,
-  Ed25519Signature,
   AptosConfig,
-  generateTransactionPayload,
   InputSubmitTransactionData,
   PendingTransactionResponse,
-  InputEntryFunctionDataWithRemoteABI,
   Aptos,
+  MultiEd25519Signature,
+  MultiEd25519PublicKey,
 } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
-import nacl from "tweetnacl";
-import { Buffer } from "buffer";
 
 import { WalletReadyState } from "./constants";
 import {
@@ -28,125 +32,123 @@ import {
   WalletNotConnectedError,
   WalletNotReadyError,
   WalletNotSelectedError,
-  WalletNotSupportedMethod,
   WalletSignAndSubmitMessageError,
   WalletSignMessageAndVerifyError,
   WalletSignMessageError,
   WalletSignTransactionError,
 } from "./error";
-import {
-  AccountInfo,
-  NetworkInfo,
-  SignMessagePayload,
-  Wallet,
-  WalletInfo,
-  WalletCoreEvents,
-  SignMessageResponse,
-  InputTransactionData,
-} from "./types";
+import { WalletCoreEvents, InputTransactionData } from "./types";
 import {
   removeLocalStorage,
   setLocalStorage,
-  scopePollingDetectionStrategy,
   isRedirectable,
   generalizedErrorMessage,
-  areBCSArguments,
 } from "./utils";
 import { getNameByAddress } from "./ans";
-import {
-  convertNetwork,
-  convertV2TransactionPayloadToV1BCSPayload,
-  convertV2PayloadToV1JSONPayload,
-} from "./conversion";
-import { WalletCoreV1 } from "./WalletCoreV1";
-import {
-  Wallet as AptosWallet,
-  UserResponse,
-  AptosConnectOutput,
-} from "@aptos-labs/wallet-standard";
-import { WaletStandardCore } from "./WalletStandardCore";
+import { convertNetwork } from "./conversion";
 
+export type IAptosWallet = AptosWallet & {
+  readyState?: WalletReadyState;
+};
 export class WalletCore extends EventEmitter<WalletCoreEvents> {
-  private _wallets: ReadonlyArray<Wallet> = [];
-  private _wallet: Wallet | null = null;
-  private _account: AccountInfo | null = null;
-  private _network: NetworkInfo | null = null;
-  private readonly waletCoreV1: WalletCoreV1 = new WalletCoreV1();
-  private readonly walletStandardCore: WaletStandardCore =
-    new WaletStandardCore();
+  private _wallets: IAptosWallet[] = [];
+  private _wallet: IAptosWallet | undefined = undefined;
+  private _account: AccountInfo | undefined = undefined;
+  private _network: NetworkInfo | undefined = undefined;
 
   private _connecting: boolean = false;
   private _connected: boolean = false;
 
-  constructor(plugins: ReadonlyArray<Wallet>) {
+  constructor() {
     super();
-    this._wallets = plugins;
-    this.scopePollingDetectionStrategy();
+    this.fetchAptosWallets();
   }
 
-  private scopePollingDetectionStrategy() {
-    this._wallets?.forEach((wallet: Wallet) => {
-      if (!wallet.readyState) {
-        wallet.readyState =
-          typeof window === "undefined" || typeof document === "undefined"
-            ? WalletReadyState.Unsupported
-            : WalletReadyState.NotDetected;
-      }
-      if (typeof window !== "undefined") {
-        scopePollingDetectionStrategy(() => {
-          const providerName = wallet.providerName || wallet.name.toLowerCase();
-          if (Object.keys(window).includes(providerName)) {
-            wallet.readyState = WalletReadyState.Installed;
-            wallet.provider = window[providerName as any];
-            this.emit("readyStateChange", wallet);
-            return true;
-          }
-          return false;
-        });
-      }
+  private fetchAptosWallets() {
+    let { aptosWallets, on } = getAptosWallets();
+    this.setWallets(aptosWallets);
+
+    if (typeof window === "undefined") return;
+    // Adds an event listener for new wallets that get registered after the dapp has been loaded,
+    // receiving an unsubscribe function, which it can later use to remove the listener
+    const that = this;
+    const removeRegisterListener = on("register", function () {
+      let { aptosWallets } = getAptosWallets();
+      that.setWallets(aptosWallets);
+    });
+
+    const removeUnregisterListener = on("unregister", function () {
+      let { aptosWallets } = getAptosWallets();
+      that.setWallets(aptosWallets);
     });
   }
 
-  private doesWalletExist(): boolean | WalletNotConnectedError {
-    if (!this._connected || this._connecting || !this._wallet)
+  private setWallets(wallets: readonly AptosWallet[]) {
+    const aptosWallets: IAptosWallet[] = [];
+
+    wallets.map((wallet: AptosWallet) => {
+      (wallet as IAptosWallet).readyState = WalletReadyState.Installed;
+      aptosWallets.push(wallet as IAptosWallet);
+    });
+    this._wallets = aptosWallets;
+    this.emit("walletsAdded", this._wallets);
+  }
+
+  private ensureWalletExists(
+    wallet: IAptosWallet | undefined
+  ): asserts wallet is IAptosWallet {
+    if (!wallet) {
+      throw new WalletNotConnectedError().name;
+    }
+    if (!this._connected || this._connecting)
       throw new WalletNotConnectedError().name;
     if (
       !(
-        this._wallet.readyState === WalletReadyState.Loadable ||
-        this._wallet.readyState === WalletReadyState.Installed
+        wallet.readyState === WalletReadyState.Loadable ||
+        wallet.readyState === WalletReadyState.Installed
       )
     )
       throw new WalletNotReadyError().name;
-    return true;
+  }
+
+  private ensureAccountExists(
+    account: AccountInfo | undefined
+  ): asserts account is AccountInfo {
+    if (!account) {
+      throw new WalletAccountError().name;
+    }
   }
 
   private clearData() {
     this._connected = false;
-    this.setWallet(null);
-    this.setAccount(null);
-    this.setNetwork(null);
+    this.setWallet(undefined);
+    this.setAccount(undefined);
+    this.setNetwork(undefined);
     removeLocalStorage();
   }
 
   private async setAnsName() {
+    if (this._account?.ansName) return;
+    // If the wallet doesnt have the account ANS name
+    // we try fetch it ourselves
     if (this._network?.chainId && this._account) {
       const name = await getNameByAddress(
-        this._network.chainId,
-        this._account.address
+        this._network.chainId.toString(),
+        this._account.address.toString()
       );
       this._account.ansName = name;
     }
   }
 
-  setWallet(wallet: Wallet | null) {
+  setWallet(wallet: IAptosWallet | undefined) {
     this._wallet = wallet;
   }
 
-  setAccount(account: AccountInfo | null) {
+  setAccount(account: AccountInfo | undefined) {
     this._account = account;
   }
 
-  setNetwork(network: NetworkInfo | null) {
+  setNetwork(network: NetworkInfo | undefined) {
     this._network = network;
   }
 
@@ -154,7 +156,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     return this._connected;
   }
 
-  get wallets(): ReadonlyArray<Wallet> {
+  get wallets(): ReadonlyArray<IAptosWallet> {
     return this._wallets;
   }
 
@@ -163,14 +165,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @return wallet info
    * @throws WalletNotSelectedError
    */
-  get wallet(): WalletInfo | null {
+  get wallet(): IAptosWallet | undefined {
     try {
-      if (!this._wallet) return null;
-      return {
-        name: this._wallet.name,
-        icon: this._wallet.icon,
-        url: this._wallet.url,
-      };
+      return this._wallet;
     } catch (error: any) {
       throw new WalletNotSelectedError(error).message;
     }
@@ -181,7 +178,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @return account info
    * @throws WalletAccountError
    */
-  get account(): AccountInfo | null {
+  get account(): AccountInfo | undefined {
     try {
       return this._account;
     } catch (error: any) {
@@ -194,7 +191,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @return network info
    * @throws WalletGetNetworkError
    */
-  get network(): NetworkInfo | null {
+  get network(): NetworkInfo | undefined {
     try {
       return this._network;
     } catch (error: any) {
@@ -208,8 +205,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param walletName. The wallet name we want to connect.
    */
   async connect(
-    walletName: string
-  ): Promise<void | string | UserResponse<AptosConnectOutput>> {
+    walletName: string,
+    silent?: boolean,
+    networkInfo?: NetworkInfo
+  ): Promise<void | UserResponse<AptosConnectOutput>> {
     // if the selected wallet is already connected, if it does we don't need to connect again
     if (this._connected) {
       if (this._wallet?.name === walletName)
@@ -218,19 +217,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         ).message;
     }
 
-    const selectedStandardWallets = this.walletStandardCore.wallets.find(
-      (wallet: AptosWallet) => wallet.name === walletName
-    );
-
-    if (selectedStandardWallets) {
-      console.log("selectedStandardWallets", selectedStandardWallets);
-
-      await this.walletStandardCore.connect(selectedStandardWallets);
-      return;
-    }
-
     const selectedWallet = this._wallets?.find(
-      (wallet: Wallet) => wallet.name === walletName
+      (wallet: IAptosWallet) => wallet.name === walletName
     );
 
     if (!selectedWallet) return;
@@ -239,10 +227,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     // since wallet readyState can be NotDetected, we check it before the next check
     if (isRedirectable()) {
       // use wallet deep link
-      if (selectedWallet.deeplinkProvider) {
-        const url = encodeURIComponent(window.location.href);
-        const location = selectedWallet.deeplinkProvider({ url });
-        window.location.href = location;
+      if (selectedWallet.features["aptos:openInMobileApp"]) {
+        await selectedWallet.features[
+          "aptos:openInMobileApp"
+        ].openInMobileApp();
+        return;
       }
     }
     if (
@@ -253,7 +242,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
 
     // Now we can connect to the wallet
-    await this.connectWallet(selectedWallet);
+    await this.connectWallet(selectedWallet, silent, networkInfo);
   }
 
   /**
@@ -265,23 +254,35 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @emit emits "connect" event
    * @throws WalletConnectionError
    */
-  async connectWallet(selectedWallet: Wallet) {
+  async connectWallet(
+    selectedWallet: IAptosWallet,
+    silent?: boolean,
+    networkInfo?: NetworkInfo
+  ) {
     try {
       this._connecting = true;
+      const account = await selectedWallet.features["aptos:connect"].connect(
+        silent,
+        networkInfo
+      );
+      if (account.status === UserResponseStatus.REJECTED) {
+        this._connecting = false;
+        throw new WalletConnectionError("User has rejected the request")
+          .message;
+      }
       this.setWallet(selectedWallet);
-      const account = await selectedWallet.connect();
-      this.setAccount({ ...account });
-      const network = await selectedWallet.network();
-      this.setNetwork({ ...network });
+      this.setAccount(account.args);
+      const network = await this._wallet?.features["aptos:network"].network();
+      this.setNetwork(network);
+
       await this.setAnsName();
       setLocalStorage(selectedWallet.name);
       this._connected = true;
-      this.emit("connect", account);
+      this.emit("connect", account.args);
     } catch (error: any) {
       this.clearData();
-
       const errMsg = generalizedErrorMessage(error);
-      throw new WalletConnectionError(errMsg).message;
+      throw new WalletConnectionError(errMsg, error);
     } finally {
       this._connecting = false;
     }
@@ -295,12 +296,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   */
   async disconnect(): Promise<void> {
     try {
-      if (this.walletStandardCore.wallet) {
-        this.walletStandardCore.disconnect();
-        return;
-      }
-      this.doesWalletExist();
-      await this._wallet?.disconnect();
+      this.ensureWalletExists(this._wallet);
+      await this._wallet.features["aptos:disconnect"].disconnect();
       this.clearData();
       this.emit("disconnect");
     } catch (error: any) {
@@ -313,78 +310,46 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * Signs and submits a transaction to chain
    *
    * @param transactionInput InputTransactionData
-   * @param options optional. A configuration object to generate a transaction by
-   * @returns The pending transaction hash (V1 output) | PendingTransactionResponse (V2 output)
+   * @returns PendingTransactionResponse
    */
   async signAndSubmitTransaction(
     transactionInput: InputTransactionData
-  ): Promise<
-    { hash: Types.HexEncodedBytes; output?: any } | PendingTransactionResponse
-  > {
+  ): Promise<PendingTransactionResponse> {
     try {
-      // if (this.walletStandardCore.wallet) {
-      //   return await this.walletStandardCore.disconnect();
-      // }
+      this.ensureWalletExists(this._wallet);
+      this.ensureAccountExists(this._account);
 
-      this.doesWalletExist();
+      const aptosConfig = new AptosConfig({
+        network: convertNetwork(this._network!.name),
+      });
 
-      // wallet supports sdk v2
-      if (this._wallet?.version === "v2") {
-        const response = await this._wallet.signAndSubmitTransaction({
-          ...transactionInput,
-          sender: transactionInput.sender ?? this._account!.address,
-        });
-        // response should be PendingTransactionResponse
-        return response;
-      }
+      const aptos = new Aptos(aptosConfig);
 
-      // get the payload piece from the input
-      const payloadData = transactionInput.data;
+      const transaction = await aptos.transaction.build.simple({
+        sender: this._account.address.toString(),
+        data: transactionInput.data,
+        options: transactionInput.options,
+      });
 
-      // first check if each argument is a BCS serialized argument
-      if (areBCSArguments(payloadData.functionArguments)) {
-        const aptosConfig = new AptosConfig({
-          network: convertNetwork(this._network),
-        });
-        const newPayload = await generateTransactionPayload({
-          ...(payloadData as InputEntryFunctionDataWithRemoteABI),
-          aptosConfig: aptosConfig,
-        });
-        const oldTransactionPayload =
-          convertV2TransactionPayloadToV1BCSPayload(newPayload);
-        const response = await this.waletCoreV1.signAndSubmitBCSTransaction(
-          oldTransactionPayload,
-          this._wallet!,
-          {
-            max_gas_amount: transactionInput.options?.maxGasAmount
-              ? BigInt(transactionInput.options?.maxGasAmount)
-              : undefined,
-            gas_unit_price: transactionInput.options?.gasUnitPrice
-              ? BigInt(transactionInput.options?.gasUnitPrice)
-              : undefined,
-          }
-        );
-        const { hash, ...output } = response;
-        return { hash, output };
-      }
-      // if it is not a bcs serialized arguments transaction, convert to the old
-      // json format
-      const oldTransactionPayload =
-        convertV2PayloadToV1JSONPayload(payloadData);
-      const response = await this.waletCoreV1.signAndSubmitTransaction(
-        oldTransactionPayload,
-        this._wallet!,
-        {
-          max_gas_amount: transactionInput.options?.maxGasAmount
-            ? BigInt(transactionInput.options?.maxGasAmount)
-            : undefined,
-          gas_unit_price: transactionInput.options?.gasUnitPrice
-            ? BigInt(transactionInput.options?.gasUnitPrice)
-            : undefined,
+      if (this._wallet.features["aptos:signAndSubmitTransaction"]) {
+        const response =
+          await this._wallet.features[
+            "aptos:signAndSubmitTransaction"
+          ].signAndSubmitTransaction(transaction);
+
+        if (response.status === UserResponseStatus.REJECTED) {
+          throw new WalletConnectionError("User has rejected the request")
+            .message;
         }
-      );
-      const { hash, ...output } = response;
-      return { hash, output };
+        return response.args;
+      }
+
+      const senderAuthenticator = await this.signTransaction(transaction);
+      const response = await this.submitTransaction({
+        transaction,
+        senderAuthenticator,
+      });
+      return response;
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
       throw new WalletSignAndSubmitMessageError(errMsg).message;
@@ -396,87 +361,44 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    *
    * To support both existing wallet adapter V1 and V2, we support 2 input types
    *
-   * @param transactionOrPayload AnyRawTransaction - V2 input | Types.TransactionPayload - V1 input
-   * @param options optional. V1 input
+   * @param transactionOrPayload AnyRawTransaction
+   * @param options asFeePayer. To sign a transaction as the fee payer sponsor
    *
-   * @returns AccountAuthenticator
+   * @returns AptosSignTransactionOutput
    */
   async signTransaction(
-    transactionOrPayload: AnyRawTransaction | Types.TransactionPayload,
-    asFeePayer?: boolean,
-    options?: InputGenerateTransactionOptions
-  ): Promise<AccountAuthenticator> {
-    try {
-      this.doesWalletExist();
-      // if input is AnyRawTransaction, i.e V2
-      if ("rawTransaction" in transactionOrPayload) {
-        if (this._wallet?.version !== "v2") {
-          throw new WalletNotSupportedMethod(
-            `Sign Transaction V2 is not supported by ${this.wallet?.name}`
-          ).message;
-        }
-        const accountAuthenticator = await (
-          this._wallet as any
-        ).signTransaction(transactionOrPayload, asFeePayer);
-
-        return accountAuthenticator;
-      }
-
-      // check current signTransaction function exists
-      if (this._wallet && !("signTransaction" in this._wallet)) {
-        throw new WalletNotSupportedMethod(
-          `Sign Transaction is not supported by ${this.wallet?.name}`
-        ).message;
-      }
-
-      const response = await this.waletCoreV1.signTransaction(
-        transactionOrPayload as Types.TransactionPayload,
-        this._wallet!,
-        {
-          max_gas_amount: options?.maxGasAmount
-            ? BigInt(options?.maxGasAmount)
-            : undefined,
-          gas_unit_price: options?.gasUnitPrice
-            ? BigInt(options?.gasUnitPrice)
-            : undefined,
-        }
-      );
-      if (!response) {
-        throw new Error("error");
-      }
-
-      // Convert retuned bcs serialized SignedTransaction into V2 AccountAuthenticator
-      const deserializer1 = new BCS.Deserializer(response);
-      const deserializedSignature =
-        TxnBuilderTypes.SignedTransaction.deserialize(deserializer1);
-      const transactionAuthenticator =
-        deserializedSignature.authenticator as TxnBuilderTypes.TransactionAuthenticatorEd25519;
-
-      const publicKey = transactionAuthenticator.public_key.value;
-      const signature = transactionAuthenticator.signature.value;
-
-      const accountAuthenticator = new AccountAuthenticatorEd25519(
-        new Ed25519PublicKey(publicKey),
-        new Ed25519Signature(signature)
-      );
-      return accountAuthenticator;
-    } catch (error: any) {
-      const errMsg = generalizedErrorMessage(error);
-      throw new WalletSignTransactionError(errMsg).message;
+    transaction: AnyRawTransaction,
+    asFeePayer?: boolean
+  ): Promise<AptosSignTransactionOutput> {
+    this.ensureWalletExists(this._wallet);
+    const response = await this._wallet.features[
+      "aptos:signTransaction"
+    ].signTransaction(transaction, asFeePayer);
+    if (response.status === UserResponseStatus.REJECTED) {
+      throw new WalletConnectionError("User has rejected the request").message;
     }
+    return response.args;
   }
 
   /**
    Sign message (doesnt submit to chain).
-   @param message
-   @return response from the wallet's signMessage function
+
+   @param message AptosSignMessageInput
+   @return AptosSignMessageOutput
    @throws WalletSignMessageError
    */
-  async signMessage(message: SignMessagePayload): Promise<SignMessageResponse> {
+  async signMessage(
+    message: AptosSignMessageInput
+  ): Promise<AptosSignMessageOutput> {
     try {
-      this.doesWalletExist();
-      const response = await this._wallet!.signMessage(message);
-      return response;
+      this.ensureWalletExists(this._wallet);
+      const response =
+        await this._wallet.features["aptos:signMessage"].signMessage(message);
+      if (response.status === UserResponseStatus.REJECTED) {
+        throw new WalletConnectionError("User has rejected the request")
+          .message;
+      }
+      return response.args;
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
       throw new WalletSignMessageError(errMsg).message;
@@ -487,29 +409,23 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     transaction: InputSubmitTransactionData
   ): Promise<PendingTransactionResponse> {
     try {
-      this.doesWalletExist();
-      if (this._wallet && !("submitTransaction" in this._wallet)) {
-        const { additionalSignersAuthenticators } = transaction;
-        const aptosConfig = new AptosConfig({
-          network: convertNetwork(this.network),
-        });
-        const aptos = new Aptos(aptosConfig);
-        if (additionalSignersAuthenticators !== undefined) {
-          const multiAgentTxn = {
-            ...transaction,
-            additionalSignersAuthenticators,
-          };
-          return aptos.transaction.submit.multiAgent(multiAgentTxn);
-        } else {
-          return aptos.transaction.submit.simple(transaction);
-        }
+      this.ensureWalletExists(this._wallet);
+      const { additionalSignersAuthenticators } = transaction;
+      const aptosConfig = new AptosConfig({
+        network: convertNetwork(
+          (await this._wallet.features["aptos:network"].network()).name
+        ),
+      });
+      const aptos = new Aptos(aptosConfig);
+      if (additionalSignersAuthenticators !== undefined) {
+        const multiAgentTxn = {
+          ...transaction,
+          additionalSignersAuthenticators,
+        };
+        return aptos.transaction.submit.multiAgent(multiAgentTxn);
+      } else {
+        return aptos.transaction.submit.simple(transaction);
       }
-
-      const pendingTransaction = await (this._wallet as any).submitTransaction(
-        transaction
-      );
-
-      return pendingTransaction;
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
       throw new WalletSignTransactionError(errMsg).message;
@@ -523,12 +439,14 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   */
   async onAccountChange(): Promise<void> {
     try {
-      this.doesWalletExist();
-      await this._wallet?.onAccountChange(async (data: AccountInfo) => {
-        this.setAccount({ ...data });
-        await this.setAnsName();
-        this.emit("accountChange", this._account);
-      });
+      this.ensureWalletExists(this._wallet);
+      await this._wallet.features["aptos:onAccountChange"].onAccountChange(
+        async (data: AccountInfo) => {
+          this.setAccount({ ...data });
+          await this.setAnsName();
+          this.emit("accountChange", data);
+        }
+      );
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
       throw new WalletAccountChangeError(errMsg).message;
@@ -542,12 +460,14 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   */
   async onNetworkChange(): Promise<void> {
     try {
-      this.doesWalletExist();
-      await this._wallet?.onNetworkChange(async (data: NetworkInfo) => {
-        this.setNetwork({ ...data });
-        await this.setAnsName();
-        this.emit("networkChange", this._network);
-      });
+      this.ensureWalletExists(this._wallet);
+      await this._wallet.features["aptos:onNetworkChange"].onNetworkChange(
+        async (data: NetworkInfo) => {
+          this.setNetwork({ ...data });
+          await this.setAnsName();
+          this.emit("networkChange", data);
+        }
+      );
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
       throw new WalletNetworkChangeError(errMsg).message;
@@ -556,70 +476,48 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   /**
    * Signs a message and verifies the signer
-   * @param message SignMessagePayload
+   * @param message AptosSignMessageInput
    * @returns boolean
    */
-  async signMessageAndVerify(message: SignMessagePayload): Promise<boolean> {
+  async signMessageAndVerify(message: AptosSignMessageInput): Promise<boolean> {
     try {
-      this.doesWalletExist();
+      this.ensureWalletExists(this._wallet);
       if (!this._account) throw new Error("No account found!");
-      const response = await this._wallet?.signMessage(message);
+
+      // sign the message
+      const response = await this.signMessage(message);
       if (!response)
         throw new WalletSignMessageAndVerifyError("Failed to sign a message")
           .message;
-      // Verify that the bytes were signed using the private key that matches the known public key
+
       let verified = false;
-      if (Array.isArray(response.signature)) {
-        // multi sig wallets
-        const { fullMessage, signature, bitmap } = response;
+      // if is a multi sig wallet with a MultiEd25519Signature type
+      // TODO support MultiKey
+      if (response.signature instanceof MultiEd25519Signature) {
+        if (!(this._account.publicKey instanceof MultiEd25519PublicKey)) {
+          throw new WalletSignMessageAndVerifyError(
+            "Public key and Signature type mismatch"
+          ).message;
+        }
+        const { fullMessage, signature } = response;
+        const bitmap = signature.bitmap;
         if (bitmap) {
-          const minKeysRequired = this._account.minKeysRequired as number;
-          if (signature.length < minKeysRequired) {
+          const minKeysRequired = this._account.publicKey.threshold;
+          if (signature.signatures.length < minKeysRequired) {
             verified = false;
           } else {
-            // Getting an array which marks the keys signing the message with 1, while marking 0 for the keys not being used.
-            const bits = Array.from(bitmap).flatMap((n) =>
-              Array.from({ length: 8 }).map((_, i) => (n >> i) & 1)
-            );
-            // Filter out indexes of the keys we need
-            const index = bits.map((_, i) => i).filter((i) => bits[i]);
-
-            const publicKeys = this._account.publicKey as string[];
-            const matchedPublicKeys = publicKeys.filter(
-              (_: string, i: number) => index.includes(i)
-            );
-
-            verified = true;
-            for (let i = 0; i < signature.length; i++) {
-              const isSigVerified = nacl.sign.detached.verify(
-                Buffer.from(fullMessage),
-                Buffer.from(signature[i], "hex"),
-                Buffer.from(matchedPublicKeys[i], "hex")
-              ); // `isSigVerified` should be `true` for every signature
-
-              if (!isSigVerified) {
-                verified = false;
-                break;
-              }
-            }
+            verified = this._account.publicKey.verifySignature({
+              message: fullMessage,
+              signature,
+            });
           }
-        } else {
-          throw new WalletSignMessageAndVerifyError("Failed to get a bitmap")
-            .message;
         }
       } else {
-        // single sig wallets
-        // support for when address doesnt have hex prefix (0x)
-        const currentAccountPublicKey = new HexString(
-          this._account.publicKey as string
-        );
-        // support for when address doesnt have hex prefix (0x)
-        const signature = new HexString(response.signature);
-        verified = nacl.sign.detached.verify(
-          Buffer.from(response.fullMessage),
-          Buffer.from(signature.noPrefix(), "hex"),
-          Buffer.from(currentAccountPublicKey.noPrefix(), "hex")
-        );
+        // TODO support secp256k1 and SingleKey
+        verified = this._account.publicKey.verifySignature({
+          message: response.fullMessage,
+          signature: response.signature,
+        });
       }
       return verified;
     } catch (error: any) {

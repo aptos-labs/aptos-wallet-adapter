@@ -17,9 +17,3 @@ export enum WalletReadyState {
    */
   Unsupported = "Unsupported",
 }
-
-export enum NetworkName {
-  Mainnet = "mainnet",
-  Testnet = "testnet",
-  Devnet = "devnet",
-}

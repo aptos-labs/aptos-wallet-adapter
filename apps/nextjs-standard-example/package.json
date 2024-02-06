@@ -1,0 +1,36 @@
+{
+  "name": "@aptos-labs/nextjs-standard-example",
+  "version": "2.4.3",
+  "private": true,
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "export": "next export",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@aptos-labs/ts-sdk": "1.9.0",
+    "@aptos-labs/wallet-adapter-ant-design": "workspace:*",
+    "@aptos-labs/wallet-adapter-core": "workspace:*",
+    "@aptos-labs/wallet-adapter-mui-design": "workspace:*",
+    "@aptos-labs/wallet-adapter-react": "workspace:*",
+    "antd": "^5.1.2",
+    "next": "13.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "@aptos-labs/wallet-standard": "latest"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@types/node": "^17.0.12",
+    "@types/react": "^18.0.22",
+    "@types/react-dom": "^18.0.7",
+    "autoprefixer": "^10.4.13",
+    "eslint": "^8.15.0",
+    "postcss": "^8.4.19",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^4.5.3"
+  }
+}

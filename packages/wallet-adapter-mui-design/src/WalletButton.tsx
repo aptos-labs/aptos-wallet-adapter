@@ -52,7 +52,7 @@ export default function WalletButton({
             <Typography noWrap ml={2}>
               {account?.ansName
                 ? account?.ansName
-                : truncateAddress(account?.address!)}
+                : truncateAddress(account!.address.toString())}
             </Typography>
           </>
         ) : (
