@@ -16,6 +16,7 @@
     "@aptos-labs/wallet-adapter-core": "workspace:*",
     "@aptos-labs/wallet-adapter-mui-design": "workspace:*",
     "@aptos-labs/wallet-adapter-react": "workspace:*",
+    "@bitget-wallet/aptos-wallet-adapter": "^0.1.0",
     "@blocto/aptos-wallet-adapter-plugin": "^0.2.2",
     "@flipperplatform/wallet-adapter-plugin": "^0.1.0",
     "@haechi-labs/face-aptos-adapter-plugin": "^0.0.4",
