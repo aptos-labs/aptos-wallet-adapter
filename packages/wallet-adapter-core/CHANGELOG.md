@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.6.0
+
+### Minor Changes
+
+- 8ebd4c7: Upgrade Aptos ts sdk version to 1.6.0
+
 ## 3.5.0
 
 ### Minor Changes
