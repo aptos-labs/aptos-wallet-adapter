@@ -28,8 +28,8 @@ importers:
   apps/nextjs-example:
     dependencies:
       '@aptos-labs/ts-sdk':
-        specifier: 1.3.0
-        version: 1.3.0
+        specifier: 1.6.0
+        version: 1.6.0
       '@aptos-labs/wallet-adapter-ant-design':
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-ant-design
@@ -110,7 +110,7 @@ importers:
         version: 13.0.0(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
       petra-plugin-wallet-adapter:
         specifier: ^0.4.3
-        version: 0.4.3(@aptos-labs/ts-sdk@1.3.0)(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(aptos@1.21.0)
+        version: 0.4.3(@aptos-labs/ts-sdk@1.6.0)(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(aptos@1.21.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -207,8 +207,8 @@ importers:
   packages/wallet-adapter-core:
     dependencies:
       '@aptos-labs/ts-sdk':
-        specifier: ^1.3.0
-        version: 1.3.0
+        specifier: ^1.6.0
+        version: 1.6.0
       aptos:
         specifier: ^1.21.0
         version: 1.21.0
@@ -419,8 +419,8 @@ packages:
       - debug
     dev: false
 
-  /@aptos-labs/ts-sdk@1.3.0:
-    resolution: {integrity: sha512-cg9S9ZGEYrb2SfIh8q5Evo/joz+rIM/SmrJI7Wa7S0CG3fBd8v8NBePG+obBm+LU4pPbJRw7KGrX6rsdqvQwWw==}
+  /@aptos-labs/ts-sdk@1.6.0:
+    resolution: {integrity: sha512-rQxJjiSMUS2PYYvGgxHQLMvC2FR1arh99mfCtXA3z2p0SqeyS06Thxey9kPyycMvs8DnbNfTLM1nFle0kwEakA==}
     engines: {node: '>=11.0.0'}
     dependencies:
       '@aptos-labs/aptos-client': 0.1.0
@@ -428,6 +428,7 @@ packages:
       '@noble/hashes': 1.3.3
       '@scure/bip32': 1.3.3
       '@scure/bip39': 1.2.1
+      eventemitter3: 5.0.1
       form-data: 4.0.0
       tweetnacl: 1.0.3
     transitivePeerDependencies:
@@ -2417,10 +2418,10 @@ packages:
     engines: {node: '>=16'}
     dependencies:
       '@mysten/bcs': 0.7.3
-      '@noble/curves': 1.2.0
-      '@noble/hashes': 1.3.2
+      '@noble/curves': 1.3.0
+      '@noble/hashes': 1.3.3
       '@open-rpc/client-js': 1.8.1
-      '@scure/bip32': 1.3.2
+      '@scure/bip32': 1.3.3
       '@scure/bip39': 1.2.1
       '@suchipi/femver': 1.0.0
       events: 3.3.0
@@ -7254,14 +7255,14 @@ packages:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
 
-  /petra-plugin-wallet-adapter@0.4.3(@aptos-labs/ts-sdk@1.3.0)(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(aptos@1.21.0):
+  /petra-plugin-wallet-adapter@0.4.3(@aptos-labs/ts-sdk@1.6.0)(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(aptos@1.21.0):
     resolution: {integrity: sha512-MP16ALtIY/VFMq+o8WhRKn/I5ntTGd7vBQwzvLH+fRGbmOu/Tsnd2bSXzM5d2duhhNemKUc9B0y5Gd5um9IXag==}
     peerDependencies:
       '@aptos-labs/ts-sdk': ^1.3.0
       '@aptos-labs/wallet-adapter-core': ^3.5.0
       aptos: ^1.21.0
     dependencies:
-      '@aptos-labs/ts-sdk': 1.3.0
+      '@aptos-labs/ts-sdk': 1.6.0
       '@aptos-labs/wallet-adapter-core': link:packages/wallet-adapter-core
       aptos: 1.21.0
     dev: false
