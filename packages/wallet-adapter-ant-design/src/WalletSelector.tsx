@@ -3,12 +3,11 @@ import { Button, Menu, Modal, Typography } from "antd";
 import {
   isRedirectable,
   useWallet,
-  Wallet,
   WalletReadyState,
-  WalletName,
 } from "@aptos-labs/wallet-adapter-react";
 import "./styles.css";
 import { truncateAddress } from "./utils";
+import { IAptosWallet } from "../../wallet-adapter-core/dist";
 const { Text } = Typography;
 
 type WalletSelectorProps = {
@@ -38,7 +37,7 @@ export function WalletSelector({
     }
   };
 
-  const onWalletSelected = (wallet: WalletName) => {
+  const onWalletSelected = (wallet: string) => {
     connect(wallet);
     setWalletSelectorModalOpen(false);
     if (setModalOpen) {
@@ -53,7 +52,7 @@ export function WalletSelector({
   };
   const buttonText = account?.ansName
     ? account?.ansName
-    : truncateAddress(account?.address);
+    : truncateAddress(account?.address.toString());
   return (
     <>
       <Button className="wallet-button" onClick={() => onWalletButtonClick()}>
@@ -70,7 +69,7 @@ export function WalletSelector({
       >
         {!connected && (
           <Menu>
-            {wallets.map((wallet: Wallet) => {
+            {wallets.map((wallet: IAptosWallet) => {
               return walletView(wallet, onWalletSelected);
             })}
           </Menu>
@@ -81,16 +80,16 @@ export function WalletSelector({
 }
 
 const walletView = (
-  wallet: Wallet,
-  onWalletSelected: (wallet: WalletName) => void
+  wallet: IAptosWallet,
+  onWalletSelected: (wallet: string) => void
 ) => {
   const isWalletReady =
     wallet.readyState === WalletReadyState.Installed ||
     wallet.readyState === WalletReadyState.Loadable;
-  const mobileSupport = wallet.deeplinkProvider;
+  const hasMobileSupport = Boolean(wallet.features["aptos:openInMobileApp"]);
 
   if (!isWalletReady && isRedirectable()) {
-    if (mobileSupport) {
+    if (hasMobileSupport) {
       return (
         <Menu.Item
           key={wallet.name}

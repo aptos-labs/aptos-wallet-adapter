@@ -15,18 +15,17 @@ import {
 import {
   isRedirectable,
   useWallet,
-  Wallet,
   WalletReadyState,
-  WalletName,
 } from "@aptos-labs/wallet-adapter-react";
 import { grey } from "./aptosColorPalette";
 // reported bug with loading mui icons with esm, therefore need to import like this https://github.com/mui/material-ui/issues/35233
 import { LanOutlined as LanOutlinedIcon } from "@mui/icons-material";
 import { Close as CloseIcon } from "@mui/icons-material";
 import { PropsWithChildren } from "react";
+import { IAptosWallet } from "../../wallet-adapter-core/dist";
 
 const ConnectWalletRow: React.FC<{
-  wallet: Wallet;
+  wallet: IAptosWallet;
   onClick(): void;
 }> = ({ wallet, onClick }) => {
   const theme = useTheme();
@@ -78,7 +77,7 @@ const ConnectWalletRow: React.FC<{
   );
 };
 
-const InstallWalletRow: React.FC<{ wallet: Wallet }> = ({ wallet }) => {
+const InstallWalletRow: React.FC<{ wallet: IAptosWallet }> = ({ wallet }) => {
   const theme = useTheme();
 
   return (
@@ -144,14 +143,16 @@ export default function WalletsModal({
 
   const theme = useTheme();
 
-  const onWalletSelect = (walletName: WalletName) => {
+  const onWalletSelect = (walletName: string) => {
     connect(walletName);
     handleClose();
   };
 
   const renderWalletsList = () => {
     return wallets.map((wallet) => {
-      const hasMobileSupport = Boolean(wallet.deeplinkProvider);
+      const hasMobileSupport = Boolean(
+        wallet.features["aptos:openInMobileApp"]
+      );
       const isWalletReady =
         wallet.readyState === WalletReadyState.Installed ||
         wallet.readyState === WalletReadyState.Loadable;

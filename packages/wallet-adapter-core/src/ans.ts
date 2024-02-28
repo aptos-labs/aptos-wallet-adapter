@@ -6,9 +6,9 @@ const ChainIdToAnsContractAddressMap: Record<string, string> = {
 export const getNameByAddress = async (
   chainId: string,
   address: string
-): Promise<string | null> => {
+): Promise<string | undefined> => {
   try {
-    if (!ChainIdToAnsContractAddressMap[chainId]) return null;
+    if (!ChainIdToAnsContractAddressMap[chainId]) return undefined;
     const response = await fetch(
       `https://www.aptosnames.com/api/${ChainIdToAnsContractAddressMap[chainId]}/v1/name/${address}`
     );
@@ -16,6 +16,6 @@ export const getNameByAddress = async (
     return data.name;
   } catch (e) {
     console.log("error", e);
-    return null;
+    return undefined;
   }
 };
