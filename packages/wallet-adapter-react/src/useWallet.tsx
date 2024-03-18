@@ -21,7 +21,7 @@ export interface WalletContextState {
   isLoading: boolean;
   account: AccountInfo | null;
   network: NetworkInfo | null;
-  connect(walletName: WalletName): void;
+  connect(walletName: WalletName): Promise<AccountInfo | null>;
   disconnect(): void;
   wallet: WalletInfo | null;
   wallets: ReadonlyArray<Wallet>;
