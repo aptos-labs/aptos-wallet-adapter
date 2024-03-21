@@ -150,7 +150,7 @@ export default function WalletsModal({
   };
 
   const renderWalletsList = () => {
-    return wallets.map((wallet) => {
+    return wallets?.map((wallet) => {
       const hasMobileSupport = Boolean(wallet.deeplinkProvider);
       const isWalletReady =
         wallet.readyState === WalletReadyState.Installed ||
