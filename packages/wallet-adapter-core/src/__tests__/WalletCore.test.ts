@@ -1,11 +1,10 @@
 import { AptosAccount } from "aptos";
-import { getNameByAddress } from "../ans";
 import {
   SignMessagePayload,
   SignMessageResponse,
   Wallet,
   WalletName,
-} from "../types";
+} from "../LegacyWalletPlugins/types";
 import { WalletCore } from "../WalletCore";
 
 const signMessageResponseMock: SignMessageResponse = {
@@ -70,7 +69,7 @@ describe("signMessageAndVerify", () => {
     .spyOn(walletCoreMock as any, "doesWalletExist")
     .mockImplementation(() => true);
 
-  it("it should verify a signed message", async () => {
+  it("verifies a signed message", async () => {
     const encoder = new TextEncoder();
     const messageBytes = encoder.encode(signMessageResponseMock.fullMessage);
     const signature = account.signBuffer(messageBytes);
@@ -87,7 +86,7 @@ describe("signMessageAndVerify", () => {
     expect(verified).toBeTruthy();
   });
 
-  it("it should fails to verify signed message", async () => {
+  it("fails to verify signed message", async () => {
     const account2 = new AptosAccount();
     const encoder = new TextEncoder();
     const messageBytes = encoder.encode(signMessageResponseMock.fullMessage);
@@ -103,15 +102,5 @@ describe("signMessageAndVerify", () => {
       mockSignMessagePayload
     );
     expect(verified).toBeFalsy();
-  });
-});
-
-describe("ans", () => {
-  it("should fetch the correct name", async () => {
-    const name = await getNameByAddress(
-      "2",
-      "0x54fac6e5d52953c75e749a8ad260bc450cad0b8ed2f06c1e98707879e13956d1"
-    );
-    expect(name).toBe("adapter");
   });
 });

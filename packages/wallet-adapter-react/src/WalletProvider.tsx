@@ -222,7 +222,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const handleStandardWalletsAdded = (standardWallet: Wallet) => {
-    // Manage current wallet state by removing optonal duplications
+    // Manage current wallet state by removing optional duplications
     // as new wallets are coming
     const updatedWallets = wallets?.map((wallet) => {
       if (wallet.name === standardWallet.name) {

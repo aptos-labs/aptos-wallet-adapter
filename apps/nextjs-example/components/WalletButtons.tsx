@@ -11,7 +11,7 @@ import { Dispatch, SetStateAction, ReactNode } from "react";
 const WalletButtons = () => {
   const { wallets, connect } = useWallet();
   const { setErrorAlertMessage } = useAlert();
-  console.log("wallets", wallets);
+
   return (
     <>
       {wallets?.map((wallet: Wallet) => {

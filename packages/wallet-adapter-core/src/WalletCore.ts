@@ -13,7 +13,7 @@ import {
 } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
 
-import { WalletReadyState } from "./constants";
+import { ChainIdToAnsContractAddressMap, WalletReadyState } from "./constants";
 import {
   WalletAccountChangeError,
   WalletAccountError,
@@ -48,7 +48,6 @@ import {
   isRedirectable,
   generalizedErrorMessage,
 } from "./utils";
-import { getNameByAddress } from "./ans";
 import { convertNetwork } from "./LegacyWalletPlugins/conversion";
 import { WalletCoreV1 } from "./LegacyWalletPlugins/WalletCoreV1";
 import {
@@ -271,7 +270,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * - Removes current connected network state
    * - Removes autoconnect local storage value
    */
-  private clearData() {
+  private clearData(): void {
     this._connected = false;
     this.setWallet(null);
     this.setAccount(null);
@@ -282,13 +281,20 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   /**
    * Queries and sets ANS name for the current connected wallet account
    */
-  private async setAnsName() {
+  private async setAnsName(): Promise<void> {
     if (this._network?.chainId && this._account) {
-      if (this.account?.ansName) return;
-      const name = await getNameByAddress(
-        this._network.chainId,
-        this._account.address
-      );
+      // ANS supports only MAINNET or TESTNET
+      if (!ChainIdToAnsContractAddressMap[this._network.chainId])
+        return undefined;
+
+      const aptosConfig = new AptosConfig({
+        network: convertNetwork(this._network),
+      });
+      const aptos = new Aptos(aptosConfig);
+      const name = await aptos.ans.getPrimaryName({
+        address: this._account.address,
+      });
+
       this._account.ansName = name;
     }
   }
@@ -298,7 +304,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    *
    * @param wallet A wallet
    */
-  setWallet(wallet: Wallet | null) {
+  setWallet(wallet: Wallet | null): void {
     this._wallet = wallet;
   }
 
@@ -511,7 +517,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @emit emits "connect" event
    * @throws WalletConnectionError
    */
-  async connectWallet(selectedWallet: Wallet) {
+  async connectWallet(selectedWallet: Wallet): Promise<void> {
     try {
       this._connecting = true;
       this.setWallet(selectedWallet);
@@ -604,7 +610,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       // Note: This should happen only for AIP-62 standard compatible wallets since
       // signAndSubmitTransaction is not a required function implementation
       const transaction = await aptos.transaction.build.simple({
-        sender: this._account.address.toString(),
+        sender: this._account.address,
         data: transactionInput.data,
         options: transactionInput.options,
       });
@@ -658,8 +664,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
             // else it means dapp passes legacy sdk v1 input data
             // and the current connected wallet does not support it
             throw new WalletNotSupportedMethod(
-              `Wrong transaction input data was porivded, ${this.wallet?.name} expects AnyRawTransaction input type. 
-              Please upgrade to the new Aptos TS SDK`
+              `Invalid transaction input data was provided, ${this.wallet?.name} expects AnyRawTransaction type. 
+              Please upgrade to the latest Aptos TS SDK https://github.com/aptos-labs/aptos-ts-sdk`
             ).message;
           }
         }
@@ -814,9 +820,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.ensureWalletExists(this._wallet);
       await this._wallet.onNetworkChange(
         async (data: NetworkInfo | StandardNetworkInfo) => {
-          console.log("onNetworkChange", data);
           this.setNetwork(data);
-
           await this.setAnsName();
           this.emit("networkChange", this._network);
         }
