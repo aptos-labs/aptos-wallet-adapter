@@ -134,12 +134,9 @@ export interface AdapterPluginProps<Name extends string = string> {
   signMessage<T extends SignMessagePayload>(
     message: T
   ): Promise<SignMessageResponse | UserResponse<AptosSignMessageOutput>>;
-  signTransaction?(
-    transactionOrPayload:
-      | Types.TransactionPayload
-      | TxnBuilderTypes.TransactionPayload
-      | AnyRawTransaction,
-    optionsOrAsFeePayer?: TransactionOptions | boolean
+  signTransaction?( // `any` type for backwards compatibility, especially for identity connect
+    transactionOrPayload: any,
+    optionsOrAsFeePayer?: any
   ): Promise<any>;
   account?: () => Promise<AccountInfo | StandardAccountInfo>;
 }

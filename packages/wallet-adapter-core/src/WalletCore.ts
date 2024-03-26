@@ -324,7 +324,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       | UserResponse<StandardAccountInfo>
       | null
   ): void {
-    if (!account) return;
+    if (account === null) {
+      this._account = null;
+      return;
+    }
 
     // Check if wallet is of type AIP-62 standard
     if (this._wallet?.isAIP62Standard) {
@@ -371,6 +374,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param network A network
    */
   setNetwork(network: NetworkInfo | StandardNetworkInfo | null): void {
+    if (network === null) {
+      this._network = null;
+      return;
+    }
     if (this._wallet?.isAIP62Standard) {
       const standardizeNetwork = network as StandardNetworkInfo;
       this._network = {
