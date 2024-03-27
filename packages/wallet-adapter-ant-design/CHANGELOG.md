@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 2.1.0
+
+### Minor Changes
+
+- 4d6e2f6: Add AIP-62 wallet standard support
+
+### Patch Changes
+
+- Updated dependencies [4d6e2f6]
+  - @aptos-labs/wallet-adapter-react@2.2.0
+
 ## 2.0.0
 
 ### Major Changes

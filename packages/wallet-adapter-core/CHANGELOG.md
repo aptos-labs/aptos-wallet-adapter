@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.7.0
+
+### Minor Changes
+
+- 4d6e2f6: Add AIP-62 wallet standard support
+
 ## 3.6.0
 
 ### Minor Changes
