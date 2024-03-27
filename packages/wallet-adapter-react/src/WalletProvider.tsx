@@ -66,6 +66,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     try {
       setIsLoading(true);
       await walletCore.connect(walletName);
+      return walletCore.account;
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
