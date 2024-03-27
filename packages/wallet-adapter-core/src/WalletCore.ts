@@ -284,8 +284,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private async setAnsName(): Promise<void> {
     if (this._network?.chainId && this._account) {
       // ANS supports only MAINNET or TESTNET
-      if (!ChainIdToAnsContractAddressMap[this._network.chainId])
-        return undefined;
+      if (!ChainIdToAnsContractAddressMap[this._network.chainId]) {
+        this._account.ansName = undefined;
+        return;
+      }
 
       const aptosConfig = new AptosConfig({
         network: convertNetwork(this._network),

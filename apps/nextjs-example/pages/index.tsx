@@ -1,13 +1,8 @@
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useWallet, AccountInfo, NetworkInfo, WalletInfo} from "@aptos-labs/wallet-adapter-react";
 import { WalletConnector } from "@aptos-labs/wallet-adapter-mui-design";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useAutoConnect } from "../components/AutoConnectProvider";
-import {
-  AccountInfo,
-  NetworkInfo,
-  WalletInfo,
-} from "@aptos-labs/wallet-adapter-core";
 import SingleSignerTransaction from "../components/transactionFlow/SingleSigner";
 import SponsorTransaction from "../components/transactionFlow/Sponsor";
 import MultiAgentTransaction from "../components/transactionFlow/MultiAgent";

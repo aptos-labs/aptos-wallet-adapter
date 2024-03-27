@@ -1,7 +1,6 @@
-import { TxnBuilderTypes, Types } from "aptos";
+import { Types } from "aptos";
 import {
   Network,
-  InputGenerateTransactionData,
   InputGenerateTransactionOptions,
   InputSubmitTransactionData,
   PendingTransactionResponse,
@@ -9,7 +8,6 @@ import {
   InputGenerateTransactionPayloadData,
   AnyRawTransaction,
   Signature,
-  AccountAuthenticator,
 } from "@aptos-labs/ts-sdk";
 import { WalletReadyState } from "../constants";
 import {
@@ -18,7 +16,6 @@ import {
   UserResponse,
   AccountInfo as StandardAccountInfo,
   NetworkInfo as StandardNetworkInfo,
-  AptosSignTransactionOutput,
 } from "@aptos-labs/wallet-standard";
 
 export { TxnBuilderTypes, Types } from "aptos";
