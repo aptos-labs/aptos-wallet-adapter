@@ -24,7 +24,7 @@ export enum NetworkName {
   Devnet = "devnet",
 }
 
-export const ChainIdToAnsContractAddressMap: Record<string, string> = {
+export const ChainIdToAnsSupportedNetworkMap: Record<string, string> = {
   "1": "mainnet", // mainnet
   "2": "testnet", // testnet
 };

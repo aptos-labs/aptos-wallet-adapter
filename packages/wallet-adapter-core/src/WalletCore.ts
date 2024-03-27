@@ -13,7 +13,7 @@ import {
 } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
 
-import { ChainIdToAnsContractAddressMap, WalletReadyState } from "./constants";
+import { ChainIdToAnsSupportedNetworkMap, WalletReadyState } from "./constants";
 import {
   WalletAccountChangeError,
   WalletAccountError,
@@ -284,7 +284,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private async setAnsName(): Promise<void> {
     if (this._network?.chainId && this._account) {
       // ANS supports only MAINNET or TESTNET
-      if (!ChainIdToAnsContractAddressMap[this._network.chainId]) {
+      if (!ChainIdToAnsSupportedNetworkMap[this._network.chainId]) {
         this._account.ansName = undefined;
         return;
       }

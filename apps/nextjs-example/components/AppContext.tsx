@@ -24,15 +24,15 @@ import { FC, ReactNode } from "react";
 import face from "../lib/faceInitialization";
 import { AlertProvider, useAlert } from "./AlertProvider";
 import { IdentityConnectWallet } from "@identity-connect/wallet-adapter-plugin";
+import { Network } from "@aptos-labs/ts-sdk";
 
 const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { autoConnect } = useAutoConnect();
   const { setErrorAlertMessage } = useAlert();
 
   const wallets = [
-    // TODO IdentityConnectWallet and BloctoWallet to use Network enum from @aptos-labs/ts-sdk
     new IdentityConnectWallet("57fa42a9-29c6-4f1e-939c-4eefa36d9ff5", {
-      networkName: NetworkName.Testnet,
+      networkName: Network.TESTNET,
     }),
     // Blocto supports Testnet/Mainnet for now.
     new BitgetWallet(),
