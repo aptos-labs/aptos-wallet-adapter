@@ -72,9 +72,6 @@ importers:
       '@msafe/aptos-wallet-adapter':
         specifier: ^1.0.11
         version: 1.0.14
-      '@nightlylabs/aptos-wallet-adapter-plugin':
-        specifier: ^0.2.12
-        version: 0.2.12
       '@okwallet/aptos-wallet-adapter':
         specifier: ^0.0.3
         version: 0.0.3
@@ -2520,17 +2517,6 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
-
-  /@nightlylabs/aptos-wallet-adapter-plugin@0.2.12:
-    resolution: {integrity: sha512-caDmoy3Az060YXHSmRibDDyUDd4YHGj87px+coJx2RSA7MSA5ufXXts4yNGH756WB32yP68FDaU4IZggJrlgAA==}
-    dependencies:
-      '@aptos-labs/wallet-adapter-core': 0.2.3
-      aptos: 1.21.0
-      bs58: 5.0.0
-      js-sha3: 0.8.0
-    transitivePeerDependencies:
-      - debug
-    dev: false
 
   /@noble/curves@1.2.0:
     resolution: {integrity: sha512-oYclrNgRaM9SsBUBVbb8M6DTV7ZHRTKugureoYEncY5c65HOmRzvSiTE3y5CYaPYJA/GVkrhXEoF0M3Ya9PMnw==}
