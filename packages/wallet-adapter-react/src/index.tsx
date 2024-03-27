@@ -3,6 +3,9 @@ export { useWallet } from "./useWallet";
 export * from "./WalletProvider";
 export type {
   Wallet,
+  AccountInfo,
+  NetworkInfo,
+  WalletInfo,
   WalletName,
   InputTransactionData,
 } from "@aptos-labs/wallet-adapter-core";

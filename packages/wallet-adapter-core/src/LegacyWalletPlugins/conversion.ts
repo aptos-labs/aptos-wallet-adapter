@@ -4,11 +4,14 @@ import {
   InputGenerateTransactionPayloadData,
   TypeTag,
 } from "@aptos-labs/ts-sdk";
+import { NetworkInfo as StandardNetworkInfo } from "@aptos-labs/wallet-standard";
 import { BCS, TxnBuilderTypes, Types } from "aptos";
 import { NetworkInfo } from "./types";
 
 // old => new
-export function convertNetwork(networkInfo: NetworkInfo | null): Network {
+export function convertNetwork(
+  networkInfo: NetworkInfo | StandardNetworkInfo | null
+): Network {
   switch (networkInfo?.name.toLowerCase()) {
     case "mainnet" as Network:
       return Network.MAINNET;

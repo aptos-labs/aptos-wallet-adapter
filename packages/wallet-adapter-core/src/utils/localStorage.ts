@@ -1,4 +1,4 @@
-import { WalletName } from "../types";
+import { WalletName } from "../LegacyWalletPlugins/types";
 
 const LOCAL_STORAGE_ITEM_KEY = "AptosWalletName";
 

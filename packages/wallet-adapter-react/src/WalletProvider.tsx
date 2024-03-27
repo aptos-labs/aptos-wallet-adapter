@@ -27,7 +27,7 @@ import { WalletCore } from "@aptos-labs/wallet-adapter-core";
 
 export interface AptosWalletProviderProps {
   children: ReactNode;
-  plugins: ReadonlyArray<Wallet>;
+  plugins?: ReadonlyArray<Wallet>;
   autoConnect?: boolean;
   onError?: (error: any) => void;
 }
@@ -57,7 +57,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   // https://github.com/aptos-labs/aptos-wallet-adapter/issues/94
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const walletCore = useMemo(() => new WalletCore(plugins), []);
+  const walletCore = useMemo(() => new WalletCore(plugins ?? []), []);
   const [wallets, setWallets] = useState<ReadonlyArray<Wallet>>(
     walletCore.wallets
   );
@@ -67,7 +67,6 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       setIsLoading(true);
       await walletCore.connect(walletName);
     } catch (error: any) {
-      console.log("connect error", error);
       if (onError) onError(error);
       return Promise.reject(error);
     } finally {
@@ -143,7 +142,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
 
   useEffect(() => {
     if (autoConnect) {
-      if (localStorage.getItem("AptosWalletName")) {
+      if (localStorage.getItem("AptosWalletName") && !connected) {
         connect(localStorage.getItem("AptosWalletName") as WalletName);
       } else {
         // if we dont use autoconnect set the connect is loading to false
@@ -157,7 +156,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       walletCore.onAccountChange();
       walletCore.onNetworkChange();
     }
-  }, [...wallets, connected]);
+  }, [connected]);
 
   // Handle the adapter's connect event
   const handleConnect = () => {
@@ -210,11 +209,28 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     });
   }, [connected]);
 
-  // Whenever the readyState of any supported wallet changes we produce a new wallets state array
-  // which in turn causes consumers of the `useWallet` hook to re-render.
-  // See https://github.com/aptos-labs/aptos-wallet-adapter/pull/129#issuecomment-1519026572 for reasoning.
-  const handleReadyStateChange = (wallet: Wallet) => {
-    setWallets((wallets) => [...wallets]);
+  const handleReadyStateChange = (updatedWallet: Wallet) => {
+    // Create a new array with updated values
+    const updatedWallets = wallets?.map((wallet) => {
+      if (wallet.name === updatedWallet.name) {
+        // Return a new object with updated value
+        return { ...wallet, readyState: updatedWallet.readyState };
+      }
+      return wallet;
+    });
+    setWallets(updatedWallets);
+  };
+
+  const handleStandardWalletsAdded = (standardWallet: Wallet) => {
+    // Manage current wallet state by removing optional duplications
+    // as new wallets are coming
+    const updatedWallets = wallets?.map((wallet) => {
+      if (wallet.name === standardWallet.name) {
+        return { ...standardWallet };
+      }
+      return wallet;
+    });
+    setWallets(updatedWallets);
   };
 
   useEffect(() => {
@@ -223,14 +239,16 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     walletCore.on("accountChange", handleAccountChange);
     walletCore.on("networkChange", handleNetworkChange);
     walletCore.on("readyStateChange", handleReadyStateChange);
+    walletCore.on("standardWalletsAdded", handleStandardWalletsAdded);
     return () => {
       walletCore.off("connect", handleConnect);
       walletCore.off("disconnect", handleDisconnect);
       walletCore.off("accountChange", handleAccountChange);
       walletCore.off("networkChange", handleNetworkChange);
       walletCore.off("readyStateChange", handleReadyStateChange);
+      walletCore.off("standardWalletsAdded", handleStandardWalletsAdded);
     };
-  }, [...wallets, connected]);
+  }, [wallets, connected]);
 
   return (
     <WalletContext.Provider

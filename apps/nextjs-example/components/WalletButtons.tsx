@@ -6,22 +6,26 @@ import {
   WalletName,
 } from "@aptos-labs/wallet-adapter-react";
 import { useAlert } from "./AlertProvider";
+import { Dispatch, SetStateAction, ReactNode } from "react";
 
 const WalletButtons = () => {
-  const { wallets } = useWallet();
+  const { wallets, connect } = useWallet();
+  const { setErrorAlertMessage } = useAlert();
 
   return (
     <>
-      {wallets.map((wallet: Wallet) => {
-        return WalletView(wallet);
+      {wallets?.map((wallet: Wallet) => {
+        return WalletView(wallet, connect, setErrorAlertMessage);
       })}
     </>
   );
 };
 
-const WalletView = (wallet: Wallet) => {
-  const { connect } = useWallet();
-  const { setErrorAlertMessage } = useAlert();
+const WalletView = (
+  wallet: Wallet,
+  connect: (walletName: WalletName) => void,
+  setErrorAlertMessage: Dispatch<SetStateAction<ReactNode>>
+) => {
   const isWalletReady =
     wallet.readyState === WalletReadyState.Installed ||
     wallet.readyState === WalletReadyState.Loadable;

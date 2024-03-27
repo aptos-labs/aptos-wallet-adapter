@@ -24,7 +24,7 @@ export interface WalletContextState {
   connect(walletName: WalletName): void;
   disconnect(): void;
   wallet: WalletInfo | null;
-  wallets: ReadonlyArray<Wallet>;
+  wallets?: ReadonlyArray<Wallet>;
   signAndSubmitTransaction(transaction: InputTransactionData): Promise<any>;
   signTransaction(
     transactionOrPayload: AnyRawTransaction | Types.TransactionPayload,

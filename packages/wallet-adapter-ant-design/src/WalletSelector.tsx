@@ -70,7 +70,7 @@ export function WalletSelector({
       >
         {!connected && (
           <Menu>
-            {wallets.map((wallet: Wallet) => {
+            {wallets?.map((wallet: Wallet) => {
               return walletView(wallet, onWalletSelected);
             })}
           </Menu>

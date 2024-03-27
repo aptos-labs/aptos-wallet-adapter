@@ -1,14 +1,22 @@
 import { Types } from "aptos";
 import {
   Network,
-  InputGenerateTransactionData,
   InputGenerateTransactionOptions,
   InputSubmitTransactionData,
   PendingTransactionResponse,
   AccountAddressInput,
   InputGenerateTransactionPayloadData,
+  AnyRawTransaction,
+  Signature,
 } from "@aptos-labs/ts-sdk";
-import { WalletReadyState } from "./constants";
+import { WalletReadyState } from "../constants";
+import {
+  AptosSignAndSubmitTransactionOutput,
+  AptosSignMessageOutput,
+  UserResponse,
+  AccountInfo as StandardAccountInfo,
+  NetworkInfo as StandardNetworkInfo,
+} from "@aptos-labs/wallet-standard";
 
 export { TxnBuilderTypes, Types } from "aptos";
 export type {
@@ -54,6 +62,7 @@ export declare interface WalletCoreEvents {
   connect(account: AccountInfo | null): void;
   disconnect(): void;
   readyStateChange(wallet: Wallet): void;
+  standardWalletsAdded(wallets: Wallet): void;
   networkChange(network: NetworkInfo | null): void;
   accountChange(account: AccountInfo | null): void;
 }
@@ -74,16 +83,16 @@ export interface SignMessageResponse {
   message: string; // The message passed in by the user
   nonce: string;
   prefix: "APTOS"; // Should always be APTOS
-  signature: string | string[]; // The signed full message
+  signature: string | string[] | Signature; // The signed full message
   bitmap?: Uint8Array; // a 4-byte (32 bits) bit-vector of length N
 }
 
 export type OnNetworkChange = (
-  callBack: (networkInfo: NetworkInfo) => Promise<void>
+  callBack: (networkInfo: NetworkInfo | StandardNetworkInfo) => Promise<void>
 ) => Promise<void>;
 
 export type OnAccountChange = (
-  callBack: (accountInfo: AccountInfo) => Promise<any>
+  callBack: (accountInfo: AccountInfo | StandardAccountInfo) => Promise<any>
 ) => Promise<void>;
 
 export interface AdapterPluginEvents {
@@ -96,25 +105,37 @@ export interface AdapterPluginProps<Name extends string = string> {
   name: WalletName<Name>;
   url: string;
   icon: `data:image/${"svg+xml" | "webp" | "png" | "gif"};base64,${string}`;
-  version?: "v1" | "v2";
   providerName?: string;
   provider: any;
+  // Compatible with legacy wallet plugin
   deeplinkProvider?: (data: { url: string }) => string;
+  // Comaptible with AIP-62 standard wallet
+  openInMobileApp?: () => void;
   connect(): Promise<any>;
   disconnect: () => Promise<any>;
   network: () => Promise<any>;
-  signAndSubmitTransaction(
-    transaction: Types.TransactionPayload | InputGenerateTransactionData,
+  signAndSubmitTransaction?(
+    transaction:
+      | Types.TransactionPayload
+      | InputTransactionData
+      | AnyRawTransaction,
     options?: InputGenerateTransactionOptions
   ): Promise<
-    { hash: Types.HexEncodedBytes; output?: any } | PendingTransactionResponse
+    | { hash: Types.HexEncodedBytes; output?: any }
+    | PendingTransactionResponse
+    | UserResponse<AptosSignAndSubmitTransactionOutput>
   >;
   submitTransaction?(
     transaction: InputSubmitTransactionData
   ): Promise<PendingTransactionResponse>;
   signMessage<T extends SignMessagePayload>(
     message: T
-  ): Promise<SignMessageResponse>;
+  ): Promise<SignMessageResponse | UserResponse<AptosSignMessageOutput>>;
+  signTransaction?( // `any` type for backwards compatibility, especially for identity connect
+    transactionOrPayload: any,
+    optionsOrAsFeePayer?: any
+  ): Promise<any>;
+  account?: () => Promise<AccountInfo | StandardAccountInfo>;
 }
 
 export type AdapterPlugin<Name extends string = string> =
@@ -122,6 +143,7 @@ export type AdapterPlugin<Name extends string = string> =
 
 export type Wallet<Name extends string = string> = AdapterPlugin<Name> & {
   readyState?: WalletReadyState;
+  isAIP62Standard?: boolean;
 };
 
 export interface TransactionOptions {

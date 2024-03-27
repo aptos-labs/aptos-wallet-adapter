@@ -23,3 +23,8 @@ export enum NetworkName {
   Testnet = "testnet",
   Devnet = "devnet",
 }
+
+export const ChainIdToAnsSupportedNetworkMap: Record<string, string> = {
+  "1": "mainnet", // mainnet
+  "2": "testnet", // testnet
+};

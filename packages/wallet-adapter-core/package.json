@@ -45,12 +45,13 @@
     "typescript": "^4.5.3"
   },
   "dependencies": {
+    "@aptos-labs/wallet-standard": "^0.0.11",
     "buffer": "^6.0.3",
     "eventemitter3": "^4.0.7",
     "tweetnacl": "^1.0.3"
   },
   "peerDependencies": {
-    "aptos": "^1.21.0",
-    "@aptos-labs/ts-sdk": "^1.6.0"
+    "@aptos-labs/ts-sdk": "^1.11.0",
+    "aptos": "^1.21.0"
   }
 }
