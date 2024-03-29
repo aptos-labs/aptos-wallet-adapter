@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.8.0
+
+### Minor Changes
+
+- 4127cfb: Support AIP-62 connect wallet method response
+
 ## 3.7.0
 
 ### Minor Changes
