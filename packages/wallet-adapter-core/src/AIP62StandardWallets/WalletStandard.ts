@@ -7,6 +7,7 @@ import {
   UserResponseStatus,
   AptosSignAndSubmitTransactionOutput,
   AccountInfo as StandardAccountInfo,
+  AptosConnectOutput,
 } from "@aptos-labs/wallet-standard";
 import {
   AnyRawTransaction,
@@ -35,6 +36,16 @@ export type AptosStandardWallet = AptosWallet & {
 };
 
 export class WalletStandardCore {
+  async connect(wallet: Wallet) {
+    const response =
+      (await wallet.connect()) as UserResponse<AptosConnectOutput>;
+
+    if (response.status === UserResponseStatus.REJECTED) {
+      throw new WalletConnectionError("User has rejected the request").message;
+    }
+    return response.args;
+  }
+
   /**
    * Signs and submits a transaction to chain
    *
