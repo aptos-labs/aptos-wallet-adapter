@@ -5,7 +5,7 @@ import {
 } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { aptosClient } from "../../utils";
 import { useAlert } from "../AlertProvider";
 import Button from "../Button";
@@ -35,65 +35,40 @@ export default function MultiAgentTransaction({
 
   let sendable = isSendableNetwork(connected, network?.name);
 
-  useEffect(() => {
-    if (!sendable) return;
-    if (!account) return;
-    if (!network) return;
+  const generateTransaction = async (): Promise<AnyRawTransaction> => {
+    if (!account) {
+      throw new Error("no account");
+    }
+    if (!network) {
+      throw new Error("no network");
+    }
 
     const secondarySigner = Account.generate();
-
-    // Generate a raw transaction using the SDK
-    const generate = async (): Promise<AnyRawTransaction> => {
-      const transactionToSign = await aptosClient(
-        network?.name.toLowerCase()
-      ).transaction.build.multiAgent({
-        sender: account.address,
-        secondarySignerAddresses: [secondarySigner.accountAddress],
-        data: {
-          function: "0x1::coin::transfer",
-          typeArguments: [APTOS_COIN],
-          functionArguments: [account.address, 1], // 1 is in Octas
-        },
-      });
-      return transactionToSign;
-    };
-
-    // Fund secondary signer account to create it on chain
-    const fundSecondarySigner = async () => {
-      await aptosClient(network.name.toLowerCase()).fundAccount({
-        accountAddress: secondarySigner.accountAddress.toString(),
-        amount: 100_000_000,
-      });
-    };
-
-    // Fund current connected account to create it on chain
-    const fundCurrentAccount = async () => {
-      await aptosClient(network.name.toLowerCase()).fundAccount({
-        accountAddress: account.address,
-        amount: 100_000_000,
-      });
-    };
-
-    // We fund the secondary signer account to create it on chain
-    // We fund the current connected account to create it on chain
-    // Then we generate the transaction with the current connected account
-    // as the sender and the secondary signer account
-    fundSecondarySigner().then(() => {
-      setSecondarySignerAccount(secondarySigner);
-      fundCurrentAccount().then(() => {
-        generate().then((transactionToSign) =>
-          setTransactionToSubmit(transactionToSign)
-        );
-      });
+    await aptosClient(network.name.toLowerCase()).fundAccount({
+      accountAddress: secondarySigner.accountAddress.toString(),
+      amount: 100_000_000,
     });
-  }, [network, account, sendable]);
+    setSecondarySignerAccount(secondarySigner);
+
+    const transactionToSign = await aptosClient(
+      network?.name.toLowerCase()
+    ).transaction.build.multiAgent({
+      sender: account.address,
+      secondarySignerAddresses: [secondarySigner.accountAddress],
+      data: {
+        function: "0x1::coin::transfer",
+        typeArguments: [APTOS_COIN],
+        functionArguments: [account.address, 1], // 1 is in Octas
+      },
+    });
+    return transactionToSign;
+  };
 
   const onSenderSignTransaction = async () => {
-    if (!transactionToSubmit) {
-      throw new Error("No Transaction to sign");
-    }
+    const transaction = await generateTransaction();
+    setTransactionToSubmit(transaction);
     try {
-      const authenticator = await signTransaction(transactionToSubmit);
+      const authenticator = await signTransaction(transaction);
       setSenderAuthenticator(authenticator);
     } catch (error) {
       console.error(error);
@@ -144,7 +119,7 @@ export default function MultiAgentTransaction({
           <Button
             color={"blue"}
             onClick={onSenderSignTransaction}
-            disabled={!sendable || !transactionToSubmit}
+            disabled={!sendable}
             message={"Sign as sender"}
           />
 
@@ -162,7 +137,7 @@ export default function MultiAgentTransaction({
           />
         </Col>
       </Row>
-      {secondarySignerAccount && secondarySignerAuthenticator && (
+      {secondarySignerAccount && senderAuthenticator && (
         <Row>
           <Col title={true}>
             <h3>Secondary Signer details</h3>
