@@ -1,6 +1,10 @@
-import { AccountAddress, AccountAuthenticator, AnyRawTransaction } from "@aptos-labs/ts-sdk";
+import {
+  AccountAddress,
+  AccountAuthenticator,
+  AnyRawTransaction,
+} from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { aptosClient } from "../../utils";
 import { useAlert } from "../AlertProvider";
 import Button from "../Button";
@@ -24,65 +28,49 @@ export default function SponsorTransaction({
     useState<AccountAuthenticator>();
   const [feepayerAuthenticator, setFeepayerAuthenticator] =
     useState<AccountAuthenticator>();
-  const [feepayerAddress, setFeepayerAddress] =
-    useState<AccountAddress>();
+  const [feepayerAddress, setFeepayerAddress] = useState<AccountAddress>();
 
   let sendable = isSendableNetwork(connected, network?.name);
 
-  useEffect(() => {
-    if (!sendable) return;
-    if (!account) return;
-    if (!network) return;
-
-    // Generate a raw transaction using the SDK
-    const generate = async (): Promise<AnyRawTransaction> => {
-      const transactionToSign = await aptosClient(
-        network?.name.toLowerCase()
-      ).transaction.build.simple({
-        sender: account.address,
-        withFeePayer: true,
-        data: {
-          function: "0x1::coin::transfer",
-          typeArguments: [APTOS_COIN],
-          functionArguments: [account.address, 1], // 1 is in Octas
-        },
-      });
-      return transactionToSign;
-    };
-
-    // Fund current connected account to create it on chain
-    const fundCurrentAccount = async () => {
-      await aptosClient(network.name.toLowerCase()).fundAccount({
-        accountAddress: account.address,
-        amount: 100_000_000,
-      });
-    };
-
-    // We fund the current connected account to create it on chain
-    // Then we generate the transaction with the current connected account
-    // as the sender
-    fundCurrentAccount().then(() => {
-      generate().then((transactionToSign) =>
-        setTransactionToSubmit(transactionToSign)
-      );
+  // Generate a raw transaction using the SDK
+  const generateTransaction = async (): Promise<AnyRawTransaction> => {
+    if (!account) {
+      throw new Error("no account");
+    }
+    const transactionToSign = await aptosClient(
+      network?.name.toLowerCase()
+    ).transaction.build.simple({
+      sender: account.address,
+      withFeePayer: true,
+      data: {
+        function: "0x1::coin::transfer",
+        typeArguments: [APTOS_COIN],
+        functionArguments: [account.address, 1], // 1 is in Octas
+      },
     });
-  }, [network, account, sendable]);
+    return transactionToSign;
+  };
 
-  const onSignTransaction = async (asSponsor?: boolean) => {
+  const onSignTransaction = async () => {
+    const transaction = await generateTransaction();
+    setTransactionToSubmit(transaction);
+
+    try {
+      const authenticator = await signTransaction(transaction);
+      setSenderAuthenticator(authenticator);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onSignTransactionAsSponsor = async () => {
     if (!transactionToSubmit) {
       throw new Error("No Transaction to sign");
     }
     try {
-      const authenticator = await signTransaction(
-        transactionToSubmit,
-        asSponsor
-      );
-      if (asSponsor) {
-        setFeepayerAuthenticator(authenticator);
-        setFeepayerAddress(AccountAddress.from(account!.address));
-      } else {
-        setSenderAuthenticator(authenticator);
-      }
+      const authenticator = await signTransaction(transactionToSubmit, true);
+      setFeepayerAuthenticator(authenticator);
+      setFeepayerAddress(AccountAddress.from(account!.address));
     } catch (error) {
       console.error(error);
     }
@@ -119,13 +107,13 @@ export default function SponsorTransaction({
       <Col border={true}>
         <Button
           color={"blue"}
-          onClick={() => onSignTransaction(false)}
-          disabled={!sendable || !transactionToSubmit}
+          onClick={() => onSignTransaction()}
+          disabled={!sendable}
           message={"Sign as Sender"}
         />
         <Button
           color={"blue"}
-          onClick={() => onSignTransaction(true)}
+          onClick={() => onSignTransactionAsSponsor()}
           disabled={!sendable || !senderAuthenticator}
           message={"Sign as Sponsor"}
         />
