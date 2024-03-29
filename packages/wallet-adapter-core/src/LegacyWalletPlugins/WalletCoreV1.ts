@@ -33,6 +33,11 @@ import {
 import { areBCSArguments, generalizedErrorMessage } from "../utils";
 
 export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
+  async connect(wallet: Wallet) {
+    const account = await wallet.connect();
+    return account;
+  }
+
   /**
    * Resolve the transaction type (BCS arguments or Simple arguments)
    *

@@ -530,7 +530,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     try {
       this._connecting = true;
       this.setWallet(selectedWallet);
-      const account = await selectedWallet.connect();
+      let account;
+      if (selectedWallet.isAIP62Standard) {
+        account = await this.walletStandardCore.connect(selectedWallet);
+      } else {
+        account = await this.walletCoreV1.connect(selectedWallet);
+      }
       this.setAccount(account);
       const network = await selectedWallet.network();
       this.setNetwork(network);
@@ -653,8 +658,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   ): Promise<AccountAuthenticator> {
     try {
       this.ensureWalletExists(this._wallet);
-      this.ensureAccountExists(this._account);
-
+      console.log("this._account", this._account);
       // Make sure wallet supports signTransaction
       if (this._wallet.signTransaction) {
         // If current connected wallet is AIP-62 standard compatible
