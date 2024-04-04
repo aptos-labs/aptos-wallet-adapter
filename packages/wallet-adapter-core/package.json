@@ -28,8 +28,10 @@
     "Aptos Wallet"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
-    "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+    "update-version": "node -p \"'export const WALLET_ADAPTER_CORE_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
+    "build-package": "export $(cat .env | xargs) && tsup src/index.ts --format esm,cjs --dts --env.GAID $GAID",
+    "build": "pnpm run update-version && pnpm run build-package",
+    "dev": "export $(cat .env | xargs) && tsup src/index.ts --format esm,cjs --watch --dts --env.GAID $GAID",
     "test": "jest",
     "lint": "TIMING=1 eslint \"src/**/*.ts*\"",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
@@ -38,6 +40,7 @@
     "@aptos-labs/eslint-config-adapter": "workspace:*",
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
     "@types/jest": "^29.2.4",
+    "@types/node": "^20.10.4",
     "eslint": "^8.15.0",
     "jest": "^29.3.1",
     "ts-jest": "^29.0.3",
