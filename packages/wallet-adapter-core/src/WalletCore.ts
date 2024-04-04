@@ -62,6 +62,8 @@ import {
   AptosStandardWallet,
   WalletStandardCore,
 } from "./AIP62StandardWallets/WalletStandard";
+import { GA4 } from "./ga";
+import { WALLET_ADAPTER_CORE_VERSION } from "./version";
 
 export type IAptosWallet = AptosStandardWallet & Wallet;
 
@@ -97,6 +99,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   // Indicates whether the dapp is connected with a wallet
   private _connected: boolean = false;
+
+  // Google Analytics 4 module
+  private readonly ga4: GA4 = new GA4();
 
   /**
    * Core functionality constructor.
@@ -214,6 +219,16 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
     this.emit("standardWalletsAdded", standardWalletConvertedToWallet);
   };
+
+  private recordEvent(eventName: string, additionalInfo?: object) {
+    this.ga4.gtag("event", `wallet_adapter_${eventName}`, {
+      wallet: this._wallet?.name,
+      network: this._network?.name,
+      adapter_core_version: WALLET_ADAPTER_CORE_VERSION,
+      send_to: process.env.GAID,
+      ...additionalInfo,
+    });
+  }
 
   /**
    * Helper function to ensure wallet exists
@@ -382,13 +397,22 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
     if (this._wallet?.isAIP62Standard) {
       const standardizeNetwork = network as StandardNetworkInfo;
+      this.recordEvent("network_change", {
+        from: this._network?.name,
+        to: standardizeNetwork.name,
+      });
       this._network = {
         name: standardizeNetwork.name,
         chainId: standardizeNetwork.chainId.toString(),
         url: standardizeNetwork.url,
       };
+
       return;
     }
+    this.recordEvent("network_change", {
+      from: this._network?.name,
+      to: network.name,
+    });
     this._network = { ...(network as NetworkInfo) };
   }
 
@@ -542,6 +566,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       await this.setAnsName();
       setLocalStorage(selectedWallet.name);
       this._connected = true;
+      this.recordEvent("wallet_connect");
       this.emit("connect", account);
     } catch (error: any) {
       this.clearData();
@@ -564,6 +589,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.ensureWalletExists(this._wallet);
       await this._wallet.disconnect();
       this.clearData();
+      this.recordEvent("wallet_disconnect");
       this.emit("disconnect");
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
@@ -586,7 +612,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     try {
       this.ensureWalletExists(this._wallet);
       this.ensureAccountExists(this._account);
-
+      this.recordEvent("sign_and_submit_transaction");
       // get the payload piece from the input
       const payloadData = transactionInput.data;
       const aptosConfig = new AptosConfig({
@@ -658,7 +684,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   ): Promise<AccountAuthenticator> {
     try {
       this.ensureWalletExists(this._wallet);
-      console.log("this._account", this._account);
+      this.recordEvent("sign_transaction");
       // Make sure wallet supports signTransaction
       if (this._wallet.signTransaction) {
         // If current connected wallet is AIP-62 standard compatible
@@ -749,7 +775,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   async signMessage(message: SignMessagePayload): Promise<SignMessageResponse> {
     try {
       this.ensureWalletExists(this._wallet);
-
+      this.recordEvent("sign_message");
       if (this._wallet.isAIP62Standard) {
         return await this.walletStandardCore.signMessage(message, this._wallet);
       }
@@ -774,6 +800,14 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     try {
       this.ensureWalletExists(this._wallet);
 
+      const { additionalSignersAuthenticators } = transaction;
+      const transactionType =
+        additionalSignersAuthenticators !== undefined
+          ? "multi-agent"
+          : "simple";
+      this.recordEvent("submit_transaction", {
+        transaction_type: transactionType,
+      });
       // If wallet supports submitTransaction transaction function
       if (this._wallet.submitTransaction) {
         const pendingTransaction =
@@ -782,7 +816,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       }
 
       // Else have the adpater submits the transaction
-      const { additionalSignersAuthenticators } = transaction;
+
       const aptosConfig = new AptosConfig({
         network: convertNetwork(this.network),
       });
@@ -814,6 +848,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         async (data: AccountInfo | StandardAccountInfo) => {
           this.setAccount(data);
           await this.setAnsName();
+          this.recordEvent("account_change");
           this.emit("accountChange", this._account);
         }
       );
@@ -853,7 +888,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     try {
       this.ensureWalletExists(this._wallet);
       this.ensureAccountExists(this._account);
-
+      this.recordEvent("sign_message_and_verify");
       // If current connected wallet is AIP-62 standard compatible
       if (this._wallet.isAIP62Standard) {
         return this.walletStandardCore.signMessageAndVerify(
