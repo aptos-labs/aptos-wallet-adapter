@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-nextjs-example",
-  "version": "2.6.1",
+  "version": "0.0.0-ga-20240405184859",
   "private": true,
   "license": "Apache-2.0",
   "scripts": {

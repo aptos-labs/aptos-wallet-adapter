@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 0.0.0-ga-20240405184859
+
+### Minor Changes
+
+- GA4
+
 ## 3.8.0
 
 ### Minor Changes
