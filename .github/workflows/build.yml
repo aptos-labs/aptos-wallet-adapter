@@ -33,4 +33,4 @@ jobs:
         run: pnpm run build
 
       - name: View build
-        run: ls -l
+        run: cat packages/wallet-adapter-core/dist/index.js
