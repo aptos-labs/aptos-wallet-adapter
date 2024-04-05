@@ -31,3 +31,6 @@ jobs:
         env:
           GAID: ${{ secrets.APTOS_WALLET_ADAPTER_GAID }}
         run: pnpm run build
+
+      - name: View build
+        run: ls -l
