@@ -28,4 +28,6 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build global project
+        env:
+          GAID: ${{ secrets.APTOS_WALLET_ADAPTER_GAID }}
         run: pnpm run build
