@@ -138,9 +138,8 @@ function WalletProps(props: {
 }) {
   const { account, network, wallet } = props;
   const isValidNetworkName = () => {
-    // TODO: Do we allow non lowercase
     return Object.values<string | undefined>(Network).includes(
-      props.network?.name
+      props.network?.name.toLowerCase()
     );
   };
 
