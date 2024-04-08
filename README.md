@@ -16,23 +16,20 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 
 Note: These are in alphabetical order, any new wallets must be in alphabetical order
 
+[AIP-62](https://github.com/aptos-foundation/AIPs/blob/main/aips/aip-62.md) standard compatible
+
+- [Nightly](https://chromewebstore.google.com/detail/nightly/fiikommddbeccaoicoejoniammnalkfa)
+
+Legacy standard compatible
+
 - [BitgetWallet](https://www.npmjs.com/package/@bitget-wallet/aptos-wallet-adapter)
-- [Blocto](https://www.npmjs.com/package/@blocto/aptos-wallet-adapter-plugin)
-- [FaceWallet](https://www.npmjs.com/package/@haechi-labs/face-aptos-adapter-plugin)
 - [Fewcha](https://www.npmjs.com/package/fewcha-plugin-wallet-adapter)
-- [Flipper](https://www.npmjs.com/package/@flipperplatform/wallet-adapter-plugin)
 - [Martian](https://www.npmjs.com/package/@martianwallet/aptos-wallet-adapter)
 - [MSafe](https://www.npmjs.com/package/@msafe/aptos-wallet-adapter)
-- [Nightly](https://www.npmjs.com/package/@nightlylabs/aptos-wallet-adapter-plugin)
-- [OpenBlock](https://www.npmjs.com/package/@openblockhq/aptos-wallet-adapter)
 - [Petra](https://www.npmjs.com/package/petra-plugin-wallet-adapter)
 - [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
-- [Rise](https://www.npmjs.com/package/@rise-wallet/wallet-adapter)
-- [TokenPocket](https://www.npmjs.com/package/@tp-lab/aptos-wallet-adapter)
-- [Trust](https://www.npmjs.com/package/@trustwallet/aptos-wallet-adapter)
-- [WELLDONE](https://www.npmjs.com/package/@welldone-studio/aptos-wallet-adapter)
 - [OKX](https://www.npmjs.com/package/@okwallet/aptos-wallet-adapter)
-- [OneKey](https://www.npmjs.com/package/@onekeyfe/aptos-wallet-adapter)
+- [Trust](https://www.npmjs.com/package/@trustwallet/aptos-wallet-adapter)
 
 #### Develop Locally
 
