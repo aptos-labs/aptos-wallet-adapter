@@ -383,7 +383,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     if (this._wallet?.isAIP62Standard) {
       const standardizeNetwork = network as StandardNetworkInfo;
       this._network = {
-        name: standardizeNetwork.name,
+        name: standardizeNetwork.name.toLowerCase(),
         chainId: standardizeNetwork.chainId.toString(),
         url: standardizeNetwork.url,
       };

@@ -139,7 +139,7 @@ function WalletProps(props: {
   const { account, network, wallet } = props;
   const isValidNetworkName = () => {
     return Object.values<string | undefined>(Network).includes(
-      props.network?.name.toLowerCase()
+      props.network?.name
     );
   };
 
