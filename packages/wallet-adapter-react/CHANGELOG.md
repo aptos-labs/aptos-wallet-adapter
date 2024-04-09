@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-react
 
+## 2.3.0
+
+### Minor Changes
+
+- 444c708: Fix wallet detection
+
+### Patch Changes
+
+- Updated dependencies [6be2a06]
+  - @aptos-labs/wallet-adapter-core@3.9.0
+
 ## 2.2.1
 
 ### Patch Changes
