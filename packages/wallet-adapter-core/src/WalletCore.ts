@@ -1,5 +1,6 @@
 import { TxnBuilderTypes, Types, BCS } from "aptos";
 import {
+  Network,
   AnyRawTransaction,
   AccountAuthenticator,
   AccountAuthenticatorEd25519,
@@ -383,13 +384,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     if (this._wallet?.isAIP62Standard) {
       const standardizeNetwork = network as StandardNetworkInfo;
       this._network = {
-        name: standardizeNetwork.name,
+        name: standardizeNetwork.name.toLowerCase() as Network,
         chainId: standardizeNetwork.chainId.toString(),
         url: standardizeNetwork.url,
       };
       return;
     }
-    this._network = { ...(network as NetworkInfo) };
+    this._network = { ...(network as NetworkInfo), name: network.name.toLowerCase() as Network };
   }
 
   /**
