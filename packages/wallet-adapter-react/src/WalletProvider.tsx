@@ -224,13 +224,20 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const handleStandardWalletsAdded = (standardWallet: Wallet) => {
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
-    const updatedWallets = wallets?.map((wallet) => {
-      if (wallet.name === standardWallet.name) {
-        return { ...standardWallet };
-      }
-      return wallet;
-    });
-    setWallets(updatedWallets);
+    const existingWalletIndex = wallets.findIndex(
+      (wallet) => wallet.name == standardWallet.name
+    );
+    if (existingWalletIndex !== -1) {
+      // If wallet exists, replace it with the new wallet
+      setWallets((wallets) => [
+        ...wallets.slice(0, existingWalletIndex),
+        standardWallet,
+        ...wallets.slice(existingWalletIndex + 1),
+      ]);
+    } else {
+      // If wallet doesn't exist, add it to the array
+      setWallets((wallets) => [...wallets, standardWallet]);
+    }
   };
 
   useEffect(() => {
