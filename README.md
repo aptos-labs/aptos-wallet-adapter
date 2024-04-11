@@ -43,3 +43,7 @@ You would need `pnpm@7.14.2` in order to bootstrap and test a local copy of this
 3. On the root folder, run `pnpm turbo run dev` - that would spin up a local server (`localhost:3000`) with the `nextjs` demoapp
 
 Looking how you can contribute? Take a look at our [contribution guide](./CONTRIBUTING.md)
+
+#### Terms of Use and Privacy Policy
+
+By accessing or using the wallet adapter, you agree to be bound to the Aptos Labs [Terms of Use](https://aptoslabs.com/terms) and [Privacy Policy](https://aptoslabs.com/privacy).
