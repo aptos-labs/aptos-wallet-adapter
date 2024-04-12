@@ -1,5 +1,15 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 2.2.0
+
+### Minor Changes
+
+- 41f9485: Implement GA4
+
+### Patch Changes
+
+- @aptos-labs/wallet-adapter-react@2.3.1
+
 ## 2.1.0
 
 ### Minor Changes
