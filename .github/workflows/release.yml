@@ -33,6 +33,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build global project
+        env:
+          GAID: ${{ vars.APTOS_WALLET_ADAPTER_GAID }}
         run: pnpm run build
 
       - name: Create Release Pull Request or Publish to npm
