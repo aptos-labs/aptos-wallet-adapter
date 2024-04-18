@@ -1,5 +1,8 @@
 import type { AppProps } from "next/app";
 import { AppContext } from "../components/AppContext";
+import { DevTWallet } from "@atomrigslab/aptos-wallet-adapter"
+
+new DevTWallet();
 
 // order matters
 import "../styles/global.css";
