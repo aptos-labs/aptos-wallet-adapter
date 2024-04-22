@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "@aptos-labs/wallet-standard": "^0.0.11",
+    "@atomrigslab/aptos-wallet-adapter": "^0.1.5",
     "buffer": "^6.0.3",
     "eventemitter3": "^4.0.7",
     "tweetnacl": "^1.0.3"

@@ -45,9 +45,6 @@ importers:
       '@aptos-labs/wallet-standard':
         specifier: ^0.0.11
         version: 0.0.11
-      '@atomrigslab/aptos-wallet-adapter':
-        specifier: ^0.1.5
-        version: 0.1.5(@aptos-labs/ts-sdk@1.11.0)
       '@bitget-wallet/aptos-wallet-adapter':
         specifier: ^0.1.0
         version: 0.1.1(@aptos-labs/wallet-adapter-core@packages+wallet-adapter-core)(aptos@1.21.0)
@@ -215,6 +212,9 @@ importers:
       '@aptos-labs/wallet-standard':
         specifier: ^0.0.11
         version: 0.0.11
+      '@atomrigslab/aptos-wallet-adapter':
+        specifier: ^0.1.5
+        version: 0.1.5(@aptos-labs/ts-sdk@1.11.0)(esbuild@0.14.54)
       aptos:
         specifier: ^1.21.0
         version: 1.21.0
@@ -562,14 +562,14 @@ packages:
       - debug
     dev: false
 
-  /@atomrigslab/aptos-wallet-adapter@0.1.5(@aptos-labs/ts-sdk@1.11.0):
+  /@atomrigslab/aptos-wallet-adapter@0.1.5(@aptos-labs/ts-sdk@1.11.0)(esbuild@0.14.54):
     resolution: {integrity: sha512-MvzU0ahfUTgvMCz9BM7hNjzGVz7slBnLZzqztTqE7aUIY1v8qcL22KVmt4uduORiAQywa1U647HN+AogN///kg==}
     peerDependencies:
       '@aptos-labs/ts-sdk': ^1.9.0
     dependencies:
       '@aptos-labs/ts-sdk': 1.11.0
       '@aptos-labs/wallet-standard': 0.0.12
-      '@atomrigslab/dekey-web-wallet-provider': 1.2.0
+      '@atomrigslab/dekey-web-wallet-provider': 1.2.0(esbuild@0.14.54)
     transitivePeerDependencies:
       - '@swc/core'
       - '@webpack-cli/generators'
@@ -580,11 +580,11 @@ packages:
       - webpack-dev-server
     dev: false
 
-  /@atomrigslab/dekey-web-wallet-provider@1.2.0:
+  /@atomrigslab/dekey-web-wallet-provider@1.2.0(esbuild@0.14.54):
     resolution: {integrity: sha512-y9Jd/fzcEaZTXj/hAvt4eKuAHD9AEMeeeVL5fgEFoJKkAyevoxPmsH2CwCgc6AZbgXNw6YUTk8KyDIjWL/XBEA==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@atomrigslab/providers': 1.0.1
+      '@atomrigslab/providers': 1.0.1(esbuild@0.14.54)
     transitivePeerDependencies:
       - '@swc/core'
       - '@webpack-cli/generators'
@@ -594,7 +594,7 @@ packages:
       - webpack-dev-server
     dev: false
 
-  /@atomrigslab/providers@1.0.1:
+  /@atomrigslab/providers@1.0.1(esbuild@0.14.54):
     resolution: {integrity: sha512-gaJZgbT3NlEP+RrU/38hAvmM0xmzpEV/I+g4wCqMjTkYY0S8c7khTB0WdrieIjldD5YPKfPr3dKdmPhibdY8JA==}
     engines: {node: '>=12.0.0'}
     dependencies:
@@ -603,7 +603,7 @@ packages:
       '@types/chrome': 0.0.136
       detect-browser: 5.3.0
       eth-rpc-errors: 4.0.3
-      extension-port-stream: 2.1.1
+      extension-port-stream: 2.1.1(esbuild@0.14.54)
       fast-deep-equal: 2.0.1
       is-stream: 2.0.1
       json-rpc-engine: 6.1.0
@@ -1302,7 +1302,6 @@ packages:
     cpu: [loong64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@eslint-community/eslint-utils@4.4.0(eslint@8.57.0):
@@ -3064,12 +3063,12 @@ packages:
   /@types/eslint-scope@3.7.7:
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
     dependencies:
-      '@types/eslint': 8.56.9
+      '@types/eslint': 8.56.10
       '@types/estree': 1.0.5
     dev: false
 
-  /@types/eslint@8.56.9:
-    resolution: {integrity: sha512-W4W3KcqzjJ0sHg2vAq9vfml6OhsJ53TcUjUqfzzZf/EChUtwspszj/S0pzMxnfRcO55/iGq47dscXw71Fxc4Zg==}
+  /@types/eslint@8.56.10:
+    resolution: {integrity: sha512-Shavhk87gCtY2fhXDctcfS3e6FdxWkCx1iUZ9eEUbh7rTqlZT0/IzOkCOVt0fCjcFuZ9FPYfuezTBImfHCDBGQ==}
     dependencies:
       '@types/estree': 1.0.5
       '@types/json-schema': 7.0.15
@@ -3437,7 +3436,7 @@ packages:
       webpack: 5.x.x
       webpack-cli: 5.x.x
     dependencies:
-      webpack: 5.91.0(webpack-cli@5.1.4)
+      webpack: 5.91.0(esbuild@0.14.54)(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack@5.91.0)
     dev: false
 
@@ -3448,7 +3447,7 @@ packages:
       webpack: 5.x.x
       webpack-cli: 5.x.x
     dependencies:
-      webpack: 5.91.0(webpack-cli@5.1.4)
+      webpack: 5.91.0(esbuild@0.14.54)(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack@5.91.0)
     dev: false
 
@@ -3463,7 +3462,7 @@ packages:
       webpack-dev-server:
         optional: true
     dependencies:
-      webpack: 5.91.0(webpack-cli@5.1.4)
+      webpack: 5.91.0(esbuild@0.14.54)(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack@5.91.0)
     dev: false
 
@@ -4960,7 +4959,6 @@ packages:
     cpu: [x64]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-android-arm64@0.14.54:
@@ -4969,7 +4967,6 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-darwin-64@0.14.54:
@@ -4978,7 +4975,6 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-darwin-arm64@0.14.54:
@@ -4987,7 +4983,6 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-freebsd-64@0.14.54:
@@ -4996,7 +4991,6 @@ packages:
     cpu: [x64]
     os: [freebsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-freebsd-arm64@0.14.54:
@@ -5005,7 +4999,6 @@ packages:
     cpu: [arm64]
     os: [freebsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-32@0.14.54:
@@ -5014,7 +5007,6 @@ packages:
     cpu: [ia32]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-64@0.14.54:
@@ -5023,7 +5015,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-arm64@0.14.54:
@@ -5032,7 +5023,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-arm@0.14.54:
@@ -5041,7 +5031,6 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-mips64le@0.14.54:
@@ -5050,7 +5039,6 @@ packages:
     cpu: [mips64el]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-ppc64le@0.14.54:
@@ -5059,7 +5047,6 @@ packages:
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-riscv64@0.14.54:
@@ -5068,7 +5055,6 @@ packages:
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-s390x@0.14.54:
@@ -5077,7 +5063,6 @@ packages:
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-netbsd-64@0.14.54:
@@ -5086,7 +5071,6 @@ packages:
     cpu: [x64]
     os: [netbsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-openbsd-64@0.14.54:
@@ -5095,7 +5079,6 @@ packages:
     cpu: [x64]
     os: [openbsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-sunos-64@0.14.54:
@@ -5104,7 +5087,6 @@ packages:
     cpu: [x64]
     os: [sunos]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-windows-32@0.14.54:
@@ -5113,7 +5095,6 @@ packages:
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-windows-64@0.14.54:
@@ -5122,7 +5103,6 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-windows-arm64@0.14.54:
@@ -5131,7 +5111,6 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild@0.14.54:
@@ -5161,7 +5140,6 @@ packages:
       esbuild-windows-32: 0.14.54
       esbuild-windows-64: 0.14.54
       esbuild-windows-arm64: 0.14.54
-    dev: true
 
   /escalade@3.1.2:
     resolution: {integrity: sha512-ErCHMCae19vR8vQGe50xIsVomy19rg6gFu3+r3jkEO46suLMWBksvVyoGgQV+jOfl84ZSOSlmv6Gxa89PmTGmA==}
@@ -5684,11 +5662,11 @@ packages:
     resolution: {integrity: sha512-UOiS2in6/Q0FK0R0q6UY9vYpQ21mr/Qn1KOnte7vsACuNJf514WvCCUHSRCPcgjPT2bAhNIJdlE6bVap1GKmeg==}
     dev: true
 
-  /extension-port-stream@2.1.1:
+  /extension-port-stream@2.1.1(esbuild@0.14.54):
     resolution: {integrity: sha512-qknp5o5rj2J9CRKfVB8KJr+uXQlrojNZzdESUPhKYLXf97TPcGf6qWWKmpsNNtUyOdzFhab1ON0jzouNxHHvow==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      webextension-polyfill: 0.11.0
+      webextension-polyfill: 0.11.0(esbuild@0.14.54)
     transitivePeerDependencies:
       - '@swc/core'
       - '@webpack-cli/generators'
@@ -9386,7 +9364,7 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /terser-webpack-plugin@5.3.10(webpack@5.91.0):
+  /terser-webpack-plugin@5.3.10(esbuild@0.14.54)(webpack@5.91.0):
     resolution: {integrity: sha512-BKFPWlPDndPs+NGGCr1U59t0XScL5317Y0UReNrHaw9/FwhPENlq6bfgs+4yPfyP51vqC1bQ4rp1EfXW5ZSH9w==}
     engines: {node: '>= 10.13.0'}
     peerDependencies:
@@ -9403,11 +9381,12 @@ packages:
         optional: true
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
+      esbuild: 0.14.54
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.2
       terser: 5.30.3
-      webpack: 5.91.0(webpack-cli@5.1.4)
+      webpack: 5.91.0(esbuild@0.14.54)(webpack-cli@5.1.4)
     dev: false
 
   /terser@5.30.3:
@@ -9911,10 +9890,10 @@ packages:
       webextension-polyfill: 0.7.0
     dev: false
 
-  /webextension-polyfill@0.11.0:
+  /webextension-polyfill@0.11.0(esbuild@0.14.54):
     resolution: {integrity: sha512-YUBSKQA0iCx2YtM75VFgvvcx1hLKaGGiph6a6UaUdSgk32VT9SzrcDAKBjeGHXoAZTnNBqS5skA4VfoKMXhEBA==}
     dependencies:
-      webpack: 5.91.0(webpack-cli@5.1.4)
+      webpack: 5.91.0(esbuild@0.14.54)(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack@5.91.0)
     transitivePeerDependencies:
       - '@swc/core'
@@ -9966,7 +9945,7 @@ packages:
       import-local: 3.1.0
       interpret: 3.1.1
       rechoir: 0.8.0
-      webpack: 5.91.0(webpack-cli@5.1.4)
+      webpack: 5.91.0(esbuild@0.14.54)(webpack-cli@5.1.4)
       webpack-merge: 5.10.0
     dev: false
 
@@ -9984,7 +9963,7 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: false
 
-  /webpack@5.91.0(webpack-cli@5.1.4):
+  /webpack@5.91.0(esbuild@0.14.54)(webpack-cli@5.1.4):
     resolution: {integrity: sha512-rzVwlLeBWHJbmgTC/8TvAcu5vpJNII+MelQpylD4jNERPwpBJOE2lEcko1zJX3QJeLjTTAnQxn/OJ8bjDzVQaw==}
     engines: {node: '>=10.13.0'}
     hasBin: true
@@ -10015,7 +9994,7 @@ packages:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.10(webpack@5.91.0)
+      terser-webpack-plugin: 5.3.10(esbuild@0.14.54)(webpack@5.91.0)
       watchpack: 2.4.1
       webpack-cli: 5.1.4(webpack@5.91.0)
       webpack-sources: 3.2.3
