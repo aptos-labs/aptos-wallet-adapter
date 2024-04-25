@@ -57,7 +57,7 @@
     "@atomrigslab/aptos-wallet-adapter": "^0.1.12"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^1.13.2",
+    "@aptos-labs/ts-sdk": "^1.18.1",
     "aptos": "^1.21.0"
   },
   "files": [
