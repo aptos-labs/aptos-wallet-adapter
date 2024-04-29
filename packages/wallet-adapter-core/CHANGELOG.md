@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.11.0
+
+### Minor Changes
+
+- 245ce8d: Support a custom network defined in a Wallet
+
 ## 3.10.0
 
 ### Minor Changes

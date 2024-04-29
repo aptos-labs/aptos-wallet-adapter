@@ -1,5 +1,19 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 2.7.0
+
+### Minor Changes
+
+- 245ce8d: Support a custom network defined in a Wallet
+
+### Patch Changes
+
+- Updated dependencies [245ce8d]
+  - @aptos-labs/wallet-adapter-core@3.11.0
+  - @aptos-labs/wallet-adapter-react@2.3.2
+  - @aptos-labs/wallet-adapter-ant-design@2.2.1
+  - @aptos-labs/wallet-adapter-mui-design@2.3.1
+
 ## 2.6.3
 
 ### Patch Changes
