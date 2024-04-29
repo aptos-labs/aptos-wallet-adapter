@@ -9,9 +9,10 @@ import {
   useState,
 } from "react";
 import { ErrorAlert, SuccessAlert } from "./Alert";
+import { isAptosNetwork, NetworkInfo } from "@aptos-labs/wallet-adapter-core";
 
 interface AlertContextState {
-  setSuccessAlertHash: (hash: string, networkName?: string) => void;
+  setSuccessAlertHash: (hash: string, network: NetworkInfo | null) => void;
   setSuccessAlertMessage: Dispatch<SetStateAction<ReactNode | null>>;
   setErrorAlertMessage: Dispatch<SetStateAction<ReactNode | null>>;
 }
@@ -35,18 +36,25 @@ export const AlertProvider: FC<{ children: ReactNode }> = ({ children }) => {
   );
 
   const setSuccessAlertHash = useCallback(
-    (hash: string, networkName?: string) => {
-      const explorerLink = `https://explorer.aptoslabs.com/txn/${hash}${
-        networkName ? `?network=${networkName.toLowerCase()}` : ""
-      }`;
-      setSuccessAlertMessage(
-        <>
-          View on Explorer:{" "}
-          <a className="underline" target="_blank" href={explorerLink} rel={"noreferrer"}>
-            {explorerLink}
-          </a>
-        </>
-      );
+    (hash: string, network: NetworkInfo | null) => {
+      if (isAptosNetwork(network)) {
+        const explorerLink = `https://explorer.aptoslabs.com/txn/${hash}${network?.name ? `?network=${network.name}` : ""}`;
+        return setSuccessAlertMessage(
+          <>
+            View on Explorer:{" "}
+            <a
+              className="underline"
+              target="_blank"
+              href={explorerLink}
+              rel={"noreferrer"}
+            >
+              {explorerLink}
+            </a>
+          </>
+        );
+      }
+
+      return setSuccessAlertMessage(<>Transaction Hash: {hash}</>);
     },
     []
   );

@@ -1,4 +1,9 @@
-import { useWallet, AccountInfo, NetworkInfo, WalletInfo} from "@aptos-labs/wallet-adapter-react";
+import {
+  useWallet,
+  AccountInfo,
+  NetworkInfo,
+  WalletInfo,
+} from "@aptos-labs/wallet-adapter-react";
 import { WalletConnector } from "@aptos-labs/wallet-adapter-mui-design";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -10,6 +15,7 @@ import Row from "../components/Row";
 import Col from "../components/Col";
 import { Network } from "@aptos-labs/ts-sdk";
 import { Typography } from "antd";
+import { isAptosNetwork } from "@aptos-labs/wallet-adapter-core";
 
 const { Link } = Typography;
 
@@ -26,12 +32,12 @@ const WalletSelectorAntDesign = dynamic(
   }
 );
 
-const isSendableNetwork = (connected: boolean, network?: string): boolean => {
-  return (
-    connected &&
-    (network?.toLowerCase() === Network.DEVNET.toLowerCase() ||
-      network?.toLowerCase() === Network.TESTNET.toLowerCase())
-  );
+const isSendableNetwork = (connected: boolean): boolean => {
+  return connected && !isMainnet(connected);
+};
+
+const isMainnet = (connected: boolean, networkName?: string): boolean => {
+  return connected && networkName === Network.MAINNET;
 };
 
 export default function App() {
@@ -66,12 +72,12 @@ export default function App() {
           {connected && (
             <WalletProps wallet={wallet} network={network} account={account} />
           )}
-          {connected && !isSendableNetwork(connected, network?.name) && (
+          {connected && isMainnet(connected, network?.name) && (
             <tr>
               <Col title={true}></Col>
               <Col>
                 <p style={{ color: "red" }}>
-                  Transactions only work with Devnet or Testnet networks
+                  Transactions dont work with Mainnet network
                 </p>
               </Col>
             </tr>
@@ -138,9 +144,14 @@ function WalletProps(props: {
 }) {
   const { account, network, wallet } = props;
   const isValidNetworkName = () => {
-    return Object.values<string | undefined>(Network).includes(
-      props.network?.name
-    );
+    if (isAptosNetwork(network)) {
+      return Object.values<string | undefined>(Network).includes(
+        props.network?.name
+      );
+    }
+    // If the configured network is not an Aptos network, i.e is a custom network
+    // we resolve it as a valid network name
+    return true;
   };
 
   return (

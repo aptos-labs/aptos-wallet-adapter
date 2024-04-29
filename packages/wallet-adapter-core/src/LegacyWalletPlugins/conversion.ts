@@ -12,7 +12,7 @@ import { NetworkInfo } from "./types";
 export function convertNetwork(
   networkInfo: NetworkInfo | StandardNetworkInfo | null
 ): Network {
-  switch (networkInfo?.name.toLowerCase()) {
+  switch (networkInfo?.name) {
     case "mainnet" as Network:
       return Network.MAINNET;
     case "testnet" as Network:
@@ -20,7 +20,7 @@ export function convertNetwork(
     case "devnet" as Network:
       return Network.DEVNET;
     default:
-      throw new Error("Invalid network name");
+      throw new Error("Invalid Aptos network name");
   }
 }
 

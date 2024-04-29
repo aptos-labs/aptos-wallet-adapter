@@ -44,14 +44,15 @@ export default function MultiAgentTransaction({
     }
 
     const secondarySigner = Account.generate();
-    await aptosClient(network.name.toLowerCase()).fundAccount({
+    // TODO support custom network
+    await aptosClient(network).fundAccount({
       accountAddress: secondarySigner.accountAddress.toString(),
       amount: 100_000_000,
     });
     setSecondarySignerAccount(secondarySigner);
 
     const transactionToSign = await aptosClient(
-      network?.name.toLowerCase()
+      network
     ).transaction.build.multiAgent({
       sender: account.address,
       secondarySignerAddresses: [secondarySigner.accountAddress],
@@ -103,7 +104,7 @@ export default function MultiAgentTransaction({
         senderAuthenticator: senderAuthenticator,
         additionalSignersAuthenticators: [secondarySignerAuthenticator],
       });
-      setSuccessAlertHash(response.hash, network?.name);
+      setSuccessAlertHash(response.hash, network);
     } catch (error) {
       console.error(error);
     }
