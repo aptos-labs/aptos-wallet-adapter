@@ -33,30 +33,30 @@ import {
 } from "./error";
 import {
   AccountInfo,
+  InputTransactionData,
   NetworkInfo,
   SignMessagePayload,
-  Wallet,
-  WalletInfo,
-  WalletCoreEvents,
   SignMessageResponse,
-  InputTransactionData,
+  Wallet,
+  WalletCoreEvents,
+  WalletInfo,
   WalletName,
 } from "./LegacyWalletPlugins/types";
 import {
-  removeLocalStorage,
-  setLocalStorage,
-  scopePollingDetectionStrategy,
-  isRedirectable,
   generalizedErrorMessage,
   getAptosConfig,
   isAptosNetwork,
+  isRedirectable,
+  removeLocalStorage,
+  scopePollingDetectionStrategy,
+  setLocalStorage,
 } from "./utils";
 import { convertNetwork } from "./LegacyWalletPlugins/conversion";
 import { WalletCoreV1 } from "./LegacyWalletPlugins/WalletCoreV1";
 import {
+  AccountInfo as StandardAccountInfo,
   AptosWallet,
   getAptosWallets,
-  AccountInfo as StandardAccountInfo,
   NetworkInfo as StandardNetworkInfo,
   UserResponse,
   UserResponseStatus,
