@@ -538,7 +538,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
 
     // Check if we are in a redirectable view (i.e on mobile AND not in an in-app browser)
-    if (isRedirectable()) {
+    // Ignore if wallet is installed (iOS extension)
+    if (isRedirectable() && selectedWallet.readyState !== WalletReadyState.Installed) {
       // use wallet deep link
       if (selectedWallet.isAIP62Standard && selectedWallet.openInMobileApp) {
         selectedWallet.openInMobileApp();
