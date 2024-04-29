@@ -94,5 +94,5 @@ export const isAptosNetwork = (
   if (!networkInfo) {
     throw new Error("Undefined network");
   }
-  return NetworkToNodeAPI[networkInfo.name] ? true : false;
+  return NetworkToNodeAPI[networkInfo.name] !== undefined;
 };

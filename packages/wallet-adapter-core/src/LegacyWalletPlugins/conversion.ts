@@ -12,7 +12,7 @@ import { NetworkInfo } from "./types";
 export function convertNetwork(
   networkInfo: NetworkInfo | StandardNetworkInfo | null
 ): Network {
-  switch (networkInfo?.name.toLowerCase()) {
+  switch (networkInfo?.name) {
     case "mainnet" as Network:
       return Network.MAINNET;
     case "testnet" as Network:

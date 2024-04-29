@@ -2,11 +2,11 @@ import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 import { NetworkInfo } from "@aptos-labs/wallet-adapter-core";
 
 export const aptosClient = (network?: NetworkInfo | null) => {
-  if (network?.name.toLowerCase() === Network.DEVNET.toLowerCase()) {
+  if (network?.name === Network.DEVNET) {
     return DEVNET_CLIENT;
-  } else if (network?.name.toLowerCase() === Network.TESTNET.toLowerCase()) {
+  } else if (network?.name === Network.TESTNET) {
     return TESTNET_CLIENT;
-  } else if (network?.name.toLowerCase() === Network.MAINNET.toLowerCase()) {
+  } else if (network?.name === Network.MAINNET) {
     throw new Error("Please use devnet or testnet for testing");
   } else {
     const CUSTOM_CONFIG = new AptosConfig({

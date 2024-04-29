@@ -38,7 +38,7 @@ export const AlertProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const setSuccessAlertHash = useCallback(
     (hash: string, network: NetworkInfo | null) => {
       if (isAptosNetwork(network)) {
-        const explorerLink = `https://explorer.aptoslabs.com/txn/${hash}${network?.name ? `?network=${network.name.toLowerCase()}` : ""}`;
+        const explorerLink = `https://explorer.aptoslabs.com/txn/${hash}${network?.name ? `?network=${network.name}` : ""}`;
         return setSuccessAlertMessage(
           <>
             View on Explorer:{" "}

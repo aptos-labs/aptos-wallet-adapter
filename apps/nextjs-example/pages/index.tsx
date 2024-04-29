@@ -32,12 +32,12 @@ const WalletSelectorAntDesign = dynamic(
   }
 );
 
-const isSendableNetwork = (connected: boolean, network?: string): boolean => {
-  return connected && !isMainnet(connected, network);
+const isSendableNetwork = (connected: boolean): boolean => {
+  return connected && !isMainnet(connected);
 };
 
-const isMainnet = (connected: boolean, network?: string): boolean => {
-  return connected && network?.toLowerCase() === Network.MAINNET.toLowerCase();
+const isMainnet = (connected: boolean, networkName?: string): boolean => {
+  return connected && networkName === Network.MAINNET;
 };
 
 export default function App() {
