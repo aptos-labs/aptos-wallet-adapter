@@ -16,6 +16,7 @@ import {
   UserResponse,
   AccountInfo as StandardAccountInfo,
   NetworkInfo as StandardNetworkInfo,
+  AptosChangeNetworkMethod,
 } from "@aptos-labs/wallet-standard";
 
 export { TxnBuilderTypes, Types } from "aptos";
@@ -136,6 +137,7 @@ export interface AdapterPluginProps<Name extends string = string> {
     optionsOrAsFeePayer?: any
   ): Promise<any>;
   account?: () => Promise<AccountInfo | StandardAccountInfo>;
+  changeNetwork?: AptosChangeNetworkMethod;
 }
 
 export type AdapterPlugin<Name extends string = string> =

@@ -11,7 +11,8 @@ import {
   InputSubmitTransactionData,
   PendingTransactionResponse,
   Aptos,
-  generateRawTransaction, SimpleTransaction,
+  generateRawTransaction,
+  SimpleTransaction,
 } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
 
@@ -19,6 +20,7 @@ import { ChainIdToAnsSupportedNetworkMap, WalletReadyState } from "./constants";
 import {
   WalletAccountChangeError,
   WalletAccountError,
+  WalletChangeNetworkError,
   WalletConnectionError,
   WalletDisconnectionError,
   WalletGetNetworkError,
@@ -60,6 +62,7 @@ import {
 import { WalletCoreV1 } from "./LegacyWalletPlugins/WalletCoreV1";
 import {
   AccountInfo as StandardAccountInfo,
+  AptosChangeNetworkOutput,
   AptosWallet,
   getAptosWallets,
   NetworkInfo as StandardNetworkInfo,
@@ -215,6 +218,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         standardWallet.features["aptos:signTransaction"].signTransaction,
       openInMobileApp:
         standardWallet.features["aptos:openInMobileApp"]?.openInMobileApp,
+      changeNetwork:
+        standardWallet.features["aptos:changeNetwork"]?.changeNetwork,
       readyState: WalletReadyState.Installed,
       isAIP62Standard: true,
     };
@@ -717,16 +722,31 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
             const aptosConfig = getAptosConfig(this._network);
             this.ensureAccountExists(this._account);
             const sender = this._account.address;
-            const payload = await generateTransactionPayloadFromV1Input(aptosConfig, transactionOrPayload);
+            const payload = await generateTransactionPayloadFromV1Input(
+              aptosConfig,
+              transactionOrPayload
+            );
             const optionsV1 = options as CompatibleTransactionOptions;
             const optionsV2 = {
               accountSequenceNumber: optionsV1?.sequenceNumber,
-              expireTimestamp: optionsV1?.expireTimestamp ?? optionsV1?.expirationTimestamp,
-              gasUnitPrice: optionsV1?.gasUnitPrice ?? optionsV1?.gas_unit_price,
-              maxGasAmount: optionsV1?.maxGasAmount ?? optionsV1?.max_gas_amount,
+              expireTimestamp:
+                optionsV1?.expireTimestamp ?? optionsV1?.expirationTimestamp,
+              gasUnitPrice:
+                optionsV1?.gasUnitPrice ?? optionsV1?.gas_unit_price,
+              maxGasAmount:
+                optionsV1?.maxGasAmount ?? optionsV1?.max_gas_amount,
             };
-            const rawTransaction = await generateRawTransaction({ aptosConfig, payload, sender, options: optionsV2 });
-            return await this.walletStandardCore.signTransaction(new SimpleTransaction(rawTransaction), this._wallet, false);
+            const rawTransaction = await generateRawTransaction({
+              aptosConfig,
+              payload,
+              sender,
+              options: optionsV2,
+            });
+            return await this.walletStandardCore.signTransaction(
+              new SimpleTransaction(rawTransaction),
+              this._wallet,
+              false
+            );
           }
         }
 
@@ -897,6 +917,28 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
       throw new WalletNetworkChangeError(errMsg).message;
+    }
+  }
+
+  async changeNetwork(
+    network: StandardNetworkInfo
+  ): Promise<AptosChangeNetworkOutput> {
+    try {
+      this.ensureWalletExists(this._wallet);
+      if (this._wallet.changeNetwork) {
+        const response = await this._wallet.changeNetwork(network);
+        if (response.status === UserResponseStatus.REJECTED) {
+          throw new WalletConnectionError("User has rejected the request")
+            .message;
+        }
+        return response.args;
+      }
+      throw new WalletChangeNetworkError(
+        `${this._wallet.name} does not support changing network request`
+      ).message;
+    } catch (error: any) {
+      const errMsg = generalizedErrorMessage(error);
+      throw new WalletChangeNetworkError(errMsg).message;
     }
   }
 
