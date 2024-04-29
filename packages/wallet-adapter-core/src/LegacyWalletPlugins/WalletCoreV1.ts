@@ -2,7 +2,6 @@ import { HexString, TxnBuilderTypes, Types } from "aptos";
 import EventEmitter from "eventemitter3";
 import { Buffer } from "buffer";
 import {
-  AptosConfig,
   InputEntryFunctionDataWithRemoteABI,
   InputGenerateTransactionPayloadData,
   generateTransactionPayload,
@@ -26,11 +25,14 @@ import {
 } from "./types";
 
 import {
-  convertNetwork,
   convertV2PayloadToV1JSONPayload,
   convertV2TransactionPayloadToV1BCSPayload,
 } from "./conversion";
-import { areBCSArguments, generalizedErrorMessage } from "../utils";
+import {
+  areBCSArguments,
+  generalizedErrorMessage,
+  getAptosConfig,
+} from "../utils";
 
 export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
   async connect(wallet: Wallet) {
@@ -56,9 +58,7 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
   ) {
     // first check if each argument is a BCS serialized argument
     if (areBCSArguments(payloadData.functionArguments)) {
-      const aptosConfig = new AptosConfig({
-        network: convertNetwork(network),
-      });
+      const aptosConfig = getAptosConfig(network);
       const newPayload = await generateTransactionPayload({
         ...(payloadData as InputEntryFunctionDataWithRemoteABI),
         aptosConfig: aptosConfig,

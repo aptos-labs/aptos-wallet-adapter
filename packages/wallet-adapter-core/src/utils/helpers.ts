@@ -1,8 +1,14 @@
 import {
+  AptosConfig,
   EntryFunctionArgumentTypes,
+  Network,
+  NetworkToNodeAPI,
   Serializable,
   SimpleEntryFunctionArgumentTypes,
 } from "@aptos-labs/ts-sdk";
+import { NetworkInfo as StandardNetworkInfo } from "@aptos-labs/wallet-standard";
+import { NetworkInfo } from "../LegacyWalletPlugins/types";
+import { convertNetwork } from "../LegacyWalletPlugins/conversion";
 
 export function isMobile(): boolean {
   return /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/i.test(
@@ -51,4 +57,42 @@ export const areBCSArguments = (
     (arg: EntryFunctionArgumentTypes | SimpleEntryFunctionArgumentTypes) =>
       arg instanceof Serializable
   );
+};
+
+/**
+ * Helper function to get AptosConfig that supports Aptos and Custom networks
+ *
+ * @param networkInfo
+ * @returns AptosConfig
+ */
+export const getAptosConfig = (
+  networkInfo: NetworkInfo | StandardNetworkInfo | null
+): AptosConfig => {
+  if (!networkInfo) {
+    throw new Error("Undefined network");
+  }
+  if (isAptosNetwork(networkInfo)) {
+    return new AptosConfig({
+      network: convertNetwork(networkInfo),
+    });
+  }
+  return new AptosConfig({
+    network: Network.CUSTOM,
+    fullnode: networkInfo.url,
+  });
+};
+
+/**
+ * Helper function to resolve if the current connected network is an Aptos network
+ *
+ * @param networkInfo
+ * @returns boolean
+ */
+export const isAptosNetwork = (
+  networkInfo: NetworkInfo | StandardNetworkInfo | null
+): boolean => {
+  if (!networkInfo) {
+    throw new Error("Undefined network");
+  }
+  return NetworkToNodeAPI[networkInfo.name] ? true : false;
 };

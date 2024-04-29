@@ -20,7 +20,7 @@ export function convertNetwork(
     case "devnet" as Network:
       return Network.DEVNET;
     default:
-      throw new Error("Invalid network name");
+      throw new Error("Invalid Aptos network name");
   }
 }
 

@@ -61,10 +61,10 @@ export default function SingleSignerTransaction({
     };
     try {
       const response = await signAndSubmitTransaction(transaction);
-      await aptosClient(network?.name.toLowerCase()).waitForTransaction({
+      await aptosClient(network).waitForTransaction({
         transactionHash: response.hash,
       });
-      setSuccessAlertHash(response.hash, network?.name);
+      setSuccessAlertHash(response.hash, network);
     } catch (error) {
       console.error(error);
     }
@@ -81,10 +81,10 @@ export default function SingleSignerTransaction({
           functionArguments: [AccountAddress.from(account.address), new U64(1)], // 1 is in Octas
         },
       });
-      await aptosClient(network?.name.toLowerCase()).waitForTransaction({
+      await aptosClient(network).waitForTransaction({
         transactionHash: response.hash,
       });
-      setSuccessAlertHash(response.hash, network?.name);
+      setSuccessAlertHash(response.hash, network);
     } catch (error) {
       console.error(error);
     }
@@ -111,7 +111,7 @@ export default function SingleSignerTransaction({
 
     try {
       const transactionToSign = await aptosClient(
-        network?.name.toLowerCase()
+        network
       ).transaction.build.simple({
         sender: account.address,
         data: {

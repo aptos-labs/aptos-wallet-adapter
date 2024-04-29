@@ -38,7 +38,7 @@ export default function SponsorTransaction({
       throw new Error("no account");
     }
     const transactionToSign = await aptosClient(
-      network?.name.toLowerCase()
+      network
     ).transaction.build.simple({
       sender: account.address,
       withFeePayer: true,
@@ -93,7 +93,7 @@ export default function SponsorTransaction({
         senderAuthenticator: senderAuthenticator,
         feePayerAuthenticator: feepayerAuthenticator,
       });
-      setSuccessAlertHash(response.hash, network?.name);
+      setSuccessAlertHash(response.hash, network);
     } catch (error) {
       console.error(error);
     }

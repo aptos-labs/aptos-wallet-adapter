@@ -48,6 +48,8 @@ import {
   scopePollingDetectionStrategy,
   isRedirectable,
   generalizedErrorMessage,
+  getAptosConfig,
+  isAptosNetwork,
 } from "./utils";
 import { convertNetwork } from "./LegacyWalletPlugins/conversion";
 import { WalletCoreV1 } from "./LegacyWalletPlugins/WalletCoreV1";
@@ -225,6 +227,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     this.ga4.gtag("event", `wallet_adapter_${eventName}`, {
       wallet: this._wallet?.name,
       network: this._network?.name,
+      network_url: this._network?.url,
       adapter_core_version: WALLET_ADAPTER_CORE_VERSION,
       send_to: process.env.GAID,
       ...additionalInfo,
@@ -300,7 +303,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private async setAnsName(): Promise<void> {
     if (this._network?.chainId && this._account) {
       // ANS supports only MAINNET or TESTNET
-      if (!ChainIdToAnsSupportedNetworkMap[this._network.chainId]) {
+      if (
+        !ChainIdToAnsSupportedNetworkMap[this._network.chainId] ||
+        !isAptosNetwork(this._network)
+      ) {
         this._account.ansName = undefined;
         return;
       }
@@ -620,9 +626,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.recordEvent("sign_and_submit_transaction");
       // get the payload piece from the input
       const payloadData = transactionInput.data;
-      const aptosConfig = new AptosConfig({
-        network: convertNetwork(this._network),
-      });
+      const aptosConfig = getAptosConfig(this._network);
 
       const aptos = new Aptos(aptosConfig);
 
