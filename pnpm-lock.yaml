@@ -28,8 +28,8 @@ importers:
   apps/nextjs-example:
     dependencies:
       '@aptos-labs/ts-sdk':
-        specifier: ^1.11.0
-        version: 1.11.0
+        specifier: ^1.13.2
+        version: 1.13.2
       '@aptos-labs/wallet-adapter-ant-design':
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-ant-design
@@ -65,7 +65,7 @@ importers:
         version: 1.14.3(ethers@5.7.2)
       '@identity-connect/wallet-adapter-plugin':
         specifier: ^1.2.5
-        version: 1.2.5(@aptos-labs/ts-sdk@1.11.0)(aptos@1.21.0)
+        version: 1.2.5(@aptos-labs/ts-sdk@1.13.2)(aptos@1.21.0)
       '@martianwallet/aptos-wallet-adapter':
         specifier: ^0.0.5
         version: 0.0.5
@@ -110,7 +110,7 @@ importers:
         version: 13.0.0(@babel/core@7.24.0)(react-dom@18.2.0)(react@18.2.0)
       petra-plugin-wallet-adapter:
         specifier: ^0.4.5
-        version: 0.4.5(@aptos-labs/ts-sdk@1.11.0)(aptos@1.21.0)
+        version: 0.4.5(@aptos-labs/ts-sdk@1.13.2)(aptos@1.21.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -207,8 +207,8 @@ importers:
   packages/wallet-adapter-core:
     dependencies:
       '@aptos-labs/ts-sdk':
-        specifier: ^1.11.0
-        version: 1.11.0
+        specifier: ^1.13.2
+        version: 1.13.2
       '@aptos-labs/wallet-standard':
         specifier: ^0.0.11
         version: 0.0.11
@@ -405,6 +405,11 @@ packages:
       throttle-debounce: 5.0.0
     dev: false
 
+  /@aptos-labs/aptos-cli@0.1.2:
+    resolution: {integrity: sha512-MCi+9xPDG/Fx6c6b9ACqyQBYJLHqKJQKB8lay/1sUNJ2mNBB2OU1Lkmd5pmjUG1JbZ5cg2Fmgid5iMKdTnphhA==}
+    hasBin: true
+    dev: false
+
   /@aptos-labs/aptos-client@0.0.2:
     resolution: {integrity: sha512-FgKZb5zDPz8MmAcVxXzYhxP6OkzuIPoDRJp48YJ8+vrZ9EOZ35HaWGN2M3u+GPdnFE9mODFqkxw3azh3kHGZjQ==}
     engines: {node: '>=15.10.0'}
@@ -439,18 +444,18 @@ packages:
       - debug
     dev: false
 
-  /@aptos-labs/ts-sdk@1.11.0:
-    resolution: {integrity: sha512-iy4bcHHVfRxcMgrdZEl6KBu2NeWpD9oMMli43R82eBLHfBO+LjDHdkr9GcFE5FE6ogt0EP9EWQk8TcjZmWkyVg==}
+  /@aptos-labs/ts-sdk@1.13.2:
+    resolution: {integrity: sha512-0dmG7KXt5G58jDsaD3dgNnYZZphyQbteAwGFao9cWVr+uPaXhtqmPOVqNBm4Tm3QRnwH9+Xo4v0nYy4wnCzABw==}
     engines: {node: '>=11.0.0'}
     dependencies:
+      '@aptos-labs/aptos-cli': 0.1.2
       '@aptos-labs/aptos-client': 0.1.0
       '@noble/curves': 1.4.0
       '@noble/hashes': 1.4.0
-      '@scure/bip32': 1.3.3
-      '@scure/bip39': 1.2.2
+      '@scure/bip32': 1.4.0
+      '@scure/bip39': 1.3.0
       eventemitter3: 5.0.1
       form-data: 4.0.0
-      tweetnacl: 1.0.3
     transitivePeerDependencies:
       - debug
     dev: false
@@ -525,13 +530,13 @@ packages:
       - debug
     dev: false
 
-  /@aptos-labs/wallet-adapter-core@3.8.0(@aptos-labs/ts-sdk@1.11.0)(aptos@1.21.0):
+  /@aptos-labs/wallet-adapter-core@3.8.0(@aptos-labs/ts-sdk@1.13.2)(aptos@1.21.0):
     resolution: {integrity: sha512-n8pevmJ0tSN/gq0FvU+1PkgxgctqZh+V1K56Q+r+PZU9OquKK5NAz+q2v7Qc+vp/7LdkWM4C2H7Gj1aFQuSziQ==}
     peerDependencies:
       '@aptos-labs/ts-sdk': ^1.11.0
       aptos: ^1.21.0
     dependencies:
-      '@aptos-labs/ts-sdk': 1.11.0
+      '@aptos-labs/ts-sdk': 1.13.2
       '@aptos-labs/wallet-standard': 0.0.11
       aptos: 1.21.0
       buffer: 6.0.3
@@ -544,7 +549,7 @@ packages:
   /@aptos-labs/wallet-standard@0.0.11:
     resolution: {integrity: sha512-8dygyPBby7TaMJjUSyeVP4R1WC9D/FPpX9gVMMLaqTKCXrSbkzhGDxcuwbMZ3ziEwRmx3zz+d6BIJbDhd0hm5g==}
     dependencies:
-      '@aptos-labs/ts-sdk': 1.11.0
+      '@aptos-labs/ts-sdk': 1.13.2
       '@wallet-standard/core': 1.0.3
     transitivePeerDependencies:
       - debug
@@ -1762,14 +1767,14 @@ packages:
       - debug
     dev: false
 
-  /@identity-connect/wallet-adapter-plugin@1.2.5(@aptos-labs/ts-sdk@1.11.0)(aptos@1.21.0):
+  /@identity-connect/wallet-adapter-plugin@1.2.5(@aptos-labs/ts-sdk@1.13.2)(aptos@1.21.0):
     resolution: {integrity: sha512-bMe88X45doLfFZXq40aBOZPJG2uFa13VD3r/LrhZA0+3DBo1JPvljx9B0Q6FgpIRcWu6VRL+RcAhyE5LaxOv3Q==}
     peerDependencies:
       '@aptos-labs/ts-sdk': ^1.11.0
       aptos: ^1.20.0
     dependencies:
-      '@aptos-labs/ts-sdk': 1.11.0
-      '@aptos-labs/wallet-adapter-core': 3.8.0(@aptos-labs/ts-sdk@1.11.0)(aptos@1.21.0)
+      '@aptos-labs/ts-sdk': 1.13.2
+      '@aptos-labs/wallet-adapter-core': 3.8.0(@aptos-labs/ts-sdk@1.13.2)(aptos@1.21.0)
       '@identity-connect/api': 0.4.1
       '@identity-connect/dapp-sdk': 0.4.3
       '@identity-connect/wallet-api': 0.0.4
@@ -2788,12 +2793,24 @@ packages:
     resolution: {integrity: sha512-Brj9FiG2W1MRQSTB212YVPRrcbjkv48FoZi/u4l/zds/ieRrqsh7aUf6CLwkAq61oKXr/ZlTzlY66gLIj3TFTQ==}
     dev: false
 
+  /@scure/base@1.1.6:
+    resolution: {integrity: sha512-ok9AWwhcgYuGG3Zfhyqg+zwl+Wn5uE+dwC0NV/2qQkx4dABbb/bx96vWu8NSj+BNjjSjno+JRYRjle1jV08k3g==}
+    dev: false
+
   /@scure/bip32@1.3.3:
     resolution: {integrity: sha512-LJaN3HwRbfQK0X1xFSi0Q9amqOgzQnnDngIt+ZlsBC3Bm7/nE7K0kwshZHyaru79yIVRv/e1mQAjZyuZG6jOFQ==}
     dependencies:
       '@noble/curves': 1.3.0
       '@noble/hashes': 1.3.3
       '@scure/base': 1.1.5
+    dev: false
+
+  /@scure/bip32@1.4.0:
+    resolution: {integrity: sha512-sVUpc0Vq3tXCkDGYVWGIZTRfnvu8LoTDaev7vbwh0omSvVORONr960MQWdKqJDCReIEmTj3PAr73O3aoxz7OPg==}
+    dependencies:
+      '@noble/curves': 1.4.0
+      '@noble/hashes': 1.4.0
+      '@scure/base': 1.1.6
     dev: false
 
   /@scure/bip39@1.1.0:
@@ -2815,6 +2832,13 @@ packages:
     dependencies:
       '@noble/hashes': 1.3.3
       '@scure/base': 1.1.5
+    dev: false
+
+  /@scure/bip39@1.3.0:
+    resolution: {integrity: sha512-disdg7gHuTDZtY+ZdkmLpPCk7fxZSu3gBiEGuoC1XYxv9cGx3Z6cpTggCgW6odSOOIXCiDjuGejW+aJKCY/pIQ==}
+    dependencies:
+      '@noble/hashes': 1.4.0
+      '@scure/base': 1.1.6
     dev: false
 
   /@sinclair/typebox@0.27.8:
@@ -7391,14 +7415,14 @@ packages:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
 
-  /petra-plugin-wallet-adapter@0.4.5(@aptos-labs/ts-sdk@1.11.0)(aptos@1.21.0):
+  /petra-plugin-wallet-adapter@0.4.5(@aptos-labs/ts-sdk@1.13.2)(aptos@1.21.0):
     resolution: {integrity: sha512-x2S2xRAIz/5ytbB2wHCTJhqLBDsgWPEVmj7X2aril1BUplIGPJHTstgo8hqOngb2rtYbBY+wviyS9Di4IDCGRA==}
     peerDependencies:
       '@aptos-labs/ts-sdk': ^1.3.0
       aptos: ^1.21.0
     dependencies:
-      '@aptos-labs/ts-sdk': 1.11.0
-      '@aptos-labs/wallet-adapter-core': 3.8.0(@aptos-labs/ts-sdk@1.11.0)(aptos@1.21.0)
+      '@aptos-labs/ts-sdk': 1.13.2
+      '@aptos-labs/wallet-adapter-core': 3.8.0(@aptos-labs/ts-sdk@1.13.2)(aptos@1.21.0)
       aptos: 1.21.0
     transitivePeerDependencies:
       - debug
