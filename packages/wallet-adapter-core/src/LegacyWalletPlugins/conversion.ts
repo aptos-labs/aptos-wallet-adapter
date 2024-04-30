@@ -3,6 +3,12 @@ import {
   TransactionPayload,
   InputGenerateTransactionPayloadData,
   TypeTag,
+  AptosConfig,
+  InputEntryFunctionData,
+  InputMultiSigData,
+  MoveFunctionId,
+  generateTransactionPayload,
+  TransactionPayloadEntryFunction,
 } from "@aptos-labs/ts-sdk";
 import { NetworkInfo as StandardNetworkInfo } from "@aptos-labs/wallet-standard";
 import { BCS, TxnBuilderTypes, Types } from "aptos";
@@ -57,4 +63,32 @@ export function convertV2PayloadToV1JSONPayload(
 
     return newPayload;
   }
+}
+
+export async function generateTransactionPayloadFromV1Input(
+  aptosConfig: AptosConfig,
+  inputV1: Types.TransactionPayload,
+): Promise<TransactionPayloadEntryFunction> {
+  if ('function' in inputV1) {
+    const inputV2: InputEntryFunctionData | InputMultiSigData = {
+      function: inputV1.function as MoveFunctionId,
+      functionArguments: inputV1.arguments,
+      typeArguments: inputV1.type_arguments,
+    };
+    return generateTransactionPayload({ ...inputV2, aptosConfig });
+  }
+
+  throw new Error('Payload type not supported');
+}
+
+export interface CompatibleTransactionOptions {
+  expireTimestamp?: number;
+  expirationSecondsFromNow?: number;
+  expirationTimestamp?: number;
+  gasUnitPrice?: number;
+  gas_unit_price?: number;
+  maxGasAmount?: number;
+  max_gas_amount?: number;
+  sender?: string;
+  sequenceNumber?: number;
 }

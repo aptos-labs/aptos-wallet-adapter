@@ -29,7 +29,9 @@
   ],
   "scripts": {
     "update-version": "node -p \"'export const WALLET_ADAPTER_CORE_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
-    "build-package": "export $(cat .env | xargs) && tsup src/index.ts --format esm,cjs --dts --env.GAID $GAID",
+    "build-package": "export $(cat .env | xargs) && pnpm build:bundle && pnpm build:declarations",
+    "build:bundle": "tsup src/index.ts --format cjs,esm --sourcemap --env.GAID $GAID",
+    "build:declarations": "tsc --emitDeclarationOnly --declaration --declarationMap",
     "build": "pnpm run update-version && pnpm run build-package",
     "dev": "export $(cat .env | xargs) && tsup src/index.ts --format esm,cjs --watch --dts --env.GAID $GAID",
     "test": "jest",
@@ -56,5 +58,11 @@
   "peerDependencies": {
     "@aptos-labs/ts-sdk": "^1.13.2",
     "aptos": "^1.21.0"
-  }
+  },
+  "files": [
+    "dist",
+    "src",
+    "!src/**.test.ts",
+    "!src/**/__tests__"
+  ]
 }

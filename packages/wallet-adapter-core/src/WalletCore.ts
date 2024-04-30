@@ -11,6 +11,7 @@ import {
   InputSubmitTransactionData,
   PendingTransactionResponse,
   Aptos,
+  generateRawTransaction, SimpleTransaction,
 } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
 
@@ -51,7 +52,11 @@ import {
   scopePollingDetectionStrategy,
   setLocalStorage,
 } from "./utils";
-import { convertNetwork } from "./LegacyWalletPlugins/conversion";
+import {
+  CompatibleTransactionOptions,
+  convertNetwork,
+  generateTransactionPayloadFromV1Input,
+} from "./LegacyWalletPlugins/conversion";
 import { WalletCoreV1 } from "./LegacyWalletPlugins/WalletCoreV1";
 import {
   AccountInfo as StandardAccountInfo,
@@ -709,12 +714,19 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
               asFeePayer
             );
           } else {
-            // else it means dapp passes legacy sdk v1 input data
-            // and the current connected wallet does not support it
-            throw new WalletNotSupportedMethod(
-              `Invalid transaction input data was provided, ${this.wallet?.name} expects AnyRawTransaction type. 
-              Please upgrade to the latest Aptos TS SDK https://github.com/aptos-labs/aptos-ts-sdk`
-            ).message;
+            const aptosConfig = getAptosConfig(this._network);
+            this.ensureAccountExists(this._account);
+            const sender = this._account.address;
+            const payload = await generateTransactionPayloadFromV1Input(aptosConfig, transactionOrPayload);
+            const optionsV1 = options as CompatibleTransactionOptions;
+            const optionsV2 = {
+              accountSequenceNumber: optionsV1?.sequenceNumber,
+              expireTimestamp: optionsV1?.expireTimestamp ?? optionsV1?.expirationTimestamp,
+              gasUnitPrice: optionsV1?.gasUnitPrice ?? optionsV1?.gas_unit_price,
+              maxGasAmount: optionsV1?.maxGasAmount ?? optionsV1?.max_gas_amount,
+            };
+            const rawTransaction = await generateRawTransaction({ aptosConfig, payload, sender, options: optionsV2 });
+            return await this.walletStandardCore.signTransaction(new SimpleTransaction(rawTransaction), this._wallet, false);
           }
         }
 
