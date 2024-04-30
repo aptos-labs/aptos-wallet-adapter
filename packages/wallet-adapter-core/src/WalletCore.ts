@@ -24,8 +24,10 @@ import {
   NetworkInfo as StandardNetworkInfo,
   UserResponse,
   UserResponseStatus,
+  isWalletWithRequiredFeatureSet,
 } from "@aptos-labs/wallet-standard";
 
+import SDKWallets from "./AIP62StandardWallets/sdkWallets";
 import { ChainIdToAnsSupportedNetworkMap, WalletReadyState } from "./constants";
 import {
   WalletAccountChangeError,
@@ -132,6 +134,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     this.fetchAptosWallets();
     // Append AIP-62 compatible wallets that are not detected on the user machine
     this.appendNotDetectedStandardSupportedWallets(this._standard_wallets);
+    // Stretegy to detect AIP-62 standard compatible SDK wallets
+    this.fetchSDKWallets();
   }
 
   private scopePollingDetectionStrategy() {
@@ -194,7 +198,25 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     });
   }
 
-  private async setWallets(wallets: readonly AptosWallet[]) {
+  private fetchSDKWallets = () => {
+    const aptosStandardWallets: AptosStandardWallet[] = [];
+
+    SDKWallets.map((wallet: any) => {
+      const sdkWallet = new wallet();
+
+      const isValid = isWalletWithRequiredFeatureSet(sdkWallet);
+      // TODO add user opt-in check
+      if (isValid) {
+        const standardWallet = sdkWallet as AptosStandardWallet;
+        standardWallet.readyState = WalletReadyState.Installed;
+        aptosStandardWallets.push(standardWallet);
+        this.standardizeStandardWalletToPluginWalletType(standardWallet);
+      }
+    });
+    this._standard_wallets = aptosStandardWallets;
+  };
+
+  private setWallets(wallets: readonly AptosWallet[]) {
     const aptosStandardWallets: AptosStandardWallet[] = [];
 
     wallets.map((wallet: AptosWallet) => {
