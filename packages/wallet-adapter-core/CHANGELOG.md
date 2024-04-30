@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.11.2
+
+### Patch Changes
+
+- ec02b10: Monkey-patched `signTransaction` v1 to be compatible with AIP62 wallets
+
 ## 3.11.1
 
 ### Patch Changes
