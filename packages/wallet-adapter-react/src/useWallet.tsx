@@ -13,6 +13,9 @@ import {
   AccountAuthenticator,
   Types,
   WalletName,
+  StandardNetworkInfo,
+  AptosChangeNetworkOutput,
+  Network,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
 
@@ -36,6 +39,7 @@ export interface WalletContextState {
   ): Promise<PendingTransactionResponse>;
   signMessage(message: SignMessagePayload): Promise<SignMessageResponse>;
   signMessageAndVerify(message: SignMessagePayload): Promise<boolean>;
+  changeNetwork(network: Network): Promise<AptosChangeNetworkOutput>;
 }
 
 const DEFAULT_CONTEXT = {

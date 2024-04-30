@@ -1,4 +1,5 @@
 import {
+  Aptos,
   AptosConfig,
   EntryFunctionArgumentTypes,
   Network,
@@ -95,4 +96,12 @@ export const isAptosNetwork = (
     throw new Error("Undefined network");
   }
   return NetworkToNodeAPI[networkInfo.name] !== undefined;
+};
+
+/**
+ * Helper function to fetch Devnet chain id
+ */
+export const fetchDevnetChainId = async (): Promise<number> => {
+  const aptos = new Aptos(); // default to devnet
+  return await aptos.getChainId();
 };

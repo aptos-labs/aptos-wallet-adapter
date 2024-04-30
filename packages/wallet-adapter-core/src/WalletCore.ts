@@ -13,6 +13,7 @@ import {
   Aptos,
   generateRawTransaction,
   SimpleTransaction,
+  NetworkToChainId,
 } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
 
@@ -46,6 +47,7 @@ import {
   WalletName,
 } from "./LegacyWalletPlugins/types";
 import {
+  fetchDevnetChainId,
   generalizedErrorMessage,
   getAptosConfig,
   isAptosNetwork,
@@ -920,13 +922,29 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     }
   }
 
-  async changeNetwork(
-    network: StandardNetworkInfo
-  ): Promise<AptosChangeNetworkOutput> {
+  /**
+   * Sends a change network request to the wallet to change the connected network
+   *
+   * @param network
+   * @returns AptosChangeNetworkOutput
+   */
+  async changeNetwork(network: Network): Promise<AptosChangeNetworkOutput> {
     try {
       this.ensureWalletExists(this._wallet);
+      this.recordEvent("change_network_request", {
+        from: this._network?.name,
+        to: network,
+      });
+      const chainId =
+        network === Network.DEVNET
+          ? await fetchDevnetChainId()
+          : NetworkToChainId[network];
       if (this._wallet.changeNetwork) {
-        const response = await this._wallet.changeNetwork(network);
+        const networkInfo: StandardNetworkInfo = {
+          name: network,
+          chainId,
+        };
+        const response = await this._wallet.changeNetwork(networkInfo);
         if (response.status === UserResponseStatus.REJECTED) {
           throw new WalletConnectionError("User has rejected the request")
             .message;
