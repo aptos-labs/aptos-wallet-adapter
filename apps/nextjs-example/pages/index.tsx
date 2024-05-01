@@ -14,8 +14,12 @@ import MultiAgentTransaction from "../components/transactionFlow/MultiAgent";
 import Row from "../components/Row";
 import Col from "../components/Col";
 import { Network } from "@aptos-labs/ts-sdk";
-import { Typography } from "antd";
-import { isAptosNetwork } from "@aptos-labs/wallet-adapter-core";
+import { Select, Typography } from "antd";
+import {
+  AptosChangeNetworkOutput,
+  StandardNetworkInfo,
+  isAptosNetwork,
+} from "@aptos-labs/wallet-adapter-core";
 
 const { Link } = Typography;
 
@@ -41,7 +45,7 @@ const isMainnet = (connected: boolean, networkName?: string): boolean => {
 };
 
 export default function App() {
-  const { account, connected, network, wallet } = useWallet();
+  const { account, connected, network, wallet, changeNetwork } = useWallet();
 
   return (
     <div>
@@ -70,7 +74,12 @@ export default function App() {
             </Row>
           )}
           {connected && (
-            <WalletProps wallet={wallet} network={network} account={account} />
+            <WalletProps
+              wallet={wallet}
+              network={network}
+              account={account}
+              changeNetwork={changeNetwork}
+            />
           )}
           {connected && isMainnet(connected, network?.name) && (
             <tr>
@@ -141,8 +150,9 @@ function WalletProps(props: {
   account: AccountInfo | null;
   network: NetworkInfo | null;
   wallet: WalletInfo | null;
+  changeNetwork: (network: Network) => Promise<AptosChangeNetworkOutput>;
 }) {
-  const { account, network, wallet } = props;
+  const { account, network, wallet, changeNetwork } = props;
   const isValidNetworkName = () => {
     if (isAptosNetwork(network)) {
       return Object.values<string | undefined>(Network).includes(
@@ -152,6 +162,11 @@ function WalletProps(props: {
     // If the configured network is not an Aptos network, i.e is a custom network
     // we resolve it as a valid network name
     return true;
+  };
+
+  const onChangeNetworkRequest = async (value: any) => {
+    console.log(`selected ${value}`);
+    await changeNetwork(value);
   };
 
   return (
@@ -221,6 +236,46 @@ function WalletProps(props: {
           />
           <DisplayOptionalValue name={"URL"} value={network?.url} />
           <DisplayOptionalValue name={"ChainId"} value={network?.chainId} />
+        </Col>
+      </Row>
+      <Row>
+        <Col title={true}>
+          <h3>Change Network</h3>
+        </Col>
+        <Col>
+          <button
+            className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 hover:bg-blue-700 ${
+              network?.name === Network.DEVNET
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-blue-700"
+            }`}
+            onClick={() => onChangeNetworkRequest(Network.DEVNET)}
+            disabled={network?.name === "devnet"}
+          >
+            <>Devnet</>
+          </button>
+          <button
+            className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 hover:bg-blue-700 ${
+              network?.name === Network.TESTNET
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-blue-700"
+            }`}
+            onClick={() => onChangeNetworkRequest(Network.TESTNET)}
+            disabled={network?.name === Network.TESTNET}
+          >
+            <>Testnet</>
+          </button>
+          <button
+            className={`bg-blue-500  text-white font-bold py-2 px-4 rounded mr-4 hover:bg-blue-700 ${
+              network?.name === Network.MAINNET
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-blue-700"
+            }`}
+            onClick={() => onChangeNetworkRequest(Network.MAINNET)}
+            disabled={network?.name === "mainnet"}
+          >
+            <>Mainnet</>
+          </button>
         </Col>
       </Row>
     </>

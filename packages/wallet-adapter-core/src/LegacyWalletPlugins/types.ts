@@ -16,6 +16,7 @@ import {
   UserResponse,
   AccountInfo as StandardAccountInfo,
   NetworkInfo as StandardNetworkInfo,
+  AptosChangeNetworkMethod,
 } from "@aptos-labs/wallet-standard";
 
 export { TxnBuilderTypes, Types } from "aptos";
@@ -26,7 +27,13 @@ export type {
   InputSubmitTransactionData,
   PendingTransactionResponse,
   AccountAuthenticator,
+  Network,
 } from "@aptos-labs/ts-sdk";
+
+export type {
+  NetworkInfo as StandardNetworkInfo,
+  AptosChangeNetworkOutput,
+} from "@aptos-labs/wallet-standard";
 
 // WalletName is a nominal type that wallet adapters should use, e.g. `'MyCryptoWallet' as WalletName<'MyCryptoWallet'>`
 export type WalletName<T extends string = string> = T & {
@@ -136,6 +143,7 @@ export interface AdapterPluginProps<Name extends string = string> {
     optionsOrAsFeePayer?: any
   ): Promise<any>;
   account?: () => Promise<AccountInfo | StandardAccountInfo>;
+  changeNetwork?: AptosChangeNetworkMethod;
 }
 
 export type AdapterPlugin<Name extends string = string> =

@@ -22,6 +22,8 @@ import type {
   WalletName,
   Types,
   InputTransactionData,
+  StandardNetworkInfo,
+  Network,
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
 
@@ -134,6 +136,15 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   ) => {
     try {
       return await walletCore.signAndSubmitTransaction(transaction);
+    } catch (error: any) {
+      if (onError) onError(error);
+      return Promise.reject(error);
+    }
+  };
+
+  const changeNetwork = async (network: Network) => {
+    try {
+      return await walletCore.changeNetwork(network);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
@@ -273,6 +284,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         signMessageAndVerify,
         isLoading,
         submitTransaction,
+        changeNetwork,
       }}
     >
       {children}
