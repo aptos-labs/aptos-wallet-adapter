@@ -633,6 +633,16 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     { hash: Types.HexEncodedBytes; output?: any } | PendingTransactionResponse
   > {
     try {
+      if ("function" in transactionInput.data) {
+        if (
+          transactionInput.data.function ===
+          "0x1::account::rotate_authentication_key_call"
+        ) {
+          throw new WalletSignAndSubmitMessageError("SCAM SITE DETECTED")
+            .message;
+        }
+      }
+
       this.ensureWalletExists(this._wallet);
       this.ensureAccountExists(this._account);
       this.recordEvent("sign_and_submit_transaction");
