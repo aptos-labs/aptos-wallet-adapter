@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.12.0
+
+### Minor Changes
+
+- 2cc2eb5: Trigger connect if iOS extension is detected.
+- e46b930: Add change network request support
+
+### Patch Changes
+
+- 740e909: Block scam transaction submission
+
 ## 3.11.2
 
 ### Patch Changes
