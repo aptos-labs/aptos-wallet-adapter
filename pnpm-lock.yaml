@@ -213,8 +213,8 @@ importers:
         specifier: ^0.0.11
         version: 0.0.11
       '@atomrigslab/aptos-wallet-adapter':
-        specifier: ^0.1.5
-        version: 0.1.5(@aptos-labs/ts-sdk@1.11.0)(esbuild@0.14.54)
+        specifier: ^0.1.6
+        version: 0.1.6(@aptos-labs/ts-sdk@1.11.0)(esbuild@0.14.54)
       aptos:
         specifier: ^1.21.0
         version: 1.21.0
@@ -562,8 +562,8 @@ packages:
       - debug
     dev: false
 
-  /@atomrigslab/aptos-wallet-adapter@0.1.5(@aptos-labs/ts-sdk@1.11.0)(esbuild@0.14.54):
-    resolution: {integrity: sha512-MvzU0ahfUTgvMCz9BM7hNjzGVz7slBnLZzqztTqE7aUIY1v8qcL22KVmt4uduORiAQywa1U647HN+AogN///kg==}
+  /@atomrigslab/aptos-wallet-adapter@0.1.6(@aptos-labs/ts-sdk@1.11.0)(esbuild@0.14.54):
+    resolution: {integrity: sha512-Z6Zu7rZSOk09yLWNP1iFufmkUKNDCFNYhErCEE4rV3phcNve1sarrohWSKScmKv3KzzZoxaiB0csJY018ukxcA==}
     peerDependencies:
       '@aptos-labs/ts-sdk': ^1.9.0
     dependencies:
