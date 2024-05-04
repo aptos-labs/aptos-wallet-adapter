@@ -130,7 +130,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     this.scopePollingDetectionStrategy();
     // Strategy to detect AIP-62 standard compatible wallets
     this.fetchAptosWallets();
-    // Stretegy to detect AIP-62 standard compatible SDK wallets
+    // Strategy to detect AIP-62 standard compatible SDK wallets
     this.fetchSDKWallets();
   }
 
