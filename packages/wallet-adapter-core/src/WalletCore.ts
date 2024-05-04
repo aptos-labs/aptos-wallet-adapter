@@ -134,7 +134,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     this.fetchAptosWallets();
     // Append AIP-62 compatible wallets that are not detected on the user machine
     this.appendNotDetectedStandardSupportedWallets(this._standard_wallets);
-    // Stretegy to detect AIP-62 standard compatible SDK wallets
+    // Strategy to detect AIP-62 standard compatible SDK wallets
     this.fetchSDKWallets();
   }
 
