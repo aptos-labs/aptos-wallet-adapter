@@ -20,6 +20,7 @@ import {
   StandardNetworkInfo,
   isAptosNetwork,
 } from "@aptos-labs/wallet-adapter-core";
+import TransactionParameters from "../components/transactionFlow/TransactionParameters";
 
 const { Link } = Typography;
 
@@ -90,6 +91,9 @@ export default function App() {
                 </p>
               </Col>
             </tr>
+          )}
+          {connected && (
+            <TransactionParameters isSendableNetwork={isSendableNetwork} />
           )}
           {connected && (
             <SingleSignerTransaction isSendableNetwork={isSendableNetwork} />
