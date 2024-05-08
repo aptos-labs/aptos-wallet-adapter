@@ -6,6 +6,7 @@ import {
   Wallet,
   WalletReadyState,
   WalletName,
+  AptosStandardSupportedWallet,
 } from "@aptos-labs/wallet-adapter-react";
 import "./styles.css";
 import { truncateAddress } from "./utils";
@@ -70,7 +71,7 @@ export function WalletSelector({
       >
         {!connected && (
           <Menu>
-            {wallets?.map((wallet: Wallet) => {
+            {wallets?.map((wallet: Wallet | AptosStandardSupportedWallet) => {
               return walletView(wallet, onWalletSelected);
             })}
           </Menu>
@@ -81,15 +82,15 @@ export function WalletSelector({
 }
 
 const walletView = (
-  wallet: Wallet,
+  wallet: Wallet | AptosStandardSupportedWallet,
   onWalletSelected: (wallet: WalletName) => void
 ) => {
   const isWalletReady =
     wallet.readyState === WalletReadyState.Installed ||
     wallet.readyState === WalletReadyState.Loadable;
-  const mobileSupport = wallet.deeplinkProvider;
 
   if (!isWalletReady && isRedirectable()) {
+    const mobileSupport = (wallet as Wallet).deeplinkProvider;
     if (mobileSupport) {
       return (
         <Menu.Item

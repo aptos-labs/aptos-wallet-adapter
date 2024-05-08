@@ -22,8 +22,8 @@ import type {
   WalletName,
   Types,
   InputTransactionData,
-  StandardNetworkInfo,
   Network,
+  AptosStandardSupportedWallet,
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
 
@@ -60,9 +60,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const walletCore = useMemo(() => new WalletCore(plugins ?? []), []);
-  const [wallets, setWallets] = useState<ReadonlyArray<Wallet>>(
-    walletCore.wallets
-  );
+  const [wallets, setWallets] = useState<
+    ReadonlyArray<Wallet | AptosStandardSupportedWallet>
+  >(walletCore.wallets);
 
   const connect = async (walletName: WalletName) => {
     try {
@@ -222,7 +222,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
 
   const handleReadyStateChange = (updatedWallet: Wallet) => {
     // Create a new array with updated values
-    const updatedWallets = wallets?.map((wallet) => {
+    const updatedWallets = (wallets as Wallet[])?.map((wallet) => {
       if (wallet.name === updatedWallet.name) {
         // Return a new object with updated value
         return { ...wallet, readyState: updatedWallet.readyState };
@@ -232,7 +232,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     setWallets(updatedWallets);
   };
 
-  const handleStandardWalletsAdded = (standardWallet: Wallet) => {
+  const handleStandardWalletsAdded = (
+    standardWallet: Wallet | AptosStandardSupportedWallet
+  ) => {
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
     const existingWalletIndex = wallets.findIndex(

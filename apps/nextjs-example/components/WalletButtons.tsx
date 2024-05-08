@@ -4,6 +4,7 @@ import {
   Wallet,
   isRedirectable,
   WalletName,
+  AptosStandardSupportedWallet,
 } from "@aptos-labs/wallet-adapter-react";
 import { useAlert } from "./AlertProvider";
 import { Dispatch, SetStateAction, ReactNode } from "react";
@@ -14,7 +15,7 @@ const WalletButtons = () => {
 
   return (
     <>
-      {wallets?.map((wallet: Wallet) => {
+      {wallets?.map((wallet: Wallet | AptosStandardSupportedWallet) => {
         return WalletView(wallet, connect, setErrorAlertMessage);
       })}
     </>
@@ -22,14 +23,13 @@ const WalletButtons = () => {
 };
 
 const WalletView = (
-  wallet: Wallet,
+  wallet: Wallet | AptosStandardSupportedWallet,
   connect: (walletName: WalletName) => void,
   setErrorAlertMessage: Dispatch<SetStateAction<ReactNode>>
 ) => {
   const isWalletReady =
     wallet.readyState === WalletReadyState.Installed ||
     wallet.readyState === WalletReadyState.Loadable;
-  const mobileSupport = wallet.deeplinkProvider;
 
   const onWalletConnectRequest = async (walletName: WalletName) => {
     try {
@@ -50,6 +50,7 @@ const WalletView = (
    * mobileSupport - does wallet have deeplinkProvider property? i.e does it support a mobile app
    */
   if (!isWalletReady && isRedirectable()) {
+    const mobileSupport = (wallet as Wallet).deeplinkProvider;
     // wallet has mobile app
     if (mobileSupport) {
       return (
