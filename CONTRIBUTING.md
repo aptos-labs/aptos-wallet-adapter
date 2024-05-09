@@ -9,7 +9,7 @@ Aptos Wallet Adapter is a monorepo built with [turbo](https://turbo.build/repo/d
 #### Apps Workspace
 
 The App workspace hold different web apps such as the adapter demo app (a nextjs app).
-You are welcome to add different apps (react/vue/etc) in this workspace (make sure you are following turbo best pratices on how to do it)
+You are welcome to add different apps (react/vue/etc) in this workspace (make sure you are following turbo best practices on how to do it)
 
 #### Packages Workspace
 
@@ -18,7 +18,7 @@ The packages workspace holds 2 main packages
 1. `wallet-adapter-core` - the core adapter logic that responsible on the adapter functionality, state and the interaction between the dapp and wallet.
 2. `wallet-adapter-react` - a light react provider that dapps can import and use the adapter.
 
-You are welcome to add packages (vue-provider/UI frameworks/etc) in this workspace (make sure you are following turbo best pratices on how to do it)
+You are welcome to add packages (vue-provider/UI frameworks/etc) in this workspace (make sure you are following turbo best practices on how to do it)
 
 ### Develop Locally
 
@@ -30,7 +30,7 @@ You would need `pnpm@7.14.2` in order to bootstrap and test a local copy of this
 
 ### Creating a pull request
 
-You are welcome to create a pull reuqest against the `main` branch.
+You are welcome to create a pull request against the `main` branch.
 
 Before creating a PR
 

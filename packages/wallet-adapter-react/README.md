@@ -1,4 +1,4 @@
-> **_NOTE:_** This documentation is for Wallet Adapter `v2.0.0` and up that is fully comatible with the Aptos TypeScript SDK V2. For Wallet Adapter `v^1.*.*` refer to [this guide](./READMEV1.md)
+> **_NOTE:_** This documentation is for Wallet Adapter `v2.0.0` and up that is fully compatible with the Aptos TypeScript SDK V2. For Wallet Adapter `v^1.*.*` refer to [this guide](./READMEV1.md)
 
 # Wallet Adapter React Provider
 

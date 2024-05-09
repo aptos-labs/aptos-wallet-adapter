@@ -126,9 +126,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   constructor(plugins: ReadonlyArray<Wallet>) {
     super();
     this._wallets = plugins;
-    // Stretegy to detect legacy wallet adapter v1 wallet plugins
+    // Strategy to detect legacy wallet adapter v1 wallet plugins
     this.scopePollingDetectionStrategy();
-    // Stretegy to detect AIP-62 standard compatible wallets
+    // Strategy to detect AIP-62 standard compatible wallets
     this.fetchAptosWallets();
   }
 
@@ -869,7 +869,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         return pendingTransaction;
       }
 
-      // Else have the adpater submits the transaction
+      // Else have the adapter submit the transaction
 
       const aptosConfig = new AptosConfig({
         network: convertNetwork(this.network),
