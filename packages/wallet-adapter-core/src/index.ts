@@ -1,5 +1,5 @@
 export { WalletCore } from "./WalletCore";
-export * from "./LegacyWalletPlugins/types";
+export * from "./LegacyWalletPlugins";
 export * from "./constants";
 export * from "./utils";
-export * from "./AIP62StandardWallets/WalletStandard";
+export * from "./AIP62StandardWallets";
