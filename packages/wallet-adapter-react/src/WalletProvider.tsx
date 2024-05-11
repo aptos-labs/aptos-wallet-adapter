@@ -160,7 +160,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         setIsLoading(false);
       }
     }
-  }, wallets);
+  }, [wallets]);
 
   useEffect(() => {
     if (connected) {

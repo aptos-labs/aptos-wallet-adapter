@@ -28,7 +28,7 @@ import {
   AccountInfo,
   InputTransactionData,
   Wallet,
-} from "../LegacyWalletPlugins/types";
+} from "../LegacyWalletPlugins";
 import { generalizedErrorMessage } from "../utils";
 
 export type AptosStandardWallet = AptosWallet & {

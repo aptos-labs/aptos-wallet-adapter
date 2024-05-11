@@ -16,6 +16,15 @@ import {
   NetworkToChainId,
 } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
+import {
+  AccountInfo as StandardAccountInfo,
+  AptosChangeNetworkOutput,
+  AptosWallet,
+  getAptosWallets,
+  NetworkInfo as StandardNetworkInfo,
+  UserResponse,
+  UserResponseStatus,
+} from "@aptos-labs/wallet-standard";
 
 import { ChainIdToAnsSupportedNetworkMap, WalletReadyState } from "./constants";
 import {
@@ -45,7 +54,11 @@ import {
   WalletCoreEvents,
   WalletInfo,
   WalletName,
-} from "./LegacyWalletPlugins/types";
+  WalletCoreV1,
+  CompatibleTransactionOptions,
+  convertNetwork,
+  generateTransactionPayloadFromV1Input,
+} from "./LegacyWalletPlugins";
 import {
   fetchDevnetChainId,
   generalizedErrorMessage,
@@ -57,24 +70,9 @@ import {
   setLocalStorage,
 } from "./utils";
 import {
-  CompatibleTransactionOptions,
-  convertNetwork,
-  generateTransactionPayloadFromV1Input,
-} from "./LegacyWalletPlugins/conversion";
-import { WalletCoreV1 } from "./LegacyWalletPlugins/WalletCoreV1";
-import {
-  AccountInfo as StandardAccountInfo,
-  AptosChangeNetworkOutput,
-  AptosWallet,
-  getAptosWallets,
-  NetworkInfo as StandardNetworkInfo,
-  UserResponse,
-  UserResponseStatus,
-} from "@aptos-labs/wallet-standard";
-import {
   AptosStandardWallet,
   WalletStandardCore,
-} from "./AIP62StandardWallets/WalletStandard";
+} from "./AIP62StandardWallets";
 import { GA4 } from "./ga";
 import { WALLET_ADAPTER_CORE_VERSION } from "./version";
 
@@ -126,9 +124,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   constructor(plugins: ReadonlyArray<Wallet>) {
     super();
     this._wallets = plugins;
-    // Stretegy to detect legacy wallet adapter v1 wallet plugins
+    // Strategy to detect legacy wallet adapter v1 wallet plugins
     this.scopePollingDetectionStrategy();
-    // Stretegy to detect AIP-62 standard compatible wallets
+    // Strategy to detect AIP-62 standard compatible wallets
     this.fetchAptosWallets();
   }
 
@@ -539,7 +537,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
     // Check if we are in a redirectable view (i.e on mobile AND not in an in-app browser)
     // Ignore if wallet is installed (iOS extension)
-    if (isRedirectable() && selectedWallet.readyState !== WalletReadyState.Installed) {
+    if (
+      isRedirectable() &&
+      selectedWallet.readyState !== WalletReadyState.Installed
+    ) {
       // use wallet deep link
       if (selectedWallet.isAIP62Standard && selectedWallet.openInMobileApp) {
         selectedWallet.openInMobileApp();
@@ -869,7 +870,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         return pendingTransaction;
       }
 
-      // Else have the adpater submits the transaction
+      // Else have the adapter submit the transaction
 
       const aptosConfig = new AptosConfig({
         network: convertNetwork(this.network),
