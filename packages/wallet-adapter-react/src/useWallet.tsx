@@ -13,7 +13,6 @@ import {
   AccountAuthenticator,
   Types,
   WalletName,
-  StandardNetworkInfo,
   AptosChangeNetworkOutput,
   Network,
 } from "@aptos-labs/wallet-adapter-core";
