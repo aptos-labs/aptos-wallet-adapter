@@ -1,5 +1,13 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 2.3.5
+
+### Patch Changes
+
+- Updated dependencies [92a1801]
+- Updated dependencies [106d55c]
+  - @aptos-labs/wallet-adapter-react@2.3.6
+
 ## 2.3.4
 
 ### Patch Changes

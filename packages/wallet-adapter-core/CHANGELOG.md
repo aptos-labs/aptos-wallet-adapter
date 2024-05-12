@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.12.1
+
+### Patch Changes
+
+- 106d55c: Export all Interfaces and types
+
 ## 3.12.0
 
 ### Minor Changes

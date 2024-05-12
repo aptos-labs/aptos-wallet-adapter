@@ -1,5 +1,14 @@
 # @aptos-labs/wallet-adapter-react
 
+## 2.3.6
+
+### Patch Changes
+
+- 92a1801: Fixed the `useEffect` dependency array for auto-connecting to be `[wallets]` instead of `wallets`
+- 106d55c: Export all Interfaces and types
+- Updated dependencies [106d55c]
+  - @aptos-labs/wallet-adapter-core@3.12.1
+
 ## 2.3.5
 
 ### Patch Changes
