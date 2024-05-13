@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.13.0
+
+### Minor Changes
+
+- 19f4fdd: Exposing wallet adapter core version into window object
+
 ## 3.12.1
 
 ### Patch Changes

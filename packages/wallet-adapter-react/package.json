@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-react",
-  "version": "2.3.6",
+  "version": "2.3.7",
   "description": "Aptos Wallet Adapter React Provider",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
