@@ -180,8 +180,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private fetchSDKWallets = () => {
     const aptosStandardWallets: AptosStandardWallet[] = [];
 
-    SDKWallets.map((wallet: any) => {
-      const sdkWallet = new wallet();
+    SDKWallets.map((sdkWallet: any) => {
+      // // initiate the SDK wallet
+      // const sdkWallet = new wallet();
 
       const isValid = isWalletWithRequiredFeatureSet(sdkWallet);
       // TODO add user opt-in check
