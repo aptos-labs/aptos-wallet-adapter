@@ -44,6 +44,25 @@ export function convertV2PayloadToV1JSONPayload(
   if ("bytecode" in payload) {
     // is a script payload
     throw new Error("script payload not supported");
+    // is multisig function payload
+  } else if ("multisigAddress" in payload) {
+    const stringTypeTags: string[] | undefined = payload.typeArguments?.map(
+      (typeTag) => {
+        if (typeTag instanceof TypeTag) {
+          return typeTag.toString();
+        }
+        return typeTag;
+      }
+    );
+    const newPayload: Types.TransactionPayload = {
+      type: "multisig_payload",
+      multisig_address: payload.multisigAddress.toString(),
+      function: payload.function,
+      type_arguments: stringTypeTags || [],
+      arguments: payload.functionArguments,
+    };
+
+    return newPayload;
   } else {
     // is entry function payload
     const stringTypeTags: string[] | undefined = payload.typeArguments?.map(
@@ -67,9 +86,9 @@ export function convertV2PayloadToV1JSONPayload(
 
 export async function generateTransactionPayloadFromV1Input(
   aptosConfig: AptosConfig,
-  inputV1: Types.TransactionPayload,
+  inputV1: Types.TransactionPayload
 ): Promise<TransactionPayloadEntryFunction> {
-  if ('function' in inputV1) {
+  if ("function" in inputV1) {
     const inputV2: InputEntryFunctionData | InputMultiSigData = {
       function: inputV1.function as MoveFunctionId,
       functionArguments: inputV1.arguments,
@@ -78,7 +97,7 @@ export async function generateTransactionPayloadFromV1Input(
     return generateTransactionPayload({ ...inputV2, aptosConfig });
   }
 
-  throw new Error('Payload type not supported');
+  throw new Error("Payload type not supported");
 }
 
 export interface CompatibleTransactionOptions {
