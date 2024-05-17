@@ -72,9 +72,11 @@ import {
 import {
   AptosStandardWallet,
   WalletStandardCore,
+  AptosStandardSupportedWallet,
 } from "./AIP62StandardWallets";
 import { GA4 } from "./ga";
 import { WALLET_ADAPTER_CORE_VERSION } from "./version";
+import { aptosStandardSupportedWalletList } from "./AIP62StandardWallets/registry";
 
 export type IAptosWallet = AptosStandardWallet & Wallet;
 
@@ -87,7 +89,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   // Private array to hold all wallets (legacy wallet adapter plugins AND compatible AIP-62 standard wallets)
   // while providing support for legacy and new wallet standard
-  private _all_wallets: Array<Wallet> = [];
+  private _all_wallets: Array<Wallet | AptosStandardSupportedWallet> = [];
 
   // Current connected wallet
   private _wallet: Wallet | null = null;
@@ -128,6 +130,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     this.scopePollingDetectionStrategy();
     // Strategy to detect AIP-62 standard compatible wallets
     this.fetchAptosWallets();
+    // Append AIP-62 compatible wallets that are not detected on the user machine
+    this.appendNotDetectedStandardSupportedWallets(this._standard_wallets);
   }
 
   private scopePollingDetectionStrategy() {
@@ -173,7 +177,24 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     });
   }
 
-  private setWallets(wallets: readonly AptosWallet[]) {
+  // Append wallets from wallet standard support registry to the `all_wallets` array
+  private appendNotDetectedStandardSupportedWallets(
+    aptosStandardWallets: ReadonlyArray<AptosStandardWallet>
+  ) {
+    aptosStandardSupportedWalletList.map((supportedWallet) => {
+      const existingWalletIndex = aptosStandardWallets.findIndex(
+        (wallet) => wallet.name == supportedWallet.name
+      );
+
+      // If wallet does not exist, append it from the supported wallets list
+      if (existingWalletIndex === -1) {
+        this._all_wallets.push(supportedWallet);
+        this.emit("standardWalletsAdded", supportedWallet);
+      }
+    });
+  }
+
+  private async setWallets(wallets: readonly AptosWallet[]) {
     const aptosStandardWallets: AptosStandardWallet[] = [];
 
     wallets.map((wallet: AptosWallet) => {
@@ -449,7 +470,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   /**
    * Getter to fetch all detected wallets
    */
-  get wallets(): ReadonlyArray<Wallet> {
+  get wallets(): ReadonlyArray<Wallet | AptosStandardSupportedWallet> {
     return this._all_wallets;
   }
 
@@ -521,7 +542,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    */
   async connect(walletName: string): Promise<void | string> {
     // Checks the wallet exists in the detected wallets array
-    const selectedWallet = this._all_wallets.find(
+
+    const allDetectedWallets = this._all_wallets as Array<Wallet>;
+
+    const selectedWallet = allDetectedWallets.find(
       (wallet: Wallet) => wallet.name === walletName
     );
     if (!selectedWallet) return;
@@ -835,7 +859,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         return await this.walletStandardCore.signMessage(message, this._wallet);
       }
       const response = await this._wallet!.signMessage(message);
-      console.log("signMessage response", response);
       return response as SignMessageResponse;
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);

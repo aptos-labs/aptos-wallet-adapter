@@ -18,6 +18,7 @@ import {
   Wallet,
   WalletReadyState,
   WalletName,
+  AptosStandardSupportedWallet,
 } from "@aptos-labs/wallet-adapter-react";
 import { grey } from "./aptosColorPalette";
 // reported bug with loading mui icons with esm, therefore need to import like this https://github.com/mui/material-ui/issues/35233
@@ -26,7 +27,7 @@ import { Close as CloseIcon } from "@mui/icons-material";
 import { PropsWithChildren } from "react";
 
 const ConnectWalletRow: React.FC<{
-  wallet: Wallet;
+  wallet: Wallet | AptosStandardSupportedWallet;
   onClick(): void;
 }> = ({ wallet, onClick }) => {
   const theme = useTheme();
@@ -78,7 +79,9 @@ const ConnectWalletRow: React.FC<{
   );
 };
 
-const InstallWalletRow: React.FC<{ wallet: Wallet }> = ({ wallet }) => {
+const InstallWalletRow: React.FC<{
+  wallet: Wallet | AptosStandardSupportedWallet;
+}> = ({ wallet }) => {
   const theme = useTheme();
 
   return (
@@ -151,7 +154,6 @@ export default function WalletsModal({
 
   const renderWalletsList = () => {
     return wallets?.map((wallet) => {
-      const hasMobileSupport = Boolean(wallet.deeplinkProvider);
       const isWalletReady =
         wallet.readyState === WalletReadyState.Installed ||
         wallet.readyState === WalletReadyState.Loadable;
@@ -166,6 +168,7 @@ export default function WalletsModal({
 
       // The user is on a mobile device
       if (!isWalletReady && isRedirectable()) {
+        const hasMobileSupport = Boolean((wallet as Wallet).deeplinkProvider);
         // If the user has a deep linked app, show the wallet
         if (hasMobileSupport) {
           return (

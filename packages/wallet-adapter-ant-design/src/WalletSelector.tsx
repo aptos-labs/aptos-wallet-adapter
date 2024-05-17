@@ -6,6 +6,7 @@ import {
   Wallet,
   WalletReadyState,
   WalletName,
+  AptosStandardSupportedWallet,
 } from "@aptos-labs/wallet-adapter-react";
 import "./styles.css";
 import { truncateAddress } from "./utils";
@@ -70,7 +71,7 @@ export function WalletSelector({
       >
         {!connected && (
           <Menu>
-            {wallets?.map((wallet: Wallet) => {
+            {wallets?.map((wallet: Wallet | AptosStandardSupportedWallet) => {
               return walletView(wallet, onWalletSelected);
             })}
           </Menu>
@@ -81,15 +82,17 @@ export function WalletSelector({
 }
 
 const walletView = (
-  wallet: Wallet,
+  wallet: Wallet | AptosStandardSupportedWallet,
   onWalletSelected: (wallet: WalletName) => void
 ) => {
   const isWalletReady =
     wallet.readyState === WalletReadyState.Installed ||
     wallet.readyState === WalletReadyState.Loadable;
-  const mobileSupport = wallet.deeplinkProvider;
 
+  // The user is on a mobile device
   if (!isWalletReady && isRedirectable()) {
+    const mobileSupport = (wallet as Wallet).deeplinkProvider;
+    // If the user has a deep linked app, show the wallet
     if (mobileSupport) {
       return (
         <Menu.Item
@@ -107,19 +110,11 @@ const walletView = (
           </div>
         </Menu.Item>
       );
-    } else {
-      return (
-        <Menu.Item key={wallet.name} disabled={true}>
-          <div className="wallet-menu-wrapper">
-            <div className="wallet-name-wrapper">
-              <img src={wallet.icon} width={25} style={{ marginRight: 10 }} />
-              <Text className="wallet-selector-text">{wallet.name}</Text>
-            </div>
-          </div>
-        </Menu.Item>
-      );
     }
+    // Otherwise don't show anything
+    return null;
   } else {
+    // The user is on a desktop device
     return (
       <Menu.Item
         key={wallet.name}
