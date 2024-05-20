@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 2.4.0
+
+### Minor Changes
+
+- ef53f38: AIP-62 standard compatible wallet registry list
+
+### Patch Changes
+
+- Updated dependencies [ef53f38]
+  - @aptos-labs/wallet-adapter-react@2.4.0
+
 ## 2.3.6
 
 ### Patch Changes

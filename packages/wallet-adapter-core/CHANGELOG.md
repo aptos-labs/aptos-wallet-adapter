@@ -1,5 +1,13 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.14.0
+
+### Minor Changes
+
+- 69b6101: Add multisig transaction support
+- 870ee0c: Support T Wallet as a SDK wallet in the adapter core
+- ef53f38: AIP-62 standard compatible wallet registry list
+
 ## 3.13.0
 
 ### Minor Changes
