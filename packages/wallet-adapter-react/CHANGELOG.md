@@ -1,5 +1,18 @@
 # @aptos-labs/wallet-adapter-react
 
+## 2.4.0
+
+### Minor Changes
+
+- ef53f38: AIP-62 standard compatible wallet registry list
+
+### Patch Changes
+
+- Updated dependencies [69b6101]
+- Updated dependencies [870ee0c]
+- Updated dependencies [ef53f38]
+  - @aptos-labs/wallet-adapter-core@3.14.0
+
 ## 2.3.7
 
 ### Patch Changes
