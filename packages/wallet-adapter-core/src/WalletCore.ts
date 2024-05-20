@@ -130,12 +130,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     this._wallets = plugins;
     // Strategy to detect legacy wallet adapter v1 wallet plugins
     this.scopePollingDetectionStrategy();
-    // Strategy to detect AIP-62 standard compatible wallets
+    // Strategy to detect AIP-62 standard compatible wallets (extension + SDK wallets)
     this.fetchAptosWallets();
     // Append AIP-62 compatible wallets that are not detected on the user machine
     this.appendNotDetectedStandardSupportedWallets(this._standard_wallets);
-    // Strategy to detect AIP-62 standard compatible SDK wallets
-    this.fetchSDKWallets();
   }
 
   private scopePollingDetectionStrategy() {
@@ -198,31 +196,28 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     });
   }
 
-  private fetchSDKWallets = () => {
+  /**
+   * Set potential Standard compatible SDK + extension wallets
+   *
+   * Loop over local SDK and Extensions wallets
+   * 1) check it is Standard compatible
+   * 2) Update their readyState to Installed (for a future UI detection)
+   * 3) push the wallet into a local wallets array
+   * 4) standardize each wallet to the Wallet Plugin type interface for legacy compatibility
+   *
+   * @param extensionwWallets
+   */
+  private setWallets(extensionwWallets: readonly AptosWallet[]) {
     const aptosStandardWallets: AptosStandardWallet[] = [];
 
-    SDKWallets.map((sdkWallet: AptosStandardWallet) => {
-      const isValid = isWalletWithRequiredFeatureSet(sdkWallet);
+    [...SDKWallets, ...extensionwWallets].map((wallet: AptosStandardWallet) => {
+      const isValid = isWalletWithRequiredFeatureSet(wallet);
       // TODO add user opt-in check
       if (isValid) {
-        const standardWallet = sdkWallet;
-        standardWallet.readyState = WalletReadyState.Installed;
-        aptosStandardWallets.push(standardWallet);
-        this.standardizeStandardWalletToPluginWalletType(standardWallet);
+        wallet.readyState = WalletReadyState.Installed;
+        aptosStandardWallets.push(wallet);
+        this.standardizeStandardWalletToPluginWalletType(wallet);
       }
-    });
-    this._standard_wallets = aptosStandardWallets;
-  };
-
-  private setWallets(wallets: readonly AptosWallet[]) {
-    const aptosStandardWallets: AptosStandardWallet[] = [];
-
-    wallets.map((wallet: AptosWallet) => {
-      const standardWallet = wallet as AptosStandardWallet;
-
-      standardWallet.readyState = WalletReadyState.Installed;
-      aptosStandardWallets.push(wallet);
-      this.standardizeStandardWalletToPluginWalletType(standardWallet);
     });
 
     this._standard_wallets = aptosStandardWallets;
