@@ -1,3 +1,3 @@
-import { DevTWallet } from "@atomrigslab/aptos-wallet-adapter";
+import { TWallet } from "@atomrigslab/aptos-wallet-adapter";
 
-export default [DevTWallet];
+export default [TWallet];
