@@ -24,12 +24,14 @@ import type {
   InputTransactionData,
   Network,
   AptosStandardSupportedWallet,
+  AvailableWallets,
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
 
 export interface AptosWalletProviderProps {
   children: ReactNode;
   plugins?: ReadonlyArray<Wallet>;
+  optInWallets?: ReadonlyArray<AvailableWallets>;
   autoConnect?: boolean;
   onError?: (error: any) => void;
 }
@@ -46,9 +48,19 @@ const initialState: {
   wallet: null,
 };
 
+/**
+ * Supported props to pass into the provider
+ *
+ * @param plugins Non AIP-62 supported wallet plugins array
+ * @param optInWallets AIP-62 supported wallet names array to only include in the adapter wallets
+ * @param autoConnect A boolean flag to indicate if the adapter should auto connect to a wallet
+ * @param onError A callback function to execute when there is an error in the adapter
+ *
+ */
 export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   children,
   plugins,
+  optInWallets,
   autoConnect = false,
   onError,
 }: AptosWalletProviderProps) => {
@@ -59,7 +71,10 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   // https://github.com/aptos-labs/aptos-wallet-adapter/issues/94
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const walletCore = useMemo(() => new WalletCore(plugins ?? []), []);
+  const walletCore = useMemo(
+    () => new WalletCore(plugins ?? [], optInWallets ?? []),
+    []
+  );
   const [wallets, setWallets] = useState<
     ReadonlyArray<Wallet | AptosStandardSupportedWallet>
   >(walletCore.wallets);

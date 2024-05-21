@@ -8,3 +8,5 @@ export interface AptosStandardSupportedWallet<Name extends string = string> {
   readyState: WalletReadyState.NotDetected;
   isAIP62Standard: true;
 }
+
+export type AvailableWallets = "Nightly" | "T wallet";
