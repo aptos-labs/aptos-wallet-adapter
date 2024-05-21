@@ -55,7 +55,7 @@ const walletMock: Wallet = {
 
 const pluginsMock: Wallet[] = [walletMock];
 
-const walletCoreMock = new WalletCore(pluginsMock);
+const walletCoreMock = new WalletCore(pluginsMock, []);
 
 describe("signMessageAndVerify", () => {
   walletCoreMock.setWallet(walletMock);
