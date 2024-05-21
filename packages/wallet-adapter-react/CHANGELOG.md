@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-react
 
+## 2.5.0
+
+### Minor Changes
+
+- 4832532: Wallets opt-in support
+
+### Patch Changes
+
+- Updated dependencies [4832532]
+  - @aptos-labs/wallet-adapter-core@3.15.0
+
 ## 2.4.0
 
 ### Minor Changes

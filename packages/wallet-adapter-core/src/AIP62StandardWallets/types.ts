@@ -9,4 +9,4 @@ export interface AptosStandardSupportedWallet<Name extends string = string> {
   isAIP62Standard: true;
 }
 
-export type AvailableWallets = "Nightly" | "T wallet";
+export type AvailableWallets = "Nightly" | "Petra" | "T wallet";

@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.15.0
+
+### Minor Changes
+
+- 4832532: Wallets opt-in support
+
 ## 3.14.0
 
 ### Minor Changes
