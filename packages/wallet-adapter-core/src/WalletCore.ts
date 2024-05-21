@@ -242,7 +242,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param walletName
    * @returns
    */
-  private excludeWallet(walletName: string): boolean {
+  excludeWallet(walletName: string): boolean {
     // If _optInWallets is not empty, and does not include the provided wallet,
     // return true to exclude the wallet, otherwise return false
     if (
