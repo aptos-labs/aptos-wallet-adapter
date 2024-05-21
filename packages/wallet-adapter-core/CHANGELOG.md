@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 3.16.0
+
+### Minor Changes
+
+- 6a58c61: Add Petra as a AIP-62 compatible wallet
+
 ## 3.15.0
 
 ### Minor Changes

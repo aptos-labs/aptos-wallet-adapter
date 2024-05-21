@@ -1,5 +1,19 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 2.9.0
+
+### Minor Changes
+
+- 6a58c61: Add Petra as a AIP-62 compatible wallet
+
+### Patch Changes
+
+- Updated dependencies [6a58c61]
+  - @aptos-labs/wallet-adapter-core@3.16.0
+  - @aptos-labs/wallet-adapter-react@2.5.1
+  - @aptos-labs/wallet-adapter-ant-design@2.3.2
+  - @aptos-labs/wallet-adapter-mui-design@2.4.2
+
 ## 2.8.1
 
 ### Patch Changes
