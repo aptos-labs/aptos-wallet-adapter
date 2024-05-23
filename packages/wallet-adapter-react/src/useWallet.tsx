@@ -16,13 +16,14 @@ import {
   AptosChangeNetworkOutput,
   Network,
   AptosStandardSupportedWallet,
+  NewStandardAccountInfo,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
 
 export interface WalletContextState {
   connected: boolean;
   isLoading: boolean;
-  account: AccountInfo | null;
+  account: AccountInfo | NewStandardAccountInfo | null;
   network: NetworkInfo | null;
   connect(walletName: WalletName): void;
   disconnect(): void;

@@ -25,6 +25,7 @@ import type {
   Network,
   AptosStandardSupportedWallet,
   AvailableWallets,
+  NewStandardAccountInfo,
 } from "@aptos-labs/wallet-adapter-core";
 import { WalletCore } from "@aptos-labs/wallet-adapter-core";
 
@@ -37,7 +38,7 @@ export interface AptosWalletProviderProps {
 }
 
 const initialState: {
-  account: AccountInfo | null;
+  account: AccountInfo | NewStandardAccountInfo | null;
   network: NetworkInfo | null;
   connected: boolean;
   wallet: WalletInfo | null;
