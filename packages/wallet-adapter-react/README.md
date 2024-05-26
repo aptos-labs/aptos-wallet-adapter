@@ -8,7 +8,7 @@ Dapps that want to use the adapter should install this package and other support
 
 ### Support
 
-The react provider supports all [wallet standard](https://aptos.dev/guides/wallet-standard) functions and feature functions
+The react provider supports all [wallet standard](https://aptos.dev/integration/wallet-adapter-for-wallets#aip-62-wallet-standard) functions and feature functions
 
 ##### Standard functions
 
