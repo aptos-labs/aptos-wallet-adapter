@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.0.0
+
+### Major Changes
+
+- 2c826a4: Support account prop to be of AIP-62 AccountInfo type
+
+### Patch Changes
+
+- Updated dependencies [2c826a4]
+  - @aptos-labs/wallet-adapter-core@4.0.0
+
 ## 2.5.1
 
 ### Patch Changes
