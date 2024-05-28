@@ -76,6 +76,7 @@ import {
   WalletStandardCore,
   AptosStandardSupportedWallet,
   AvailableWallets,
+  NewStandardAccountInfo,
 } from "./AIP62StandardWallets";
 import { GA4 } from "./ga";
 import { WALLET_ADAPTER_CORE_VERSION } from "./version";
@@ -101,7 +102,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private _wallet: Wallet | null = null;
 
   // Current connected account
-  private _account: AccountInfo | null = null;
+  private _account: AccountInfo | NewStandardAccountInfo | null = null;
 
   // Current connected network
   private _network: NetworkInfo | null = null;
@@ -335,7 +336,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param account An account
    */
   private ensureAccountExists(
-    account: AccountInfo | null
+    account: AccountInfo | NewStandardAccountInfo | null
   ): asserts account is AccountInfo {
     if (!account) {
       throw new WalletAccountError("Account is not set").name;
@@ -444,8 +445,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         }
         // account is of type
         this._account = {
-          address: connectStandardAccount.args.address.toString(),
-          publicKey: connectStandardAccount.args.publicKey.toString(),
+          address: connectStandardAccount.args.address,
+          publicKey: connectStandardAccount.args.publicKey,
           ansName: connectStandardAccount.args.ansName,
         };
         return;
@@ -453,8 +454,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         // account is of type `StandardAccountInfo` which means it comes from onAccountChange event
         const standardAccount = account as StandardAccountInfo;
         this._account = {
-          address: standardAccount.address.toString(),
-          publicKey: standardAccount.publicKey.toString(),
+          address: standardAccount.address,
+          publicKey: standardAccount.publicKey,
           ansName: standardAccount.ansName,
         };
         return;
@@ -559,7 +560,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @return account info
    * @throws WalletAccountError
    */
-  get account(): AccountInfo | null {
+  get account(): AccountInfo | NewStandardAccountInfo | null {
     try {
       return this._account;
     } catch (error: any) {
