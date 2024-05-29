@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.1.0
+
+### Minor Changes
+
+- 3ed84cd: Query ANS name with account address as string
+
 ## 4.0.0
 
 ### Major Changes
