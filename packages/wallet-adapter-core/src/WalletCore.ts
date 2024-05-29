@@ -394,7 +394,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       });
       const aptos = new Aptos(aptosConfig);
       const name = await aptos.ans.getPrimaryName({
-        address: this._account.address,
+        address: this._account.address.toString(),
       });
 
       this._account.ansName = name;
