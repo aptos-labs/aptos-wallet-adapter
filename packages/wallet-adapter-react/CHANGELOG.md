@@ -1,5 +1,13 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.0.2
+
+### Patch Changes
+
+- 6e152e4: Revert Support account prop to be of AIP-62 AccountInfo type
+- Updated dependencies [6e152e4]
+  - @aptos-labs/wallet-adapter-core@4.1.1
+
 ## 3.0.1
 
 ### Patch Changes

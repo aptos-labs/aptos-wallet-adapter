@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 2.10.2
+
+### Patch Changes
+
+- 6e152e4: Revert Support account prop to be of AIP-62 AccountInfo type
+- Updated dependencies [6e152e4]
+  - @aptos-labs/wallet-adapter-ant-design@2.4.2
+  - @aptos-labs/wallet-adapter-core@4.1.1
+  - @aptos-labs/wallet-adapter-mui-design@2.5.2
+  - @aptos-labs/wallet-adapter-react@3.0.2
+
 ## 2.10.1
 
 ### Patch Changes

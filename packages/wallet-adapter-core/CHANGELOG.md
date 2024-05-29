@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.1.1
+
+### Patch Changes
+
+- 6e152e4: Revert Support account prop to be of AIP-62 AccountInfo type
+
 ## 4.1.0
 
 ### Minor Changes
