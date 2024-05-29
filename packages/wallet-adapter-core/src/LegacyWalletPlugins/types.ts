@@ -18,10 +18,7 @@ import {
   NetworkInfo as StandardNetworkInfo,
   AptosChangeNetworkMethod,
 } from "@aptos-labs/wallet-standard";
-import {
-  AptosStandardSupportedWallet,
-  NewStandardAccountInfo,
-} from "../AIP62StandardWallets/types";
+import { AptosStandardSupportedWallet } from "../AIP62StandardWallets/types";
 
 export { TxnBuilderTypes, Types } from "aptos";
 export type {
@@ -75,7 +72,7 @@ export declare interface WalletCoreEvents {
   readyStateChange(wallet: Wallet): void;
   standardWalletsAdded(wallets: Wallet | AptosStandardSupportedWallet): void;
   networkChange(network: NetworkInfo | null): void;
-  accountChange(account: AccountInfo | NewStandardAccountInfo | null): void;
+  accountChange(account: AccountInfo | null): void;
 }
 
 export interface SignMessagePayload {

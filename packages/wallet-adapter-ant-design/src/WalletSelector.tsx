@@ -54,7 +54,7 @@ export function WalletSelector({
   };
   const buttonText = account?.ansName
     ? account?.ansName
-    : truncateAddress(account?.address.toString());
+    : truncateAddress(account?.address);
   return (
     <>
       <Button className="wallet-button" onClick={() => onWalletButtonClick()}>

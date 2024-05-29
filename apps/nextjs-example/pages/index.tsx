@@ -13,11 +13,11 @@ import SponsorTransaction from "../components/transactionFlow/Sponsor";
 import MultiAgentTransaction from "../components/transactionFlow/MultiAgent";
 import Row from "../components/Row";
 import Col from "../components/Col";
-import { AccountAddress, Network } from "@aptos-labs/ts-sdk";
-import { Typography } from "antd";
+import { Network } from "@aptos-labs/ts-sdk";
+import { Select, Typography } from "antd";
 import {
   AptosChangeNetworkOutput,
-  NewStandardAccountInfo,
+  StandardNetworkInfo,
   isAptosNetwork,
 } from "@aptos-labs/wallet-adapter-core";
 import TransactionParameters from "../components/transactionFlow/TransactionParameters";
@@ -151,7 +151,7 @@ function WalletSelect() {
 
 // TODO: Verify public key matches account
 function WalletProps(props: {
-  account: AccountInfo | NewStandardAccountInfo | null;
+  account: AccountInfo | null;
   network: NetworkInfo | null;
   wallet: WalletInfo | null;
   changeNetwork: (network: Network) => Promise<AptosChangeNetworkOutput>;
@@ -221,12 +221,10 @@ function WalletProps(props: {
             name={"ANS Name (only if attached)"}
             value={account?.ansName}
           />
-          {account && "minKeysRequired" in account && (
-            <DisplayOptionalValue
-              name={"Min keys required (only for multisig)"}
-              value={account.minKeysRequired?.toString()}
-            />
-          )}
+          <DisplayOptionalValue
+            name={"Min keys required (only for multisig)"}
+            value={account?.minKeysRequired?.toString()}
+          />
         </Col>
       </Row>
       <Row>
@@ -291,7 +289,7 @@ function WalletProps(props: {
 function DisplayRequiredValue(props: {
   name: string;
   isCorrect: boolean;
-  value?: string | AccountAddress;
+  value?: string;
   expected?: string;
 }) {
   const { name, isCorrect, value, expected } = props;
@@ -307,7 +305,7 @@ function DisplayRequiredValue(props: {
   return (
     <div style={successStyling()}>
       <p>
-        <b>{name}:</b> {value?.toString() ?? "Not present"}{" "}
+        <b>{name}:</b> {value ?? "Not present"}{" "}
         {!isCorrect && expected && (
           <>
             <b>Expected:</b> {expected}

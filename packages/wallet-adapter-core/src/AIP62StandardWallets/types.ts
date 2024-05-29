@@ -1,4 +1,3 @@
-import { AccountAddress, PublicKey } from "@aptos-labs/ts-sdk";
 import { WalletName } from "../LegacyWalletPlugins/types";
 import { WalletReadyState } from "../constants";
 
@@ -11,11 +10,3 @@ export interface AptosStandardSupportedWallet<Name extends string = string> {
 }
 
 export type AvailableWallets = "Nightly" | "Petra" | "T wallet";
-
-export type NewStandardAccountInfo = {
-  address: AccountAddress;
-  publicKey: PublicKey;
-  ansName?: string;
-};
-
-export { AccountAddress } from "@aptos-labs/ts-sdk";
