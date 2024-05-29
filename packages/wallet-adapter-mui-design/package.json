@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-mui-design",
-  "version": "2.4.2",
+  "version": "2.5.0",
   "description": "Aptos Wallet Adapter mui design",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

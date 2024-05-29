@@ -1,5 +1,19 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 2.10.0
+
+### Minor Changes
+
+- 2c826a4: Support account prop to be of AIP-62 AccountInfo type
+
+### Patch Changes
+
+- Updated dependencies [2c826a4]
+  - @aptos-labs/wallet-adapter-react@3.0.0
+  - @aptos-labs/wallet-adapter-core@4.0.0
+  - @aptos-labs/wallet-adapter-ant-design@2.4.0
+  - @aptos-labs/wallet-adapter-mui-design@2.5.0
+
 ## 2.9.0
 
 ### Minor Changes

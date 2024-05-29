@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.0.0
+
+### Major Changes
+
+- 2c826a4: Support account prop to be of AIP-62 AccountInfo type
+
 ## 3.16.0
 
 ### Minor Changes
