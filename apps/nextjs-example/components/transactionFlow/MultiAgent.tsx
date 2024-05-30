@@ -2,6 +2,8 @@ import {
   Account,
   AccountAuthenticator,
   AnyRawTransaction,
+  Ed25519Account,
+  SigningSchemeInput,
 } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
@@ -23,7 +25,7 @@ export default function MultiAgentTransaction({
     useWallet();
 
   const [secondarySignerAccount, setSecondarySignerAccount] =
-    useState<Account>();
+    useState<Ed25519Account>();
   const [transactionToSubmit, setTransactionToSubmit] =
     useState<AnyRawTransaction | null>(null);
   const { setSuccessAlertHash } = useAlert();
