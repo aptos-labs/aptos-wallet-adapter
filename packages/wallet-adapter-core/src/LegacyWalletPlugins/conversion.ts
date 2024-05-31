@@ -25,6 +25,8 @@ export function convertNetwork(
       return Network.TESTNET;
     case "devnet" as Network:
       return Network.DEVNET;
+    case "local" as Network:
+      return Network.LOCAL;
     default:
       throw new Error("Invalid Aptos network name");
   }

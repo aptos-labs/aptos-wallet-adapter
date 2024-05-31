@@ -1,7 +1,7 @@
 import {
-  Account,
   AccountAuthenticator,
   AnyRawTransaction,
+  Ed25519Account,
 } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
@@ -23,7 +23,7 @@ export default function MultiAgentTransaction({
     useWallet();
 
   const [secondarySignerAccount, setSecondarySignerAccount] =
-    useState<Account>();
+    useState<Ed25519Account>();
   const [transactionToSubmit, setTransactionToSubmit] =
     useState<AnyRawTransaction | null>(null);
   const { setSuccessAlertHash } = useAlert();
@@ -43,7 +43,7 @@ export default function MultiAgentTransaction({
       throw new Error("no network");
     }
 
-    const secondarySigner = Account.generate();
+    const secondarySigner = Ed25519Account.generate();
     // TODO support custom network
     await aptosClient(network).fundAccount({
       accountAddress: secondarySigner.accountAddress.toString(),
