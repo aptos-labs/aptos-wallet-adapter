@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 2.10.3
+
+### Patch Changes
+
+- 1ff5230: [hot fix] remove petra from aip-62 wallet registry
+- Updated dependencies [1ff5230]
+  - @aptos-labs/wallet-adapter-core@4.1.2
+  - @aptos-labs/wallet-adapter-react@3.0.3
+  - @aptos-labs/wallet-adapter-ant-design@2.4.3
+  - @aptos-labs/wallet-adapter-mui-design@2.5.3
+
 ## 2.10.2
 
 ### Patch Changes
