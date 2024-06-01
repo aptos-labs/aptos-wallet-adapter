@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.1.2
+
+### Patch Changes
+
+- 1ff5230: [hot fix] remove petra from aip-62 wallet registry
+
 ## 4.1.1
 
 ### Patch Changes
