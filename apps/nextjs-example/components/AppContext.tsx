@@ -11,6 +11,7 @@ import { FC, ReactNode } from "react";
 import { AlertProvider, useAlert } from "./AlertProvider";
 import { IdentityConnectWallet } from "@identity-connect/wallet-adapter-plugin";
 import { Network } from "@aptos-labs/ts-sdk";
+import { PetraWallet } from "petra-plugin-wallet-adapter";
 
 const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { autoConnect } = useAutoConnect();
@@ -27,6 +28,7 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     new PontemWallet(),
     new TrustWallet(),
     new OKXWallet(),
+    new PetraWallet(),
   ];
 
   return (
