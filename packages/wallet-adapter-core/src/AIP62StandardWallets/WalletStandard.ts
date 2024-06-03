@@ -56,17 +56,50 @@ export class WalletStandardCore {
     transactionInput: InputTransactionData,
     aptos: Aptos,
     account: AccountInfo,
-    wallet: Wallet
-  ): Promise<PendingTransactionResponse> {
+    wallet: Wallet,
+    standardWallets: ReadonlyArray<AptosStandardWallet>
+  ): Promise<AptosSignAndSubmitTransactionOutput> {
     try {
-      const transaction = await aptos.transaction.build.simple({
-        sender: account.address.toString(),
-        data: transactionInput.data,
-        options: transactionInput.options,
-      });
+      // need to find the standard wallet type to do the
+      // next features check
+      const standardWallet = standardWallets.find(
+        (standardWallet: AptosStandardWallet) =>
+          wallet.name === standardWallet.name
+      );
+
+      // check for backward compatibility. before version 1.1.0 the standard expected
+      // AnyRawTransaction input so the adapter built the transaction before sendign it to the wallet
+      if (
+        standardWallet?.features["aptos:signAndSubmitTransaction"]?.version !==
+        "1.1.0"
+      ) {
+        const transaction = await aptos.transaction.build.simple({
+          sender: account.address.toString(),
+          data: transactionInput.data,
+          options: transactionInput.options,
+        });
+        const response = (await wallet.signAndSubmitTransaction!(
+          transaction
+        )) as UserResponse<AptosSignAndSubmitTransactionOutput>;
+
+        if (response.status === UserResponseStatus.REJECTED) {
+          throw new WalletConnectionError("User has rejected the request")
+            .message;
+        }
+
+        return response.args;
+      }
+
+      // build standard json format
+      const transaction = {
+        gasUnitPrice: transactionInput.options?.gasUnitPrice,
+        maxGasAmount: transactionInput.options?.maxGasAmount,
+        payload: transactionInput.data,
+      };
       const response = (await wallet.signAndSubmitTransaction!(
         transaction
       )) as UserResponse<AptosSignAndSubmitTransactionOutput>;
+
       if (response.status === UserResponseStatus.REJECTED) {
         throw new WalletConnectionError("User has rejected the request")
           .message;
