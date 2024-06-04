@@ -183,8 +183,8 @@ importers:
         specifier: ^0.0.11
         version: 0.0.11
       '@atomrigslab/aptos-wallet-adapter':
-        specifier: ^0.1.10
-        version: 0.1.10(@aptos-labs/ts-sdk@1.13.2)(@wallet-standard/core@1.0.3)(esbuild@0.14.54)
+        specifier: ^0.1.12
+        version: 0.1.12(@aptos-labs/ts-sdk@1.13.2)(esbuild@0.14.54)
       aptos:
         specifier: ^1.21.0
         version: 1.21.0
@@ -472,28 +472,18 @@ packages:
       - debug
     dev: false
 
-  /@aptos-labs/wallet-standard@0.0.13(@aptos-labs/ts-sdk@1.13.2)(@wallet-standard/core@1.0.3):
-    resolution: {integrity: sha512-9w/eY84sQMGiNASe1DUlbIgu8yK9kDhEgLFS+XxdSJgDaOeELYjbeloyy8arwp5JAygpd2hnrZGqmliTRwpAxw==}
-    peerDependencies:
-      '@aptos-labs/ts-sdk': ^1.16.0
-      '@wallet-standard/core': ^1.0.3
-    dependencies:
-      '@aptos-labs/ts-sdk': 1.13.2
-      '@wallet-standard/core': 1.0.3
-    dev: false
-
-  /@atomrigslab/aptos-wallet-adapter@0.1.10(@aptos-labs/ts-sdk@1.13.2)(@wallet-standard/core@1.0.3)(esbuild@0.14.54):
-    resolution: {integrity: sha512-NdWVIuotp8g0hrbfSqeEUptSLJrHEGIhkk/xx0InE0k+k5BzNsmV2fTaMCuGsQeTEiNY/pyPj2tvMoJ4ux4kmg==}
+  /@atomrigslab/aptos-wallet-adapter@0.1.12(@aptos-labs/ts-sdk@1.13.2)(esbuild@0.14.54):
+    resolution: {integrity: sha512-fxkinFLitXaq7UDtfA4BgFMW4DL9dg/tHI14Du7a+tGHUL2cCmUhRIS29X6gsAiPUNHE/gsrDODvcU1QdE1dWQ==}
     peerDependencies:
       '@aptos-labs/ts-sdk': ^1.9.0
     dependencies:
       '@aptos-labs/ts-sdk': 1.13.2
-      '@aptos-labs/wallet-standard': 0.0.13(@aptos-labs/ts-sdk@1.13.2)(@wallet-standard/core@1.0.3)
+      '@aptos-labs/wallet-standard': 0.0.11
       '@atomrigslab/dekey-web-wallet-provider': 1.2.0(esbuild@0.14.54)
     transitivePeerDependencies:
       - '@swc/core'
-      - '@wallet-standard/core'
       - '@webpack-cli/generators'
+      - debug
       - esbuild
       - uglify-js
       - webpack-bundle-analyzer
