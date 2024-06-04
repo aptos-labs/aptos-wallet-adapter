@@ -1,5 +1,12 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.1.3
+
+### Patch Changes
+
+- cc4021b: Add the `local` case to the switch statement that converts a string to a Network.
+- ec6cb0c: it bumps @atomrigslab/aptos-wallet-adapter version to fixe redirection issue with Twallet URL
+
 ## 4.1.2
 
 ### Patch Changes
