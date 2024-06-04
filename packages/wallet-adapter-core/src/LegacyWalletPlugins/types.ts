@@ -167,7 +167,6 @@ export type InputTransactionData = {
   sender?: AccountAddressInput;
   data: InputGenerateTransactionPayloadData;
   options?: InputGenerateTransactionOptions;
-  feePayer?: AccountAuthenticator;
 };
 
 // To be used by a wallet plugin

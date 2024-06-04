@@ -725,7 +725,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       const aptos = new Aptos(aptosConfig);
 
       if (this._wallet.signAndSubmitTransaction) {
-        console.log("_standard_wallets", this._standard_wallets);
         // if wallet is compatible with the AIP-62 standard
         if (this._wallet.isAIP62Standard) {
           const { hash, ...output } =
