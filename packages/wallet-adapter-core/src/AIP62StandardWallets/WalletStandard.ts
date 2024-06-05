@@ -68,7 +68,7 @@ export class WalletStandardCore {
       );
 
       // check for backward compatibility. before version 1.1.0 the standard expected
-      // AnyRawTransaction input so the adapter built the transaction before sendign it to the wallet
+      // AnyRawTransaction input so the adapter built the transaction before sending it to the wallet
       if (
         standardWallet?.features["aptos:signAndSubmitTransaction"]?.version !==
         "1.1.0"
