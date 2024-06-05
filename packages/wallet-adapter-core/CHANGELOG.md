@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.2.0
+
+### Minor Changes
+
+- 9f94e4d: Support signAndSubmitTransaction standard function feature version 1.1.0
+
 ## 4.1.3
 
 ### Patch Changes
