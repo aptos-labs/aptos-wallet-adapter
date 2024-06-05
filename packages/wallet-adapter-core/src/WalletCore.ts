@@ -732,7 +732,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
               transactionInput,
               aptos,
               this._account,
-              this._wallet
+              this._wallet,
+              this._standard_wallets
             );
           return { hash, output };
         } else {
