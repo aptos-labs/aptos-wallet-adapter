@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.2.1
+
+### Patch Changes
+
+- 4db7a8d: Trigger release to update WALLET_ADAPTER_CORE_VERSION injected variable
+
 ## 4.2.0
 
 ### Minor Changes
