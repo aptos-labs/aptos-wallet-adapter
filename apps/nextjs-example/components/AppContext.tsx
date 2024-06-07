@@ -1,3 +1,4 @@
+import { AptosConnectWalletPlugin } from '@aptos-connect/wallet-adapter-plugin';
 import { BitgetWallet } from "@bitget-wallet/aptos-wallet-adapter";
 import { FewchaWallet } from "fewcha-plugin-wallet-adapter";
 import { MartianWallet } from "@martianwallet/aptos-wallet-adapter";
@@ -17,7 +18,15 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { autoConnect } = useAutoConnect();
   const { setErrorAlertMessage } = useAlert();
 
+  const clientSidePlugins = typeof global.window !== 'undefined' ? [
+    new AptosConnectWalletPlugin({
+      network: Network.DEVNET,
+      // frontendBaseURL: 'http://localhost:3000'
+    }),
+  ] : [];
+
   const wallets = [
+    ...clientSidePlugins,
     new IdentityConnectWallet("57fa42a9-29c6-4f1e-939c-4eefa36d9ff5", {
       networkName: Network.TESTNET,
     }),
