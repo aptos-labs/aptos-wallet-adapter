@@ -27,6 +27,12 @@ importers:
 
   apps/nextjs-example:
     dependencies:
+      '@aptos-connect/wallet-adapter-plugin':
+        specifier: ^0.0.6
+        version: 0.0.6(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.0.11)(aptos@1.21.0)
+      '@aptos-connect/wallet-api':
+        specifier: ^0.0.3
+        version: 0.0.3(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.0.11)(aptos@1.21.0)
       '@aptos-labs/ts-sdk':
         specifier: ^1.18.1
         version: 1.18.1
