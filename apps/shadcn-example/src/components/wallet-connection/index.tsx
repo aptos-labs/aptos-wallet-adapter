@@ -73,6 +73,10 @@ export function WalletConnectionButton() {
     if (!account?.address) return;
     try {
       await navigator.clipboard.writeText(account.address);
+      toast({
+        title: "Success",
+        description: "Copied wallet address to clipboard.",
+      });
     } catch {
       toast({
         variant: "destructive",
@@ -84,7 +88,7 @@ export function WalletConnectionButton() {
 
   return connected ? (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button>
           {account?.ansName || truncateAddress(account?.address) || "Unknown"}
         </Button>
