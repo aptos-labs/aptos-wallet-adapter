@@ -1,5 +1,5 @@
 import { ThemeToggle } from "@/components/theme-toggle";
-import { WalletConnectionButton } from "@/components/wallet-connection";
+import { WalletSelector } from "@/components/wallet-selector";
 
 export default function Home() {
   return (
@@ -8,7 +8,7 @@ export default function Home() {
         <ThemeToggle />
       </div>
       <div className="flex justify-center pt-[20vh]">
-        <WalletConnectionButton />
+        <WalletSelector />
       </div>
     </main>
   );
