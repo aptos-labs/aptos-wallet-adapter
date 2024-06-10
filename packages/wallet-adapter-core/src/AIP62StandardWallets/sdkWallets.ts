@@ -5,8 +5,6 @@ import { Network } from "@aptos-labs/ts-sdk";
 
 const isProd = process.env.NODE_ENV === "production";
 
-let aptosNetwork = isProd ? Network.MAINNET : Network.TESTNET;
-
 const sdkWallets: AptosStandardWallet[] = [];
 
 // Push production wallet if env is production, otherwise use dev wallet
@@ -18,6 +16,7 @@ if (isProd) {
   sdkWallets.push(new DevTWallet() as any);
 }
 
+let aptosNetwork = isProd ? Network.MAINNET : Network.TESTNET;
 // Need to check window is defined for AptosConnect
 if (typeof window !== "undefined") {
   sdkWallets.push(new AptosConnectWallet({ network: aptosNetwork }));
