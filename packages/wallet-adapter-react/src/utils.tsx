@@ -7,6 +7,11 @@ import {
 
 export type AptosWallet = Wallet | AptosStandardSupportedWallet<string>;
 
+/**
+ * A function that will partition the provided wallets into two list — `defaultWallets` and `moreWallets`.
+ * By default, the wallets will be partitioned by whether or not they are installed or loadable.
+ * You can pass your own partition function if you wish to customize this behavior.
+ */
 export function partitionWallets(
   wallets: ReadonlyArray<AptosWallet>,
   partitionFunction: (wallet: AptosWallet) => boolean = isInstalledOrLoadable
@@ -22,23 +27,26 @@ export function partitionWallets(
   return { defaultWallets, moreWallets };
 }
 
-function isInstalledOrLoadable(wallet: AptosWallet) {
+/** Returns true if the wallet is installed or loadable. */
+export function isInstalledOrLoadable(wallet: AptosWallet) {
   return (
     wallet.readyState === WalletReadyState.Installed ||
     wallet.readyState === WalletReadyState.Loadable
   );
 }
 
+/**
+ * Returns true if the user is on desktop and the provided wallet requires installation of a browser extension.
+ * This can be used to decide whether to show a "Connect" button or "Install" link in the UI.
+ */
 export function isInstallRequired(wallet: AptosWallet) {
-  const isWalletReady =
-    wallet.readyState === WalletReadyState.Installed ||
-    wallet.readyState === WalletReadyState.Loadable;
-
+  const isWalletReady = isInstalledOrLoadable(wallet);
   const isMobile = !isWalletReady && isRedirectable();
 
   return !isMobile && !isWalletReady;
 }
 
+/** Truncates the provided wallet address at the middle with an ellipsis. */
 export function truncateAddress(address: string | undefined) {
   if (!address) return;
   return `${address.slice(0, 6)}...${address.slice(-5)}`;

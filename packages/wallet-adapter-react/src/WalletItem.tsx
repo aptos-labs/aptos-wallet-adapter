@@ -14,15 +14,27 @@ import { useWallet } from "./useWallet";
 import { AptosWallet } from "./utils";
 
 export interface WalletItemProps {
+  /** The wallet option to be displayed. */
   wallet: AptosWallet;
+  /** A callback to be invoked when the wallet is connected. */
   onConnect?: () => void;
+  /** A class name for styling the wrapper element. */
   className?: string;
+  /**
+   * Whether to render as the child element instead of the default `div` provided.
+   * All props will be merged into the child element.
+   */
   asChild?: boolean;
   children?: ReactNode;
 }
 
 export interface WalletItemElementProps {
+  /** A class name for styling the element. */
   className?: string;
+  /**
+   * Whether to render as the child element instead of the default element provided.
+   * All props will be merged into the child element.
+   */
   asChild?: boolean;
   children?: ReactNode;
 }
@@ -156,6 +168,7 @@ const WalletItemInstallLink = forwardRef<
 });
 WalletItemInstallLink.displayName = "WalletItem.InstallLink";
 
+/** A headless component for rendering a wallet option's name, icon, and either connect button or install link. */
 export const WalletItem = Object.assign(WalletItemRoot, {
   Icon: WalletItemIcon,
   Name: WalletItemName,
