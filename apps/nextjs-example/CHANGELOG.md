@@ -1,5 +1,20 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 2.11.0
+
+### Minor Changes
+
+- 79b1bf8: Add AptosConnect
+
+### Patch Changes
+
+- Updated dependencies [79b1bf8]
+- Updated dependencies [9566c50]
+  - @aptos-labs/wallet-adapter-core@4.3.0
+  - @aptos-labs/wallet-adapter-react@3.0.7
+  - @aptos-labs/wallet-adapter-ant-design@2.4.7
+  - @aptos-labs/wallet-adapter-mui-design@2.5.7
+
 ## 2.10.6
 
 ### Patch Changes
