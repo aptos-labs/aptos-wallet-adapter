@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.3.1
+
+### Minor Changes
+
+- e6a858c: Add `AnyAptosWallet` union type
+
 ## 4.2.1
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.1.6
+
+### Minor Changes
+
+- cb8acd1: Added the following headless React component and some utility functions to simplify the creation of new wallet adapter UIs:
+  - `WalletItem` component
+  - `partitionWallets` utility
+  - `isInstalledOrLoadable` utility
+  - `isInstallRequired` utility
+  - `truncateAddress` utility
+
 ## 3.0.6
 
 ### Patch Changes
