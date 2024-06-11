@@ -83,6 +83,8 @@ import { aptosStandardSupportedWalletList } from "./AIP62StandardWallets/registr
 
 export type IAptosWallet = AptosStandardWallet & Wallet;
 
+export type AnyAptosWallet = Wallet | AptosStandardSupportedWallet;
+
 export class WalletCore extends EventEmitter<WalletCoreEvents> {
   // Private array to hold legacy wallet adapter plugins
   private _wallets: ReadonlyArray<Wallet> = [];
@@ -95,7 +97,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   // Private array to hold all wallets (legacy wallet adapter plugins AND compatible AIP-62 standard wallets)
   // while providing support for legacy and new wallet standard
-  private _all_wallets: Array<Wallet | AptosStandardSupportedWallet> = [];
+  private _all_wallets: Array<AnyAptosWallet> = [];
 
   // Current connected wallet
   private _wallet: Wallet | null = null;
@@ -516,7 +518,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   /**
    * Getter to fetch all detected wallets
    */
-  get wallets(): ReadonlyArray<Wallet | AptosStandardSupportedWallet> {
+  get wallets(): ReadonlyArray<AnyAptosWallet> {
     return this._all_wallets;
   }
 

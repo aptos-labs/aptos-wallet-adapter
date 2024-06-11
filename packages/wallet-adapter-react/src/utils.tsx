@@ -1,11 +1,8 @@
 import {
-  AptosStandardSupportedWallet,
-  Wallet,
+  AnyAptosWallet,
   WalletReadyState,
   isRedirectable,
 } from "@aptos-labs/wallet-adapter-core";
-
-export type AptosWallet = Wallet | AptosStandardSupportedWallet<string>;
 
 /**
  * A function that will partition the provided wallets into two list — `defaultWallets` and `moreWallets`.
@@ -13,11 +10,11 @@ export type AptosWallet = Wallet | AptosStandardSupportedWallet<string>;
  * You can pass your own partition function if you wish to customize this behavior.
  */
 export function partitionWallets(
-  wallets: ReadonlyArray<AptosWallet>,
-  partitionFunction: (wallet: AptosWallet) => boolean = isInstalledOrLoadable
+  wallets: ReadonlyArray<AnyAptosWallet>,
+  partitionFunction: (wallet: AnyAptosWallet) => boolean = isInstalledOrLoadable
 ) {
-  const defaultWallets: Array<AptosWallet> = [];
-  const moreWallets: Array<AptosWallet> = [];
+  const defaultWallets: Array<AnyAptosWallet> = [];
+  const moreWallets: Array<AnyAptosWallet> = [];
 
   for (const wallet of wallets) {
     if (partitionFunction(wallet)) defaultWallets.push(wallet);
@@ -28,7 +25,7 @@ export function partitionWallets(
 }
 
 /** Returns true if the wallet is installed or loadable. */
-export function isInstalledOrLoadable(wallet: AptosWallet) {
+export function isInstalledOrLoadable(wallet: AnyAptosWallet) {
   return (
     wallet.readyState === WalletReadyState.Installed ||
     wallet.readyState === WalletReadyState.Loadable
@@ -39,7 +36,7 @@ export function isInstalledOrLoadable(wallet: AptosWallet) {
  * Returns true if the user is on desktop and the provided wallet requires installation of a browser extension.
  * This can be used to decide whether to show a "Connect" button or "Install" link in the UI.
  */
-export function isInstallRequired(wallet: AptosWallet) {
+export function isInstallRequired(wallet: AnyAptosWallet) {
   const isWalletReady = isInstalledOrLoadable(wallet);
   const isMobile = !isWalletReady && isRedirectable();
 

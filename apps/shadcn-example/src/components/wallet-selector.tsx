@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  AptosWallet,
+  AnyAptosWallet,
   WalletItem,
   isInstallRequired,
   partitionWallets,
@@ -116,7 +116,7 @@ function ConnectWalletDialog({ close }: ConnectWalletDialogProps) {
 }
 
 interface WalletRowProps {
-  wallet: AptosWallet;
+  wallet: AnyAptosWallet;
   onConnect?: () => void;
 }
 

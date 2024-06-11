@@ -1,4 +1,5 @@
 import {
+  AnyAptosWallet,
   WalletReadyState,
   isRedirectable,
 } from "@aptos-labs/wallet-adapter-core";
@@ -11,11 +12,10 @@ import {
   useContext,
 } from "react";
 import { useWallet } from "./useWallet";
-import { AptosWallet } from "./utils";
 
 export interface WalletItemProps {
   /** The wallet option to be displayed. */
-  wallet: AptosWallet;
+  wallet: AnyAptosWallet;
   /** A callback to be invoked when the wallet is connected. */
   onConnect?: () => void;
   /** A class name for styling the wrapper element. */
@@ -40,7 +40,7 @@ export interface WalletItemElementProps {
 }
 
 const WalletItemContext = createContext<{
-  wallet: AptosWallet;
+  wallet: AnyAptosWallet;
   connectWallet: () => void;
 } | null>(null);
 
