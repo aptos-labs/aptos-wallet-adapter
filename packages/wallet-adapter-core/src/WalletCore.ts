@@ -248,6 +248,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @returns
    */
   excludeWallet(walletName: string): boolean {
+    // for now, we always include AptosConnect
+    if (walletName === "Google (AptosConnect)") return false;
     // If _optInWallets is not empty, and does not include the provided wallet,
     // return true to exclude the wallet, otherwise return false
     if (
