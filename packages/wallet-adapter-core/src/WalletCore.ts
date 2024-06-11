@@ -83,6 +83,9 @@ import { aptosStandardSupportedWalletList } from "./AIP62StandardWallets/registr
 
 export type IAptosWallet = AptosStandardWallet & Wallet;
 
+/** Any wallet that can be handled by `WalletCore`.
+ * This includes both wallets from legacy wallet adapter plugins and compatible AIP-62 standard wallets.
+ */
 export type AnyAptosWallet = Wallet | AptosStandardSupportedWallet;
 
 export class WalletCore extends EventEmitter<WalletCoreEvents> {
