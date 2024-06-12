@@ -1,5 +1,18 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.1.0
+
+### Minor Changes
+
+- 2e9c156: Added `partitionWallets`, `isInstalledOrLoadable`, `isInstallRequired`, and `truncateAddress` utility functions to make it easier to implement custom wallet selectors.
+- 2e9c156: Added `WalletItem` headless component for implementing custom wallet selectors.
+
+### Patch Changes
+
+- 2e9c156: Fixed a bug where `WalletProvider` would not automatically attempt to reconnect the wallet when the `autoConnect` is set to true after the initial render.
+- Updated dependencies [2e9c156]
+  - @aptos-labs/wallet-adapter-core@4.4.0
+
 ## 3.0.7
 
 ### Patch Changes

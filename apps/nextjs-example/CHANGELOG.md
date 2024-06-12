@@ -1,5 +1,22 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.0.0
+
+### Major Changes
+
+- 2e9c156: Overhauled the app to use the latest version of Next.js and shadcn/ui. The app is now mobile-responsive, has a light/dark mode toggle, and includes a shadcn/ui wallet selector.
+
+### Patch Changes
+
+- Updated dependencies [2e9c156]
+- Updated dependencies [2e9c156]
+- Updated dependencies [2e9c156]
+- Updated dependencies [2e9c156]
+  - @aptos-labs/wallet-adapter-react@3.1.0
+  - @aptos-labs/wallet-adapter-core@4.4.0
+  - @aptos-labs/wallet-adapter-ant-design@2.4.8
+  - @aptos-labs/wallet-adapter-mui-design@2.5.8
+
 ## 2.11.0
 
 ### Minor Changes
