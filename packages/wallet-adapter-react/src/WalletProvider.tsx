@@ -175,7 +175,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         setIsLoading(false);
       }
     }
-  }, [wallets]);
+  }, [autoConnect, wallets]);
 
   useEffect(() => {
     if (connected) {

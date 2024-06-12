@@ -1,6 +1,6 @@
 import { WALLET_ADAPTER_CORE_VERSION } from "./version";
 
-export { WalletCore } from "./WalletCore";
+export { type AnyAptosWallet, WalletCore } from "./WalletCore";
 export * from "./LegacyWalletPlugins";
 export * from "./constants";
 export * from "./utils";
