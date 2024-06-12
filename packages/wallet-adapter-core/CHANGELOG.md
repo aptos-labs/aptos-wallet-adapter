@@ -1,5 +1,15 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.3.0
+
+### Minor Changes
+
+- 79b1bf8: Add AptosConnect
+
+### Patch Changes
+
+- 9566c50: Bumped @aptos-connect/wallet-adapter-plugin version to include args normalization fix
+
 ## 4.2.1
 
 ### Patch Changes
