@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.0.1
+
+### Patch Changes
+
+- 716fd69: Fixed a bug where "More wallets" would still be displayed in the shadcn/ui wallet selector even if there aren't more wallets.
+
 ## 3.0.0
 
 ### Major Changes
