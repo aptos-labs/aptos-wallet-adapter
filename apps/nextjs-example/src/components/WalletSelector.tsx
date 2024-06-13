@@ -99,18 +99,20 @@ function ConnectWalletDialog({ close }: ConnectWalletDialogProps) {
           <WalletRow key={wallet.name} wallet={wallet} onConnect={close} />
         ))}
       </div>
-      <Collapsible className="flex flex-col gap-4">
-        <CollapsibleTrigger asChild>
-          <Button size="sm" variant="ghost" className="gap-2">
-            More wallets <ChevronDown />
-          </Button>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="flex flex-col gap-3">
-          {moreWallets.map((wallet) => (
-            <WalletRow key={wallet.name} wallet={wallet} onConnect={close} />
-          ))}
-        </CollapsibleContent>
-      </Collapsible>
+      {!!moreWallets.length && (
+        <Collapsible className="flex flex-col gap-4">
+          <CollapsibleTrigger asChild>
+            <Button size="sm" variant="ghost" className="gap-2">
+              More wallets <ChevronDown />
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="flex flex-col gap-3">
+            {moreWallets.map((wallet) => (
+              <WalletRow key={wallet.name} wallet={wallet} onConnect={close} />
+            ))}
+          </CollapsibleContent>
+        </Collapsible>
+      )}
     </DialogContent>
   );
 }
