@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.0.2
+
+### Patch Changes
+
+- d1f3ce6: Remove IdentityConnect and Petra plugins in favor of AIP-62 Petra and AptosConnect
+
 ## 3.0.1
 
 ### Patch Changes
