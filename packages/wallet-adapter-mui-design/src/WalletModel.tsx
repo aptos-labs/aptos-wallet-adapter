@@ -1,136 +1,32 @@
 import {
+  AnyAptosWallet,
+  WalletItem,
+  getAptosConnectWallets,
+  isInstallRequired,
+  partitionWallets,
+  useWallet,
+} from "@aptos-labs/wallet-adapter-react";
+import {
   Box,
   Button,
+  Collapse,
+  Dialog,
+  Divider,
+  IconButton,
   ListItem,
-  ListItemAvatar,
-  ListItemButton,
   ListItemText,
+  Stack,
   Typography,
   useTheme,
-  Grid,
-  IconButton,
-  Dialog,
-  Stack,
 } from "@mui/material";
-import {
-  isRedirectable,
-  useWallet,
-  Wallet,
-  WalletReadyState,
-  WalletName,
-  AptosStandardSupportedWallet,
-} from "@aptos-labs/wallet-adapter-react";
 import { grey } from "./aptosColorPalette";
 // reported bug with loading mui icons with esm, therefore need to import like this https://github.com/mui/material-ui/issues/35233
-import { LanOutlined as LanOutlinedIcon } from "@mui/icons-material";
-import { Close as CloseIcon } from "@mui/icons-material";
-import { PropsWithChildren } from "react";
-
-const ConnectWalletRow: React.FC<{
-  wallet: Wallet | AptosStandardSupportedWallet;
-  onClick(): void;
-}> = ({ wallet, onClick }) => {
-  const theme = useTheme();
-  return (
-    <ListItem disablePadding>
-      <ListItemButton
-        alignItems="center"
-        disableGutters
-        onClick={() => onClick()}
-        sx={{
-          background: theme.palette.mode === "dark" ? grey[700] : grey[200],
-          padding: "1rem 1rem",
-          borderRadius: `${theme.shape.borderRadius}px`,
-          display: "flex",
-          gap: "1rem",
-        }}
-      >
-        <ListItemAvatar
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            width: "2rem",
-            height: "2rem",
-            minWidth: "0",
-            color: `${theme.palette.text.primary}`,
-          }}
-        >
-          <Box
-            component="img"
-            src={wallet.icon}
-            sx={{ width: "100%", height: "100%" }}
-          />
-        </ListItemAvatar>
-        <ListItemText
-          primary={wallet.name}
-          primaryTypographyProps={{
-            fontSize: 18,
-          }}
-        />
-        <Button
-          variant="contained"
-          size="small"
-          className="wallet-connect-button"
-        >
-          Connect
-        </Button>
-      </ListItemButton>
-    </ListItem>
-  );
-};
-
-const InstallWalletRow: React.FC<{
-  wallet: Wallet | AptosStandardSupportedWallet;
-}> = ({ wallet }) => {
-  const theme = useTheme();
-
-  return (
-    <ListItem
-      alignItems="center"
-      sx={{
-        borderRadius: `${theme.shape.borderRadius}px`,
-        background: theme.palette.mode === "dark" ? grey[700] : grey[200],
-        padding: "1rem 1rem",
-        gap: "1rem",
-      }}
-    >
-      <ListItemAvatar
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          width: "2rem",
-          height: "2rem",
-          minWidth: "0",
-          opacity: "0.25",
-        }}
-      >
-        <Box
-          component="img"
-          src={wallet.icon}
-          sx={{ width: "100%", height: "100%" }}
-        />
-      </ListItemAvatar>
-      <ListItemText
-        sx={{
-          opacity: "0.25",
-        }}
-        primary={wallet.name}
-        primaryTypographyProps={{
-          fontSize: 18,
-        }}
-      />
-      <Button
-        LinkComponent={"a"}
-        href={wallet.url}
-        target="_blank"
-        size="small"
-        className="wallet-connect-install"
-      >
-        Install
-      </Button>
-    </ListItem>
-  );
-};
+import {
+  Close as CloseIcon,
+  ExpandMore,
+  LanOutlined as LanOutlinedIcon,
+} from "@mui/icons-material";
+import { useState } from "react";
 
 type WalletsModalProps = {
   handleClose: () => void;
@@ -143,70 +39,32 @@ export default function WalletsModal({
   modalOpen,
   networkSupport,
 }: WalletsModalProps): JSX.Element {
-  const { wallets, connect } = useWallet();
-
   const theme = useTheme();
+  const [expanded, setExpanded] = useState(false);
 
-  const onWalletSelect = (walletName: WalletName) => {
-    connect(walletName);
-    handleClose();
-  };
+  const { wallets = [] } = useWallet();
 
-  const renderWalletsList = () => {
-    return wallets?.map((wallet) => {
-      const isWalletReady =
-        wallet.readyState === WalletReadyState.Installed ||
-        wallet.readyState === WalletReadyState.Loadable;
+  const {
+    /** Wallets that use social login to create an account on the blockchain */
+    aptosConnectWallets,
+    /** Wallets that use traditional wallet extensions */
+    otherWallets,
+  } = getAptosConnectWallets(wallets);
 
-      const Container: React.FC<PropsWithChildren> = ({ children }) => {
-        return (
-          <Grid xs={12} paddingY={0.5} item>
-            {children}
-          </Grid>
-        );
-      };
+  const {
+    /** Wallets that are currently installed or loadable. */
+    defaultWallets,
+    /** Wallets that are NOT currently installed or loadable. */
+    moreWallets,
+  } = partitionWallets(otherWallets);
 
-      // The user is on a mobile device
-      if (!isWalletReady && isRedirectable()) {
-        const hasMobileSupport = Boolean((wallet as Wallet).deeplinkProvider);
-        // If the user has a deep linked app, show the wallet
-        if (hasMobileSupport) {
-          return (
-            <Container key={wallet.name}>
-              <ConnectWalletRow
-                wallet={wallet}
-                onClick={() => connect(wallet.name)}
-              />
-            </Container>
-          );
-        }
-
-        // Otherwise don't show anything
-        return null;
-      }
-
-      // The user is on a desktop device
-      return (
-        <Container key={wallet.name}>
-          {isWalletReady ? (
-            <ConnectWalletRow
-              wallet={wallet}
-              onClick={() => onWalletSelect(wallet.name)}
-            />
-          ) : (
-            <InstallWalletRow wallet={wallet} />
-          )}
-        </Container>
-      );
-    });
-  };
+  const hasAptosConnectWallets = !!aptosConnectWallets.length;
 
   return (
     <Dialog
       open={modalOpen}
       onClose={handleClose}
-      aria-labelledby="wallet selector modal"
-      aria-describedby="select a wallet to connect"
+      aria-label="wallet selector modal"
       sx={{ borderRadius: `${theme.shape.borderRadius}px` }}
       maxWidth="xs"
       fullWidth
@@ -220,6 +78,7 @@ export default function WalletsModal({
           bgcolor: "background.paper",
           boxShadow: 24,
           p: 3,
+          gap: 2,
         }}
       >
         <IconButton
@@ -233,8 +92,23 @@ export default function WalletsModal({
         >
           <CloseIcon />
         </IconButton>
-        <Typography align="center" variant="h5" pt={2}>
-          Connect Wallet
+        <Typography
+          align="center"
+          variant="h5"
+          pt={2}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {hasAptosConnectWallets ? (
+            <>
+              <span>Log in or sign up</span>
+              <span>with Social + Aptos Connect</span>
+            </>
+          ) : (
+            "Connect Wallet"
+          )}
         </Typography>
         <Box
           sx={{
@@ -242,7 +116,6 @@ export default function WalletsModal({
             gap: 0.5,
             alignItems: "center",
             justifyContent: "center",
-            mb: 4,
           }}
         >
           {networkSupport && (
@@ -266,8 +139,125 @@ export default function WalletsModal({
             </>
           )}
         </Box>
-        <Box>{renderWalletsList()}</Box>
+        {hasAptosConnectWallets && (
+          <>
+            <Stack sx={{ gap: 1 }}>
+              {aptosConnectWallets.map((wallet) => (
+                <AptosConnectWalletRow
+                  key={wallet.name}
+                  wallet={wallet}
+                  onConnect={handleClose}
+                />
+              ))}
+            </Stack>
+            <Divider sx={{ color: grey[400], pt: 2 }}>Or</Divider>
+          </>
+        )}
+        <Stack sx={{ gap: 1 }}>
+          {defaultWallets.map((wallet) => (
+            <WalletRow
+              key={wallet.name}
+              wallet={wallet}
+              onConnect={handleClose}
+            />
+          ))}
+          {!!moreWallets.length && (
+            <>
+              <Button
+                variant="text"
+                size="small"
+                onClick={() => setExpanded((prev) => !prev)}
+                endIcon={<ExpandMore sx={{ height: "20px", width: "20px" }} />}
+              >
+                More Wallets
+              </Button>
+              <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <Stack sx={{ gap: 1 }}>
+                  {moreWallets.map((wallet) => (
+                    <WalletRow
+                      key={wallet.name}
+                      wallet={wallet}
+                      onConnect={handleClose}
+                    />
+                  ))}
+                </Stack>
+              </Collapse>
+            </>
+          )}
+        </Stack>
       </Stack>
     </Dialog>
+  );
+}
+
+interface WalletRowProps {
+  wallet: AnyAptosWallet;
+  onConnect?: () => void;
+}
+
+function WalletRow({ wallet, onConnect }: WalletRowProps) {
+  const theme = useTheme();
+  return (
+    <WalletItem wallet={wallet} onConnect={onConnect} asChild>
+      <ListItem disablePadding>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            px: 2,
+            py: 1.5,
+            gap: 2,
+            border: "solid 1px",
+            borderColor: theme.palette.mode === "dark" ? grey[700] : grey[200],
+            borderRadius: `${theme.shape.borderRadius}px`,
+          }}
+        >
+          <Box component={WalletItem.Icon} sx={{ width: 32, height: 32 }} />
+          <ListItemText
+            primary={wallet.name}
+            primaryTypographyProps={{ fontSize: "1.125rem" }}
+          />
+          {isInstallRequired(wallet) ? (
+            <WalletItem.InstallLink asChild>
+              <Button
+                LinkComponent={"a"}
+                size="small"
+                className="wallet-connect-install"
+              >
+                Install
+              </Button>
+            </WalletItem.InstallLink>
+          ) : (
+            <WalletItem.ConnectButton asChild>
+              <Button
+                variant="contained"
+                size="small"
+                className="wallet-connect-button"
+              >
+                Connect
+              </Button>
+            </WalletItem.ConnectButton>
+          )}
+        </Box>
+      </ListItem>
+    </WalletItem>
+  );
+}
+
+function AptosConnectWalletRow({ wallet, onConnect }: WalletRowProps) {
+  return (
+    <WalletItem wallet={wallet} onConnect={onConnect} asChild>
+      <WalletItem.ConnectButton asChild>
+        <Button
+          size="large"
+          variant="outlined"
+          sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
+        >
+          <Box component={WalletItem.Icon} sx={{ width: 20, height: 20 }} />
+          <WalletItem.Name />
+        </Button>
+      </WalletItem.ConnectButton>
+    </WalletItem>
   );
 }

@@ -1,3 +1,4 @@
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import {
   List,
   ListItem,
@@ -6,8 +7,7 @@ import {
   Popover,
   Tooltip,
 } from "@mui/material";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import React, { useState } from "react";
+import { useState } from "react";
 
 type WalletMenuProps = {
   popoverAnchor: HTMLButtonElement | null;
@@ -36,7 +36,7 @@ export default function WalletMenu({
 
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
 
-  const copyAddress = async (event: React.MouseEvent<HTMLDivElement>) => {
+  const copyAddress = async () => {
     await navigator.clipboard.writeText(account?.address!);
 
     setTooltipOpen(true);
@@ -72,11 +72,13 @@ export default function WalletMenu({
             </ListItemButton>
           </ListItem>
         </Tooltip>
-        <ListItem disablePadding>
-          <ListItemButton onClick={onAccountOptionClicked}>
-            <ListItemText primary="Account" />
-          </ListItemButton>
-        </ListItem>
+        {!!handleNavigate && (
+          <ListItem disablePadding>
+            <ListItemButton onClick={onAccountOptionClicked}>
+              <ListItemText primary="Account" />
+            </ListItemButton>
+          </ListItem>
+        )}
         <ListItem disablePadding>
           <ListItemButton onClick={handleLogout}>
             <ListItemText primary="Logout" />
