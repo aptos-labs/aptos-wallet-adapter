@@ -1,9 +1,11 @@
 "use client";
 
 import {
+  APTOS_CONNECT_ACCOUNT_URL,
   AnyAptosWallet,
   WalletItem,
   getAptosConnectWallets,
+  isAptosConnectWallet,
   isInstallRequired,
   partitionWallets,
   truncateAddress,
@@ -67,10 +69,10 @@ export function WalletSelector() {
         <DropdownMenuItem onSelect={copyAddress} className="gap-2">
           <Copy className="h-4 w-4" /> Copy address
         </DropdownMenuItem>
-        {wallet?.url.includes("aptosconnect.app") && (
+        {wallet && isAptosConnectWallet(wallet) && (
           <DropdownMenuItem asChild>
             <a
-              href="https://aptosconnect.app/dashboard/main-account"
+              href={APTOS_CONNECT_ACCOUNT_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="flex gap-2"
@@ -100,8 +102,20 @@ interface ConnectWalletDialogProps {
 
 function ConnectWalletDialog({ close }: ConnectWalletDialogProps) {
   const { wallets = [] } = useWallet();
-  const { aptosConnectWallets, otherWallets } = getAptosConnectWallets(wallets);
-  const { defaultWallets, moreWallets } = partitionWallets(otherWallets);
+
+  const {
+    /** Wallets that use social login to create an account on the blockchain */
+    aptosConnectWallets,
+    /** Wallets that use traditional wallet extensions */
+    otherWallets,
+  } = getAptosConnectWallets(wallets);
+
+  const {
+    /** Wallets that are currently installed or loadable. */
+    defaultWallets,
+    /** Wallets that are NOT currently installed or loadable. */
+    moreWallets,
+  } = partitionWallets(otherWallets);
 
   return (
     <DialogContent className="max-h-screen overflow-auto">
