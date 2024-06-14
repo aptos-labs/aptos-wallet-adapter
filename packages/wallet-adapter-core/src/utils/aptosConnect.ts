@@ -10,5 +10,5 @@ export const APTOS_CONNECT_ACCOUNT_URL =
 
 /** Returns `true` if the provided wallet is an Aptos Connect wallet. */
 export function isAptosConnectWallet(wallet: WalletInfo | AnyAptosWallet) {
-  return wallet.url.includes(APTOS_CONNECT_BASE_URL);
+  return wallet.url.startsWith(APTOS_CONNECT_BASE_URL);
 }
