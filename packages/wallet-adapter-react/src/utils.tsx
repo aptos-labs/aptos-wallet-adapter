@@ -32,6 +32,14 @@ export function isInstalledOrLoadable(wallet: AnyAptosWallet) {
   );
 }
 
+/** Partitions the `wallets` array so that Aptos Connect wallets are grouped separately from the rest. */
+export function getAptosConnectWallets(wallets: ReadonlyArray<AnyAptosWallet>) {
+  const { defaultWallets, moreWallets } = partitionWallets(wallets, (wallet) =>
+    wallet.url.includes("aptosconnect.app")
+  );
+  return { aptosConnectWallets: defaultWallets, otherWallets: moreWallets };
+}
+
 /**
  * Returns true if the user is on desktop and the provided wallet requires installation of a browser extension.
  * This can be used to decide whether to show a "Connect" button or "Install" link in the UI.

@@ -3,12 +3,13 @@
 import {
   AnyAptosWallet,
   WalletItem,
+  getAptosConnectWallets,
   isInstallRequired,
   partitionWallets,
   truncateAddress,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
-import { ChevronDown, Copy, LogOut } from "lucide-react";
+import { ChevronDown, Copy, LogOut, User } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Button } from "./ui/button";
 import {
@@ -32,7 +33,7 @@ import {
 import { useToast } from "./ui/use-toast";
 
 export function WalletSelector() {
-  const { disconnect, account, connected } = useWallet();
+  const { account, connected, disconnect, wallet } = useWallet();
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -66,6 +67,18 @@ export function WalletSelector() {
         <DropdownMenuItem onSelect={copyAddress} className="gap-2">
           <Copy className="h-4 w-4" /> Copy address
         </DropdownMenuItem>
+        {wallet?.url.includes("aptosconnect.app") && (
+          <DropdownMenuItem asChild>
+            <a
+              href="https://aptosconnect.app/dashboard/main-account"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex gap-2"
+            >
+              <User className="h-4 w-4" /> Account
+            </a>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem onSelect={disconnect} className="gap-2">
           <LogOut className="h-4 w-4" /> Disconnect
         </DropdownMenuItem>
@@ -86,33 +99,55 @@ interface ConnectWalletDialogProps {
 }
 
 function ConnectWalletDialog({ close }: ConnectWalletDialogProps) {
-  const { wallets } = useWallet();
-  const { defaultWallets, moreWallets } = partitionWallets(wallets ?? []);
+  const { wallets = [] } = useWallet();
+  const { aptosConnectWallets, otherWallets } = getAptosConnectWallets(wallets);
+  const { defaultWallets, moreWallets } = partitionWallets(otherWallets);
 
   return (
     <DialogContent className="max-h-screen overflow-auto">
-      <DialogHeader>
-        <DialogTitle>Connect Wallet</DialogTitle>
+      <DialogHeader className="flex flex-col items-center">
+        <DialogTitle className="flex flex-col text-center leading-snug">
+          <span>Log in or sign up</span>
+          <span>with Social + Aptos Connect</span>
+        </DialogTitle>
       </DialogHeader>
+      <div className="flex flex-col gap-3 pt-3">
+        {aptosConnectWallets.map((wallet) => (
+          <AptosConnectWalletRow
+            key={wallet.name}
+            wallet={wallet}
+            onConnect={close}
+          />
+        ))}
+      </div>
+      <div className="flex items-center gap-3 pt-4 text-muted-foreground">
+        <div className="h-px w-full bg-secondary" />
+        Or
+        <div className="h-px w-full bg-secondary" />
+      </div>
       <div className="flex flex-col gap-3 pt-3">
         {defaultWallets.map((wallet) => (
           <WalletRow key={wallet.name} wallet={wallet} onConnect={close} />
         ))}
+        {!!moreWallets.length && (
+          <Collapsible className="flex flex-col gap-3">
+            <CollapsibleTrigger asChild>
+              <Button size="sm" variant="ghost" className="gap-2">
+                More wallets <ChevronDown />
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="flex flex-col gap-3">
+              {moreWallets.map((wallet) => (
+                <WalletRow
+                  key={wallet.name}
+                  wallet={wallet}
+                  onConnect={close}
+                />
+              ))}
+            </CollapsibleContent>
+          </Collapsible>
+        )}
       </div>
-      {!!moreWallets.length && (
-        <Collapsible className="flex flex-col gap-4">
-          <CollapsibleTrigger asChild>
-            <Button size="sm" variant="ghost" className="gap-2">
-              More wallets <ChevronDown />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="flex flex-col gap-3">
-            {moreWallets.map((wallet) => (
-              <WalletRow key={wallet.name} wallet={wallet} onConnect={close} />
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
-      )}
     </DialogContent>
   );
 }
@@ -142,6 +177,19 @@ function WalletRow({ wallet, onConnect }: WalletRowProps) {
           <Button size="sm">Connect</Button>
         </WalletItem.ConnectButton>
       )}
+    </WalletItem>
+  );
+}
+
+function AptosConnectWalletRow({ wallet, onConnect }: WalletRowProps) {
+  return (
+    <WalletItem wallet={wallet} onConnect={onConnect}>
+      <WalletItem.ConnectButton asChild>
+        <Button size="lg" variant="outline" className="w-full gap-4">
+          <WalletItem.Icon className="h-5 w-5" />
+          <WalletItem.Name className="text-base font-normal" />
+        </Button>
+      </WalletItem.ConnectButton>
     </WalletItem>
   );
 }
