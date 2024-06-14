@@ -2,4 +2,4 @@
 "@aptos-labs/wallet-adapter-react": minor
 ---
 
-Add `getAptosConnectWallets` utility function
+Added `getAptosConnectWallets` utility function
