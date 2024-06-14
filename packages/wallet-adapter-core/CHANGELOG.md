@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.5.0
+
+### Minor Changes
+
+- c1a9f41: Bumped auto-injected AptosConnect plugin version
+
 ## 4.4.0
 
 ### Minor Changes
