@@ -216,8 +216,8 @@ importers:
   packages/wallet-adapter-core:
     dependencies:
       '@aptos-connect/wallet-adapter-plugin':
-        specifier: ^0.0.12
-        version: 0.0.12(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
+        specifier: ^1.0.0
+        version: 1.0.0(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
       '@aptos-labs/ts-sdk':
         specifier: ^1.18.1
         version: 1.18.1
@@ -465,34 +465,22 @@ packages:
       throttle-debounce: 5.0.0
     dev: false
 
-  /@aptos-connect/wallet-adapter-plugin@0.0.12(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0):
-    resolution: {integrity: sha512-rIKrC3TETcBfpqawt5OSb1+fW1Z8j8D7IEx/OOW8v3lqPEEkjdFjObG0uoZUHboNVWKnwa5PBnIsiDmIV9OaFQ==}
+  /@aptos-connect/wallet-adapter-plugin@1.0.0(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0):
+    resolution: {integrity: sha512-9Mii1izvp8xp5eDSUZIotSWfoUDGvngkDJ4qPspUzLEFLy44iftTpNbcM1P/J+G7lBU6XvtIgCLLmppt3Hiqhg==}
     peerDependencies:
       '@aptos-labs/ts-sdk': 1.18.1
       '@aptos-labs/wallet-standard': ^0.1.0
       aptos: ^1.21.0
     dependencies:
-      '@aptos-connect/wallet-api': 0.0.6(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
+      '@aptos-connect/wallet-api': 0.1.1(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
       '@aptos-labs/ts-sdk': 1.18.1
       '@aptos-labs/wallet-adapter-core': 3.8.0(@aptos-labs/ts-sdk@1.18.1)(aptos@1.21.0)
       '@aptos-labs/wallet-standard': 0.1.0(@aptos-labs/ts-sdk@1.18.1)(@wallet-standard/core@1.0.3)
       '@identity-connect/crypto': 0.2.3(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
-      '@identity-connect/dapp-sdk': 0.6.2(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
+      '@identity-connect/dapp-sdk': 0.9.0(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
       aptos: 1.21.0
     transitivePeerDependencies:
       - debug
-    dev: false
-
-  /@aptos-connect/wallet-api@0.0.6(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0):
-    resolution: {integrity: sha512-c0k7YouK9H6ml9O0PnXi53Uh3Yd+AJ6qB/qMofCRG/mdpgZkmRZ+vekijjViOBgJHwvXY+YLyFIqeaXBkjgegg==}
-    peerDependencies:
-      '@aptos-labs/ts-sdk': 1.18.1
-      '@aptos-labs/wallet-standard': ^0.1.0
-      aptos: ^1.20.0
-    dependencies:
-      '@aptos-labs/ts-sdk': 1.18.1
-      '@aptos-labs/wallet-standard': 0.1.0(@aptos-labs/ts-sdk@1.18.1)(@wallet-standard/core@1.0.3)
-      aptos: 1.21.0
     dev: false
 
   /@aptos-connect/wallet-api@0.1.1(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0):
@@ -508,14 +496,14 @@ packages:
       aptos: 1.21.0
     dev: false
 
-  /@aptos-connect/web-transport@0.0.5(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0):
-    resolution: {integrity: sha512-hfy7C6Y6fFWbH2gQqTj4afmr4uMTLM28cG+y1qJGYPVFalgTzQDnzp2ldMF42NjV8b1fGiUs/K+d+RUKZjNA8w==}
+  /@aptos-connect/web-transport@0.0.7(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0):
+    resolution: {integrity: sha512-4dYv/696bEZc75041ewKsWxg48/dTEDqP0TpIfK3KndGepKWDM9q3Lj8iZo+8Z9nhzxwulEqiAO7c0nvzXxVFA==}
     peerDependencies:
       '@aptos-labs/ts-sdk': 1.18.1
       '@aptos-labs/wallet-standard': ^0.1.0
       aptos: ^1.20.0
     dependencies:
-      '@aptos-connect/wallet-api': 0.0.6(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
+      '@aptos-connect/wallet-api': 0.1.1(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
       '@aptos-labs/ts-sdk': 1.18.1
       '@aptos-labs/wallet-standard': 0.1.0(@aptos-labs/ts-sdk@1.18.1)(@wallet-standard/core@1.0.3)
       aptos: 1.21.0
@@ -1822,16 +1810,6 @@ packages:
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
     dev: true
 
-  /@identity-connect/api@0.6.0(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0):
-    resolution: {integrity: sha512-Opgd4E7nrKlzvGeXFIzXOCku+7U/x2f310e2huB5kHMV7fuakvNHbTRTMcWWiS9mCCDP141bia3Au1hXIaV38g==}
-    dependencies:
-      '@identity-connect/crypto': 0.2.3(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
-    transitivePeerDependencies:
-      - '@aptos-labs/ts-sdk'
-      - '@aptos-labs/wallet-standard'
-      - aptos
-    dev: false
-
   /@identity-connect/api@0.6.1:
     resolution: {integrity: sha512-CBeff9UZtQWhJBPEuwFCOcies2rFkn14BTLyyYLpI+Tlxv1XTCWSZKRx/Ewvexb4U/5OWWMY1s263gZBaOAiPQ==}
     dev: false
@@ -1851,17 +1829,17 @@ packages:
       - aptos
     dev: false
 
-  /@identity-connect/dapp-sdk@0.6.2(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0):
-    resolution: {integrity: sha512-xa2F6Qtsne80A53H6nVCyH8Fa8Z8wwKg3o/o6DkBiVCgmKWQFMi9RiSvQs4IwbVIBIqN4zpEIxvvgegwTvOoMg==}
+  /@identity-connect/dapp-sdk@0.9.0(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0):
+    resolution: {integrity: sha512-EYB9PMyEagt3PCjJTwX3V34vyXi/asj7dAD22rvUJarlx+TIRPYODxTWoUR2jc7F9Q83cZbU7Iv/EL77diqYYQ==}
     peerDependencies:
       '@aptos-labs/ts-sdk': 1.18.1
       '@aptos-labs/wallet-standard': ^0.1.0
     dependencies:
-      '@aptos-connect/wallet-api': 0.0.6(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
-      '@aptos-connect/web-transport': 0.0.5(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
+      '@aptos-connect/wallet-api': 0.1.1(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
+      '@aptos-connect/web-transport': 0.0.7(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
       '@aptos-labs/ts-sdk': 1.18.1
       '@aptos-labs/wallet-standard': 0.1.0(@aptos-labs/ts-sdk@1.18.1)(@wallet-standard/core@1.0.3)
-      '@identity-connect/api': 0.6.0(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
+      '@identity-connect/api': 0.6.1
       '@identity-connect/crypto': 0.2.3(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
       '@identity-connect/wallet-api': 0.1.1(@aptos-labs/ts-sdk@1.18.1)(aptos@1.21.0)
       axios: 1.6.8
