@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 2.6.0
+
+### Minor Changes
+
+- 65e4d1c: Update `WalletConnector` to new UI layout for Aptos Connect
+
 ## 2.5.10
 
 ### Patch Changes
