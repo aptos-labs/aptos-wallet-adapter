@@ -1,5 +1,20 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.1.0
+
+### Minor Changes
+
+- 2e9b7df: Moved Aptos Connect wallets to separate section in shadcn/ui wallet selector
+
+### Patch Changes
+
+- Updated dependencies [2e9b7df]
+- Updated dependencies [0672ff4]
+  - @aptos-labs/wallet-adapter-react@3.2.0
+  - @aptos-labs/wallet-adapter-core@4.6.0
+  - @aptos-labs/wallet-adapter-ant-design@2.4.10
+  - @aptos-labs/wallet-adapter-mui-design@2.5.10
+
 ## 3.0.3
 
 ### Patch Changes

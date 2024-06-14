@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.2.0
+
+### Minor Changes
+
+- 2e9b7df: Added `getAptosConnectWallets` utility function
+
+### Patch Changes
+
+- Updated dependencies [0672ff4]
+  - @aptos-labs/wallet-adapter-core@4.6.0
+
 ## 3.1.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.6.0
+
+### Minor Changes
+
+- 0672ff4: Added `APTOS_CONNECT_BASE_URL`, `APTOS_CONNECT_ACCOUNT_URL`, and `isAptosConnectWallet`
+
 ## 4.5.0
 
 ### Minor Changes
