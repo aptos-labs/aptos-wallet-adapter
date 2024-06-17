@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.7.0
+
+### Minor Changes
+
+- 07ee265: Support dappConfig user prop to set SDK wallets configuration
+
 ## 4.6.0
 
 ### Minor Changes
