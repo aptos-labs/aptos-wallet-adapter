@@ -33,6 +33,7 @@ export interface AptosWalletProviderProps {
   plugins?: ReadonlyArray<Wallet>;
   optInWallets?: ReadonlyArray<AvailableWallets>;
   autoConnect?: boolean;
+  dappConfig?: { network: Network };
   onError?: (error: any) => void;
 }
 
@@ -54,6 +55,7 @@ const initialState: {
  * @param plugins Non AIP-62 supported wallet plugins array
  * @param optInWallets AIP-62 supported wallet names array to only include in the adapter wallets
  * @param autoConnect A boolean flag to indicate if the adapter should auto connect to a wallet
+ * @param dappConfig The dapp configurations to be used by SDK wallets to set their configurations
  * @param onError A callback function to execute when there is an error in the adapter
  *
  */
@@ -62,6 +64,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   plugins,
   optInWallets,
   autoConnect = false,
+  dappConfig,
   onError,
 }: AptosWalletProviderProps) => {
   const [{ connected, account, network, wallet }, setState] =
@@ -72,7 +75,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const walletCore = useMemo(
-    () => new WalletCore(plugins ?? [], optInWallets ?? []),
+    () => new WalletCore(plugins ?? [], optInWallets ?? [], dappConfig),
     []
   );
   const [wallets, setWallets] = useState<

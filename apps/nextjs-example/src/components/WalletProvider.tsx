@@ -9,6 +9,7 @@ import { PontemWallet } from "@pontem/wallet-adapter-plugin";
 import { TrustWallet } from "@trustwallet/aptos-wallet-adapter";
 import { FewchaWallet } from "fewcha-plugin-wallet-adapter";
 import { PropsWithChildren } from "react";
+import { Network } from "@aptos-labs/ts-sdk";
 import { useAutoConnect } from "./AutoConnectProvider";
 import { useToast } from "./ui/use-toast";
 
@@ -30,6 +31,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     <AptosWalletAdapterProvider
       plugins={wallets}
       autoConnect={autoConnect}
+      dappConfig={{ network: Network.DEVNET }}
       onError={(error) => {
         toast({
           variant: "destructive",
