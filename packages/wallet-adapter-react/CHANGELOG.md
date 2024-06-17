@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.3.0
+
+### Minor Changes
+
+- 07ee265: Support dappConfig user prop to set SDK wallets configuration
+
+### Patch Changes
+
+- Updated dependencies [07ee265]
+  - @aptos-labs/wallet-adapter-core@4.7.0
+
 ## 3.2.0
 
 ### Minor Changes

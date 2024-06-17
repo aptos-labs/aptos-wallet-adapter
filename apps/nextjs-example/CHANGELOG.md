@@ -1,5 +1,21 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.2.0
+
+### Minor Changes
+
+- 07ee265: Support dappConfig user prop to set SDK wallets configuration
+
+### Patch Changes
+
+- Updated dependencies [5bcae5e]
+- Updated dependencies [07ee265]
+- Updated dependencies [5bcae5e]
+  - @aptos-labs/wallet-adapter-mui-design@2.7.0
+  - @aptos-labs/wallet-adapter-react@3.3.0
+  - @aptos-labs/wallet-adapter-core@4.7.0
+  - @aptos-labs/wallet-adapter-ant-design@2.4.11
+
 ## 3.1.1
 
 ### Patch Changes
