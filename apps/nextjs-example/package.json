@@ -39,7 +39,6 @@
     "lucide-react": "^0.383.0",
     "next": "14.2.3",
     "next-themes": "^0.3.0",
-    "petra-plugin-wallet-adapter": "^0.4.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tailwind-merge": "^2.3.0",

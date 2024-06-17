@@ -1,5 +1,5 @@
-import { AptosStandardWallet } from "../AIP62StandardWallets";
-import { Wallet } from "../LegacyWalletPlugins";
+import { WalletInfo } from "../LegacyWalletPlugins";
+import { AnyAptosWallet } from "../WalletCore";
 
 /** The base URL for all Aptos Connect wallets. */
 export const APTOS_CONNECT_BASE_URL = "https://aptosconnect.app";
@@ -9,6 +9,6 @@ export const APTOS_CONNECT_ACCOUNT_URL =
   "https://aptosconnect.app/dashboard/main-account";
 
 /** Returns `true` if the provided wallet is an Aptos Connect wallet. */
-export function isAptosConnectWallet(wallet: AptosStandardWallet | Wallet) {
+export function isAptosConnectWallet(wallet: WalletInfo | AnyAptosWallet) {
   return wallet.url.startsWith(APTOS_CONNECT_BASE_URL);
 }

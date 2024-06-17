@@ -111,9 +111,6 @@ importers:
       next-themes:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@18.3.1)(react@18.3.1)
-      petra-plugin-wallet-adapter:
-        specifier: ^0.4.5
-        version: 0.4.5(@aptos-labs/ts-sdk@1.18.1)(aptos@1.21.0)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -8462,19 +8459,6 @@ packages:
   /path-type@4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
-
-  /petra-plugin-wallet-adapter@0.4.5(@aptos-labs/ts-sdk@1.18.1)(aptos@1.21.0):
-    resolution: {integrity: sha512-x2S2xRAIz/5ytbB2wHCTJhqLBDsgWPEVmj7X2aril1BUplIGPJHTstgo8hqOngb2rtYbBY+wviyS9Di4IDCGRA==}
-    peerDependencies:
-      '@aptos-labs/ts-sdk': ^1.3.0
-      aptos: ^1.21.0
-    dependencies:
-      '@aptos-labs/ts-sdk': 1.18.1
-      '@aptos-labs/wallet-adapter-core': 3.8.0(@aptos-labs/ts-sdk@1.18.1)(aptos@1.21.0)
-      aptos: 1.21.0
-    transitivePeerDependencies:
-      - debug
-    dev: false
 
   /picocolors@1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
