@@ -27,17 +27,23 @@ import {
   LanOutlined as LanOutlinedIcon,
 } from "@mui/icons-material";
 import { useState } from "react";
+import { WalletConnectorProps } from "./WalletConnector";
 
-type WalletsModalProps = {
+interface WalletsModalProps
+  extends Pick<
+    WalletConnectorProps,
+    "networkSupport" | "sortDefaultWallets" | "sortMoreWallets"
+  > {
   handleClose: () => void;
   modalOpen: boolean;
-  networkSupport?: string;
-};
+}
 
 export default function WalletsModal({
   handleClose,
   modalOpen,
   networkSupport,
+  sortDefaultWallets,
+  sortMoreWallets,
 }: WalletsModalProps): JSX.Element {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
@@ -57,6 +63,9 @@ export default function WalletsModal({
     /** Wallets that are NOT currently installed or loadable. */
     moreWallets,
   } = partitionWallets(otherWallets);
+
+  if (sortDefaultWallets) defaultWallets.sort(sortDefaultWallets);
+  if (sortMoreWallets) moreWallets.sort(sortMoreWallets);
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
 
