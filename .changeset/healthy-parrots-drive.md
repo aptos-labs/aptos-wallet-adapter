@@ -4,4 +4,4 @@
 "@aptos-labs/wallet-adapter-nextjs-example": minor
 ---
 
-Support aptosConnectConfig user prop to set AptosConnect configuration
+Support dappConfig user prop to set SDK wallets configuration

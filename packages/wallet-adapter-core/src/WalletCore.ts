@@ -128,7 +128,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private readonly ga4: GA4 = new GA4();
 
   // JSON configuration for AptosConnect
-  private _aptosConnectConfig: { network: Network } | undefined;
+  private _dappConfig: { network: Network } | undefined;
 
   // Local private variable to hold SDK wallets in the adapter
   private readonly _sdkWallets: AptosStandardWallet[];
@@ -143,13 +143,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   constructor(
     plugins: ReadonlyArray<Wallet>,
     optInWallets: ReadonlyArray<AvailableWallets>,
-    aptosConnectConfig?: { network: Network }
+    dappConfig?: { network: Network }
   ) {
     super();
     this._wallets = plugins;
     this._optInWallets = optInWallets;
-    this._aptosConnectConfig = aptosConnectConfig;
-    this._sdkWallets = getSDKWallets(this._aptosConnectConfig);
+    this._dappConfig = dappConfig;
+    this._sdkWallets = getSDKWallets(this._dappConfig);
     // Strategy to detect legacy wallet adapter v1 wallet plugins
     this.scopePollingDetectionStrategy();
     // Strategy to detect AIP-62 standard compatible wallets (extension + SDK wallets)

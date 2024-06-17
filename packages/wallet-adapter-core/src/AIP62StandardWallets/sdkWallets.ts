@@ -3,12 +3,10 @@ import { AptosConnectWallet } from "@aptos-connect/wallet-adapter-plugin";
 import { AptosStandardWallet } from "./WalletStandard";
 import { Network } from "@aptos-labs/ts-sdk";
 
-const isProd = process.env.NODE_ENV === "production";
-
-export function getSDKWallets(aptosConnectConfig?: { network: Network }) {
+export function getSDKWallets(dappConfig?: { network: Network }) {
   const sdkWallets: AptosStandardWallet[] = [];
   // Push production wallet if env is production, otherwise use dev wallet
-  if (isProd) {
+  if (dappConfig?.network === Network.MAINNET) {
     // TODO twallet uses @aptos-labs/wallet-standard at version 0.0.11 while adapter uses
     // a newer version (0.1.0) - this causes type mismatch. We should figure out how to handle it.
     sdkWallets.push(new TWallet() as any);
@@ -18,9 +16,7 @@ export function getSDKWallets(aptosConnectConfig?: { network: Network }) {
 
   // Need to check window is defined for AptosConnect
   if (typeof window !== "undefined") {
-    sdkWallets.push(
-      new AptosConnectWallet({ network: aptosConnectConfig?.network })
-    );
+    sdkWallets.push(new AptosConnectWallet({ network: dappConfig?.network }));
   }
 
   return sdkWallets;
