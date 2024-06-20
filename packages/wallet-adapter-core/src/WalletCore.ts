@@ -65,7 +65,6 @@ import {
   fetchDevnetChainId,
   generalizedErrorMessage,
   getAptosConfig,
-  isAptosConnectWallet,
   isAptosNetwork,
   isRedirectable,
   removeLocalStorage,

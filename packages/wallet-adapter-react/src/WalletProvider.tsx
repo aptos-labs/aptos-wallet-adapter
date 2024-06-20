@@ -82,13 +82,25 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
 
   const walletCoreRef = useRef<WalletCore>();
 
+  const handleReadyStateChange = (updatedWallet: Wallet) => {
+    // Create a new array with updated values
+    const updatedWallets = (wallets as Wallet[])?.map((wallet) => {
+      if (wallet.name === updatedWallet.name) {
+        // Return a new object with updated value
+        return { ...wallet, readyState: updatedWallet.readyState };
+      }
+      return wallet;
+    });
+    setWallets(updatedWallets);
+  };
+
   const handleStandardWalletsAdded = (
     standardWallet: Wallet | AptosStandardSupportedWallet
   ) => {
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
     const existingWalletIndex = wallets.findIndex(
-      (wallet) => wallet.name == standardWallet.name
+      (wallet) => wallet.name === standardWallet.name
     );
     if (existingWalletIndex !== -1) {
       // If wallet exists, replace it with the new wallet
@@ -154,20 +166,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     });
   }, [connected]);
 
-  const handleReadyStateChange = (updatedWallet: Wallet) => {
-    // Create a new array with updated values
-    const updatedWallets = (wallets as Wallet[])?.map((wallet) => {
-      if (wallet.name === updatedWallet.name) {
-        // Return a new object with updated value
-        return { ...wallet, readyState: updatedWallet.readyState };
-      }
-      return wallet;
-    });
-    setWallets(updatedWallets);
-  };
-
-  // Initialize WalletCore on first load and register first load
-  // nessecery event listeners
+  // Initialize WalletCore on first load
   useEffect(() => {
     const walletCore = new WalletCore(
       plugins ?? [],
@@ -175,15 +174,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       dappConfig
     );
     walletCoreRef.current = walletCore;
-
-    walletCore.on("standardWalletsAdded", handleStandardWalletsAdded);
-    walletCore.on("readyStateChange", handleReadyStateChange);
-
-    walletCore.initialize();
-    return () => {
-      walletCore.off("standardWalletsAdded", handleStandardWalletsAdded);
-      walletCore.off("readyStateChange", handleReadyStateChange);
-    };
+    walletCoreRef?.current.initialize();
   }, []);
 
   // Update initial Wallets state once WalletCore has been initialized
@@ -193,8 +184,13 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   }, [walletCoreRef]);
 
-  // Register all event listeners
+  // Register all event listeners when wallets is being set
   useEffect(() => {
+    walletCoreRef?.current?.on(
+      "standardWalletsAdded",
+      handleStandardWalletsAdded
+    );
+    walletCoreRef?.current?.on("readyStateChange", handleReadyStateChange);
     walletCoreRef?.current?.on("connect", handleConnect);
     walletCoreRef?.current?.on("disconnect", handleDisconnect);
     walletCoreRef?.current?.on("accountChange", handleAccountChange);
@@ -204,8 +200,13 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       walletCoreRef?.current?.off("disconnect", handleDisconnect);
       walletCoreRef?.current?.off("accountChange", handleAccountChange);
       walletCoreRef?.current?.off("networkChange", handleNetworkChange);
+      walletCoreRef?.current?.off(
+        "standardWalletsAdded",
+        handleStandardWalletsAdded
+      );
+      walletCoreRef?.current?.off("readyStateChange", handleReadyStateChange);
     };
-  }, [wallets, connected]);
+  }, [wallets]);
 
   const connect = async (walletName: WalletName) => {
     try {
