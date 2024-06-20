@@ -66,14 +66,16 @@ Import the `AptosWalletAdapterProvider`.
 import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
 ```
 
-Wrap your app with the Provider, pass it the `plugins (wallets)` you want to have on your app as an array and a `autoConnect` option (set to false by default)
+Wrap your app with the Provider, pass it the relevant props.
 
 ```js
-const wallets = [new AptosWallet()];
+const wallets = [new AptosLegacyStandardWallet()];
 
 <AptosWalletAdapterProvider
   plugins={wallets}
   autoConnect={true}
+  optInWallets={["Petra"]}
+  dappConfig={{ netwrok: network.MAINNET }}
   onError={(error) => {
     console.log("error", error);
   }}
@@ -81,6 +83,14 @@ const wallets = [new AptosWallet()];
   <App />
 </AptosWalletAdapterProvider>;
 ```
+
+#### Available Provider Props
+
+- `plugins` - any legacy standard wallet, i.e a wallet that is not AIP-62 standard compatible, should be installed and passed in this array. [Check here](../../README.md#supported-wallet-packages) for a list of AIP-62 and legacy standard wallets.
+- `autoConnect` - a prop indicates whether the dapp should auto connect with a previous connected wallet.
+- `optInWallets` - the adapter detects and adds AIP-62 standard wallets by default, sometimes you might want to opt-in with specific wallets. This props lets you define the AIP-62 standard wallets you want to support in your dapp.
+- `dappConfig` - the adapter comes built-in with AIP-62 standard SDK wallets and it needs to know what configuration your dapp is in to render the current instance.
+- `onError` - a callback function to fire when the adapter throws an error
 
 #### Use Wallet
 
@@ -112,14 +122,19 @@ const {
 ### Use a UI package (recommended)
 
 As part of the wallet adapter repo we provide a wallet connect UI package that provides a wallet connect button and a wallet select modal.
-You can find it [here](../wallet-adapter-ant-design/) with instructions on how to use it.
+
+The available UI Packages are
+
+- [shadcn/ui](../wallet-adapter-react/src/WalletItem.tsx)
+- [Ant Design](<(../wallet-adapter-ant-design/)>)
+- [MUI](../wallet-adapter-mui-design/)
 
 #### Examples
 
 ##### Initialize Aptos
 
 ```js
-const aptosConfig = new AptosConfig({ network: Network.TESTNET });
+const aptosConfig = new AptosConfig({ network: Network.MAINNET });
 const aptos = new Aptos(aptosConfig);
 ```
 
