@@ -19,8 +19,9 @@ export function isAptosConnectWallet(wallet: WalletInfo | AnyAptosWallet) {
  * Aptos Connect is a web wallet that uses social login to create accounts on the blockchain.
  */
 export function getAptosConnectWallets(wallets: ReadonlyArray<AnyAptosWallet>) {
-  const { defaultWallets, moreWallets } = partitionWallets(wallets, (wallet) =>
-    wallet.url.includes("aptosconnect.app")
+  const { defaultWallets, moreWallets } = partitionWallets(
+    wallets,
+    isAptosConnectWallet
   );
   return { aptosConnectWallets: defaultWallets, otherWallets: moreWallets };
 }
