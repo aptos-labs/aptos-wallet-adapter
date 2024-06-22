@@ -154,6 +154,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     this.scopePollingDetectionStrategy();
     // Strategy to detect AIP-62 standard compatible wallets (extension + SDK wallets)
     this.fetchAptosWallets();
+    // Append AIP-62 compatible wallets that are not detected on the user machine
+    this.appendNotDetectedStandardSupportedWallets(this._standard_wallets);
   }
 
   private scopePollingDetectionStrategy() {
@@ -199,20 +201,37 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     });
   }
 
-  // Append wallets from wallet standard support registry to the `all_wallets` array
+  // Append wallets from wallet aip-62 standard registry to the `all_wallets` array
   private appendNotDetectedStandardSupportedWallets(
     aptosStandardWallets: ReadonlyArray<AptosStandardWallet>
   ) {
+    // Loop over the registry map
     aptosStandardSupportedWalletList.map((supportedWallet) => {
-      if (this.excludeWallet(supportedWallet.name)) {
-        return;
-      }
-      const existingWalletIndex = aptosStandardWallets.findIndex(
+      // Check if we already have this wallet as an installed plugin
+      const existingPluginWalletIndex = this.wallets.findIndex(
+        (wallet) => wallet.name === supportedWallet.name
+      );
+
+      // If the plugin wallet is installed, dont append and dont show it on the selector modal
+      // as a not detected wallet
+      if (existingPluginWalletIndex !== -1) return;
+
+      // Check if we already have this wallet as a AIP-62 wallet standard
+      const existingStandardWallet = aptosStandardWallets.find(
         (wallet) => wallet.name == supportedWallet.name
       );
 
-      // If wallet does not exist, append it from the supported wallets list
-      if (existingWalletIndex === -1) {
+      // If AIP-62 wallet detected but it is excluded by the dapp, dont add it to the wallets array
+      if (
+        existingStandardWallet &&
+        this.excludeWallet(existingStandardWallet.name)
+      ) {
+        return;
+      }
+
+      // If AIP-62 wallet does not exist, append it to the wallet selector modal
+      // as an undetected wallet
+      if (!existingStandardWallet) {
         this._all_wallets.push(supportedWallet);
         this.emit("standardWalletsAdded", supportedWallet);
       }
@@ -248,8 +267,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     );
 
     this._standard_wallets = aptosStandardWallets;
-    // Append AIP-62 compatible wallets that are not detected on the user machine
-    this.appendNotDetectedStandardSupportedWallets(this._standard_wallets);
   }
 
   /**

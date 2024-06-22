@@ -7,9 +7,10 @@ import {
   WalletReadyState,
   WalletName,
   AptosStandardSupportedWallet,
+  truncateAddress,
 } from "@aptos-labs/wallet-adapter-react";
 import "./styles.css";
-import { truncateAddress } from "./utils";
+
 const { Text } = Typography;
 
 type WalletSelectorProps = {
