@@ -75,7 +75,7 @@ const wallets = [new AptosLegacyStandardWallet()];
   plugins={wallets}
   autoConnect={true}
   optInWallets={["Petra"]}
-  dappConfig={{ netwrok: Network.MAINNET }}
+  dappConfig={{ network: network.MAINNET }}
   onError={(error) => {
     console.log("error", error);
   }}

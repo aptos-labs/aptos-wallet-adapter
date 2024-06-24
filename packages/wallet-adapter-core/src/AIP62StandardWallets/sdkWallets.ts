@@ -2,8 +2,9 @@ import { DevTWallet, TWallet } from "@atomrigslab/aptos-wallet-adapter";
 import { AptosConnectWallet } from "@aptos-connect/wallet-adapter-plugin";
 import { AptosStandardWallet } from "./WalletStandard";
 import { Network } from "@aptos-labs/ts-sdk";
+import { DappConfig } from "../WalletCore";
 
-export function getSDKWallets(dappConfig?: { network: Network }) {
+export function getSDKWallets(dappConfig?: DappConfig) {
   const sdkWallets: AptosStandardWallet[] = [];
   // Push production wallet if env is production, otherwise use dev wallet
   if (dappConfig?.network === Network.MAINNET) {
@@ -16,7 +17,7 @@ export function getSDKWallets(dappConfig?: { network: Network }) {
 
   // Need to check window is defined for AptosConnect
   if (typeof window !== "undefined") {
-    sdkWallets.push(new AptosConnectWallet({ network: dappConfig?.network }));
+    sdkWallets.push(new AptosConnectWallet({ network: dappConfig?.network, dappId: dappConfig?.aptosConnectDappId }));
   }
 
   return sdkWallets;

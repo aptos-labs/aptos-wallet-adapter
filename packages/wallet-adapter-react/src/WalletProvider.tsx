@@ -26,14 +26,14 @@ import type {
   AptosStandardSupportedWallet,
   AvailableWallets,
 } from "@aptos-labs/wallet-adapter-core";
-import { WalletCore } from "@aptos-labs/wallet-adapter-core";
+import { DappConfig, WalletCore } from "@aptos-labs/wallet-adapter-core";
 
 export interface AptosWalletProviderProps {
   children: ReactNode;
   plugins?: ReadonlyArray<Wallet>;
   optInWallets?: ReadonlyArray<AvailableWallets>;
   autoConnect?: boolean;
-  dappConfig?: { network: Network };
+  dappConfig?: DappConfig;
   onError?: (error: any) => void;
 }
 
