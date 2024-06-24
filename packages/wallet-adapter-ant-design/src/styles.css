@@ -1,56 +1,7 @@
-.ant-menu {
-  border: none !important;
-}
-
-.ant-menu-item {
-  background-color: rgba(0, 0, 0, 0.1);
-  padding: 15px;
-  height: auto !important;
-  margin-bottom: 10px !important;
-}
-
-.ant-menu-item-selected {
-  background-color: rgba(0, 0, 0, 0.06) !important;
-  color: black !important;
-}
-
-.wallet-selector-text {
-  font-size: 14px;
-}
-
-.wallet-connect-button-text {
-  color: white;
-}
-
-.wallet-menu-wrapper {
-  display: flex;
-  justify-content: space-between;
-  font-size: 20px;
-}
-
-.wallet-name-wrapper {
-  display: flex;
-  align-items: center;
-}
-
-.wallet-connect-button {
-  align-self: center;
-  background-color: #3f67ff;
-  height: auto;
-}
-
-.wallet-connect-install {
-  align-self: center;
-  color: #3f67ff;
-  padding-right: 15px;
-  font-size: 16px;
-  padding-top: 3px;
-  padding-bottom: 3px;
-}
-
 .wallet-button {
   padding: 10px 20px;
   height: auto;
+  border-radius: 6px;
   font-size: 16px;
   background-color: #3f67ff;
   color: white;
@@ -58,5 +9,81 @@
 
 .wallet-modal-title {
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 32px;
+}
+
+.aptos-connect-button {
+  color: #3f67ff;
+  border-color: #3f67ff;
+}
+
+.wallet-menu-wrapper {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+  border: solid 1px;
+  border-color: rgba(0, 0, 0, 0.1);
+  padding-inline: 16px;
+  padding-block: 12px;
+  border-radius: 8px;
+}
+
+.wallet-name-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.wallet-selector-icon {
+  height: 24px;
+  width: 24px;
+  margin-right: 12px;
+}
+
+.wallet-selector-text {
+  font-size: 14px;
+}
+
+.wallet-connect-button {
+  align-self: center;
+  background-color: #3f67ff;
+  color: white;
+  height: auto;
+}
+
+.wallet-connect-install {
+  align-self: center;
+  color: #3f67ff;
+  padding-right: 16px;
+  font-size: 16px;
+  line-height: 32px;
+}
+
+/* Scoped Ant CSS overrides */
+
+:where(.wallet-selector-modal .ant-modal-body) {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+:where(.wallet-selector-modal .ant-divider-inner-text) {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+:where(.wallet-selector-modal .ant-collapse-header) {
+  justify-content: center !important;
+  color: rgba(0, 0, 0, 0.5) !important;
+}
+:where(.wallet-selector-modal .ant-collapse-header-text) {
+  flex: unset !important;
+  margin-inline-end: 0 !important;
+}
+
+:where(.wallet-selector-modal .ant-collapse-content-box) {
+  padding: 0px !important;
+  padding-top: 8px !important;
 }

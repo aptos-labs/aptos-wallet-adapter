@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "@aptos-labs/wallet-adapter-react": "workspace:*",
-    "antd": "^5.1.2"
+    "antd": "^5.18.3"
   },
   "peerDependencies": {
     "react": "^18",
