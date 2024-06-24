@@ -3,6 +3,7 @@
 import {
   APTOS_CONNECT_ACCOUNT_URL,
   AnyAptosWallet,
+  PrivacyPolicy,
   WalletItem,
   getAptosConnectWallets,
   isAptosConnectWallet,
@@ -134,6 +135,14 @@ function ConnectWalletDialog({ close }: ConnectWalletDialogProps) {
           />
         ))}
       </div>
+      <PrivacyPolicy className="flex flex-col items-center">
+        <p className="text-xs leading-5">
+          <PrivacyPolicy.Disclaimer />{" "}
+          <PrivacyPolicy.Link className="text-muted-foreground underline underline-offset-4" />
+          <span className="text-muted-foreground">.</span>
+        </p>
+        <PrivacyPolicy.PoweredBy className="flex gap-1.5 items-center text-xs leading-5 text-muted-foreground" />
+      </PrivacyPolicy>
       <div className="flex items-center gap-3 pt-4 text-muted-foreground">
         <div className="h-px w-full bg-secondary" />
         Or

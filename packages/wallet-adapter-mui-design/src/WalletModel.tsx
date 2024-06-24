@@ -1,5 +1,6 @@
 import {
   AnyAptosWallet,
+  PrivacyPolicy,
   WalletItem,
   getAptosConnectWallets,
   isInstallRequired,
@@ -158,6 +159,31 @@ export default function WalletsModal({
                   onConnect={handleClose}
                 />
               ))}
+            </Stack>
+            <Stack component={PrivacyPolicy} alignItems="center">
+              <Typography component="p" fontSize="12px" lineHeight="20px">
+                <PrivacyPolicy.Disclaimer />{" "}
+                <Box
+                  component={PrivacyPolicy.Link}
+                  sx={{
+                    color: grey[400],
+                    textDecoration: "underline",
+                    textUnderlineOffset: "4px",
+                  }}
+                />
+                <span>.</span>
+              </Typography>
+              <Box
+                component={PrivacyPolicy.PoweredBy}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.75,
+                  fontSize: "12px",
+                  lineHeight: "20px",
+                  color: grey[400],
+                }}
+              />
             </Stack>
             <Divider sx={{ color: grey[400], pt: 2 }}>Or</Divider>
           </>
