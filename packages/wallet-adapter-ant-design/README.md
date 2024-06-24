@@ -38,6 +38,8 @@ That would add a `Connect Wallet` button when clicked opens up a `wallet selecto
 You can override these classes
 
 ```
+.wallet-selector-modal
+.wallet-selector-icon
 .wallet-selector-text
 .wallet-menu-wrapper
 .wallet-name-wrapper
@@ -45,13 +47,14 @@ You can override these classes
 .wallet-connect-install
 .wallet-button
 .wallet-modal-title
+aptos-connect-button
 ```
 
 For example, to override the `connect wallet` button background color, you can use the `.wallet-button` class in your local `.css` file
 
 ```
 .wallet-button{
-  background-color:red;
+  background-color: red;
 }
 ```
 
