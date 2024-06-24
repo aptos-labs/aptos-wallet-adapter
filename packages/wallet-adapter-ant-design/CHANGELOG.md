@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 2.5.0
+
+### Minor Changes
+
+- 9f0d3de: Updated wallet selector modal to new design for Aptos Connect.
+- 9f0d3de: Added `sortDefaultWallets` and `sortMoreWallets` props for controlling the order of wallets in the modal.
+
+### Patch Changes
+
+- @aptos-labs/wallet-adapter-react@3.3.1
+
 ## 2.4.11
 
 ### Patch Changes
