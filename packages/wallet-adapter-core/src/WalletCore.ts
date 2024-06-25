@@ -156,11 +156,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     this._optInWallets = optInWallets;
     this._dappConfig = dappConfig;
     this._sdkWallets = getSDKWallets(this._dappConfig);
-    // Strategy to detect AIP-62 extension standard compatible wallets
+    // Strategy to detect AIP-62 standard compatible extension wallets
     this.fetchExtensionAIP62AptosWallets();
-    // Strategy to detect AIP-62 SDK standard compatible wallets.
-    // We separate the extension and sdk detection process so we dont refetch sdk wallets anytime a new
-    // extension wallet becomes available
+    // Strategy to detect AIP-62 standard compatible SDK wallets.
+    // We separate the extension and sdk detection process so we dont refetch sdk wallets everytime a new
+    // extension wallet is detected
     this.fetchSDKAIP62AptosWallets();
     // Strategy to detect legacy wallet adapter v1 wallet plugins
     this.scopePollingDetectionStrategy();
@@ -212,7 +212,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   // Since we can't discover AIP-62 wallets that are not installed on the user machine,
-  // We hold a AIP-62 wallets registry to show on the wallet selector modal for the users.
+  // we hold a AIP-62 wallets registry to show on the wallet selector modal for the users.
   // Append wallets from wallet standard support registry to the `all_wallets` array
   // when wallet is not installed on the user machine
   private appendNotDetectedStandardSupportedWallets() {
@@ -265,7 +265,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    */
   private setExtensionAIP62Wallets(extensionwWallets: readonly AptosWallet[]) {
     // Twallet SDK fires a register event so the adapter assumes it is an extension wallet
-    // so filter out t wallet
+    // so filter out t wallet, remove it when twallet fixes it
     const wallets = extensionwWallets.filter(
       (wallet) => wallet.name !== "Dev T wallet" && wallet.name !== "T wallet"
     );
@@ -277,7 +277,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   /**
-   * A function that excludes a wallet the dapp doesnt want to include
+   * A function that excludes an AIP-62 compatible wallet the dapp doesnt want to include
    *
    * @param walletName
    * @returns

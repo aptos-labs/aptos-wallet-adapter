@@ -77,8 +77,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
 
   const [wallets, setWallets] = useState<
     ReadonlyArray<Wallet | AptosStandardSupportedWallet>
-  >([]);
+  >(plugins ?? []);
 
+  // A global ref to assign WalletCore to so we can use outside of the useEffect context
   const walletCoreRef = useRef<WalletCore>();
 
   // Initialize WalletCore on first load
