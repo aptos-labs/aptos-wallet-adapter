@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.4.1
+
+### Patch Changes
+
+- 0bdbb0d: Fixed the SVG attributes for the graphic of the Aptos logo.
+
 ## 3.4.0
 
 ### Minor Changes
