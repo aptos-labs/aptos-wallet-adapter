@@ -9,6 +9,7 @@ import {
 } from "@aptos-labs/wallet-adapter-react";
 import {
   Box,
+  Breakpoint,
   Button,
   Collapse,
   Dialog,
@@ -37,6 +38,7 @@ interface WalletsModalProps
   > {
   handleClose: () => void;
   modalOpen: boolean;
+  maxWidth?: Breakpoint;
 }
 
 export default function WalletsModal({
@@ -45,6 +47,7 @@ export default function WalletsModal({
   networkSupport,
   sortDefaultWallets,
   sortMoreWallets,
+  maxWidth,
 }: WalletsModalProps): JSX.Element {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
@@ -76,7 +79,7 @@ export default function WalletsModal({
       onClose={handleClose}
       aria-label="wallet selector modal"
       sx={{ borderRadius: `${theme.shape.borderRadius}px` }}
-      maxWidth="xs"
+      maxWidth={maxWidth ?? "xs"}
       fullWidth
     >
       <Stack
