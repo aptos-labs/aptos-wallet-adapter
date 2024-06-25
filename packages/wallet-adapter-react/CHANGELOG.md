@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.4.0
+
+### Minor Changes
+
+- 6bec234: Added `AptosPrivacyPolicy` headless component for building the privacy policy disclaimer that should be displayed below Aptos Connect login options.
+
 ## 3.3.1
 
 ### Patch Changes
