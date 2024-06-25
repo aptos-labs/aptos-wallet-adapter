@@ -1,5 +1,12 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.8.0
+
+### Minor Changes
+
+- e3df2db: Added the following utility functions: `getAptosConnectWallets`, `partitionWallets`, `isInstalledOrLoadable`, `isInstallRequired`, and `truncateAddress`.
+- 1580df8: Add Petra to the AIP-62 wallet registry
+
 ## 4.7.0
 
 ### Minor Changes
