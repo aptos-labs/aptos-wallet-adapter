@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 2.6.0
+
+### Minor Changes
+
+- 6bec234: Added privacy policy disclaimer below Aptos Connect login options.
+
+### Patch Changes
+
+- Updated dependencies [6bec234]
+  - @aptos-labs/wallet-adapter-react@3.4.0
+
 ## 2.5.0
 
 ### Minor Changes
