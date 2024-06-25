@@ -1,5 +1,6 @@
 import {
   AnyAptosWallet,
+  AptosPrivacyPolicy,
   WalletItem,
   getAptosConnectWallets,
   isInstallRequired,
@@ -122,6 +123,14 @@ export function WalletSelector({
                     />
                   ))}
                 </Flex>
+                <AptosPrivacyPolicy className="aptos-connect-privacy-policy-wrapper">
+                  <p className="aptos-connect-privacy-policy-text">
+                    <AptosPrivacyPolicy.Disclaimer />{" "}
+                    <AptosPrivacyPolicy.Link className="aptos-connect-privacy-policy-link" />
+                    <span>.</span>
+                  </p>
+                  <AptosPrivacyPolicy.PoweredBy className="aptos-connect-powered-by" />
+                </AptosPrivacyPolicy>
                 <Divider>Or</Divider>
               </>
             )}

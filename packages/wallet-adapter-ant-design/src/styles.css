@@ -21,6 +21,36 @@
   border-color: #3f67ff;
 }
 
+.aptos-connect-privacy-policy-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.aptos-connect-privacy-policy-text {
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.aptos-connect-privacy-policy-link {
+  color: rgba(0, 0, 0, 0.5);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.aptos-connect-privacy-policy-link:hover {
+  text-decoration: underline;
+}
+
+.aptos-connect-powered-by {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 12px;
+  line-height: 20px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
 .wallet-menu-wrapper {
   display: flex;
   justify-content: space-between;
