@@ -11,7 +11,7 @@ import {
   useCallback,
   useContext,
 } from "react";
-import { useWallet } from "./useWallet";
+import { useWallet } from "../useWallet";
 
 export interface WalletItemProps {
   /** The wallet option to be displayed. */

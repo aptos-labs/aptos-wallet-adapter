@@ -1,10 +1,10 @@
 import { Slot } from "@radix-ui/react-slot";
 import { ReactNode, forwardRef } from "react";
-import { SmallAptosLogo } from "./graphics/SmallAptosLogo";
+import { SmallAptosLogo } from "../graphics/SmallAptosLogo";
 
-export const PRIVACY_POLICY_URL = "https://aptoslabs.com/privacy";
+export const APTOS_PRIVACY_POLICY_URL = "https://aptoslabs.com/privacy";
 
-export interface PrivacyPolicyProps {
+export interface AptosPrivacyPolicyProps {
   /** A class name for styling the element. */
   className?: string;
   /**
@@ -15,7 +15,7 @@ export interface PrivacyPolicyProps {
   children?: ReactNode;
 }
 
-const Root = forwardRef<HTMLDivElement, PrivacyPolicyProps>(
+const Root = forwardRef<HTMLDivElement, AptosPrivacyPolicyProps>(
   ({ className, asChild, children }, ref) => {
     const Component = asChild ? Slot : "div";
 
@@ -26,9 +26,9 @@ const Root = forwardRef<HTMLDivElement, PrivacyPolicyProps>(
     );
   }
 );
-Root.displayName = "PrivacyPolicy.Root";
+Root.displayName = "AptosPrivacyPolicy.Root";
 
-const Disclaimer = forwardRef<HTMLSpanElement, PrivacyPolicyProps>(
+const Disclaimer = forwardRef<HTMLSpanElement, AptosPrivacyPolicyProps>(
   ({ className, asChild, children }, ref) => {
     const Component = asChild ? Slot : "span";
 
@@ -39,9 +39,9 @@ const Disclaimer = forwardRef<HTMLSpanElement, PrivacyPolicyProps>(
     );
   }
 );
-Disclaimer.displayName = "PrivacyPolicy.Disclaimer";
+Disclaimer.displayName = "AptosPrivacyPolicy.Disclaimer";
 
-const Link = forwardRef<HTMLAnchorElement, PrivacyPolicyProps>(
+const Link = forwardRef<HTMLAnchorElement, AptosPrivacyPolicyProps>(
   ({ className, asChild, children }, ref) => {
     const Component = asChild ? Slot : "a";
 
@@ -49,7 +49,7 @@ const Link = forwardRef<HTMLAnchorElement, PrivacyPolicyProps>(
       <Component
         ref={ref}
         className={className}
-        href={PRIVACY_POLICY_URL}
+        href={APTOS_PRIVACY_POLICY_URL}
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -58,11 +58,11 @@ const Link = forwardRef<HTMLAnchorElement, PrivacyPolicyProps>(
     );
   }
 );
-Root.displayName = "PrivacyPolicy.Root";
+Link.displayName = "AptosPrivacyPolicy.Link";
 
 const PoweredBy = forwardRef<
   HTMLDivElement,
-  Pick<PrivacyPolicyProps, "className">
+  Pick<AptosPrivacyPolicyProps, "className">
 >(({ className }, ref) => {
   return (
     <div ref={ref} className={className}>
@@ -72,13 +72,13 @@ const PoweredBy = forwardRef<
     </div>
   );
 });
-PoweredBy.displayName = "PrivacyPolicy.PoweredBy";
+PoweredBy.displayName = "AptosPrivacyPolicy.PoweredBy";
 
 /**
  * A headless component for rendering the Aptos Labs privacy policy disclaimer
  * that should be placed under the Aptos Connect login options.
  */
-export const PrivacyPolicy = Object.assign(Root, {
+export const AptosPrivacyPolicy = Object.assign(Root, {
   Disclaimer,
   Link,
   PoweredBy,

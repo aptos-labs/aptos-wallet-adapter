@@ -1,6 +1,6 @@
 import {
   AnyAptosWallet,
-  PrivacyPolicy,
+  AptosPrivacyPolicy,
   WalletItem,
   getAptosConnectWallets,
   isInstallRequired,
@@ -160,11 +160,11 @@ export default function WalletsModal({
                 />
               ))}
             </Stack>
-            <Stack component={PrivacyPolicy} alignItems="center">
+            <Stack component={AptosPrivacyPolicy} alignItems="center">
               <Typography component="p" fontSize="12px" lineHeight="20px">
-                <PrivacyPolicy.Disclaimer />{" "}
+                <AptosPrivacyPolicy.Disclaimer />{" "}
                 <Box
-                  component={PrivacyPolicy.Link}
+                  component={AptosPrivacyPolicy.Link}
                   sx={{
                     color: grey[400],
                     textDecoration: "underline",
@@ -174,7 +174,7 @@ export default function WalletsModal({
                 <span>.</span>
               </Typography>
               <Box
-                component={PrivacyPolicy.PoweredBy}
+                component={AptosPrivacyPolicy.PoweredBy}
                 sx={{
                   display: "flex",
                   alignItems: "center",
