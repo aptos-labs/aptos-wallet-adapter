@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 2.9.0
+
+### Minor Changes
+
+- b31ed77: Added optional `modalMaxWidth` prop.
+
 ## 2.8.0
 
 ### Minor Changes
