@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- 6bec234: Added `PrivacyPolicy` headless component for building the privacy policy disclaimer that should be displayed below Aptos Connect login options.
+- 6bec234: Added `AptosPrivacyPolicy` headless component for building the privacy policy disclaimer that should be displayed below Aptos Connect login options.
 
 ## 3.3.1
 
