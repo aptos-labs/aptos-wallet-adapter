@@ -125,7 +125,7 @@ As part of the wallet adapter repo we provide a wallet connect UI package that p
 
 The available UI Packages are
 
-- [shadcn/ui](../wallet-adapter-react/src/WalletItem.tsx)
+- [shadcn/ui](../wallet-adapter-react/src/components/WalletItem.tsx)
 - [Ant Design](<(../wallet-adapter-ant-design/)>)
 - [MUI](../wallet-adapter-mui-design/)
 
