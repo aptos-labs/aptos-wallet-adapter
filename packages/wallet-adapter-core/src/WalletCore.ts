@@ -65,6 +65,7 @@ import {
   fetchDevnetChainId,
   generalizedErrorMessage,
   getAptosConfig,
+  isAptosConnectWallet,
   isAptosNetwork,
   isRedirectable,
   removeLocalStorage,
@@ -224,7 +225,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       // If AIP-62 wallet detected but it is excluded by the dapp, dont add it to the wallets array
       if (
         existingStandardWallet &&
-        this.excludeWallet(existingStandardWallet.name)
+        this.excludeWallet(existingStandardWallet)
       ) {
         return;
       }
@@ -254,7 +255,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
     [...this._sdkWallets, ...extensionwWallets].map(
       (wallet: AptosStandardWallet) => {
-        if (this.excludeWallet(wallet.name)) {
+        if (this.excludeWallet(wallet)) {
           return;
         }
         const isValid = isWalletWithRequiredFeatureSet(wallet);
@@ -275,14 +276,14 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param walletName
    * @returns
    */
-  excludeWallet(walletName: string): boolean {
+  excludeWallet(wallet: AptosStandardWallet): boolean {
     // for now, we always include AptosConnect
-    if (walletName === "Google (AptosConnect)") return false;
+    if (isAptosConnectWallet(wallet)) return false;
     // If _optInWallets is not empty, and does not include the provided wallet,
     // return true to exclude the wallet, otherwise return false
     if (
       this._optInWallets.length > 0 &&
-      !this._optInWallets.includes(walletName as AvailableWallets)
+      !this._optInWallets.includes(wallet.name as AvailableWallets)
     ) {
       return true;
     }
