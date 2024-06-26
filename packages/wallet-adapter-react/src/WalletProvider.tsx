@@ -1,12 +1,4 @@
-import {
-  FC,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { FC, ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { WalletContext } from "./useWallet";
 import type {
   AccountInfo,
@@ -75,12 +67,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   // https://github.com/aptos-labs/aptos-wallet-adapter/issues/94
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const [walletCore, SetWalletCore] = useState<WalletCore>();
+
   const [wallets, setWallets] = useState<
     ReadonlyArray<Wallet | AptosStandardSupportedWallet>
   >(plugins ?? []);
-
-  // A global ref to assign WalletCore to so we can use outside of the useEffect context
-  const walletCoreRef = useRef<WalletCore>();
 
   // Initialize WalletCore on first load
   useEffect(() => {
@@ -89,18 +80,18 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       optInWallets ?? [],
       dappConfig
     );
-    walletCoreRef.current = walletCore;
+    SetWalletCore(walletCore);
   }, []);
 
   // Update initial Wallets state once WalletCore has been initialized
   useEffect(() => {
-    setWallets(walletCoreRef?.current?.wallets ?? []);
-  }, [walletCoreRef?.current]);
+    setWallets(walletCore?.wallets ?? []);
+  }, [walletCore]);
 
   const connect = async (walletName: WalletName) => {
     try {
       setIsLoading(true);
-      await walletCoreRef?.current?.connect(walletName);
+      await walletCore?.connect(walletName);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
@@ -111,7 +102,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
 
   const disconnect = async () => {
     try {
-      await walletCoreRef?.current?.disconnect();
+      await walletCore?.disconnect();
     } catch (error) {
       if (onError) onError(error);
       return Promise.reject(error);
@@ -123,11 +114,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     asFeePayer?: boolean,
     options?: InputGenerateTransactionOptions
   ): Promise<AccountAuthenticator> => {
-    if (!walletCoreRef.current) {
+    if (!walletCore) {
       throw new Error("WalletCore is not initialized");
     }
     try {
-      return await walletCoreRef?.current?.signTransaction(
+      return await walletCore?.signTransaction(
         transaction,
         asFeePayer,
         options
@@ -141,11 +132,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const signMessage = async (
     message: SignMessagePayload
   ): Promise<SignMessageResponse> => {
-    if (!walletCoreRef.current) {
+    if (!walletCore) {
       throw new Error("WalletCore is not initialized");
     }
     try {
-      return await walletCoreRef?.current?.signMessage(message);
+      return await walletCore?.signMessage(message);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
@@ -155,11 +146,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const signMessageAndVerify = async (
     message: SignMessagePayload
   ): Promise<boolean> => {
-    if (!walletCoreRef.current) {
+    if (!walletCore) {
       throw new Error("WalletCore is not initialized");
     }
     try {
-      return await walletCoreRef?.current?.signMessageAndVerify(message);
+      return await walletCore?.signMessageAndVerify(message);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
@@ -169,11 +160,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const submitTransaction = async (
     transaction: InputSubmitTransactionData
   ): Promise<PendingTransactionResponse> => {
-    if (!walletCoreRef.current) {
+    if (!walletCore) {
       throw new Error("WalletCore is not initialized");
     }
     try {
-      return await walletCoreRef?.current?.submitTransaction(transaction);
+      return await walletCore?.submitTransaction(transaction);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
@@ -184,9 +175,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     transaction: InputTransactionData
   ) => {
     try {
-      return await walletCoreRef?.current?.signAndSubmitTransaction(
-        transaction
-      );
+      return await walletCore?.signAndSubmitTransaction(transaction);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
@@ -194,11 +183,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const changeNetwork = async (network: Network) => {
-    if (!walletCoreRef.current) {
+    if (!walletCore) {
       throw new Error("WalletCore is not initialized");
     }
     try {
-      return await walletCoreRef?.current?.changeNetwork(network);
+      return await walletCore?.changeNetwork(network);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
@@ -218,8 +207,8 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
 
   useEffect(() => {
     if (connected) {
-      walletCoreRef?.current?.onAccountChange();
-      walletCoreRef?.current?.onNetworkChange();
+      walletCore?.onAccountChange();
+      walletCore?.onNetworkChange();
     }
   }, [connected]);
 
@@ -229,9 +218,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       return {
         ...state,
         connected: true,
-        account: walletCoreRef?.current?.account || null,
-        network: walletCoreRef?.current?.network || null,
-        wallet: walletCoreRef?.current?.wallet || null,
+        account: walletCore?.account || null,
+        network: walletCore?.network || null,
+        wallet: walletCore?.wallet || null,
       };
     });
   };
@@ -243,8 +232,8 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       return {
         ...state,
         connected: false,
-        account: walletCoreRef?.current?.account || null,
-        network: walletCoreRef?.current?.network || null,
+        account: walletCore?.account || null,
+        network: walletCore?.network || null,
         wallet: null,
       };
     });
@@ -253,11 +242,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   // Handle the adapter's account change event
   const handleAccountChange = useCallback(() => {
     if (!connected) return;
-    if (!walletCoreRef?.current?.wallet) return;
+    if (!walletCore?.wallet) return;
     setState((state) => {
       return {
         ...state,
-        account: walletCoreRef?.current?.account || null,
+        account: walletCore?.account || null,
       };
     });
   }, [connected]);
@@ -265,11 +254,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   // Handle the adapter's network event
   const handleNetworkChange = useCallback(() => {
     if (!connected) return;
-    if (!walletCoreRef?.current?.wallet) return;
+    if (!walletCore?.wallet) return;
     setState((state) => {
       return {
         ...state,
-        network: walletCoreRef?.current?.network || null,
+        network: walletCore?.network || null,
       };
     });
   }, [connected]);
@@ -308,27 +297,21 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   useEffect(() => {
-    walletCoreRef?.current?.on("connect", handleConnect);
-    walletCoreRef?.current?.on("disconnect", handleDisconnect);
-    walletCoreRef?.current?.on("accountChange", handleAccountChange);
-    walletCoreRef?.current?.on("networkChange", handleNetworkChange);
-    walletCoreRef?.current?.on("readyStateChange", handleReadyStateChange);
-    walletCoreRef?.current?.on(
-      "standardWalletsAdded",
-      handleStandardWalletsAdded
-    );
+    walletCore?.on("connect", handleConnect);
+    walletCore?.on("disconnect", handleDisconnect);
+    walletCore?.on("accountChange", handleAccountChange);
+    walletCore?.on("networkChange", handleNetworkChange);
+    walletCore?.on("readyStateChange", handleReadyStateChange);
+    walletCore?.on("standardWalletsAdded", handleStandardWalletsAdded);
     return () => {
-      walletCoreRef?.current?.off("connect", handleConnect);
-      walletCoreRef?.current?.off("disconnect", handleDisconnect);
-      walletCoreRef?.current?.off("accountChange", handleAccountChange);
-      walletCoreRef?.current?.off("networkChange", handleNetworkChange);
-      walletCoreRef?.current?.off("readyStateChange", handleReadyStateChange);
-      walletCoreRef?.current?.off(
-        "standardWalletsAdded",
-        handleStandardWalletsAdded
-      );
+      walletCore?.off("connect", handleConnect);
+      walletCore?.off("disconnect", handleDisconnect);
+      walletCore?.off("accountChange", handleAccountChange);
+      walletCore?.off("networkChange", handleNetworkChange);
+      walletCore?.off("readyStateChange", handleReadyStateChange);
+      walletCore?.off("standardWalletsAdded", handleStandardWalletsAdded);
     };
-  }, [wallets]);
+  }, [wallets, account]);
 
   return (
     <WalletContext.Provider
