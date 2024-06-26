@@ -84,6 +84,11 @@ import { aptosStandardSupportedWalletList } from "./AIP62StandardWallets/registr
 
 export type IAptosWallet = AptosStandardWallet & Wallet;
 
+export interface DappConfig {
+  network: Network;
+  aptosConnectDappId?: string;
+}
+
 /** Any wallet that can be handled by `WalletCore`.
  * This includes both wallets from legacy wallet adapter plugins and compatible AIP-62 standard wallets.
  */
@@ -129,7 +134,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private readonly ga4: GA4 = new GA4();
 
   // JSON configuration for AptosConnect
-  private _dappConfig: { network: Network } | undefined;
+  private _dappConfig: DappConfig | undefined;
 
   // Local private variable to hold SDK wallets in the adapter
   private readonly _sdkWallets: AptosStandardWallet[];
