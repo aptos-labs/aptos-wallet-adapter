@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-core",
-  "version": "4.8.0",
+  "version": "4.8.2",
   "description": "Aptos Wallet Adapter Core",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -55,7 +55,7 @@
     "eventemitter3": "^4.0.7",
     "tweetnacl": "^1.0.3",
     "@atomrigslab/aptos-wallet-adapter": "^0.1.12",
-    "@aptos-connect/wallet-adapter-plugin": "^1.0.0"
+    "@aptos-connect/wallet-adapter-plugin": "^1.0.1"
   },
   "peerDependencies": {
     "@aptos-labs/ts-sdk": "^1.18.1",

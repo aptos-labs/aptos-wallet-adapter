@@ -1,5 +1,18 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.8.2
+
+### Patch Changes
+
+- 79a0212: Bumped to `@aptos-connect/wallet-adapter-plugin` v1.0.1
+
+## 4.8.1
+
+### Patch Changes
+
+- 1644cfc: use isAptosConnectWallet function to verify a wallet is an AptosConnect wallet in excludeWallet function
+- cbbbe23: Added Dapp id to dappConfig
+
 ## 4.8.0
 
 ### Minor Changes

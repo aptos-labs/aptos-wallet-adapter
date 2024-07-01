@@ -1,5 +1,21 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.4.3
+
+### Patch Changes
+
+- Updated dependencies [79a0212]
+  - @aptos-labs/wallet-adapter-core@4.8.2
+
+## 3.4.2
+
+### Patch Changes
+
+- cbbbe23: Added Dapp id to dappConfig
+- Updated dependencies [1644cfc]
+- Updated dependencies [cbbbe23]
+  - @aptos-labs/wallet-adapter-core@4.8.1
+
 ## 3.4.1
 
 ### Patch Changes
