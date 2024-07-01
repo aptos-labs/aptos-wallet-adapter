@@ -1,68 +1,27 @@
-import { Slot } from "@radix-ui/react-slot";
-import { ReactNode, forwardRef } from "react";
+import { forwardRef } from "react";
 import { SmallAptosLogo } from "../graphics/SmallAptosLogo";
+import { HeadlessComponentProps, createHeadlessComponent } from "./utils";
 
 export const APTOS_PRIVACY_POLICY_URL = "https://aptoslabs.com/privacy";
 
-export interface AptosPrivacyPolicyProps {
-  /** A class name for styling the element. */
-  className?: string;
-  /**
-   * Whether to render as the child element instead of the default element provided.
-   * All props will be merged into the child element.
-   */
-  asChild?: boolean;
-  children?: ReactNode;
-}
+const Root = createHeadlessComponent("AptosPrivacyPolicy.Root", "div");
 
-const Root = forwardRef<HTMLDivElement, AptosPrivacyPolicyProps>(
-  ({ className, asChild, children }, ref) => {
-    const Component = asChild ? Slot : "div";
-
-    return (
-      <Component ref={ref} className={className}>
-        {children}
-      </Component>
-    );
-  }
+const Disclaimer = createHeadlessComponent(
+  "AptosPrivacyPolicy.Disclaimer",
+  "span",
+  { children: "By continuing, you agree to Aptos Labs'" }
 );
-Root.displayName = "AptosPrivacyPolicy.Root";
 
-const Disclaimer = forwardRef<HTMLSpanElement, AptosPrivacyPolicyProps>(
-  ({ className, asChild, children }, ref) => {
-    const Component = asChild ? Slot : "span";
-
-    return (
-      <Component ref={ref} className={className}>
-        {children ?? "By continuing, you agree to Aptos Labs'"}
-      </Component>
-    );
-  }
-);
-Disclaimer.displayName = "AptosPrivacyPolicy.Disclaimer";
-
-const Link = forwardRef<HTMLAnchorElement, AptosPrivacyPolicyProps>(
-  ({ className, asChild, children }, ref) => {
-    const Component = asChild ? Slot : "a";
-
-    return (
-      <Component
-        ref={ref}
-        className={className}
-        href={APTOS_PRIVACY_POLICY_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {children ?? "Privacy Policy"}
-      </Component>
-    );
-  }
-);
-Link.displayName = "AptosPrivacyPolicy.Link";
+const Link = createHeadlessComponent("AptosPrivacyPolicy.Disclaimer", "a", {
+  href: APTOS_PRIVACY_POLICY_URL,
+  target: "_blank",
+  rel: "noopener noreferrer",
+  children: "Privacy Policy",
+});
 
 const PoweredBy = forwardRef<
   HTMLDivElement,
-  Pick<AptosPrivacyPolicyProps, "className">
+  Pick<HeadlessComponentProps, "className">
 >(({ className }, ref) => {
   return (
     <div ref={ref} className={className}>

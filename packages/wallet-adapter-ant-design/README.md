@@ -52,6 +52,16 @@ You can override these classes
 .aptos-connect-privacy-policy-text
 .aptos-connect-privacy-policy-link
 .aptos-connect-powered-by
+.about-aptos-connect-trigger-wrapper
+.about-aptos-connect-trigger
+.about-aptos-connect-header
+.about-aptos-connect-graphic-wrapper
+.about-aptos-connect-text-wrapper
+.about-aptos-connect-title
+.about-aptos-connect-description
+.about-aptos-connect-footer-wrapper
+.about-aptos-connect-screen-indicators-wrapper
+.about-aptos-connect-screen-indicator
 ```
 
 For example, to override the `connect wallet` button background color, you can use the `.wallet-button` class in your local `.css` file

@@ -1,8 +1,18 @@
-import { SVGProps } from "react";
+import { SVGProps, forwardRef } from "react";
 
-export function SmallAptosLogo(props: SVGProps<SVGSVGElement>) {
+export const SmallAptosLogo = forwardRef<
+  SVGSVGElement,
+  SVGProps<SVGSVGElement>
+>((props, ref) => {
   return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" {...props}>
+    <svg
+      ref={ref}
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      {...props}
+    >
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -11,4 +21,5 @@ export function SmallAptosLogo(props: SVGProps<SVGSVGElement>) {
       />
     </svg>
   );
-}
+});
+SmallAptosLogo.displayName = "SmallAptosLogo";

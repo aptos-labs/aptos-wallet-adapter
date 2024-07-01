@@ -4,39 +4,25 @@ import {
   isRedirectable,
 } from "@aptos-labs/wallet-adapter-core";
 import { Slot } from "@radix-ui/react-slot";
-import {
-  ReactNode,
-  createContext,
-  forwardRef,
-  useCallback,
-  useContext,
-} from "react";
+import { createContext, forwardRef, useCallback, useContext } from "react";
 import { useWallet } from "../useWallet";
+import { HeadlessComponentProps, createHeadlessComponent } from "./utils";
 
-export interface WalletItemProps {
+export interface WalletItemProps extends HeadlessComponentProps {
   /** The wallet option to be displayed. */
   wallet: AnyAptosWallet;
   /** A callback to be invoked when the wallet is connected. */
   onConnect?: () => void;
-  /** A class name for styling the wrapper element. */
-  className?: string;
-  /**
-   * Whether to render as the child element instead of the default `div` provided.
-   * All props will be merged into the child element.
-   */
-  asChild?: boolean;
-  children?: ReactNode;
 }
 
-export interface WalletItemElementProps {
-  /** A class name for styling the element. */
-  className?: string;
-  /**
-   * Whether to render as the child element instead of the default element provided.
-   * All props will be merged into the child element.
-   */
-  asChild?: boolean;
-  children?: ReactNode;
+function useWalletItemContext(displayName: string) {
+  const context = useContext(WalletItemContext);
+
+  if (!context) {
+    throw new Error(`\`${displayName}\` must be used within \`WalletItem\``);
+  }
+
+  return context;
 }
 
 const WalletItemContext = createContext<{
@@ -44,7 +30,7 @@ const WalletItemContext = createContext<{
   connectWallet: () => void;
 } | null>(null);
 
-const WalletItemRoot = forwardRef<HTMLDivElement, WalletItemProps>(
+const Root = forwardRef<HTMLDivElement, WalletItemProps>(
   ({ wallet, onConnect, className, asChild, children }, ref) => {
     const { connect } = useWallet();
 
@@ -73,105 +59,65 @@ const WalletItemRoot = forwardRef<HTMLDivElement, WalletItemProps>(
     );
   }
 );
-WalletItemRoot.displayName = "WalletItem";
+Root.displayName = "WalletItem";
 
-const WalletItemIcon = forwardRef<HTMLImageElement, WalletItemElementProps>(
-  ({ className, asChild, children }, ref) => {
-    const context = useContext(WalletItemContext);
+const Icon = createHeadlessComponent(
+  "WalletItem.Icon",
+  "img",
+  (displayName) => {
+    const context = useWalletItemContext(displayName);
 
-    if (!context) {
-      throw new Error("`WalletItem.Icon` must be used within `WalletItem`");
-    }
-
-    const Component = asChild ? Slot : "img";
-
-    return (
-      <Component
-        ref={ref}
-        src={context.wallet.icon}
-        alt={`${context.wallet.name} icon`}
-        className={className}
-      >
-        {children}
-      </Component>
-    );
+    return {
+      src: context.wallet.icon,
+      alt: `${context.wallet.name} icon`,
+    };
   }
 );
-WalletItemIcon.displayName = "WalletItem.Icon";
 
-const WalletItemName = forwardRef<HTMLDivElement, WalletItemElementProps>(
-  ({ className, asChild, children }, ref) => {
-    const context = useContext(WalletItemContext);
+const Name = createHeadlessComponent(
+  "WalletItem.Name",
+  "div",
+  (displayName) => {
+    const context = useWalletItemContext(displayName);
 
-    if (!context) {
-      throw new Error("`WalletItem.Name` must be used within `WalletItem`");
-    }
-
-    const Component = asChild ? Slot : "div";
-
-    return (
-      <Component ref={ref} className={className}>
-        {children ?? context.wallet.name}
-      </Component>
-    );
+    return {
+      children: context.wallet.name,
+    };
   }
 );
-WalletItemName.displayName = "WalletItem.Name";
 
-const WalletItemConnectButton = forwardRef<
-  HTMLButtonElement,
-  WalletItemElementProps
->(({ className, asChild, children }, ref) => {
-  const context = useContext(WalletItemContext);
+const ConnectButton = createHeadlessComponent(
+  "WalletItem.ConnectButton",
+  "button",
+  (displayName) => {
+    const context = useWalletItemContext(displayName);
 
-  if (!context) {
-    throw new Error(
-      "`WalletItem.ConnectButton` must be used within `WalletItem`"
-    );
+    return {
+      onClick: context.connectWallet,
+      children: "Connect",
+    };
   }
+);
 
-  const Component = asChild ? Slot : "button";
+const InstallLink = createHeadlessComponent(
+  "WalletItem.InstallLink",
+  "a",
+  (displayName) => {
+    const context = useWalletItemContext(displayName);
 
-  return (
-    <Component ref={ref} className={className} onClick={context.connectWallet}>
-      {children ?? "Connect"}
-    </Component>
-  );
-});
-WalletItemConnectButton.displayName = "WalletItem.ConnectButton";
-
-const WalletItemInstallLink = forwardRef<
-  HTMLAnchorElement,
-  WalletItemElementProps
->(({ className, asChild, children }, ref) => {
-  const context = useContext(WalletItemContext);
-
-  if (!context) {
-    throw new Error(
-      "`WalletItem.InstallLink` must be used within `WalletItem`"
-    );
+    return {
+      href: context.wallet.url,
+      target: "_blank",
+      rel: "noopener noreferrer",
+      children: "Install",
+    };
   }
-
-  const Component = asChild ? Slot : "a";
-
-  return (
-    <Component
-      ref={ref}
-      className={className}
-      href={context.wallet.url}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {children ?? "Install"}
-    </Component>
-  );
-});
-WalletItemInstallLink.displayName = "WalletItem.InstallLink";
+);
 
 /** A headless component for rendering a wallet option's name, icon, and either connect button or install link. */
-export const WalletItem = Object.assign(WalletItemRoot, {
-  Icon: WalletItemIcon,
-  Name: WalletItemName,
-  ConnectButton: WalletItemConnectButton,
-  InstallLink: WalletItemInstallLink,
+export const WalletItem = Object.assign(Root, {
+  Icon,
+  Name,
+  ConnectButton,
+  InstallLink,
 });
