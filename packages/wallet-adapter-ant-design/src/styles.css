@@ -101,9 +101,15 @@
 }
 
 .about-aptos-connect-trigger {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 4px;
+  padding-inline: 0;
   padding-block: 12px;
   color: black;
 }
@@ -158,12 +164,16 @@
 .about-aptos-connect-screen-indicators-wrapper {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
   place-self: center;
 }
 
 .about-aptos-connect-screen-indicator {
+  background: none;
+  border: none;
+  padding-inline: 0;
   padding-block: 16px;
+  cursor: pointer;
 }
 .about-aptos-connect-screen-indicator > div {
   height: 2px;

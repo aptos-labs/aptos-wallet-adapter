@@ -299,7 +299,7 @@ function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
           size="sm"
           variant="ghost"
           onClick={screen.back}
-          className="place-self-start"
+          className="justify-self-start"
         >
           Back
         </Button>
@@ -314,7 +314,7 @@ function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
           size="sm"
           variant="ghost"
           onClick={screen.next}
-          className="gap-2 place-self-end"
+          className="gap-2 justify-self-end"
         >
           {screen.screenIndex === screen.totalScreens - 1 ? "Finish" : "Next"}
           <ArrowRight size={16} />

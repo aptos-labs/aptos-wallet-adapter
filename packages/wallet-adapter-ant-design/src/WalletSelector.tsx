@@ -129,7 +129,7 @@ export function WalletSelector({
       <div className="about-aptos-connect-footer-wrapper">
         <Button
           type="text"
-          style={{ placeSelf: "start" }}
+          style={{ justifySelf: "start" }}
           onClick={screen.back}
         >
           Back
@@ -148,7 +148,7 @@ export function WalletSelector({
           type="text"
           icon={<ArrowRightOutlined />}
           iconPosition="end"
-          style={{ placeSelf: "end" }}
+          style={{ justifySelf: "end" }}
           onClick={screen.next}
         >
           {screen.screenIndex === screen.totalScreens - 1 ? "Finish" : "Next"}

@@ -178,11 +178,18 @@ export default function WalletsModal({
                 <Box
                   component={AboutAptosConnect.Trigger}
                   sx={{
+                    background: "none",
+                    border: "none",
+                    fontFamily: "inherit",
+                    fontSize: "inherit",
+                    cursor: "pointer",
                     display: "flex",
                     gap: 0.5,
+                    px: 0,
                     py: 1.5,
                     alignItems: "center",
                     color: theme.palette.text.primary,
+                    appearance: "none",
                   }}
                 >
                   Aptos Connect <ArrowForward sx={{ height: 16, width: 16 }} />
@@ -390,7 +397,7 @@ function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
           size="small"
           variant="text"
           onClick={screen.back}
-          sx={{ placeSelf: "start" }}
+          sx={{ justifySelf: "start" }}
         >
           Back
         </Button>
@@ -403,7 +410,17 @@ function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
           }}
         >
           {screen.screenIndicators.map((ScreenIndicator, i) => (
-            <Box key={i} component={ScreenIndicator} sx={{ py: 2 }}>
+            <Box
+              key={i}
+              component={ScreenIndicator}
+              sx={{
+                px: 0,
+                py: 2,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
               <Box
                 sx={{
                   height: "2px",
@@ -421,7 +438,7 @@ function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
           size="small"
           variant="text"
           onClick={screen.next}
-          sx={{ placeSelf: "end" }}
+          sx={{ justifySelf: "end" }}
           endIcon={<ArrowForward sx={{ height: 16, width: 16 }} />}
         >
           {screen.screenIndex === screen.totalScreens - 1 ? "Finish" : "Next"}
