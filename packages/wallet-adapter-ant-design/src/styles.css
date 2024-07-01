@@ -37,7 +37,6 @@
   text-decoration: underline;
   text-underline-offset: 4px;
 }
-
 .aptos-connect-privacy-policy-link:hover {
   text-decoration: underline;
 }
@@ -90,6 +89,90 @@
   padding-right: 16px;
   font-size: 16px;
   line-height: 32px;
+}
+
+.about-aptos-connect-trigger-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+}
+
+.about-aptos-connect-trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-block: 12px;
+  color: black;
+}
+
+.about-aptos-connect-header {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.about-aptos-connect-header > div {
+  margin: 0;
+  font-size: 18px;
+}
+
+.about-aptos-connect-graphic-wrapper {
+  display: flex;
+  height: 162px;
+  padding-bottom: 12px;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.about-aptos-connect-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+  padding-bottom: 4px;
+}
+
+.about-aptos-connect-title {
+  font-size: 22px;
+}
+
+.about-aptos-connect-description {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.5);
+}
+.about-aptos-connect-description > a {
+  color: black;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.about-aptos-connect-footer-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+}
+
+.about-aptos-connect-screen-indicators-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  place-self: center;
+}
+
+.about-aptos-connect-screen-indicator {
+  padding-block: 16px;
+}
+.about-aptos-connect-screen-indicator > div {
+  height: 2px;
+  width: 24px;
+  background-color: rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease;
+}
+.about-aptos-connect-screen-indicator[data-active] > div {
+  background-color: black;
 }
 
 /* Scoped Ant CSS overrides */
