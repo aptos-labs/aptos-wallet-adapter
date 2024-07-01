@@ -219,8 +219,8 @@ importers:
   packages/wallet-adapter-core:
     dependencies:
       '@aptos-connect/wallet-adapter-plugin':
-        specifier: ^1.0.0
-        version: 1.0.0(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
+        specifier: ^1.0.1
+        version: 1.0.1(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
       '@aptos-labs/ts-sdk':
         specifier: ^1.18.1
         version: 1.18.1
@@ -468,8 +468,8 @@ packages:
       throttle-debounce: 5.0.0
     dev: false
 
-  /@aptos-connect/wallet-adapter-plugin@1.0.0(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0):
-    resolution: {integrity: sha512-9Mii1izvp8xp5eDSUZIotSWfoUDGvngkDJ4qPspUzLEFLy44iftTpNbcM1P/J+G7lBU6XvtIgCLLmppt3Hiqhg==}
+  /@aptos-connect/wallet-adapter-plugin@1.0.1(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0):
+    resolution: {integrity: sha512-yrnzO9gWMPqhgV0hz3Qv9XP98hefX/V7Pcj911SLM3NWktc+mL/5CW6BKz4VKcqnhewotd2Tek43VDZTSHKoeQ==}
     peerDependencies:
       '@aptos-labs/ts-sdk': 1.18.1
       '@aptos-labs/wallet-standard': ^0.1.0

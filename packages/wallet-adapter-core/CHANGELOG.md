@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.8.2
+
+### Patch Changes
+
+- 79a0212: Bumped to `@aptos-connect/wallet-adapter-plugin` v1.0.1
+
 ## 4.8.1
 
 ### Patch Changes
