@@ -124,8 +124,7 @@ const {
 As part of the wallet adapter repo we provide a wallet connect UI package that provides a wallet connect button and a wallet select modal.
 
 The available UI Packages are
-
-- [shadcn/ui](../wallet-adapter-react/src/WalletItem.tsx)
+- [shadcn/ui](../../apps/nextjs-example/README.md#use-shadcnui-wallet-selector-for-your-own-app)
 - [Ant Design](<(../wallet-adapter-ant-design/)>)
 - [MUI](../wallet-adapter-mui-design/)
 
