@@ -23,11 +23,11 @@ jobs:
         with:
           node-version-file: .node-version
 
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v4
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7
+          version: 8.8.0
 
       - name: Install global dependencies
         run: pnpm install --frozen-lockfile
