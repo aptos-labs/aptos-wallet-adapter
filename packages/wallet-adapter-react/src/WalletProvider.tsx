@@ -67,7 +67,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   // https://github.com/aptos-labs/aptos-wallet-adapter/issues/94
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const [walletCore, SetWalletCore] = useState<WalletCore>();
+  const [walletCore, setWalletCore] = useState<WalletCore>();
 
   const [wallets, setWallets] = useState<
     ReadonlyArray<Wallet | AptosStandardSupportedWallet>
@@ -80,7 +80,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       optInWallets ?? [],
       dappConfig
     );
-    SetWalletCore(walletCore);
+    setWalletCore(walletCore);
   }, []);
 
   // Update initial Wallets state once WalletCore has been initialized
