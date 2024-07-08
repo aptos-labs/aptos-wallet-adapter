@@ -1,5 +1,21 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 3.0.0
+
+### Major Changes
+
+- 96df1f7: Renamed `sortDefaultWallets` prop to `sortAvailableWallets` and `sortMoreWallets` prop to `sortInstallableWallets`. Also added `sortAptosConnectWallets` prop.
+
+### Minor Changes
+
+- 96df1f7: Added Aptos Connect education screens to the wallet selector modal.
+
+### Patch Changes
+
+- Updated dependencies [96df1f7]
+- Updated dependencies [f23cf43]
+  - @aptos-labs/wallet-adapter-react@3.5.0
+
 ## 2.6.3
 
 ### Patch Changes

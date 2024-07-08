@@ -1,5 +1,18 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.5.0
+
+### Minor Changes
+
+- 96df1f7: Added `AboutAptosConnect` headless component for building Aptos Connect education screens.
+- f23cf43: Fix adapter event communication
+
+### Patch Changes
+
+- Updated dependencies [96df1f7]
+- Updated dependencies [f23cf43]
+  - @aptos-labs/wallet-adapter-core@4.9.0
+
 ## 3.4.3
 
 ### Patch Changes
