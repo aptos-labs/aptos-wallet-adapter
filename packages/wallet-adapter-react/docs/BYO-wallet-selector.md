@@ -203,3 +203,24 @@ A function that partitions the `wallets` array so that Aptos Connect wallets are
 ```ts
 const { aptosConnectWallets, otherWallets } = getAptosConnectWallets(wallets);
 ```
+
+### `groupAndSortWallets`
+
+A function that partitions the `wallets` array into three distinct groups:
+
+- `aptosConnectWallets` - Wallets that use social login to create accounts on
+  the blockchain via Aptos Connect.
+- `availableWallets` - Wallets that are currently installed or loadable by the client.
+- `installableWallets` - Wallets that are NOT current installed or loadable and
+  require the client to install a browser extension first.
+
+Additionally, these wallet groups can be sorted by passing the following sort functions via the `options` argument:
+
+- `sortAptosConnectWallets`
+- `sortAvailableWallets`
+- `sortInstallableWallets`
+
+```ts
+const { aptosConnectWallets, availableWallets, installableWallets } =
+  groupAndSortWallets(wallets, walletSortingOptions);
+```

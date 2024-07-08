@@ -1,12 +1,13 @@
+import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import {
   AboutAptosConnect,
   AboutAptosConnectEducationScreen,
   AnyAptosWallet,
   AptosPrivacyPolicy,
   WalletItem,
-  getAptosConnectWallets,
+  WalletSortingOptions,
+  groupAndSortWallets,
   isInstallRequired,
-  partitionWallets,
   truncateAddress,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
@@ -21,30 +22,18 @@ import {
 } from "antd";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import "./styles.css";
-import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 
-type WalletSelectorProps = {
+interface WalletSelectorProps extends WalletSortingOptions {
   isModalOpen?: boolean;
   setModalOpen?: Dispatch<SetStateAction<boolean>>;
-  /**
-   * An optional function for sorting wallets that are currently installed or
-   * loadable in the wallet selector modal.
-   */
-  sortDefaultWallets?: (a: AnyAptosWallet, b: AnyAptosWallet) => number;
-  /**
-   * An optional function for sorting wallets that are NOT currently installed or
-   * loadable in the wallet selector modal.
-   */
-  sortMoreWallets?: (a: AnyAptosWallet, b: AnyAptosWallet) => number;
-};
+}
 
 export function WalletSelector({
   isModalOpen,
   setModalOpen,
-  sortDefaultWallets,
-  sortMoreWallets,
+  ...walletSortingOptions
 }: WalletSelectorProps) {
   const [walletSelectorModalOpen, setWalletSelectorModalOpen] = useState(false);
 
@@ -58,22 +47,8 @@ export function WalletSelector({
 
   const { account, connected, disconnect, wallets = [] } = useWallet();
 
-  const {
-    /** Wallets that use social login to create an account on the blockchain */
-    aptosConnectWallets,
-    /** Wallets that use traditional wallet extensions */
-    otherWallets,
-  } = getAptosConnectWallets(wallets);
-
-  const {
-    /** Wallets that are currently installed or loadable. */
-    defaultWallets,
-    /** Wallets that are NOT currently installed or loadable. */
-    moreWallets,
-  } = partitionWallets(otherWallets);
-
-  if (sortDefaultWallets) defaultWallets.sort(sortDefaultWallets);
-  if (sortMoreWallets) moreWallets.sort(sortMoreWallets);
+  const { aptosConnectWallets, availableWallets, installableWallets } =
+    groupAndSortWallets(wallets, walletSortingOptions);
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
 
@@ -208,7 +183,7 @@ export function WalletSelector({
                 </Flex>
               )}
               <Flex vertical gap={12}>
-                {defaultWallets.map((wallet) => (
+                {availableWallets.map((wallet) => (
                   <WalletRow
                     key={wallet.name}
                     wallet={wallet}
@@ -216,7 +191,7 @@ export function WalletSelector({
                   />
                 ))}
               </Flex>
-              {!!moreWallets.length && (
+              {!!installableWallets.length && (
                 <Collapse
                   ghost
                   expandIconPosition="end"
@@ -226,7 +201,7 @@ export function WalletSelector({
                       label: "More Wallets",
                       children: (
                         <Flex vertical gap={12}>
-                          {moreWallets.map((wallet) => (
+                          {installableWallets.map((wallet) => (
                             <WalletRow
                               key={wallet.name}
                               wallet={wallet}

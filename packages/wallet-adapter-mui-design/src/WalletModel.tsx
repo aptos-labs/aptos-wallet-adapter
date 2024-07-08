@@ -4,14 +4,13 @@ import {
   AnyAptosWallet,
   AptosPrivacyPolicy,
   WalletItem,
-  getAptosConnectWallets,
+  WalletSortingOptions,
+  groupAndSortWallets,
   isInstallRequired,
-  partitionWallets,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
 import {
   Box,
-  Breakpoint,
   Button,
   Collapse,
   Dialog,
@@ -36,44 +35,26 @@ import { useState } from "react";
 import { WalletConnectorProps } from "./WalletConnector";
 
 interface WalletsModalProps
-  extends Pick<
-    WalletConnectorProps,
-    "networkSupport" | "sortDefaultWallets" | "sortMoreWallets"
-  > {
+  extends Pick<WalletConnectorProps, "networkSupport" | "modalMaxWidth">,
+    WalletSortingOptions {
   handleClose: () => void;
   modalOpen: boolean;
-  maxWidth?: Breakpoint;
 }
 
 export default function WalletsModal({
   handleClose,
   modalOpen,
   networkSupport,
-  sortDefaultWallets,
-  sortMoreWallets,
-  maxWidth,
+  modalMaxWidth,
+  ...walletSortingOptions
 }: WalletsModalProps): JSX.Element {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
 
   const { wallets = [] } = useWallet();
 
-  const {
-    /** Wallets that use social login to create an account on the blockchain */
-    aptosConnectWallets,
-    /** Wallets that use traditional wallet extensions */
-    otherWallets,
-  } = getAptosConnectWallets(wallets);
-
-  const {
-    /** Wallets that are currently installed or loadable. */
-    defaultWallets,
-    /** Wallets that are NOT currently installed or loadable. */
-    moreWallets,
-  } = partitionWallets(otherWallets);
-
-  if (sortDefaultWallets) defaultWallets.sort(sortDefaultWallets);
-  if (sortMoreWallets) moreWallets.sort(sortMoreWallets);
+  const { aptosConnectWallets, availableWallets, installableWallets } =
+    groupAndSortWallets(wallets, walletSortingOptions);
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
 
@@ -83,7 +64,7 @@ export default function WalletsModal({
       onClose={handleClose}
       aria-label="wallet selector modal"
       sx={{ borderRadius: `${theme.shape.borderRadius}px` }}
-      maxWidth={maxWidth ?? "xs"}
+      maxWidth={modalMaxWidth ?? "xs"}
       fullWidth
     >
       <Stack
@@ -229,14 +210,14 @@ export default function WalletsModal({
             </Stack>
           )}
           <Stack sx={{ gap: 1 }}>
-            {defaultWallets.map((wallet) => (
+            {availableWallets.map((wallet) => (
               <WalletRow
                 key={wallet.name}
                 wallet={wallet}
                 onConnect={handleClose}
               />
             ))}
-            {!!moreWallets.length && (
+            {!!installableWallets.length && (
               <>
                 <Button
                   variant="text"
@@ -250,7 +231,7 @@ export default function WalletsModal({
                 </Button>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                   <Stack sx={{ gap: 1 }}>
-                    {moreWallets.map((wallet) => (
+                    {installableWallets.map((wallet) => (
                       <WalletRow
                         key={wallet.name}
                         wallet={wallet}

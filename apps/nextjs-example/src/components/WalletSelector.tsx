@@ -7,10 +7,10 @@ import {
   AnyAptosWallet,
   AptosPrivacyPolicy,
   WalletItem,
-  getAptosConnectWallets,
+  WalletSortingOptions,
+  groupAndSortWallets,
   isAptosConnectWallet,
   isInstallRequired,
-  partitionWallets,
   truncateAddress,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
@@ -44,23 +44,7 @@ import {
 } from "./ui/dropdown-menu";
 import { useToast } from "./ui/use-toast";
 
-export interface WalletSelectorProps {
-  /**
-   * An optional function for sorting wallets that are currently installed or
-   * loadable in the wallet selector modal.
-   */
-  sortDefaultWallets?: (a: AnyAptosWallet, b: AnyAptosWallet) => number;
-  /**
-   * An optional function for sorting wallets that are NOT currently installed or
-   * loadable in the wallet selector modal.
-   */
-  sortMoreWallets?: (a: AnyAptosWallet, b: AnyAptosWallet) => number;
-}
-
-export function WalletSelector({
-  sortDefaultWallets,
-  sortMoreWallets,
-}: WalletSelectorProps) {
+export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
   const { account, connected, disconnect, wallet } = useWallet();
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -117,43 +101,23 @@ export function WalletSelector({
       <DialogTrigger asChild>
         <Button>Connect a Wallet</Button>
       </DialogTrigger>
-      <ConnectWalletDialog
-        close={closeDialog}
-        sortDefaultWallets={sortDefaultWallets}
-        sortMoreWallets={sortMoreWallets}
-      />
+      <ConnectWalletDialog close={closeDialog} {...walletSortingOptions} />
     </Dialog>
   );
 }
 
-interface ConnectWalletDialogProps
-  extends Pick<WalletSelectorProps, "sortDefaultWallets" | "sortMoreWallets"> {
+interface ConnectWalletDialogProps extends WalletSortingOptions {
   close: () => void;
 }
 
 function ConnectWalletDialog({
   close,
-  sortDefaultWallets,
-  sortMoreWallets,
+  ...walletSortingOptions
 }: ConnectWalletDialogProps) {
   const { wallets = [] } = useWallet();
 
-  const {
-    /** Wallets that use social login to create an account on the blockchain */
-    aptosConnectWallets,
-    /** Wallets that use traditional wallet extensions */
-    otherWallets,
-  } = getAptosConnectWallets(wallets);
-
-  const {
-    /** Wallets that are currently installed or loadable. */
-    defaultWallets,
-    /** Wallets that are NOT currently installed or loadable. */
-    moreWallets,
-  } = partitionWallets(otherWallets);
-
-  if (sortDefaultWallets) defaultWallets.sort(sortDefaultWallets);
-  if (sortMoreWallets) moreWallets.sort(sortMoreWallets);
+  const { aptosConnectWallets, availableWallets, installableWallets } =
+    groupAndSortWallets(wallets, walletSortingOptions);
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
 
@@ -205,10 +169,10 @@ function ConnectWalletDialog({
         )}
 
         <div className="flex flex-col gap-3 pt-3">
-          {defaultWallets.map((wallet) => (
+          {availableWallets.map((wallet) => (
             <WalletRow key={wallet.name} wallet={wallet} onConnect={close} />
           ))}
-          {!!moreWallets.length && (
+          {!!installableWallets.length && (
             <Collapsible className="flex flex-col gap-3">
               <CollapsibleTrigger asChild>
                 <Button size="sm" variant="ghost" className="gap-2">
@@ -216,7 +180,7 @@ function ConnectWalletDialog({
                 </Button>
               </CollapsibleTrigger>
               <CollapsibleContent className="flex flex-col gap-3">
-                {moreWallets.map((wallet) => (
+                {installableWallets.map((wallet) => (
                   <WalletRow
                     key={wallet.name}
                     wallet={wallet}
