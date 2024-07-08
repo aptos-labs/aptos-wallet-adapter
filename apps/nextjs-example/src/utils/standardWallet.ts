@@ -114,7 +114,6 @@ export class MyWalletAccount implements AptosWalletAccount {
  * 1. MyWallet should be renamed to be the name of your wallet. Ex. For Petra, MyWallet should be named "PetraWallet". (Be sure to also update references to "MyWallet" in this file.)
  * 2. Update the values of this class to match your Wallet's deatils.
  * 3. Implement each of the features below. (Including adding implementations for any additional required features that you can find here in the "AptosFeatures" type: https://github.com/aptos-labs/wallet-standard/blob/main/src/features/index.ts)
- *
  */
 export class MyWallet implements AptosWallet {
   // REVISION - Include the link to create an account using your wallet or your primary website. (Ex. https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
@@ -143,7 +142,7 @@ export class MyWallet implements AptosWallet {
   /**
    * REVISION - Set the subset of Aptos chains your wallet supports.
    * APTOS_CHAINS = ["aptos:devnet", "aptos:testnet", "aptos:localnet", "aptos:mainnet"]
-   * Many wallets only support "aptos:mainnet" and "aptos:testnet".
+   * It is recommended to support at least "aptos:mainnet", "aptos:testnet", and "aptos:devnet".
    */
   chains = APTOS_CHAINS;
   /**
