@@ -1,39 +1,39 @@
+import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import {
+  AboutAptosConnect,
+  AboutAptosConnectEducationScreen,
   AnyAptosWallet,
   AptosPrivacyPolicy,
   WalletItem,
-  getAptosConnectWallets,
+  WalletSortingOptions,
+  groupAndSortWallets,
   isInstallRequired,
-  partitionWallets,
   truncateAddress,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
-import { Button, Collapse, Divider, Flex, Modal, Typography } from "antd";
+import {
+  Button,
+  Collapse,
+  Divider,
+  Flex,
+  Modal,
+  ModalProps,
+  Typography,
+} from "antd";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import "./styles.css";
 
 const { Text } = Typography;
 
-type WalletSelectorProps = {
+interface WalletSelectorProps extends WalletSortingOptions {
   isModalOpen?: boolean;
   setModalOpen?: Dispatch<SetStateAction<boolean>>;
-  /**
-   * An optional function for sorting wallets that are currently installed or
-   * loadable in the wallet selector modal.
-   */
-  sortDefaultWallets?: (a: AnyAptosWallet, b: AnyAptosWallet) => number;
-  /**
-   * An optional function for sorting wallets that are NOT currently installed or
-   * loadable in the wallet selector modal.
-   */
-  sortMoreWallets?: (a: AnyAptosWallet, b: AnyAptosWallet) => number;
-};
+}
 
 export function WalletSelector({
   isModalOpen,
   setModalOpen,
-  sortDefaultWallets,
-  sortMoreWallets,
+  ...walletSortingOptions
 }: WalletSelectorProps) {
   const [walletSelectorModalOpen, setWalletSelectorModalOpen] = useState(false);
 
@@ -47,22 +47,8 @@ export function WalletSelector({
 
   const { account, connected, disconnect, wallets = [] } = useWallet();
 
-  const {
-    /** Wallets that use social login to create an account on the blockchain */
-    aptosConnectWallets,
-    /** Wallets that use traditional wallet extensions */
-    otherWallets,
-  } = getAptosConnectWallets(wallets);
-
-  const {
-    /** Wallets that are currently installed or loadable. */
-    defaultWallets,
-    /** Wallets that are NOT currently installed or loadable. */
-    moreWallets,
-  } = partitionWallets(otherWallets);
-
-  if (sortDefaultWallets) defaultWallets.sort(sortDefaultWallets);
-  if (sortMoreWallets) moreWallets.sort(sortMoreWallets);
+  const { aptosConnectWallets, availableWallets, installableWallets } =
+    groupAndSortWallets(wallets, walletSortingOptions);
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
 
@@ -84,36 +70,92 @@ export function WalletSelector({
   const buttonText =
     account?.ansName || truncateAddress(account?.address) || "Unknown";
 
+  const modalProps: ModalProps = {
+    centered: true,
+    open: walletSelectorModalOpen,
+    onCancel: closeModal,
+    footer: null,
+    zIndex: 9999,
+    className: "wallet-selector-modal",
+  };
+
+  const renderEducationScreens = (screen: AboutAptosConnectEducationScreen) => (
+    <Modal
+      {...modalProps}
+      afterClose={screen.cancel}
+      title={
+        <div className="about-aptos-connect-header">
+          <Button
+            type="text"
+            icon={<ArrowLeftOutlined />}
+            onClick={screen.cancel}
+          />
+          <div className="wallet-modal-title">About Aptos Connect</div>
+        </div>
+      }
+    >
+      <div className="about-aptos-connect-graphic-wrapper">
+        <screen.Graphic />
+      </div>
+      <div className="about-aptos-connect-text-wrapper">
+        <screen.Title className="about-aptos-connect-title" />
+        <screen.Description className="about-aptos-connect-description" />
+      </div>
+      <div className="about-aptos-connect-footer-wrapper">
+        <Button
+          type="text"
+          style={{ justifySelf: "start" }}
+          onClick={screen.back}
+        >
+          Back
+        </Button>
+        <div className="about-aptos-connect-screen-indicators-wrapper">
+          {screen.screenIndicators.map((ScreenIndicator, i) => (
+            <ScreenIndicator
+              key={i}
+              className="about-aptos-connect-screen-indicator"
+            >
+              <div />
+            </ScreenIndicator>
+          ))}
+        </div>
+        <Button
+          type="text"
+          icon={<ArrowRightOutlined />}
+          iconPosition="end"
+          style={{ justifySelf: "end" }}
+          onClick={screen.next}
+        >
+          {screen.screenIndex === screen.totalScreens - 1 ? "Finish" : "Next"}
+        </Button>
+      </div>
+    </Modal>
+  );
+
   return (
     <>
       <Button className="wallet-button" onClick={onWalletButtonClick}>
         {connected ? buttonText : "Connect Wallet"}
       </Button>
-      <Modal
-        title={
-          <div className="wallet-modal-title">
-            {hasAptosConnectWallets ? (
-              <>
-                <span>Log in or sign up</span>
-                <span>with Social + Aptos Connect</span>
-              </>
-            ) : (
-              "Connect Wallet"
-            )}
-          </div>
-        }
-        centered
-        open={walletSelectorModalOpen}
-        onCancel={closeModal}
-        footer={[]}
-        closable={false}
-        zIndex={9999}
-        className="wallet-selector-modal"
-      >
-        {!connected && (
-          <>
-            {hasAptosConnectWallets && (
-              <>
+      <AboutAptosConnect renderEducationScreen={renderEducationScreens}>
+        <Modal
+          {...modalProps}
+          title={
+            <div className="wallet-modal-title">
+              {hasAptosConnectWallets ? (
+                <>
+                  <span>Log in or sign up</span>
+                  <span>with Social + Aptos Connect</span>
+                </>
+              ) : (
+                "Connect Wallet"
+              )}
+            </div>
+          }
+        >
+          {!connected && (
+            <>
+              {hasAptosConnectWallets && (
                 <Flex vertical gap={12}>
                   {aptosConnectWallets.map((wallet) => (
                     <AptosConnectWalletRow
@@ -122,53 +164,60 @@ export function WalletSelector({
                       onConnect={closeModal}
                     />
                   ))}
-                </Flex>
-                <AptosPrivacyPolicy className="aptos-connect-privacy-policy-wrapper">
-                  <p className="aptos-connect-privacy-policy-text">
-                    <AptosPrivacyPolicy.Disclaimer />{" "}
-                    <AptosPrivacyPolicy.Link className="aptos-connect-privacy-policy-link" />
-                    <span>.</span>
+                  <p className="about-aptos-connect-trigger-wrapper">
+                    Learn more about{" "}
+                    <AboutAptosConnect.Trigger className="about-aptos-connect-trigger">
+                      Aptos Connect
+                      <ArrowRightOutlined />
+                    </AboutAptosConnect.Trigger>
                   </p>
-                  <AptosPrivacyPolicy.PoweredBy className="aptos-connect-powered-by" />
-                </AptosPrivacyPolicy>
-                <Divider>Or</Divider>
-              </>
-            )}
-            <Flex vertical gap={12}>
-              {defaultWallets.map((wallet) => (
-                <WalletRow
-                  key={wallet.name}
-                  wallet={wallet}
-                  onConnect={closeModal}
+                  <AptosPrivacyPolicy className="aptos-connect-privacy-policy-wrapper">
+                    <p className="aptos-connect-privacy-policy-text">
+                      <AptosPrivacyPolicy.Disclaimer />{" "}
+                      <AptosPrivacyPolicy.Link className="aptos-connect-privacy-policy-link" />
+                      <span>.</span>
+                    </p>
+                    <AptosPrivacyPolicy.PoweredBy className="aptos-connect-powered-by" />
+                  </AptosPrivacyPolicy>
+                  <Divider>Or</Divider>
+                </Flex>
+              )}
+              <Flex vertical gap={12}>
+                {availableWallets.map((wallet) => (
+                  <WalletRow
+                    key={wallet.name}
+                    wallet={wallet}
+                    onConnect={closeModal}
+                  />
+                ))}
+              </Flex>
+              {!!installableWallets.length && (
+                <Collapse
+                  ghost
+                  expandIconPosition="end"
+                  items={[
+                    {
+                      key: "more-wallets",
+                      label: "More Wallets",
+                      children: (
+                        <Flex vertical gap={12}>
+                          {installableWallets.map((wallet) => (
+                            <WalletRow
+                              key={wallet.name}
+                              wallet={wallet}
+                              onConnect={closeModal}
+                            />
+                          ))}
+                        </Flex>
+                      ),
+                    },
+                  ]}
                 />
-              ))}
-            </Flex>
-            {!!moreWallets.length && (
-              <Collapse
-                ghost
-                expandIconPosition="end"
-                items={[
-                  {
-                    key: "more-wallets",
-                    label: "More Wallets",
-                    children: (
-                      <Flex vertical gap={12}>
-                        {moreWallets.map((wallet) => (
-                          <WalletRow
-                            key={wallet.name}
-                            wallet={wallet}
-                            onConnect={closeModal}
-                          />
-                        ))}
-                      </Flex>
-                    ),
-                  },
-                ]}
-              />
-            )}
-          </>
-        )}
-      </Modal>
+              )}
+            </>
+          )}
+        </Modal>
+      </AboutAptosConnect>
     </>
   );
 }
