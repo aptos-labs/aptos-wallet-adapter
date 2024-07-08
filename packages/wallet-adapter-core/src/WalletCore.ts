@@ -102,7 +102,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private _optInWallets: ReadonlyArray<AvailableWallets> = [];
 
   // Private array to hold compatible AIP-62 standard wallets
-  private _standard_wallets: ReadonlyArray<AptosStandardWallet> = [];
+  private _standard_wallets: Array<AptosStandardWallet> = [];
 
   // Private array to hold all wallets (legacy wallet adapter plugins AND compatible AIP-62 standard wallets)
   // while providing support for legacy and new wallet standard
@@ -156,12 +156,16 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     this._optInWallets = optInWallets;
     this._dappConfig = dappConfig;
     this._sdkWallets = getSDKWallets(this._dappConfig);
+    // Strategy to detect AIP-62 standard compatible extension wallets
+    this.fetchExtensionAIP62AptosWallets();
+    // Strategy to detect AIP-62 standard compatible SDK wallets.
+    // We separate the extension and sdk detection process so we dont refetch sdk wallets everytime a new
+    // extension wallet is detected
+    this.fetchSDKAIP62AptosWallets();
     // Strategy to detect legacy wallet adapter v1 wallet plugins
     this.scopePollingDetectionStrategy();
-    // Strategy to detect AIP-62 standard compatible wallets (extension + SDK wallets)
-    this.fetchAptosWallets();
     // Append AIP-62 compatible wallets that are not detected on the user machine
-    this.appendNotDetectedStandardSupportedWallets(this._standard_wallets);
+    this.appendNotDetectedStandardSupportedWallets();
   }
 
   private scopePollingDetectionStrategy() {
@@ -188,9 +192,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     });
   }
 
-  private fetchAptosWallets() {
+  private fetchExtensionAIP62AptosWallets() {
     let { aptosWallets, on } = getAptosWallets();
-    this.setWallets(aptosWallets);
+    this.setExtensionAIP62Wallets(aptosWallets);
 
     if (typeof window === "undefined") return;
     // Adds an event listener for new wallets that get registered after the dapp has been loaded,
@@ -198,19 +202,20 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     const that = this;
     const removeRegisterListener = on("register", function () {
       let { aptosWallets } = getAptosWallets();
-      that.setWallets(aptosWallets);
+      that.setExtensionAIP62Wallets(aptosWallets);
     });
 
     const removeUnregisterListener = on("unregister", function () {
       let { aptosWallets } = getAptosWallets();
-      that.setWallets(aptosWallets);
+      that.setExtensionAIP62Wallets(aptosWallets);
     });
   }
 
-  // Append wallets from wallet aip-62 standard registry to the `all_wallets` array
-  private appendNotDetectedStandardSupportedWallets(
-    aptosStandardWallets: ReadonlyArray<AptosStandardWallet>
-  ) {
+  // Since we can't discover AIP-62 wallets that are not installed on the user machine,
+  // we hold a AIP-62 wallets registry to show on the wallet selector modal for the users.
+  // Append wallets from wallet standard support registry to the `all_wallets` array
+  // when wallet is not installed on the user machine
+  private appendNotDetectedStandardSupportedWallets() {
     // Loop over the registry map
     aptosStandardSupportedWalletList.map((supportedWallet) => {
       // Check if we already have this wallet as an installed plugin
@@ -223,7 +228,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       if (existingPluginWalletIndex !== -1) return;
 
       // Check if we already have this wallet as a AIP-62 wallet standard
-      const existingStandardWallet = aptosStandardWallets.find(
+      const existingStandardWallet = this._standard_wallets.find(
         (wallet) => wallet.name == supportedWallet.name
       );
 
@@ -245,38 +250,34 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   /**
-   * Set potential Standard compatible SDK + extension wallets
-   *
-   * Loop over local SDK and Extensions wallets
-   * 1) check it is Standard compatible
-   * 2) Update their readyState to Installed (for a future UI detection)
-   * 3) push the wallet into a local wallets array
-   * 4) standardize each wallet to the Wallet Plugin type interface for legacy compatibility
-   *
-   * @param extensionwWallets
+   * Set AIP-62 SDK wallets
    */
-  private setWallets(extensionwWallets: readonly AptosWallet[]) {
-    const aptosStandardWallets: AptosStandardWallet[] = [];
-
-    [...this._sdkWallets, ...extensionwWallets].map(
-      (wallet: AptosStandardWallet) => {
-        if (this.excludeWallet(wallet)) {
-          return;
-        }
-        const isValid = isWalletWithRequiredFeatureSet(wallet);
-        if (isValid) {
-          wallet.readyState = WalletReadyState.Installed;
-          aptosStandardWallets.push(wallet);
-          this.standardizeStandardWalletToPluginWalletType(wallet);
-        }
-      }
-    );
-
-    this._standard_wallets = aptosStandardWallets;
+  private fetchSDKAIP62AptosWallets() {
+    this._sdkWallets.map((wallet: AptosStandardWallet) => {
+      this.standardizeAIP62WalletType(wallet);
+    });
   }
 
   /**
-   * A function that excludes a wallet the dapp doesnt want to include
+   * Set AIP-62 extension wallets
+   *
+   * @param extensionwWallets
+   */
+  private setExtensionAIP62Wallets(extensionwWallets: readonly AptosWallet[]) {
+    // Twallet SDK fires a register event so the adapter assumes it is an extension wallet
+    // so filter out t wallet, remove it when twallet fixes it
+    const wallets = extensionwWallets.filter(
+      (wallet) => wallet.name !== "Dev T wallet" && wallet.name !== "T wallet"
+    );
+
+    wallets.map((wallet: AptosStandardWallet) => {
+      this.standardizeAIP62WalletType(wallet);
+      this._standard_wallets.push(wallet);
+    });
+  }
+
+  /**
+   * A function that excludes an AIP-62 compatible wallet the dapp doesnt want to include
    *
    * @param walletName
    * @returns
@@ -293,6 +294,29 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Standardize AIP62 wallet
+   *
+   * 1) check it is Standard compatible
+   * 2) Update its readyState to Installed (for a future UI detection)
+   * 3) convert it to the Wallet Plugin type interface for legacy compatibility
+   * 4) push the wallet into a local standard wallets array
+   *
+   * @param wallet
+   * @returns
+   */
+  private standardizeAIP62WalletType(wallet: AptosStandardWallet) {
+    if (this.excludeWallet(wallet)) {
+      return;
+    }
+    const isValid = isWalletWithRequiredFeatureSet(wallet);
+    if (isValid) {
+      wallet.readyState = WalletReadyState.Installed;
+      this.standardizeStandardWalletToPluginWalletType(wallet);
+      this._standard_wallets.push(wallet);
+    }
   }
 
   /**
