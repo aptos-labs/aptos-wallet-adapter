@@ -1,5 +1,12 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.9.0
+
+### Minor Changes
+
+- 96df1f7: Added `groupAndSortWallets` utility function.
+- f23cf43: Fix adapter event communication
+
 ## 4.8.2
 
 ### Patch Changes
