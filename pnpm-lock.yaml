@@ -229,7 +229,7 @@ importers:
         version: 0.1.0(@aptos-labs/ts-sdk@1.18.1)(@wallet-standard/core@1.0.3)
       '@atomrigslab/aptos-wallet-adapter':
         specifier: ^0.1.13
-        version: 0.1.13(@aptos-labs/ts-sdk@1.13.2)(esbuild@0.14.54)
+        version: 0.1.13(@aptos-labs/ts-sdk@1.18.1)(esbuild@0.14.54)
       aptos:
         specifier: ^1.21.0
         version: 1.21.0
@@ -437,7 +437,7 @@ packages:
       '@ant-design/icons-svg': 4.4.2
       '@babel/runtime': 7.24.7
       classnames: 2.5.1
-      rc-util: 5.39.1(react-dom@18.3.1)(react@18.3.1)
+      rc-util: 5.43.0(react-dom@18.3.1)(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
     dev: false
@@ -614,12 +614,22 @@ packages:
       - debug
     dev: false
 
-  /@atomrigslab/aptos-wallet-adapter@0.1.13(@aptos-labs/ts-sdk@1.13.2)(esbuild@0.14.54):
+  /@aptos-labs/wallet-standard@0.1.0(@aptos-labs/ts-sdk@1.18.1)(@wallet-standard/core@1.0.3):
+    resolution: {integrity: sha512-DC4cWuvgXKBVQC+seGQc/nwIZoggZmGOIoN8EtEKHBSBMijwVfgRjD6cXPx8xWaXANyr5d32BGnWvYfMyWk3Pg==}
+    peerDependencies:
+      '@aptos-labs/ts-sdk': ^1.17.0
+      '@wallet-standard/core': ^1.0.3
+    dependencies:
+      '@aptos-labs/ts-sdk': 1.18.1
+      '@wallet-standard/core': 1.0.3
+    dev: false
+
+  /@atomrigslab/aptos-wallet-adapter@0.1.13(@aptos-labs/ts-sdk@1.18.1)(esbuild@0.14.54):
     resolution: {integrity: sha512-qicPxrvFujTz3utTz+ArIJbYi89jwVoFhECZPmtNTiOPhQvZ7xqi0KNwELrulpEMhRpmS7+oju1rhx/cIoySxg==}
     peerDependencies:
       '@aptos-labs/ts-sdk': ^1.9.0
     dependencies:
-      '@aptos-labs/ts-sdk': 1.13.2
+      '@aptos-labs/ts-sdk': 1.18.1
       '@aptos-labs/wallet-standard': 0.0.11
       '@atomrigslab/dekey-web-wallet-provider': 1.2.0(esbuild@0.14.54)
     transitivePeerDependencies:
@@ -9752,6 +9762,18 @@ packages:
       '@babel/runtime': 7.24.7
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+      react-is: 18.2.0
+    dev: false
+
+  /rc-util@5.43.0(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-AzC7KKOXFqAdIBqdGWepL9Xn7cm3vnAmjlHqUnoQaTMZYhM4VlXGLkkHHxj/BZ7Td0+SOPKB4RGPboBVKT9htw==}
+    peerDependencies:
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
+    dependencies:
+      '@babel/runtime': 7.24.7
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
       react-is: 18.2.0
     dev: false
 
