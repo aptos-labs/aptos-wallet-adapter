@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-ant-design",
-  "version": "2.4.3",
+  "version": "2.4.11",
   "description": "Aptos Wallet Adapter ant-design",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -42,8 +42,8 @@
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "eslint": "^8.15.0",
     "tsup": "^5.10.1",
     "typescript": "^4.5.3"

@@ -1,5 +1,77 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.3.0
+
+### Minor Changes
+
+- 07ee265: Support dappConfig user prop to set SDK wallets configuration
+
+### Patch Changes
+
+- Updated dependencies [07ee265]
+  - @aptos-labs/wallet-adapter-core@4.7.0
+
+## 3.2.0
+
+### Minor Changes
+
+- 2e9b7df: Added `getAptosConnectWallets` utility function
+
+### Patch Changes
+
+- Updated dependencies [0672ff4]
+  - @aptos-labs/wallet-adapter-core@4.6.0
+
+## 3.1.1
+
+### Patch Changes
+
+- Updated dependencies [c1a9f41]
+  - @aptos-labs/wallet-adapter-core@4.5.0
+
+## 3.1.0
+
+### Minor Changes
+
+- 2e9c156: Added `partitionWallets`, `isInstalledOrLoadable`, `isInstallRequired`, and `truncateAddress` utility functions to make it easier to implement custom wallet selectors.
+- 2e9c156: Added `WalletItem` headless component for implementing custom wallet selectors.
+
+### Patch Changes
+
+- 2e9c156: Fixed a bug where `WalletProvider` would not automatically attempt to reconnect the wallet when the `autoConnect` is set to true after the initial render.
+- Updated dependencies [2e9c156]
+  - @aptos-labs/wallet-adapter-core@4.4.0
+
+## 3.0.7
+
+### Patch Changes
+
+- Updated dependencies [79b1bf8]
+- Updated dependencies [9566c50]
+  - @aptos-labs/wallet-adapter-core@4.3.0
+
+## 3.0.6
+
+### Patch Changes
+
+- Updated dependencies [4db7a8d]
+  - @aptos-labs/wallet-adapter-core@4.2.1
+
+## 3.0.5
+
+### Patch Changes
+
+- Updated dependencies [9f94e4d]
+  - @aptos-labs/wallet-adapter-core@4.2.0
+
+## 3.0.4
+
+### Patch Changes
+
+- Updated dependencies [cc4021b]
+- Updated dependencies [ec6cb0c]
+  - @aptos-labs/wallet-adapter-core@4.1.3
+
 ## 3.0.3
 
 ### Patch Changes

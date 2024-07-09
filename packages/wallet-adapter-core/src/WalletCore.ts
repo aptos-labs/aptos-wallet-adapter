@@ -27,7 +27,7 @@ import {
   isWalletWithRequiredFeatureSet,
 } from "@aptos-labs/wallet-standard";
 
-import SDKWallets from "./AIP62StandardWallets/sdkWallets";
+import { getSDKWallets } from "./AIP62StandardWallets/sdkWallets";
 import { ChainIdToAnsSupportedNetworkMap, WalletReadyState } from "./constants";
 import {
   WalletAccountChangeError,
@@ -83,6 +83,11 @@ import { aptosStandardSupportedWalletList } from "./AIP62StandardWallets/registr
 
 export type IAptosWallet = AptosStandardWallet & Wallet;
 
+/** Any wallet that can be handled by `WalletCore`.
+ * This includes both wallets from legacy wallet adapter plugins and compatible AIP-62 standard wallets.
+ */
+export type AnyAptosWallet = Wallet | AptosStandardSupportedWallet;
+
 export class WalletCore extends EventEmitter<WalletCoreEvents> {
   // Private array to hold legacy wallet adapter plugins
   private _wallets: ReadonlyArray<Wallet> = [];
@@ -95,7 +100,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   // Private array to hold all wallets (legacy wallet adapter plugins AND compatible AIP-62 standard wallets)
   // while providing support for legacy and new wallet standard
-  private _all_wallets: Array<Wallet | AptosStandardSupportedWallet> = [];
+  private _all_wallets: Array<AnyAptosWallet> = [];
 
   // Current connected wallet
   private _wallet: Wallet | null = null;
@@ -122,6 +127,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   // Google Analytics 4 module
   private readonly ga4: GA4 = new GA4();
 
+  // JSON configuration for AptosConnect
+  private _dappConfig: { network: Network } | undefined;
+
+  // Local private variable to hold SDK wallets in the adapter
+  private readonly _sdkWallets: AptosStandardWallet[];
+
   /**
    * Core functionality constructor.
    * For legacy wallet adapter v1 support we expect the dapp to pass in wallet plugins,
@@ -131,15 +142,20 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    */
   constructor(
     plugins: ReadonlyArray<Wallet>,
-    optInWallets: ReadonlyArray<AvailableWallets>
+    optInWallets: ReadonlyArray<AvailableWallets>,
+    dappConfig?: { network: Network }
   ) {
     super();
     this._wallets = plugins;
     this._optInWallets = optInWallets;
+    this._dappConfig = dappConfig;
+    this._sdkWallets = getSDKWallets(this._dappConfig);
     // Strategy to detect legacy wallet adapter v1 wallet plugins
     this.scopePollingDetectionStrategy();
     // Strategy to detect AIP-62 standard compatible wallets (extension + SDK wallets)
     this.fetchAptosWallets();
+    // Append AIP-62 compatible wallets that are not detected on the user machine
+    this.appendNotDetectedStandardSupportedWallets(this._standard_wallets);
   }
 
   private scopePollingDetectionStrategy() {
@@ -185,20 +201,37 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     });
   }
 
-  // Append wallets from wallet standard support registry to the `all_wallets` array
+  // Append wallets from wallet aip-62 standard registry to the `all_wallets` array
   private appendNotDetectedStandardSupportedWallets(
     aptosStandardWallets: ReadonlyArray<AptosStandardWallet>
   ) {
+    // Loop over the registry map
     aptosStandardSupportedWalletList.map((supportedWallet) => {
-      if (this.excludeWallet(supportedWallet.name)) {
-        return;
-      }
-      const existingWalletIndex = aptosStandardWallets.findIndex(
+      // Check if we already have this wallet as an installed plugin
+      const existingPluginWalletIndex = this.wallets.findIndex(
+        (wallet) => wallet.name === supportedWallet.name
+      );
+
+      // If the plugin wallet is installed, dont append and dont show it on the selector modal
+      // as a not detected wallet
+      if (existingPluginWalletIndex !== -1) return;
+
+      // Check if we already have this wallet as a AIP-62 wallet standard
+      const existingStandardWallet = aptosStandardWallets.find(
         (wallet) => wallet.name == supportedWallet.name
       );
 
-      // If wallet does not exist, append it from the supported wallets list
-      if (existingWalletIndex === -1) {
+      // If AIP-62 wallet detected but it is excluded by the dapp, dont add it to the wallets array
+      if (
+        existingStandardWallet &&
+        this.excludeWallet(existingStandardWallet.name)
+      ) {
+        return;
+      }
+
+      // If AIP-62 wallet does not exist, append it to the wallet selector modal
+      // as an undetected wallet
+      if (!existingStandardWallet) {
         this._all_wallets.push(supportedWallet);
         this.emit("standardWalletsAdded", supportedWallet);
       }
@@ -219,21 +252,21 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private setWallets(extensionwWallets: readonly AptosWallet[]) {
     const aptosStandardWallets: AptosStandardWallet[] = [];
 
-    [...SDKWallets, ...extensionwWallets].map((wallet: AptosStandardWallet) => {
-      if (this.excludeWallet(wallet.name)) {
-        return;
+    [...this._sdkWallets, ...extensionwWallets].map(
+      (wallet: AptosStandardWallet) => {
+        if (this.excludeWallet(wallet.name)) {
+          return;
+        }
+        const isValid = isWalletWithRequiredFeatureSet(wallet);
+        if (isValid) {
+          wallet.readyState = WalletReadyState.Installed;
+          aptosStandardWallets.push(wallet);
+          this.standardizeStandardWalletToPluginWalletType(wallet);
+        }
       }
-      const isValid = isWalletWithRequiredFeatureSet(wallet);
-      if (isValid) {
-        wallet.readyState = WalletReadyState.Installed;
-        aptosStandardWallets.push(wallet);
-        this.standardizeStandardWalletToPluginWalletType(wallet);
-      }
-    });
+    );
 
     this._standard_wallets = aptosStandardWallets;
-    // Append AIP-62 compatible wallets that are not detected on the user machine
-    this.appendNotDetectedStandardSupportedWallets(this._standard_wallets);
   }
 
   /**
@@ -243,6 +276,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @returns
    */
   excludeWallet(walletName: string): boolean {
+    // for now, we always include AptosConnect
+    if (walletName === "Google (AptosConnect)") return false;
     // If _optInWallets is not empty, and does not include the provided wallet,
     // return true to exclude the wallet, otherwise return false
     if (
@@ -516,7 +551,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   /**
    * Getter to fetch all detected wallets
    */
-  get wallets(): ReadonlyArray<Wallet | AptosStandardSupportedWallet> {
+  get wallets(): ReadonlyArray<AnyAptosWallet> {
     return this._all_wallets;
   }
 
@@ -732,7 +767,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
               transactionInput,
               aptos,
               this._account,
-              this._wallet
+              this._wallet,
+              this._standard_wallets
             );
           return { hash, output };
         } else {

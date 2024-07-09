@@ -1,5 +1,69 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 2.7.0
+
+### Minor Changes
+
+- 5bcae5e: Added `sortDefaultWallets` and `sortMoreWallets` props to `WalletConnector`.
+- 5bcae5e: Exposed `WalletConnectorProps` interface.
+
+### Patch Changes
+
+- Updated dependencies [07ee265]
+  - @aptos-labs/wallet-adapter-react@3.3.0
+
+## 2.6.0
+
+### Minor Changes
+
+- 65e4d1c: Update `WalletConnector` to new UI layout for Aptos Connect
+
+## 2.5.10
+
+### Patch Changes
+
+- Updated dependencies [2e9b7df]
+  - @aptos-labs/wallet-adapter-react@3.2.0
+
+## 2.5.9
+
+### Patch Changes
+
+- @aptos-labs/wallet-adapter-react@3.1.1
+
+## 2.5.8
+
+### Patch Changes
+
+- Updated dependencies [2e9c156]
+- Updated dependencies [2e9c156]
+- Updated dependencies [2e9c156]
+  - @aptos-labs/wallet-adapter-react@3.1.0
+
+## 2.5.7
+
+### Patch Changes
+
+- @aptos-labs/wallet-adapter-react@3.0.7
+
+## 2.5.6
+
+### Patch Changes
+
+- @aptos-labs/wallet-adapter-react@3.0.6
+
+## 2.5.5
+
+### Patch Changes
+
+- @aptos-labs/wallet-adapter-react@3.0.5
+
+## 2.5.4
+
+### Patch Changes
+
+- @aptos-labs/wallet-adapter-react@3.0.4
+
 ## 2.5.3
 
 ### Patch Changes

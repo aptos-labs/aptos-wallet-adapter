@@ -1,5 +1,128 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.2.0
+
+### Minor Changes
+
+- 07ee265: Support dappConfig user prop to set SDK wallets configuration
+
+### Patch Changes
+
+- Updated dependencies [5bcae5e]
+- Updated dependencies [07ee265]
+- Updated dependencies [5bcae5e]
+  - @aptos-labs/wallet-adapter-mui-design@2.7.0
+  - @aptos-labs/wallet-adapter-react@3.3.0
+  - @aptos-labs/wallet-adapter-core@4.7.0
+  - @aptos-labs/wallet-adapter-ant-design@2.4.11
+
+## 3.1.1
+
+### Patch Changes
+
+- Updated dependencies [65e4d1c]
+  - @aptos-labs/wallet-adapter-mui-design@2.6.0
+
+## 3.1.0
+
+### Minor Changes
+
+- 2e9b7df: Moved Aptos Connect wallets to separate section in shadcn/ui wallet selector
+
+### Patch Changes
+
+- Updated dependencies [2e9b7df]
+- Updated dependencies [0672ff4]
+  - @aptos-labs/wallet-adapter-react@3.2.0
+  - @aptos-labs/wallet-adapter-core@4.6.0
+  - @aptos-labs/wallet-adapter-ant-design@2.4.10
+  - @aptos-labs/wallet-adapter-mui-design@2.5.10
+
+## 3.0.3
+
+### Patch Changes
+
+- Updated dependencies [c1a9f41]
+  - @aptos-labs/wallet-adapter-core@4.5.0
+  - @aptos-labs/wallet-adapter-react@3.1.1
+  - @aptos-labs/wallet-adapter-ant-design@2.4.9
+  - @aptos-labs/wallet-adapter-mui-design@2.5.9
+
+## 3.0.2
+
+### Patch Changes
+
+- d1f3ce6: Remove IdentityConnect and Petra plugins in favor of AIP-62 Petra and AptosConnect
+
+## 3.0.1
+
+### Patch Changes
+
+- 716fd69: Fixed a bug where "More wallets" would still be displayed in the shadcn/ui wallet selector even if there aren't more wallets.
+
+## 3.0.0
+
+### Major Changes
+
+- 2e9c156: Overhauled the app to use the latest version of Next.js and shadcn/ui. The app is now mobile-responsive, has a light/dark mode toggle, and includes a shadcn/ui wallet selector.
+
+### Patch Changes
+
+- Updated dependencies [2e9c156]
+- Updated dependencies [2e9c156]
+- Updated dependencies [2e9c156]
+- Updated dependencies [2e9c156]
+  - @aptos-labs/wallet-adapter-react@3.1.0
+  - @aptos-labs/wallet-adapter-core@4.4.0
+  - @aptos-labs/wallet-adapter-ant-design@2.4.8
+  - @aptos-labs/wallet-adapter-mui-design@2.5.8
+
+## 2.11.0
+
+### Minor Changes
+
+- 79b1bf8: Add AptosConnect
+
+### Patch Changes
+
+- Updated dependencies [79b1bf8]
+- Updated dependencies [9566c50]
+  - @aptos-labs/wallet-adapter-core@4.3.0
+  - @aptos-labs/wallet-adapter-react@3.0.7
+  - @aptos-labs/wallet-adapter-ant-design@2.4.7
+  - @aptos-labs/wallet-adapter-mui-design@2.5.7
+
+## 2.10.6
+
+### Patch Changes
+
+- Updated dependencies [4db7a8d]
+  - @aptos-labs/wallet-adapter-core@4.2.1
+  - @aptos-labs/wallet-adapter-react@3.0.6
+  - @aptos-labs/wallet-adapter-ant-design@2.4.6
+  - @aptos-labs/wallet-adapter-mui-design@2.5.6
+
+## 2.10.5
+
+### Patch Changes
+
+- Updated dependencies [9f94e4d]
+  - @aptos-labs/wallet-adapter-core@4.2.0
+  - @aptos-labs/wallet-adapter-react@3.0.5
+  - @aptos-labs/wallet-adapter-ant-design@2.4.5
+  - @aptos-labs/wallet-adapter-mui-design@2.5.5
+
+## 2.10.4
+
+### Patch Changes
+
+- Updated dependencies [cc4021b]
+- Updated dependencies [ec6cb0c]
+  - @aptos-labs/wallet-adapter-core@4.1.3
+  - @aptos-labs/wallet-adapter-react@3.0.4
+  - @aptos-labs/wallet-adapter-ant-design@2.4.4
+  - @aptos-labs/wallet-adapter-mui-design@2.5.4
+
 ## 2.10.3
 
 ### Patch Changes

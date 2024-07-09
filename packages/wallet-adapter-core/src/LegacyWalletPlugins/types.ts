@@ -8,6 +8,7 @@ import {
   InputGenerateTransactionPayloadData,
   AnyRawTransaction,
   Signature,
+  AccountAuthenticator,
 } from "@aptos-labs/ts-sdk";
 import { WalletReadyState } from "../constants";
 import {
@@ -17,6 +18,7 @@ import {
   AccountInfo as StandardAccountInfo,
   NetworkInfo as StandardNetworkInfo,
   AptosChangeNetworkMethod,
+  AptosSignAndSubmitTransactionInput,
 } from "@aptos-labs/wallet-standard";
 import { AptosStandardSupportedWallet } from "../AIP62StandardWallets/types";
 
@@ -126,7 +128,8 @@ export interface AdapterPluginProps<Name extends string = string> {
     transaction:
       | Types.TransactionPayload
       | InputTransactionData
-      | AnyRawTransaction,
+      | AnyRawTransaction
+      | AptosSignAndSubmitTransactionInput,
     options?: InputGenerateTransactionOptions
   ): Promise<
     | { hash: Types.HexEncodedBytes; output?: any }

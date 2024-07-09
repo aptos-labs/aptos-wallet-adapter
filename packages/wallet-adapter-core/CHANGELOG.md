@@ -1,5 +1,58 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.7.0
+
+### Minor Changes
+
+- 07ee265: Support dappConfig user prop to set SDK wallets configuration
+
+## 4.6.0
+
+### Minor Changes
+
+- 0672ff4: Added `APTOS_CONNECT_BASE_URL`, `APTOS_CONNECT_ACCOUNT_URL`, and `isAptosConnectWallet`
+
+## 4.5.0
+
+### Minor Changes
+
+- c1a9f41: Bumped auto-injected AptosConnect plugin version
+
+## 4.4.0
+
+### Minor Changes
+
+- 2e9c156: Added `AnyAptosWallet` union type alias.
+
+## 4.3.0
+
+### Minor Changes
+
+- 79b1bf8: Add AptosConnect
+
+### Patch Changes
+
+- 9566c50: Bumped @aptos-connect/wallet-adapter-plugin version to include args normalization fix
+
+## 4.2.1
+
+### Patch Changes
+
+- 4db7a8d: Trigger release to update WALLET_ADAPTER_CORE_VERSION injected variable
+
+## 4.2.0
+
+### Minor Changes
+
+- 9f94e4d: Support signAndSubmitTransaction standard function feature version 1.1.0
+
+## 4.1.3
+
+### Patch Changes
+
+- cc4021b: Add the `local` case to the switch statement that converts a string to a Network.
+- ec6cb0c: it bumps @atomrigslab/aptos-wallet-adapter version to fixe redirection issue with Twallet URL
+
 ## 4.1.2
 
 ### Patch Changes

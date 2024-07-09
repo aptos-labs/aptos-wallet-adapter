@@ -1,10 +1,8 @@
-import { Avatar, Button, Typography } from "@mui/material";
-import { useState } from "react";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import WalletMenu from "./WalletMenu";
-import React from "react";
-import { truncateAddress } from "./utils";
+import { truncateAddress, useWallet } from "@aptos-labs/wallet-adapter-react";
 import { AccountBalanceWalletOutlined as AccountBalanceWalletOutlinedIcon } from "@mui/icons-material";
+import { Avatar, Button, Typography } from "@mui/material";
+import React, { useState } from "react";
+import WalletMenu from "./WalletMenu";
 
 type WalletButtonProps = {
   handleModalOpen: () => void;
@@ -50,9 +48,9 @@ export default function WalletButton({
               sx={{ width: 24, height: 24 }}
             />
             <Typography noWrap ml={2}>
-              {account?.ansName
-                ? account?.ansName
-                : truncateAddress(account?.address!)}
+              {account?.ansName ||
+                truncateAddress(account?.address) ||
+                "Unknown"}
             </Typography>
           </>
         ) : (
