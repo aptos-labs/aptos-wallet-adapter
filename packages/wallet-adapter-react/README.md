@@ -75,7 +75,7 @@ const wallets = [new AptosLegacyStandardWallet()];
   plugins={wallets}
   autoConnect={true}
   optInWallets={["Petra"]}
-  dappConfig={{ netwrok: network.MAINNET }}
+  dappConfig={{ network: network.MAINNET }}
   onError={(error) => {
     console.log("error", error);
   }}
@@ -125,9 +125,11 @@ As part of the wallet adapter repo we provide a wallet connect UI package that p
 
 The available UI Packages are
 
-- [shadcn/ui](../wallet-adapter-react/src/WalletItem.tsx)
+- [shadcn/ui](../../apps/nextjs-example/README.md#use-shadcnui-wallet-selector-for-your-own-app)
 - [Ant Design](<(../wallet-adapter-ant-design/)>)
 - [MUI](../wallet-adapter-mui-design/)
+
+If you want to create your own wallet selector UI from existing components and styles in your app, `@aptos-labs/wallet-adapter-react` provides a series of headless components and utilities to simplify this process so that you can focus on writing CSS instead of implementing business logic. For more information, check out the [Building Your Own Wallet Selector](./docs/BYO-wallet-selector.md) document.
 
 #### Examples
 
