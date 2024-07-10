@@ -181,6 +181,9 @@ importers:
 
   packages/wallet-adapter-ant-design:
     dependencies:
+      '@ant-design/icons':
+        specifier: ^5.3.7
+        version: 5.3.7(react-dom@18.2.0)(react@18.2.0)
       '@aptos-labs/wallet-adapter-react':
         specifier: workspace:*
         version: link:../wallet-adapter-react
@@ -216,8 +219,8 @@ importers:
   packages/wallet-adapter-core:
     dependencies:
       '@aptos-connect/wallet-adapter-plugin':
-        specifier: ^1.0.0
-        version: 1.0.0(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
+        specifier: ^1.0.1
+        version: 1.0.1(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
       '@aptos-labs/ts-sdk':
         specifier: ^1.18.1
         version: 1.18.1
@@ -225,8 +228,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(@aptos-labs/ts-sdk@1.18.1)(@wallet-standard/core@1.0.3)
       '@atomrigslab/aptos-wallet-adapter':
-        specifier: ^0.1.12
-        version: 0.1.12(@aptos-labs/ts-sdk@1.18.1)(esbuild@0.14.54)
+        specifier: ^0.1.20
+        version: 0.1.20(@aptos-labs/ts-sdk@1.18.1)(esbuild@0.14.54)
       aptos:
         specifier: ^1.21.0
         version: 1.21.0
@@ -407,22 +410,6 @@ packages:
     resolution: {integrity: sha512-vHbT+zJEVzllwP+CM+ul7reTEfBR0vgxFe7+lREAsAA7YGsYpboiq2sQNeQeRvh09GfQgs/GyFEvZpJ9cLXpXA==}
     dev: false
 
-  /@ant-design/icons@5.3.4(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-U5eTSeSFr2V9SeJzYOo5mybAZfsoNuiIA8bvFoZUe+h9LBLs8UwrVaVwcMQC4AhBuojXkLMlmtnIlvUczXXHaQ==}
-    engines: {node: '>=8'}
-    peerDependencies:
-      react: '>=16.0.0'
-      react-dom: '>=16.0.0'
-    dependencies:
-      '@ant-design/colors': 7.0.2
-      '@ant-design/icons-svg': 4.4.2
-      '@babel/runtime': 7.24.7
-      classnames: 2.5.1
-      rc-util: 5.39.1(react-dom@18.3.1)(react@18.3.1)
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-    dev: false
-
   /@ant-design/icons@5.3.7(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-bCPXTAg66f5bdccM4TT21SQBDO1Ek2gho9h3nO9DAKXJP4sq+5VBjrQMSxMVXSB3HyEz+cUbHQ5+6ogxCOpaew==}
     engines: {node: '>=8'}
@@ -437,6 +424,22 @@ packages:
       rc-util: 5.43.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@ant-design/icons@5.3.7(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-bCPXTAg66f5bdccM4TT21SQBDO1Ek2gho9h3nO9DAKXJP4sq+5VBjrQMSxMVXSB3HyEz+cUbHQ5+6ogxCOpaew==}
+    engines: {node: '>=8'}
+    peerDependencies:
+      react: '>=16.0.0'
+      react-dom: '>=16.0.0'
+    dependencies:
+      '@ant-design/colors': 7.0.2
+      '@ant-design/icons-svg': 4.4.2
+      '@babel/runtime': 7.24.7
+      classnames: 2.5.1
+      rc-util: 5.43.0(react-dom@18.3.1)(react@18.3.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
     dev: false
 
   /@ant-design/react-slick@1.0.2(react@18.3.1):
@@ -465,8 +468,8 @@ packages:
       throttle-debounce: 5.0.0
     dev: false
 
-  /@aptos-connect/wallet-adapter-plugin@1.0.0(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0):
-    resolution: {integrity: sha512-9Mii1izvp8xp5eDSUZIotSWfoUDGvngkDJ4qPspUzLEFLy44iftTpNbcM1P/J+G7lBU6XvtIgCLLmppt3Hiqhg==}
+  /@aptos-connect/wallet-adapter-plugin@1.0.1(@aptos-labs/ts-sdk@1.18.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0):
+    resolution: {integrity: sha512-yrnzO9gWMPqhgV0hz3Qv9XP98hefX/V7Pcj911SLM3NWktc+mL/5CW6BKz4VKcqnhewotd2Tek43VDZTSHKoeQ==}
     peerDependencies:
       '@aptos-labs/ts-sdk': 1.18.1
       '@aptos-labs/wallet-standard': ^0.1.0
@@ -621,8 +624,8 @@ packages:
       '@wallet-standard/core': 1.0.3
     dev: false
 
-  /@atomrigslab/aptos-wallet-adapter@0.1.12(@aptos-labs/ts-sdk@1.18.1)(esbuild@0.14.54):
-    resolution: {integrity: sha512-fxkinFLitXaq7UDtfA4BgFMW4DL9dg/tHI14Du7a+tGHUL2cCmUhRIS29X6gsAiPUNHE/gsrDODvcU1QdE1dWQ==}
+  /@atomrigslab/aptos-wallet-adapter@0.1.20(@aptos-labs/ts-sdk@1.18.1)(esbuild@0.14.54):
+    resolution: {integrity: sha512-vQRAk4AtJDrdVXe6Wg6G9qfl/IMMGrUtGG2h3Kk6zDEN60EPY+COKj/QwxzDP2zKzBWQ8dEaVLPGU6m0rbABdw==}
     peerDependencies:
       '@aptos-labs/ts-sdk': ^1.9.0
     dependencies:
@@ -4186,7 +4189,7 @@ packages:
     dependencies:
       '@ant-design/colors': 7.0.2
       '@ant-design/cssinjs': 1.18.4(react-dom@18.3.1)(react@18.3.1)
-      '@ant-design/icons': 5.3.4(react-dom@18.3.1)(react@18.3.1)
+      '@ant-design/icons': 5.3.7(react-dom@18.3.1)(react@18.3.1)
       '@ant-design/react-slick': 1.0.2(react@18.3.1)
       '@babel/runtime': 7.24.0
       '@ctrl/tinycolor': 3.6.1
@@ -9759,6 +9762,18 @@ packages:
       '@babel/runtime': 7.24.7
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+      react-is: 18.2.0
+    dev: false
+
+  /rc-util@5.43.0(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-AzC7KKOXFqAdIBqdGWepL9Xn7cm3vnAmjlHqUnoQaTMZYhM4VlXGLkkHHxj/BZ7Td0+SOPKB4RGPboBVKT9htw==}
+    peerDependencies:
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
+    dependencies:
+      '@babel/runtime': 7.24.7
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
       react-is: 18.2.0
     dev: false
 

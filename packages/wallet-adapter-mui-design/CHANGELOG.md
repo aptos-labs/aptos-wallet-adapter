@@ -1,5 +1,34 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 3.0.0
+
+### Major Changes
+
+- 96df1f7: Renamed `sortDefaultWallets` prop to `sortAvailableWallets` and `sortMoreWallets` prop to `sortInstallableWallets`. Also added `sortAptosConnectWallets` prop.
+
+### Minor Changes
+
+- 96df1f7: Added Aptos Connect education screens to the wallet selector modal.
+
+### Patch Changes
+
+- Updated dependencies [96df1f7]
+- Updated dependencies [f23cf43]
+  - @aptos-labs/wallet-adapter-react@3.5.0
+
+## 2.9.3
+
+### Patch Changes
+
+- @aptos-labs/wallet-adapter-react@3.4.3
+
+## 2.9.2
+
+### Patch Changes
+
+- Updated dependencies [cbbbe23]
+  - @aptos-labs/wallet-adapter-react@3.4.2
+
 ## 2.9.1
 
 ### Patch Changes
