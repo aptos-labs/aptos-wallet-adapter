@@ -1,5 +1,44 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.4.0
+
+### Minor Changes
+
+- 96df1f7: Added Aptos Connect education screens to the wallet selector modal.
+
+### Patch Changes
+
+- Updated dependencies [96df1f7]
+- Updated dependencies [96df1f7]
+- Updated dependencies [96df1f7]
+- Updated dependencies [f23cf43]
+- Updated dependencies [96df1f7]
+  - @aptos-labs/wallet-adapter-ant-design@3.0.0
+  - @aptos-labs/wallet-adapter-mui-design@3.0.0
+  - @aptos-labs/wallet-adapter-react@3.5.0
+  - @aptos-labs/wallet-adapter-core@4.9.0
+
+## 3.3.4
+
+### Patch Changes
+
+- Updated dependencies [79a0212]
+  - @aptos-labs/wallet-adapter-core@4.8.2
+  - @aptos-labs/wallet-adapter-react@3.4.3
+  - @aptos-labs/wallet-adapter-ant-design@2.6.3
+  - @aptos-labs/wallet-adapter-mui-design@2.9.3
+
+## 3.3.3
+
+### Patch Changes
+
+- Updated dependencies [1644cfc]
+- Updated dependencies [cbbbe23]
+  - @aptos-labs/wallet-adapter-core@4.8.1
+  - @aptos-labs/wallet-adapter-react@3.4.2
+  - @aptos-labs/wallet-adapter-ant-design@2.6.2
+  - @aptos-labs/wallet-adapter-mui-design@2.9.2
+
 ## 3.3.2
 
 ### Patch Changes

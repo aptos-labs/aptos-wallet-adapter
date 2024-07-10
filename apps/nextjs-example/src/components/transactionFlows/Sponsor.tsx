@@ -114,7 +114,7 @@ export function Sponsor() {
           Sign as sponsor
         </Button>
         <Button
-          onClick={onSignTransaction}
+          onClick={onSubmitTransaction}
           disabled={!sendable || !senderAuthenticator}
         >
           Submit transaction
