@@ -45,6 +45,7 @@ export function MultiAgent() {
     await aptosClient(network).fundAccount({
       accountAddress: secondarySigner.accountAddress.toString(),
       amount: 100_000_000,
+      options: { waitForIndexer: false }
     });
     setSecondarySignerAccount(secondarySigner);
 
