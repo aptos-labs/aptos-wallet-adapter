@@ -20,5 +20,8 @@ export function getSDKWallets(dappConfig?: DappConfig) {
     sdkWallets.push(new AptosConnectWallet({ network: dappConfig?.network, dappId: dappConfig?.aptosConnectDappId }));
   }
 
+  // Add new SDK wallet plugins (ones that should be installed as packages) here:
+  // Ex. sdkWallets.push(new YourSDKWallet(dappConfig))
+
   return sdkWallets;
 }
