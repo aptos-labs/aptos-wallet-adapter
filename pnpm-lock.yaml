@@ -225,8 +225,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(@aptos-labs/ts-sdk@1.18.1)(@wallet-standard/core@1.0.3)
       '@atomrigslab/aptos-wallet-adapter':
-        specifier: ^0.1.12
-        version: 0.1.12(@aptos-labs/ts-sdk@1.18.1)(esbuild@0.14.54)
+        specifier: ^0.1.21
+        version: 0.1.21(@aptos-labs/ts-sdk@1.18.1)(esbuild@0.14.54)
       aptos:
         specifier: ^1.21.0
         version: 1.21.0
@@ -621,14 +621,14 @@ packages:
       '@wallet-standard/core': 1.0.3
     dev: false
 
-  /@atomrigslab/aptos-wallet-adapter@0.1.12(@aptos-labs/ts-sdk@1.18.1)(esbuild@0.14.54):
-    resolution: {integrity: sha512-fxkinFLitXaq7UDtfA4BgFMW4DL9dg/tHI14Du7a+tGHUL2cCmUhRIS29X6gsAiPUNHE/gsrDODvcU1QdE1dWQ==}
+  /@atomrigslab/aptos-wallet-adapter@0.1.21(@aptos-labs/ts-sdk@1.18.1)(esbuild@0.14.54):
+    resolution: {integrity: sha512-LwT0OTOaGglctggMcihXLd4mzBFwRoJsR0aeFBHQRfTxZV1agNTgN/PxJl6N13+WYAvzc00j/WByxAmWgonorA==}
     peerDependencies:
       '@aptos-labs/ts-sdk': ^1.9.0
     dependencies:
       '@aptos-labs/ts-sdk': 1.18.1
       '@aptos-labs/wallet-standard': 0.0.11
-      '@atomrigslab/dekey-web-wallet-provider': 1.2.0(esbuild@0.14.54)
+      '@atomrigslab/dekey-web-wallet-provider': 1.2.1(esbuild@0.14.54)
     transitivePeerDependencies:
       - '@swc/core'
       - '@webpack-cli/generators'
@@ -639,11 +639,11 @@ packages:
       - webpack-dev-server
     dev: false
 
-  /@atomrigslab/dekey-web-wallet-provider@1.2.0(esbuild@0.14.54):
-    resolution: {integrity: sha512-y9Jd/fzcEaZTXj/hAvt4eKuAHD9AEMeeeVL5fgEFoJKkAyevoxPmsH2CwCgc6AZbgXNw6YUTk8KyDIjWL/XBEA==}
+  /@atomrigslab/dekey-web-wallet-provider@1.2.1(esbuild@0.14.54):
+    resolution: {integrity: sha512-GMEGjARgle9lIRopvxm4uis+sRr/ih26HzBgFbnLsk8+G94Z5dE87EclAIGFQUSAxYj7SmSk6xpx7//qUJDW/A==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@atomrigslab/providers': 1.0.1(esbuild@0.14.54)
+      '@atomrigslab/providers': 1.1.0(esbuild@0.14.54)
     transitivePeerDependencies:
       - '@swc/core'
       - '@webpack-cli/generators'
@@ -653,8 +653,8 @@ packages:
       - webpack-dev-server
     dev: false
 
-  /@atomrigslab/providers@1.0.1(esbuild@0.14.54):
-    resolution: {integrity: sha512-gaJZgbT3NlEP+RrU/38hAvmM0xmzpEV/I+g4wCqMjTkYY0S8c7khTB0WdrieIjldD5YPKfPr3dKdmPhibdY8JA==}
+  /@atomrigslab/providers@1.1.0(esbuild@0.14.54):
+    resolution: {integrity: sha512-QLYxSCVrxwlN1oZ7vLnZbKZxkbZ6QG77Bj4pmTEowIpTcq7qZdBtU9pn+vqJAso1nnA3+AkmPuE9Jnx7+Jo1zQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@metamask/object-multiplex': 1.3.0
