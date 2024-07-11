@@ -87,16 +87,16 @@ export function MultiAgent() {
   };
 
   const onSubmitTransaction = async () => {
-    if (!transactionToSubmit) {
-      throw new Error("No Transaction to sign");
-    }
-    if (!senderAuthenticator) {
-      throw new Error("No senderAuthenticator");
-    }
-    if (!secondarySignerAuthenticator) {
-      throw new Error("No secondarySignerAuthenticator");
-    }
     try {
+      if (!transactionToSubmit) {
+        throw new Error("No Transaction to sign");
+      }
+      if (!senderAuthenticator) {
+        throw new Error("No senderAuthenticator");
+      }
+      if (!secondarySignerAuthenticator) {
+        throw new Error("No secondarySignerAuthenticator");
+      }
       const response = await submitTransaction({
         transaction: transactionToSubmit,
         senderAuthenticator: senderAuthenticator,
@@ -107,6 +107,11 @@ export function MultiAgent() {
         description: <TransactionHash hash={response.hash} network={network} />,
       });
     } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Unable to submit multiagent Transaction.",
+      });
       console.error(error);
     }
   };
