@@ -81,7 +81,7 @@ const WalletRow = ({ wallet, onConnect }: WalletItemProps) => (
 ```tsx
 import { WalletItem, WalletItemProps } from "@aptos-labs/wallet-adapter-react";
 
-function AptosConnectWalletRow({ wallet, onConnect }: WalletItemProps) {
+const AptosConnectWalletRow = ({ wallet, onConnect }: WalletItemProps) => {
   return (
     <WalletItem wallet={wallet} onConnect={onConnect}>
       <WalletItem.ConnectButton>
@@ -90,7 +90,7 @@ function AptosConnectWalletRow({ wallet, onConnect }: WalletItemProps) {
       </WalletItem.ConnectButton>
     </WalletItem>
   );
-}
+};
 ```
 
 ![shadcn/ui WalletItem](./images/wallet-item-3.png)
