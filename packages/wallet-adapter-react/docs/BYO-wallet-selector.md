@@ -6,6 +6,8 @@ The `@aptos-labs/wallet-adapter-react` package exposes all of the primitives tha
 
 This document covers each primitive one-by-one, but if you want to see a full example of how these primitives can be composed to create a full wallet selector, refer to the implementation of the `shadcn/ui` wallet selector located in [`WalletSelector.tsx`](../../../apps/nextjs-example/src/components/WalletSelector.tsx) from the example Next.js app.
 
+![shadcn/ui wallet selector](./images/wallet-selector.png)
+
 ## Headless Components
 
 The following components are "headless", meaning that they do not include any styles. They simply provide elements with pre-attached event handlers and `aria-*` properties. It is up to you to compose and style them as you wish.
@@ -73,6 +75,10 @@ const WalletRow = ({ wallet, onConnect }: WalletItemProps) => (
 );
 ```
 
+![shadcn/ui WalletItem](./images/wallet-item-1.png)
+![shadcn/ui WalletItem](./images/wallet-item-2.png)
+![shadcn/ui WalletItem](./images/wallet-item-3.png)
+
 #### `WalletItem`
 
 This is a headless component that serves as a wrapper element and sets up a React context to provide the wallet information to the rest of the `WalletItem.*` components.
@@ -108,6 +114,8 @@ const PrivacyPolicy = () => (
 );
 ```
 
+![shadcn/ui AptosPrivacyPolicy](./images/privacy-policy.png)
+
 #### `AptosPrivacyPolicy`
 
 This is a headless component that simply serves as a wrapper element for the rest of the `AptosPrivacyPolicy.*` components.
@@ -142,9 +150,35 @@ const WalletSelector = () => (
 );
 
 function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
-  return <></>;
+  return (
+    <>
+      <div>
+        <button onClick={screen.cancel}>Cancel</button>
+        <h2>About Aptos Connect</h2>
+      </div>
+      <screen.Graphic />
+      <screen.Title />
+      <screen.Description />
+      <div>
+        <button onClick={screen.back}>Back</button>
+        <div>
+          {screen.screenIndicators.map((ScreenIndicator, i) => (
+            <ScreenIndicator key={i} />
+          ))}
+        </div>
+        <button onClick={screen.next}>
+          {screen.screenIndex === screen.totalScreens - 1 ? "Finish" : "Next"}
+        </button>
+      </div>
+    </>
+  );
 }
 ```
+
+![shadcn/ui AboutAptosConnect.Trigger](./images/edu-trigger.png)
+![shadcn/ui Education Screen 1](./images/edu-screen-1.png)
+![shadcn/ui Education Screen 2](./images/edu-screen-2.png)
+![shadcn/ui Education Screen 3](./images/edu-screen-3.png)
 
 #### `AboutAptosConnect`
 
@@ -153,6 +187,20 @@ This component sets up a React context for managing the education screen flow, b
 #### `AboutAptosConnect.Trigger`
 
 This is a headless component that renders a button element that when clicked will trigger the education screen flow. When triggered, the children of the `AboutAptosConnect` component will be replaced with the current education screen so `AboutAptosConnect` should wrap the entire body of your wallet selector UI.
+
+#### `AboutAptosConnectEducationScreen`
+
+This is the type of the `screen` object that is provided by `AboutAptosConnect`'s `renderEducationScreen` prop. You can map this object to a `ReactNode` to render each education screen. Each `screen` object has the following properties:
+
+- `Graphic` - A component that renders an SVG to illustrate the idea of the current screen.
+- `Title` - A headless component that renders the title of the current screen.
+- `Description` - A headless component that renders the description text of the current screen.
+- `screenIndex` - The index of the current education screen.
+- `totalScreens` - The total number of education screens.
+- `screenIndicators` - An array of headless components for indicating the current screen of the set. Each indicator will navigate the user to the screen it represents when clicked.
+- `back` - A function that navigates the user to the previous education screen. If the user is on the first education screen, they will be navigated to the initial wallet selection screen.
+- `next` - A function that navigates the user to the next education screen. If the user is on the last education screen, they will be navigated to the initial wallet selection screen.
+- `cancel` - A function that navigates the user to the initial wallet selection screen.
 
 ## Utilities
 
