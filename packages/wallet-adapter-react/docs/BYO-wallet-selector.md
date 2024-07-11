@@ -165,7 +165,7 @@ const WalletSelector = () => (
   </AboutAptosConnect>
 );
 
-function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
+const renderEducationScreen = (screen: AboutAptosConnectEducationScreen) => {
   return (
     <>
       <div>
@@ -188,7 +188,7 @@ function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
       </div>
     </>
   );
-}
+};
 ```
 
 ![shadcn/ui AboutAptosConnect.Trigger](./images/edu-trigger.png)
