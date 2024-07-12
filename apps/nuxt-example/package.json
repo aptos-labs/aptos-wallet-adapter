@@ -1,0 +1,40 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@aptos-labs/ts-sdk": "^1.13.2",
+    "@aptos-labs/wallet-adapter-core": "workspace:*",
+    "@aptos-labs/wallet-adapter-vue": "workspace:*",
+    "@aptos-labs/wallet-standard": "^0.1.0",
+    "@nuxtjs/google-fonts": "^3.2.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "lucide-vue-next": "0.396.0",
+    "radix-vue": "^1.9.1",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7",
+    "vue": "^3.4.29",
+    "vue-router": "^4.3.3"
+  },
+  "devDependencies": {
+    "@nuxtjs/color-mode": "^3.4.2",
+    "@nuxtjs/eslint-config-typescript": "12.1.0",
+    "@nuxtjs/eslint-module": "4.1.0",
+    "@nuxtjs/tailwindcss": "^6.12.1",
+    "consola": "^3.2.3",
+    "eslint": "^8.15.0",
+    "nuxt": "^3.12.3",
+    "prettier": "^3.3.1",
+    "shadcn-nuxt": "^0.10.4",
+    "typescript": "^5.4.5",
+    "ufo": "1.5.3"
+  }
+}
