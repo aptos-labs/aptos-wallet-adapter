@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.10.0
+
+### Minor Changes
+
+- 6bfeb14: Add dapp id to be passed to AptosConnect
+
+### Patch Changes
+
+- 249331f: it stops emitting register event to prevent TWallet button to render twice
+- ed4f483: resolves connection issues with Twallet due to hardcoded twallet url
+
 ## 4.9.0
 
 ### Minor Changes

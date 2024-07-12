@@ -9,7 +9,7 @@ export function getSDKWallets(dappConfig?: DappConfig) {
 
   // Need to check window is defined for AptosConnect
   if (typeof window !== "undefined") {
-    sdkWallets.push(new AptosConnectWallet({ network: dappConfig?.network }));
+    sdkWallets.push(new AptosConnectWallet({ network: dappConfig?.network, dappId: dappConfig?.aptosConnectDappId }));
   }
 
   // Push production wallet if env is production, otherwise use dev wallet
