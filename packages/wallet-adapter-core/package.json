@@ -55,7 +55,7 @@
     "eventemitter3": "^4.0.7",
     "tweetnacl": "^1.0.3",
     "@atomrigslab/aptos-wallet-adapter": "^0.1.21",
-    "@aptos-connect/wallet-adapter-plugin": "^1.0.0"
+    "@aptos-connect/wallet-adapter-plugin": "^1.0.1"
   },
   "peerDependencies": {
     "@aptos-labs/ts-sdk": "^1.18.1",
