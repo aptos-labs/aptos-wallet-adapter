@@ -13,18 +13,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "~/components/ui/DropdownMenu";
-import { useToast } from "~/composables/useToast";
+} from "~/components/ui/dropdown-menu";
+import { useToast } from "~/components/ui/toast";
 import { useNuxtApp } from "#app";
 const { $walletAdapter } = useNuxtApp();
 const { account, connected, disconnect, wallet, wallets, connect } =
   $walletAdapter || {};
 
-console.log("WalletSelector account: ", account);
-console.log("WalletSelector connected: ", connected);
-console.log("WalletSelector disconnect: ", disconnect);
-console.log("WalletSelector wallet: ", wallet);
-console.log("WalletSelector wallets: ", wallets);
 const { toast } = useToast();
 const isDialogOpen = ref(false);
 
@@ -50,7 +45,6 @@ async function copyAddress() {
 }
 
 async function connectWallet(wallet: AnyAptosWallet) {
-  console.log("WalletSelector connectWallet wallet: ", wallet);
   await connect(wallet.name);
 }
 </script>

@@ -4,7 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "~/components/ui/DropdownMenu";
+} from "~/components/ui/dropdown-menu";
 import { Moon, Sun } from "lucide-vue-next";
 </script>
 

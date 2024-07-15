@@ -1,6 +1,6 @@
 import { useWallet, WalletContextState } from "@aptos-labs/wallet-adapter-vue";
 import { Network } from "@aptos-labs/ts-sdk";
-import { useToast } from "~/composables/useToast";
+import { useToast } from "~/components/ui/toast";
 import { BitgetWallet } from "@bitget-wallet/aptos-wallet-adapter";
 import { FewchaWallet } from "fewcha-plugin-wallet-adapter";
 import { MartianWallet } from "@martianwallet/aptos-wallet-adapter";

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { aptosClient, isSendableNetwork } from "@/utils";
 import { InputTransactionData } from "@aptos-labs/wallet-adapter-vue";
+import { useToast } from "~/components/ui/toast";
 const { toast } = useToast();
 const { $walletAdapter } = useNuxtApp();
 const { network, connected, account, wallet, signAndSubmitTransaction } =

@@ -7,7 +7,7 @@ import {
   AnyRawTransaction,
 } from "@aptos-labs/ts-sdk";
 import TransactionHash from "~/components/TransactionHash.vue";
-
+import { useToast } from "~/components/ui/toast";
 const { toast } = useToast();
 const { $walletAdapter } = useNuxtApp();
 const { network, connected, account, signTransaction, submitTransaction } =
@@ -21,12 +21,12 @@ const feepayerAuthenticator = ref<AccountAuthenticator>();
 const feepayerAddress = ref<AccountAddress>();
 
 const isSendable = computed(() =>
-  isSendableNetwork(connected.value, network?.value || undefined),
+  isSendableNetwork(connected.value, network.value?.name || undefined),
 );
 
 // Generate a raw transaction using the SDK
 const generateTransaction = async (): Promise<AnyRawTransaction> => {
-  if (!account) {
+  if (!account.value) {
     throw new Error("no account");
   }
   const transactionToSign = await aptosClient(
@@ -79,12 +79,12 @@ const onSubmitTransaction = async () => {
   if (!feepayerAuthenticator.value) {
     throw new Error("No feepayerAuthenticator");
   }
-  transactionToSubmit.value.feePayerAddress = feepayerAddress;
+  transactionToSubmit.value.feePayerAddress = feepayerAddress!;
   try {
     const response = await submitTransaction({
-      transaction: transactionToSubmit,
-      senderAuthenticator: senderAuthenticator,
-      feePayerAuthenticator: feepayerAuthenticator,
+      transaction: transactionToSubmit.value,
+      senderAuthenticator: senderAuthenticator.value,
+      feePayerAuthenticator: feepayerAuthenticator.value,
     });
     toast({
       title: "Success",

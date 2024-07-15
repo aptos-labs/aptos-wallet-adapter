@@ -4,6 +4,7 @@ import { aptosClient, isSendableNetwork } from "@/utils";
 import { AccountAddress, parseTypeTag, U64 } from "@aptos-labs/ts-sdk";
 import { InputTransactionData } from "@aptos-labs/wallet-adapter-core";
 import TransactionHash from "~/components/TransactionHash.vue";
+import { useToast } from "~/components/ui/toast";
 const { toast } = useToast();
 const { $walletAdapter } = useNuxtApp();
 const {
@@ -14,7 +15,7 @@ const {
   signMessageAndVerify,
   signMessage,
   signTransaction,
-} = toRefs($walletAdapter);
+} = $walletAdapter;
 
 const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
 
@@ -73,7 +74,7 @@ const onSignAndSubmitTransaction = async () => {
 };
 
 const onSignAndSubmitBCSTransaction = async () => {
-  if (!account) return;
+  if (!account.value) return;
 
   try {
     const response = await signAndSubmitTransaction({
@@ -81,7 +82,7 @@ const onSignAndSubmitBCSTransaction = async () => {
         function: "0x1::coin::transfer",
         typeArguments: [parseTypeTag(APTOS_COIN)],
         functionArguments: [
-          AccountAddress.from(account.value.address),
+          AccountAddress.from(account.value?.address),
           new U64(1),
         ], // 1 is in Octas
       },
@@ -108,7 +109,7 @@ const onSignTransaction = async () => {
       type: "entry_function_payload",
       function: "0x1::coin::transfer",
       type_arguments: ["0x1::aptos_coin::AptosCoin"],
-      arguments: [account?.address, 1], // 1 is in Octas
+      arguments: [account.value?.address, 1], // 1 is in Octas
     };
     const response = await signTransaction(payload);
     toast({
@@ -121,17 +122,17 @@ const onSignTransaction = async () => {
 };
 
 const onSignTransactionV2 = async () => {
-  if (!account) return;
+  if (!account.value) return;
 
   try {
     const transactionToSign = await aptosClient(
-      network,
+      network.value,
     ).transaction.build.simple({
-      sender: account.address,
+      sender: account.value?.address,
       data: {
         function: "0x1::coin::transfer",
         typeArguments: [APTOS_COIN],
-        functionArguments: [account.address, 1], // 1 is in Octas
+        functionArguments: [account.value?.address, 1], // 1 is in Octas
       },
     });
     const response = await signTransaction(transactionToSign);

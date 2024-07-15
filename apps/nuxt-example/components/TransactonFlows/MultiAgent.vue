@@ -8,6 +8,7 @@ import {
   Ed25519Account,
 } from "@aptos-labs/ts-sdk";
 import TransactionHash from "~/components/TransactionHash.vue";
+import { toast } from "~/components/ui/toast";
 
 const { $walletAdapter } = useNuxtApp();
 const {
@@ -46,7 +47,7 @@ const generateTransaction = async (): Promise<AnyRawTransaction> => {
     accountAddress: secondarySigner.accountAddress.toString(),
     amount: 100_000_000,
   });
-  secondarySignerAuthenticator.value = secondarySigner;
+  secondarySignerAccount.value = secondarySigner;
 
   const transactionToSign = await aptosClient(
     network.value,
@@ -77,8 +78,9 @@ const onSecondarySignerSignTransaction = async () => {
     throw new Error("No Transaction to sign");
   }
   try {
-    secondarySignerAuthenticator.value =
-      await signTransaction(transactionToSubmit);
+    secondarySignerAuthenticator.value = await signTransaction(
+      transactionToSubmit.value,
+    );
   } catch (error) {
     console.error(error);
   }
@@ -96,9 +98,9 @@ const onSubmitTransaction = async () => {
   }
   try {
     const response = await submitTransaction({
-      transaction: transactionToSubmit,
-      senderAuthenticator: senderAuthenticator,
-      additionalSignersAuthenticators: [secondarySignerAuthenticator],
+      transaction: transactionToSubmit.value,
+      senderAuthenticator: senderAuthenticator.value,
+      additionalSignersAuthenticators: [secondarySignerAuthenticator.value],
     });
     toast({
       title: "Success",
