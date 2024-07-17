@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.11.0
+
+### Minor Changes
+
+- f1fb4a5: Add proper dappconfig type to wallet core
+
 ## 4.10.0
 
 ### Minor Changes
