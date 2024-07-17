@@ -34,6 +34,19 @@ import {
 import { AlertCircle } from "lucide-react";
 import Image from "next/image";
 
+// Imports for registering a browser extension wallet plugin on page load
+import { MyWallet } from "@/utils/standardWallet";
+import { registerWallet } from "@aptos-labs/wallet-standard";
+
+// Example of how to register a browser extension wallet plugin.
+// Browser extension wallets should call registerWallet once on page load.
+// When you click "Connect Wallet", you should see "Example Wallet" 
+(function () {
+  if (typeof window === "undefined") return;
+  const myWallet = new MyWallet();
+  registerWallet(myWallet);
+})();
+
 export default function Home() {
   const { account, connected, network, wallet, changeNetwork } = useWallet();
 
