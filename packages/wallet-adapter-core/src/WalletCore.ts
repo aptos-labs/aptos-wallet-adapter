@@ -149,7 +149,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   constructor(
     plugins: ReadonlyArray<Wallet>,
     optInWallets: ReadonlyArray<AvailableWallets>,
-    dappConfig?: { network: Network }
+    dappConfig?: DappConfig
   ) {
     super();
     this._wallets = plugins;
