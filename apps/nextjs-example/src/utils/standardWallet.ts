@@ -121,7 +121,7 @@ export class MyWallet implements AptosWallet {
   // This should be updated whenever you release a new implementation of "MyWallet"
   readonly version = "1.0.0";
   // REVISION - Change the name to the name of your Wallet. (Ex. "Petra")
-  readonly name: string = "Aptos Burner";
+  readonly name: string = "Example Wallet";
   /**
    * REVISION - Set the icon to be a base64 encoding of your Wallet's logo.
    * 
@@ -280,6 +280,7 @@ export class MyWallet implements AptosWallet {
       await this.aptos.fundAccount({
         accountAddress: this.signer.accountAddress,
         amount: 1_000_000_000_000,
+        options: { waitForIndexer: false }
       });
       const account = new AccountInfo({
         address: this.signer.accountAddress,
@@ -419,10 +420,11 @@ export class MyWallet implements AptosWallet {
   };
 }
 
-// This section should NOT be revised (although it may make sense to move where it gets called).
-// A wallet call to register itself (this happens on the wallet side)
-(function () {
-  if (typeof window === "undefined") return;
-  const myWallet = new MyWallet();
-  registerWallet(myWallet);
-})();
+// REVISION - FOR BROWSER EXTENSION WALLETS ONLY
+// registerWallet should be called by your browser extension wallet on page load to notify dapps that your wallet is available.
+// In this demo dapp, we use the following function in app/page.tsx to register "MyWallet".
+// (function () {
+//   if (typeof window === "undefined") return;
+//   const myWallet = new MyWallet();
+//   registerWallet(myWallet);
+// })();
