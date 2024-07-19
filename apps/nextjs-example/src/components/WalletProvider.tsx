@@ -1,6 +1,6 @@
 "use client";
 
-import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
+import { AptosWalletAdapterProvider, NetworkName } from "@aptos-labs/wallet-adapter-react";
 import { BitgetWallet } from "@bitget-wallet/aptos-wallet-adapter";
 import { MartianWallet } from "@martianwallet/aptos-wallet-adapter";
 import { MSafeWalletAdapter } from "@msafe/aptos-wallet-adapter";
@@ -12,6 +12,8 @@ import { PropsWithChildren } from "react";
 import { Network } from "@aptos-labs/ts-sdk";
 import { useAutoConnect } from "./AutoConnectProvider";
 import { useToast } from "./ui/use-toast";
+import { MizuWallet } from '@mizuwallet-sdk/aptos-wallet-adapter'
+
 
 export const WalletProvider = ({ children }: PropsWithChildren) => {
   const { autoConnect } = useAutoConnect();
@@ -24,7 +26,11 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     new MSafeWalletAdapter(),
     new PontemWallet(),
     new TrustWallet(),
-    new OKXWallet(),
+    new OKXWallet(), 
+    new MizuWallet({
+      appId:'dfa1794e-8412-4c9c-b28d-25ecd4c0b52f',
+      network: NetworkName.Testnet
+    })
   ];
 
   return (

@@ -29,6 +29,7 @@ Legacy standard compatible
 - [Fewcha](https://www.npmjs.com/package/fewcha-plugin-wallet-adapter)
 - [Martian](https://www.npmjs.com/package/@martianwallet/aptos-wallet-adapter)
 - [MSafe](https://www.npmjs.com/package/@msafe/aptos-wallet-adapter)
+- [MizuWallet](https://www.npmjs.com/package/@mizuwallet-sdk/aptos-wallet-adapter)
 - [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
 - [OKX](https://www.npmjs.com/package/@okwallet/aptos-wallet-adapter)
 - [Trust](https://www.npmjs.com/package/@trustwallet/aptos-wallet-adapter)
