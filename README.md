@@ -27,6 +27,7 @@ Legacy standard compatible
 
 - [BitgetWallet](https://www.npmjs.com/package/@bitget-wallet/aptos-wallet-adapter)
 - [Fewcha](https://www.npmjs.com/package/fewcha-plugin-wallet-adapter)
+- [GateWallet](https://www.npmjs.com/package/@gatewallet/aptos-wallet-adapter)
 - [Martian](https://www.npmjs.com/package/@martianwallet/aptos-wallet-adapter)
 - [MSafe](https://www.npmjs.com/package/@msafe/aptos-wallet-adapter)
 - [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
