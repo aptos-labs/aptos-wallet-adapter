@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.5.3
+
+### Patch Changes
+
+- 91fe52c: Corrected a typo in the last education screen of the `AboutAptosConnect` component.
+
 ## 3.5.2
 
 ### Patch Changes
