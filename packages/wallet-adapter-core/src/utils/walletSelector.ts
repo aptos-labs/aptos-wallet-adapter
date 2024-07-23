@@ -53,6 +53,7 @@ export function truncateAddress(address: string | undefined) {
 export function isAptosConnectWallet(
   wallet: WalletInfo | AnyAptosWallet | AptosStandardWallet
 ) {
+  if (!wallet.url) return false;
   return wallet.url.startsWith(APTOS_CONNECT_BASE_URL);
 }
 
