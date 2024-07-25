@@ -17,4 +17,8 @@ export interface AptosStandardSupportedWallet<Name extends string = string> {
 }
 
 // Update this with the name of your wallet when you create a new wallet plugin.
-export type AvailableWallets = "Nightly" | "Petra" | "T wallet";
+export type AvailableWallets =
+  | "Nightly"
+  | "Petra"
+  | "T wallet"
+  | "Pontem Wallet";
