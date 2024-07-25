@@ -1,5 +1,34 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.4.5
+
+### Patch Changes
+
+- Updated dependencies [d9ce63d]
+  - @aptos-labs/wallet-adapter-core@4.12.0
+  - @aptos-labs/wallet-adapter-react@3.5.5
+  - @aptos-labs/wallet-adapter-ant-design@3.0.5
+  - @aptos-labs/wallet-adapter-mui-design@3.0.5
+
+## 3.4.4
+
+### Patch Changes
+
+- Updated dependencies [0b7d07f]
+  - @aptos-labs/wallet-adapter-core@4.11.1
+  - @aptos-labs/wallet-adapter-react@3.5.4
+  - @aptos-labs/wallet-adapter-ant-design@3.0.4
+  - @aptos-labs/wallet-adapter-mui-design@3.0.4
+
+## 3.4.3
+
+### Patch Changes
+
+- Updated dependencies [91fe52c]
+  - @aptos-labs/wallet-adapter-react@3.5.3
+  - @aptos-labs/wallet-adapter-ant-design@3.0.3
+  - @aptos-labs/wallet-adapter-mui-design@3.0.3
+
 ## 3.4.2
 
 ### Patch Changes

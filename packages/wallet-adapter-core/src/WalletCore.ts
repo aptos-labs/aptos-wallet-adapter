@@ -170,6 +170,27 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   private scopePollingDetectionStrategy() {
     this._wallets?.forEach((wallet: Wallet) => {
+      // Hot fix to manage Pontem wallet to not show duplications if user has the
+      // new standard version installed. Pontem uses "Pontem" wallet name for previous versions and
+      // "Pontem Wallet" with new version
+      const existingStandardPontemWallet = this._standard_wallets.find(
+        (wallet) => wallet.name == "Pontem Wallet"
+      );
+      if (wallet.name === "Pontem" && existingStandardPontemWallet) {
+        return;
+      }
+
+      /**
+       * Manage potential duplications when a plugin is installed in a dapp
+       * but the existing wallet installed is on AIP-62 new standard - in that case we dont want to
+       * include the plugin wallet (i.e npm package)
+       */
+      const existingWalletIndex = this._standard_wallets.findIndex(
+        (standardWallet) => standardWallet.name == wallet.name
+      );
+      if (existingWalletIndex !== -1) return;
+
+      // push the plugin wallet to the all_wallets array
       this._all_wallets.push(wallet);
       if (!wallet.readyState) {
         wallet.readyState =
@@ -226,6 +247,19 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       // If the plugin wallet is installed, dont append and dont show it on the selector modal
       // as a not detected wallet
       if (existingPluginWalletIndex !== -1) return;
+
+      // Hot fix to manage Pontem wallet to not show duplications if user has the
+      // new standard version installed. Pontem uses "Pontem" wallet name for previous versions and
+      // "Pontem Wallet" with new version
+      const existingStandardPontemWallet = this.wallets.find(
+        (wallet) => wallet.name == "Pontem"
+      );
+      if (
+        supportedWallet.name === "Pontem Wallet" &&
+        existingStandardPontemWallet
+      ) {
+        return;
+      }
 
       // Check if we already have this wallet as a AIP-62 wallet standard
       const existingStandardWallet = this._standard_wallets.find(

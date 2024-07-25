@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.12.0
+
+### Minor Changes
+
+- d9ce63d: Add support for Pontem wallet as an AIP-62 standard compatible
+
+## 4.11.1
+
+### Patch Changes
+
+- 0b7d07f: [Hot Fix] Pontem wallet version 2.6.7 does not include a URL prop
+
 ## 4.11.0
 
 ### Minor Changes
