@@ -32,14 +32,11 @@ import {
 } from "@aptos-labs/wallet-standard";
 
 /**
- * This class is a template you can modify to implement an AIP-62 Wallet.
+ * This is an implementation of the template AIP-62 Wallet Plugin template.
  * 
- * Sections of the code which need to be revised will be marked with a "REVISION" comment.
- * We recommend using the REVISION comments like a checklist and deleting them as you go.
- * Ex. REVISION - Update this section.
+ * Go to https://github.com/aptos-labs/wallet-standard/blob/main/example/wallet.ts to get the template with
+ * full instructions on how to rewrite it for your Wallet provider.
  * 
- * Function implementations are for DEMONSTRATION PURPOSES ONLY. Please ensure you rewrite all features
- * to use your Wallet as the method of communicating on-chain.
  */
 
 /**
@@ -54,7 +51,6 @@ import {
  * Wallets may use or extend {@link "@wallet-standard/wallet".ReadonlyWalletAccount} which implements this interface.
  * 
  */
-// REVISION - Replace the "MyWallet" in "MyWalletAccount" with the name of your wallet. Ex. "PetraAccount"
 export class MyWalletAccount implements AptosWalletAccount {
   /** Address of the account, corresponding with a public key. */
   address: string;
@@ -93,38 +89,21 @@ export class MyWalletAccount implements AptosWalletAccount {
     | `data:image/gif;base64,${string}`
     | undefined;
 
-  // REVISION - Update this constructor to use values your wallet supports.
   constructor(account: Account) {
     this.address = account.accountAddress.toString();
     this.publicKey = account.publicKey.toUint8Array();
-    // REVISION - Choose which chains your wallet supports. This may only be subset of all Aptos networks.
     this.chains = APTOS_CHAINS; // ["aptos:devnet", "aptos:testnet", "aptos:localnet", "aptos:mainnet"]
-    // This is the only feature required on the Account class. The other features must be implemented on the Wallet class below.
     this.features = ["aptos:connect"];
-    /**
-     * REVISION - Ensure this signing scheme matches the encoding used to generate your private key.
-     */
     this.signingScheme = SigningScheme.Ed25519;
   }
 }
 
-/**
- * REVISION - This class needs to be extensively customized to match the details of your wallet.
- * 
- * 1. MyWallet should be renamed to be the name of your wallet. Ex. For Petra, MyWallet should be named "PetraWallet". (Be sure to also update references to "MyWallet" in this file.)
- * 2. Update the values of this class to match your Wallet's deatils.
- * 3. Implement each of the features below. (Including adding implementations for any additional required features that you can find here in the "AptosFeatures" type: https://github.com/aptos-labs/wallet-standard/blob/main/src/features/index.ts)
- */
 export class MyWallet implements AptosWallet {
-  // REVISION - Include the link to create an account using your wallet or your primary website. (Ex. https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
   readonly url: string = "https://aptos.dev";
   // This should be updated whenever you release a new implementation of "MyWallet"
   readonly version = "1.0.0";
-  // REVISION - Change the name to the name of your Wallet. (Ex. "Petra")
   readonly name: string = "Example Wallet";
   /**
-   * REVISION - Set the icon to be a base64 encoding of your Wallet's logo.
-   * 
    * The icon data must be of the format:
    * 1. "data:image/"
    * 2. The icon's file extension, which must be one of:
@@ -140,7 +119,6 @@ export class MyWallet implements AptosWallet {
   readonly icon =
     "data:image/png;base64,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";
   /**
-   * REVISION - Set the subset of Aptos chains your wallet supports.
    * APTOS_CHAINS = ["aptos:devnet", "aptos:testnet", "aptos:localnet", "aptos:mainnet"]
    * It is recommended to support at least "aptos:mainnet", "aptos:testnet", and "aptos:devnet".
    */
@@ -155,8 +133,7 @@ export class MyWallet implements AptosWallet {
 
   // Local MyWallet class variables, 
   /**
-   * REVISION - These two variables likely should NOT be in your finalized plugin template. 
-   * They are used throughout this example's feature implementations in order to show how you could
+   * These are used throughout this example's feature implementations in order to show how you could
    * implement each function.
    * 
    * signer - This stores the private keys for an account on-chain. (Example purposes only)
@@ -167,10 +144,7 @@ export class MyWallet implements AptosWallet {
   signer: Account;
   aptos: Aptos;
 
-    /**
-   * REVISION - List all features your wallet supports below.
-   * You will need to implement how your wallet supports each.
-   * 
+  /**
    * In order to be compatible with the AIP-62 Wallet standard, ensure you are at least supporting all
    * currently required features by checking the list of features in the `AptosFeatures` type here: 
    * https://github.com/aptos-labs/wallet-standard/blob/main/src/features/index.ts
@@ -220,14 +194,11 @@ export class MyWallet implements AptosWallet {
   }
 
   /**
-   * REVISION - This constructor should be updated to support your Wallet's implementation of the supported features.
-   * 
    * The template code's constructor currently initializes `signer` to act as the private key for an account on-chain, and uses
    * `aptos` to handle the on-chain connection.
    * 
    */
   constructor() {
-    // THIS LOGIC SHOULD BE REPLACED. IT IS FOR EXAMPLE PURPOSES ONLY.    
     // Create a random signer for our stub implementations.
     this.signer = Account.generate();
     // We will use DEVNET since we can fund our test account via a faucet there.
@@ -242,8 +213,6 @@ export class MyWallet implements AptosWallet {
   }
 
   /**
-   * REVISION - Implement this function using your Wallet. 
-   * 
    * Look up the account info for the currently connected wallet address on the chosen network. 
    * 
    * @returns Return account info.
@@ -257,8 +226,6 @@ export class MyWallet implements AptosWallet {
   };
 
   /**
-   * REVISION - Implement this function using your Wallet. 
-   * 
    * Connect an account using this Wallet. 
    * This must wait for the user to sign in to the Wallet provider and confirm they are ok sharing
    * details with the dapp.
@@ -275,7 +242,6 @@ export class MyWallet implements AptosWallet {
   connect: AptosConnectMethod = async (): Promise<
     UserResponse<AccountInfo>
   > => {
-    // THIS LOGIC SHOULD BE REPLACED. IT IS FOR EXAMPLE PURPOSES ONLY.    
     try {
       await this.aptos.fundAccount({
         accountAddress: this.signer.accountAddress,
@@ -296,14 +262,11 @@ export class MyWallet implements AptosWallet {
   };
 
   /**
-   * REVISION - Implement this function using your Wallet. 
-   * 
    * Return the name, chainId, and url of the network connection your wallet is using to connect to the Aptos chain.
    * 
    * @returns Which network the connected Wallet is pointing to.
    */
   network: AptosGetNetworkMethod = async (): Promise<NetworkInfo> => {
-    // THIS LOGIC SHOULD BE REPLACED. IT IS FOR EXAMPLE PURPOSES ONLY.    
     // You may use getLedgerInfo() to determine which ledger your Wallet is connected to.
     const network = await this.aptos.getLedgerInfo();
     return {
@@ -315,8 +278,6 @@ export class MyWallet implements AptosWallet {
   };
 
   /**
-   * REVISION - Implement this function using your Wallet. 
-   * 
    * Remove the permission of the Wallet class to access the account that was connected.
    * 
    * @returns Resolves when done cleaning up.
@@ -327,8 +288,6 @@ export class MyWallet implements AptosWallet {
   };
 
   /**
-   * REVISION - Implement this function using your Wallet. 
-   * 
    * @param transaction - A transaction that the user should have the ability to sign if they choose to.
    * @param asFeePayer - Optionally, another this signature is acting as a fee-payer for the transaction being signed.
    * @returns The result of whether the user chose to sign the transaction or not.
@@ -361,15 +320,12 @@ export class MyWallet implements AptosWallet {
   };
 
   /**
-   * REVISION - Implement this function using your Wallet. 
-   * 
    * @param input - A message to sign with the private key of the connected account.
    * @returns A user response either with a signed message, or the user rejecting to sign.
    */
   signMessage: AptosSignMessageMethod = async (
     input: AptosSignMessageInput,
   ): Promise<UserResponse<AptosSignMessageOutput>> => {
-    // THIS LOGIC SHOULD BE REPLACED. IT IS FOR EXAMPLE PURPOSES ONLY.    
     // 'Aptos' + application + address + nonce + chainId + message
     const messageToSign = `Aptos
     demoAdapter
@@ -396,31 +352,25 @@ export class MyWallet implements AptosWallet {
   };
 
   /**
-   * REVISION - Implement this function using your Wallet. 
-   * 
    * An event which will be triggered anytime an Account changes.
    * 
    * @returns when the logic is resolved.
    */
   onAccountChange: AptosOnAccountChangeMethod = async (): Promise<void> => {
-    // THIS LOGIC SHOULD BE REPLACED. IT IS FOR EXAMPLE PURPOSES ONLY.    
     return Promise.resolve();
   };
 
   /**
-   * REVISION - Implement this function using your Wallet. 
-   * 
    * When users indicate a Network change should occur, update your Wallet accordingly.
    * 
    * @returns when the logic is resolved.
    */
   onNetworkChange: AptosOnNetworkChangeMethod = async (): Promise<void> => {
-    // THIS LOGIC SHOULD BE REPLACED. IT IS FOR EXAMPLE PURPOSES ONLY.    
     return Promise.resolve();
   };
 }
 
-// REVISION - FOR BROWSER EXTENSION WALLETS ONLY
+// This is for browser extension wallets only.
 // registerWallet should be called by your browser extension wallet on page load to notify dapps that your wallet is available.
 // In this demo dapp, we use the following function in app/page.tsx to register "MyWallet".
 // (function () {
