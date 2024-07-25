@@ -180,6 +180,15 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       if (typeof window !== "undefined") {
         scopePollingDetectionStrategy(() => {
           const providerName = wallet.providerName || wallet.name.toLowerCase();
+          // Hot fix to manage Pontem wallet to not show duplications if user has the
+          // new standard version installed. Pontem uses "Pontem" wallet name for previous versions and
+          // "Pontem Wallet" with new version
+          if (providerName === "pontem") {
+            const existingStandardPontemWallet = this._standard_wallets.find(
+              (wallet) => wallet.name == "Pontem Wallet"
+            );
+            if (existingStandardPontemWallet) return false;
+          }
           if (Object.keys(window).includes(providerName)) {
             wallet.readyState = WalletReadyState.Installed;
             wallet.provider = window[providerName as any];
