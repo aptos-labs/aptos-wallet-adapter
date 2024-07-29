@@ -15,6 +15,8 @@ import {
   Aptos,
   MultiEd25519Signature,
   MultiEd25519PublicKey,
+  KeylessPublicKey,
+  KeylessSignature,
 } from "@aptos-labs/ts-sdk";
 
 import { WalletReadyState } from "../constants";
@@ -182,6 +184,12 @@ export class WalletStandardCore {
 
       if (response.status === UserResponseStatus.REJECTED) {
         throw new WalletConnectionError("Failed to sign a message").message;
+      }
+
+      // For Keyless wallet accounts we skip verification for now.
+      // TODO: Remove when client-side verification is done in SDK.
+      if (account.publicKey instanceof KeylessPublicKey && response.args.signature instanceof KeylessSignature) {
+        return true;
       }
 
       let verified = false;
