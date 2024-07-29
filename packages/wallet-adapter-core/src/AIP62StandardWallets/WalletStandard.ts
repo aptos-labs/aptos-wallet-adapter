@@ -16,6 +16,7 @@ import {
   MultiEd25519Signature,
   MultiEd25519PublicKey,
   KeylessPublicKey,
+  KeylessSignature,
 } from "@aptos-labs/ts-sdk";
 
 import { WalletReadyState } from "../constants";
@@ -187,7 +188,7 @@ export class WalletStandardCore {
 
       // For Keyless wallet accounts we skip verification for now.
       // TODO: Remove when client-side verification is done in SDK.
-      if (account.publicKey instanceof KeylessPublicKey) {
+      if (account.publicKey instanceof KeylessPublicKey && response.args.signature instanceof KeylessSignature) {
         return true;
       }
 
