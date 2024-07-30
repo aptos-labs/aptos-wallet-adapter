@@ -3,6 +3,7 @@ import { AptosConnectWallet } from "@aptos-connect/wallet-adapter-plugin";
 import { AptosStandardWallet } from "./WalletStandard";
 import { Network } from "@aptos-labs/ts-sdk";
 import { DappConfig } from "../WalletCore";
+import { Coin98Wallet } from "@coin98-com/aptos-wallet-adapter";
 
 export function getSDKWallets(dappConfig?: DappConfig) {
   const sdkWallets: AptosStandardWallet[] = [];

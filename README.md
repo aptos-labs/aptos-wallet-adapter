@@ -22,6 +22,7 @@ Note: These are in alphabetical order, any new wallets must be in alphabetical o
 - [Nightly](https://chromewebstore.google.com/detail/nightly/fiikommddbeccaoicoejoniammnalkfa)
 - [Petra](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
 - T wallet
+- [Coin98](https://chromewebstore.google.com/detail/coin98-wallet/aeachknmefphepccionboohckonoeemg?hl=en)
 
 Legacy standard compatible
 
@@ -32,6 +33,7 @@ Legacy standard compatible
 - [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
 - [OKX](https://www.npmjs.com/package/@okwallet/aptos-wallet-adapter)
 - [Trust](https://www.npmjs.com/package/@trustwallet/aptos-wallet-adapter)
+- [Coin98](https://www.npmjs.com/package/@coin98-com/aptos-wallet-adapter)
 
 #### Develop Locally
 
