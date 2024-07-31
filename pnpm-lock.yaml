@@ -51,6 +51,9 @@ importers:
       '@martianwallet/aptos-wallet-adapter':
         specifier: ^0.0.5
         version: 0.0.5
+      '@mizuwallet-sdk/aptos-wallet-adapter':
+        specifier: ^0.1.0
+        version: 0.1.0(@mizuwallet-sdk/core@1.2.0)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0)
       '@msafe/aptos-wallet-adapter':
         specifier: ^1.0.11
         version: 1.1.3(@aptos-labs/ts-sdk@1.26.0)(@wallet-standard/core@1.0.3)
