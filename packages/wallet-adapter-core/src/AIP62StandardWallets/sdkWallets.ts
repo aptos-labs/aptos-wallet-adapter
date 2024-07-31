@@ -16,6 +16,19 @@ export function getSDKWallets(dappConfig?: DappConfig) {
         dappId: dappConfig?.aptosConnectDappId,
       })
     );
+
+    if (
+      dappConfig?.network &&
+      [Network.MAINNET, Network.TESTNET].includes(dappConfig.network)
+    ) {
+      sdkWallets.push(
+        new MizuWallet({
+          network: dappConfig.network as any,
+          manifestURL: dappConfig.mizuwallet.manifestURL,
+          appId: dappConfig.mizuwallet.appId,
+        }) as any
+      );
+    }
   }
 
   // Push production wallet if env is production, otherwise use dev wallet
@@ -25,19 +38,6 @@ export function getSDKWallets(dappConfig?: DappConfig) {
     sdkWallets.push(new TWallet() as any);
   } else {
     sdkWallets.push(new DevTWallet() as any);
-  }
-
-  if (
-    dappConfig?.network &&
-    [Network.MAINNET, Network.TESTNET].includes(dappConfig.network)
-  ) {
-    sdkWallets.push(
-      new MizuWallet({
-        network: dappConfig.network as any,
-        manifestURL: dappConfig.mizuwallet.manifestURL,
-        appId: dappConfig.mizuwallet.appId,
-      }) as any
-    );
   }
 
   // Add new SDK wallet plugins (ones that should be installed as packages) here:
