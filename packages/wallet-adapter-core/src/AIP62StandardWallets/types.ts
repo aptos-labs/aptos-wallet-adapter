@@ -21,4 +21,5 @@ export type AvailableWallets =
   | "Nightly"
   | "Petra"
   | "T wallet"
-  | "Pontem Wallet";
+  | "Pontem Wallet"
+  | "Mizu Wallet";
