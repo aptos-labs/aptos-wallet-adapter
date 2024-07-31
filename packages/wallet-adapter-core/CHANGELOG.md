@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.12.1
+
+### Patch Changes
+
+- 4fd4527: Skip verification for Keyless accounts
+
 ## 4.12.0
 
 ### Minor Changes
