@@ -1,5 +1,15 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.13.0
+
+### Minor Changes
+
+- 74f99d2: Add support for Mizu Wallet as an AIP-62 standarad compatible.
+
+### Patch Changes
+
+- 3d9ae51: Fix Keyless sign and verify
+
 ## 4.12.1
 
 ### Patch Changes
