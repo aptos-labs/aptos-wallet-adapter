@@ -2,4 +2,4 @@
 "@aptos-labs/wallet-adapter-core": minor
 ---
 
-Version Package
+Bump `@mizuwallet-sdk/aptos-wallet-adapter` version
