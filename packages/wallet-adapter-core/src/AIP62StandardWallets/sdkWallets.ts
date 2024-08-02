@@ -18,6 +18,7 @@ export function getSDKWallets(dappConfig?: DappConfig) {
     );
 
     if (
+      dappConfig?.mizuwallet &&
       dappConfig?.network &&
       [Network.MAINNET, Network.TESTNET].includes(dappConfig.network)
     ) {
