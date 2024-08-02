@@ -87,7 +87,7 @@ export type IAptosWallet = AptosStandardWallet & Wallet;
 export interface DappConfig {
   network: Network;
   aptosConnectDappId?: string;
-  mizuwallet: {
+  mizuwallet?: {
     manifestURL: string;
     appId?: string;
   };
