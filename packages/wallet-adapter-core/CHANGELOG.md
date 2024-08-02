@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.13.1
+
+### Patch Changes
+
+- ae2351b: Change mizuWallet config to an optional prop
+
 ## 4.13.0
 
 ### Minor Changes
