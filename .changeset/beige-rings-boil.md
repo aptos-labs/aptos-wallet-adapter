@@ -1,5 +1,5 @@
 ---
-"@aptos-labs/wallet-adapter-core": minor
+"@aptos-labs/wallet-adapter-core": patch
 ---
 
 Bump `@mizuwallet-sdk/aptos-wallet-adapter` version
