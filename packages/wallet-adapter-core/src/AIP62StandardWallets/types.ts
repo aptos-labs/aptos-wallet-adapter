@@ -22,4 +22,5 @@ export type AvailableWallets =
   | "Petra"
   | "T wallet"
   | "Pontem Wallet"
-  | "Mizu Wallet";
+  | "Mizu Wallet"
+  | "ABC Wallet";
