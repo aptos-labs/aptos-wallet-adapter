@@ -87,6 +87,10 @@ export type IAptosWallet = AptosStandardWallet & Wallet;
 export interface DappConfig {
   network: Network;
   aptosConnectDappId?: string;
+  mizuwallet?: {
+    manifestURL: string;
+    appId?: string;
+  };
 }
 
 /** Any wallet that can be handled by `WalletCore`.
@@ -152,10 +156,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     dappConfig?: DappConfig
   ) {
     super();
+
     this._wallets = plugins;
     this._optInWallets = optInWallets;
     this._dappConfig = dappConfig;
     this._sdkWallets = getSDKWallets(this._dappConfig);
+
     // Strategy to detect AIP-62 standard compatible extension wallets
     this.fetchExtensionAIP62AptosWallets();
     // Strategy to detect AIP-62 standard compatible SDK wallets.

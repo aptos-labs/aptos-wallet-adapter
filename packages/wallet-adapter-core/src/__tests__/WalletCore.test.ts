@@ -25,8 +25,8 @@ const disconnectMock = jest.fn(() =>
   Promise.resolve(console.log("disconnect"))
 );
 const networkMock = jest.fn(() => Promise.resolve(console.log("network")));
-const signAndSubmitTransactionkMock = jest.fn((transaction, options?) =>
-  Promise.resolve({ hash: "signAndSubmitTransactionkMock" })
+const signAndSubmitTransactionMock = jest.fn((transaction, options?) =>
+  Promise.resolve({ hash: "signAndSubmitTransactionMock" })
 );
 const signMessageMock = jest.fn((message) =>
   Promise.resolve(signMessageResponseMock)
@@ -47,7 +47,7 @@ const walletMock: Wallet = {
   connect: connectMock,
   disconnect: disconnectMock,
   network: networkMock,
-  signAndSubmitTransaction: signAndSubmitTransactionkMock,
+  signAndSubmitTransaction: signAndSubmitTransactionMock,
   signMessage: signMessageMock,
   onNetworkChange: onNetworkChangeeMock,
   onAccountChange: onAccountChangeMock,

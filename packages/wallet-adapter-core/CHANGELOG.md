@@ -1,5 +1,28 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.13.2
+
+### Patch Changes
+
+- 754f6e1: Bump @mizuwallet-sdk/aptos-wallet-adapter version to 0.1.2
+- 754f6e1: Bump @mizuwallet-sdk/aptos-wallet-adapter version to 0.1.3
+
+## 4.13.1
+
+### Patch Changes
+
+- ae2351b: Change mizuWallet config to an optional prop
+
+## 4.13.0
+
+### Minor Changes
+
+- 74f99d2: Add support for Mizu Wallet as an AIP-62 standarad compatible.
+
+### Patch Changes
+
+- 3d9ae51: Fix Keyless sign and verify
+
 ## 4.12.1
 
 ### Patch Changes
