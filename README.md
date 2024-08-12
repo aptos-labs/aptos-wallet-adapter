@@ -23,7 +23,7 @@ Note: These are in alphabetical order, any new wallets must be in alphabetical o
 - [Petra](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
 - [MizuWallet](https://www.npmjs.com/package/@mizuwallet-sdk/aptos-wallet-adapter)
 - T wallet
-- ABC Wallet
+- [ABC Wallet](https://chromewebstore.google.com/detail/abc-wallet/mlhakagmgkmonhdonhkpjeebfphligng)
 
 Legacy standard compatible
 
