@@ -23,6 +23,8 @@ Note: These are in alphabetical order, any new wallets must be in alphabetical o
 - [Petra](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
 - [MizuWallet](https://www.npmjs.com/package/@mizuwallet-sdk/aptos-wallet-adapter)
 - T wallet
+- [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
+- [Mizu](https://www.mizu.io/)
 - [ABC Wallet](https://chromewebstore.google.com/detail/abc-wallet/mlhakagmgkmonhdonhkpjeebfphligng)
 
 Legacy standard compatible
@@ -31,7 +33,6 @@ Legacy standard compatible
 - [Fewcha](https://www.npmjs.com/package/fewcha-plugin-wallet-adapter)
 - [Martian](https://www.npmjs.com/package/@martianwallet/aptos-wallet-adapter)
 - [MSafe](https://www.npmjs.com/package/@msafe/aptos-wallet-adapter)
-- [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
 - [OKX](https://www.npmjs.com/package/@okwallet/aptos-wallet-adapter)
 - [Trust](https://www.npmjs.com/package/@trustwallet/aptos-wallet-adapter)
 
