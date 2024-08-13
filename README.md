@@ -19,13 +19,13 @@ Note: These are in alphabetical order, any new wallets must be in alphabetical o
 [AIP-62](https://github.com/aptos-foundation/AIPs/blob/main/aips/aip-62.md) standard compatible
 
 - [AptosConnect](https://aptosconnect.app/)
+- [ABC Wallet](https://chromewebstore.google.com/detail/abc-wallet/mlhakagmgkmonhdonhkpjeebfphligng)
+- [Mizu](https://www.mizu.io/)
+- [MizuWallet](https://www.npmjs.com/package/@mizuwallet-sdk/aptos-wallet-adapter)
 - [Nightly](https://chromewebstore.google.com/detail/nightly/fiikommddbeccaoicoejoniammnalkfa)
 - [Petra](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
-- [MizuWallet](https://www.npmjs.com/package/@mizuwallet-sdk/aptos-wallet-adapter)
-- T wallet
 - [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
-- [Mizu](https://www.mizu.io/)
-- [ABC Wallet](https://chromewebstore.google.com/detail/abc-wallet/mlhakagmgkmonhdonhkpjeebfphligng)
+- T wallet
 
 Legacy standard compatible
 
