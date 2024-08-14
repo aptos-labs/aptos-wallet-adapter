@@ -103,7 +103,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private _wallets: ReadonlyArray<Wallet> = [];
 
   // Private array that holds all the Wallets a dapp decided to opt-in to
-  private _optInWallets: ReadonlyArray<AvailableWallets> = [];
+  private _optInWallets: ReadonlyArray<AvailableWallets> | undefined;
 
   // Private array to hold compatible AIP-62 standard wallets
   private _standard_wallets: Array<AptosStandardWallet> = [];
@@ -152,7 +152,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    */
   constructor(
     plugins: ReadonlyArray<Wallet>,
-    optInWallets: ReadonlyArray<AvailableWallets>,
+    optInWallets?: ReadonlyArray<AvailableWallets>,
     dappConfig?: DappConfig
   ) {
     super();
@@ -325,14 +325,23 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   excludeWallet(wallet: AptosStandardWallet): boolean {
     // for now, we always include AptosConnect
     if (isAptosConnectWallet(wallet)) return false;
+    // If _optInWallets is undefined, include all wallets
+    if (!this._optInWallets) {
+      return false;
+    }
+    // If _optInWallets is defined as an empty array, exclude each wallet
+    if (this._optInWallets.length === 0) {
+      return true;
+    }
     // If _optInWallets is not empty, and does not include the provided wallet,
-    // return true to exclude the wallet, otherwise return false
+    // return true to exclude the wallet
     if (
       this._optInWallets.length > 0 &&
       !this._optInWallets.includes(wallet.name as AvailableWallets)
     ) {
       return true;
     }
+    // Otherwise return false
     return false;
   }
 

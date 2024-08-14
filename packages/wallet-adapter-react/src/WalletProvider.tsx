@@ -75,11 +75,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
 
   // Initialize WalletCore on first load
   useEffect(() => {
-    const walletCore = new WalletCore(
-      plugins ?? [],
-      optInWallets ?? [],
-      dappConfig
-    );
+    const walletCore = new WalletCore(plugins ?? [], optInWallets, dappConfig);
     setWalletCore(walletCore);
   }, []);
 
