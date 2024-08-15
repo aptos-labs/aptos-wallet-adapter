@@ -9,6 +9,7 @@
     "resolveJsonModule": true,
     "noImplicitThis": true,
     "strict": true,
+    "module": "ESNext",
     "target": "ESNext",
     "useDefineForClassFields": true,
     "esModuleInterop": true,
