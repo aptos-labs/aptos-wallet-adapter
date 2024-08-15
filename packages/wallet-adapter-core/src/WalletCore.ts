@@ -323,8 +323,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @returns
    */
   excludeWallet(wallet: AptosStandardWallet): boolean {
-    // for now, we always include AptosConnect
-    if (isAptosConnectWallet(wallet)) return false;
     // If _optInWallets is not empty, and does not include the provided wallet,
     // return true to exclude the wallet, otherwise return false
     if (
