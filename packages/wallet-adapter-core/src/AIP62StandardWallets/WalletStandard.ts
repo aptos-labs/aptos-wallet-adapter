@@ -10,6 +10,8 @@ import {
   AptosConnectOutput,
 } from "@aptos-labs/wallet-standard";
 import {
+  AnyPublicKey,
+  AnyPublicKeyVariant,
   AnyRawTransaction,
   PendingTransactionResponse,
   Aptos,
@@ -182,6 +184,15 @@ export class WalletStandardCore {
 
       if (response.status === UserResponseStatus.REJECTED) {
         throw new WalletConnectionError("Failed to sign a message").message;
+      }
+
+      // For Keyless wallet accounts we skip verification for now.
+      // TODO: Remove when client-side verification is done in SDK.
+      if (
+        account.publicKey instanceof AnyPublicKey &&
+        account.publicKey.variant === AnyPublicKeyVariant.Keyless
+      ) {
+        return true;
       }
 
       let verified = false;

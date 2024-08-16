@@ -1,5 +1,73 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.14.0
+
+### Minor Changes
+
+- 4240f8b: Have the option to exclude AptosConnect from the wallet selector modal
+
+### Patch Changes
+
+- 0e37588: Bump @mizuwallet-sdk/aptos-wallet-adapter version to 0.1.5
+
+## 4.13.2
+
+### Patch Changes
+
+- 754f6e1: Bump @mizuwallet-sdk/aptos-wallet-adapter version to 0.1.2
+- 754f6e1: Bump @mizuwallet-sdk/aptos-wallet-adapter version to 0.1.3
+
+## 4.13.1
+
+### Patch Changes
+
+- ae2351b: Change mizuWallet config to an optional prop
+
+## 4.13.0
+
+### Minor Changes
+
+- 74f99d2: Add support for Mizu Wallet as an AIP-62 standarad compatible.
+
+### Patch Changes
+
+- 3d9ae51: Fix Keyless sign and verify
+
+## 4.12.1
+
+### Patch Changes
+
+- 4fd4527: Skip verification for Keyless accounts
+
+## 4.12.0
+
+### Minor Changes
+
+- d9ce63d: Add support for Pontem wallet as an AIP-62 standard compatible
+
+## 4.11.1
+
+### Patch Changes
+
+- 0b7d07f: [Hot Fix] Pontem wallet version 2.6.7 does not include a URL prop
+
+## 4.11.0
+
+### Minor Changes
+
+- f1fb4a5: Add proper dappconfig type to wallet core
+
+## 4.10.0
+
+### Minor Changes
+
+- 6bfeb14: Add dapp id to be passed to AptosConnect
+
+### Patch Changes
+
+- 249331f: it stops emitting register event to prevent TWallet button to render twice
+- ed4f483: resolves connection issues with Twallet due to hardcoded twallet url
+
 ## 4.9.0
 
 ### Minor Changes

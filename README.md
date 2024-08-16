@@ -19,8 +19,11 @@ Note: These are in alphabetical order, any new wallets must be in alphabetical o
 [AIP-62](https://github.com/aptos-foundation/AIPs/blob/main/aips/aip-62.md) standard compatible
 
 - [AptosConnect](https://aptosconnect.app/)
+- [Mizu](https://www.mizu.io/)
+- [MizuWallet](https://www.npmjs.com/package/@mizuwallet-sdk/aptos-wallet-adapter)
 - [Nightly](https://chromewebstore.google.com/detail/nightly/fiikommddbeccaoicoejoniammnalkfa)
 - [Petra](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
+- [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
 - T wallet
 
 Legacy standard compatible
@@ -29,7 +32,6 @@ Legacy standard compatible
 - [Fewcha](https://www.npmjs.com/package/fewcha-plugin-wallet-adapter)
 - [Martian](https://www.npmjs.com/package/@martianwallet/aptos-wallet-adapter)
 - [MSafe](https://www.npmjs.com/package/@msafe/aptos-wallet-adapter)
-- [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
 - [OKX](https://www.npmjs.com/package/@okwallet/aptos-wallet-adapter)
 - [Trust](https://www.npmjs.com/package/@trustwallet/aptos-wallet-adapter)
 

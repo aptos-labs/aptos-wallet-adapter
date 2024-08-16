@@ -1,5 +1,109 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.4.10
+
+### Patch Changes
+
+- Updated dependencies [0e37588]
+- Updated dependencies [4240f8b]
+  - @aptos-labs/wallet-adapter-core@4.14.0
+  - @aptos-labs/wallet-adapter-react@3.5.10
+  - @aptos-labs/wallet-adapter-ant-design@3.0.10
+  - @aptos-labs/wallet-adapter-mui-design@3.0.10
+
+## 3.4.9
+
+### Patch Changes
+
+- Updated dependencies [754f6e1]
+- Updated dependencies [754f6e1]
+  - @aptos-labs/wallet-adapter-core@4.13.2
+  - @aptos-labs/wallet-adapter-react@3.5.9
+  - @aptos-labs/wallet-adapter-ant-design@3.0.9
+  - @aptos-labs/wallet-adapter-mui-design@3.0.9
+
+## 3.4.8
+
+### Patch Changes
+
+- Updated dependencies [ae2351b]
+  - @aptos-labs/wallet-adapter-core@4.13.1
+  - @aptos-labs/wallet-adapter-react@3.5.8
+  - @aptos-labs/wallet-adapter-ant-design@3.0.8
+  - @aptos-labs/wallet-adapter-mui-design@3.0.8
+
+## 3.4.7
+
+### Patch Changes
+
+- Updated dependencies [74f99d2]
+- Updated dependencies [3d9ae51]
+  - @aptos-labs/wallet-adapter-core@4.13.0
+  - @aptos-labs/wallet-adapter-react@3.5.7
+  - @aptos-labs/wallet-adapter-ant-design@3.0.7
+  - @aptos-labs/wallet-adapter-mui-design@3.0.7
+
+## 3.4.6
+
+### Patch Changes
+
+- Updated dependencies [4fd4527]
+  - @aptos-labs/wallet-adapter-core@4.12.1
+  - @aptos-labs/wallet-adapter-react@3.5.6
+  - @aptos-labs/wallet-adapter-ant-design@3.0.6
+  - @aptos-labs/wallet-adapter-mui-design@3.0.6
+
+## 3.4.5
+
+### Patch Changes
+
+- Updated dependencies [d9ce63d]
+  - @aptos-labs/wallet-adapter-core@4.12.0
+  - @aptos-labs/wallet-adapter-react@3.5.5
+  - @aptos-labs/wallet-adapter-ant-design@3.0.5
+  - @aptos-labs/wallet-adapter-mui-design@3.0.5
+
+## 3.4.4
+
+### Patch Changes
+
+- Updated dependencies [0b7d07f]
+  - @aptos-labs/wallet-adapter-core@4.11.1
+  - @aptos-labs/wallet-adapter-react@3.5.4
+  - @aptos-labs/wallet-adapter-ant-design@3.0.4
+  - @aptos-labs/wallet-adapter-mui-design@3.0.4
+
+## 3.4.3
+
+### Patch Changes
+
+- Updated dependencies [91fe52c]
+  - @aptos-labs/wallet-adapter-react@3.5.3
+  - @aptos-labs/wallet-adapter-ant-design@3.0.3
+  - @aptos-labs/wallet-adapter-mui-design@3.0.3
+
+## 3.4.2
+
+### Patch Changes
+
+- Updated dependencies [f1fb4a5]
+  - @aptos-labs/wallet-adapter-core@4.11.0
+  - @aptos-labs/wallet-adapter-react@3.5.2
+  - @aptos-labs/wallet-adapter-ant-design@3.0.2
+  - @aptos-labs/wallet-adapter-mui-design@3.0.2
+
+## 3.4.1
+
+### Patch Changes
+
+- Updated dependencies [249331f]
+- Updated dependencies [6bfeb14]
+- Updated dependencies [ed4f483]
+  - @aptos-labs/wallet-adapter-core@4.10.0
+  - @aptos-labs/wallet-adapter-react@3.5.1
+  - @aptos-labs/wallet-adapter-ant-design@3.0.1
+  - @aptos-labs/wallet-adapter-mui-design@3.0.1
+
 ## 3.4.0
 
 ### Minor Changes

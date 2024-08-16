@@ -64,8 +64,8 @@ const educationScreens = [
     Description: createHeadlessComponent("EducationScreen.Description", "p", {
       children: (
         <>
-          Aptos Connect lets you to take one account across any application
-          built on Aptos.{" "}
+          Aptos Connect lets you take one account across any application built
+          on Aptos.{" "}
           <a
             href={EXPLORE_ECOSYSTEM_URL}
             target="_blank"
@@ -115,7 +115,7 @@ export interface AboutAptosConnectEducationScreen {
   Description: ForwardRefExoticComponent<
     HeadlessComponentProps & RefAttributes<HTMLParagraphElement>
   >;
-  /** The index of the current education screen */
+  /** The index of the current education screen. */
   screenIndex: number;
   /** The total number of education screens. */
   totalScreens: number;

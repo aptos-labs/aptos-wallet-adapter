@@ -31,7 +31,14 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     <AptosWalletAdapterProvider
       plugins={wallets}
       autoConnect={autoConnect}
-      dappConfig={{ network: Network.DEVNET }}
+      dappConfig={{
+        network: Network.TESTNET,
+        aptosConnectDappId: "57fa42a9-29c6-4f1e-939c-4eefa36d9ff5",
+        mizuwallet: {
+          manifestURL:
+            "https://assets.mz.xyz/static/config/mizuwallet-connect-manifest.json",
+        },
+      }}
       onError={(error) => {
         toast({
           variant: "destructive",

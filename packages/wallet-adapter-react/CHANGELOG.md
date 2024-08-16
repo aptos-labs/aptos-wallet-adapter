@@ -1,5 +1,79 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.5.10
+
+### Patch Changes
+
+- Updated dependencies [0e37588]
+- Updated dependencies [4240f8b]
+  - @aptos-labs/wallet-adapter-core@4.14.0
+
+## 3.5.9
+
+### Patch Changes
+
+- Updated dependencies [754f6e1]
+- Updated dependencies [754f6e1]
+  - @aptos-labs/wallet-adapter-core@4.13.2
+
+## 3.5.8
+
+### Patch Changes
+
+- Updated dependencies [ae2351b]
+  - @aptos-labs/wallet-adapter-core@4.13.1
+
+## 3.5.7
+
+### Patch Changes
+
+- Updated dependencies [74f99d2]
+- Updated dependencies [3d9ae51]
+  - @aptos-labs/wallet-adapter-core@4.13.0
+
+## 3.5.6
+
+### Patch Changes
+
+- Updated dependencies [4fd4527]
+  - @aptos-labs/wallet-adapter-core@4.12.1
+
+## 3.5.5
+
+### Patch Changes
+
+- Updated dependencies [d9ce63d]
+  - @aptos-labs/wallet-adapter-core@4.12.0
+
+## 3.5.4
+
+### Patch Changes
+
+- Updated dependencies [0b7d07f]
+  - @aptos-labs/wallet-adapter-core@4.11.1
+
+## 3.5.3
+
+### Patch Changes
+
+- 91fe52c: Corrected a typo in the last education screen of the `AboutAptosConnect` component.
+
+## 3.5.2
+
+### Patch Changes
+
+- Updated dependencies [f1fb4a5]
+  - @aptos-labs/wallet-adapter-core@4.11.0
+
+## 3.5.1
+
+### Patch Changes
+
+- Updated dependencies [249331f]
+- Updated dependencies [6bfeb14]
+- Updated dependencies [ed4f483]
+  - @aptos-labs/wallet-adapter-core@4.10.0
+
 ## 3.5.0
 
 ### Minor Changes
