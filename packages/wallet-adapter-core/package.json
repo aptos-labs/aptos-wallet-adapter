@@ -56,7 +56,7 @@
     "@mizuwallet-sdk/aptos-wallet-adapter": "^0.1.5",
     "buffer": "^6.0.3",
     "eventemitter3": "^4.0.7",
-    "tweetnacl": "^1.0.3",
+    "tweetnacl": "^1.0.3"
   },
   "peerDependencies": {
     "@aptos-labs/ts-sdk": "^1.18.1",
