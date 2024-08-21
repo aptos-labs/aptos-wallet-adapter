@@ -231,8 +231,8 @@ importers:
         specifier: ^0.1.20
         version: 0.1.21(@aptos-labs/ts-sdk@1.26.0)
       '@mizuwallet-sdk/aptos-wallet-adapter':
-        specifier: ^0.1.5
-        version: 0.1.5(@mizuwallet-sdk/core@1.2.1)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0)
+        specifier: ^0.2.0
+        version: 0.2.0(@mizuwallet-sdk/core@1.2.1)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0)
       aptos:
         specifier: ^1.21.0
         version: 1.21.0
@@ -2164,8 +2164,8 @@ packages:
     resolution: {integrity: sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==}
     dev: false
 
-  /@mizuwallet-sdk/aptos-wallet-adapter@0.1.5(@mizuwallet-sdk/core@1.2.1)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0):
-    resolution: {integrity: sha512-t4XY+pqK2Ax7ESOAlMPAm8WqU0ln4oJ/voig8pSJNJL+EUviRiTdMJ6zIoYRo2KNNAx0dFPdQEZEhqWwoTmEvQ==}
+  /@mizuwallet-sdk/aptos-wallet-adapter@0.2.0(@mizuwallet-sdk/core@1.2.1)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0):
+    resolution: {integrity: sha512-pSBdYmUH/mS0v0rMsfgx17xJHEHctBz50mBm3a/qVfa+8sgMu7QXyCPaqtxT9gfUF14iXP7iQKJ2YSrmElayFg==}
     peerDependencies:
       '@mizuwallet-sdk/core': '>=1.2.0'
       '@mizuwallet-sdk/protocol': 0.0.1

@@ -1,5 +1,15 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.14.0
+
+### Minor Changes
+
+- 4240f8b: Have the option to exclude AptosConnect from the wallet selector modal
+
+### Patch Changes
+
+- 0e37588: Bump @mizuwallet-sdk/aptos-wallet-adapter version to 0.1.5
+
 ## 4.13.2
 
 ### Patch Changes
