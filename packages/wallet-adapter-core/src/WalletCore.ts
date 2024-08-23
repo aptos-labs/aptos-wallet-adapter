@@ -65,7 +65,6 @@ import {
   fetchDevnetChainId,
   generalizedErrorMessage,
   getAptosConfig,
-  isAptosConnectWallet,
   isAptosNetwork,
   isRedirectable,
   removeLocalStorage,
@@ -135,13 +134,16 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private _connected: boolean = false;
 
   // Google Analytics 4 module
-  private readonly ga4: GA4 = new GA4();
+  private readonly ga4: GA4 | null = null;
 
   // JSON configuration for AptosConnect
   private _dappConfig: DappConfig | undefined;
 
   // Local private variable to hold SDK wallets in the adapter
   private readonly _sdkWallets: AptosStandardWallet[];
+
+  // Local flag to disable the adapter telemetry tool
+  private _disableTelemetry: boolean | undefined = false;
 
   /**
    * Core functionality constructor.
@@ -153,14 +155,21 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   constructor(
     plugins: ReadonlyArray<Wallet>,
     optInWallets: ReadonlyArray<AvailableWallets>,
-    dappConfig?: DappConfig
+    dappConfig?: DappConfig,
+    disableTelemetry?: boolean
   ) {
     super();
 
     this._wallets = plugins;
     this._optInWallets = optInWallets;
     this._dappConfig = dappConfig;
+    this._disableTelemetry = disableTelemetry;
     this._sdkWallets = getSDKWallets(this._dappConfig);
+
+    // If disableTelemetry set to false (by default), start GA4
+    if (!this._disableTelemetry) {
+      this.ga4 = new GA4();
+    }
 
     // Strategy to detect AIP-62 standard compatible extension wallets
     this.fetchExtensionAIP62AptosWallets();
@@ -404,7 +413,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   };
 
   private recordEvent(eventName: string, additionalInfo?: object) {
-    this.ga4.gtag("event", `wallet_adapter_${eventName}`, {
+    this.ga4?.gtag("event", `wallet_adapter_${eventName}`, {
       wallet: this._wallet?.name,
       network: this._network?.name,
       network_url: this._network?.url,
