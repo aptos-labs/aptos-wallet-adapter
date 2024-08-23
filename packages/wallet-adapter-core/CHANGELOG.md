@@ -1,5 +1,15 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.15.0
+
+### Minor Changes
+
+- a2391db: Support a boolean flag to disable the adapter telemetry tool
+
+### Patch Changes
+
+- 92f7187: Bump @mizuwallet-sdk/aptos-wallet-adapter version to 0.2.0
+
 ## 4.14.0
 
 ### Minor Changes
