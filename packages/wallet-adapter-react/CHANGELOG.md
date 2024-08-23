@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.6.0
+
+### Minor Changes
+
+- a2391db: Support a boolean flag to disable the adapter telemetry tool
+
+### Patch Changes
+
+- Updated dependencies [a2391db]
+- Updated dependencies [92f7187]
+  - @aptos-labs/wallet-adapter-core@4.15.0
+
 ## 3.5.10
 
 ### Patch Changes

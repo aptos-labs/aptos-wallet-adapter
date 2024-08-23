@@ -91,6 +91,7 @@ const wallets = [new AptosLegacyStandardWallet()];
 - `optInWallets` - the adapter detects and adds AIP-62 standard wallets by default, sometimes you might want to opt-in with specific wallets. This props lets you define the AIP-62 standard wallets you want to support in your dapp.
 - `dappConfig` - the adapter comes built-in with AIP-62 standard SDK wallets and it needs to know what configuration your dapp is in to render the current instance.
 - `onError` - a callback function to fire when the adapter throws an error
+- (optional) `disableTelemetry` - A boolean flag to disable the adapter telemetry tool, false by default
 
 #### Use Wallet
 
