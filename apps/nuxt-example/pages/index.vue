@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { AlertCircle } from 'lucide-vue-next';
+import { isMainnet } from "@/utils";
 const { $walletAdapter } = useNuxtApp();
 const { network, connected, account, wallet, changeNetwork } =
   $walletAdapter || {};
+
+
 </script>
 
 <template>
@@ -32,6 +36,16 @@ const { network, connected, account, wallet, changeNetwork } =
           :wallet="wallet"
           @changeNetwork="changeNetwork"
         />
+        <template v-if="isMainnet(connected, network?.name)">
+          <Alert variant="warning">
+            <AlertCircle class="w-4 h-4 mr-2" />
+            <AlertTitle>Warning</AlertTitle>
+            <p>
+              You are connected to the mainnet. Please be cautious when
+              interacting with the blockchain.
+            </p>
+          </Alert>
+        </template>
         <TransactionParameters />
         <SingleSigner />
         <Sponsor />

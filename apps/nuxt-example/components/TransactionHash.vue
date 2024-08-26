@@ -14,7 +14,7 @@ const isAptosLink = computed(() => isAptosNetwork(network.value));
 
 const explorerLink = computed(() => {
   if (isAptosLink.value) {
-    return `https://explorer.aptoslabs.com/txn/${hash}${
+    return `https://explorer.aptoslabs.com/txn/${hash.value}${
       network.value?.name ? `?network=${network.value?.name}` : ""
     }`;
   }
