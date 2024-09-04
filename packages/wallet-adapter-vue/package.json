@@ -1,10 +1,12 @@
 {
   "name": "@aptos-labs/wallet-adapter-vue",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Aptos Wallet Adapter Vue Provider",
   "license": "Apache-2.0",
   "type": "module",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/wallet-adapter-vue.umd.cjs",
   "module": "./dist/wallet-adapter-vue.js",
   "types": "./dist/index.d.ts",
