@@ -1,0 +1,59 @@
+{
+  "name": "@aptos-labs/wallet-adapter-vue",
+  "version": "0.1.0",
+  "description": "Aptos Wallet Adapter Vue Provider",
+  "license": "Apache-2.0",
+  "type": "module",
+  "files": ["dist"],
+  "main": "./dist/wallet-adapter-vue.umd.cjs",
+  "module": "./dist/wallet-adapter-vue.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/wallet-adapter-vue.js",
+      "require": "./dist/wallet-adapter-vue.umd.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./dist/style.css": "./dist/style.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aptos-labs/aptos-wallet-adapter.git"
+  },
+  "homepage": "https://github.com/aptos-labs/aptos-wallet-adapter",
+  "bugs": {
+    "url": "https://github.com/aptos-labs/aptos-wallet-adapter/issues"
+  },
+  "author": "aptoslabs.com",
+  "keywords": [
+    "Aptos",
+    "Aptos Labs",
+    "Wallet",
+    "Wallet Adapter",
+    "Wallet Adapter Provider",
+    "Vue",
+    "Nuxt"
+  ],
+  "scripts": {
+    "build:bundle": "vite build",
+    "build:declarations": "vite build",
+    "types": "vue-tsc",
+    "build": "pnpm build:bundle"
+  },
+  "dependencies": {
+    "@aptos-labs/wallet-adapter-core": "4.15.0"
+  },
+  "devDependencies": {
+    "vite": "5.3.3",
+    "vite-plugin-dts": "3.9.1",
+    "@vitejs/plugin-vue": "5.0.5",
+    "eslint": "^8.15.0",
+    "typescript": "^4.5.3",
+    "vue-tsc": "^2.0.26",
+    "vite-plugin-css-injected-by-js": "^3.5.1",
+    "rollup-plugin-typescript2": "^0.36.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.21"
+  }
+}
