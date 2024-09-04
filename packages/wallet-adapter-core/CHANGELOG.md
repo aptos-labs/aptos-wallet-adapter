@@ -1,5 +1,12 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.15.1
+
+### Patch Changes
+
+- 3419043: Bump @mizuwallet-sdk/aptos-wallet-adapter version to 0.2.3
+- ee95b8b: Upgrade @aptos-labe/ts-sdk version
+
 ## 4.15.0
 
 ### Minor Changes

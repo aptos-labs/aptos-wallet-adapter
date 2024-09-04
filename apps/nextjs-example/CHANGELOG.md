@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.4.12
+
+### Patch Changes
+
+- ee95b8b: Upgrade @aptos-labe/ts-sdk version
+- Updated dependencies [3419043]
+- Updated dependencies [ee95b8b]
+  - @aptos-labs/wallet-adapter-core@4.15.1
+  - @aptos-labs/wallet-adapter-react@3.6.1
+  - @aptos-labs/wallet-adapter-ant-design@3.0.12
+  - @aptos-labs/wallet-adapter-mui-design@3.0.12
+
 ## 3.4.11
 
 ### Patch Changes
