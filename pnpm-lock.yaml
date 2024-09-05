@@ -451,7 +451,7 @@ importers:
   packages/wallet-adapter-vue:
     dependencies:
       '@aptos-labs/wallet-adapter-core':
-        specifier: 4.15.0
+        specifier: 4.15.1
         version: link:../wallet-adapter-core
       vue:
         specifier: ^3.4.21
@@ -708,10 +708,10 @@ packages:
       - debug
     dev: false
 
-  /@aptos-labs/wallet-adapter-core@4.15.0(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.2.1)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0):
-    resolution: {integrity: sha512-5FpdBWDA+YVEMktGB1UbO5GOL2x01DjvdVsDC25asubOnrx0HEYVsY/YCqgNo3aFYPN1hGExjNQBspg/nh4cxQ==}
+  /@aptos-labs/wallet-adapter-core@4.15.1(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.2.1)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0):
+    resolution: {integrity: sha512-f7BVTCen7VvzuKs3yhD/pVbSRkRwkwe2AYVrpT+EGxXpeMjLkM3cQRstfZeUMqj8HuAskBnS81WsILXybqZPAA==}
     peerDependencies:
-      '@aptos-labs/ts-sdk': ^1.18.1
+      '@aptos-labs/ts-sdk': ^1.27.1
       aptos: ^1.21.0
     dependencies:
       '@aptos-connect/wallet-adapter-plugin': 1.0.1(@aptos-labs/ts-sdk@1.27.1)(@aptos-labs/wallet-standard@0.1.0)(aptos@1.21.0)
@@ -3328,7 +3328,7 @@ packages:
   /@msafe/aptos-wallet-adapter@1.1.3(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.2.1)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3):
     resolution: {integrity: sha512-/5ftbNac9j2Vc6YOqET4IdkhiJnMzuy9LcnGP8ptLWHVuye5P/pAjIpv0A07gOM4/siUJQzlXkBxXdLYF9p8wQ==}
     dependencies:
-      '@aptos-labs/wallet-adapter-core': 4.15.0(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.2.1)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0)
+      '@aptos-labs/wallet-adapter-core': 4.15.1(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.2.1)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0)
       '@msafe/aptos-wallet': 6.1.1
       aptos: 1.21.0
     transitivePeerDependencies:
@@ -3762,7 +3762,7 @@ packages:
       simple-git: 3.25.0
       sirv: 2.0.4
       tinyglobby: 0.2.5
-      unimport: 3.11.1
+      unimport: 3.11.1(rollup@4.21.1)
       vite: 5.3.3
       vite-plugin-inspect: 0.8.7(@nuxt/kit@3.13.0)(vite@5.3.3)
       vite-plugin-vue-inspector: 5.1.3(vite@5.3.3)
@@ -3797,7 +3797,7 @@ packages:
       semver: 7.6.3
       ufo: 1.5.4
       unctx: 2.3.1
-      unimport: 3.11.1
+      unimport: 3.11.1(rollup@4.21.1)
       untyped: 1.4.2
     transitivePeerDependencies:
       - magicast
@@ -3818,7 +3818,7 @@ packages:
       std-env: 3.7.0
       ufo: 1.5.4
       uncrypto: 0.1.3
-      unimport: 3.11.1
+      unimport: 3.11.1(rollup@4.21.1)
       untyped: 1.4.2
     transitivePeerDependencies:
       - rollup
