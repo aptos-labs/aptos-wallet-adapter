@@ -3,6 +3,7 @@ import vue from "@vitejs/plugin-vue";
 import dts from "vite-plugin-dts";
 import typescript2, { RPT2Options } from "rollup-plugin-typescript2";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
+import viteCompression from 'vite-plugin-compression';
 import { resolve } from "path";
 
 const typescript2Options: RPT2Options = {
@@ -27,6 +28,10 @@ export default defineConfig({
     }),
     cssInjectedByJsPlugin(),
     typescript2({ ...typescript2Options }),
+    viteCompression({
+      algorithm: 'brotliCompress',
+      threshold: 10240,
+    }),
   ],
   build: {
     lib: {
@@ -38,7 +43,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, "src/index.ts"),
       },
-      external: ["vue"],
+      external: ["vue", "@aptos-labs/wallet-adapter-core"],
       output: {
         exports: "named",
         globals: {
@@ -46,6 +51,7 @@ export default defineConfig({
         },
       },
     },
+    minify: 'terser',
     sourcemap: true,
   },
   resolve: {
