@@ -465,19 +465,22 @@ importers:
         version: 8.57.0
       rollup-plugin-typescript2:
         specifier: ^0.36.0
-        version: 0.36.0(rollup@2.79.1)(typescript@4.9.5)
+        version: 0.36.0(rollup@4.21.1)(typescript@4.9.5)
       typescript:
         specifier: ^4.5.3
         version: 4.9.5
       vite:
         specifier: 5.3.3
         version: 5.3.3
+      vite-plugin-compression:
+        specifier: ^0.5.1
+        version: 0.5.1(vite@5.3.3)
       vite-plugin-css-injected-by-js:
         specifier: ^3.5.1
         version: 3.5.1(vite@5.3.3)
       vite-plugin-dts:
         specifier: 3.9.1
-        version: 3.9.1(rollup@2.79.1)(typescript@4.9.5)(vite@5.3.3)
+        version: 3.9.1(rollup@4.21.1)(typescript@4.9.5)(vite@5.3.3)
       vue-tsc:
         specifier: ^2.0.26
         version: 2.0.29(typescript@4.9.5)
@@ -3855,7 +3858,7 @@ packages:
       vue: ^3.3.4
     dependencies:
       '@nuxt/kit': 3.13.0(magicast@0.3.5)
-      '@rollup/plugin-replace': 5.0.7
+      '@rollup/plugin-replace': 5.0.7(rollup@4.21.1)
       '@vitejs/plugin-vue': 5.1.2(vite@5.4.2)(vue@3.4.38)
       '@vitejs/plugin-vue-jsx': 4.0.1(vite@5.4.2)(vue@3.4.38)
       autoprefixer: 10.4.20(postcss@8.4.41)
@@ -5037,19 +5040,6 @@ packages:
       rollup: 4.21.1
     dev: true
 
-  /@rollup/plugin-replace@5.0.7:
-    resolution: {integrity: sha512-PqxSfuorkHz/SPpyngLyg5GCEkOcee9M1bkxiVDr41Pd61mqP1PLOoDPbpl44SB2mQGKwV/In74gqQmGITOhEQ==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-    dependencies:
-      '@rollup/pluginutils': 5.1.0(rollup@2.79.1)
-      magic-string: 0.30.11
-    dev: true
-
   /@rollup/plugin-replace@5.0.7(rollup@4.21.1):
     resolution: {integrity: sha512-PqxSfuorkHz/SPpyngLyg5GCEkOcee9M1bkxiVDr41Pd61mqP1PLOoDPbpl44SB2mQGKwV/In74gqQmGITOhEQ==}
     engines: {node: '>=14.0.0'}
@@ -5087,20 +5077,6 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /@rollup/pluginutils@5.1.0(rollup@2.79.1):
-    resolution: {integrity: sha512-XTIWOPPcpvyKI6L1NHo0lFlCyznUEyPmPY1mc3KpPVDYulHSTvyeLNVW00QTLIAFNhR3kYnJTQHeGqU4M3n09g==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-    dependencies:
-      '@types/estree': 1.0.5
-      estree-walker: 2.0.2
-      picomatch: 2.3.1
-      rollup: 2.79.1
-
   /@rollup/pluginutils@5.1.0(rollup@4.21.1):
     resolution: {integrity: sha512-XTIWOPPcpvyKI6L1NHo0lFlCyznUEyPmPY1mc3KpPVDYulHSTvyeLNVW00QTLIAFNhR3kYnJTQHeGqU4M3n09g==}
     engines: {node: '>=14.0.0'}
@@ -5114,14 +5090,12 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
       rollup: 4.21.1
-    dev: true
 
   /@rollup/rollup-android-arm-eabi@4.21.1:
     resolution: {integrity: sha512-2thheikVEuU7ZxFXubPDOtspKn1x0yqaYQwvALVtEcvFhMifPADBrgRPyHV0TF3b+9BgvgjgagVyvA/UqPZHmg==}
     cpu: [arm]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-android-arm64@4.21.1:
@@ -5129,7 +5103,6 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-darwin-arm64@4.21.1:
@@ -5137,7 +5110,6 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-darwin-x64@4.21.1:
@@ -5145,7 +5117,6 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-arm-gnueabihf@4.21.1:
@@ -5153,7 +5124,6 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-arm-musleabihf@4.21.1:
@@ -5161,7 +5131,6 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-arm64-gnu@4.21.1:
@@ -5169,7 +5138,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-arm64-musl@4.21.1:
@@ -5177,7 +5145,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-powerpc64le-gnu@4.21.1:
@@ -5185,7 +5152,6 @@ packages:
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-riscv64-gnu@4.21.1:
@@ -5193,7 +5159,6 @@ packages:
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-s390x-gnu@4.21.1:
@@ -5201,7 +5166,6 @@ packages:
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-x64-gnu@4.21.1:
@@ -5209,7 +5173,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-x64-musl@4.21.1:
@@ -5217,7 +5180,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-win32-arm64-msvc@4.21.1:
@@ -5225,7 +5187,6 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-win32-ia32-msvc@4.21.1:
@@ -5233,7 +5194,6 @@ packages:
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-win32-x64-msvc@4.21.1:
@@ -5241,7 +5201,6 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rushstack/eslint-patch@1.10.4:
@@ -6002,7 +5961,7 @@ packages:
         optional: true
     dependencies:
       '@babel/types': 7.25.2
-      '@rollup/pluginutils': 5.1.0(rollup@2.79.1)
+      '@rollup/pluginutils': 5.1.0(rollup@4.21.1)
       '@vue/compiler-sfc': 3.4.38
       ast-kit: 1.1.0
       local-pkg: 0.5.0
@@ -12392,7 +12351,7 @@ packages:
       uncrypto: 0.1.3
       unctx: 2.3.1
       unenv: 1.10.0
-      unimport: 3.11.1
+      unimport: 3.11.1(rollup@4.21.1)
       unplugin: 1.12.2
       unplugin-vue-router: 0.10.7(vue-router@4.4.3)(vue@3.4.38)
       unstorage: 1.10.2(ioredis@5.4.1)
@@ -14254,7 +14213,7 @@ packages:
     dependencies:
       glob: 7.2.3
 
-  /rollup-plugin-typescript2@0.36.0(rollup@2.79.1)(typescript@4.9.5):
+  /rollup-plugin-typescript2@0.36.0(rollup@4.21.1)(typescript@4.9.5):
     resolution: {integrity: sha512-NB2CSQDxSe9+Oe2ahZbf+B4bh7pHwjV5L+RSYpCu7Q5ROuN94F9b6ioWwKfz3ueL3KTtmX4o2MUH2cgHDIEUsw==}
     peerDependencies:
       rollup: '>=1.26.3'
@@ -14263,7 +14222,7 @@ packages:
       '@rollup/pluginutils': 4.2.1
       find-cache-dir: 3.3.2
       fs-extra: 10.1.0
-      rollup: 2.79.1
+      rollup: 4.21.1
       semver: 7.6.3
       tslib: 2.6.3
       typescript: 4.9.5
@@ -14292,6 +14251,7 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.3
+    dev: true
 
   /rollup@4.21.1:
     resolution: {integrity: sha512-ZnYyKvscThhgd3M5+Qt3pmhO4jIRR5RGzaSovB6Q7rGNrK5cUncrtLmcTTJVSdcKXyZjW8X8MB0JMSuH9bcAJg==}
@@ -14317,7 +14277,6 @@ packages:
       '@rollup/rollup-win32-ia32-msvc': 4.21.1
       '@rollup/rollup-win32-x64-msvc': 4.21.1
       fsevents: 2.3.3
-    dev: true
 
   /rpc-websockets@7.11.2:
     resolution: {integrity: sha512-pL9r5N6AVHlMN/vT98+fcO+5+/UcPLf/4tq+WUaid/PPUGS/ttJ3y8e9IqmaWKtShNAysMSjkczuEA49NuV7UQ==}
@@ -15607,25 +15566,6 @@ packages:
     resolution: {integrity: sha512-lRfVq8fE8gz6QMBuDM6a+LO3IAzTi05H6gCVaUpir2E1Rwpo4ZUog45KpNXKC/Mn3Yb9UDuHumeFTo9iV/D9FQ==}
     engines: {node: '>=18'}
 
-  /unimport@3.11.1:
-    resolution: {integrity: sha512-DuB1Uoq01LrrXTScxnwOoMSlTXxyKcULguFxbLrMDFcE/CO0ZWHpEiyhovN0mycPt7K6luAHe8laqvwvuoeUPg==}
-    dependencies:
-      '@rollup/pluginutils': 5.1.0(rollup@2.79.1)
-      acorn: 8.12.1
-      escape-string-regexp: 5.0.0
-      estree-walker: 3.0.3
-      fast-glob: 3.3.2
-      local-pkg: 0.5.0
-      magic-string: 0.30.11
-      mlly: 1.7.1
-      pathe: 1.1.2
-      pkg-types: 1.2.0
-      scule: 1.3.0
-      strip-literal: 2.1.0
-      unplugin: 1.12.2
-    transitivePeerDependencies:
-      - rollup
-
   /unimport@3.11.1(rollup@4.21.1):
     resolution: {integrity: sha512-DuB1Uoq01LrrXTScxnwOoMSlTXxyKcULguFxbLrMDFcE/CO0ZWHpEiyhovN0mycPt7K6luAHe8laqvwvuoeUPg==}
     dependencies:
@@ -15644,7 +15584,6 @@ packages:
       unplugin: 1.12.2
     transitivePeerDependencies:
       - rollup
-    dev: true
 
   /universalify@0.1.2:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
@@ -15664,7 +15603,7 @@ packages:
         optional: true
     dependencies:
       '@babel/types': 7.25.2
-      '@rollup/pluginutils': 5.1.0(rollup@2.79.1)
+      '@rollup/pluginutils': 5.1.0(rollup@4.21.1)
       '@vue-macros/common': 1.12.2(vue@3.4.38)
       ast-walker-scope: 0.6.2
       chokidar: 3.6.0
@@ -15982,6 +15921,19 @@ packages:
       vscode-uri: 3.0.8
     dev: true
 
+  /vite-plugin-compression@0.5.1(vite@5.3.3):
+    resolution: {integrity: sha512-5QJKBDc+gNYVqL/skgFAP81Yuzo9R+EAf19d+EtsMF/i8kFUpNi3J/H01QD3Oo8zBQn+NzoCIFkpPLynoOzaJg==}
+    peerDependencies:
+      vite: '>=2.0.0'
+    dependencies:
+      chalk: 4.1.2
+      debug: 4.3.6
+      fs-extra: 10.1.0
+      vite: 5.3.3
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /vite-plugin-css-injected-by-js@3.5.1(vite@5.3.3):
     resolution: {integrity: sha512-9ioqwDuEBxW55gNoWFEDhfLTrVKXEEZgl5adhWmmqa88EQGKfTmexy4v1Rh0pAS6RhKQs2bUYQArprB32JpUZQ==}
     peerDependencies:
@@ -15990,7 +15942,7 @@ packages:
       vite: 5.3.3
     dev: true
 
-  /vite-plugin-dts@3.9.1(rollup@2.79.1)(typescript@4.9.5)(vite@5.3.3):
+  /vite-plugin-dts@3.9.1(rollup@4.21.1)(typescript@4.9.5)(vite@5.3.3):
     resolution: {integrity: sha512-rVp2KM9Ue22NGWB8dNtWEr+KekN3rIgz1tWD050QnRGlriUCmaDwa7qA5zDEjbXg5lAXhYMSBJtx3q3hQIJZSg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -16001,7 +15953,7 @@ packages:
         optional: true
     dependencies:
       '@microsoft/api-extractor': 7.43.0
-      '@rollup/pluginutils': 5.1.0(rollup@2.79.1)
+      '@rollup/pluginutils': 5.1.0(rollup@4.21.1)
       '@vue/language-core': 1.8.27(typescript@4.9.5)
       debug: 4.3.6
       kolorist: 1.8.0
@@ -16040,7 +15992,7 @@ packages:
     dependencies:
       '@antfu/utils': 0.7.10
       '@nuxt/kit': 3.13.0(magicast@0.3.5)
-      '@rollup/pluginutils': 5.1.0(rollup@2.79.1)
+      '@rollup/pluginutils': 5.1.0(rollup@4.21.1)
       debug: 4.3.6
       error-stack-parser-es: 0.1.5
       fs-extra: 11.2.0
@@ -16357,7 +16309,7 @@ packages:
       '@webassemblyjs/wasm-parser': 1.12.1
       acorn: 8.12.1
       acorn-import-attributes: 1.9.5(acorn@8.12.1)
-      browserslist: 4.23.2
+      browserslist: 4.23.3
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.17.1
       es-module-lexer: 1.5.4
