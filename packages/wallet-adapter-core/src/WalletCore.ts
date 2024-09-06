@@ -2,6 +2,7 @@ import { TxnBuilderTypes, Types, BCS } from "aptos";
 import {
   Network,
   AnyRawTransaction,
+  AccountAddress,
   AccountAuthenticator,
   AccountAuthenticatorEd25519,
   Ed25519PublicKey,
@@ -59,6 +60,7 @@ import {
   WalletCoreV1,
   CompatibleTransactionOptions,
   convertNetwork,
+  convertPayloadInputV1ToV2,
   generateTransactionPayloadFromV1Input,
 } from "./LegacyWalletPlugins";
 import {
@@ -156,7 +158,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     plugins: ReadonlyArray<Wallet>,
     optInWallets: ReadonlyArray<AvailableWallets>,
     dappConfig?: DappConfig,
-    disableTelemetry?: boolean
+    disableTelemetry?: boolean,
   ) {
     super();
 
@@ -189,7 +191,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       // new standard version installed. Pontem uses "Pontem" wallet name for previous versions and
       // "Pontem Wallet" with new version
       const existingStandardPontemWallet = this._standard_wallets.find(
-        (wallet) => wallet.name == "Pontem Wallet"
+        (wallet) => wallet.name == "Pontem Wallet",
       );
       if (wallet.name === "Pontem" && existingStandardPontemWallet) {
         return;
@@ -201,7 +203,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
        * include the plugin wallet (i.e npm package)
        */
       const existingWalletIndex = this._standard_wallets.findIndex(
-        (standardWallet) => standardWallet.name == wallet.name
+        (standardWallet) => standardWallet.name == wallet.name,
       );
       if (existingWalletIndex !== -1) return;
 
@@ -256,7 +258,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     aptosStandardSupportedWalletList.map((supportedWallet) => {
       // Check if we already have this wallet as an installed plugin
       const existingPluginWalletIndex = this.wallets.findIndex(
-        (wallet) => wallet.name === supportedWallet.name
+        (wallet) => wallet.name === supportedWallet.name,
       );
 
       // If the plugin wallet is installed, dont append and dont show it on the selector modal
@@ -267,7 +269,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       // new standard version installed. Pontem uses "Pontem" wallet name for previous versions and
       // "Pontem Wallet" with new version
       const existingStandardPontemWallet = this.wallets.find(
-        (wallet) => wallet.name == "Pontem"
+        (wallet) => wallet.name == "Pontem",
       );
       if (
         supportedWallet.name === "Pontem Wallet" &&
@@ -278,7 +280,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
       // Check if we already have this wallet as a AIP-62 wallet standard
       const existingStandardWallet = this._standard_wallets.find(
-        (wallet) => wallet.name == supportedWallet.name
+        (wallet) => wallet.name == supportedWallet.name,
       );
 
       // If AIP-62 wallet detected but it is excluded by the dapp, dont add it to the wallets array
@@ -316,7 +318,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     // Twallet SDK fires a register event so the adapter assumes it is an extension wallet
     // so filter out t wallet, remove it when twallet fixes it
     const wallets = extensionwWallets.filter(
-      (wallet) => wallet.name !== "Dev T wallet" && wallet.name !== "T wallet"
+      (wallet) => wallet.name !== "Dev T wallet" && wallet.name !== "T wallet",
     );
 
     wallets.map((wallet: AptosStandardWallet) => {
@@ -374,7 +376,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param standardWallet An AIP-62 standard compatible wallet
    */
   private standardizeStandardWalletToPluginWalletType = (
-    standardWallet: AptosStandardWallet
+    standardWallet: AptosStandardWallet,
   ) => {
     let standardWalletConvertedToWallet: Wallet = {
       name: standardWallet.name as WalletName,
@@ -386,26 +388,27 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       network: standardWallet.features["aptos:network"].network,
       account: standardWallet.features["aptos:account"].account,
       signAndSubmitTransaction:
-        standardWallet.features["aptos:signAndSubmitTransaction"]
-          ?.signAndSubmitTransaction,
+      standardWallet.features["aptos:signAndSubmitTransaction"]
+        ?.signAndSubmitTransaction,
       signMessage: standardWallet.features["aptos:signMessage"].signMessage,
       onAccountChange:
-        standardWallet.features["aptos:onAccountChange"].onAccountChange,
+      standardWallet.features["aptos:onAccountChange"].onAccountChange,
       onNetworkChange:
-        standardWallet.features["aptos:onNetworkChange"].onNetworkChange,
+      standardWallet.features["aptos:onNetworkChange"].onNetworkChange,
       signTransaction:
-        standardWallet.features["aptos:signTransaction"].signTransaction,
+      standardWallet.features["aptos:signTransaction"].signTransaction,
       openInMobileApp:
-        standardWallet.features["aptos:openInMobileApp"]?.openInMobileApp,
+      standardWallet.features["aptos:openInMobileApp"]?.openInMobileApp,
       changeNetwork:
-        standardWallet.features["aptos:changeNetwork"]?.changeNetwork,
+      standardWallet.features["aptos:changeNetwork"]?.changeNetwork,
       readyState: WalletReadyState.Installed,
       isAIP62Standard: true,
+      isSignTransactionV1_1: standardWallet.features["aptos:signTransaction"]?.version === '1.1',
     };
 
     // Remove optional duplications in the _all_wallets array
     this._all_wallets = this._all_wallets.filter(
-      (item) => item.name !== standardWalletConvertedToWallet.name
+      (item) => item.name !== standardWalletConvertedToWallet.name,
     );
     this._all_wallets.push(standardWalletConvertedToWallet);
 
@@ -447,7 +450,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param account An account
    */
   private ensureAccountExists(
-    account: AccountInfo | null
+    account: AccountInfo | null,
   ): asserts account is AccountInfo {
     if (!account) {
       throw new WalletAccountError("Account is not set").name;
@@ -535,7 +538,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       | AccountInfo
       | StandardAccountInfo
       | UserResponse<StandardAccountInfo>
-      | null
+      | null,
   ): void {
     if (account === null) {
       this._account = null;
@@ -704,7 +707,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     const allDetectedWallets = this._all_wallets as Array<Wallet>;
 
     const selectedWallet = allDetectedWallets.find(
-      (wallet: Wallet) => wallet.name === walletName
+      (wallet: Wallet) => wallet.name === walletName,
     );
     if (!selectedWallet) return;
 
@@ -713,7 +716,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       // if the selected wallet is already connected, we don't need to connect again
       if (this._wallet?.name === walletName)
         throw new WalletConnectionError(
-          `${walletName} wallet is already connected`
+          `${walletName} wallet is already connected`,
         ).message;
     }
 
@@ -812,7 +815,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @returns The pending transaction hash (V1 output) | PendingTransactionResponse (V2 output)
    */
   async signAndSubmitTransaction(
-    transactionInput: InputTransactionData
+    transactionInput: InputTransactionData,
   ): Promise<
     { hash: Types.HexEncodedBytes; output?: any } | PendingTransactionResponse
   > {
@@ -845,7 +848,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
               aptos,
               this._account,
               this._wallet,
-              this._standard_wallets
+              this._standard_wallets,
             );
           return { hash, output };
         } else {
@@ -855,7 +858,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
               payloadData,
               this._network,
               this._wallet,
-              transactionInput
+              transactionInput,
             );
           return { hash, output };
         }
@@ -896,7 +899,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   async signTransaction(
     transactionOrPayload: AnyRawTransaction | Types.TransactionPayload,
     asFeePayer?: boolean,
-    options?: InputGenerateTransactionOptions
+    options?: InputGenerateTransactionOptions,
   ): Promise<AccountAuthenticator> {
     try {
       this.ensureWalletExists(this._wallet);
@@ -913,15 +916,32 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
             return await this.walletStandardCore.signTransaction(
               transactionOrPayload,
               this._wallet,
-              asFeePayer
+              asFeePayer,
             );
+          } else if (this._wallet.isSignTransactionV1_1) {
+            // This wallet is AIP-62 compliant and supports transaction inputs
+            const payload = convertPayloadInputV1ToV2(transactionOrPayload);
+            const optionsV1 = options as CompatibleTransactionOptions | undefined;
+            const { authenticator } = await this.walletStandardCore.signTransaction(
+              {
+                payload,
+                expirationTimestamp: optionsV1?.expireTimestamp ?? optionsV1?.expirationTimestamp,
+                expirationSecondsFromNow: optionsV1?.expirationSecondsFromNow,
+                gasUnitPrice: optionsV1?.gasUnitPrice ?? optionsV1?.gas_unit_price,
+                maxGasAmount: optionsV1?.maxGasAmount ?? optionsV1?.max_gas_amount,
+                sequenceNumber: optionsV1?.sequenceNumber,
+                sender: optionsV1?.sender ? { address: AccountAddress.from(optionsV1.sender) } : undefined,
+              },
+              this._wallet,
+            );
+            return authenticator;
           } else {
             const aptosConfig = getAptosConfig(this._network);
             this.ensureAccountExists(this._account);
             const sender = this._account.address;
             const payload = await generateTransactionPayloadFromV1Input(
               aptosConfig,
-              transactionOrPayload
+              transactionOrPayload,
             );
             const optionsV1 = options as CompatibleTransactionOptions;
             const optionsV2 = {
@@ -942,7 +962,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
             return await this.walletStandardCore.signTransaction(
               new SimpleTransaction(rawTransaction),
               this._wallet,
-              false
+              false,
             );
           }
         }
@@ -953,7 +973,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         if ("rawTransaction" in transactionOrPayload) {
           const accountAuthenticator = (await this._wallet.signTransaction(
             transactionOrPayload,
-            asFeePayer
+            asFeePayer,
           )) as AccountAuthenticator;
 
           return accountAuthenticator;
@@ -968,7 +988,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
               gas_unit_price: options?.gasUnitPrice
                 ? BigInt(options?.gasUnitPrice)
                 : undefined,
-            }
+            },
           );
 
           if (!response) {
@@ -987,7 +1007,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
           const accountAuthenticator = new AccountAuthenticatorEd25519(
             new Ed25519PublicKey(publicKey),
-            new Ed25519Signature(signature)
+            new Ed25519Signature(signature),
           );
           return accountAuthenticator;
         }
@@ -995,7 +1015,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
       // If we are here it means this wallet does not support signTransaction
       throw new WalletNotSupportedMethod(
-        `Sign Transaction is not supported by ${this.wallet?.name}`
+        `Sign Transaction is not supported by ${this.wallet?.name}`,
       ).message;
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
@@ -1032,7 +1052,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @returns PendingTransactionResponse
    */
   async submitTransaction(
-    transaction: InputSubmitTransactionData
+    transaction: InputSubmitTransactionData,
   ): Promise<PendingTransactionResponse> {
     try {
       this.ensureWalletExists(this._wallet);
@@ -1074,10 +1094,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   /**
-  Event for when account has changed on the wallet
-  @return the new account info
-  @throws WalletAccountChangeError
-  */
+   Event for when account has changed on the wallet
+   @return the new account info
+   @throws WalletAccountChangeError
+   */
   async onAccountChange(): Promise<void> {
     try {
       this.ensureWalletExists(this._wallet);
@@ -1087,7 +1107,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           await this.setAnsName();
           this.recordEvent("account_change");
           this.emit("accountChange", this._account);
-        }
+        },
       );
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
@@ -1096,10 +1116,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   /**
-  Event for when network has changed on the wallet
-  @return the new network info
-  @throws WalletNetworkChangeError
-  */
+   Event for when network has changed on the wallet
+   @return the new network info
+   @throws WalletNetworkChangeError
+   */
   async onNetworkChange(): Promise<void> {
     try {
       this.ensureWalletExists(this._wallet);
@@ -1108,7 +1128,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           this.setNetwork(data);
           await this.setAnsName();
           this.emit("networkChange", this._network);
-        }
+        },
       );
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
@@ -1146,7 +1166,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         return response.args;
       }
       throw new WalletChangeNetworkError(
-        `${this._wallet.name} does not support changing network request`
+        `${this._wallet.name} does not support changing network request`,
       ).message;
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
@@ -1168,14 +1188,14 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       if (this._wallet.isAIP62Standard) {
         return this.walletStandardCore.signMessageAndVerify(
           message,
-          this._wallet
+          this._wallet,
         );
       }
 
       return await this.walletCoreV1.signMessageAndVerify(
         message,
         this._wallet,
-        this._account
+        this._account,
       );
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
