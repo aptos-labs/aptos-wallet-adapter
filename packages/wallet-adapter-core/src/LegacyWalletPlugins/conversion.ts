@@ -86,16 +86,27 @@ export function convertV2PayloadToV1JSONPayload(
   }
 }
 
-export async function generateTransactionPayloadFromV1Input(
-  aptosConfig: AptosConfig,
+export function convertPayloadInputV1ToV2(
   inputV1: Types.TransactionPayload
-): Promise<TransactionPayloadEntryFunction> {
+) {
   if ("function" in inputV1) {
     const inputV2: InputEntryFunctionData | InputMultiSigData = {
       function: inputV1.function as MoveFunctionId,
       functionArguments: inputV1.arguments,
       typeArguments: inputV1.type_arguments,
     };
+    return inputV2;
+  }
+
+  throw new Error("Payload type not supported");
+}
+
+export async function generateTransactionPayloadFromV1Input(
+  aptosConfig: AptosConfig,
+  inputV1: Types.TransactionPayload
+): Promise<TransactionPayloadEntryFunction> {
+  if ("function" in inputV1) {
+    const inputV2 = convertPayloadInputV1ToV2(inputV1);
     return generateTransactionPayload({ ...inputV2, aptosConfig });
   }
 
