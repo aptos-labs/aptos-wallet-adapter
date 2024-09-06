@@ -2,7 +2,6 @@
 import { ref, computed, h } from "vue";
 import { aptosClient, isSendableNetwork } from "@/utils";
 import {
-  AccountAddress,
   AccountAuthenticator,
   AnyRawTransaction,
   Account,
@@ -19,7 +18,6 @@ const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
 const transactionToSubmit = ref<AnyRawTransaction>();
 const senderAuthenticator = ref<AccountAuthenticator>();
 const feepayerAuthenticator = ref<AccountAuthenticator>();
-const feepayerAddress = ref<AccountAddress>();
 
 const isSendable = computed(() =>
   isSendableNetwork(connected.value, network.value?.name || undefined),
