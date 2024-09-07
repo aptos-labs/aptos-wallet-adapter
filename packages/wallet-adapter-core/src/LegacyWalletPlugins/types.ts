@@ -156,6 +156,7 @@ export type AdapterPlugin<Name extends string = string> =
 export type Wallet<Name extends string = string> = AdapterPlugin<Name> & {
   readyState?: WalletReadyState;
   isAIP62Standard?: boolean;
+  isSignTransactionV1_1?: boolean;
 };
 
 export interface TransactionOptions {
