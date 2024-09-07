@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.16.0
+
+### Minor Changes
+
+- 3795c56: Added transaction input support for `signTransaction`
+
 ## 4.15.1
 
 ### Patch Changes
