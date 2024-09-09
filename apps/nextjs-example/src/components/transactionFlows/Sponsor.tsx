@@ -1,6 +1,6 @@
 import { aptosClient, isSendableNetwork } from "@/utils";
 import {
-  AccountAddress,
+  Account,
   AccountAuthenticator,
   AnyRawTransaction,
 } from "@aptos-labs/ts-sdk";
@@ -24,9 +24,12 @@ export function Sponsor() {
     useState<AccountAuthenticator>();
   const [feepayerAuthenticator, setFeepayerAuthenticator] =
     useState<AccountAuthenticator>();
-  const [feepayerAddress, setFeepayerAddress] = useState<AccountAddress>();
 
   let sendable = isSendableNetwork(connected, network?.name);
+
+  // create sponsor account
+  const SPONSOR_INITIAL_BALANCE = 100_000_000;
+  const sponsor = Account.generate();
 
   // Generate a raw transaction using the SDK
   const generateTransaction = async (): Promise<AnyRawTransaction> => {
@@ -34,7 +37,7 @@ export function Sponsor() {
       throw new Error("no account");
     }
     const transactionToSign = await aptosClient(
-      network,
+      network
     ).transaction.build.simple({
       sender: account.address,
       withFeePayer: true,
@@ -64,9 +67,17 @@ export function Sponsor() {
       throw new Error("No Transaction to sign");
     }
     try {
-      const authenticator = await signTransaction(transactionToSubmit, true);
+      await aptosClient(network).fundAccount({
+        accountAddress: sponsor.accountAddress,
+        amount: SPONSOR_INITIAL_BALANCE,
+      });
+      const authenticator = await aptosClient(
+        network
+      ).transaction.signAsFeePayer({
+        signer: sponsor,
+        transaction: transactionToSubmit,
+      });
       setFeepayerAuthenticator(authenticator);
-      setFeepayerAddress(AccountAddress.from(account!.address));
     } catch (error) {
       console.error(error);
     }
@@ -82,7 +93,6 @@ export function Sponsor() {
     if (!feepayerAuthenticator) {
       throw new Error("No feepayerAuthenticator");
     }
-    transactionToSubmit.feePayerAddress = feepayerAddress;
     try {
       const response = await submitTransaction({
         transaction: transactionToSubmit,
