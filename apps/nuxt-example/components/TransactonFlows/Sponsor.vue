@@ -2,9 +2,9 @@
 import { ref, computed, h } from "vue";
 import { aptosClient, isSendableNetwork } from "@/utils";
 import {
-  AccountAddress,
   AccountAuthenticator,
   AnyRawTransaction,
+  Account,
 } from "@aptos-labs/ts-sdk";
 import TransactionHash from "~/components/TransactionHash.vue";
 import { useToast } from "~/components/ui/toast";
@@ -18,11 +18,14 @@ const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
 const transactionToSubmit = ref<AnyRawTransaction>();
 const senderAuthenticator = ref<AccountAuthenticator>();
 const feepayerAuthenticator = ref<AccountAuthenticator>();
-const feepayerAddress = ref<AccountAddress>();
 
 const isSendable = computed(() =>
   isSendableNetwork(connected.value, network.value?.name || undefined),
 );
+
+  // create sponsor account
+  const SPONSOR_INITIAL_BALANCE = 100_000_000;
+  const sponsor = Account.generate();
 
 // Generate a raw transaction using the SDK
 const generateTransaction = async (): Promise<AnyRawTransaction> => {
@@ -59,11 +62,16 @@ const onSignTransactionAsSponsor = async () => {
     throw new Error("No Transaction to sign");
   }
   try {
-    feepayerAuthenticator.value = await signTransaction(
-      transactionToSubmit.value,
-      true,
-    );
-    feepayerAddress.value = AccountAddress.from(account.value!.address);
+    await aptosClient(network.value).fundAccount({
+        accountAddress: sponsor.accountAddress,
+        amount: SPONSOR_INITIAL_BALANCE,
+      });
+    feepayerAuthenticator.value = await aptosClient(
+        network.value
+      ).transaction.signAsFeePayer({
+        signer: sponsor,
+        transaction: transactionToSubmit.value,
+      });
   } catch (error) {
     console.error(error);
   }
@@ -79,7 +87,6 @@ const onSubmitTransaction = async () => {
   if (!feepayerAuthenticator.value) {
     throw new Error("No feepayerAuthenticator");
   }
-  transactionToSubmit.value.feePayerAddress = feepayerAddress!;
   try {
     const response = await submitTransaction({
       transaction: transactionToSubmit.value,
