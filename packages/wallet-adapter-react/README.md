@@ -75,7 +75,7 @@ const wallets = [new AptosLegacyStandardWallet()];
   plugins={wallets}
   autoConnect={true}
   optInWallets={["Petra"]}
-  dappConfig={{ network: network.MAINNET }}
+  dappConfig={{ network: network.MAINNET, aptosApiKey: "my-generated-api-key" }}
   onError={(error) => {
     console.log("error", error);
   }}
@@ -86,12 +86,14 @@ const wallets = [new AptosLegacyStandardWallet()];
 
 #### Available Provider Props
 
+- `dappConfig` - Config used to initialize the dapp with.
+  - `network` - the network the dapp works with
+  - `aptosApiKey` - an api key generated from https://developers.aptoslabs.com/docs/api-access
+- `onError` - a callback function to fire when the adapter throws an error
 - `plugins` - any legacy standard wallet, i.e a wallet that is not AIP-62 standard compatible, should be installed and passed in this array. [Check here](../../README.md#supported-wallet-packages) for a list of AIP-62 and legacy standard wallets.
 - `autoConnect` - a prop indicates whether the dapp should auto connect with a previous connected wallet.
 - `optInWallets` - the adapter detects and adds AIP-62 standard wallets by default, sometimes you might want to opt-in with specific wallets. This props lets you define the AIP-62 standard wallets you want to support in your dapp.
-- `dappConfig` - the adapter comes built-in with AIP-62 standard SDK wallets and it needs to know what configuration your dapp is in to render the current instance.
-- `onError` - a callback function to fire when the adapter throws an error
-- (optional) `disableTelemetry` - A boolean flag to disable the adapter telemetry tool, false by default
+- `disableTelemetry` - A boolean flag to disable the adapter telemetry tool, false by default
 
 #### Use Wallet
 

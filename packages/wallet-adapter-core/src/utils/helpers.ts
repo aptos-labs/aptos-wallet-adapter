@@ -10,6 +10,7 @@ import {
 import { NetworkInfo as StandardNetworkInfo } from "@aptos-labs/wallet-standard";
 import { convertNetwork } from "../LegacyWalletPlugins/conversion";
 import { NetworkInfo } from "../LegacyWalletPlugins/types";
+import { DappConfig } from "../WalletCore";
 
 export function isMobile(): boolean {
   return /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/i.test(
@@ -64,10 +65,12 @@ export const areBCSArguments = (
  * Helper function to get AptosConfig that supports Aptos and Custom networks
  *
  * @param networkInfo
+ * @param dappConfig
  * @returns AptosConfig
  */
 export const getAptosConfig = (
-  networkInfo: NetworkInfo | StandardNetworkInfo | null
+  networkInfo: NetworkInfo | StandardNetworkInfo | null,
+  dappConfig: DappConfig | undefined
 ): AptosConfig => {
   if (!networkInfo) {
     throw new Error("Undefined network");
@@ -75,11 +78,13 @@ export const getAptosConfig = (
   if (isAptosNetwork(networkInfo)) {
     return new AptosConfig({
       network: convertNetwork(networkInfo),
+      clientConfig: { API_KEY: dappConfig?.aptosApiKey },
     });
   }
   return new AptosConfig({
     network: Network.CUSTOM,
     fullnode: networkInfo.url,
+    clientConfig: { API_KEY: dappConfig?.aptosApiKey },
   });
 };
 
