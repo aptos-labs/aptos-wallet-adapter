@@ -82,12 +82,16 @@ import {
 import { GA4 } from "./ga";
 import { WALLET_ADAPTER_CORE_VERSION } from "./version";
 import { aptosStandardSupportedWalletList } from "./AIP62StandardWallets/registry";
+import type { AptosConnectWalletConfig } from "@aptos-connect/wallet-adapter-plugin";
 
 export type IAptosWallet = AptosStandardWallet & Wallet;
 
 export interface DappConfig {
   network: Network;
+  /** @deprecated */
   aptosConnectDappId?: string;
+  // Config used to initialize the AptosConnect wallet provider
+  aptosConnect?: Omit<AptosConnectWalletConfig, 'network'>,
   mizuwallet?: {
     manifestURL: string;
     appId?: string;
