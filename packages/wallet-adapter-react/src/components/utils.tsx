@@ -29,7 +29,7 @@ export function createHeadlessComponent<
   elementType: TElement,
   props?:
     | JSX.IntrinsicElements[TElement]
-    | ((displayName: string) => JSX.IntrinsicElements[TElement])
+    | ((displayName: string) => JSX.IntrinsicElements[TElement]),
 ) {
   const component = forwardRef<
     HTMLElementFromTag<TElement>,
@@ -38,7 +38,7 @@ export function createHeadlessComponent<
     const Component = asChild ? Slot : elementType;
 
     const { children: defaultChildren, ...resolvedProps } =
-      typeof props === "function" ? props(displayName) : props ?? {};
+      typeof props === "function" ? props(displayName) : (props ?? {});
 
     return (
       /**
@@ -52,12 +52,9 @@ export function createHeadlessComponent<
        * ignored for the JSX block below.
        */
       // @ts-expect-error
-      <Component
-        ref={ref}
-        className={className}
-        children={children ?? defaultChildren}
-        {...resolvedProps}
-      />
+      <Component ref={ref} className={className} {...resolvedProps}>
+        {children ?? defaultChildren}
+      </Component>
     );
   });
   component.displayName = displayName;
