@@ -14,7 +14,8 @@ export function getSDKWallets(dappConfig?: DappConfig) {
       new AptosConnectWallet({
         network: dappConfig?.network,
         dappId: dappConfig?.aptosConnectDappId,
-      })
+        ...dappConfig?.aptosConnect,
+      }),
     );
 
     if (

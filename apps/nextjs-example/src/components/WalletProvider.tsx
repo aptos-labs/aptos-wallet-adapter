@@ -33,7 +33,8 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       autoConnect={autoConnect}
       dappConfig={{
         network: Network.TESTNET,
-        aptosConnectDappId: "57fa42a9-29c6-4f1e-939c-4eefa36d9ff5",
+        aptosApiKey: process.env.NEXT_PUBLIC_APTOS_API_KEY,
+        aptosConnect: { dappId: "57fa42a9-29c6-4f1e-939c-4eefa36d9ff5" },
         mizuwallet: {
           manifestURL:
             "https://assets.mz.xyz/static/config/mizuwallet-connect-manifest.json",

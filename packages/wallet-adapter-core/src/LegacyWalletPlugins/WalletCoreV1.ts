@@ -33,6 +33,7 @@ import {
   generalizedErrorMessage,
   getAptosConfig,
 } from "../utils";
+import { DappConfig } from "../WalletCore";
 
 export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
   async connect(wallet: Wallet) {
@@ -54,11 +55,12 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
     payloadData: InputGenerateTransactionPayloadData,
     network: NetworkInfo | null,
     wallet: Wallet,
-    transactionInput: InputTransactionData
+    transactionInput: InputTransactionData,
+    dappConfig?: DappConfig
   ) {
     // first check if each argument is a BCS serialized argument
     if (areBCSArguments(payloadData.functionArguments)) {
-      const aptosConfig = getAptosConfig(network);
+      const aptosConfig = getAptosConfig(network, dappConfig);
       const newPayload = await generateTransactionPayload({
         ...(payloadData as InputEntryFunctionDataWithRemoteABI),
         aptosConfig: aptosConfig,
