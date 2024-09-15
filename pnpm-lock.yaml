@@ -636,7 +636,6 @@ packages:
       - debug
     dev: false
 
-
   /@aptos-labs/ts-sdk@1.27.1:
     resolution: {integrity: sha512-QS4BlivXQy/uJgXcNOfXNjv8l+MSd+qQ256mY/Jc6iaWbfn69nRYh6chjSyLot4fHA49QxlZlWh1mJLlfNdtow==}
     engines: {node: '>=11.0.0'}
@@ -687,9 +686,8 @@ packages:
       - debug
     dev: false
 
-  /@aptos-labs/wallet-adapter-core@4.16.0(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.2.1)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0):
+  /@aptos-labs/wallet-adapter-core@4.16.0(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.3.2)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0):
     resolution: {integrity: sha512-SnjrDEI5Ftwub+zPJiGIQG3zSiz9vgH+vNAmpHoxc/9aSUm10BA+mI/xKcT+8ZvMOEFeoPyuDtYfud3CDGu5ew==}
-
     peerDependencies:
       '@aptos-labs/ts-sdk': ^1.27.1
       aptos: ^1.21.0
@@ -3275,7 +3273,7 @@ packages:
   /@msafe/aptos-wallet-adapter@1.1.3(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.3.2)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3):
     resolution: {integrity: sha512-/5ftbNac9j2Vc6YOqET4IdkhiJnMzuy9LcnGP8ptLWHVuye5P/pAjIpv0A07gOM4/siUJQzlXkBxXdLYF9p8wQ==}
     dependencies:
-      '@aptos-labs/wallet-adapter-core': 4.16.0(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.2.1)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0)
+      '@aptos-labs/wallet-adapter-core': 4.16.0(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.3.2)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0)
       '@msafe/aptos-wallet': 6.1.1
       aptos: 1.21.0
     transitivePeerDependencies:
@@ -4086,6 +4084,7 @@ packages:
     dependencies:
       is-glob: 4.0.3
       micromatch: 4.0.8
+      napi-wasm: 1.1.3
     dev: true
     bundledDependencies:
       - napi-wasm
@@ -11976,6 +11975,10 @@ packages:
     resolution: {integrity: sha512-AiJsGsSF3O0havL1BydvI4+wR76sKT+okKRwWIaK96cZUnXqH0uNBOsHlbwZq3+m2BR1VKqHDVudl3gO4mYjpQ==}
     dev: true
 
+  /napi-wasm@1.1.3:
+    resolution: {integrity: sha512-h/4nMGsHjZDCYmQVNODIrYACVJ+I9KItbG+0si6W/jSjdA9JbWDoU4LLeMXVcEQGHjttI2tuXqDrbGF7qkUHHg==}
+    dev: true
+
   /natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
@@ -15860,7 +15863,7 @@ packages:
       vite: '>=2.0.0'
     dependencies:
       chalk: 4.1.2
-      debug: 4.3.6
+      debug: 4.3.7
       fs-extra: 10.1.0
       vite: 5.3.3
     transitivePeerDependencies:
