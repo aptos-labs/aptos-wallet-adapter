@@ -1,5 +1,18 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.7.0
+
+### Minor Changes
+
+- e252fce: Add support for a dapp generated api key
+
+### Patch Changes
+
+- Updated dependencies [d348384]
+- Updated dependencies [e252fce]
+- Updated dependencies [bd54d77]
+  - @aptos-labs/wallet-adapter-core@4.17.0
+
 ## 3.6.2
 
 ### Patch Changes

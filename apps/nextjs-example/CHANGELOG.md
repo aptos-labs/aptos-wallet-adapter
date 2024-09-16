@@ -1,5 +1,18 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.4.14
+
+### Patch Changes
+
+- e252fce: Add support for a dapp generated api key
+- Updated dependencies [d348384]
+- Updated dependencies [e252fce]
+- Updated dependencies [bd54d77]
+  - @aptos-labs/wallet-adapter-core@4.17.0
+  - @aptos-labs/wallet-adapter-react@3.7.0
+  - @aptos-labs/wallet-adapter-ant-design@3.0.14
+  - @aptos-labs/wallet-adapter-mui-design@3.0.14
+
 ## 3.4.13
 
 ### Patch Changes
