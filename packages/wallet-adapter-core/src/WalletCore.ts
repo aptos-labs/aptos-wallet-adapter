@@ -1161,17 +1161,21 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param network
    * @returns AptosChangeNetworkOutput
    */
-  async changeNetwork(network: Network): Promise<AptosChangeNetworkOutput> {
+  async changeNetwork(
+    network: Network,
+    customChainId?: number
+  ): Promise<AptosChangeNetworkOutput> {
     try {
       this.ensureWalletExists(this._wallet);
       this.recordEvent("change_network_request", {
         from: this._network?.name,
         to: network,
       });
+
       const chainId =
         network === Network.DEVNET
           ? await fetchDevnetChainId()
-          : NetworkToChainId[network];
+          : (network === Network.CUSTOM && customChainId) ? customChainId : NetworkToChainId[network];
       if (this._wallet.changeNetwork) {
         const networkInfo: StandardNetworkInfo = {
           name: network,
