@@ -33,6 +33,7 @@ import {
 } from "@aptos-labs/wallet-adapter-react";
 import { AlertCircle } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
 // Imports for registering a browser extension wallet plugin on page load
 import { MyWallet } from "@/utils/standardWallet";
@@ -144,7 +145,7 @@ interface WalletConnectionProps {
   account: AccountInfo | null;
   network: NetworkInfo | null;
   wallet: WalletInfo | null;
-  changeNetwork: (network: Network) => Promise<AptosChangeNetworkOutput>;
+  changeNetwork: (network: Network, chainId?: number) => Promise<AptosChangeNetworkOutput>;
 }
 
 function WalletConnection({
@@ -161,6 +162,8 @@ function WalletConnection({
     // we resolve it as a valid network name
     return true;
   };
+
+  const [customChainId, setCustomChainId] = useState<number | "">("");
 
   // TODO: Do a proper check for network change support
   const isNetworkChangeSupported = wallet?.name === "Nightly";
@@ -292,7 +295,18 @@ function WalletConnection({
             value={network?.name}
             orientation="horizontal"
             className="flex gap-6"
-            onValueChange={(value: Network) => changeNetwork(value)}
+            onValueChange={(value: Network) => {
+              if (value === Network.CUSTOM) {
+                changeNetwork(
+                  value,
+                  customChainId ? Number(customChainId) : undefined
+                );
+              } else {
+                changeNetwork(value)
+              }
+             }
+            }            
+            
             disabled={!isNetworkChangeSupported}
           >
             <div className="flex items-center space-x-2">
@@ -307,7 +321,24 @@ function WalletConnection({
               <RadioGroupItem value={Network.MAINNET} id="mainnet-radio" />
               <Label htmlFor="mainnet-radio">Mainnet</Label>
             </div>
-          </RadioGroup>
+
+            <div className="flex items-center space-x-2">
+          <RadioGroupItem 
+            value={Network.CUSTOM} 
+            id="custom-radio" 
+            disabled={!customChainId} 
+          />
+          <Label htmlFor="custom-radio">Custom</Label>
+
+            <input
+              type="number"
+              className="ml-2 border rounded px-2 py-1"
+              value={customChainId}
+              onChange={(e) => setCustomChainId(e.target.value ? Number(e.target.value) : "")}
+              placeholder="Enter chainId"
+            />
+        </div>
+      </RadioGroup>
           {!isNetworkChangeSupported && (
             <div className="text-sm text-red-600 dark:text-red-400">
               * {wallet?.name ?? "This wallet"} does not support network change

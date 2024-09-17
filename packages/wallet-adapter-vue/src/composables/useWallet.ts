@@ -208,7 +208,6 @@ export function useWallet(
       return Promise.reject(error);
     }
   };
-  
 
   const handleReadyStateChange = (updatedWallet: MaybeRef<Wallet>) => {
     const _updatedWallet = unref(updatedWallet);
