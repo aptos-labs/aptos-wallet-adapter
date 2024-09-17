@@ -39,7 +39,7 @@ export interface WalletContextState {
   ): Promise<PendingTransactionResponse>;
   signMessage(message: SignMessagePayload): Promise<SignMessageResponse>;
   signMessageAndVerify(message: SignMessagePayload): Promise<boolean>;
-  changeNetwork(network: Network, chainId: number): Promise<AptosChangeNetworkOutput>;
+  changeNetwork(network: Network, chainId?: number): Promise<AptosChangeNetworkOutput>;
 }
 
 const DEFAULT_CONTEXT = {
