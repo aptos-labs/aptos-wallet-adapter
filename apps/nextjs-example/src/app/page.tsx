@@ -296,17 +296,16 @@ function WalletConnection({
             orientation="horizontal"
             className="flex gap-6"
             onValueChange={(value: Network) => {
-              if (value === Network.CUSTOM) {
-                changeNetwork(
-                  value,
-                  customChainId ? Number(customChainId) : undefined
-                );
+              if (value === Network.CUSTOM && customChainId && Number(customChainId) > 0) {
+                changeNetwork(value, Number(customChainId));
+              } else if (value !== Network.CUSTOM) {
+                changeNetwork(value);
               } else {
-                changeNetwork(value)
+                console.warn("Invalid chainId");
               }
-             }
-            }            
-            
+            }}
+
+
             disabled={!isNetworkChangeSupported}
           >
             <div className="flex items-center space-x-2">
@@ -323,22 +322,23 @@ function WalletConnection({
             </div>
 
             <div className="flex items-center space-x-2">
-          <RadioGroupItem 
-            value={Network.CUSTOM} 
-            id="custom-radio" 
-            disabled={!customChainId} 
-          />
-          <Label htmlFor="custom-radio">Custom</Label>
+            <RadioGroupItem 
+  value={Network.CUSTOM} 
+  id="custom-radio" 
+  disabled={!customChainId || Number(customChainId) <= 0} 
+/>
 
-            <input
-              type="number"
-              className="ml-2 border rounded px-2 py-1"
-              value={customChainId}
-              onChange={(e) => setCustomChainId(e.target.value ? Number(e.target.value) : "")}
-              placeholder="Enter chainId"
-            />
-        </div>
-      </RadioGroup>
+              <Label htmlFor="custom-radio">Custom</Label>
+
+              <input
+                type="number"
+                className="ml-2 border rounded px-2 py-1"
+                value={customChainId}
+                onChange={(e) => setCustomChainId(e.target.value ? Number(e.target.value) : "")}
+                placeholder="Enter chainId"
+              />
+            </div>
+          </RadioGroup>
           {!isNetworkChangeSupported && (
             <div className="text-sm text-red-600 dark:text-red-400">
               * {wallet?.name ?? "This wallet"} does not support network change
