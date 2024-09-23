@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.17.0
+
+### Minor Changes
+
+- e252fce: Add support for a dapp generated api key
+- bd54d77: Bumped `@aptos-connect/wallet-adapter-plugin` to 2.0.2 and exposed `preferredWalletName` option
+
+### Patch Changes
+
+- d348384: Bump @mizuwallet-sdk/aptos-wallet-adapter version to 0.2.5
+
 ## 4.16.0
 
 ### Minor Changes
