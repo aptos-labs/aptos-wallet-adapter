@@ -1,9 +1,12 @@
 import { aptosClient, isSendableNetwork } from "@/utils";
 import {
   Account,
+  AccountAddress,
   AccountAuthenticator,
   AnyRawTransaction,
   Ed25519Account,
+  parseTypeTag,
+  U64,
 } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useState } from "react";
@@ -14,6 +17,8 @@ import { useToast } from "../ui/use-toast";
 import { LabelValueGrid } from "../LabelValueGrid";
 
 const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
+const TRANSFER_SCRIPT =
+  "0xa11ceb0b0600000006010002030206040802050a10071a1d0837200000000103010100000204060c060c05030001090003060c05030d6170746f735f6163636f756e740e7472616e736665725f636f696e73000000000000000000000000000000000000000000000000000000000000000101000001050b010b020b03380002";
 
 export function MultiAgent() {
   const { toast } = useToast();
@@ -55,9 +60,9 @@ export function MultiAgent() {
       sender: account.address,
       secondarySignerAddresses: [secondarySigner.accountAddress],
       data: {
-        function: "0x1::coin::transfer",
-        typeArguments: [APTOS_COIN],
-        functionArguments: [account.address.toString(), 1], // 1 is in Octas
+        bytecode: TRANSFER_SCRIPT,
+        typeArguments: [parseTypeTag(APTOS_COIN)],
+        functionArguments: [AccountAddress.fromString(account.address), new U64(1)],
       },
     });
     return transactionToSign;
@@ -67,10 +72,8 @@ export function MultiAgent() {
     const transaction = await generateTransaction();
     setTransactionToSubmit(transaction);
     try {
-      const response = await signTransaction({
-        transactionOrPayload: transaction,
-      });
-      setSenderAuthenticator(response.authenticator);
+      const authenticator = await signTransaction(transaction);
+      setSenderAuthenticator(authenticator);
     } catch (error) {
       console.error(error);
     }
@@ -80,11 +83,12 @@ export function MultiAgent() {
     if (!transactionToSubmit) {
       throw new Error("No Transaction to sign");
     }
+    if (!secondarySignerAccount) {
+      throw new Error("No secondarySignerAccount");
+    }
     try {
-      const response = await signTransaction({
-        transactionOrPayload: transactionToSubmit,
-      });
-      setSecondarySignerAuthenticator(response.authenticator);
+      const authenticator = await signTransaction(transactionToSubmit);
+      setSecondarySignerAuthenticator(authenticator);
     } catch (error) {
       console.error(error);
     }
