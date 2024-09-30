@@ -192,9 +192,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
     
     try {
-      return await walletCore.changeNetwork(network, chainId)
-        ? await walletCore.changeNetwork(network, chainId) 
-        : await walletCore.changeNetwork(network);
+      return await walletCore.changeNetwork(network, chainId);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
