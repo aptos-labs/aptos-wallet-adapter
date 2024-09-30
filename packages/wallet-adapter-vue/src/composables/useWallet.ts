@@ -52,7 +52,7 @@ export interface WalletContextState {
   ): Promise<PendingTransactionResponse>;
   signMessage(message: SignMessagePayload): Promise<SignMessageResponse>;
   signMessageAndVerify(message: SignMessagePayload): Promise<boolean>;
-  changeNetwork(network: Network, chainId?: number): Promise<AptosChangeNetworkOutput>;
+  changeNetwork(network: Network, chainId?: string): Promise<AptosChangeNetworkOutput>;
 }
 
 export interface AptosWalletProviderProps {
@@ -197,7 +197,7 @@ export function useWallet(
     }
   };
 
-  const changeNetwork = async (network: Network, chainId?: number) => {
+  const changeNetwork = async (network: Network, chainId?: string) => {
     try {
       // Call changeNetwork with chainId if provided, otherwise call without it
       return chainId !== undefined 

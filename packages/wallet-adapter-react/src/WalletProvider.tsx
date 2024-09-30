@@ -186,7 +186,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const changeNetwork = async (network: Network, chainId?: number) => {
+  const changeNetwork = async (network: Network, chainId?: string) => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
     }

@@ -163,7 +163,7 @@ function WalletConnection({
     return true;
   };
 
-  const [customChainId, setCustomChainId] = useState<number | "">("");
+  const [customChainId, setCustomChainId] = useState<string | "">("");
 
   // TODO: Do a proper check for network change support
   const isNetworkChangeSupported = wallet?.name === "Nightly";
@@ -297,7 +297,7 @@ function WalletConnection({
             className="flex gap-6"
             onValueChange={(value: Network) => {
               if (value === Network.CUSTOM && customChainId && Number(customChainId) > 0) {
-                changeNetwork(value, Number(customChainId));
+                changeNetwork(value, customChainId);
               } else if (value !== Network.CUSTOM) {
                 changeNetwork(value);
               } else {
