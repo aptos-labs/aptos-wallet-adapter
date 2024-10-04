@@ -15,6 +15,7 @@ import {
   generateRawTransaction,
   SimpleTransaction,
   NetworkToChainId,
+  Hex,
 } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
 import {
@@ -67,6 +68,7 @@ import {
   fetchDevnetChainId,
   generalizedErrorMessage,
   getAptosConfig,
+  handlePublishPackageTransaction,
   isAptosNetwork,
   isRedirectable,
   removeLocalStorage,
@@ -838,6 +840,15 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         ) {
           throw new WalletSignAndSubmitMessageError("SCAM SITE DETECTED")
             .message;
+        }
+
+        if (
+          transactionInput.data.function === "0x1::code::publish_package_txn"
+        ) {
+          ({
+            metadataBytes: transactionInput.data.functionArguments[0],
+            byteCode: transactionInput.data.functionArguments[1],
+          } = handlePublishPackageTransaction(transactionInput));
         }
       }
 

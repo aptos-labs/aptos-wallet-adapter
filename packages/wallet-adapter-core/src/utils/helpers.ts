@@ -2,6 +2,7 @@ import {
   Aptos,
   AptosConfig,
   EntryFunctionArgumentTypes,
+  Hex,
   Network,
   NetworkToNodeAPI,
   Serializable,
@@ -9,8 +10,12 @@ import {
 } from "@aptos-labs/ts-sdk";
 import { NetworkInfo as StandardNetworkInfo } from "@aptos-labs/wallet-standard";
 import { convertNetwork } from "../LegacyWalletPlugins/conversion";
-import { NetworkInfo } from "../LegacyWalletPlugins/types";
+import {
+  InputTransactionData,
+  NetworkInfo,
+} from "../LegacyWalletPlugins/types";
 import { DappConfig } from "../WalletCore";
+import { WalletSignAndSubmitMessageError } from "../error";
 
 export function isMobile(): boolean {
   return /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/i.test(
@@ -109,4 +114,36 @@ export const isAptosNetwork = (
 export const fetchDevnetChainId = async (): Promise<number> => {
   const aptos = new Aptos(); // default to devnet
   return await aptos.getChainId();
+};
+
+/**
+ * A helper function to handle the publish package transaction.
+ * The Aptos SDK expects the metadataBytes and byteCode to be Uint8Array, but in case the arguments are passed in
+ * as a string, this function converts the string to Uint8Array.
+ */
+export const handlePublishPackageTransaction = (
+  transactionInput: InputTransactionData
+) => {
+  // convert the first argument, metadataBytes, to uint8array if is a string
+  let metadataBytes = transactionInput.data.functionArguments[0];
+  if (typeof metadataBytes === "string") {
+    metadataBytes = Hex.fromHexInput(metadataBytes).toUint8Array();
+  }
+
+  // convert the second argument, byteCode, to uint8array if is a string
+  let byteCode = transactionInput.data.functionArguments[1];
+  if (Array.isArray(byteCode)) {
+    byteCode = byteCode.map((byte) => {
+      if (typeof byte === "string") {
+        return Hex.fromHexInput(byte).toUint8Array();
+      }
+      return byte;
+    });
+  } else {
+    throw new WalletSignAndSubmitMessageError(
+      "The bytecode argument must be an array."
+    ).message;
+  }
+
+  return { metadataBytes, byteCode };
 };
