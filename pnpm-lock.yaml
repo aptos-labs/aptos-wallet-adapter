@@ -84,6 +84,9 @@ importers:
       '@radix-ui/react-toast':
         specifier: ^1.1.5
         version: 1.2.1(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1)(react@18.3.1)
+      '@telegram-apps/sdk':
+        specifier: ^2.0.0
+        version: 2.4.0
       '@trustwallet/aptos-wallet-adapter':
         specifier: ^0.1.6
         version: 0.1.6
@@ -5319,6 +5322,23 @@ packages:
       '@telegram-apps/toolkit': 1.0.0
       '@telegram-apps/transformers': 1.0.1
       '@telegram-apps/types': 1.0.1
+    dev: false
+
+  /@telegram-apps/navigation@1.0.3:
+    resolution: {integrity: sha512-v1BPs0GrV7GhbTYWbFw7tUJj0dLR8+LdEBSzQmpEF1KK+6gmPrgGxQ0U9FzZ/jOiJlzcGNz/pLF8PEpoVzrQnA==}
+    dependencies:
+      '@telegram-apps/bridge': 1.2.1
+      '@telegram-apps/signals': 1.0.1
+      '@telegram-apps/toolkit': 1.0.0
+    dev: false
+
+  /@telegram-apps/sdk@2.4.0:
+    resolution: {integrity: sha512-TqGheu3jVZj3Dv0wrZ81J+ojLWuOrnpHXecl8c8StrpjdCReV4WUtd00Mfu4IWakOyR1qE5Ohgv7cQvrkAisyA==}
+    dependencies:
+      '@telegram-apps/bridge': 1.2.1
+      '@telegram-apps/navigation': 1.0.3
+      '@telegram-apps/signals': 1.0.1
+      '@telegram-apps/transformers': 1.0.1
     dev: false
 
   /@telegram-apps/signals@1.0.1:
