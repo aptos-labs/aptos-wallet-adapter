@@ -1,5 +1,12 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.18.0
+
+### Minor Changes
+
+- 67440bf: Bumped `@aptos-connect/wallet-adapter-plugin` to 2.1.0 to enable Telegram support
+- bde8112: Handle arguments conversion when submitting a package publish transaction
+
 ## 4.17.0
 
 ### Minor Changes
