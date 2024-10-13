@@ -145,7 +145,7 @@ interface WalletConnectionProps {
   account: AccountInfo | null;
   network: NetworkInfo | null;
   wallet: WalletInfo | null;
-  changeNetwork: (network: Network, chainId?: number) => Promise<AptosChangeNetworkOutput>;
+  changeNetwork: (network: Network, chainId?: string) => Promise<AptosChangeNetworkOutput>;
 }
 
 function WalletConnection({
@@ -163,7 +163,7 @@ function WalletConnection({
     return true;
   };
 
-  const [customChainId, setCustomChainId] = useState<string | "">("");
+  const [customChainId, setCustomChainId] = useState<string>("");
 
   // TODO: Do a proper check for network change support
   const isNetworkChangeSupported = wallet?.name === "Nightly";
@@ -334,7 +334,7 @@ function WalletConnection({
                 type="number"
                 className="ml-2 border rounded px-2 py-1"
                 value={customChainId}
-                onChange={(e) => setCustomChainId(e.target.value ? Number(e.target.value) : "")}
+                onChange={(e) => setCustomChainId(e.target.value)}
                 placeholder="Enter chainId"
               />
             </div>

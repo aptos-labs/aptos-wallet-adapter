@@ -200,9 +200,7 @@ export function useWallet(
   const changeNetwork = async (network: Network, chainId?: string) => {
     try {
       // Call changeNetwork with chainId if provided, otherwise call without it
-      return chainId !== undefined 
-        ? await walletCoreInstance.changeNetwork(network, chainId) 
-        : await walletCoreInstance.changeNetwork(network);
+      await walletCoreInstance.changeNetwork(network, chainId)
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
