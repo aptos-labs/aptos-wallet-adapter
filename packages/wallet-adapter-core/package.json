@@ -53,7 +53,7 @@
     "@aptos-connect/wallet-adapter-plugin": "^2.1.1",
     "@aptos-labs/wallet-standard": "^0.2.0",
     "@atomrigslab/aptos-wallet-adapter": "^0.1.20",
-    "@mizuwallet-sdk/aptos-wallet-adapter": "^0.2.5",
+    "@mizuwallet-sdk/aptos-wallet-adapter": "^0.2.6",
     "buffer": "^6.0.3",
     "eventemitter3": "^4.0.7",
     "tweetnacl": "^1.0.3"
