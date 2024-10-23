@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.4.16
+
+### Patch Changes
+
+- 737bd2b: Bump @mizuwallet-sdk/aptos-wallet-adapter to v0.3.1 and add '--experimental-https' flag to nextjs-example's dev command.
+- Updated dependencies [737bd2b]
+- Updated dependencies [f9ecf18]
+  - @aptos-labs/wallet-adapter-core@4.18.1
+  - @aptos-labs/wallet-adapter-react@3.7.2
+  - @aptos-labs/wallet-adapter-ant-design@3.0.16
+  - @aptos-labs/wallet-adapter-mui-design@3.0.16
+
 ## 3.4.15
 
 ### Patch Changes
