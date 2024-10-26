@@ -53,7 +53,7 @@ importers:
         version: 0.0.5
       '@msafe/aptos-wallet-adapter':
         specifier: ^1.0.11
-        version: 1.1.3(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.3.2)(@mizuwallet-sdk/protocol@0.0.1)(@telegram-apps/bridge@1.2.1)(@wallet-standard/core@1.0.3)
+        version: 1.1.3(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.4.0)(@mizuwallet-sdk/protocol@0.0.1)(@telegram-apps/bridge@1.2.1)(@wallet-standard/core@1.0.3)
       '@okwallet/aptos-wallet-adapter':
         specifier: ^0.0.3
         version: 0.0.3
@@ -180,7 +180,7 @@ importers:
         version: 0.0.5
       '@msafe/aptos-wallet-adapter':
         specifier: ^1.0.11
-        version: 1.1.3(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.3.2)(@mizuwallet-sdk/protocol@0.0.1)(@telegram-apps/bridge@1.2.1)(@wallet-standard/core@1.0.3)
+        version: 1.1.3(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.4.0)(@mizuwallet-sdk/protocol@0.0.1)(@telegram-apps/bridge@1.2.1)(@wallet-standard/core@1.0.3)
       '@nuxtjs/google-fonts':
         specifier: ^3.2.0
         version: 3.2.0
@@ -331,8 +331,8 @@ importers:
         specifier: ^0.1.20
         version: 0.1.21(@aptos-labs/ts-sdk@1.27.1)
       '@mizuwallet-sdk/aptos-wallet-adapter':
-        specifier: ^0.2.6
-        version: 0.2.6(@mizuwallet-sdk/core@1.3.2)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0)
+        specifier: ^0.3.1
+        version: 0.3.1(@mizuwallet-sdk/core@1.4.0)(@mizuwallet-sdk/protocol@0.0.6)(@wallet-standard/core@1.0.3)
       aptos:
         specifier: ^1.21.0
         version: 1.21.0
@@ -454,7 +454,7 @@ importers:
   packages/wallet-adapter-vue:
     dependencies:
       '@aptos-labs/wallet-adapter-core':
-        specifier: 4.18.0
+        specifier: 4.18.1
         version: link:../wallet-adapter-core
       vue:
         specifier: ^3.4.21
@@ -692,7 +692,7 @@ packages:
       - debug
     dev: false
 
-  /@aptos-labs/wallet-adapter-core@4.18.0(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.3.2)(@mizuwallet-sdk/protocol@0.0.1)(@telegram-apps/bridge@1.2.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0):
+  /@aptos-labs/wallet-adapter-core@4.18.0(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.4.0)(@mizuwallet-sdk/protocol@0.0.1)(@telegram-apps/bridge@1.2.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0):
     resolution: {integrity: sha512-VtjYWThy4vWvHihQWZYBXspJmc1ElsUflIRxB4pD/kfEsYBR1mGErNng/lfvEZbWuKZ3O0s2mt+BWeYng4/YYQ==}
     peerDependencies:
       '@aptos-labs/ts-sdk': ^1.27.1
@@ -702,7 +702,7 @@ packages:
       '@aptos-labs/ts-sdk': 1.27.1
       '@aptos-labs/wallet-standard': 0.2.0(@aptos-labs/ts-sdk@1.27.1)(@wallet-standard/core@1.0.3)
       '@atomrigslab/aptos-wallet-adapter': 0.1.21(@aptos-labs/ts-sdk@1.27.1)
-      '@mizuwallet-sdk/aptos-wallet-adapter': 0.2.6(@mizuwallet-sdk/core@1.3.2)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0)
+      '@mizuwallet-sdk/aptos-wallet-adapter': 0.2.6(@mizuwallet-sdk/core@1.4.0)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0)
       aptos: 1.21.0
       buffer: 6.0.3
       eventemitter3: 4.0.7
@@ -3214,7 +3214,7 @@ packages:
     resolution: {integrity: sha512-9b8mPpKrfeGRuhFH5iO1iwCLeIIsV6+H1sRfxbkoGXIyQE2BTsPd9zqSqQJ+pv5sJ/hT5M1zvOFL02MnEezFug==}
     dev: true
 
-  /@mizuwallet-sdk/aptos-wallet-adapter@0.2.6(@mizuwallet-sdk/core@1.3.2)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0):
+  /@mizuwallet-sdk/aptos-wallet-adapter@0.2.6(@mizuwallet-sdk/core@1.4.0)(@mizuwallet-sdk/protocol@0.0.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0):
     resolution: {integrity: sha512-FY5LdP+OaqcKud00EE9RnehJsBcLvY18j8u7PsBonQFJwY5nZzvz/OAZ650kKiNDD3q0s2XZbjgxehkGb+6W1w==}
     peerDependencies:
       '@mizuwallet-sdk/core': '>=1.3.2'
@@ -3223,7 +3223,7 @@ packages:
       '@aptos-labs/ts-sdk': 1.27.1
       '@aptos-labs/wallet-standard': 0.1.0-ms.1(@aptos-labs/ts-sdk@1.27.1)(@wallet-standard/core@1.0.3)
       '@blocto/sdk': 0.10.3(aptos@1.21.0)
-      '@mizuwallet-sdk/core': 1.3.2(@aptos-labs/ts-sdk@1.27.1)(graphql-request@7.1.0)
+      '@mizuwallet-sdk/core': 1.4.0(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/protocol@0.0.1)(graphql-request@7.1.0)
       '@mizuwallet-sdk/protocol': 0.0.1
       '@msafe/aptos-wallet': 6.1.1
       buffer: 6.0.3
@@ -3236,13 +3236,45 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@mizuwallet-sdk/core@1.3.2(@aptos-labs/ts-sdk@1.27.1)(graphql-request@7.1.0):
-    resolution: {integrity: sha512-pe4YLMUBBYKDggKPT+U4gn7s6MpJ4qnENOlNwvlUQRY+Q9/zUs+PIQljRlDA9aGM8Y8ZwsRZmuIHTmeirWw7yg==}
+  /@mizuwallet-sdk/aptos-wallet-adapter@0.3.1(@mizuwallet-sdk/core@1.4.0)(@mizuwallet-sdk/protocol@0.0.6)(@wallet-standard/core@1.0.3):
+    resolution: {integrity: sha512-gWqU446xZHiRoChXhoNqGLtjgRFfI2TLtDuCsaqcZlIhGfMm/9S8frrjVFaoiqIaEJKz6TZqqlHxUD3pk3mr/Q==}
+    peerDependencies:
+      '@mizuwallet-sdk/core': '>=1.4.0'
+      '@mizuwallet-sdk/protocol': 0.0.6
+    dependencies:
+      '@aptos-labs/ts-sdk': 1.27.1
+      '@aptos-labs/wallet-standard': 0.1.0-ms.1(@aptos-labs/ts-sdk@1.27.1)(@wallet-standard/core@1.0.3)
+      '@mizuwallet-sdk/core': 1.4.0(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/protocol@0.0.6)(graphql-request@7.1.0)
+      '@mizuwallet-sdk/protocol': 0.0.6
+      buffer: 6.0.3
+    transitivePeerDependencies:
+      - '@wallet-standard/core'
+      - debug
+    dev: false
+
+  /@mizuwallet-sdk/core@1.4.0(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/protocol@0.0.1)(graphql-request@7.1.0):
+    resolution: {integrity: sha512-03jKqKr+P4kCgcNQT2YNXmFBRVmeZ88vpEFKpQ9SaorCY4L9lF56kJS4Y+e/+A4Gb1bnqA7xuFmnEz13LjsZyg==}
     peerDependencies:
       '@aptos-labs/ts-sdk': '>=1.14.0'
+      '@mizuwallet-sdk/protocol': 0.0.2
       graphql-request: '>=7.0.1'
     dependencies:
       '@aptos-labs/ts-sdk': 1.27.1
+      '@mizuwallet-sdk/protocol': 0.0.1
+      buffer: 6.0.3
+      graphql-request: 7.1.0(graphql@16.9.0)
+      jwt-decode: 4.0.0
+    dev: false
+
+  /@mizuwallet-sdk/core@1.4.0(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/protocol@0.0.6)(graphql-request@7.1.0):
+    resolution: {integrity: sha512-03jKqKr+P4kCgcNQT2YNXmFBRVmeZ88vpEFKpQ9SaorCY4L9lF56kJS4Y+e/+A4Gb1bnqA7xuFmnEz13LjsZyg==}
+    peerDependencies:
+      '@aptos-labs/ts-sdk': '>=1.14.0'
+      '@mizuwallet-sdk/protocol': 0.0.2
+      graphql-request: '>=7.0.1'
+    dependencies:
+      '@aptos-labs/ts-sdk': 1.27.1
+      '@mizuwallet-sdk/protocol': 0.0.6
       buffer: 6.0.3
       graphql-request: 7.1.0(graphql@16.9.0)
       jwt-decode: 4.0.0
@@ -3250,6 +3282,14 @@ packages:
 
   /@mizuwallet-sdk/protocol@0.0.1:
     resolution: {integrity: sha512-LTkygWdCL4ao7XvmrUq570waMMA9EKDWV/GH7/NbTndLUQqJDp5hIM08E99FdplpI02mdA89/o6uTtfmd/Pstg==}
+    dependencies:
+      '@microsoft/fetch-event-source': 2.0.1
+      tweetnacl: 1.0.3
+      tweetnacl-util: 0.15.1
+    dev: false
+
+  /@mizuwallet-sdk/protocol@0.0.6:
+    resolution: {integrity: sha512-I6ibbdPmPqsqc4JfCfI9qplZ2RcqeUxawyYBNb3TNhibMqQhoVUUaczt9kLuML20ODTvvZW/ja+5S6PXSzWPiw==}
     dependencies:
       '@microsoft/fetch-event-source': 2.0.1
       tweetnacl: 1.0.3
@@ -3278,10 +3318,10 @@ packages:
       ts-toolbelt: 9.6.0
     dev: false
 
-  /@msafe/aptos-wallet-adapter@1.1.3(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.3.2)(@mizuwallet-sdk/protocol@0.0.1)(@telegram-apps/bridge@1.2.1)(@wallet-standard/core@1.0.3):
+  /@msafe/aptos-wallet-adapter@1.1.3(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.4.0)(@mizuwallet-sdk/protocol@0.0.1)(@telegram-apps/bridge@1.2.1)(@wallet-standard/core@1.0.3):
     resolution: {integrity: sha512-/5ftbNac9j2Vc6YOqET4IdkhiJnMzuy9LcnGP8ptLWHVuye5P/pAjIpv0A07gOM4/siUJQzlXkBxXdLYF9p8wQ==}
     dependencies:
-      '@aptos-labs/wallet-adapter-core': 4.18.0(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.3.2)(@mizuwallet-sdk/protocol@0.0.1)(@telegram-apps/bridge@1.2.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0)
+      '@aptos-labs/wallet-adapter-core': 4.18.0(@aptos-labs/ts-sdk@1.27.1)(@mizuwallet-sdk/core@1.4.0)(@mizuwallet-sdk/protocol@0.0.1)(@telegram-apps/bridge@1.2.1)(@wallet-standard/core@1.0.3)(aptos@1.21.0)
       '@msafe/aptos-wallet': 6.1.1
       aptos: 1.21.0
     transitivePeerDependencies:
