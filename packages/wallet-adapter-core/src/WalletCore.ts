@@ -8,14 +8,13 @@ import {
   Ed25519PublicKey,
   InputGenerateTransactionOptions,
   Ed25519Signature,
-  AptosConfig,
   InputSubmitTransactionData,
   PendingTransactionResponse,
   Aptos,
   generateRawTransaction,
   SimpleTransaction,
   NetworkToChainId,
-  Hex,
+  PublicKey,
 } from "@aptos-labs/ts-sdk";
 import EventEmitter from "eventemitter3";
 import {
@@ -60,7 +59,6 @@ import {
   WalletName,
   WalletCoreV1,
   CompatibleTransactionOptions,
-  convertNetwork,
   convertPayloadInputV1ToV2,
   generateTransactionPayloadFromV1Input,
 } from "./LegacyWalletPlugins";
@@ -80,6 +78,8 @@ import {
   WalletStandardCore,
   AptosStandardSupportedWallet,
   AvailableWallets,
+  StandardAccountInfoInput,
+  AccountInfoOutput,
 } from "./AIP62StandardWallets";
 import { GA4 } from "./ga";
 import { WALLET_ADAPTER_CORE_VERSION } from "./version";
@@ -131,7 +131,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private _wallet: Wallet | null = null;
 
   // Current connected account
-  private _account: AccountInfo | null = null;
+  private _account: AccountInfo | StandardAccountInfoInput | null = null;
 
   // Current connected network
   private _network: NetworkInfo | null = null;
@@ -465,7 +465,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param account An account
    */
   private ensureAccountExists(
-    account: AccountInfo | null
+    account: AccountInfo | StandardAccountInfoInput | null
   ): asserts account is AccountInfo {
     if (!account) {
       throw new WalletAccountError("Account is not set").name;
@@ -541,57 +541,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * Sets the connected account
    *
    * `AccountInfo` type comes from a legacy wallet adapter plugin
-   * `StandardAccountInfo` type comes from AIP-62 standard compatible wallet when onAccountChange event is called
-   * `UserResponse<StandardAccountInfo>` type comes from AIP-62 standard compatible wallet on wallet connect
+   * `StandardAccountInfo` type comes from AIP-62 standard compatible wallet
    *
    * @param account An account
    */
-  setAccount(
-    account:
-      | AccountInfo
-      | StandardAccountInfo
-      | UserResponse<StandardAccountInfo>
-      | null
-  ): void {
-    if (account === null) {
-      this._account = null;
-      return;
-    }
-
-    // Check if wallet is of type AIP-62 standard
-    if (this._wallet?.isAIP62Standard) {
-      // Check if account is of type UserResponse<StandardAccountInfo> which means the `account`
-      // comes from the `connect` method
-      if ("status" in account) {
-        const connectStandardAccount =
-          account as UserResponse<StandardAccountInfo>;
-        if (connectStandardAccount.status === UserResponseStatus.REJECTED) {
-          this._connecting = false;
-          throw new WalletConnectionError("User has rejected the request")
-            .message;
-        }
-        // account is of type
-        this._account = {
-          address: connectStandardAccount.args.address.toString(),
-          publicKey: connectStandardAccount.args.publicKey.toString(),
-          ansName: connectStandardAccount.args.ansName,
-        };
-        return;
-      } else {
-        // account is of type `StandardAccountInfo` which means it comes from onAccountChange event
-        const standardAccount = account as StandardAccountInfo;
-        this._account = {
-          address: standardAccount.address.toString(),
-          publicKey: standardAccount.publicKey.toString(),
-          ansName: standardAccount.ansName,
-        };
-        return;
-      }
-    }
-
-    // account is of type `AccountInfo`
-    this._account = { ...(account as AccountInfo) };
-    return;
+  setAccount(account: AccountInfo | StandardAccountInfo | null): void {
+    this._account = account;
   }
 
   /**
@@ -687,9 +642,30 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @return account info
    * @throws WalletAccountError
    */
-  get account(): AccountInfo | null {
+  get account(): AccountInfoOutput | null {
     try {
-      return this._account;
+      if (!this._account) return null;
+      return {
+        address:
+          typeof this._account.address === "string"
+            ? AccountAddress.from(this._account.address)
+            : this._account.address,
+        publicKey:
+          // for backward compatibility, if the account public key is of type `string` convert it to Ed25519PublicKey
+          typeof this._account.publicKey === "string"
+            ? new Ed25519PublicKey(this._account.publicKey)
+            : // for backward compatibility, if the account public key is of type `string[]` convert each string to Ed25519PublicKey
+              Array.isArray(this._account.publicKey) &&
+                this._account.publicKey.every(
+                  (item) => typeof item === "string"
+                )
+              ? this._account.publicKey.map((key) => new Ed25519PublicKey(key))
+              : // else, the account is of the new standard and return it with the exact type
+                (this._account.publicKey as PublicKey),
+        minKeysRequired:
+          (this._account as AccountInfo).minKeysRequired ?? undefined,
+        ansName: this._account.ansName,
+      };
     } catch (error: any) {
       throw new WalletAccountError(error).message;
     }
@@ -931,7 +907,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       if (this._wallet.signTransaction) {
         // If current connected wallet is AIP-62 standard compatible
         // we want to make sure the transaction input is what the
-        // standard expects, i,e new sdk v2 input
+        // standard expects, i.e new sdk v2 input
         if (this._wallet.isAIP62Standard) {
           // if rawTransaction prop it means transaction input data is
           // compatible with new sdk v2 input

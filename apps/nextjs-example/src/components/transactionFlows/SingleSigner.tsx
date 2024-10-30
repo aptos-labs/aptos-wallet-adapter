@@ -77,7 +77,7 @@ export function SingleSigner() {
         data: {
           function: "0x1::coin::transfer",
           typeArguments: [parseTypeTag(APTOS_COIN)],
-          functionArguments: [AccountAddress.from(account.address), new U64(1)], // 1 is in Octas
+          functionArguments: [account.address, new U64(1)], // 1 is in Octas
         },
       });
       await aptosClient(network).waitForTransaction({
@@ -99,7 +99,7 @@ export function SingleSigner() {
         type: "entry_function_payload",
         function: "0x1::coin::transfer",
         type_arguments: ["0x1::aptos_coin::AptosCoin"],
-        arguments: [account?.address, 1], // 1 is in Octas
+        arguments: [account?.address.toString(), 1], // 1 is in Octas
       };
       const response = await signTransaction(payload);
       toast({
@@ -116,13 +116,13 @@ export function SingleSigner() {
 
     try {
       const transactionToSign = await aptosClient(
-        network,
+        network
       ).transaction.build.simple({
         sender: account.address,
         data: {
           function: "0x1::coin::transfer",
           typeArguments: [APTOS_COIN],
-          functionArguments: [account.address, 1], // 1 is in Octas
+          functionArguments: [account.address.toString(), 1], // 1 is in Octas
         },
       });
       const response = await signTransaction(transactionToSign);

@@ -25,6 +25,7 @@ import { WalletSelector as AntdWalletSelector } from "@aptos-labs/wallet-adapter
 import { WalletConnector as MuiWalletSelector } from "@aptos-labs/wallet-adapter-mui-design";
 import {
   AccountInfo,
+  AccountInfoOutput,
   AptosChangeNetworkOutput,
   NetworkInfo,
   WalletInfo,
@@ -48,7 +49,9 @@ import { registerWallet } from "@aptos-labs/wallet-standard";
   registerWallet(myWallet);
 })();
 
-const isTelegramMiniApp = typeof window !== 'undefined' && (window as any).TelegramWebviewProxy !== undefined;
+const isTelegramMiniApp =
+  typeof window !== "undefined" &&
+  (window as any).TelegramWebviewProxy !== undefined;
 if (isTelegramMiniApp) {
   initTelegram();
 }
@@ -147,7 +150,7 @@ function WalletSelection() {
 }
 
 interface WalletConnectionProps {
-  account: AccountInfo | null;
+  account: AccountInfoOutput | null;
   network: NetworkInfo | null;
   wallet: WalletInfo | null;
   changeNetwork: (network: Network) => Promise<AptosChangeNetworkOutput>;
@@ -225,7 +228,7 @@ function WalletConnection({
                 label: "Address",
                 value: (
                   <DisplayValue
-                    value={account?.address ?? "Not Present"}
+                    value={account?.address.toString() ?? "Not Present"}
                     isCorrect={!!account?.address}
                   />
                 ),

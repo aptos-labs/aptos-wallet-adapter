@@ -54,7 +54,7 @@ export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
   const copyAddress = useCallback(async () => {
     if (!account?.address) return;
     try {
-      await navigator.clipboard.writeText(account.address);
+      await navigator.clipboard.writeText(account.address.toString());
       toast({
         title: "Success",
         description: "Copied wallet address to clipboard.",
