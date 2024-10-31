@@ -84,6 +84,9 @@ importers:
       '@radix-ui/react-toast':
         specifier: ^1.1.5
         version: 1.2.1(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1)(react@18.3.1)
+      '@tanstack/react-query':
+        specifier: ^5.59.16
+        version: 5.59.16(react@18.3.1)
       '@telegram-apps/sdk':
         specifier: ^2.0.0
         version: 2.4.0
@@ -5241,6 +5244,19 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       defer-to-connect: 2.0.1
+    dev: false
+
+  /@tanstack/query-core@5.59.16:
+    resolution: {integrity: sha512-crHn+G3ltqb5JG0oUv6q+PMz1m1YkjpASrXTU+sYWW9pLk0t2GybUHNRqYPZWhxgjPaVGC4yp92gSFEJgYEsPw==}
+    dev: false
+
+  /@tanstack/react-query@5.59.16(react@18.3.1):
+    resolution: {integrity: sha512-MuyWheG47h6ERd4PKQ6V8gDyBu3ThNG22e1fRVwvq6ap3EqsFhyuxCAwhNP/03m/mLg+DAb0upgbPaX6VB+CkQ==}
+    peerDependencies:
+      react: ^18 || ^19
+    dependencies:
+      '@tanstack/query-core': 5.59.16
+      react: 18.3.1
     dev: false
 
   /@tanstack/virtual-core@3.10.7:

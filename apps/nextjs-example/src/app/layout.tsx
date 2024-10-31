@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { PropsWithChildren } from "react";
 import { AutoConnectProvider } from "@/components/AutoConnectProvider";
+import { ReactQueryClientProvider } from '@/components/ReactQueryClientProvider';
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -37,10 +38,12 @@ export default function RootLayout({ children }: PropsWithChildren) {
           disableTransitionOnChange
         >
           <AutoConnectProvider>
-            <WalletProvider>
-              {children}
-              <Toaster />
-            </WalletProvider>
+            <ReactQueryClientProvider>
+              <WalletProvider>
+                {children}
+                <Toaster />
+              </WalletProvider>
+            </ReactQueryClientProvider>
           </AutoConnectProvider>
         </ThemeProvider>
       </body>
