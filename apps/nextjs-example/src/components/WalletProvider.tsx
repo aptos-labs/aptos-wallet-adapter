@@ -41,7 +41,6 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
         aptosConnect: {
           claimSecretKey,
           dappId: "57fa42a9-29c6-4f1e-939c-4eefa36d9ff5",
-          frontendBaseURL: 'http://localhost:3000'
         },
         mizuwallet: {
           manifestURL:
