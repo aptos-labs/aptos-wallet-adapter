@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.19.0
+
+### Minor Changes
+
+- 66ad437: Bumped the Aptos Connect plugin to support claims
+
 ## 4.18.1
 
 ### Patch Changes
