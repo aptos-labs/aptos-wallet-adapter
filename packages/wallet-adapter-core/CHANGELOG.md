@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.20.0
+
+### Minor Changes
+
+- f5ba2f2: Bump `@aptos-connect/wallet-adapter-plugin` to 2.3.2 to support Apple logins
+
 ## 4.19.0
 
 ### Minor Changes
