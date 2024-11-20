@@ -8,9 +8,10 @@ import { OKXWallet } from "@okwallet/aptos-wallet-adapter";
 import { PontemWallet } from "@pontem/wallet-adapter-plugin";
 import { TrustWallet } from "@trustwallet/aptos-wallet-adapter";
 import { FewchaWallet } from "fewcha-plugin-wallet-adapter";
+import { MizuWallet } from "@mizuwallet-sdk/aptos-wallet-adapter";
 import { PropsWithChildren } from "react";
 import { Network } from "@aptos-labs/ts-sdk";
-import { useClaimSecretKey } from '@/hooks/useClaimSecretKey';
+import { useClaimSecretKey } from "@/hooks/useClaimSecretKey";
 import { useAutoConnect } from "./AutoConnectProvider";
 import { useToast } from "./ui/use-toast";
 
@@ -42,10 +43,13 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
           claimSecretKey,
           dappId: "57fa42a9-29c6-4f1e-939c-4eefa36d9ff5",
         },
-        mizuwallet: {
-          manifestURL:
-            "https://assets.mz.xyz/static/config/mizuwallet-connect-manifest.json",
-        },
+        standardWallets: [
+          new MizuWallet({
+            network: Network.TESTNET,
+            manifestURL:
+              "https://assets.mz.xyz/static/config/mizuwallet-connect-manifest.json",
+          }),
+        ],
       }}
       onError={(error) => {
         toast({

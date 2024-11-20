@@ -102,6 +102,8 @@ export interface DappConfig {
   /** @deprecated */
   aptosConnectDappId?: string;
   aptosConnect?: Omit<AptosConnectWalletConfig, "network">;
+  standardWallets?: Array<AptosStandardWallet>;
+  /** @deprecated */
   mizuwallet?: {
     manifestURL: string;
     appId?: string;
