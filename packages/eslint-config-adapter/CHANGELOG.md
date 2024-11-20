@@ -1,5 +1,11 @@
 # @aptos-labs/eslint-config-adapter
 
+## 0.0.2
+
+### Patch Changes
+
+- ca1dc8e: Bump all packages version to fix broken previous version
+
 ## 0.0.1
 
 ### Patch Changes

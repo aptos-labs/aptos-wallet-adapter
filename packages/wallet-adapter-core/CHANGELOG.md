@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.22.1
+
+### Patch Changes
+
+- ca1dc8e: Bump all packages version to fix broken previous version
+
 ## 4.22.0
 
 ### Minor Changes

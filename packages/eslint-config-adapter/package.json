@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/eslint-config-adapter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "private": true,
   "license": "Apache-2.0",

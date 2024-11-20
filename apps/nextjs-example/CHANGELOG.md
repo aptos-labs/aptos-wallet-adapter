@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.4.21
+
+### Patch Changes
+
+- ca1dc8e: Bump all packages version to fix broken previous version
+- Updated dependencies [ca1dc8e]
+  - @aptos-labs/wallet-adapter-ant-design@3.0.21
+  - @aptos-labs/wallet-adapter-core@4.22.1
+  - @aptos-labs/wallet-adapter-mui-design@3.0.21
+  - @aptos-labs/wallet-adapter-react@3.7.7
+
 ## 3.4.20
 
 ### Patch Changes
