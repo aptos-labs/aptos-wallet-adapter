@@ -10,7 +10,7 @@ import { TrustWallet } from "@trustwallet/aptos-wallet-adapter";
 import { FewchaWallet } from "fewcha-plugin-wallet-adapter";
 import { PropsWithChildren } from "react";
 import { Network } from "@aptos-labs/ts-sdk";
-import { useClaimSecretKey } from '@/hooks/useClaimSecretKey';
+import { useClaimSecretKey } from "@/hooks/useClaimSecretKey";
 import { useAutoConnect } from "./AutoConnectProvider";
 import { useToast } from "./ui/use-toast";
 
@@ -37,7 +37,10 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       autoConnect={autoConnect}
       dappConfig={{
         network: Network.TESTNET,
-        aptosApiKey: process.env.NEXT_PUBLIC_APTOS_API_KEY,
+        aptosApiKeys: {
+          testnet: process.env.NEXT_PUBLIC_APTOS_API_KEY_TESNET,
+          devnet: process.env.NEXT_PUBLIC_APTOS_API_KEY_DEVNET,
+        },
         aptosConnect: {
           claimSecretKey,
           dappId: "57fa42a9-29c6-4f1e-939c-4eefa36d9ff5",

@@ -92,12 +92,14 @@ export type IAptosWallet = AptosStandardWallet & Wallet;
  * Interface for dapp configuration
  *
  * @network The network the dapp is working with
- * @aptosApiKey An Api Key generated with {@link https://developers.aptoslabs.com/docs/api-access}
+ * @aptosApiKeys A map of Network<>Api Key generated with {@link https://developers.aptoslabs.com/docs/api-access}
  * @aptosConnect Config used to initialize the AptosConnect wallet provider
  * @mizuwallet Config used to initialize the Mizu wallet provider
  */
 export interface DappConfig {
   network: Network;
+  aptosApiKeys?: Partial<Record<Network, string>>;
+  /** @deprecated */
   aptosApiKey?: string;
   /** @deprecated */
   aptosConnectDappId?: string;
