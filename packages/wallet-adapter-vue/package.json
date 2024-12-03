@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-vue",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "Aptos Wallet Adapter Vue Provider",
   "license": "Apache-2.0",
   "type": "module",
@@ -43,7 +43,7 @@
     "build": "pnpm build:bundle"
   },
   "dependencies": {
-    "@aptos-labs/wallet-adapter-core": "4.22.1"
+    "@aptos-labs/wallet-adapter-core": "4.22.2"
   },
   "devDependencies": {
     "vite": "5.3.6",
