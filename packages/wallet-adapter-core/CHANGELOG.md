@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.23.0
+
+### Minor Changes
+
+- 80a3c8a: Support network based API key
+
 ## 4.22.2
 
 ### Patch Changes

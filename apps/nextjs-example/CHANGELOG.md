@@ -1,5 +1,19 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.5.0
+
+### Minor Changes
+
+- 80a3c8a: Support network based API key
+
+### Patch Changes
+
+- Updated dependencies [80a3c8a]
+  - @aptos-labs/wallet-adapter-core@4.23.0
+  - @aptos-labs/wallet-adapter-react@3.7.9
+  - @aptos-labs/wallet-adapter-ant-design@3.0.23
+  - @aptos-labs/wallet-adapter-mui-design@3.0.23
+
 ## 3.4.22
 
 ### Patch Changes
