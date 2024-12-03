@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.22.2
+
+### Patch Changes
+
+- af7c080: Bump wallet adapter ts-sdk peer dependency version
+
 ## 4.22.1
 
 ### Patch Changes
