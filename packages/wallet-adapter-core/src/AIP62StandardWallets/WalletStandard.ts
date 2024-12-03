@@ -130,11 +130,11 @@ export class WalletStandardCore {
     transaction: AnyRawTransaction,
     wallet: Wallet,
     asFeePayer?: boolean
-  ): Promise<AptosSignTransactionOutput>
+  ): Promise<AptosSignTransactionOutput>;
   async signTransaction(
     input: AptosSignTransactionInputV1_1,
-    wallet: Wallet,
-  ): Promise<AptosSignTransactionOutputV1_1>
+    wallet: Wallet
+  ): Promise<AptosSignTransactionOutputV1_1>;
   async signTransaction(
     transactionOrInput: AnyRawTransaction | AptosSignTransactionInputV1_1,
     wallet: Wallet,

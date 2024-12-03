@@ -8,7 +8,8 @@ import {
   InputGenerateTransactionPayloadData,
   AnyRawTransaction,
   Signature,
-  AccountAuthenticator,
+  AccountAddress,
+  PublicKey,
 } from "@aptos-labs/ts-sdk";
 import { WalletReadyState } from "../constants";
 import {
@@ -20,7 +21,10 @@ import {
   AptosChangeNetworkMethod,
   AptosSignAndSubmitTransactionInput,
 } from "@aptos-labs/wallet-standard";
-import { AptosStandardSupportedWallet } from "../AIP62StandardWallets/types";
+import {
+  AptosStandardSupportedWallet,
+  StandardAccountInfoInput,
+} from "../AIP62StandardWallets/types";
 
 export { TxnBuilderTypes, Types } from "aptos";
 export type {
@@ -55,6 +59,7 @@ export type WalletInfo = {
   url: string;
 };
 
+// Input type to handle legacy wallets that are not AIP-62 compatible
 export type AccountInfo = {
   address: string;
   publicKey: string | string[];
@@ -74,7 +79,7 @@ export declare interface WalletCoreEvents {
   readyStateChange(wallet: Wallet): void;
   standardWalletsAdded(wallets: Wallet | AptosStandardSupportedWallet): void;
   networkChange(network: NetworkInfo | null): void;
-  accountChange(account: AccountInfo | null): void;
+  accountChange(account: AccountInfo | StandardAccountInfoInput | null): void;
 }
 
 export interface SignMessagePayload {

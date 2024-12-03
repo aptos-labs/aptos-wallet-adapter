@@ -1,3 +1,4 @@
+import { AccountAddress } from "@aptos-labs/ts-sdk";
 import { AptosStandardWallet } from "../AIP62StandardWallets";
 import { WalletInfo } from "../LegacyWalletPlugins";
 import { AnyAptosWallet } from "../WalletCore";
@@ -44,9 +45,9 @@ export function isInstallRequired(wallet: AnyAptosWallet) {
 }
 
 /** Truncates the provided wallet address at the middle with an ellipsis. */
-export function truncateAddress(address: string | undefined) {
+export function truncateAddress(address: AccountAddress | undefined) {
   if (!address) return;
-  return `${address.slice(0, 6)}...${address.slice(-5)}`;
+  return `${address.toString().slice(0, 6)}...${address.toString().slice(-5)}`;
 }
 
 /** Returns `true` if the provided wallet is an Aptos Connect wallet. */
