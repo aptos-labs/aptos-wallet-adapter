@@ -14,7 +14,7 @@ If you want to add the shadcn/ui Aptos wallet selector to your shadcn-based app,
 - Run the following command to install all of the shadcn/ui components that the wallet selector depends on:
 
 ```bash
-npx shadcn-ui@latest add button collapsible dialog dropdown-menu toast
+npx shadcn@latest add button collapsible dialog dropdown-menu toast
 ```
 
 - Copy the [wallet-selector.tsx](./src/components/WalletSelector.tsx) file from this repo to your `src/components/` directory.
