@@ -1,3 +1,4 @@
+import { AccountAddress, PublicKey } from "@aptos-labs/ts-sdk";
 import { WalletName } from "../LegacyWalletPlugins/types";
 import { WalletReadyState } from "../constants";
 
@@ -15,6 +16,21 @@ export interface AptosStandardSupportedWallet<Name extends string = string> {
   // See https://github.com/aptos-foundation/AIPs/blob/main/aips/aip-62.md for more details.
   isAIP62Standard: true;
 }
+
+export type StandardAccountInfoInput = {
+  address: AccountAddress;
+  publicKey: PublicKey;
+  ansName?: string;
+};
+
+// Output type for the account to support AIP-62 standard wallets
+export type AccountInfoOutput = {
+  address: AccountAddress;
+  // PublicKey[] for backward compatibility,
+  publicKey: PublicKey | PublicKey[];
+  minKeysRequired?: number;
+  ansName?: string | null;
+};
 
 // Update this with the name of your wallet when you create a new wallet plugin.
 export type AvailableWallets =
