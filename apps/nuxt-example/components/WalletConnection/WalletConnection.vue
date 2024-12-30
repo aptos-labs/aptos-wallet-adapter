@@ -8,13 +8,13 @@ import {
 import { Network } from "@aptos-labs/ts-sdk";
 
 const WalletIcon = defineAsyncComponent(
-  () => import("~/components/ui/Wallet/WalletIcon.vue"),
+  () => import("~/components/ui/Wallet/WalletIcon.vue")
 );
 const WalletLink = defineAsyncComponent(
-  () => import("~/components/ui/Wallet/WalletLink.vue"),
+  () => import("~/components/ui/Wallet/WalletLink.vue")
 );
 const DisplayValue = defineAsyncComponent(
-  () => import("~/components/DisplayValue.vue"),
+  () => import("~/components/DisplayValue.vue")
 );
 
 interface WalletConnectionProps {
@@ -31,7 +31,7 @@ const { account, network, wallet } = toRefs(props);
 const isValidNetworkName = computed(() => {
   if (isAptosNetwork(network.value)) {
     return Object.values<string | undefined>(Network).includes(
-      network.value?.name,
+      network.value?.name
     );
   }
   // If the configured network is not an Aptos network, i.e is a custom network
@@ -40,8 +40,8 @@ const isValidNetworkName = computed(() => {
 });
 
 // TODO: Do a proper check for network change support
-const isNetworkChangeSupported = computed(
-  () => wallet.value?.name === "Nightly",
+const isNetworkChangeSupported = computed(() =>
+  ["Nightly", "Leap Wallet"].includes(wallet.value?.name ?? "")
 );
 </script>
 
