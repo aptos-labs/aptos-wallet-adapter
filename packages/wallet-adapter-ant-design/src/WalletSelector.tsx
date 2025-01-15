@@ -2,7 +2,8 @@ import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import {
   AboutAptosConnect,
   AboutAptosConnectEducationScreen,
-  AnyAptosWallet,
+  AdapterNotDetectedWallet,
+  AdapterWallet,
   AptosPrivacyPolicy,
   WalletItem,
   WalletSortingOptions,
@@ -68,7 +69,9 @@ export function WalletSelector({
   };
 
   const buttonText =
-    account?.ansName || truncateAddress(account?.address) || "Unknown";
+    account?.ansName ||
+    truncateAddress(account?.address?.toString()) ||
+    "Unknown";
 
   const modalProps: ModalProps = {
     centered: true,
@@ -223,7 +226,7 @@ export function WalletSelector({
 }
 
 interface WalletRowProps {
-  wallet: AnyAptosWallet;
+  wallet: AdapterWallet | AdapterNotDetectedWallet;
   onConnect?: () => void;
 }
 

@@ -105,3 +105,7 @@ export class WalletNotSupportedMethod extends WalletError {
 export class WalletChangeNetworkError extends WalletError {
   name = "WalletChangeNetworkError";
 }
+
+export class WalletSubmitTransactionError extends WalletError {
+  name = "WalletSubmitTransactionError";
+}

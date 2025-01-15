@@ -5,11 +5,10 @@ import {
 import { Network } from "@aptos-labs/ts-sdk";
 import { DevTWallet, TWallet } from "@atomrigslab/aptos-wallet-adapter";
 import { MizuWallet } from "@mizuwallet-sdk/aptos-wallet-adapter";
-import { DappConfig } from "../WalletCore";
-import { AptosStandardWallet } from "./WalletStandard";
+import { DappConfig, AdapterWallet } from "./WalletCore";
 
 export function getSDKWallets(dappConfig?: DappConfig) {
-  const sdkWallets: AptosStandardWallet[] = [];
+  const sdkWallets: AdapterWallet[] = [];
 
   // Need to check window is defined for AptosConnect
   if (typeof window !== "undefined") {
@@ -23,7 +22,7 @@ export function getSDKWallets(dappConfig?: DappConfig) {
         network: dappConfig?.network,
         dappId: dappConfig?.aptosConnectDappId,
         ...dappConfig?.aptosConnect,
-      }),
+      })
     );
 
     if (
@@ -36,7 +35,7 @@ export function getSDKWallets(dappConfig?: DappConfig) {
           network: dappConfig.network as any,
           manifestURL: dappConfig.mizuwallet.manifestURL,
           appId: dappConfig.mizuwallet.appId,
-        }) as any,
+        }) as any
       );
     }
   }

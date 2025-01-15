@@ -1,8 +1,6 @@
-import { WalletName } from "../LegacyWalletPlugins/types";
-
 const LOCAL_STORAGE_ITEM_KEY = "AptosWalletName";
 
-export function setLocalStorage(walletName: WalletName) {
+export function setLocalStorage(walletName: string) {
   localStorage.setItem(LOCAL_STORAGE_ITEM_KEY, walletName);
 }
 

@@ -1,45 +1,49 @@
+import { useContext, createContext } from "react";
 import {
-  AccountInfo,
-  NetworkInfo,
-  WalletInfo,
-  SignMessagePayload,
-  SignMessageResponse,
-  Wallet,
-  InputGenerateTransactionOptions,
-  AnyRawTransaction,
-  InputTransactionData,
-  InputSubmitTransactionData,
-  PendingTransactionResponse,
   AccountAuthenticator,
-  Types,
-  WalletName,
-  AptosChangeNetworkOutput,
+  AccountInfo,
+  AdapterWallet,
+  AnyRawTransaction,
+  AptosSignAndSubmitTransactionOutput,
+  InputGenerateTransactionOptions,
+  InputTransactionData,
+  NetworkInfo,
+  AptosSignMessageInput,
+  AptosSignMessageOutput,
+  AdapterNotDetectedWallet,
   Network,
-  AptosStandardSupportedWallet,
+  AptosChangeNetworkOutput,
+  PendingTransactionResponse,
+  InputSubmitTransactionData,
 } from "@aptos-labs/wallet-adapter-core";
-import { createContext, useContext } from "react";
 
 export interface WalletContextState {
   connected: boolean;
   isLoading: boolean;
   account: AccountInfo | null;
   network: NetworkInfo | null;
-  connect(walletName: WalletName): void;
-  disconnect(): void;
-  wallet: WalletInfo | null;
-  wallets?: ReadonlyArray<Wallet | AptosStandardSupportedWallet>;
-  signAndSubmitTransaction(transaction: InputTransactionData): Promise<any>;
+  connect(walletName: string): void;
+  signAndSubmitTransaction(
+    transaction: InputTransactionData
+  ): Promise<AptosSignAndSubmitTransactionOutput>;
   signTransaction(
-    transactionOrPayload: AnyRawTransaction | Types.TransactionPayload,
+    transaction: AnyRawTransaction | InputTransactionData,
     asFeePayer?: boolean,
-    options?: InputGenerateTransactionOptions,
+    options?: InputGenerateTransactionOptions & {
+      expirationSecondsFromNow?: number;
+      expirationTimestamp?: number;
+    }
   ): Promise<AccountAuthenticator>;
-  submitTransaction(
-    transaction: InputSubmitTransactionData,
-  ): Promise<PendingTransactionResponse>;
-  signMessage(message: SignMessagePayload): Promise<SignMessageResponse>;
-  signMessageAndVerify(message: SignMessagePayload): Promise<boolean>;
+  signMessage(message: AptosSignMessageInput): Promise<AptosSignMessageOutput>;
+  signMessageAndVerify(message: AptosSignMessageInput): Promise<boolean>;
+  disconnect(): void;
   changeNetwork(network: Network): Promise<AptosChangeNetworkOutput>;
+  submitTransaction(
+    transaction: InputSubmitTransactionData
+  ): Promise<PendingTransactionResponse>;
+  wallet: AdapterWallet | null;
+  wallets: ReadonlyArray<AdapterWallet>;
+  notDetectedWallets: ReadonlyArray<AdapterNotDetectedWallet>;
 }
 
 const DEFAULT_CONTEXT = {
@@ -47,7 +51,7 @@ const DEFAULT_CONTEXT = {
 };
 
 export const WalletContext = createContext<WalletContextState>(
-  DEFAULT_CONTEXT as WalletContextState,
+  DEFAULT_CONTEXT as WalletContextState
 );
 
 export function useWallet(): WalletContextState {
