@@ -1,0 +1,1 @@
+{"version":3,"file":"sdkWallets.d.ts","sourceRoot":"","sources":["../../src/AIP62StandardWallets/sdkWallets.ts"],"names":[],"mappings":"AAOA,OAAO,EAAE,UAAU,EAAE,MAAM,kBAAkB,CAAC;AAC9C,OAAO,EAAE,mBAAmB,EAAE,MAAM,kBAAkB,CAAC;AAEvD,wBAAgB,aAAa,CAAC,UAAU,CAAC,EAAE,UAAU,yBA8CpD"}
