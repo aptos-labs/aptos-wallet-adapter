@@ -1,0 +1,116 @@
+import { Types } from "aptos";
+import { Network, InputGenerateTransactionOptions, InputSubmitTransactionData, PendingTransactionResponse, AccountAddressInput, InputGenerateTransactionPayloadData, AnyRawTransaction, Signature } from "@aptos-labs/ts-sdk";
+import { WalletReadyState } from "../constants";
+import { AptosSignAndSubmitTransactionOutput, AptosSignMessageOutput, UserResponse, AccountInfo as StandardAccountInfo, NetworkInfo as StandardNetworkInfo, AptosChangeNetworkMethod, AptosSignAndSubmitTransactionInput } from "@aptos-labs/wallet-standard";
+import { AptosStandardSupportedWallet } from "../AIP62StandardWallets/types";
+export { TxnBuilderTypes, Types } from "aptos";
+export type { InputGenerateTransactionData, InputGenerateTransactionOptions, AnyRawTransaction, InputSubmitTransactionData, PendingTransactionResponse, AccountAuthenticator, Network, } from "@aptos-labs/ts-sdk";
+export type { NetworkInfo as StandardNetworkInfo, AptosChangeNetworkOutput, } from "@aptos-labs/wallet-standard";
+export type WalletName<T extends string = string> = T & {
+    __brand__: "WalletName";
+};
+export type NetworkInfo = {
+    name: Network;
+    chainId?: string;
+    url?: string;
+};
+export type WalletInfo = {
+    name: WalletName;
+    icon: string;
+    url: string;
+};
+export type AccountInfo = {
+    address: string;
+    publicKey: string | string[];
+    minKeysRequired?: number;
+    ansName?: string | null;
+};
+export interface AptosWalletErrorResult {
+    code: number;
+    name: string;
+    message: string;
+}
+export declare interface WalletCoreEvents {
+    connect(account: AccountInfo | null): void;
+    disconnect(): void;
+    readyStateChange(wallet: Wallet): void;
+    standardWalletsAdded(wallets: Wallet | AptosStandardSupportedWallet): void;
+    networkChange(network: NetworkInfo | null): void;
+    accountChange(account: AccountInfo | null): void;
+}
+export interface SignMessagePayload {
+    address?: boolean;
+    application?: boolean;
+    chainId?: boolean;
+    message: string;
+    nonce: string;
+}
+export interface SignMessageResponse {
+    address?: string;
+    application?: string;
+    chainId?: number;
+    fullMessage: string;
+    message: string;
+    nonce: string;
+    prefix: "APTOS";
+    signature: string | string[] | Signature;
+    bitmap?: Uint8Array;
+}
+export type OnNetworkChange = (callBack: (networkInfo: NetworkInfo | StandardNetworkInfo) => Promise<void>) => Promise<void>;
+export type OnAccountChange = (callBack: (accountInfo: AccountInfo | StandardAccountInfo) => Promise<any>) => Promise<void>;
+export interface AdapterPluginEvents {
+    onNetworkChange: OnNetworkChange;
+    onAccountChange: OnAccountChange;
+}
+export interface AdapterPluginProps<Name extends string = string> {
+    name: WalletName<Name>;
+    url: string;
+    icon: `data:image/${"svg+xml" | "webp" | "png" | "gif"};base64,${string}`;
+    providerName?: string;
+    provider: any;
+    deeplinkProvider?: (data: {
+        url: string;
+    }) => string;
+    openInMobileApp?: () => void;
+    connect(): Promise<any>;
+    disconnect: () => Promise<any>;
+    network: () => Promise<any>;
+    signAndSubmitTransaction?(transaction: Types.TransactionPayload | InputTransactionData | AnyRawTransaction | AptosSignAndSubmitTransactionInput, options?: InputGenerateTransactionOptions): Promise<{
+        hash: Types.HexEncodedBytes;
+        output?: any;
+    } | PendingTransactionResponse | UserResponse<AptosSignAndSubmitTransactionOutput>>;
+    submitTransaction?(transaction: InputSubmitTransactionData): Promise<PendingTransactionResponse>;
+    signMessage<T extends SignMessagePayload>(message: T): Promise<SignMessageResponse | UserResponse<AptosSignMessageOutput>>;
+    signTransaction?(// `any` type for backwards compatibility, especially for identity connect
+    transactionOrPayload: any, optionsOrAsFeePayer?: any): Promise<any>;
+    account?: () => Promise<AccountInfo | StandardAccountInfo>;
+    changeNetwork?: AptosChangeNetworkMethod;
+}
+export type AdapterPlugin<Name extends string = string> = AdapterPluginProps<Name> & AdapterPluginEvents;
+export type Wallet<Name extends string = string> = AdapterPlugin<Name> & {
+    readyState?: WalletReadyState;
+    isAIP62Standard?: boolean;
+    isSignTransactionV1_1?: boolean;
+};
+export interface TransactionOptions {
+    max_gas_amount?: bigint;
+    gas_unit_price?: bigint;
+}
+export type InputTransactionData = {
+    sender?: AccountAddressInput;
+    data: InputGenerateTransactionPayloadData;
+    options?: InputGenerateTransactionOptions;
+};
+export interface PluginProvider {
+    connect: () => Promise<AccountInfo>;
+    account: () => Promise<AccountInfo>;
+    disconnect: () => Promise<void>;
+    signAndSubmitTransaction: (transaction: any, options?: any) => Promise<{
+        hash: Types.HexEncodedBytes;
+    } | AptosWalletErrorResult>;
+    signMessage: (message: SignMessagePayload) => Promise<SignMessageResponse>;
+    network: () => Promise<NetworkInfo>;
+    onAccountChange: (listener: (newAddress: AccountInfo) => Promise<void>) => Promise<void>;
+    onNetworkChange: OnNetworkChange;
+}
+//# sourceMappingURL=types.d.ts.map

@@ -27,6 +27,7 @@ import {
   UserResponse,
   UserResponseStatus,
   isWalletWithRequiredFeatureSet,
+  getWallets,
 } from "@aptos-labs/wallet-standard";
 
 import { getSDKWallets } from "./AIP62StandardWallets/sdkWallets";
