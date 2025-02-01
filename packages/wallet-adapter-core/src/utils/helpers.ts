@@ -95,12 +95,12 @@ export const getAptosConfig = (
     return new AptosConfig({
       network: currentNetwork,
     });
-  } else {
-    return new AptosConfig({
-      network: Network.CUSTOM,
-      fullnode: networkInfo.url,
-    });
   }
+
+  return new AptosConfig({
+    network: Network.CUSTOM,
+    fullnode: networkInfo.url,
+  });
 };
 
 /**
