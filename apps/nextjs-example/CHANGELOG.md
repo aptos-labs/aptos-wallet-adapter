@@ -1,5 +1,19 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.6.0
+
+### Minor Changes
+
+- b8cae2d: Fix deeplink redirect on mobile view
+
+### Patch Changes
+
+- Updated dependencies [b8cae2d]
+  - @aptos-labs/wallet-adapter-core@4.24.0
+  - @aptos-labs/wallet-adapter-react@3.7.11
+  - @aptos-labs/wallet-adapter-ant-design@3.0.25
+  - @aptos-labs/wallet-adapter-mui-design@3.0.25
+
 ## 3.5.1
 
 ### Patch Changes
