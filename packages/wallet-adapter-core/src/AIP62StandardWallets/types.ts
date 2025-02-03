@@ -14,6 +14,9 @@ export interface AptosStandardSupportedWallet<Name extends string = string> {
   // A flag to indicate that this AptosStandardSupportedWallet implements the AIP-62 Wallet Standard.
   // See https://github.com/aptos-foundation/AIPs/blob/main/aips/aip-62.md for more details.
   isAIP62Standard: true;
+  // An optional deeplink provider for the wallet. If the wallet is not installed, we can redirect the user to the wallet's deeplink provider
+  // @example "https://myWallet.app/explore?link="
+  deeplinkProvider?: string;
 }
 
 // Update this with the name of your wallet when you create a new wallet plugin.
