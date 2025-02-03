@@ -5,7 +5,6 @@ import { BitgetWallet } from "@bitget-wallet/aptos-wallet-adapter";
 import { MartianWallet } from "@martianwallet/aptos-wallet-adapter";
 import { MSafeWalletAdapter } from "@msafe/aptos-wallet-adapter";
 import { OKXWallet } from "@okwallet/aptos-wallet-adapter";
-import { PontemWallet } from "@pontem/wallet-adapter-plugin";
 import { TrustWallet } from "@trustwallet/aptos-wallet-adapter";
 import { FewchaWallet } from "fewcha-plugin-wallet-adapter";
 import { PropsWithChildren } from "react";
@@ -26,7 +25,6 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     new FewchaWallet(),
     new MartianWallet(),
     new MSafeWalletAdapter(),
-    new PontemWallet(),
     new TrustWallet(),
     new OKXWallet(),
   ];

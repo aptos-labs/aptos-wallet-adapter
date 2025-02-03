@@ -741,11 +741,24 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       isRedirectable() &&
       selectedWallet.readyState !== WalletReadyState.Installed
     ) {
-      // use wallet deep link
-      if (selectedWallet.isAIP62Standard && selectedWallet.openInMobileApp) {
-        selectedWallet.openInMobileApp();
-        return;
+      // If wallet is AIP-62 compatible
+      if (selectedWallet.isAIP62Standard) {
+        // If wallet has a openInMobileApp method, use it
+        if (selectedWallet.openInMobileApp) {
+          selectedWallet.openInMobileApp();
+          return;
+        }
+        // If wallet has a deeplinkProvider property, i.e wallet is on the internal registry, use it
+        const uninstalledWallet =
+          selectedWallet as AptosStandardSupportedWallet;
+        if (uninstalledWallet.deeplinkProvider) {
+          const url = encodeURIComponent(window.location.href);
+          const location = uninstalledWallet.deeplinkProvider.concat(url);
+          window.location.href = location;
+          return;
+        }
       }
+      // Wallet is on the old standard, check if it has a deeplinkProvider method property
       if (selectedWallet.deeplinkProvider) {
         const url = encodeURIComponent(window.location.href);
         const location = selectedWallet.deeplinkProvider({ url });
