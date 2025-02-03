@@ -48,7 +48,9 @@ import { registerWallet } from "@aptos-labs/wallet-standard";
   registerWallet(myWallet);
 })();
 
-const isTelegramMiniApp = typeof window !== 'undefined' && (window as any).TelegramWebviewProxy !== undefined;
+const isTelegramMiniApp =
+  typeof window !== "undefined" &&
+  (window as any).TelegramWebviewProxy !== undefined;
 if (isTelegramMiniApp) {
   initTelegram();
 }
@@ -169,7 +171,9 @@ function WalletConnection({
   };
 
   // TODO: Do a proper check for network change support
-  const isNetworkChangeSupported = wallet?.name === "Nightly";
+  const isNetworkChangeSupported = ["Nightly", "Leap Wallet"].includes(
+    wallet?.name ?? ""
+  );
 
   return (
     <Card>

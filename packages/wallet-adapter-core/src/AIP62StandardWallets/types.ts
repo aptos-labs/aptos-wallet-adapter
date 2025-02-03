@@ -26,4 +26,5 @@ export type AvailableWallets =
   | "T wallet"
   | "Pontem Wallet"
   | "Mizu Wallet"
-  | "Continue with Google";
+  | "Continue with Google"
+  | "Leap Wallet";

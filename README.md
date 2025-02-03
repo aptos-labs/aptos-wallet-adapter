@@ -24,6 +24,7 @@ Note: These are in alphabetical order, any new wallets must be in alphabetical o
 - [Nightly](https://chromewebstore.google.com/detail/nightly/fiikommddbeccaoicoejoniammnalkfa)
 - [Petra](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
 - [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
+- [Leap Wallet](https://chromewebstore.google.com/detail/leap-cosmos-wallet/fcfcfllfndlomdhbehjjcoimbgofdncg)
 - T wallet
 
 Legacy standard compatible
