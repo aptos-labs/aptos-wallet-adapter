@@ -80,21 +80,23 @@ export const getAptosConfig = (
   if (!networkInfo) {
     throw new Error("Undefined network");
   }
-  const currentNetwork = convertNetwork(networkInfo);
-
-  if (isAptosLiveNetwork(currentNetwork)) {
-    const apiKey = dappConfig?.aptosApiKeys;
-    return new AptosConfig({
-      network: currentNetwork,
-      clientConfig: { API_KEY: apiKey ? apiKey[currentNetwork] : undefined },
-    });
-  }
 
   if (isAptosNetwork(networkInfo)) {
+    const currentNetwork = convertNetwork(networkInfo);
+
+    if (isAptosLiveNetwork(currentNetwork)) {
+      const apiKey = dappConfig?.aptosApiKeys;
+      return new AptosConfig({
+        network: currentNetwork,
+        clientConfig: { API_KEY: apiKey ? apiKey[currentNetwork] : undefined },
+      });
+    }
+
     return new AptosConfig({
       network: currentNetwork,
     });
   }
+
   return new AptosConfig({
     network: Network.CUSTOM,
     fullnode: networkInfo.url,
