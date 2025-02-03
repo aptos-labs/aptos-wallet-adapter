@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.23.1
+
+### Patch Changes
+
+- 31fe032: Fix unexpected exceptions when submitting transaction with a CUSTOM network
+
 ## 4.23.0
 
 ### Minor Changes
