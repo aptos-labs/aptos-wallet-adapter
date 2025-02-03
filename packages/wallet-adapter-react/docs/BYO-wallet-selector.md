@@ -99,7 +99,7 @@ const AptosConnectWalletRow = ({ wallet, onConnect }: WalletItemProps) => {
 
 This is a headless component that serves as a wrapper element and sets up a React context to provide the wallet information to the rest of the `WalletItem.*` components.
 
-### `WalletItem.Icon`
+#### `WalletItem.Icon`
 
 This is a headless component that renders the icon of the wallet.
 
