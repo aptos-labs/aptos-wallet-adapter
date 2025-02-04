@@ -454,7 +454,7 @@ importers:
   packages/wallet-adapter-vue:
     dependencies:
       '@aptos-labs/wallet-adapter-core':
-        specifier: 4.23.1
+        specifier: 4.24.0
         version: link:../wallet-adapter-core
       vue:
         specifier: ^3.4.21
