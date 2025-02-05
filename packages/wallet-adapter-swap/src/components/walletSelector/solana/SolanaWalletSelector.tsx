@@ -1,44 +1,35 @@
 import { Copy, LogOut } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { Button } from "../../../ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "../../../ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { useToast } from "./ui/use-toast";
+} from "../../../ui/dropdown-menu";
+import { useToast } from "../../../ui/use-toast";
 import {
-  BinanceWallet,
-  EVMWallet,
-  Eip6963Wallet,
-  Eip6963Wallets,
-  InjectedWallet,
-  InjectedWallets,
-  DEFAULT_CHAINS,
-} from "@xlabs-libs/wallet-aggregator-evm";
+  getSolanaStandardWallets,
+  SolanaWallet,
+} from "@xlabs-libs/wallet-aggregator-solana";
+import { WalletState } from "@xlabs-libs/wallet-aggregator-core";
+import { Connection } from "@solana/web3.js";
+import { SolanaWalletItem } from "./SolanaWalletItem";
 import { truncateAddress } from "@aptos-labs/wallet-adapter-react";
-import { Wallet, WalletState } from "@xlabs-libs/wallet-aggregator-core";
-import { EthereumWalletItem } from "./EthereumWalletItem";
 
-const eip6963Wallets = Object.entries(Eip6963Wallets).reduce(
-  (acc, [key, name]) => ({ [key]: new Eip6963Wallet(name), ...acc }),
-  {}
-);
-
-export function EthereumWalletSelector({
-  setSourceWalletAddress,
+export function SolanaWalletSelector({
   setSourceWallet,
+  transactionInProgress,
 }: {
-  setSourceWalletAddress: (address: string | null) => void;
-  setSourceWallet: (wallet: Wallet | null) => void;
+  setSourceWallet: (wallet: SolanaWallet | null) => void;
+  transactionInProgress: boolean;
 }) {
   const [connected, setConnected] = useState(false);
   const [accountAddress, setAccountAddress] = useState<string | undefined>(
     undefined
   );
-  const [wallet, setWallet] = useState<Eip6963Wallet | undefined>(undefined);
+  const [wallet, setWallet] = useState<SolanaWallet | undefined>(undefined);
 
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -48,7 +39,6 @@ export function EthereumWalletSelector({
   const onDisconnect = useCallback(async () => {
     await wallet?.disconnect();
     setConnected(false);
-    setSourceWalletAddress(null);
     setSourceWallet(null);
     setAccountAddress(undefined);
     setWallet(undefined);
@@ -74,7 +64,9 @@ export function EthereumWalletSelector({
   return connected ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button>{truncateAddress(accountAddress) || "Unknown"}</Button>
+        <Button disabled={transactionInProgress}>
+          {truncateAddress(accountAddress) || "Unknown"}
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onSelect={copyAddress} className="gap-2">
@@ -88,14 +80,13 @@ export function EthereumWalletSelector({
   ) : (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button>Connect a Wallet</Button>
+        <Button>Connect Solana Wallet</Button>
       </DialogTrigger>
       <ConnectWalletDialog
         close={closeDialog}
         setAccountAddress={setAccountAddress}
         setConnected={setConnected}
         setWallet={setWallet}
-        setSourceWalletAddress={setSourceWalletAddress}
         setSourceWallet={setSourceWallet}
       />
     </Dialog>
@@ -106,9 +97,8 @@ interface ConnectWalletDialogProps {
   close: () => void;
   setAccountAddress: (address: string | undefined) => void;
   setConnected: (connected: boolean) => void;
-  setWallet: (wallet: Eip6963Wallet | undefined) => void;
-  setSourceWalletAddress: (address: string | null) => void;
-  setSourceWallet: (wallet: Eip6963Wallet | null) => void;
+  setWallet: (wallet: SolanaWallet | undefined) => void;
+  setSourceWallet: (wallet: SolanaWallet | null) => void;
 }
 
 function ConnectWalletDialog({
@@ -116,31 +106,37 @@ function ConnectWalletDialog({
   setAccountAddress,
   setConnected,
   setWallet,
-  setSourceWalletAddress,
   setSourceWallet,
 }: ConnectWalletDialogProps) {
-  const [wallets, setEthereumWallets] = useState<Eip6963Wallet[]>([]);
+  const [wallets, setSolanaWallets] = useState<SolanaWallet[]>([]);
 
   useEffect(() => {
-    const ethereumWallets = Object.values(eip6963Wallets).filter((wallet) =>
-      ["MetaMask", "Phantom", "Coinbase Wallet"].includes(
-        (wallet as Eip6963Wallet).getName()
-      )
-    );
-    setEthereumWallets(ethereumWallets as Eip6963Wallet[]);
+    const solanaWallets = async () => {
+      // const cluster = "mainnet-beta";
+      // const url = clusterApiUrl(cluster);
+      const isDevnet = true;
+      const connection = isDevnet
+        ? "https://api.devnet.solana.com"
+        : "https://solana-mainnet.rpc.extrnode.com/eb370d10-948a-4f47-8017-a80241a5c7fc";
+      const wallets = await getSolanaStandardWallets(
+        new Connection(connection)
+      );
+      setSolanaWallets(wallets);
+    };
+    solanaWallets();
   }, []);
 
   const onConnectClick = useCallback(
-    (wallet: Eip6963Wallet) => {
+    (wallet: SolanaWallet) => {
       setAccountAddress(wallet.getAddress());
       setConnected(true);
       setWallet(wallet);
-      setSourceWalletAddress(wallet.getAddress() || null);
       setSourceWallet(wallet);
       close();
     },
     [setAccountAddress, close, setSourceWallet]
   );
+
   return (
     <DialogContent className="max-h-screen overflow-auto">
       <div className="flex flex-col gap-3 pt-3">
@@ -157,7 +153,7 @@ function ConnectWalletDialog({
 }
 
 interface WalletRowProps {
-  wallet: Eip6963Wallet;
+  wallet: SolanaWallet;
   onConnect?: () => void;
 }
 
@@ -169,24 +165,24 @@ function WalletRow({ wallet, onConnect }: WalletRowProps) {
   }, [wallet, onConnect]);
 
   return (
-    <EthereumWalletItem
+    <SolanaWalletItem
       wallet={wallet}
       onConnect={connectWallet}
       className="flex items-center justify-between px-4 py-3 gap-4 border rounded-md"
     >
       <div className="flex items-center gap-4">
-        <EthereumWalletItem.Icon className="h-6 w-6" />
-        <EthereumWalletItem.Name className="text-base font-normal" />
+        <SolanaWalletItem.Icon className="h-6 w-6" />
+        <SolanaWalletItem.Name className="text-base font-normal" />
       </div>
       {wallet.getWalletState() === WalletState.NotDetected ? (
         <Button size="sm" variant="ghost" asChild>
-          <EthereumWalletItem.InstallLink />
+          <SolanaWalletItem.InstallLink />
         </Button>
       ) : (
-        <EthereumWalletItem.ConnectButton asChild>
+        <SolanaWalletItem.ConnectButton asChild>
           <Button size="sm">Connect</Button>
-        </EthereumWalletItem.ConnectButton>
+        </SolanaWalletItem.ConnectButton>
       )}
-    </EthereumWalletItem>
+    </SolanaWalletItem>
   );
 }

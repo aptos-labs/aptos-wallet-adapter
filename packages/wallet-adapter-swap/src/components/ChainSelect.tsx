@@ -1,13 +1,18 @@
 import * as React from "react";
 import { ChevronDown, ExternalLink } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { mainnetChains, mainnetChainTokens } from "./utils";
+} from "../ui/dropdown-menu";
+import {
+  mainnetChains,
+  mainnetChainTokens,
+  testnetChains,
+  testnetChainTokens,
+} from "../utils/index";
 import { chainToIcon } from "@wormhole-foundation/sdk-icons";
 import { truncateAddress } from "@aptos-labs/wallet-adapter-react";
 import { Chain } from "@wormhole-foundation/sdk/dist/cjs";
@@ -15,9 +20,11 @@ import { Chain } from "@wormhole-foundation/sdk/dist/cjs";
 export function ChainSelect({
   setSelectedSourceChain,
   selectedSourceChain,
+  isMainnet,
 }: {
   setSelectedSourceChain: (chain: Chain) => void;
   selectedSourceChain: Chain;
+  isMainnet: boolean;
 }) {
   const [selectedItem, setSelectedItem] =
     React.useState<Chain>(selectedSourceChain);
@@ -27,10 +34,14 @@ export function ChainSelect({
     setSelectedSourceChain(chain as Chain);
   };
 
+  const chains = isMainnet ? mainnetChains : testnetChains;
+
+  const chainTokens = isMainnet ? mainnetChainTokens : testnetChainTokens;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="w-[200px] justify-between">
+        <Button variant="outline" className="w-full justify-between">
           {selectedItem ? (
             <>
               <img
@@ -47,33 +58,30 @@ export function ChainSelect({
           <ChevronDown className="ml-2 h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-full">
-        {Object.values(mainnetChains).map((item, index) => (
+      <DropdownMenuContent>
+        {Object.values(chains).map((chain, index) => (
           <DropdownMenuItem
             key={index}
             onSelect={() =>
-              onSelectedSourceChainChangeClicked(item.displayName)
+              onSelectedSourceChainChangeClicked(chain.displayName)
             }
-            className="flex items-center justify-between"
           >
-            <div className="flex items-center">
-              <img
-                src={chainToIcon(item.icon as any)}
-                alt={item.key}
-                height="32px"
-                width="32px"
-              />
-            </div>
-            <div className="flex flex-col">
+            <img
+              src={chainToIcon(chain.icon as any)}
+              alt={chain.key}
+              height="32px"
+              width="32px"
+            />
+            <div>
               <span className="ml-2">USDC</span>
               <a
-                href={`${item.explorerUrl}/address/${mainnetChainTokens[item.key].tokenId.address}`}
+                href={`${chain.explorerUrl}/address/${chainTokens[chain.key].tokenId.address}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
                 className="ml-2 underline flex flex-row gap-2"
               >
-                {truncateAddress(mainnetChainTokens[item.key].tokenId.address)}
+                {truncateAddress(chainTokens[chain.key].tokenId.address)}
                 <ExternalLink className="h-4 w-4" />
               </a>
             </div>

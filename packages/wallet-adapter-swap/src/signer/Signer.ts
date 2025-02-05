@@ -13,6 +13,7 @@ import * as ethereumSigner from "./EthereumSigner";
 import { EvmChains } from "@wormhole-foundation/sdk-evm/dist/cjs/types";
 import { EvmUnsignedTransaction } from "@wormhole-foundation/sdk-evm/dist/cjs/unsignedTransaction";
 import { Eip6963Wallet } from "@xlabs-libs/wallet-aggregator-evm";
+import { testnetChains } from "@/utils/chains/testnet";
 
 export class Signer<N extends Network, C extends Chain>
   implements SignAndSendSigner<N, C>
@@ -63,15 +64,18 @@ export const signAndSendTransaction = async (
   if (!wallet) {
     throw new Error("wallet is undefined");
   }
+  const chainContext =
+    testnetChains[chain as keyof typeof testnetChains].context;
+  console.log("chainContext", chainContext);
   // TODO make it dynamic import
-  if (chain === "Solana") {
+  if (chainContext === "Solana") {
     const signature = await solanaSigner.signAndSendTransaction(
       request as SolanaUnsignedTransaction<Network>,
       wallet as SolanaWallet,
       options
     );
     return signature;
-  } else if (chain === "Ethereum") {
+  } else if (chainContext === "Ethereum") {
     const tx = await ethereumSigner.signAndSendTransaction(
       request as EvmUnsignedTransaction<Network, EvmChains>,
       wallet as Eip6963Wallet,
