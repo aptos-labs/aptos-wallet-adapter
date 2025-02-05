@@ -2,6 +2,7 @@ import { WALLET_ADAPTER_CORE_VERSION } from "./version";
 
 export { type AnyAptosWallet, type DappConfig, WalletCore } from "./WalletCore";
 export * from "./LegacyWalletPlugins";
+export * from "./new";
 export * from "./constants";
 export * from "./utils";
 export * from "./AIP62StandardWallets";
