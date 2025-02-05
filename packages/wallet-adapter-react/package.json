@@ -7,9 +7,16 @@
   "types": "./dist/index.d.ts",
   "license": "Apache-2.0",
   "exports": {
-    "require": "./dist/index.js",
-    "import": "./dist/index.mjs",
-    "types": "./dist/index.d.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./new": {
+      "types": "./dist/new/index.d.ts",
+      "require": "./dist/new/index.js",
+      "import": "./dist/new/index.mjs"
+    }
   },
   "repository": {
     "type": "git",
@@ -29,12 +36,19 @@
     "React"
   ],
   "scripts": {
-    "build:bundle": "tsup src/index.tsx --format esm,cjs --sourcemap",
+    "build:bundle": "tsup --sourcemap",
     "build:declarations": "tsc --emitDeclarationOnly --declaration --declarationMap",
     "build": "pnpm build:bundle && pnpm build:declarations",
-    "dev": "tsup src/index.tsx --format esm,cjs --watch",
+    "dev": "tsup --watch",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "lint": "TIMING=1 eslint \"src/**/*.ts*\""
+  },
+  "tsup": {
+    "entryPoints": [
+      "src/index.tsx",
+      "src/new/index.ts"
+    ],
+    "format": ["esm", "cjs"]
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
@@ -46,10 +60,12 @@
   },
   "dependencies": {
     "@aptos-labs/wallet-adapter-core": "workspace:*",
+    "@aptos-labs/wallet-standard": "^0.2.0",
     "@radix-ui/react-slot": "^1.0.2"
   },
   "peerDependencies": {
-    "react": "^18"
+    "react": "^18",
+    "@aptos-labs/ts-sdk": "^1.33.1"
   },
   "files": [
     "dist",

@@ -3,8 +3,8 @@
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["es2020", "dom"],
+    "target": "es2020",
+    "lib": ["es2021", "dom"],
     "rootDir": "src",
     "outDir": "dist"
   }

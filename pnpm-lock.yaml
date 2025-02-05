@@ -398,9 +398,15 @@ importers:
 
   packages/wallet-adapter-react:
     dependencies:
+      '@aptos-labs/ts-sdk':
+        specifier: ^1.33.1
+        version: 1.35.0(axios@1.7.9)(got@11.8.6)
       '@aptos-labs/wallet-adapter-core':
         specifier: workspace:*
         version: link:../wallet-adapter-core
+      '@aptos-labs/wallet-standard':
+        specifier: ^0.2.0
+        version: 0.2.0(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@radix-ui/react-slot':
         specifier: ^1.0.2
         version: 1.1.2(@types/react@18.3.18)(react@18.3.1)

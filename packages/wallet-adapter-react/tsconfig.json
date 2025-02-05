@@ -3,6 +3,8 @@
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
+    "lib": ["es2020", "dom"],
+    "moduleResolution": "bundler",
     "rootDir": "src",
     "outDir": "dist"
   }
