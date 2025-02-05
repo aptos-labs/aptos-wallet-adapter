@@ -46,10 +46,12 @@
   },
   "dependencies": {
     "@aptos-labs/wallet-adapter-core": "workspace:*",
+    "@aptos-labs/wallet-standard": "^0.2.0",
     "@radix-ui/react-slot": "^1.0.2"
   },
   "peerDependencies": {
-    "react": "^18"
+    "react": "^18",
+    "@aptos-labs/ts-sdk": "^1.33.1"
   },
   "files": [
     "dist",
