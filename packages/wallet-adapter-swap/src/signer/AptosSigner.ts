@@ -1,9 +1,13 @@
-import { Wallet } from "@xlabs-libs/wallet-aggregator-core";
 import { AptosWallet } from "@xlabs-libs/wallet-aggregator-aptos";
 import {
+  Account,
+  AccountAuthenticator,
+  AnyRawTransaction,
   Aptos,
   AptosConfig,
   Network as AptosNetwork,
+  Ed25519Account,
+  Ed25519PrivateKey,
 } from "@aptos-labs/ts-sdk";
 
 import {
@@ -26,17 +30,20 @@ export class AptosSigner<N extends Network, C extends Chain>
   _address: string;
   _options: any;
   _wallet: WalletContextState;
+  _feePayerAccount: Ed25519Account | undefined;
 
   constructor(
     chain: C,
     address: string,
     options: any,
-    wallet: WalletContextState
+    wallet: WalletContextState,
+    feePayerAccount: Ed25519Account | undefined
   ) {
     this._chain = chain;
     this._address = address;
     this._options = options;
     this._wallet = wallet;
+    this._feePayerAccount = feePayerAccount;
   }
 
   chain(): C {
@@ -54,7 +61,8 @@ export class AptosSigner<N extends Network, C extends Chain>
     for (const tx of txs) {
       const txId = await signAndSendTransaction(
         tx as AptosUnsignedTransaction<Network, AptosChains>,
-        this._wallet
+        this._wallet,
+        this._feePayerAccount
       );
       txHashes.push(txId);
     }
@@ -63,11 +71,6 @@ export class AptosSigner<N extends Network, C extends Chain>
 }
 
 export function fetchOptions() {
-  // const aptosWalletConfig = {
-  //   network: config.isMainnet
-  //     ? ('mainnet' as AptosNetwork)
-  //     : ('testnet' as AptosNetwork),
-  // };
   const aptosWallets: Record<string, AptosWallet> = {};
   const walletCore = AptosWallet.walletCoreFactory(
     { network: AptosNetwork.TESTNET },
@@ -82,7 +85,8 @@ export function fetchOptions() {
 
 export async function signAndSendTransaction(
   request: UnsignedTransaction<Network, AptosChains>,
-  wallet: WalletContextState | undefined
+  wallet: WalletContextState | undefined,
+  feePayerAccount: Ed25519Account | undefined
 ) {
   if (!wallet) {
     throw new Error("Wallet is undefined");
@@ -100,23 +104,41 @@ export async function signAndSendTransaction(
     }
   });
 
-  //const context = await getWormholeContextV2();
   const aptosConfig = new AptosConfig({
     network: AptosNetwork.TESTNET,
   });
   const aptos = new Aptos(aptosConfig);
-  //const aptos = context.getPlatform('Aptos');
-  //const rpc = (await aptos.getRpc('Aptos')) as Aptos;
-  console.log("payload", payload);
-  const tx = await wallet.signAndSubmitTransaction({
-    data: payload,
-    options: {
-      // this is set to 5 minutes in case the user takes a while to sign the transaction
-      expireTimestamp: Math.floor(Date.now() / 1000) + 60 * 5,
-    },
-  });
-  console.log("aptos tx", tx);
-  await aptos.waitForTransaction({ transactionHash: tx.hash });
 
-  return tx;
+  const txnToSign = await aptos.transaction.build.simple({
+    data: payload,
+    sender: wallet.account?.address!,
+    withFeePayer: feePayerAccount ? true : false,
+  });
+  const senderAuthenticator = await wallet.signTransaction(txnToSign);
+
+  const txnToSubmit: {
+    transaction: AnyRawTransaction;
+    senderAuthenticator: AccountAuthenticator;
+    feePayerAuthenticator?: AccountAuthenticator;
+  } = {
+    transaction: txnToSign,
+    senderAuthenticator,
+  };
+
+  if (feePayerAccount) {
+    const feePayerSignerAuthenticator = aptos.transaction.signAsFeePayer({
+      signer: feePayerAccount,
+      transaction: txnToSign,
+    });
+    txnToSubmit.feePayerAuthenticator = feePayerSignerAuthenticator;
+  }
+
+  const response = await aptos.transaction.submit.simple(txnToSubmit);
+  console.log("response", response.hash);
+
+  const tx = await aptos.waitForTransaction({
+    transactionHash: response.hash,
+  });
+
+  return tx.hash;
 }

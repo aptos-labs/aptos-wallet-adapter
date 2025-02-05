@@ -8,6 +8,7 @@
       "@/*": ["./src/*"]
     },
     "allowImportingTsExtensions": true,
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "skipLibCheck": true
   }
 }

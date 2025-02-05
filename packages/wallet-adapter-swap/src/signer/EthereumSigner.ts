@@ -21,7 +21,8 @@ export async function signAndSendTransaction(
     ? getBigInt(request.transaction.chainId)
     : undefined;
   const actualChainId = provider?.chainId;
-
+  console.log("actualChainId", actualChainId);
+  console.log("expectedChainId", expectedChainId);
   if (
     !actualChainId ||
     !expectedChainId ||
