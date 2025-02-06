@@ -1,7 +1,7 @@
 export * from './utils/approval';
 export * from './utils/walletFromLegacyPlugin';
 export * from './AdaptedWallet';
-export * from './getAptosWallets';
+export * from './WalletAdapter';
 
 // TODO: remove other `Network` definition
 export {

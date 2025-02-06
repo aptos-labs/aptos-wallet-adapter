@@ -1,21 +1,23 @@
-import { getAptosWallets } from '@aptos-labs/wallet-adapter-core';
 import { useEffect, useState } from 'react';
+import { useWalletAdapter } from './useWalletAdapter';
 
 export function useAvailableWallets() {
-  const aptosWallets = getAptosWallets();
+  const adapter = useWalletAdapter();
 
-  const [availableWallets, setAvailableWallets] = useState(aptosWallets.get());
+  const [availableWallets, setAvailableWallets] = useState(adapter.availableWallets);
   useEffect(() => {
     const refreshAvailableWallets = () => {
-      setAvailableWallets(aptosWallets.get());
+      setAvailableWallets(adapter.availableWallets);
     };
-    const unsubscribeOnRegister = aptosWallets.on('register', refreshAvailableWallets);
-    const unsubscribeOnUnregister = aptosWallets.on('unregister', refreshAvailableWallets);
+
+    adapter.on('register', refreshAvailableWallets);
+    adapter.on('unregister', refreshAvailableWallets);
+
     return () => {
-      unsubscribeOnRegister();
-      unsubscribeOnUnregister();
+      adapter.off('register', refreshAvailableWallets);
+      adapter.off('unregister', refreshAvailableWallets);
     };
-  }, [aptosWallets]);
+  }, [adapter]);
 
   return availableWallets;
 }
