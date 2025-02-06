@@ -1,6 +1,6 @@
 import { UserResponseStatus } from '@aptos-labs/wallet-standard';
 import { useState } from 'react';
-import { useActiveWallet, UseActiveWalletConnectedResult } from './useActiveWallet';
+import { ConnectedWallet, useActiveWallet } from './useActiveWallet';
 import { setActiveWalletId } from './useActiveWalletId';
 import { useAvailableWallets } from './useAvailableWallets';
 
@@ -41,7 +41,7 @@ export function WalletSelectorModal() {
 }
 
 interface ActiveAccountNavItemProps {
-  wallet: UseActiveWalletConnectedResult
+  wallet: ConnectedWallet
 }
 
 export function ActiveAccountNavItem({ wallet }: ActiveAccountNavItemProps) {
@@ -57,7 +57,7 @@ export function ActiveAccountNavItem({ wallet }: ActiveAccountNavItemProps) {
 
   return (
     <button onClick={onToggle}>
-      <div>{wallet.account.address.toString()}</div>
+      <div>{wallet.activeAccount.address.toString()}</div>
       {isDropdownOpen ? (
         <ul>
           <li>Copy address</li>

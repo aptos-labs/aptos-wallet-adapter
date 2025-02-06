@@ -1,36 +1,38 @@
 import { AdaptedWallet, NewNetwork as Network, StandardNetwork } from '@aptos-labs/wallet-adapter-core';
 import {
   AccountInfo,
+  AptosFeatures,
   AptosSignAndSubmitTransactionInput,
   AptosSignMessageInput,
   AptosSignTransactionInputV1_1,
+  WalletIcon,
 } from '@aptos-labs/wallet-standard';
 import { useEffect, useMemo, useState } from 'react';
 import { useActiveWalletId } from './useActiveWalletId';
 import { useAvailableWallets } from './useAvailableWallets';
 
-export interface UseActiveWalletUninitializedResult {
+export interface UninitializedWallet {
   isInitialized: false;
   isConnected: false;
-  account?: undefined;
-  network?: undefined;
-  wallet?: undefined;
+  activeAccount?: undefined;
+  activeNetwork?: undefined;
 }
 
-export interface UseActiveWalletDisconnectedResult {
+export interface DisconnectedWallet {
   isInitialized: true;
   isConnected: false;
-  account?: undefined;
-  network?: undefined;
-  wallet?: undefined;
+  activeAccount?: undefined;
+  activeNetwork?: undefined;
 }
 
-export interface UseActiveWalletConnectedResult {
+export interface ConnectedWallet {
   isInitialized: true;
   isConnected: true;
-  account: AccountInfo;
-  network: Network;
-  // wallet: Wallet;
+  activeAccount: AccountInfo;
+  activeNetwork: Network;
+  name: string;
+  icon: WalletIcon;
+  features: AptosFeatures;
   disconnect: () => Promise<void>;
   signMessage: (input: AptosSignMessageInput)
     => ReturnType<AdaptedWallet['signMessage']>;
@@ -41,9 +43,9 @@ export interface UseActiveWalletConnectedResult {
 }
 
 type UseActiveWalletResult =
-  UseActiveWalletUninitializedResult
-  | UseActiveWalletDisconnectedResult
-  | UseActiveWalletConnectedResult;
+  | UninitializedWallet
+  | DisconnectedWallet
+  | ConnectedWallet;
 
 export function useActiveWallet(): UseActiveWalletResult {
   const availableWallets = useAvailableWallets();
@@ -89,27 +91,28 @@ export function useActiveWallet(): UseActiveWalletResult {
       return {
         isInitialized: false,
         isConnected: false,
-      } satisfies UseActiveWalletUninitializedResult;
+      } satisfies UninitializedWallet;
     }
 
     if (!activeWallet || !activeAccount) {
       return {
         isInitialized: true,
         isConnected: false,
-      } satisfies UseActiveWalletDisconnectedResult;
+      } satisfies DisconnectedWallet;
     }
 
     return {
       isInitialized: true,
       isConnected: true,
-      // todo: pass other useful info
-      // wallet: activeWallet,
-      account: activeAccount,
-      network: activeNetwork,
+      activeAccount,
+      activeNetwork,
+      name: activeWallet.name,
+      icon: activeWallet.icon,
+      features: activeWallet.features,
       disconnect: async () => activeWallet.disconnect(),
       signMessage: async (input) => activeWallet.signMessage(input),
       signTransaction: async (input) => activeWallet.signTransaction(input),
       signAndSubmitTransaction: async (input) => activeWallet.signAndSubmitTransaction(input),
-    } satisfies UseActiveWalletConnectedResult;
+    } satisfies ConnectedWallet;
   }, [activeAccount, activeNetwork, activeWallet, isInitialized]);
 }

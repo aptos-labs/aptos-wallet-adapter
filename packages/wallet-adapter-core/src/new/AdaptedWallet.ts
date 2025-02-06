@@ -8,6 +8,7 @@ import {
   AptosSignTransactionInputV1_1,
   AptosSignTransactionOutput,
   AptosSignTransactionOutputV1_1,
+  WalletIcon,
 } from '@aptos-labs/wallet-standard';
 import { GA4 } from '../ga';
 import { WALLET_ADAPTER_CORE_VERSION } from '../version';
@@ -39,7 +40,7 @@ export interface AdaptedWalletConfig {
 export class AdaptedWallet {
   readonly name: string;
   readonly url: string;
-  readonly icon: string;
+  readonly icon: WalletIcon;
   readonly features: AptosFeatures;
 
   readonly availableNetworks: Network[];
