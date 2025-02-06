@@ -14,6 +14,8 @@ export type UnsubscribeCallback = () => void;
 
 export interface WalletAdapterConfig {
   disableTelemetry?: boolean;
+  whitelist?: string[];
+  blacklist?: string[];
 }
 
 export class WalletAdapter {
@@ -24,6 +26,9 @@ export class WalletAdapter {
   constructor(config: WalletAdapterConfig = {}) {
     const api = getWallets();
 
+    const { disableTelemetry, whitelist, blacklist } = config;
+    const adaptedWalletConfig = { disableTelemetry };
+
     // Use local references so that cleanup callback doesn't bind to `this`
     const registeredWallets = this.registeredWallets;
     const onRegisterListeners = this.onRegisterListeners;
@@ -31,14 +36,16 @@ export class WalletAdapter {
 
     for (const wallet of api.get()) {
       if (isAptosStandardWallet(wallet)) {
-        registeredWallets.set(wallet, new AdaptedWallet(wallet, config));
+        registeredWallets.set(wallet, new AdaptedWallet(wallet, adaptedWalletConfig));
       }
     }
 
     const offRegister = api.on('register', (...wallets) => {
       for (const wallet of wallets) {
-        if (isAptosStandardWallet(wallet)) {
-          const adaptedWallet = new AdaptedWallet(wallet, config);
+        const whitelisted = whitelist?.includes(wallet.name) ?? true;
+        const blacklisted = blacklist?.includes(wallet.name) ?? false;
+        if (isAptosStandardWallet(wallet) && whitelisted && !blacklisted) {
+          const adaptedWallet = new AdaptedWallet(wallet, adaptedWalletConfig);
           registeredWallets.set(wallet, adaptedWallet);
           for (const callback of onRegisterListeners) {
             callback(adaptedWallet);
