@@ -19,17 +19,17 @@ import { WalletSignAndSubmitMessageError } from "../error";
 
 export function isMobile(): boolean {
   return /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/i.test(
-    navigator.userAgent
+    navigator.userAgent,
   );
 }
 
 export function isInAppBrowser(): boolean {
   const isIphone = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(
-    navigator.userAgent
+    navigator.userAgent,
   );
 
   const isAndroid = /(Android).*Version\/[\d.]+.*Chrome\/[^\s]+ Mobile/i.test(
-    navigator.userAgent
+    navigator.userAgent,
   );
 
   return isIphone || isAndroid;
@@ -55,14 +55,14 @@ export function generalizedErrorMessage(error: any): string {
 // Serializable, so if each argument is of an instance of a class
 // the extends Serializable - we know these are BCS arguments
 export const areBCSArguments = (
-  args: Array<EntryFunctionArgumentTypes | SimpleEntryFunctionArgumentTypes>
+  args: Array<EntryFunctionArgumentTypes | SimpleEntryFunctionArgumentTypes>,
 ): boolean => {
   // `every` returns true if the array is empty, so
   // first check the array length
   if (args.length === 0) return false;
   return args.every(
     (arg: EntryFunctionArgumentTypes | SimpleEntryFunctionArgumentTypes) =>
-      arg instanceof Serializable
+      arg instanceof Serializable,
   );
 };
 
@@ -75,7 +75,7 @@ export const areBCSArguments = (
  */
 export const getAptosConfig = (
   networkInfo: NetworkInfo | StandardNetworkInfo | null,
-  dappConfig: DappConfig | undefined
+  dappConfig: DappConfig | undefined,
 ): AptosConfig => {
   if (!networkInfo) {
     throw new Error("Undefined network");
@@ -97,10 +97,9 @@ export const getAptosConfig = (
     });
   }
 
-  return new AptosConfig({
-    network: Network.CUSTOM,
-    fullnode: networkInfo.url,
-  });
+  throw new Error(
+    "Invalid network, custom network not supported with Aptos wallet adapter to prevent user from using an unexpected network.",
+  );
 };
 
 /**
@@ -110,7 +109,7 @@ export const getAptosConfig = (
  * @returns boolean
  */
 export const isAptosNetwork = (
-  networkInfo: NetworkInfo | StandardNetworkInfo | null
+  networkInfo: NetworkInfo | StandardNetworkInfo | null,
 ): boolean => {
   if (!networkInfo) {
     throw new Error("Undefined network");
@@ -140,7 +139,7 @@ export const fetchDevnetChainId = async (): Promise<number> => {
  * as a string, this function converts the string to Uint8Array.
  */
 export const handlePublishPackageTransaction = (
-  transactionInput: InputTransactionData
+  transactionInput: InputTransactionData,
 ) => {
   // convert the first argument, metadataBytes, to uint8array if is a string
   let metadataBytes = transactionInput.data.functionArguments[0];
@@ -159,7 +158,7 @@ export const handlePublishPackageTransaction = (
     });
   } else {
     throw new WalletSignAndSubmitMessageError(
-      "The bytecode argument must be an array."
+      "The bytecode argument must be an array.",
     ).message;
   }
 
