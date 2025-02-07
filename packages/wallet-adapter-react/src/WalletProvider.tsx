@@ -82,7 +82,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       plugins ?? [],
       optInWallets ?? [],
       dappConfig,
-      disableTelemetry
+      disableTelemetry,
     );
     setWalletCore(walletCore);
   }, []);
@@ -116,7 +116,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const signTransaction = async (
     transaction: AnyRawTransaction | Types.TransactionPayload,
     asFeePayer?: boolean,
-    options?: InputGenerateTransactionOptions
+    options?: InputGenerateTransactionOptions,
   ): Promise<AccountAuthenticator> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -125,7 +125,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       return await walletCore?.signTransaction(
         transaction,
         asFeePayer,
-        options
+        options,
       );
     } catch (error: any) {
       if (onError) onError(error);
@@ -134,7 +134,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signMessage = async (
-    message: SignMessagePayload
+    message: SignMessagePayload,
   ): Promise<SignMessageResponse> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -148,7 +148,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signMessageAndVerify = async (
-    message: SignMessagePayload
+    message: SignMessagePayload,
   ): Promise<boolean> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -162,7 +162,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const submitTransaction = async (
-    transaction: InputSubmitTransactionData
+    transaction: InputSubmitTransactionData,
   ): Promise<PendingTransactionResponse> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -176,7 +176,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signAndSubmitTransaction = async (
-    transaction: InputTransactionData
+    transaction: InputTransactionData,
   ) => {
     try {
       return await walletCore?.signAndSubmitTransaction(transaction);
@@ -280,12 +280,12 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const handleStandardWalletsAdded = (
-    standardWallet: Wallet | AptosStandardSupportedWallet
+    standardWallet: Wallet | AptosStandardSupportedWallet,
   ) => {
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
     const existingWalletIndex = wallets.findIndex(
-      (wallet) => wallet.name == standardWallet.name
+      (wallet) => wallet.name == standardWallet.name,
     );
     if (existingWalletIndex !== -1) {
       // If wallet exists, replace it with the new wallet

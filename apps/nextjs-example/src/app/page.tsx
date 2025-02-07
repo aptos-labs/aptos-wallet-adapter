@@ -48,7 +48,9 @@ import { registerWallet } from "@aptos-labs/wallet-standard";
   registerWallet(myWallet);
 })();
 
-const isTelegramMiniApp = typeof window !== 'undefined' && (window as any).TelegramWebviewProxy !== undefined;
+const isTelegramMiniApp =
+  typeof window !== "undefined" &&
+  (window as any).TelegramWebviewProxy !== undefined;
 if (isTelegramMiniApp) {
   initTelegram();
 }

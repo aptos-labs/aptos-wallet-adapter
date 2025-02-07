@@ -28,7 +28,7 @@ export function scopePollingDetectionStrategy(detect: () => boolean): void {
       once: true,
     });
     disposers.push(() =>
-      document.removeEventListener("DOMContentLoaded", detectAndDispose)
+      document.removeEventListener("DOMContentLoaded", detectAndDispose),
     );
   }
 
