@@ -97,6 +97,7 @@ export const getAptosConfig = (
     });
   }
 
+  // Custom networks are not supported, please ensure that the wallet is returning the appropriate network Mainnet, Testnet, Devnet, Local
   throw new Error(
     "Invalid network, custom network not supported with Aptos wallet adapter to prevent user from using an unexpected network.",
   );
