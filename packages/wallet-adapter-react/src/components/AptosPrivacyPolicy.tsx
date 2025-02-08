@@ -9,7 +9,7 @@ const Root = createHeadlessComponent("AptosPrivacyPolicy.Root", "div");
 const Disclaimer = createHeadlessComponent(
   "AptosPrivacyPolicy.Disclaimer",
   "span",
-  { children: "By continuing, you agree to Aptos Labs'" }
+  { children: "By continuing, you agree to Aptos Labs'" },
 );
 
 const Link = createHeadlessComponent("AptosPrivacyPolicy.Disclaimer", "a", {

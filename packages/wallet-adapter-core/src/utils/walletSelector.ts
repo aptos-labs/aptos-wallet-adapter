@@ -11,7 +11,9 @@ import { isRedirectable } from "./helpers";
  */
 export function partitionWallets(
   wallets: ReadonlyArray<AnyAptosWallet>,
-  partitionFunction: (wallet: AnyAptosWallet) => boolean = isInstalledOrLoadable
+  partitionFunction: (
+    wallet: AnyAptosWallet,
+  ) => boolean = isInstalledOrLoadable,
 ) {
   const defaultWallets: Array<AnyAptosWallet> = [];
   const moreWallets: Array<AnyAptosWallet> = [];
@@ -51,7 +53,7 @@ export function truncateAddress(address: string | undefined) {
 
 /** Returns `true` if the provided wallet is an Aptos Connect wallet. */
 export function isAptosConnectWallet(
-  wallet: WalletInfo | AnyAptosWallet | AptosStandardWallet
+  wallet: WalletInfo | AnyAptosWallet | AptosStandardWallet,
 ) {
   if (!wallet.url) return false;
   return wallet.url.startsWith(APTOS_CONNECT_BASE_URL);
@@ -64,7 +66,7 @@ export function isAptosConnectWallet(
 export function getAptosConnectWallets(wallets: ReadonlyArray<AnyAptosWallet>) {
   const { defaultWallets, moreWallets } = partitionWallets(
     wallets,
-    isAptosConnectWallet
+    isAptosConnectWallet,
   );
   return { aptosConnectWallets: defaultWallets, otherWallets: moreWallets };
 }
@@ -93,7 +95,7 @@ export interface WalletSortingOptions {
  */
 export function groupAndSortWallets(
   wallets: ReadonlyArray<AnyAptosWallet>,
-  options?: WalletSortingOptions
+  options?: WalletSortingOptions,
 ) {
   const { aptosConnectWallets, otherWallets } = getAptosConnectWallets(wallets);
   const { defaultWallets, moreWallets } = partitionWallets(otherWallets);

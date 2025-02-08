@@ -37,6 +37,6 @@ export const WalletGraphic = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
         />
       </svg>
     );
-  }
+  },
 );
 WalletGraphic.displayName = "WalletGraphic";
