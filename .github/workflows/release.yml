@@ -27,7 +27,7 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 8.8.0
+          version: 9.15.5
 
       - name: Install global dependencies
         run: pnpm install --frozen-lockfile
