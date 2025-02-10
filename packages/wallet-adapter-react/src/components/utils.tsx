@@ -38,7 +38,7 @@ export function createHeadlessComponent<
     const Component = asChild ? Slot : elementType;
 
     const { children: defaultChildren, ...resolvedProps } =
-      typeof props === "function" ? props(displayName) : props ?? {};
+      typeof props === "function" ? props(displayName) : (props ?? {});
     const resolvedChildren =
       /**
        * Use props' default children if no children are set in the component element's children and when asChild is true.

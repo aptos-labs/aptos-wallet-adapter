@@ -23,7 +23,7 @@ export function getSDKWallets(dappConfig?: DappConfig) {
         network: dappConfig?.network,
         dappId: dappConfig?.aptosConnectDappId,
         ...dappConfig?.aptosConnect,
-      })
+      }),
     );
 
     if (
@@ -36,7 +36,7 @@ export function getSDKWallets(dappConfig?: DappConfig) {
           network: dappConfig.network as any,
           manifestURL: dappConfig.mizuwallet.manifestURL,
           appId: dappConfig.mizuwallet.appId,
-        }) as any
+        }) as any,
       );
     }
   }

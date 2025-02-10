@@ -21,6 +21,6 @@ export const LinkGraphic = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
         </g>
       </svg>
     );
-  }
+  },
 );
 LinkGraphic.displayName = "LinkGraphic";

@@ -22,21 +22,21 @@ const mockSignMessagePayload: SignMessagePayload = {
 
 const connectMock = jest.fn(() => Promise.resolve(console.log("connect")));
 const disconnectMock = jest.fn(() =>
-  Promise.resolve(console.log("disconnect"))
+  Promise.resolve(console.log("disconnect")),
 );
 const networkMock = jest.fn(() => Promise.resolve(console.log("network")));
 const signAndSubmitTransactionMock = jest.fn((transaction, options?) =>
-  Promise.resolve({ hash: "signAndSubmitTransactionMock" })
+  Promise.resolve({ hash: "signAndSubmitTransactionMock" }),
 );
 const signMessageMock = jest.fn((message) =>
-  Promise.resolve(signMessageResponseMock)
+  Promise.resolve(signMessageResponseMock),
 );
 
 const onNetworkChangeeMock = jest.fn((callback: any) =>
-  Promise.resolve(console.log("onNetworkChange"))
+  Promise.resolve(console.log("onNetworkChange")),
 );
 const onAccountChangeMock = jest.fn((callback: any) =>
-  Promise.resolve(console.log("onAccountChangeMock"))
+  Promise.resolve(console.log("onAccountChangeMock")),
 );
 
 const walletMock: Wallet = {
@@ -81,7 +81,7 @@ describe("signMessageAndVerify", () => {
       .mockResolvedValue(signMessageResponseMock);
 
     const verified = await walletCoreMock.signMessageAndVerify(
-      mockSignMessagePayload
+      mockSignMessagePayload,
     );
     expect(verified).toBeTruthy();
   });
@@ -99,7 +99,7 @@ describe("signMessageAndVerify", () => {
       .mockResolvedValue(signMessageResponseMock);
 
     const verified = await walletCoreMock.signMessageAndVerify(
-      mockSignMessagePayload
+      mockSignMessagePayload,
     );
     expect(verified).toBeFalsy();
   });

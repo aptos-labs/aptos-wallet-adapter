@@ -56,7 +56,7 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
     network: NetworkInfo | null,
     wallet: Wallet,
     transactionInput: InputTransactionData,
-    dappConfig?: DappConfig
+    dappConfig?: DappConfig,
   ) {
     // first check if each argument is a BCS serialized argument
     if (areBCSArguments(payloadData.functionArguments)) {
@@ -78,7 +78,7 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
           gas_unit_price: transactionInput.options?.gasUnitPrice
             ? BigInt(transactionInput.options?.gasUnitPrice)
             : undefined,
-        }
+        },
       );
     }
 
@@ -105,12 +105,12 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
   async signAndSubmitTransaction(
     transaction: Types.TransactionPayload,
     wallet: Wallet,
-    options?: TransactionOptions
+    options?: TransactionOptions,
   ): Promise<any> {
     try {
       const response = await (wallet as any).signAndSubmitTransaction(
         transaction,
-        options
+        options,
       );
       return response;
     } catch (error: any) {
@@ -130,17 +130,17 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
   async signAndSubmitBCSTransaction(
     transaction: TxnBuilderTypes.TransactionPayload,
     wallet: Wallet,
-    options?: TransactionOptions
+    options?: TransactionOptions,
   ): Promise<any> {
     if (!("signAndSubmitBCSTransaction" in wallet)) {
       throw new WalletNotSupportedMethod(
-        `Submit a BCS Transaction is not supported by ${wallet.name}`
+        `Submit a BCS Transaction is not supported by ${wallet.name}`,
       ).message;
     }
     try {
       const response = await (wallet as any).signAndSubmitBCSTransaction(
         transaction,
-        options
+        options,
       );
       return response;
     } catch (error: any) {
@@ -160,12 +160,12 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
   async signTransaction(
     transaction: Types.TransactionPayload,
     wallet: Wallet,
-    options?: TransactionOptions
+    options?: TransactionOptions,
   ): Promise<Uint8Array | null> {
     try {
       const response = await (wallet as any).signTransaction(
         transaction,
-        options
+        options,
       );
       return response;
     } catch (error: any) {
@@ -183,7 +183,7 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
   async signMessageAndVerify(
     message: SignMessagePayload,
     wallet: Wallet,
-    account: AccountInfo
+    account: AccountInfo,
   ): Promise<boolean> {
     try {
       const response = await wallet.signMessage(message);
@@ -205,14 +205,14 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
           } else {
             // Getting an array which marks the keys signing the message with 1, while marking 0 for the keys not being used.
             const bits = Array.from(bitmap).flatMap((n) =>
-              Array.from({ length: 8 }).map((_, i) => (n >> i) & 1)
+              Array.from({ length: 8 }).map((_, i) => (n >> i) & 1),
             );
             // Filter out indexes of the keys we need
             const index = bits.map((_, i) => i).filter((i) => bits[i]);
 
             const publicKeys = account.publicKey as string[];
             const matchedPublicKeys = publicKeys.filter(
-              (_: string, i: number) => index.includes(i)
+              (_: string, i: number) => index.includes(i),
             );
 
             verified = true;
@@ -220,7 +220,7 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
               const isSigVerified = nacl.sign.detached.verify(
                 Buffer.from(fullMessage),
                 Buffer.from((signature as string[])[i], "hex"),
-                Buffer.from(matchedPublicKeys[i], "hex")
+                Buffer.from(matchedPublicKeys[i], "hex"),
               ); // `isSigVerified` should be `true` for every signature
 
               if (!isSigVerified) {
@@ -237,16 +237,16 @@ export class WalletCoreV1 extends EventEmitter<WalletCoreEvents> {
         // single sig wallets
         // support for when address doesnt have hex prefix (0x)
         const currentAccountPublicKey = new HexString(
-          account.publicKey as string
+          account.publicKey as string,
         );
         // support for when address doesnt have hex prefix (0x)
         const signature = new HexString(
-          (response as SignMessageResponse).signature as string
+          (response as SignMessageResponse).signature as string,
         );
         verified = nacl.sign.detached.verify(
           Buffer.from((response as SignMessageResponse).fullMessage),
           Buffer.from(signature.noPrefix(), "hex"),
-          Buffer.from(currentAccountPublicKey.noPrefix(), "hex")
+          Buffer.from(currentAccountPublicKey.noPrefix(), "hex"),
         );
       }
       return verified;

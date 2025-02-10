@@ -26,6 +26,6 @@ export const Web3Graphic = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
         </g>
       </svg>
     );
-  }
+  },
 );
 Web3Graphic.displayName = "Web3Graphic";

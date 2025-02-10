@@ -16,7 +16,7 @@ import { NetworkInfo } from "./types";
 
 // old => new
 export function convertNetwork(
-  networkInfo: NetworkInfo | StandardNetworkInfo | null
+  networkInfo: NetworkInfo | StandardNetworkInfo | null,
 ): Network {
   switch (networkInfo?.name) {
     case "mainnet" as Network:
@@ -34,14 +34,14 @@ export function convertNetwork(
 
 // new => old
 export function convertV2TransactionPayloadToV1BCSPayload(
-  payload: TransactionPayload
+  payload: TransactionPayload,
 ): TxnBuilderTypes.TransactionPayload {
   const deserializer = new BCS.Deserializer(payload.bcsToBytes());
   return TxnBuilderTypes.TransactionPayload.deserialize(deserializer);
 }
 
 export function convertV2PayloadToV1JSONPayload(
-  payload: InputGenerateTransactionPayloadData
+  payload: InputGenerateTransactionPayloadData,
 ): Types.TransactionPayload {
   if ("bytecode" in payload) {
     // is a script payload
@@ -54,7 +54,7 @@ export function convertV2PayloadToV1JSONPayload(
           return typeTag.toString();
         }
         return typeTag;
-      }
+      },
     );
     const newPayload: Types.TransactionPayload = {
       type: "multisig_payload",
@@ -73,7 +73,7 @@ export function convertV2PayloadToV1JSONPayload(
           return typeTag.toString();
         }
         return typeTag;
-      }
+      },
     );
     const newPayload: Types.TransactionPayload = {
       type: "entry_function_payload",
@@ -86,9 +86,7 @@ export function convertV2PayloadToV1JSONPayload(
   }
 }
 
-export function convertPayloadInputV1ToV2(
-  inputV1: Types.TransactionPayload
-) {
+export function convertPayloadInputV1ToV2(inputV1: Types.TransactionPayload) {
   if ("function" in inputV1) {
     const inputV2: InputEntryFunctionData | InputMultiSigData = {
       function: inputV1.function as MoveFunctionId,
@@ -103,7 +101,7 @@ export function convertPayloadInputV1ToV2(
 
 export async function generateTransactionPayloadFromV1Input(
   aptosConfig: AptosConfig,
-  inputV1: Types.TransactionPayload
+  inputV1: Types.TransactionPayload,
 ): Promise<TransactionPayloadEntryFunction> {
   if ("function" in inputV1) {
     const inputV2 = convertPayloadInputV1ToV2(inputV1);
