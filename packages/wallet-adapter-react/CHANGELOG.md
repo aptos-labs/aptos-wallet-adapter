@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-react
 
+## 3.8.0
+
+### Minor Changes
+
+- 99dc712: Bump package versions
+
+### Patch Changes
+
+- Updated dependencies [c2de332]
+- Updated dependencies [99dc712]
+  - @aptos-labs/wallet-adapter-core@4.25.0
+
 ## 3.7.11
 
 ### Patch Changes
