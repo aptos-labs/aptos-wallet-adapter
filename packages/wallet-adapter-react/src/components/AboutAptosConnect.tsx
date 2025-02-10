@@ -28,7 +28,7 @@ function useAboutAptosConnectContext(displayName: string) {
 
   if (!context) {
     throw new Error(
-      `\`${displayName}\` must be used within \`AboutAptosConnect\``
+      `\`${displayName}\` must be used within \`AboutAptosConnect\``,
     );
   }
 
@@ -98,8 +98,8 @@ const educationScreenIndicators = Array(educationScreens.length)
             context.setScreenIndex(index + 1);
           },
         };
-      }
-    )
+      },
+    ),
   );
 
 export interface AboutAptosConnectEducationScreen {
@@ -147,7 +147,7 @@ export interface AboutAptosConnectProps {
    * that allow you to construct your UI and apply your own styles.
    */
   renderEducationScreen: (
-    screen: AboutAptosConnectEducationScreen
+    screen: AboutAptosConnectEducationScreen,
   ) => ReactNode;
   /**
    * The initial wallet selection UI that will be replaced by the education
@@ -171,14 +171,14 @@ const Root = ({ renderEducationScreen, children }: AboutAptosConnectProps) => {
         },
         next: () => {
           setScreenIndex(
-            screenIndex === educationScreens.length ? 0 : screenIndex + 1
+            screenIndex === educationScreens.length ? 0 : screenIndex + 1,
           );
         },
         cancel: () => {
           setScreenIndex(0);
         },
       }))[screenIndex - 1],
-    [screenIndex]
+    [screenIndex],
   );
 
   return (
@@ -202,7 +202,7 @@ const Trigger = createHeadlessComponent(
         context.setScreenIndex(1);
       },
     };
-  }
+  },
 );
 
 /**

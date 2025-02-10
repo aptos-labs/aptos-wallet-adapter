@@ -21,7 +21,7 @@ export class GA4 {
 
     myScript.setAttribute(
       "src",
-      `https://www.googletagmanager.com/gtag/js?id=${gaID}`
+      `https://www.googletagmanager.com/gtag/js?id=${gaID}`,
     );
 
     const that = this;

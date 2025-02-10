@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { PropsWithChildren } from "react";
 import { AutoConnectProvider } from "@/components/AutoConnectProvider";
-import { ReactQueryClientProvider } from '@/components/ReactQueryClientProvider';
+import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
 
 const fontSans = FontSans({
   subsets: ["latin"],

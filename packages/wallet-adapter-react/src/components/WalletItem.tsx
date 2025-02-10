@@ -57,7 +57,7 @@ const Root = forwardRef<HTMLDivElement, WalletItemProps>(
         </Component>
       </WalletItemContext.Provider>
     );
-  }
+  },
 );
 Root.displayName = "WalletItem";
 
@@ -71,7 +71,7 @@ const Icon = createHeadlessComponent(
       src: context.wallet.icon,
       alt: `${context.wallet.name} icon`,
     };
-  }
+  },
 );
 
 const Name = createHeadlessComponent(
@@ -83,7 +83,7 @@ const Name = createHeadlessComponent(
     return {
       children: context.wallet.name,
     };
-  }
+  },
 );
 
 const ConnectButton = createHeadlessComponent(
@@ -96,7 +96,7 @@ const ConnectButton = createHeadlessComponent(
       onClick: context.connectWallet,
       children: "Connect",
     };
-  }
+  },
 );
 
 const InstallLink = createHeadlessComponent(
@@ -111,7 +111,7 @@ const InstallLink = createHeadlessComponent(
       rel: "noopener noreferrer",
       children: "Install",
     };
-  }
+  },
 );
 
 /** A headless component for rendering a wallet option's name, icon, and either connect button or install link. */

@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.24.0
+
+### Minor Changes
+
+- b8cae2d: Fix deeplink redirect on mobile view
+
 ## 4.23.1
 
 ### Patch Changes

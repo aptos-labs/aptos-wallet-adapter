@@ -55,7 +55,7 @@ npm i @aptos-labs/wallet-adapter-vue
 
 To use Wallet Adapter for Vue in a Nuxt 3 project, you need to create client-side plugin for it (e.g., `plugins/wallet.client.ts`)
 
-```js 
+```js
 import { SomeAptosWallet } from "some-aptos-wallet-package";
 import { useWallet } from "@aptos-labs/wallet-adapter-vue";
 
@@ -106,7 +106,7 @@ const {
 
 Create plugin for it (e.g., `plugins/wallet.ts`)
 
-```js 
+```js
 import { SomeAptosWallet } from "some-aptos-wallet-package";
 import { useWallet } from "@aptos-labs/wallet-adapter-vue";
 
@@ -130,7 +130,7 @@ export default {
 Use it in `main.ts`
 
 ```js
-const app = createApp()
+const app = createApp();
 app.use(wallet);
 ```
 
@@ -139,7 +139,7 @@ app.use(wallet);
 On any page you want to use the wallet:
 
 ```js
-const $wallet = inject('$wallet');
+const $wallet = inject("$wallet");
 ```
 
 Then you can use the exported properties
@@ -160,7 +160,6 @@ const {
   signMessageAndVerify,
 } = $wallet;
 ```
-
 
 #### Examples
 
