@@ -1,8 +1,12 @@
 import "./global.css";
 import { FC, useEffect, useState } from "react";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { CircleAlert, Loader2, MoveDown } from "lucide-react";
-import { Ed25519Account, Network as AptosNetwork } from "@aptos-labs/ts-sdk";
+import { Loader2, MoveDown } from "lucide-react";
+import {
+  Ed25519Account,
+  Network as AptosNetwork,
+  Ed25519PrivateKey,
+  Account,
+} from "@aptos-labs/ts-sdk";
 import {
   chainToPlatform,
   routes,
@@ -12,7 +16,6 @@ import {
   Chain,
   Platform,
   Network,
-  AttestationReceipt,
   TransferState,
   PlatformContext,
   amount as amountUtils,
@@ -24,7 +27,6 @@ import solana from "@wormhole-foundation/sdk/solana";
 import evm from "@wormhole-foundation/sdk/evm";
 
 import { Card, CardContent } from "./ui/card";
-import { WalletSelector } from "./components/walletSelector/aptos/WalletSelector";
 import { Button } from "./ui/button";
 import { SolanaWalletSelector } from "./components/walletSelector/solana/SolanaWalletSelector";
 import {
@@ -36,28 +38,45 @@ import {
 import { ChainSelect } from "./components/ChainSelect";
 import { Input } from "./ui/input";
 import { Signer } from "./signer/Signer";
-import { AptosSigner } from "./signer/AptosSigner";
 import { sleep } from "./signer/SolanaSigner";
 import { Progress } from "./ui/progress";
 import { EthereumWalletSelector } from "./components/walletSelector/ethereum/EthereumWalletSelector";
-import { AptosLogo } from "./icons/Aptos";
 import USDC from "./icons/USDC";
 import { logger } from "./utils/logger";
+import { AptosLocalSigner } from "./signer/AptosLocalSigner";
+
+// should come from transaction stream worker
+const claimSignerPrivateKey = new Ed25519PrivateKey(
+  "0xddc1abd2ebb35b6ffa7c328f1b1d672e48073adb32cd3c95a911d6df2e205920"
+);
+const claimSignerAccount = Account.fromPrivateKey({
+  privateKey: claimSignerPrivateKey,
+});
+
+// should come from gas station
+const feePayerPrivateKey = new Ed25519PrivateKey(
+  "0xedae3fa4f04fdee1e3458b9e38d006ebca0101bd9d8a124db9dd9e8dc3707b45"
+);
+const feePayerStaticAccount = Account.fromPrivateKey({
+  privateKey: feePayerPrivateKey,
+});
+
+// should be derived from hash(domain_name + source_chain_address + domain_separator)
+const destinationAccountAddress =
+  "0x38383091fdd9325e0b8ada990c474da8c7f5aa51580b65eb477885b6ce0a36b7";
 
 export interface MultiChainProps {
   feePayerAccount?: Ed25519Account;
-  dappConfig: { network: AptosNetwork.MAINNET | AptosNetwork.TESTNET };
+  dappConfig?: { network: AptosNetwork.MAINNET | AptosNetwork.TESTNET };
 }
 
 export const MultiChain: FC<MultiChainProps> = ({
   feePayerAccount = undefined,
   dappConfig,
 }) => {
-  const isMainnet = dappConfig.network === AptosNetwork.MAINNET;
+  const isMainnet = dappConfig?.network === AptosNetwork.MAINNET;
   const chainToken = isMainnet ? mainnetChainTokens : testnetChainTokens;
 
-  const aptosWalletContext = useWallet();
-  const { wallet, account } = aptosWalletContext;
   const [sourceWallet, setSourceWallet] = useState<Wallet | null>(null);
 
   const [selectedSourceChain, setSelectedSourceChain] =
@@ -91,9 +110,6 @@ export const MultiChain: FC<MultiChainProps> = ({
   const [showQuote, setShowQuote] = useState(false);
   const [quoteAmount, setQuoteAmount] = useState<string | null>(null);
 
-  const [transactionReceipt, setTransactionReceipt] =
-    useState<routes.Receipt<AttestationReceipt> | null>(null);
-
   const [wormholeContext, setWormholeContext] = useState<
     Wormhole<Network> | undefined
   >(undefined);
@@ -105,16 +121,14 @@ export const MultiChain: FC<MultiChainProps> = ({
   const [transactionETA, setTransactionETA] = useState<number>(0);
   const [startTime, setStartTime] = useState<number | null>(null);
 
-  const [transactionInitiated, setTransactionInitiated] = useState(false);
-  const [transactionSubmitted, setTransactionSubmitted] = useState(false);
-
+  const [aptosTransactionId, setAptosTransactionId] = useState<
+    string | undefined
+  >(undefined);
+  const [transactionInProgress, setTransactionInProgress] = useState(false);
+  const [transactionCompleted, setTransactionCompleted] = useState(false);
   const [countdown, setCountdown] = useState({ minutes: 0, seconds: 0 });
 
   const [invalidAmount, setInvalidAmount] = useState(false);
-
-  const [transactionReadyToClaim, setTransactionReadyToClaim] = useState(false);
-
-  const [transactionClaimed, setTransactionClaimed] = useState(false);
 
   const [wormholeTransactionId, setWormholeTransactionId] = useState<
     string | undefined
@@ -338,10 +352,6 @@ export const MultiChain: FC<MultiChainProps> = ({
       throw new Error("Request is not initialized");
     }
 
-    if (!account?.address) {
-      throw new Error("Destination wallet is undefined");
-    }
-
     if (!quote) {
       throw new Error("Quote is not initialized");
     }
@@ -354,16 +364,15 @@ export const MultiChain: FC<MultiChainProps> = ({
     );
 
     // initiate transfer
-    setTransactionInitiated(true);
+    setTransactionInProgress(true);
     let receipt = await cctpRoute.initiate(
       cctpRequest,
       signer,
       quote,
-      Wormhole.chainAddress("Aptos", account?.address)
+      Wormhole.chainAddress("Aptos", destinationAccountAddress)
     );
     logger.log("Initiated transfer with receipt: ", receipt);
 
-    setTransactionSubmitted(true);
     setStartTime(Date.now()); // Start the timer
 
     // The txn hash that shows up on solana and wormhole explorer
@@ -372,7 +381,6 @@ export const MultiChain: FC<MultiChainProps> = ({
         ? receipt.originTxs[receipt.originTxs.length - 1].txid
         : undefined;
     setWormholeTransactionId(txId);
-
     let retries = 0;
     const maxRetries = 5;
     const baseDelay = 1000; // Initial delay of 1 second
@@ -381,9 +389,35 @@ export const MultiChain: FC<MultiChainProps> = ({
       try {
         for await (receipt of cctpRoute.track(receipt, 120 * 1000)) {
           if (receipt.state >= TransferState.SourceInitiated) {
-            setTransactionReceipt(receipt);
-            setTransactionReadyToClaim(true);
             logger.log("Receipt is on track ", receipt);
+
+            try {
+              const signer = new AptosLocalSigner(
+                "Aptos",
+                {},
+                claimSignerAccount, // the account that signs the "claim" transaction
+                feePayerStaticAccount // the fee payer account, should use gas station
+              );
+
+              if (routes.isManual(cctpRoute)) {
+                const circleAttestationReceipt = await cctpRoute.complete(
+                  signer,
+                  receipt
+                );
+                logger.log("Claim receipt: ", circleAttestationReceipt);
+                signer.claimedTransactionHashes().forEach((txHash) => {
+                  console.log("Claimed transaction hash: ", txHash);
+                  setAptosTransactionId(txHash);
+                });
+                setTransactionInProgress(false);
+                setTransactionCompleted(true);
+              } else {
+                // Should be unreachable
+                return undefined;
+              }
+            } catch (e) {
+              console.error("Failed to claim", e);
+            }
             return;
           }
         }
@@ -400,84 +434,69 @@ export const MultiChain: FC<MultiChainProps> = ({
     }
   };
 
-  const onClaimClick = async () => {
-    if (!wallet) {
-      throw new Error("Wallet is not initialized");
-    }
+  // const onClaimClick = async () => {
+  //   // if (!wallet) {
+  //   //   throw new Error("Wallet is not initialized");
+  //   // }
 
-    if (!cctpRoute) {
-      throw new Error("Route is not initialized");
-    }
+  //   if (!cctpRoute) {
+  //     throw new Error("Route is not initialized");
+  //   }
 
-    if (!transactionReceipt) {
-      throw new Error("Transaction receipt is not initialized");
-    }
+  //   if (!transactionReceipt) {
+  //     throw new Error("Transaction receipt is not initialized");
+  //   }
 
-    const signer = new AptosSigner(
-      "Aptos",
-      account?.address!,
-      {},
-      aptosWalletContext,
-      feePayerAccount
-    );
+  //   const privateKey = new Ed25519PrivateKey(
+  //     "0x085ccf3442892541412303189c2f84adc80287290219a55568361805ac9dc397"
+  //   );
+  //   const signerAccount = Account.fromPrivateKey({ privateKey });
 
-    if (routes.isManual(cctpRoute)) {
-      const receipt = await cctpRoute.complete(signer, transactionReceipt);
-      logger.log("Claim receipt: ", receipt);
-      setTransactionClaimed(true);
-    } else {
-      // Should be unreachable
-      return undefined;
-    }
-  };
+  //   try {
+  //     const signer = new AptosLocalSigner(
+  //       "Aptos",
+  //       {},
+  //       signerAccount,
+  //       feePayerAccount
+  //     );
+
+  //     if (routes.isManual(cctpRoute)) {
+  //       const receipt = await cctpRoute.complete(signer, transactionReceipt);
+  //       logger.log("Claim receipt: ", receipt);
+  //       setTransactionClaimed(true);
+  //     } else {
+  //       // Should be unreachable
+  //       return undefined;
+  //     }
+  //   } catch (e) {
+  //     console.error("Failed to claim", e);
+  //   }
+  // };
 
   return (
     <div className="w-full flex justify-center items-center p-4">
       <Card className="w-96">
         <CardContent className="flex flex-col gap-8 pt-6">
           {/*From*/}
-          <div className="flex flex-col gap-6">
-            <div className="flex flex-row justify-between items-center">
-              <p>From:</p>
-              <p>
-                {selectedSourceChain === "Solana" ? (
-                  <SolanaWalletSelector
-                    setSourceWallet={setSourceWallet}
-                    transactionInProgress={transactionInitiated}
-                  />
-                ) : (
-                  <EthereumWalletSelector
-                    setSourceWallet={setSourceWallet}
-                    transactionInProgress={transactionInitiated}
-                  />
-                )}
-              </p>
-            </div>
-            <ChainSelect
-              setSelectedSourceChain={setSelectedSourceChain}
-              selectedSourceChain={selectedSourceChain}
-              isMainnet={isMainnet}
-            />
+          <ChainSelect
+            setSelectedSourceChain={setSelectedSourceChain}
+            selectedSourceChain={selectedSourceChain}
+            isMainnet={isMainnet}
+          />
+          <div className="flex flex-col w-full">
+            {selectedSourceChain === "Solana" ? (
+              <SolanaWalletSelector
+                setSourceWallet={setSourceWallet}
+                transactionInProgress={transactionInProgress}
+              />
+            ) : (
+              <EthereumWalletSelector
+                setSourceWallet={setSourceWallet}
+                transactionInProgress={transactionInProgress}
+              />
+            )}
           </div>
 
-          {/*To*/}
-          <div className="flex flex-col gap-6">
-            <div className="flex flex-row justify-between items-center">
-              <p>To:</p>
-              <p>
-                <WalletSelector
-                  walletSortingOptions={{}}
-                  transactionInProgress={transactionInitiated}
-                />
-              </p>
-            </div>
-            <Button variant="outline" className="w-full gap-6" disabled>
-              <div className="flex flex-row items-center justify-between">
-                <AptosLogo />
-                <span className="ml-2">USDC</span>
-              </div>
-            </Button>
-          </div>
           <div className="flex flex-row gap-2 items-center">
             <Input
               value={amount}
@@ -568,24 +587,16 @@ export const MultiChain: FC<MultiChainProps> = ({
                   </div>
                   <p className="text-md">~{humanReadableETA(transactionETA)}</p>
                 </div>
-                <div className="flex flex-row gap-2">
-                  <CircleAlert />
-                  <div>
-                    <p>This transfer requires two transactions.</p>
-                    <p>You will need to make two wallet approvals.</p>
-                  </div>
-                </div>
               </CardContent>
             </Card>
           )}
 
-          {!transactionInitiated && (
+          {!transactionInProgress && !transactionCompleted && (
             <Button
               onClick={onSwapClick}
               disabled={
                 !amount ||
                 !sourceWallet ||
-                !wallet ||
                 !quoteAmount ||
                 !quote ||
                 invalidAmount
@@ -595,7 +606,7 @@ export const MultiChain: FC<MultiChainProps> = ({
             </Button>
           )}
 
-          {transactionInitiated && !transactionSubmitted && (
+          {transactionInProgress && !transactionCompleted && (
             <div className="flex flex-col gap-4">
               <p className="text-lg text-center">Submitting transaction</p>
               <Button disabled>
@@ -604,40 +615,47 @@ export const MultiChain: FC<MultiChainProps> = ({
             </div>
           )}
 
-          {transactionInitiated && transactionSubmitted && (
+          {!transactionInProgress && transactionCompleted && (
+            <div className="flex flex-col gap-4">
+              <Button>Start a new Transaction</Button>
+            </div>
+          )}
+
+          {/* {transactionInProgress && !isCountdownComplete && (
+            <>
+              <p className="test-xl">ETA: {humanReadableETA(transactionETA)}</p>
+              <p className="text-3xl font-bold">
+                {countdown.minutes}:{countdown.seconds}
+              </p>
+              <Progress value={progress} />
+            </>
+          )} */}
+
+          {transactionCompleted && (
             <div className="flex flex-col items-center justify-center gap-4">
-              <p className="text-lg">Transaction submitted, begin transfer</p>
+              <p className="text-lg">Transaction submitted</p>
               {wormholeTransactionId && (
                 <a
-                  href={`https://wormholescan.io/#/tx/${wormholeTransactionId}?network=${
-                    isMainnet ? "Mainnet" : "Testnet"
+                  href={`https://explorer.solana.com/tx/${wormholeTransactionId}?cluster=${
+                    isMainnet ? "mainnet" : "devnet"
                   }`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <p className="text-md underline">View on Wormholescan</p>
+                  <p className="text-md underline">View on Solana Explorer</p>
                 </a>
               )}
-              {!isCountdownComplete && (
-                <>
-                  <p className="test-xl">
-                    ETA: {humanReadableETA(transactionETA)}
-                  </p>
-                  <p className="text-3xl font-bold">
-                    {countdown.minutes}:{countdown.seconds}
-                  </p>
-                  <Progress value={progress} />
-                </>
+              {aptosTransactionId && (
+                <a
+                  href={`https://explorer.aptoslabs.com/txn/${aptosTransactionId}?network=${
+                    isMainnet ? "mainnet" : "testnet"
+                  }`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <p className="text-md underline">View on Aptos Explorer</p>
+                </a>
               )}
-            </div>
-          )}
-
-          {transactionReadyToClaim && (
-            <div className="flex flex-col gap-4">
-              <p className="text-lg text-center">Ready to claim on Aptos</p>
-              <Button onClick={onClaimClick} disabled={transactionClaimed}>
-                {transactionClaimed ? "Claimed" : "Claim"}
-              </Button>
             </div>
           )}
         </CardContent>
