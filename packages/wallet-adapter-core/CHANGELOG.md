@@ -1,5 +1,77 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.24.0
+
+### Minor Changes
+
+- b8cae2d: Fix deeplink redirect on mobile view
+
+## 4.23.1
+
+### Patch Changes
+
+- 31fe032: Fix unexpected exceptions when submitting transaction with a CUSTOM network
+
+## 4.23.0
+
+### Minor Changes
+
+- 80a3c8a: Support network based API key
+
+## 4.22.2
+
+### Patch Changes
+
+- af7c080: Bump wallet adapter ts-sdk peer dependency version
+
+## 4.22.1
+
+### Patch Changes
+
+- ca1dc8e: Bump all packages version to fix broken previous version
+
+## 4.22.0
+
+### Minor Changes
+
+- fix publish
+
+## 4.21.0
+
+### Minor Changes
+
+- bump mizu dep
+
+### Patch Changes
+
+- 6915184: @mizuwallet-sdk/aptos-wallet-adapter Bump version to 0.3.2
+
+## 4.20.0
+
+### Minor Changes
+
+- f5ba2f2: Bump `@aptos-connect/wallet-adapter-plugin` to 2.3.2 to support Apple logins
+
+## 4.19.0
+
+### Minor Changes
+
+- 66ad437: Bumped the Aptos Connect plugin to support claims
+
+## 4.18.1
+
+### Patch Changes
+
+- 737bd2b: Bump @mizuwallet-sdk/aptos-wallet-adapter to v0.3.1 and add '--experimental-https' flag to nextjs-example's dev command.
+- f9ecf18: Bump @aptos-labs/wallet-adapter-core version to v0.2.6
+
+## 4.18.0
+
+### Minor Changes
+
+- 67440bf: Bumped `@aptos-connect/wallet-adapter-plugin` to 2.1.0 to enable Telegram support
+- bde8112: Handle arguments conversion when submitting a package publish transaction
+
 ## 4.17.0
 
 ### Minor Changes

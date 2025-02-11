@@ -1,4 +1,7 @@
-import { AptosConnectWallet } from "@aptos-connect/wallet-adapter-plugin";
+import {
+  AptosConnectAppleWallet,
+  AptosConnectGoogleWallet,
+} from "@aptos-connect/wallet-adapter-plugin";
 import { Network } from "@aptos-labs/ts-sdk";
 import { DevTWallet, TWallet } from "@atomrigslab/aptos-wallet-adapter";
 import { MizuWallet } from "@mizuwallet-sdk/aptos-wallet-adapter";
@@ -11,7 +14,12 @@ export function getSDKWallets(dappConfig?: DappConfig) {
   // Need to check window is defined for AptosConnect
   if (typeof window !== "undefined") {
     sdkWallets.push(
-      new AptosConnectWallet({
+      new AptosConnectGoogleWallet({
+        network: dappConfig?.network,
+        dappId: dappConfig?.aptosConnectDappId,
+        ...dappConfig?.aptosConnect,
+      }),
+      new AptosConnectAppleWallet({
         network: dappConfig?.network,
         dappId: dappConfig?.aptosConnectDappId,
         ...dappConfig?.aptosConnect,
@@ -28,7 +36,7 @@ export function getSDKWallets(dappConfig?: DappConfig) {
           network: dappConfig.network as any,
           manifestURL: dappConfig.mizuwallet.manifestURL,
           appId: dappConfig.mizuwallet.appId,
-        }) as any
+        }) as any,
       );
     }
   }

@@ -98,11 +98,11 @@ export interface SignMessageResponse {
 }
 
 export type OnNetworkChange = (
-  callBack: (networkInfo: NetworkInfo | StandardNetworkInfo) => Promise<void>
+  callBack: (networkInfo: NetworkInfo | StandardNetworkInfo) => Promise<void>,
 ) => Promise<void>;
 
 export type OnAccountChange = (
-  callBack: (accountInfo: AccountInfo | StandardAccountInfo) => Promise<any>
+  callBack: (accountInfo: AccountInfo | StandardAccountInfo) => Promise<any>,
 ) => Promise<void>;
 
 export interface AdapterPluginEvents {
@@ -130,21 +130,21 @@ export interface AdapterPluginProps<Name extends string = string> {
       | InputTransactionData
       | AnyRawTransaction
       | AptosSignAndSubmitTransactionInput,
-    options?: InputGenerateTransactionOptions
+    options?: InputGenerateTransactionOptions,
   ): Promise<
     | { hash: Types.HexEncodedBytes; output?: any }
     | PendingTransactionResponse
     | UserResponse<AptosSignAndSubmitTransactionOutput>
   >;
   submitTransaction?(
-    transaction: InputSubmitTransactionData
+    transaction: InputSubmitTransactionData,
   ): Promise<PendingTransactionResponse>;
   signMessage<T extends SignMessagePayload>(
-    message: T
+    message: T,
   ): Promise<SignMessageResponse | UserResponse<AptosSignMessageOutput>>;
   signTransaction?( // `any` type for backwards compatibility, especially for identity connect
     transactionOrPayload: any,
-    optionsOrAsFeePayer?: any
+    optionsOrAsFeePayer?: any,
   ): Promise<any>;
   account?: () => Promise<AccountInfo | StandardAccountInfo>;
   changeNetwork?: AptosChangeNetworkMethod;
@@ -177,12 +177,12 @@ export interface PluginProvider {
   disconnect: () => Promise<void>;
   signAndSubmitTransaction: (
     transaction: any,
-    options?: any
+    options?: any,
   ) => Promise<{ hash: Types.HexEncodedBytes } | AptosWalletErrorResult>;
   signMessage: (message: SignMessagePayload) => Promise<SignMessageResponse>;
   network: () => Promise<NetworkInfo>;
   onAccountChange: (
-    listener: (newAddress: AccountInfo) => Promise<void>
+    listener: (newAddress: AccountInfo) => Promise<void>,
   ) => Promise<void>;
   onNetworkChange: OnNetworkChange;
 }

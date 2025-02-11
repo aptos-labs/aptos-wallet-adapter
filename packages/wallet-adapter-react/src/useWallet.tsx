@@ -32,10 +32,10 @@ export interface WalletContextState {
   signTransaction(
     transactionOrPayload: AnyRawTransaction | Types.TransactionPayload,
     asFeePayer?: boolean,
-    options?: InputGenerateTransactionOptions
+    options?: InputGenerateTransactionOptions,
   ): Promise<AccountAuthenticator>;
   submitTransaction(
-    transaction: InputSubmitTransactionData
+    transaction: InputSubmitTransactionData,
   ): Promise<PendingTransactionResponse>;
   signMessage(message: SignMessagePayload): Promise<SignMessageResponse>;
   signMessageAndVerify(message: SignMessagePayload): Promise<boolean>;
@@ -47,7 +47,7 @@ const DEFAULT_CONTEXT = {
 };
 
 export const WalletContext = createContext<WalletContextState>(
-  DEFAULT_CONTEXT as WalletContextState
+  DEFAULT_CONTEXT as WalletContextState,
 );
 
 export function useWallet(): WalletContextState {

@@ -1,5 +1,128 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 3.6.0
+
+### Minor Changes
+
+- b8cae2d: Fix deeplink redirect on mobile view
+
+### Patch Changes
+
+- Updated dependencies [b8cae2d]
+  - @aptos-labs/wallet-adapter-core@4.24.0
+  - @aptos-labs/wallet-adapter-react@3.7.11
+  - @aptos-labs/wallet-adapter-ant-design@3.0.25
+  - @aptos-labs/wallet-adapter-mui-design@3.0.25
+
+## 3.5.1
+
+### Patch Changes
+
+- Updated dependencies [31fe032]
+  - @aptos-labs/wallet-adapter-core@4.23.1
+  - @aptos-labs/wallet-adapter-react@3.7.10
+  - @aptos-labs/wallet-adapter-ant-design@3.0.24
+  - @aptos-labs/wallet-adapter-mui-design@3.0.24
+
+## 3.5.0
+
+### Minor Changes
+
+- 80a3c8a: Support network based API key
+
+### Patch Changes
+
+- Updated dependencies [80a3c8a]
+  - @aptos-labs/wallet-adapter-core@4.23.0
+  - @aptos-labs/wallet-adapter-react@3.7.9
+  - @aptos-labs/wallet-adapter-ant-design@3.0.23
+  - @aptos-labs/wallet-adapter-mui-design@3.0.23
+
+## 3.4.22
+
+### Patch Changes
+
+- Updated dependencies [af7c080]
+  - @aptos-labs/wallet-adapter-core@4.22.2
+  - @aptos-labs/wallet-adapter-react@3.7.8
+  - @aptos-labs/wallet-adapter-ant-design@3.0.22
+  - @aptos-labs/wallet-adapter-mui-design@3.0.22
+
+## 3.4.21
+
+### Patch Changes
+
+- ca1dc8e: Bump all packages version to fix broken previous version
+- Updated dependencies [ca1dc8e]
+  - @aptos-labs/wallet-adapter-ant-design@3.0.21
+  - @aptos-labs/wallet-adapter-core@4.22.1
+  - @aptos-labs/wallet-adapter-mui-design@3.0.21
+  - @aptos-labs/wallet-adapter-react@3.7.7
+
+## 3.4.20
+
+### Patch Changes
+
+- Updated dependencies
+  - @aptos-labs/wallet-adapter-core@4.22.0
+  - @aptos-labs/wallet-adapter-react@3.7.6
+  - @aptos-labs/wallet-adapter-ant-design@3.0.20
+  - @aptos-labs/wallet-adapter-mui-design@3.0.20
+
+## 3.4.19
+
+### Patch Changes
+
+- Updated dependencies [6915184]
+- Updated dependencies
+  - @aptos-labs/wallet-adapter-core@4.21.0
+  - @aptos-labs/wallet-adapter-react@3.7.5
+  - @aptos-labs/wallet-adapter-ant-design@3.0.19
+  - @aptos-labs/wallet-adapter-mui-design@3.0.19
+
+## 3.4.18
+
+### Patch Changes
+
+- Updated dependencies [f5ba2f2]
+  - @aptos-labs/wallet-adapter-core@4.20.0
+  - @aptos-labs/wallet-adapter-react@3.7.4
+  - @aptos-labs/wallet-adapter-ant-design@3.0.18
+  - @aptos-labs/wallet-adapter-mui-design@3.0.18
+
+## 3.4.17
+
+### Patch Changes
+
+- Updated dependencies [66ad437]
+  - @aptos-labs/wallet-adapter-core@4.19.0
+  - @aptos-labs/wallet-adapter-react@3.7.3
+  - @aptos-labs/wallet-adapter-ant-design@3.0.17
+  - @aptos-labs/wallet-adapter-mui-design@3.0.17
+
+## 3.4.16
+
+### Patch Changes
+
+- 737bd2b: Bump @mizuwallet-sdk/aptos-wallet-adapter to v0.3.1 and add '--experimental-https' flag to nextjs-example's dev command.
+- Updated dependencies [737bd2b]
+- Updated dependencies [f9ecf18]
+  - @aptos-labs/wallet-adapter-core@4.18.1
+  - @aptos-labs/wallet-adapter-react@3.7.2
+  - @aptos-labs/wallet-adapter-ant-design@3.0.16
+  - @aptos-labs/wallet-adapter-mui-design@3.0.16
+
+## 3.4.15
+
+### Patch Changes
+
+- Updated dependencies [67440bf]
+- Updated dependencies [bde8112]
+  - @aptos-labs/wallet-adapter-core@4.18.0
+  - @aptos-labs/wallet-adapter-react@3.7.1
+  - @aptos-labs/wallet-adapter-ant-design@3.0.15
+  - @aptos-labs/wallet-adapter-mui-design@3.0.15
+
 ## 3.4.14
 
 ### Patch Changes
