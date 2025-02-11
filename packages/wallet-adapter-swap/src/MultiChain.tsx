@@ -39,7 +39,7 @@ import { ChainSelect } from "./components/ChainSelect";
 import { Input } from "./ui/input";
 import { Signer } from "./signer/Signer";
 import { sleep } from "./signer/SolanaSigner";
-import { Progress } from "./ui/progress";
+
 import { EthereumWalletSelector } from "./components/walletSelector/ethereum/EthereumWalletSelector";
 import USDC from "./icons/USDC";
 import { logger } from "./utils/logger";
@@ -72,7 +72,7 @@ export interface MultiChainProps {
 
 export const MultiChain: FC<MultiChainProps> = ({
   feePayerAccount = undefined,
-  dappConfig,
+  dappConfig = undefined,
 }) => {
   const isMainnet = dappConfig?.network === AptosNetwork.MAINNET;
   const chainToken = isMainnet ? mainnetChainTokens : testnetChainTokens;
