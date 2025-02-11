@@ -186,18 +186,19 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const changeNetwork = async (network: Network) => {
+  const changeNetwork = async (network: Network, chainId?: string) => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
     }
+    
     try {
-      return await walletCore?.changeNetwork(network);
+      return await walletCore.changeNetwork(network, chainId);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
     }
   };
-
+  
   useEffect(() => {
     if (autoConnect) {
       if (localStorage.getItem("AptosWalletName") && !connected) {
