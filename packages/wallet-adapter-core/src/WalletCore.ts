@@ -288,7 +288,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       ) {
         return;
       }
-      console.log("supportedWallet", supportedWallet);
       // If AIP-62 wallet does not exist, append it to the wallet selector modal
       // as an undetected wallet
       if (!existingStandardWallet) {
@@ -296,10 +295,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         this.emit("standardNotDetectedWalletAdded", supportedWallet);
       }
     });
-    console.log(
-      "this._standard_not_detected_wallets",
-      this._standard_not_detected_wallets
-    );
   }
 
   /**
@@ -562,7 +557,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       }
       const account = response.args;
       this.setAccount(account);
-      const network = await selectedWallet.features["aptos:network"]?.network();
+      const network = await selectedWallet.features["aptos:network"].network();
       this.setNetwork(network);
       await this.setAnsName();
       setLocalStorage(selectedWallet.name);
@@ -602,11 +597,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * Signs and submits a transaction to chain
    *
    * @param transactionInput InputTransactionData
-   * @returns PendingTransactionResponse
+   * @returns AptosSignAndSubmitTransactionOutput
    */
-  async signAndSubmitTransaction(
-    transactionInput: InputTransactionData
-  ): Promise<AptosSignAndSubmitTransactionOutput> {
+  async signAndSubmitTransaction(args: {
+    transactionInput: InputTransactionData;
+  }): Promise<AptosSignAndSubmitTransactionOutput> {
+    const { transactionInput } = args;
     try {
       if ("function" in transactionInput.data) {
         if (
@@ -691,10 +687,14 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         options: transactionInput.options,
       });
 
-      const signTransactionResponse = await this.signTransaction(transaction);
+      const signTransactionResponse = await this.signTransaction({
+        transactionOrPayload: transaction,
+      });
       const response = await this.submitTransaction({
-        transaction,
-        senderAuthenticator: signTransactionResponse,
+        transaction: {
+          transaction,
+          senderAuthenticator: signTransactionResponse,
+        },
       });
       return { hash: response.hash };
     } catch (error: any) {
@@ -706,21 +706,25 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   /**
    * Signs a transaction
    *
-   * To support both existing wallet adapter V1 and V2, we support 2 input types
+   * This method supports 2 input types -
+   * 1. A raw transaction that was already built by the dapp,
+   * 2. A transaction data input as JSON. This is for the wallet to be able to simulate before signing
    *
-   * @param transactionOrPayload AnyRawTransaction - V2 input | Types.TransactionPayload - V1 input
-   * @param options optional. V1 input
+   * @param transactionOrPayload AnyRawTransaction | InputTransactionData
+   * @param asFeePayer optional. A flag indicates to sign the transaction as the fee payer
+   * @param options optional. Transaction options
    *
    * @returns AccountAuthenticator
    */
-  async signTransaction(
-    transactionOrPayload: AnyRawTransaction | InputTransactionData,
-    asFeePayer?: boolean,
+  async signTransaction(args: {
+    transactionOrPayload: AnyRawTransaction | InputTransactionData;
+    asFeePayer?: boolean;
     options?: InputGenerateTransactionOptions & {
       expirationSecondsFromNow?: number;
       expirationTimestamp?: number;
-    }
-  ): Promise<AccountAuthenticator> {
+    };
+  }): Promise<AccountAuthenticator> {
+    const { transactionOrPayload, asFeePayer, options } = args;
     /**
      * All standard compatible wallets should support AnyRawTransaction for signTransaction version 1.0.0
      * For standard signTransaction version 1.1.0, the standard expects a transaction input
@@ -738,7 +742,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.ensureAccountExists(this._account);
       this.recordEvent("sign_transaction");
 
-      // dapp sends a generated transaction (i.e AnyRawTransaction), which is supported by the wallet at signMessage version 1.0.0
+      // dapp sends a generated transaction (i.e AnyRawTransaction), which is supported by the wallet standard at signTransaction version 1.0.0
       if ("rawTransaction" in transactionOrPayload) {
         const response = (await this._wallet?.features[
           "aptos:signTransaction"
@@ -753,7 +757,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         if ("public_key" in response.args && "signature" in response.args) {
         }
         return response.args;
-      } // dapp sends a transaction data input (i.e InputTransactionData), which is supported by the wallet at signMessage version 1.1.0
+      } // dapp sends a transaction data input (i.e InputTransactionData), which is supported by the wallet standard at signTransaction version 1.1.0
       else if (
         this._wallet.features["aptos:signTransaction"]?.version === "1.1"
       ) {
@@ -815,15 +819,17 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   /**
-   * Sign message (doesnt submit to chain).
+   * Sign a message (doesnt submit to chain).
    *
-   * @param message
+   * @param message - AptosSignMessageInput
+   *
    * @return response from the wallet's signMessage function
    * @throws WalletSignMessageError
    */
-  async signMessage(
-    message: AptosSignMessageInput
-  ): Promise<AptosSignMessageOutput> {
+  async signMessage(args: {
+    message: AptosSignMessageInput;
+  }): Promise<AptosSignMessageOutput> {
+    const { message } = args;
     try {
       this.ensureWalletExists(this._wallet);
       this.recordEvent("sign_message");
@@ -844,12 +850,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   /**
    * Submits transaction to chain
    *
-   * @param transaction
+   * @param transaction - InputSubmitTransactionData
    * @returns PendingTransactionResponse
    */
-  async submitTransaction(
-    transaction: InputSubmitTransactionData
-  ): Promise<PendingTransactionResponse> {
+  async submitTransaction(args: {
+    transaction: InputSubmitTransactionData;
+  }): Promise<PendingTransactionResponse> {
+    const { transaction } = args;
     // The standard does not support submitTransaction, so we use the adapter to submit the transaction
     try {
       this.ensureWalletExists(this._wallet);
@@ -926,7 +933,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   /**
    * Sends a change network request to the wallet to change the connected network
    *
-   * @param network
+   * @param network - Network
    * @returns AptosChangeNetworkOutput
    */
   async changeNetwork(network: Network): Promise<AptosChangeNetworkOutput> {
@@ -969,7 +976,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   /**
    * Signs a message and verifies the signer
-   * @param message SignMessagePayload
+   * @param message - AptosSignMessageInput
    * @returns boolean
    */
   async signMessageAndVerify(message: AptosSignMessageInput): Promise<boolean> {

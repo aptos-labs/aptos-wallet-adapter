@@ -55,7 +55,9 @@ export function Sponsor() {
     setTransactionToSubmit(transaction);
 
     try {
-      const response = await signTransaction(transaction);
+      const response = await signTransaction({
+        transactionOrPayload: transaction,
+      });
       setSenderAuthenticator(response);
     } catch (error) {
       console.error(error);
@@ -95,9 +97,11 @@ export function Sponsor() {
     }
     try {
       const response = await submitTransaction({
-        transaction: transactionToSubmit,
-        senderAuthenticator: senderAuthenticator,
-        feePayerAuthenticator: feepayerAuthenticator,
+        transaction: {
+          transaction: transactionToSubmit,
+          senderAuthenticator: senderAuthenticator,
+          feePayerAuthenticator: feepayerAuthenticator,
+        },
       });
       toast({
         title: "Success",

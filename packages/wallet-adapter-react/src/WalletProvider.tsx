@@ -107,51 +107,58 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const signAndSubmitTransaction = async (
-    transaction: InputTransactionData
-  ): Promise<AptosSignAndSubmitTransactionOutput> => {
+  const signAndSubmitTransaction = async (args: {
+    transaction: InputTransactionData;
+  }): Promise<AptosSignAndSubmitTransactionOutput> => {
+    const { transaction } = args;
     try {
       if (!walletCore) {
         throw new Error("WalletCore is not initialized");
       }
-      return await walletCore.signAndSubmitTransaction(transaction);
+      return await walletCore.signAndSubmitTransaction({
+        transactionInput: transaction,
+      });
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
     }
   };
 
-  const signTransaction = async (
-    transactionOrPayload: AnyRawTransaction | InputTransactionData,
-    asFeePayer?: boolean,
+  const signTransaction = async (args: {
+    transactionOrPayload: AnyRawTransaction | InputTransactionData;
+    asFeePayer?: boolean;
     options?: InputGenerateTransactionOptions & {
       expirationSecondsFromNow?: number;
       expirationTimestamp?: number;
-    }
-  ): Promise<AccountAuthenticator> => {
+    };
+  }): Promise<AccountAuthenticator> => {
+    const { transactionOrPayload, asFeePayer, options } = args;
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
     }
     try {
-      return await walletCore.signTransaction(
+      return await walletCore.signTransaction({
         transactionOrPayload,
         asFeePayer,
-        options
-      );
+        options,
+      });
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
     }
   };
 
-  const submitTransaction = async (
-    transaction: InputSubmitTransactionData
-  ): Promise<PendingTransactionResponse> => {
+  const submitTransaction = async (args: {
+    transaction: InputSubmitTransactionData;
+  }): Promise<PendingTransactionResponse> => {
+    const { transaction } = args;
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
     }
     try {
-      return await walletCore?.submitTransaction(transaction);
+      return await walletCore?.submitTransaction({
+        transaction,
+      });
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
@@ -165,7 +172,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       throw new Error("WalletCore is not initialized");
     }
     try {
-      return await walletCore?.signMessage(message);
+      return await walletCore?.signMessage({
+        message,
+      });
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);

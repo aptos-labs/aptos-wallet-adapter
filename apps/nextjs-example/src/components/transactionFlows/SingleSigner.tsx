@@ -56,7 +56,9 @@ export function SingleSigner() {
       },
     };
     try {
-      const response = await signAndSubmitTransaction(transaction);
+      const response = await signAndSubmitTransaction({
+        transaction,
+      });
       await aptosClient(network).waitForTransaction({
         transactionHash: response.hash,
       });
@@ -74,10 +76,15 @@ export function SingleSigner() {
 
     try {
       const response = await signAndSubmitTransaction({
-        data: {
-          function: "0x1::coin::transfer",
-          typeArguments: [parseTypeTag(APTOS_COIN)],
-          functionArguments: [AccountAddress.from(account.address), new U64(1)], // 1 is in Octas
+        transaction: {
+          data: {
+            function: "0x1::coin::transfer",
+            typeArguments: [parseTypeTag(APTOS_COIN)],
+            functionArguments: [
+              AccountAddress.from(account.address),
+              new U64(1),
+            ], // 1 is in Octas
+          },
         },
       });
       await aptosClient(network).waitForTransaction({
@@ -102,7 +109,9 @@ export function SingleSigner() {
           functionArguments: [account?.address.toString(), 1], // 1 is in Octas
         },
       };
-      const response = await signTransaction(payload);
+      const response = await signTransaction({
+        transactionOrPayload: payload,
+      });
       toast({
         title: "Success",
         description: JSON.stringify(response),
@@ -126,7 +135,9 @@ export function SingleSigner() {
           functionArguments: [account.address.toString(), 1], // 1 is in Octas
         },
       });
-      const response = await signTransaction(transactionToSign);
+      const response = await signTransaction({
+        transactionOrPayload: transactionToSign,
+      });
       toast({
         title: "Success",
         description: JSON.stringify(response),

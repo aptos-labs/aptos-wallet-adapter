@@ -23,24 +23,24 @@ export interface WalletContextState {
   account: AccountInfo | null;
   network: NetworkInfo | null;
   connect(walletName: string): void;
-  signAndSubmitTransaction(
-    transaction: InputTransactionData
-  ): Promise<AptosSignAndSubmitTransactionOutput>;
-  signTransaction(
-    transaction: AnyRawTransaction | InputTransactionData,
-    asFeePayer?: boolean,
+  signAndSubmitTransaction(args: {
+    transaction: InputTransactionData;
+  }): Promise<AptosSignAndSubmitTransactionOutput>;
+  signTransaction(args: {
+    transactionOrPayload: AnyRawTransaction | InputTransactionData;
+    asFeePayer?: boolean;
     options?: InputGenerateTransactionOptions & {
       expirationSecondsFromNow?: number;
       expirationTimestamp?: number;
-    }
-  ): Promise<AccountAuthenticator>;
+    };
+  }): Promise<AccountAuthenticator>;
   signMessage(message: AptosSignMessageInput): Promise<AptosSignMessageOutput>;
   signMessageAndVerify(message: AptosSignMessageInput): Promise<boolean>;
   disconnect(): void;
   changeNetwork(network: Network): Promise<AptosChangeNetworkOutput>;
-  submitTransaction(
-    transaction: InputSubmitTransactionData
-  ): Promise<PendingTransactionResponse>;
+  submitTransaction(args: {
+    transaction: InputSubmitTransactionData;
+  }): Promise<PendingTransactionResponse>;
   wallet: AdapterWallet | null;
   wallets: ReadonlyArray<AdapterWallet>;
   notDetectedWallets: ReadonlyArray<AdapterNotDetectedWallet>;

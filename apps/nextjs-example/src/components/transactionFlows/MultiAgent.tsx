@@ -67,7 +67,9 @@ export function MultiAgent() {
     const transaction = await generateTransaction();
     setTransactionToSubmit(transaction);
     try {
-      const response = await signTransaction(transaction);
+      const response = await signTransaction({
+        transactionOrPayload: transaction,
+      });
       setSenderAuthenticator(response);
     } catch (error) {
       console.error(error);
@@ -79,7 +81,9 @@ export function MultiAgent() {
       throw new Error("No Transaction to sign");
     }
     try {
-      const response = await signTransaction(transactionToSubmit);
+      const response = await signTransaction({
+        transactionOrPayload: transactionToSubmit,
+      });
       setSecondarySignerAuthenticator(response);
     } catch (error) {
       console.error(error);
@@ -98,9 +102,11 @@ export function MultiAgent() {
         throw new Error("No secondarySignerAuthenticator");
       }
       const response = await submitTransaction({
-        transaction: transactionToSubmit,
-        senderAuthenticator: senderAuthenticator,
-        additionalSignersAuthenticators: [secondarySignerAuthenticator],
+        transaction: {
+          transaction: transactionToSubmit,
+          senderAuthenticator: senderAuthenticator,
+          additionalSignersAuthenticators: [secondarySignerAuthenticator],
+        },
       });
       toast({
         title: "Success",
