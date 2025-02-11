@@ -58,7 +58,7 @@ export function Sponsor() {
       const response = await signTransaction({
         transactionOrPayload: transaction,
       });
-      setSenderAuthenticator(response);
+      setSenderAuthenticator(response.authenticator);
     } catch (error) {
       console.error(error);
     }

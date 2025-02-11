@@ -35,7 +35,10 @@ export type AvailableWallets =
 export type InputTransactionData = {
   sender?: AccountAddressInput;
   data: InputGenerateTransactionPayloadData;
-  options?: InputGenerateTransactionOptions;
+  options?: InputGenerateTransactionOptions & {
+    expirationSecondsFromNow?: number;
+    expirationTimestamp?: number;
+  };
 };
 
 export type WalletInfo = {

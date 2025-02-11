@@ -70,7 +70,7 @@ export function MultiAgent() {
       const response = await signTransaction({
         transactionOrPayload: transaction,
       });
-      setSenderAuthenticator(response);
+      setSenderAuthenticator(response.authenticator);
     } catch (error) {
       console.error(error);
     }
@@ -84,7 +84,7 @@ export function MultiAgent() {
       const response = await signTransaction({
         transactionOrPayload: transactionToSubmit,
       });
-      setSecondarySignerAuthenticator(response);
+      setSecondarySignerAuthenticator(response.authenticator);
     } catch (error) {
       console.error(error);
     }

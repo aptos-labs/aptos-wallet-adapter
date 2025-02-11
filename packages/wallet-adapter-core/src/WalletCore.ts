@@ -693,7 +693,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       const response = await this.submitTransaction({
         transaction: {
           transaction,
-          senderAuthenticator: signTransactionResponse,
+          senderAuthenticator: signTransactionResponse.authenticator,
         },
       });
       return { hash: response.hash };
@@ -719,12 +719,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   async signTransaction(args: {
     transactionOrPayload: AnyRawTransaction | InputTransactionData;
     asFeePayer?: boolean;
-    options?: InputGenerateTransactionOptions & {
-      expirationSecondsFromNow?: number;
-      expirationTimestamp?: number;
-    };
-  }): Promise<AccountAuthenticator> {
-    const { transactionOrPayload, asFeePayer, options } = args;
+  }): Promise<{
+    authenticator: AccountAuthenticator;
+    rawTransaction: Uint8Array;
+  }> {
+    const { transactionOrPayload, asFeePayer } = args;
     /**
      * All standard compatible wallets should support AnyRawTransaction for signTransaction version 1.0.0
      * For standard signTransaction version 1.1.0, the standard expects a transaction input
@@ -754,9 +753,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           throw new WalletConnectionError("User has rejected the request")
             .message;
         }
-        if ("public_key" in response.args && "signature" in response.args) {
-        }
-        return response.args;
+        return {
+          authenticator: response.args,
+          rawTransaction: transactionOrPayload.rawTransaction.bcsToBytes(),
+        };
       } // dapp sends a transaction data input (i.e InputTransactionData), which is supported by the wallet standard at signTransaction version 1.1.0
       else if (
         this._wallet.features["aptos:signTransaction"]?.version === "1.1"
@@ -765,11 +765,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         const signTransactionV1_1StandardInput: AptosSignTransactionInputV1_1 =
           {
             payload: transactionOrPayload.data,
-            expirationTimestamp: options?.expirationTimestamp,
-            expirationSecondsFromNow: options?.expirationSecondsFromNow,
-            gasUnitPrice: options?.gasUnitPrice,
-            maxGasAmount: options?.maxGasAmount,
-            sequenceNumber: options?.accountSequenceNumber,
+            expirationTimestamp:
+              transactionOrPayload.options?.expirationTimestamp,
+            expirationSecondsFromNow:
+              transactionOrPayload.options?.expirationSecondsFromNow,
+            gasUnitPrice: transactionOrPayload.options?.gasUnitPrice,
+            maxGasAmount: transactionOrPayload.options?.maxGasAmount,
+            sequenceNumber: transactionOrPayload.options?.accountSequenceNumber,
             sender: transactionOrPayload.sender
               ? { address: AccountAddress.from(transactionOrPayload.sender) }
               : undefined,
@@ -787,7 +789,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           throw new WalletConnectionError("User has rejected the request")
             .message;
         }
-        return response.args.authenticator;
+        return {
+          authenticator: response.args.authenticator,
+          rawTransaction: response.args.rawTransaction.bcsToBytes(),
+        };
       } else {
         // dapp input is InputTransactionData but the wallet does not support it, so we convert it to a rawTransaction
         const aptosConfig = getAptosConfig(this._network, this._dappConfig);
@@ -796,7 +801,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         const transaction = await aptos.transaction.build.simple({
           sender: this._account.address,
           data: transactionOrPayload.data,
-          options: options,
+          options: transactionOrPayload.options,
         });
 
         const response = (await this._wallet?.features[
@@ -810,7 +815,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
             .message;
         }
 
-        return response.args;
+        return {
+          authenticator: response.args,
+          rawTransaction: transaction.bcsToBytes(),
+        };
       }
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);

@@ -29,11 +29,10 @@ export interface WalletContextState {
   signTransaction(args: {
     transactionOrPayload: AnyRawTransaction | InputTransactionData;
     asFeePayer?: boolean;
-    options?: InputGenerateTransactionOptions & {
-      expirationSecondsFromNow?: number;
-      expirationTimestamp?: number;
-    };
-  }): Promise<AccountAuthenticator>;
+  }): Promise<{
+    authenticator: AccountAuthenticator;
+    rawTransaction: Uint8Array;
+  }>;
   signMessage(message: AptosSignMessageInput): Promise<AptosSignMessageOutput>;
   signMessageAndVerify(message: AptosSignMessageInput): Promise<boolean>;
   disconnect(): void;
