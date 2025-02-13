@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@aptos-connect/wallet-adapter-plugin": "^2.3.2",
-    "@aptos-labs/wallet-standard": "^0.2.0",
+    "@aptos-labs/wallet-standard": "^0.3.0",
     "@atomrigslab/aptos-wallet-adapter": "^0.1.20",
     "@mizuwallet-sdk/aptos-wallet-adapter": "^0.3.2",
     "buffer": "^6.0.3",

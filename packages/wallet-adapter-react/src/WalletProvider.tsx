@@ -18,6 +18,7 @@ import type {
   Network,
   AptosStandardSupportedWallet,
   AvailableWallets,
+  AptosSignInInput,
 } from "@aptos-labs/wallet-adapter-core";
 import { DappConfig, WalletCore } from "@aptos-labs/wallet-adapter-core";
 
@@ -25,7 +26,9 @@ export interface AptosWalletProviderProps {
   children: ReactNode;
   plugins?: ReadonlyArray<Wallet>;
   optInWallets?: ReadonlyArray<AvailableWallets>;
-  autoConnect?: boolean;
+  autoConnect?:
+    | boolean
+    | ((core: WalletCore, adapter: Wallet) => Promise<boolean>);
   dappConfig?: DappConfig;
   disableTelemetry?: boolean;
   onError?: (error: any) => void;
@@ -63,6 +66,8 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   disableTelemetry = false,
   onError,
 }: AptosWalletProviderProps) => {
+  const didAttemptAutoConnectRef = useRef(false);
+
   const [{ connected, account, network, wallet }, setState] =
     useState(initialState);
 
@@ -82,7 +87,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       plugins ?? [],
       optInWallets ?? [],
       dappConfig,
-      disableTelemetry,
+      disableTelemetry
     );
     setWalletCore(walletCore);
   }, []);
@@ -104,6 +109,18 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
+  const signIn = async (walletName: WalletName, input: AptosSignInInput) => {
+    try {
+      setIsLoading(true);
+      return await walletCore?.signIn(walletName, input);
+    } catch (error: any) {
+      if (onError) onError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const disconnect = async () => {
     try {
       await walletCore?.disconnect();
@@ -116,7 +133,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const signTransaction = async (
     transaction: AnyRawTransaction | Types.TransactionPayload,
     asFeePayer?: boolean,
-    options?: InputGenerateTransactionOptions,
+    options?: InputGenerateTransactionOptions
   ): Promise<AccountAuthenticator> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -125,7 +142,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       return await walletCore?.signTransaction(
         transaction,
         asFeePayer,
-        options,
+        options
       );
     } catch (error: any) {
       if (onError) onError(error);
@@ -134,7 +151,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signMessage = async (
-    message: SignMessagePayload,
+    message: SignMessagePayload
   ): Promise<SignMessageResponse> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -148,7 +165,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signMessageAndVerify = async (
-    message: SignMessagePayload,
+    message: SignMessagePayload
   ): Promise<boolean> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -162,7 +179,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const submitTransaction = async (
-    transaction: InputSubmitTransactionData,
+    transaction: InputSubmitTransactionData
   ): Promise<PendingTransactionResponse> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -176,7 +193,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signAndSubmitTransaction = async (
-    transaction: InputTransactionData,
+    transaction: InputTransactionData
   ) => {
     try {
       return await walletCore?.signAndSubmitTransaction(transaction);
@@ -199,13 +216,54 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   useEffect(() => {
-    if (autoConnect) {
-      if (localStorage.getItem("AptosWalletName") && !connected) {
-        connect(localStorage.getItem("AptosWalletName") as WalletName);
-      } else {
-        // if we dont use autoconnect set the connect is loading to false
-        setIsLoading(false);
-      }
+    // Only attempt to auto connect once per render and only if there are wallets
+    if (didAttemptAutoConnectRef.current || !walletCore?.wallets.length) return;
+    didAttemptAutoConnectRef.current = true;
+
+    // If auto connect is not set, ignore the attempt
+    if (!autoConnect) {
+      setIsLoading(false);
+      return;
+    }
+
+    // Make sure the user has a previously connected wallet
+    const walletName = localStorage.getItem(
+      "AptosWalletName"
+    ) as WalletName | null;
+    if (!walletName) {
+      setIsLoading(false);
+      return;
+    }
+
+    // Make sure the wallet is still installed
+    const selectedWallet = walletCore?.wallets.find(
+      (e) => e.name === walletName
+    ) as Wallet | undefined;
+    if (selectedWallet && walletCore && !connected) {
+      (async () => {
+        try {
+          let shouldConnect = true;
+
+          // Providing a function to autoConnect allows the dapp to determine
+          // whether to attempt to connect to the wallet using the `signIn`
+          // or `connect` method. If `signIn` is successful, the user can
+          // return `false` and skip the `connect` method.
+          if (typeof autoConnect === "function") {
+            shouldConnect = await autoConnect(walletCore, selectedWallet);
+          } else {
+            shouldConnect = autoConnect;
+          }
+
+          if (shouldConnect) connect(walletName);
+        } catch (error) {
+          if (onError) onError(error);
+          return Promise.reject(error);
+        } finally {
+          setIsLoading(false);
+        }
+      })();
+    } else {
+      setIsLoading(false);
     }
   }, [autoConnect, wallets]);
 
@@ -280,12 +338,12 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const handleStandardWalletsAdded = (
-    standardWallet: Wallet | AptosStandardSupportedWallet,
+    standardWallet: Wallet | AptosStandardSupportedWallet
   ) => {
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
     const existingWalletIndex = wallets.findIndex(
-      (wallet) => wallet.name == standardWallet.name,
+      (wallet) => wallet.name == standardWallet.name
     );
     if (existingWalletIndex !== -1) {
       // If wallet exists, replace it with the new wallet
@@ -321,6 +379,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     <WalletContext.Provider
       value={{
         connect,
+        signIn,
         account,
         network,
         connected,

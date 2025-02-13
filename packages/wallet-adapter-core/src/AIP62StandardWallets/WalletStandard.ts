@@ -10,6 +10,8 @@ import {
   AccountInfo as StandardAccountInfo,
   AptosConnectOutput,
   AptosSignTransactionOutputV1_1,
+  AptosSignInOutput,
+  AptosSignInInput,
 } from "@aptos-labs/wallet-standard";
 import {
   AnyPublicKey,
@@ -24,6 +26,7 @@ import {
 import { WalletReadyState } from "../constants";
 import {
   WalletConnectionError,
+  WalletNotSupportedMethod,
   WalletSignAndSubmitMessageError,
   WalletSignMessageAndVerifyError,
   WalletSignMessageError,
@@ -50,6 +53,26 @@ export class WalletStandardCore {
     return response.args;
   }
 
+  async signIn(
+    input: AptosSignInInput,
+    wallet: Wallet
+  ): Promise<AptosSignInOutput> {
+    if (!wallet.signIn) {
+      throw new WalletNotSupportedMethod(
+        `Sign in with Aptos is not supported by ${wallet.name}`
+      ).message;
+    }
+
+    const response = (await wallet.signIn(
+      input
+    )) as UserResponse<AptosSignInOutput>;
+
+    if (response.status === UserResponseStatus.REJECTED) {
+      throw new WalletConnectionError("User has rejected the request").message;
+    }
+    return response.args;
+  }
+
   /**
    * Signs and submits a transaction to chain
    *
@@ -61,14 +84,14 @@ export class WalletStandardCore {
     aptos: Aptos,
     account: AccountInfo,
     wallet: Wallet,
-    standardWallets: ReadonlyArray<AptosStandardWallet>,
+    standardWallets: ReadonlyArray<AptosStandardWallet>
   ): Promise<AptosSignAndSubmitTransactionOutput> {
     try {
       // need to find the standard wallet type to do the
       // next features check
       const standardWallet = standardWallets.find(
         (standardWallet: AptosStandardWallet) =>
-          wallet.name === standardWallet.name,
+          wallet.name === standardWallet.name
       );
 
       // check for backward compatibility. before version 1.1.0 the standard expected
@@ -83,7 +106,7 @@ export class WalletStandardCore {
           options: transactionInput.options,
         });
         const response = (await wallet.signAndSubmitTransaction!(
-          transaction,
+          transaction
         )) as UserResponse<AptosSignAndSubmitTransactionOutput>;
 
         if (response.status === UserResponseStatus.REJECTED) {
@@ -101,7 +124,7 @@ export class WalletStandardCore {
         payload: transactionInput.data,
       };
       const response = (await wallet.signAndSubmitTransaction!(
-        transaction,
+        transaction
       )) as UserResponse<AptosSignAndSubmitTransactionOutput>;
 
       if (response.status === UserResponseStatus.REJECTED) {
@@ -129,20 +152,20 @@ export class WalletStandardCore {
   async signTransaction(
     transaction: AnyRawTransaction,
     wallet: Wallet,
-    asFeePayer?: boolean,
+    asFeePayer?: boolean
   ): Promise<AptosSignTransactionOutput>;
   async signTransaction(
     input: AptosSignTransactionInputV1_1,
-    wallet: Wallet,
+    wallet: Wallet
   ): Promise<AptosSignTransactionOutputV1_1>;
   async signTransaction(
     transactionOrInput: AnyRawTransaction | AptosSignTransactionInputV1_1,
     wallet: Wallet,
-    asFeePayer?: boolean,
+    asFeePayer?: boolean
   ): Promise<AptosSignTransactionOutput | AptosSignTransactionOutputV1_1> {
     const response = (await wallet.signTransaction!(
       transactionOrInput,
-      asFeePayer,
+      asFeePayer
     )) as UserResponse<AptosSignTransactionOutput>;
     if (response.status === UserResponseStatus.REJECTED) {
       throw new WalletConnectionError("User has rejected the request").message;
@@ -159,11 +182,11 @@ export class WalletStandardCore {
    */
   async signMessage(
     message: AptosSignMessageInput,
-    wallet: Wallet,
+    wallet: Wallet
   ): Promise<AptosSignMessageOutput> {
     try {
       const response = (await wallet.signMessage(
-        message,
+        message
       )) as UserResponse<AptosSignMessageOutput>;
       if (response.status === UserResponseStatus.REJECTED) {
         throw new WalletConnectionError("User has rejected the request")
@@ -183,12 +206,12 @@ export class WalletStandardCore {
    */
   async signMessageAndVerify(
     message: AptosSignMessageInput,
-    wallet: Wallet,
+    wallet: Wallet
   ): Promise<boolean> {
     try {
       // sign the message
       const response = (await wallet.signMessage(
-        message,
+        message
       )) as UserResponse<AptosSignMessageOutput>;
       // standard wallet account() method is a required method
       const account = (await wallet.account!()) as StandardAccountInfo;
@@ -211,7 +234,7 @@ export class WalletStandardCore {
       if (response.args.signature instanceof MultiEd25519Signature) {
         if (!(account.publicKey instanceof MultiEd25519PublicKey)) {
           throw new WalletSignMessageAndVerifyError(
-            "Public key and Signature type mismatch",
+            "Public key and Signature type mismatch"
           ).message;
         }
         const { fullMessage, signature } = response.args;

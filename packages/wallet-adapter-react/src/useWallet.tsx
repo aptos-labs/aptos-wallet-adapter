@@ -16,6 +16,8 @@ import {
   AptosChangeNetworkOutput,
   Network,
   AptosStandardSupportedWallet,
+  AptosSignInInput,
+  AptosSignInOutput,
 } from "@aptos-labs/wallet-adapter-core";
 import { createContext, useContext } from "react";
 
@@ -25,6 +27,10 @@ export interface WalletContextState {
   account: AccountInfo | null;
   network: NetworkInfo | null;
   connect(walletName: WalletName): void;
+  signIn(
+    walletName: WalletName,
+    input: AptosSignInInput
+  ): Promise<void | AptosSignInOutput>;
   disconnect(): void;
   wallet: WalletInfo | null;
   wallets?: ReadonlyArray<Wallet | AptosStandardSupportedWallet>;
