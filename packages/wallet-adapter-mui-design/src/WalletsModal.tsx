@@ -1,13 +1,10 @@
 import {
   AboutAptosConnect,
   AboutAptosConnectEducationScreen,
-  AnyAptosWallet,
   AptosPrivacyPolicy,
-  WalletItem,
+  NewWalletItem as WalletItem,
   WalletSortingOptions,
-  groupAndSortWallets,
-  isInstallRequired,
-  useWallet,
+  useAvailableWallets, AdaptedWallet,
 } from "@aptos-labs/wallet-adapter-react";
 import {
   Box,
@@ -31,7 +28,7 @@ import {
   ExpandMore,
   LanOutlined as LanOutlinedIcon,
 } from "@mui/icons-material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { WalletConnectorProps } from "./WalletConnector";
 
 interface WalletsModalProps
@@ -42,21 +39,29 @@ interface WalletsModalProps
 }
 
 export default function WalletsModal({
-  handleClose,
-  modalOpen,
-  networkSupport,
-  modalMaxWidth,
-  ...walletSortingOptions
-}: WalletsModalProps): JSX.Element {
+                                       handleClose,
+                                       modalOpen,
+                                       networkSupport,
+                                       modalMaxWidth,
+                                       ...walletSortingOptions
+                                     }: WalletsModalProps): JSX.Element {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
 
-  const { wallets = [] } = useWallet();
+  const availableWallets = useAvailableWallets();
+  const [acWallets, otherWallets] = useMemo(() => {
+    const acWallets: AdaptedWallet[] = [];
+    const otherWallets: AdaptedWallet[] = [];
+    for (const wallet of availableWallets) {
+      const isAcWallet = wallet.name.includes('Continue with');
+      (isAcWallet ? acWallets : otherWallets).push(wallet);
+    }
+    return [acWallets, otherWallets];
+  }, [availableWallets]);
 
-  const { aptosConnectWallets, availableWallets, installableWallets } =
-    groupAndSortWallets(wallets, walletSortingOptions);
-
-  const hasAptosConnectWallets = !!aptosConnectWallets.length;
+  // const { aptosConnectWallets, availableWallets, installableWallets } =
+  //   groupAndSortWallets(wallets, walletSortingOptions);
+  // const hasAptosConnectWallets = !!aptosConnectWallets.length;
 
   return (
     <Dialog
@@ -99,7 +104,7 @@ export default function WalletsModal({
               flexDirection: "column",
             }}
           >
-            {hasAptosConnectWallets ? (
+            {acWallets.length > 0 ? (
               <>
                 <span>Log in or sign up</span>
                 <span>with Social + Aptos Connect</span>
@@ -135,9 +140,9 @@ export default function WalletsModal({
               </Typography>
             </Box>
           )}
-          {hasAptosConnectWallets && (
+          {acWallets.length > 0 && (
             <Stack gap={1}>
-              {aptosConnectWallets.map((wallet) => (
+              {acWallets.map((wallet) => (
                 <AptosConnectWalletRow
                   key={wallet.name}
                   wallet={wallet}
@@ -210,14 +215,14 @@ export default function WalletsModal({
             </Stack>
           )}
           <Stack sx={{ gap: 1 }}>
-            {availableWallets.map((wallet) => (
+            {otherWallets.map((wallet) => (
               <WalletRow
                 key={wallet.name}
                 wallet={wallet}
                 onConnect={handleClose}
               />
             ))}
-            {!!installableWallets.length && (
+            {/*{!!installableWallets.length && (
               <>
                 <Button
                   variant="text"
@@ -241,7 +246,7 @@ export default function WalletsModal({
                   </Stack>
                 </Collapse>
               </>
-            )}
+            )}*/}
           </Stack>
         </AboutAptosConnect>
       </Stack>
@@ -250,12 +255,13 @@ export default function WalletsModal({
 }
 
 interface WalletRowProps {
-  wallet: AnyAptosWallet;
+  wallet: AdaptedWallet;
   onConnect?: () => void;
 }
 
 function WalletRow({ wallet, onConnect }: WalletRowProps) {
   const theme = useTheme();
+  const isInstallRequired = false;
   return (
     <WalletItem wallet={wallet} onConnect={onConnect} asChild>
       <ListItem disablePadding>
@@ -277,7 +283,7 @@ function WalletRow({ wallet, onConnect }: WalletRowProps) {
             primary={wallet.name}
             primaryTypographyProps={{ fontSize: "1.125rem" }}
           />
-          {isInstallRequired(wallet) ? (
+          {isInstallRequired ? (
             <WalletItem.InstallLink asChild>
               <Button
                 LinkComponent={"a"}
