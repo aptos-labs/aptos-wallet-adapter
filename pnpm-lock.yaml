@@ -352,6 +352,9 @@ importers:
 
   packages/wallet-adapter-mui-design:
     dependencies:
+      '@aptos-labs/wallet-adapter-core':
+        specifier: workspace:*
+        version: link:../wallet-adapter-core
       '@aptos-labs/wallet-adapter-react':
         specifier: workspace:*
         version: link:../wallet-adapter-react
