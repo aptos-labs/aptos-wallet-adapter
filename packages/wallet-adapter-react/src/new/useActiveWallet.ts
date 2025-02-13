@@ -1,4 +1,4 @@
-import { AdaptedWallet, NewNetwork as Network, StandardNetwork } from '@aptos-labs/wallet-adapter-core';
+import { AdaptedWallet, NewNetwork as Network } from '@aptos-labs/wallet-adapter-core';
 import {
   AccountInfo,
   AptosFeatures,
@@ -56,7 +56,7 @@ export function useActiveWallet(): UseActiveWalletResult {
 
   const [isInitialized, setIsInitialized] = useState(activeWallet === undefined);
   const [activeAccount, setActiveAccount] = useState<AccountInfo>();
-  const [activeNetwork, setActiveNetwork] = useState<Network>(StandardNetwork.MAINNET);
+  const [activeNetwork, setActiveNetwork] = useState<Network>();
 
   useEffect(() => {
     if (!activeWallet) {
@@ -77,6 +77,10 @@ export function useActiveWallet(): UseActiveWalletResult {
     const listeners = [
       activeWallet.on('activeAccountChanged', setActiveAccount),
       activeWallet.on('activeNetworkChanged', setActiveNetwork),
+      activeWallet.on('accountConnected', setActiveAccount),
+      activeWallet.on('accountDisconnected', () => {
+        setActiveAccount(undefined);
+      }),
     ];
 
     return () => {
@@ -94,7 +98,7 @@ export function useActiveWallet(): UseActiveWalletResult {
       } satisfies UninitializedWallet;
     }
 
-    if (!activeWallet || !activeAccount) {
+    if (!activeWallet || !activeAccount || !activeNetwork) {
       return {
         isInitialized: true,
         isConnected: false,
