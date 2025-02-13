@@ -8,12 +8,13 @@ import {
   AptosSignTransactionInputV1_1,
   AptosSignTransactionOutput,
   AptosSignTransactionOutputV1_1,
+  UserResponseStatus,
   WalletIcon,
 } from '@aptos-labs/wallet-standard';
 import { GA4 } from '../ga';
 import { WALLET_ADAPTER_CORE_VERSION } from '../version';
 import { AptosStandardWallet } from './AptosStandardWallet';
-import { Network } from './network';
+import { Network, StandardNetwork } from './network';
 import {
   aptosChainIdentifierToNetworkMap,
   buildTransaction,
@@ -23,10 +24,16 @@ import {
   networkInfoToNetwork,
 } from './utils';
 
+// The standard doesn't currently allow removing event listeners, so instead
+// we pass a special null callback that can be detected by wallets as "null"
+const nullCallback = Object.assign(() => {
+}, { _isNull: true });
+
 type EventHandlers = {
-  accountDisconnected: (account: AccountInfo) => void;
+  accountConnected: (account: AccountInfo) => void;
+  accountDisconnected: (account?: AccountInfo) => void;
   activeAccountChanged: (account?: AccountInfo) => void;
-  activeNetworkChanged: (network: Network) => void;
+  activeNetworkChanged: (network?: Network) => void;
 }
 
 export interface AdaptedWalletConfig {
@@ -83,18 +90,30 @@ export class AdaptedWallet {
 
   async connect() {
     const feature = this.features['aptos:connect'];
-    return feature.connect();
+    const response = await feature.connect();
+    if (response.status === UserResponseStatus.APPROVED) {
+      for (const callback of this.onAccountConnectedListeners) {
+        callback(response.args);
+      }
+    }
+    return response;
   }
 
   async disconnect() {
     // TODO: specify which account. defaults to active account
     const feature = this.features['aptos:disconnect'];
     await feature.disconnect();
+    for (const callback of this.onAccountDisconnectedListeners) {
+      callback();
+    }
   }
 
   // endregion
 
   // region Accounts
+
+  readonly onAccountConnectedListeners = new Set<(account: AccountInfo) => void>();
+  readonly onAccountDisconnectedListeners = new Set<() => void>();
 
   async getConnectedAccounts(): Promise<AccountInfo[]> {
     // TODO: add explicit `getConnectedAccounts` feature
@@ -102,10 +121,14 @@ export class AdaptedWallet {
     return activeAccount ? [activeAccount] : [];
   }
 
-  // TODO
-  onAccountDisconnected(callback: (account: AccountInfo) => void) {
-    return () => {
-    };
+  onAccountConnected(callback: (account: AccountInfo) => void) {
+    this.onAccountConnectedListeners.add(callback);
+    return () => this.onAccountConnectedListeners.delete(callback);
+  }
+
+  onAccountDisconnected(callback: () => void) {
+    this.onAccountDisconnectedListeners.add(callback);
+    return () => this.onAccountDisconnectedListeners.delete(callback);
   }
 
   async getActiveAccount(): Promise<AccountInfo | undefined> {
@@ -119,8 +142,7 @@ export class AdaptedWallet {
       callback(newAccount);
     });
     return () => {
-      void feature.onAccountChange(() => {
-      });
+      void feature.onAccountChange(nullCallback);
     }
   }
 
@@ -135,20 +157,23 @@ export class AdaptedWallet {
 
   async getActiveNetwork(): Promise<Network> {
     const feature = this.features['aptos:network'];
-    const networkInfo = await feature.network();
-    return networkInfoToNetwork(networkInfo);
+    try {
+      const networkInfo = await feature.network();
+      return networkInfoToNetwork(networkInfo);
+    } catch {
+      return StandardNetwork.MAINNET;
+    }
   }
 
-  onActiveNetworkChanged(callback: (network: Network) => void) {
+  onActiveNetworkChanged(callback: (network?: Network) => void) {
     const feature = this.features['aptos:onNetworkChange'];
 
     void feature.onNetworkChange((networkInfo) => {
-      const network = networkInfoToNetwork(networkInfo);
+      const network = networkInfo && networkInfoToNetwork(networkInfo);
       callback(network);
     });
     return () => {
-      void feature.onNetworkChange(() => {
-      });
+      void feature.onNetworkChange(nullCallback);
     }
   }
 
@@ -212,6 +237,7 @@ export class AdaptedWallet {
     const handlers: {
       [K in keyof EventHandlers]: (cb: EventHandlers[K]) => () => void;
     } = {
+      accountConnected: (cb) => this.onAccountConnected(cb),
       accountDisconnected: (cb) => this.onAccountDisconnected(cb),
       activeAccountChanged: (cb) => this.onActiveAccountChanged(cb),
       activeNetworkChanged: (cb) => this.onActiveNetworkChanged(cb),
