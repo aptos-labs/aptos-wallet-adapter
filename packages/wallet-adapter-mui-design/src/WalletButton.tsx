@@ -1,4 +1,4 @@
-import { truncateAddress, useWallet } from "@aptos-labs/wallet-adapter-react";
+import { truncateAddress, useActiveWallet } from "@aptos-labs/wallet-adapter-react";
 import { AccountBalanceWalletOutlined as AccountBalanceWalletOutlinedIcon } from "@mui/icons-material";
 import { Avatar, Button, Typography } from "@mui/material";
 import React, { useState } from "react";
@@ -13,7 +13,7 @@ export default function WalletButton({
   handleModalOpen,
   handleNavigate,
 }: WalletButtonProps): JSX.Element {
-  const { connected, account, wallet } = useWallet();
+  const wallet = useActiveWallet();
 
   const [popoverAnchor, setPopoverAnchor] = useState<HTMLButtonElement | null>(
     null,
@@ -36,21 +36,19 @@ export default function WalletButton({
       <Button
         size="large"
         variant="contained"
-        onClick={connected ? handleClick : onConnectWalletClick}
+        onClick={wallet.isConnected ? handleClick : onConnectWalletClick}
         className="wallet-button"
         sx={{ borderRadius: "10px" }}
       >
-        {connected ? (
+        {wallet.isConnected ? (
           <>
             <Avatar
-              alt={wallet?.name}
-              src={wallet?.icon}
+              alt={wallet.name}
+              src={wallet.icon}
               sx={{ width: 24, height: 24 }}
             />
             <Typography noWrap ml={2}>
-              {account?.ansName ||
-                truncateAddress(account?.address) ||
-                "Unknown"}
+              {truncateAddress(wallet.activeAccount.address.toString())}
             </Typography>
           </>
         ) : (
@@ -60,11 +58,12 @@ export default function WalletButton({
           </>
         )}
       </Button>
-      <WalletMenu
+      {wallet.isConnected ? <WalletMenu
+        wallet={wallet}
         popoverAnchor={popoverAnchor}
         handlePopoverClose={handlePopoverClose}
         handleNavigate={handleNavigate}
-      />
+      /> : null}
     </>
   );
 }
