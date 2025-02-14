@@ -1,5 +1,12 @@
 # @aptos-labs/wallet-adapter-core
 
+## 4.25.0
+
+### Minor Changes
+
+- c2de332: Deeplink Provider for Nightly Wallet
+- 99dc712: Bump package versions
+
 ## 4.24.0
 
 ### Minor Changes

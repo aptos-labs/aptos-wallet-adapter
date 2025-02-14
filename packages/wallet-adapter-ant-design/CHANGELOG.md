@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 3.1.0
+
+### Minor Changes
+
+- 99dc712: Bump package versions
+
+### Patch Changes
+
+- Updated dependencies [99dc712]
+  - @aptos-labs/wallet-adapter-react@3.8.0
+
 ## 3.0.25
 
 ### Patch Changes

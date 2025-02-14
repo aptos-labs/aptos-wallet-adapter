@@ -1,5 +1,13 @@
 # @aptos-labs/wallet-adapter-vue
 
+## 0.3.12
+
+### Patch Changes
+
+- Updated dependencies [c2de332]
+- Updated dependencies [99dc712]
+  - @aptos-labs/wallet-adapter-core@4.25.0
+
 ## 0.3.11
 
 ### Patch Changes
