@@ -1,9 +1,13 @@
-import { WalletName } from "../LegacyWalletPlugins/types";
+import {
+  AccountAddressInput,
+  InputGenerateTransactionOptions,
+} from "@aptos-labs/ts-sdk";
+import { InputGenerateTransactionPayloadData } from "@aptos-labs/ts-sdk";
 import { WalletReadyState } from "../constants";
 
-export interface AptosStandardSupportedWallet<Name extends string = string> {
+export interface AptosStandardSupportedWallet {
   // The name of your wallet cast to WalletName (Ex. "Petra" as WalletName<"Petra">)
-  name: WalletName<Name>;
+  name: string;
   // The link to your chrome extension or main website where new users can create an account with your wallet.
   url: string;
   // An icon for your wallet. Can be one of 4 data types. Be sure to follow the below format exactly (including the "," after base64).
@@ -27,3 +31,18 @@ export type AvailableWallets =
   | "Pontem Wallet"
   | "Mizu Wallet"
   | "Continue with Google";
+
+export type InputTransactionData = {
+  sender?: AccountAddressInput;
+  data: InputGenerateTransactionPayloadData;
+  options?: InputGenerateTransactionOptions & {
+    expirationSecondsFromNow?: number;
+    expirationTimestamp?: number;
+  };
+};
+
+export type WalletInfo = {
+  name: string;
+  icon: string;
+  url: string;
+};

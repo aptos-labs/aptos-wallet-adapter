@@ -27,11 +27,13 @@ export function TransactionParameters() {
       options: { maxGasAmount: MaxGasAMount },
     };
     try {
-      const commitedTransaction = await signAndSubmitTransaction(transaction);
+      const commitedTransaction = await signAndSubmitTransaction({
+        transaction,
+      });
       const executedTransaction = await aptosClient(network).waitForTransaction(
         {
           transactionHash: commitedTransaction.hash,
-        },
+        }
       );
       // Check maxGasAmount is respected by the current connected Wallet
       if ((executedTransaction as any).max_gas_amount == MaxGasAMount) {

@@ -56,7 +56,9 @@ export function SingleSigner() {
       },
     };
     try {
-      const response = await signAndSubmitTransaction(transaction);
+      const response = await signAndSubmitTransaction({
+        transaction,
+      });
       await aptosClient(network).waitForTransaction({
         transactionHash: response.hash,
       });
@@ -74,10 +76,15 @@ export function SingleSigner() {
 
     try {
       const response = await signAndSubmitTransaction({
-        data: {
-          function: "0x1::coin::transfer",
-          typeArguments: [parseTypeTag(APTOS_COIN)],
-          functionArguments: [AccountAddress.from(account.address), new U64(1)], // 1 is in Octas
+        transaction: {
+          data: {
+            function: "0x1::coin::transfer",
+            typeArguments: [parseTypeTag(APTOS_COIN)],
+            functionArguments: [
+              AccountAddress.from(account.address),
+              new U64(1),
+            ], // 1 is in Octas
+          },
         },
       });
       await aptosClient(network).waitForTransaction({
@@ -95,13 +102,16 @@ export function SingleSigner() {
   // Legacy typescript sdk support
   const onSignTransaction = async () => {
     try {
-      const payload = {
-        type: "entry_function_payload",
-        function: "0x1::coin::transfer",
-        type_arguments: ["0x1::aptos_coin::AptosCoin"],
-        arguments: [account?.address, 1], // 1 is in Octas
+      const payload: InputTransactionData = {
+        data: {
+          function: "0x1::coin::transfer",
+          typeArguments: [APTOS_COIN],
+          functionArguments: [account?.address.toString(), 1],
+        },
       };
-      const response = await signTransaction(payload);
+      const response = await signTransaction({
+        transactionOrPayload: payload,
+      });
       toast({
         title: "Success",
         description: JSON.stringify(response),
@@ -111,21 +121,23 @@ export function SingleSigner() {
     }
   };
 
-  const onSignTransactionV2 = async () => {
+  const onSignRawTransaction = async () => {
     if (!account) return;
 
     try {
       const transactionToSign = await aptosClient(
-        network,
+        network
       ).transaction.build.simple({
         sender: account.address,
         data: {
           function: "0x1::coin::transfer",
           typeArguments: [APTOS_COIN],
-          functionArguments: [account.address, 1], // 1 is in Octas
+          functionArguments: [account.address.toString(), 1],
         },
       });
-      const response = await signTransaction(transactionToSign);
+      const response = await signTransaction({
+        transactionOrPayload: transactionToSign,
+      });
       toast({
         title: "Success",
         description: JSON.stringify(response),
@@ -150,8 +162,8 @@ export function SingleSigner() {
         <Button onClick={onSignTransaction} disabled={!sendable}>
           Sign transaction
         </Button>
-        <Button onClick={onSignTransactionV2} disabled={!sendable}>
-          Sign transaction V2
+        <Button onClick={onSignRawTransaction} disabled={!sendable}>
+          Sign raw transaction
         </Button>
         <Button onClick={onSignMessage} disabled={!sendable}>
           Sign message

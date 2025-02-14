@@ -1,5 +1,6 @@
 import {
-  AnyAptosWallet,
+  AdapterNotDetectedWallet,
+  AdapterWallet,
   WalletReadyState,
   isRedirectable,
 } from "@aptos-labs/wallet-adapter-core";
@@ -10,7 +11,7 @@ import { HeadlessComponentProps, createHeadlessComponent } from "./utils";
 
 export interface WalletItemProps extends HeadlessComponentProps {
   /** The wallet option to be displayed. */
-  wallet: AnyAptosWallet;
+  wallet: AdapterWallet | AdapterNotDetectedWallet;
   /** A callback to be invoked when the wallet is connected. */
   onConnect?: () => void;
 }
@@ -26,7 +27,7 @@ function useWalletItemContext(displayName: string) {
 }
 
 const WalletItemContext = createContext<{
-  wallet: AnyAptosWallet;
+  wallet: AdapterWallet | AdapterNotDetectedWallet;
   connectWallet: () => void;
 } | null>(null);
 
@@ -39,9 +40,7 @@ const Root = forwardRef<HTMLDivElement, WalletItemProps>(
       onConnect?.();
     }, [connect, wallet.name, onConnect]);
 
-    const isWalletReady =
-      wallet.readyState === WalletReadyState.Installed ||
-      wallet.readyState === WalletReadyState.Loadable;
+    const isWalletReady = wallet.readyState === WalletReadyState.Installed;
 
     const mobileSupport =
       "deeplinkProvider" in wallet && wallet.deeplinkProvider;
@@ -57,7 +56,7 @@ const Root = forwardRef<HTMLDivElement, WalletItemProps>(
         </Component>
       </WalletItemContext.Provider>
     );
-  },
+  }
 );
 Root.displayName = "WalletItem";
 
@@ -71,7 +70,7 @@ const Icon = createHeadlessComponent(
       src: context.wallet.icon,
       alt: `${context.wallet.name} icon`,
     };
-  },
+  }
 );
 
 const Name = createHeadlessComponent(
@@ -83,7 +82,7 @@ const Name = createHeadlessComponent(
     return {
       children: context.wallet.name,
     };
-  },
+  }
 );
 
 const ConnectButton = createHeadlessComponent(
@@ -96,7 +95,7 @@ const ConnectButton = createHeadlessComponent(
       onClick: context.connectWallet,
       children: "Connect",
     };
-  },
+  }
 );
 
 const InstallLink = createHeadlessComponent(
@@ -111,7 +110,7 @@ const InstallLink = createHeadlessComponent(
       rel: "noopener noreferrer",
       children: "Install",
     };
-  },
+  }
 );
 
 /** A headless component for rendering a wallet option's name, icon, and either connect button or install link. */
