@@ -2,14 +2,13 @@ import {
   AboutAptosConnect,
   AboutAptosConnectEducationScreen,
   AptosPrivacyPolicy,
-  NewWalletItem as WalletItem,
   WalletSortingOptions,
-  useAvailableWallets, AdaptedWallet,
 } from "@aptos-labs/wallet-adapter-react";
+import { WalletItem, useAvailableWallets } from "@aptos-labs/wallet-adapter-react/new";
+import { AdaptedWallet } from "@aptos-labs/wallet-adapter-core/new";
 import {
   Box,
   Button,
-  Collapse,
   Dialog,
   Divider,
   IconButton,
@@ -25,10 +24,9 @@ import {
   ArrowBack,
   ArrowForward,
   Close as CloseIcon,
-  ExpandMore,
   LanOutlined as LanOutlinedIcon,
 } from "@mui/icons-material";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { WalletConnectorProps } from "./WalletConnector";
 
 interface WalletsModalProps
@@ -43,10 +41,8 @@ export default function WalletsModal({
                                        modalOpen,
                                        networkSupport,
                                        modalMaxWidth,
-                                       ...walletSortingOptions
                                      }: WalletsModalProps): JSX.Element {
   const theme = useTheme();
-  const [expanded, setExpanded] = useState(false);
 
   const availableWallets = useAvailableWallets();
   const [acWallets, otherWallets] = useMemo(() => {

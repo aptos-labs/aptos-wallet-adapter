@@ -1,4 +1,5 @@
-import { truncateAddress, useActiveWallet } from "@aptos-labs/wallet-adapter-react";
+import { truncateAddress } from "@aptos-labs/wallet-adapter-react";
+import { useActiveWallet } from "@aptos-labs/wallet-adapter-react/new";
 import { AccountBalanceWalletOutlined as AccountBalanceWalletOutlinedIcon } from "@mui/icons-material";
 import { Avatar, Button, Typography } from "@mui/material";
 import React, { useState } from "react";

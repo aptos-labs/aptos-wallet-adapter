@@ -1,5 +1,8 @@
 {
   "extends": "@aptos-labs/wallet-adapter-tsconfig/react-library.json",
+  "compilerOptions": {
+    "moduleResolution": "bundler"
+  },
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
 }

@@ -43,6 +43,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@aptos-labs/wallet-adapter-core": "workspace:*",
     "@aptos-labs/wallet-adapter-react": "workspace:*",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",

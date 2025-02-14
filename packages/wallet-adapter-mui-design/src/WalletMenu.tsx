@@ -1,4 +1,4 @@
-import { ConnectedWallet, useWallet } from "@aptos-labs/wallet-adapter-react";
+import { ConnectedWallet } from "@aptos-labs/wallet-adapter-react/new";
 import {
   List,
   ListItem,
