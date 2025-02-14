@@ -1,4 +1,4 @@
-import { ConnectedWallet, useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import {
   List,
   ListItem,
@@ -13,15 +13,14 @@ type WalletMenuProps = {
   popoverAnchor: HTMLButtonElement | null;
   handlePopoverClose: () => void;
   handleNavigate?: () => void;
-  wallet: ConnectedWallet;
 };
 
 export default function WalletMenu({
   popoverAnchor,
   handlePopoverClose,
   handleNavigate,
-  wallet,
 }: WalletMenuProps): JSX.Element {
+  const { account, disconnect } = useWallet();
   const popoverOpen = Boolean(popoverAnchor);
   const id = popoverOpen ? "wallet-popover" : undefined;
 
@@ -30,15 +29,15 @@ export default function WalletMenu({
     handlePopoverClose();
   };
 
-  const handleLogout = async () => {
-    await wallet.disconnect();
+  const handleLogout = () => {
+    disconnect();
     handlePopoverClose();
   };
 
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
 
   const copyAddress = async () => {
-    await navigator.clipboard.writeText(wallet.activeAccount.address.toString());
+    await navigator.clipboard.writeText(account?.address!);
 
     setTooltipOpen(true);
 

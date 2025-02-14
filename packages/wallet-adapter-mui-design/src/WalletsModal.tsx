@@ -1,10 +1,12 @@
 import {
   AboutAptosConnect,
-  AboutAptosConnectEducationScreen,
+  AnyAptosWallet,
   AptosPrivacyPolicy,
-  NewWalletItem as WalletItem,
+  WalletItem,
   WalletSortingOptions,
-  useAvailableWallets, AdaptedWallet,
+  groupAndSortWallets,
+  isInstallRequired,
+  useWallet,
 } from "@aptos-labs/wallet-adapter-react";
 import {
   Box,
@@ -22,13 +24,13 @@ import {
 import { grey } from "./aptosColorPalette";
 // reported bug with loading mui icons with esm, therefore need to import like this https://github.com/mui/material-ui/issues/35233
 import {
-  ArrowBack,
   ArrowForward,
   Close as CloseIcon,
   ExpandMore,
   LanOutlined as LanOutlinedIcon,
 } from "@mui/icons-material";
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import { AptosConnectEducationScreen } from './AptosConnectEducationScreen';
 import { WalletConnectorProps } from "./WalletConnector";
 
 interface WalletsModalProps
@@ -39,29 +41,21 @@ interface WalletsModalProps
 }
 
 export default function WalletsModal({
-                                       handleClose,
-                                       modalOpen,
-                                       networkSupport,
-                                       modalMaxWidth,
-                                       ...walletSortingOptions
-                                     }: WalletsModalProps): JSX.Element {
+  handleClose,
+  modalOpen,
+  networkSupport,
+  modalMaxWidth,
+  ...walletSortingOptions
+}: WalletsModalProps): JSX.Element {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
 
-  const availableWallets = useAvailableWallets();
-  const [acWallets, otherWallets] = useMemo(() => {
-    const acWallets: AdaptedWallet[] = [];
-    const otherWallets: AdaptedWallet[] = [];
-    for (const wallet of availableWallets) {
-      const isAcWallet = wallet.name.includes('Continue with');
-      (isAcWallet ? acWallets : otherWallets).push(wallet);
-    }
-    return [acWallets, otherWallets];
-  }, [availableWallets]);
+  const { wallets = [] } = useWallet();
 
-  // const { aptosConnectWallets, availableWallets, installableWallets } =
-  //   groupAndSortWallets(wallets, walletSortingOptions);
-  // const hasAptosConnectWallets = !!aptosConnectWallets.length;
+  const { aptosConnectWallets, availableWallets, installableWallets } =
+    groupAndSortWallets(wallets, walletSortingOptions);
+
+  const hasAptosConnectWallets = !!aptosConnectWallets.length;
 
   return (
     <Dialog
@@ -93,7 +87,7 @@ export default function WalletsModal({
         >
           <CloseIcon />
         </IconButton>
-        <AboutAptosConnect renderEducationScreen={renderEducationScreen}>
+        <AboutAptosConnect renderEducationScreen={AptosConnectEducationScreen}>
           <Typography
             align="center"
             variant="h5"
@@ -104,7 +98,7 @@ export default function WalletsModal({
               flexDirection: "column",
             }}
           >
-            {acWallets.length > 0 ? (
+            {hasAptosConnectWallets ? (
               <>
                 <span>Log in or sign up</span>
                 <span>with Social + Aptos Connect</span>
@@ -140,9 +134,9 @@ export default function WalletsModal({
               </Typography>
             </Box>
           )}
-          {acWallets.length > 0 && (
+          {hasAptosConnectWallets && (
             <Stack gap={1}>
-              {acWallets.map((wallet) => (
+              {aptosConnectWallets.map((wallet) => (
                 <AptosConnectWalletRow
                   key={wallet.name}
                   wallet={wallet}
@@ -215,14 +209,14 @@ export default function WalletsModal({
             </Stack>
           )}
           <Stack sx={{ gap: 1 }}>
-            {otherWallets.map((wallet) => (
+            {availableWallets.map((wallet) => (
               <WalletRow
                 key={wallet.name}
                 wallet={wallet}
                 onConnect={handleClose}
               />
             ))}
-            {/*{!!installableWallets.length && (
+            {!!installableWallets.length && (
               <>
                 <Button
                   variant="text"
@@ -246,7 +240,7 @@ export default function WalletsModal({
                   </Stack>
                 </Collapse>
               </>
-            )}*/}
+            )}
           </Stack>
         </AboutAptosConnect>
       </Stack>
@@ -255,13 +249,12 @@ export default function WalletsModal({
 }
 
 interface WalletRowProps {
-  wallet: AdaptedWallet;
+  wallet: AnyAptosWallet;
   onConnect?: () => void;
 }
 
 function WalletRow({ wallet, onConnect }: WalletRowProps) {
   const theme = useTheme();
-  const isInstallRequired = false;
   return (
     <WalletItem wallet={wallet} onConnect={onConnect} asChild>
       <ListItem disablePadding>
@@ -283,7 +276,7 @@ function WalletRow({ wallet, onConnect }: WalletRowProps) {
             primary={wallet.name}
             primaryTypographyProps={{ fontSize: "1.125rem" }}
           />
-          {isInstallRequired ? (
+          {isInstallRequired(wallet) ? (
             <WalletItem.InstallLink asChild>
               <Button
                 LinkComponent={"a"}
@@ -324,113 +317,5 @@ function AptosConnectWalletRow({ wallet, onConnect }: WalletRowProps) {
         </Button>
       </WalletItem.ConnectButton>
     </WalletItem>
-  );
-}
-
-function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
-  return (
-    <>
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "1fr 4fr 1fr",
-          alignItems: "center",
-          justifyItems: "start",
-        }}
-      >
-        <IconButton onClick={screen.cancel}>
-          <ArrowBack />
-        </IconButton>
-        <Typography variant="body1" component="h2" width="100%" align="center">
-          About Aptos Connect
-        </Typography>
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          pb: 1.5,
-          alignItems: "end",
-          justifyContent: "center",
-          height: "162px",
-        }}
-      >
-        <screen.Graphic />
-      </Box>
-      <Stack sx={{ gap: 1, textAlign: "center", pb: 2 }}>
-        <Typography component={screen.Title} variant="h6" />
-        <Typography
-          component={screen.Description}
-          variant="body2"
-          color={(theme) => theme.palette.text.secondary}
-          sx={{
-            "&>a": {
-              color: (theme) => theme.palette.text.primary,
-              textDecoration: "underline",
-              textUnderlineOffset: "4px",
-            },
-          }}
-        />
-      </Stack>
-
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-          alignItems: "center",
-        }}
-      >
-        <Button
-          size="small"
-          variant="text"
-          onClick={screen.back}
-          sx={{ justifySelf: "start" }}
-        >
-          Back
-        </Button>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            placeSelf: "center",
-          }}
-        >
-          {screen.screenIndicators.map((ScreenIndicator, i) => (
-            <Box
-              key={i}
-              component={ScreenIndicator}
-              sx={{
-                px: 0,
-                py: 2,
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <Box
-                sx={{
-                  height: "2px",
-                  width: "24px",
-                  bgcolor: (theme) => theme.palette.text.disabled,
-                  "[data-active]>&": {
-                    bgcolor: (theme) => theme.palette.text.primary,
-                  },
-                }}
-              />
-            </Box>
-          ))}
-        </Box>
-        <Button
-          size="small"
-          variant="text"
-          onClick={screen.next}
-          sx={{ justifySelf: "end" }}
-          endIcon={<ArrowForward sx={{ height: 16, width: 16 }} />}
-        >
-          {screen.screenIndex === screen.totalScreens - 1 ? "Finish" : "Next"}
-        </Button>
-      </Box>
-    </>
   );
 }
