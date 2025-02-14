@@ -1,11 +1,4 @@
-import { NetworkToChainId, Network as AptosNetwork } from '@aptos-labs/ts-sdk';
-import {
-  APTOS_DEVNET_CHAIN,
-  APTOS_LOCALNET_CHAIN,
-  APTOS_MAINNET_CHAIN,
-  APTOS_TESTNET_CHAIN,
-  ChainsId,
-} from '@aptos-labs/wallet-standard';
+import { Network as AptosNetwork } from '@aptos-labs/ts-sdk';
 
 /**
  * Subset of `Network` enum that only includes standard networks.
