@@ -2,7 +2,7 @@ import { WalletSortingOptions } from "@aptos-labs/wallet-adapter-react";
 import { Breakpoint } from "@mui/material";
 import { useState } from "react";
 import WalletButton from "./WalletButton";
-import WalletsModal from "./WalletModel";
+import WalletsModal from "./WalletsModal";
 
 export interface WalletConnectorProps extends WalletSortingOptions {
   networkSupport?: string;
