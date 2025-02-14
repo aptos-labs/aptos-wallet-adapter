@@ -1,4 +1,4 @@
-import { WalletAdapter, WalletAdapterConfig } from '@aptos-labs/wallet-adapter-core';
+import { WalletAdapter, WalletAdapterConfig } from '@aptos-labs/wallet-adapter-core/new';
 import { createContext, PropsWithChildren, useMemo } from 'react';
 
 export const WalletAdapterContext = createContext<WalletAdapter | null>(null);

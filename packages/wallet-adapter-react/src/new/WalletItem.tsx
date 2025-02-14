@@ -1,4 +1,4 @@
-import { AdaptedWallet, isRedirectable } from "@aptos-labs/wallet-adapter-core";
+import { AdaptedWallet } from "@aptos-labs/wallet-adapter-core/new";
 import { UserResponseStatus } from '@aptos-labs/wallet-standard';
 import { Slot } from "@radix-ui/react-slot";
 import { createContext, forwardRef, useCallback, useContext } from "react";
@@ -44,7 +44,8 @@ const Root = forwardRef<HTMLDivElement, WalletItemProps>(
     const mobileSupport = false;
     // "deeplinkProvider" in wallet && wallet.deeplinkProvider;
 
-    if (!isWalletReady && isRedirectable() && !mobileSupport) return null;
+    const isRedirectable = false;
+    if (!isWalletReady && isRedirectable && !mobileSupport) return null;
 
     const Component = asChild ? Slot : "div";
 
