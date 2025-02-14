@@ -19,6 +19,7 @@ Note: These are in alphabetical order, any new wallets must be in alphabetical o
 [AIP-62](https://github.com/aptos-foundation/AIPs/blob/main/aips/aip-62.md) standard compatible
 
 - [AptosConnect](https://aptosconnect.app/)
+- [ABC Wallet](https://chromewebstore.google.com/detail/abc-wallet/mlhakagmgkmonhdonhkpjeebfphligng)
 - [Mizu](https://www.mizu.io/)
 - [MizuWallet](https://www.npmjs.com/package/@mizuwallet-sdk/aptos-wallet-adapter)
 - [Nightly](https://chromewebstore.google.com/detail/nightly/fiikommddbeccaoicoejoniammnalkfa)
