@@ -1,0 +1,66 @@
+import { Context } from "../types";
+
+import { ChainsConfig } from "../types";
+
+export const mainnetChains: ChainsConfig = {
+  Ethereum: {
+    key: "Ethereum",
+    id: 2,
+    context: Context.ETH,
+    finalityThreshold: 64,
+    displayName: "Ethereum",
+    explorerUrl: "https://etherscan.io/",
+    explorerName: "Etherscan",
+    gasToken: "ETH",
+    chainId: 1,
+    icon: "Ethereum",
+    maxBlockSearch: 2000,
+    symbol: "ETH",
+    sdkName: "Ethereum",
+  },
+  Solana: {
+    key: "Solana",
+    id: 1,
+    context: Context.SOLANA,
+    finalityThreshold: 32,
+    displayName: "Solana",
+    explorerUrl: "https://explorer.solana.com/",
+    explorerName: "Solana Explorer",
+    gasToken: "SOL",
+    chainId: 0,
+    icon: "Solana",
+    maxBlockSearch: 2000,
+    symbol: "SOL",
+    sdkName: "Solana",
+  },
+  // Sui: {
+  //   key: "Sui",
+  //   id: 21,
+  //   context: Context.SUI,
+  //   finalityThreshold: 0,
+  //   displayName: "Sui",
+  //   sdkName: "Sui",
+  //   explorerUrl: "https://suiscan.xyz/",
+  //   explorerName: "Suiscan",
+  //   gasToken: "SUI",
+  //   chainId: 0,
+  //   icon: "Sui",
+  //   maxBlockSearch: 0,
+  //   symbol: "SUI",
+  // },
+};
+
+export const AptosMainnetChain = {
+  key: "Aptos",
+  id: 22,
+  context: "Aptos",
+  finalityThreshold: 0,
+  displayName: "Aptos",
+  explorerUrl: "https://explorer.aptoslabs.com/",
+  explorerName: "Aptos Explorer",
+  gasToken: "APT",
+  chainId: 0,
+  icon: "Aptos",
+  maxBlockSearch: 0,
+  symbol: "APT",
+};
