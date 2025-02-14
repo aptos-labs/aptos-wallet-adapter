@@ -1,0 +1,21 @@
+{
+  "name": "@aptos-labs/wallet-adapter-aggregator",
+  "version": "0.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "scripts": {
+    "build:bundle": "tsup src/index.tsx --format esm,cjs --sourcemap",
+    "build:declarations": "tsc --emitDeclarationOnly --declaration --declarationMap",
+    "build": "pnpm build:bundle && pnpm build:declarations",
+    "dev": "tsup src/index.tsx --format esm,cjs --watch",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "lint": "TIMING=1 eslint \"src/**/*.ts*\""
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "tsup": "^5.10.1",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {},
+  "packageManager": "pnpm@9.15.5"
+}
