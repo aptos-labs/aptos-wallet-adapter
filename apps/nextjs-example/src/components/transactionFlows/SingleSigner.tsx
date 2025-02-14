@@ -106,7 +106,7 @@ export function SingleSigner() {
         data: {
           function: "0x1::coin::transfer",
           typeArguments: [APTOS_COIN],
-          functionArguments: [account?.address.toString(), 1], // 1 is in Octas
+          functionArguments: [account?.address.toString(), 1],
         },
       };
       const response = await signTransaction({
@@ -132,7 +132,7 @@ export function SingleSigner() {
         data: {
           function: "0x1::coin::transfer",
           typeArguments: [APTOS_COIN],
-          functionArguments: [account.address.toString(), 1], // 1 is in Octas
+          functionArguments: [account.address.toString(), 1],
         },
       });
       const response = await signTransaction({

@@ -6,7 +6,6 @@ import {
   AnyPublicKeyVariant,
   AnyRawTransaction,
   Aptos,
-  InputGenerateTransactionOptions,
   InputSubmitTransactionData,
   MultiEd25519PublicKey,
   MultiEd25519Signature,
@@ -172,7 +171,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     super();
     this._optInWallets = optInWallets || [];
     this._dappConfig = dappConfig;
-    this._disableTelemetry = disableTelemetry || false;
+    this._disableTelemetry = disableTelemetry ?? false;
     this._sdkWallets = getSDKWallets(this._dappConfig);
 
     // If disableTelemetry set to false (by default), start GA4
@@ -185,7 +184,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     // We separate the extension and sdk detection process so we dont refetch sdk wallets everytime a new
     // extension wallet is detected
     this.fetchSDKAIP62AptosWallets();
-
+    // Strategy to append not detected AIP-62 standard compatible extension wallets
     this.appendNotDetectedStandardSupportedWallets();
   }
 
@@ -216,13 +215,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   private setExtensionAIP62Wallets(
     extensionwWallets: readonly AptosWallet[]
   ): void {
-    // Twallet SDK fires a register event so the adapter assumes it is an extension wallet
-    // so filter out t wallet, remove it when twallet fixes it
-    const wallets = extensionwWallets.filter(
-      (wallet) => wallet.name !== "Dev T wallet" && wallet.name !== "T wallet"
-    );
-
-    wallets.map((wallet: AdapterWallet) => {
+    extensionwWallets.map((wallet: AdapterWallet) => {
       if (this.excludeWallet(wallet)) {
         return;
       }
@@ -269,23 +262,21 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
   // Since we can't discover AIP-62 wallets that are not installed on the user machine,
   // we hold a AIP-62 wallets registry to show on the wallet selector modal for the users.
-  // Append wallets from wallet standard support registry to the `all_wallets` array
+  // Append wallets from wallet standard support registry to the `_standard_not_detected_wallets` array
   // when wallet is not installed on the user machine
   private appendNotDetectedStandardSupportedWallets(): void {
     // Loop over the registry map
     aptosStandardSupportedWalletList.map((supportedWallet) => {
-      // Check if we already have this wallet as a AIP-62 wallet standard
+      // Check if we already have this wallet as a detected AIP-62 wallet standard
       const existingStandardWallet = this._standard_wallets.find(
         (wallet) => wallet.name == supportedWallet.name
       );
+      // If it is detected, it means the user has the wallet installed, so dont add it to the wallets array
       if (existingStandardWallet) {
         return;
       }
       // If AIP-62 wallet detected but it is excluded by the dapp, dont add it to the wallets array
-      if (
-        existingStandardWallet &&
-        this.excludeWallet(existingStandardWallet)
-      ) {
+      if (this.excludeWallet(supportedWallet)) {
         return;
       }
       // If AIP-62 wallet does not exist, append it to the wallet selector modal
@@ -300,10 +291,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   /**
    * A function that excludes an AIP-62 compatible wallet the dapp doesnt want to include
    *
-   * @param walletName
-   * @returns
+   * @param wallet AdapterWallet | AdapterNotDetectedWallet
+   * @returns boolean
    */
-  excludeWallet(wallet: AdapterWallet): boolean {
+  excludeWallet(wallet: AdapterWallet | AdapterNotDetectedWallet): boolean {
     // If _optInWallets is not empty, and does not include the provided wallet,
     // return true to exclude the wallet, otherwise return false
     if (

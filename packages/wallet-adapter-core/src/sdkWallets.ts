@@ -32,10 +32,11 @@ export function getSDKWallets(dappConfig?: DappConfig) {
     ) {
       sdkWallets.push(
         new MizuWallet({
-          network: dappConfig.network as any,
+          // mizo supports only TESTNET and MAINNET and holds a custom type for network
+          network: dappConfig.network as Network.MAINNET | Network.TESTNET,
           manifestURL: dappConfig.mizuwallet.manifestURL,
           appId: dappConfig.mizuwallet.appId,
-        }) as any
+        })
       );
     }
   }
