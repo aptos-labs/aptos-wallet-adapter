@@ -1,4 +1,4 @@
-import { AdaptedWallet, NewNetwork as Network } from '@aptos-labs/wallet-adapter-core';
+import { AdaptedWallet, Network } from '@aptos-labs/wallet-adapter-core/new';
 import {
   AccountInfo,
   AptosFeatures,

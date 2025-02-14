@@ -1,4 +1,4 @@
-import { WalletAdapter } from '@aptos-labs/wallet-adapter-core';
+import { WalletAdapter } from '@aptos-labs/wallet-adapter-core/new';
 import { useContext } from 'react';
 import { WalletAdapterContext } from './WalletAdapterContext';
 
