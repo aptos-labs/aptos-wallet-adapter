@@ -621,7 +621,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         // check for backward compatibility. before version 1.1.0 the standard expected
         // AnyRawTransaction input so the adapter built the transaction before sending it to the wallet
         if (
-          this._wallet.features["aptos:signAndSubmitTransaction"]?.version !==
+          this._wallet.features["aptos:signAndSubmitTransaction"].version !==
           "1.1.0"
         ) {
           const aptosConfig = getAptosConfig(this._network, this._dappConfig);
