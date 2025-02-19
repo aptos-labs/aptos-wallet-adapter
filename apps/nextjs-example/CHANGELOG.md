@@ -1,5 +1,19 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 4.0.0
+
+### Major Changes
+
+- ce53a2b: Major upgrade to only support AIP-62 standard compatible wallets
+
+### Patch Changes
+
+- Updated dependencies [ce53a2b]
+  - @aptos-labs/wallet-adapter-ant-design@4.0.0
+  - @aptos-labs/wallet-adapter-mui-design@4.0.0
+  - @aptos-labs/wallet-adapter-react@4.0.0
+  - @aptos-labs/wallet-adapter-core@5.0.0
+
 ## 3.7.0
 
 ### Minor Changes

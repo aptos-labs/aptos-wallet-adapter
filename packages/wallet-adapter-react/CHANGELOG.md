@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-react
 
+## 4.0.0
+
+### Major Changes
+
+- ce53a2b: Major upgrade to only support AIP-62 standard compatible wallets
+
+### Patch Changes
+
+- Updated dependencies [ce53a2b]
+  - @aptos-labs/wallet-adapter-core@5.0.0
+
 ## 3.8.0
 
 ### Minor Changes
