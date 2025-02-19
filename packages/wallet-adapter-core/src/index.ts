@@ -1,10 +1,10 @@
 import { WALLET_ADAPTER_CORE_VERSION } from "./version";
 
-export { type AnyAptosWallet, type DappConfig, WalletCore } from "./WalletCore";
-export * from "./LegacyWalletPlugins";
+export * from "./WalletCore";
 export * from "./constants";
 export * from "./utils";
-export * from "./AIP62StandardWallets";
+export * from "./sdkWallets";
+export * from "./registry";
 
 // inject adapter core version to the window
 if (typeof window !== "undefined") {

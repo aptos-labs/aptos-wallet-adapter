@@ -16,7 +16,7 @@ export default function WalletButton({
   const { connected, account, wallet } = useWallet();
 
   const [popoverAnchor, setPopoverAnchor] = useState<HTMLButtonElement | null>(
-    null,
+    null
   );
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setPopoverAnchor(event.currentTarget);
@@ -49,7 +49,7 @@ export default function WalletButton({
             />
             <Typography noWrap ml={2}>
               {account?.ansName ||
-                truncateAddress(account?.address) ||
+                truncateAddress(account?.address?.toString()) ||
                 "Unknown"}
             </Typography>
           </>

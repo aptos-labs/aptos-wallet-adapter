@@ -4,7 +4,8 @@ import {
   APTOS_CONNECT_ACCOUNT_URL,
   AboutAptosConnect,
   AboutAptosConnectEducationScreen,
-  AnyAptosWallet,
+  AdapterNotDetectedWallet,
+  AdapterWallet,
   AptosPrivacyPolicy,
   WalletItem,
   WalletSortingOptions,
@@ -54,7 +55,7 @@ export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
   const copyAddress = useCallback(async () => {
     if (!account?.address) return;
     try {
-      await navigator.clipboard.writeText(account.address);
+      await navigator.clipboard.writeText(account.address.toString());
       toast({
         title: "Success",
         description: "Copied wallet address to clipboard.",
@@ -72,7 +73,9 @@ export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button>
-          {account?.ansName || truncateAddress(account?.address) || "Unknown"}
+          {account?.ansName ||
+            truncateAddress(account?.address?.toString()) ||
+            "Unknown"}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -114,10 +117,13 @@ function ConnectWalletDialog({
   close,
   ...walletSortingOptions
 }: ConnectWalletDialogProps) {
-  const { wallets = [] } = useWallet();
+  const { wallets = [], notDetectedWallets = [] } = useWallet();
 
   const { aptosConnectWallets, availableWallets, installableWallets } =
-    groupAndSortWallets(wallets, walletSortingOptions);
+    groupAndSortWallets(
+      [...wallets, ...notDetectedWallets],
+      walletSortingOptions
+    );
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
 
@@ -197,7 +203,7 @@ function ConnectWalletDialog({
 }
 
 interface WalletRowProps {
-  wallet: AnyAptosWallet;
+  wallet: AdapterWallet | AdapterNotDetectedWallet;
   onConnect?: () => void;
 }
 

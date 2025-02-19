@@ -50,7 +50,7 @@
     "typescript": "^4.5.3"
   },
   "dependencies": {
-    "@aptos-connect/wallet-adapter-plugin": "^2.3.2",
+    "@aptos-connect/wallet-adapter-plugin": "2.3.2",
     "@aptos-labs/wallet-standard": "^0.2.0",
     "@atomrigslab/aptos-wallet-adapter": "^0.1.20",
     "@mizuwallet-sdk/aptos-wallet-adapter": "^0.3.2",
@@ -59,8 +59,7 @@
     "tweetnacl": "^1.0.3"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^1.33.1",
-    "aptos": "^1.21.0"
+    "@aptos-labs/ts-sdk": "^1.35.0"
   },
   "files": [
     "dist",

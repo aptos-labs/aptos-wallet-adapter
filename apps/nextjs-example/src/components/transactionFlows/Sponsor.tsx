@@ -37,7 +37,7 @@ export function Sponsor() {
       throw new Error("no account");
     }
     const transactionToSign = await aptosClient(
-      network,
+      network
     ).transaction.build.simple({
       sender: account.address,
       withFeePayer: true,
@@ -55,8 +55,10 @@ export function Sponsor() {
     setTransactionToSubmit(transaction);
 
     try {
-      const authenticator = await signTransaction(transaction);
-      setSenderAuthenticator(authenticator);
+      const response = await signTransaction({
+        transactionOrPayload: transaction,
+      });
+      setSenderAuthenticator(response.authenticator);
     } catch (error) {
       console.error(error);
     }
@@ -72,7 +74,7 @@ export function Sponsor() {
         amount: SPONSOR_INITIAL_BALANCE,
       });
       const authenticator = await aptosClient(
-        network,
+        network
       ).transaction.signAsFeePayer({
         signer: sponsor,
         transaction: transactionToSubmit,

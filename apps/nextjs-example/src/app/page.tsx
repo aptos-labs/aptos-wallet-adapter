@@ -25,6 +25,7 @@ import { WalletSelector as AntdWalletSelector } from "@aptos-labs/wallet-adapter
 import { WalletConnector as MuiWalletSelector } from "@aptos-labs/wallet-adapter-mui-design";
 import {
   AccountInfo,
+  AdapterWallet,
   AptosChangeNetworkOutput,
   NetworkInfo,
   WalletInfo,
@@ -151,7 +152,7 @@ function WalletSelection() {
 interface WalletConnectionProps {
   account: AccountInfo | null;
   network: NetworkInfo | null;
-  wallet: WalletInfo | null;
+  wallet: AdapterWallet | null;
   changeNetwork: (network: Network) => Promise<AptosChangeNetworkOutput>;
 }
 
@@ -227,7 +228,7 @@ function WalletConnection({
                 label: "Address",
                 value: (
                   <DisplayValue
-                    value={account?.address ?? "Not Present"}
+                    value={account?.address?.toString() ?? "Not Present"}
                     isCorrect={!!account?.address}
                   />
                 ),
@@ -236,7 +237,7 @@ function WalletConnection({
                 label: "Public key",
                 value: (
                   <DisplayValue
-                    value={account?.publicKey.toString() ?? "Not Present"}
+                    value={account?.publicKey?.toString() ?? "Not Present"}
                     isCorrect={!!account?.publicKey}
                   />
                 ),
@@ -246,13 +247,13 @@ function WalletConnection({
                 subLabel: "(only if attached)",
                 value: <p>{account?.ansName ?? "Not Present"}</p>,
               },
-              {
-                label: "Min keys required",
-                subLabel: "(only for multisig)",
-                value: (
-                  <p>{account?.minKeysRequired?.toString() ?? "Not Present"}</p>
-                ),
-              },
+              // {
+              //   label: "Min keys required",
+              //   subLabel: "(only for multisig)",
+              //   value: (
+              //     <p>{account?.minKeysRequired?.toString() ?? "Not Present"}</p>
+              //   ),
+              // },
             ]}
           />
         </div>

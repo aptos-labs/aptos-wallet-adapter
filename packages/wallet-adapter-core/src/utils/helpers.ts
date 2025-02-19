@@ -1,35 +1,32 @@
 import {
   Aptos,
   AptosConfig,
-  EntryFunctionArgumentTypes,
   Hex,
   Network,
   NetworkToNodeAPI,
-  Serializable,
-  SimpleEntryFunctionArgumentTypes,
 } from "@aptos-labs/ts-sdk";
-import { NetworkInfo as StandardNetworkInfo } from "@aptos-labs/wallet-standard";
-import { convertNetwork } from "../LegacyWalletPlugins/conversion";
 import {
-  InputTransactionData,
   NetworkInfo,
-} from "../LegacyWalletPlugins/types";
+  NetworkInfo as StandardNetworkInfo,
+} from "@aptos-labs/wallet-standard";
+
 import { DappConfig } from "../WalletCore";
 import { WalletSignAndSubmitMessageError } from "../error";
+import { InputTransactionData } from "./types";
 
 export function isMobile(): boolean {
   return /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/i.test(
-    navigator.userAgent,
+    navigator.userAgent
   );
 }
 
 export function isInAppBrowser(): boolean {
   const isIphone = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(
-    navigator.userAgent,
+    navigator.userAgent
   );
 
   const isAndroid = /(Android).*Version\/[\d.]+.*Chrome\/[^\s]+ Mobile/i.test(
-    navigator.userAgent,
+    navigator.userAgent
   );
 
   return isIphone || isAndroid;
@@ -50,22 +47,6 @@ export function generalizedErrorMessage(error: any): string {
     : error;
 }
 
-// Helper function to check if input arguments are BCS serialized arguments.
-// In @aptos-labs/ts-sdk each move representative class extends
-// Serializable, so if each argument is of an instance of a class
-// the extends Serializable - we know these are BCS arguments
-export const areBCSArguments = (
-  args: Array<EntryFunctionArgumentTypes | SimpleEntryFunctionArgumentTypes>,
-): boolean => {
-  // `every` returns true if the array is empty, so
-  // first check the array length
-  if (args.length === 0) return false;
-  return args.every(
-    (arg: EntryFunctionArgumentTypes | SimpleEntryFunctionArgumentTypes) =>
-      arg instanceof Serializable,
-  );
-};
-
 /**
  * Helper function to get AptosConfig that supports Aptos and Custom networks
  *
@@ -74,8 +55,8 @@ export const areBCSArguments = (
  * @returns AptosConfig
  */
 export const getAptosConfig = (
-  networkInfo: NetworkInfo | StandardNetworkInfo | null,
-  dappConfig: DappConfig | undefined,
+  networkInfo: NetworkInfo | null,
+  dappConfig: DappConfig | undefined
 ): AptosConfig => {
   if (!networkInfo) {
     throw new Error("Undefined network");
@@ -97,9 +78,26 @@ export const getAptosConfig = (
     });
   }
 
+  const knownNetworks = {
+    okx: "https://wallet.okx.com/fullnode/aptos/discover/rpc",
+  };
+
+  if (networkInfo.url) {
+    const isKnownNetwork = Object.values(knownNetworks).includes(
+      networkInfo.url
+    );
+
+    if (isKnownNetwork) {
+      return new AptosConfig({
+        network: Network.CUSTOM,
+        fullnode: networkInfo.url,
+      });
+    }
+  }
+
   // Custom networks are not supported, please ensure that the wallet is returning the appropriate network Mainnet, Testnet, Devnet, Local
   throw new Error(
-    "Invalid network, custom network not supported with Aptos wallet adapter to prevent user from using an unexpected network.",
+    `Invalid network, network ${networkInfo.name} not supported with Aptos wallet adapter to prevent user from using an unexpected network.`
   );
 };
 
@@ -110,7 +108,7 @@ export const getAptosConfig = (
  * @returns boolean
  */
 export const isAptosNetwork = (
-  networkInfo: NetworkInfo | StandardNetworkInfo | null,
+  networkInfo: NetworkInfo | StandardNetworkInfo | null
 ): boolean => {
   if (!networkInfo) {
     throw new Error("Undefined network");
@@ -140,7 +138,7 @@ export const fetchDevnetChainId = async (): Promise<number> => {
  * as a string, this function converts the string to Uint8Array.
  */
 export const handlePublishPackageTransaction = (
-  transactionInput: InputTransactionData,
+  transactionInput: InputTransactionData
 ) => {
   // convert the first argument, metadataBytes, to uint8array if is a string
   let metadataBytes = transactionInput.data.functionArguments[0];
@@ -159,9 +157,25 @@ export const handlePublishPackageTransaction = (
     });
   } else {
     throw new WalletSignAndSubmitMessageError(
-      "The bytecode argument must be an array.",
+      "The bytecode argument must be an array."
     ).message;
   }
 
   return { metadataBytes, byteCode };
 };
+
+// old => new
+export function convertNetwork(networkInfo: NetworkInfo | null): Network {
+  switch (networkInfo?.name) {
+    case "mainnet" as Network:
+      return Network.MAINNET;
+    case "testnet" as Network:
+      return Network.TESTNET;
+    case "devnet" as Network:
+      return Network.DEVNET;
+    case "local" as Network:
+      return Network.LOCAL;
+    default:
+      throw new Error("Invalid Aptos network name");
+  }
+}
