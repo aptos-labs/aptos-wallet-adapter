@@ -1,6 +1,7 @@
 import {
   AboutAptosConnect,
   AboutAptosConnectEducationScreen,
+  AdapterNotDetectedWallet,
   AdapterWallet,
   AptosPrivacyPolicy,
   WalletItem,
@@ -51,10 +52,13 @@ export default function WalletsModal({
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
 
-  const { wallets = [] } = useWallet();
+  const { wallets = [], notDetectedWallets = [] } = useWallet();
 
   const { aptosConnectWallets, availableWallets, installableWallets } =
-    groupAndSortWallets(wallets, walletSortingOptions);
+    groupAndSortWallets(
+      [...wallets, ...notDetectedWallets],
+      walletSortingOptions
+    );
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
 
@@ -250,7 +254,7 @@ export default function WalletsModal({
 }
 
 interface WalletRowProps {
-  wallet: AdapterWallet;
+  wallet: AdapterWallet | AdapterNotDetectedWallet;
   onConnect?: () => void;
 }
 
