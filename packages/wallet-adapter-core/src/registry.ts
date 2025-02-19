@@ -40,4 +40,18 @@ export const aptosStandardSupportedWalletList: Array<AptosStandardSupportedWalle
       readyState: WalletReadyState.NotDetected,
       isAIP62Standard: true,
     },
+    {
+      name: "Rimosafe",
+      url: "https://chromewebstore.google.com/detail/rimo-safe-wallet/kiicddjcakdmobjkcpppkgcjbpakcagp",
+      icon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIGZpbGw9Im5vbmUiLz4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzLCAzKSBzY2FsZSgwLjgpIj4KICAgIDxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMjkuNTMxMSA5Ljg0MzY5VjBIMTkuNjg3NEwxOS42ODc3IDAuMDAwMzQwNTU1TDAgMC4wMDAzNDE0MTVMNC4zMjEzNGUtMDcgOS44NDQwM0g5Ljg0MzY5QzQuNDA3MTcgOS44NDQwMyAwIDE0LjI1MTIgMCAxOS42ODc3VjMwLjAwMDFIOS44NDM2OVYxOS42ODc5TDE5LjY4NzEgMzAuMDAwMUwxOS42ODcxIDE5LjY4NzdMMjkuNTMwOCA5Ljg0NDAzTDI5LjUzMTEgOS44NDQwM1Y5Ljg0MzY1TDI5LjUzMTEgOS44NDM2OVpNMTkuNjg3MSAxOS42ODc2TDE5LjY4NzEgOS44NDQwM0g5Ljg0MzY5VjE5LjY4NzZIMTkuNjg3MVpNMjkuNTMxMSA5Ljg0MzY1TDE5LjY4NzcgMC4wMDAzNDA1NTVMMjkuNTMxMSAwLjAwMDM0MDEyNVY5Ljg0MzY1Wk0xOS42ODc0IDE5LjY4NzZIMjkuNTMxMVYzMC4wMDAxSDE5LjY4NzRWMTkuNjg3NloiIGZpbGw9IiNGRjVDMjgiLz4KICA8L2c+Cjwvc3ZnPgo=",
+      readyState: WalletReadyState.NotDetected,
+      isAIP62Standard: true,
+    },
+    {
+      name: "OKX Wallet",
+      url: "https://chromewebstore.google.com/detail/okx-wallet/mcohilncbfahbmgdjkbpemcciiolgcge",
+      icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAJDSURBVHgB7Zq9jtpAEMfHlhEgQLiioXEkoAGECwoKxMcTRHmC5E3IoyRPkPAEkI7unJYmTgEFTYwA8a3NTKScLnCHN6c9r1e3P2llWQy7M/s1Gv1twCP0ej37dDq9x+Zut1t3t9vZjDEHIiSRSPg4ZpDL5fxkMvn1cDh8m0wmfugfO53OoFQq/crn8wxfY9EymQyrVCqMfHvScZx1p9ls3pFxXBy/bKlUipGPrVbLuQqAfsCliq3zl0H84zwtjQrOw4Mt1W63P5LvBm2d+Xz+YzqdgkqUy+WgWCy+Mc/nc282m4FqLBYL+3g8fjDxenq72WxANZbLJeA13zDX67UDioL5ybXwafMYu64Ltn3bdDweQ5R97fd7GyhBQMipx4POeEDHIu2LfDdBIGGz+hJ9CQ1ABjoA2egAZPM6AgiCAEQhsi/C4jHyPA/6/f5NG3Ks2+3CYDC4aTccDrn6ojG54MnEvG00GoVmWLIRNZ7wTCwDHYBsdACy0QHIhiuRETxlICWpMMhGZHmqS8qH6JLyGegAZKMDkI0uKf8X4SWlaZo+Pp1bRrwlJU8ZKLIvUjKh0WiQ3sRUbNVq9c5Ebew7KEo2m/1p4jJ4qAmDaqDQBzj5XyiAT4VCQezJigAU+IDU+z8vJFnGWeC+bKQV/5VZ71FV6L7PA3gg3tXrdQ+DgLhC+75Wq3no69P3MC0NFQpx2lL04Ql9gHK1bRDjsSBIvScBnDTk1WrlGIZBorIDEYJj+rhdgnQ67VmWRe0zlplXl81vcyEt0rSoYDUAAAAASUVORK5CYII=",
+      readyState: WalletReadyState.NotDetected,
+      isAIP62Standard: true,
+    },
   ];
