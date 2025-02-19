@@ -97,11 +97,9 @@ export function Sponsor() {
     }
     try {
       const response = await submitTransaction({
-        transaction: {
-          transaction: transactionToSubmit,
-          senderAuthenticator: senderAuthenticator,
-          feePayerAuthenticator: feepayerAuthenticator,
-        },
+        transaction: transactionToSubmit,
+        senderAuthenticator: senderAuthenticator,
+        feePayerAuthenticator: feepayerAuthenticator,
       });
       toast({
         title: "Success",

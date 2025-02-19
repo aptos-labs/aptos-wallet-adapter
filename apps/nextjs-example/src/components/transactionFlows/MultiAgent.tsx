@@ -102,11 +102,9 @@ export function MultiAgent() {
         throw new Error("No secondarySignerAuthenticator");
       }
       const response = await submitTransaction({
-        transaction: {
-          transaction: transactionToSubmit,
-          senderAuthenticator: senderAuthenticator,
-          additionalSignersAuthenticators: [secondarySignerAuthenticator],
-        },
+        transaction: transactionToSubmit,
+        senderAuthenticator: senderAuthenticator,
+        additionalSignersAuthenticators: [secondarySignerAuthenticator],
       });
       toast({
         title: "Success",

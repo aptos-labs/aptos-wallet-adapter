@@ -27,9 +27,7 @@ export function TransactionParameters() {
       options: { maxGasAmount: MaxGasAMount },
     };
     try {
-      const commitedTransaction = await signAndSubmitTransaction({
-        transaction,
-      });
+      const commitedTransaction = await signAndSubmitTransaction(transaction);
       const executedTransaction = await aptosClient(network).waitForTransaction(
         {
           transactionHash: commitedTransaction.hash,

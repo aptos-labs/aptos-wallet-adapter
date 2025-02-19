@@ -5,7 +5,6 @@ import {
   AdapterWallet,
   AnyRawTransaction,
   AptosSignAndSubmitTransactionOutput,
-  InputGenerateTransactionOptions,
   InputTransactionData,
   NetworkInfo,
   AptosSignMessageInput,
@@ -23,9 +22,9 @@ export interface WalletContextState {
   account: AccountInfo | null;
   network: NetworkInfo | null;
   connect(walletName: string): void;
-  signAndSubmitTransaction(args: {
-    transaction: InputTransactionData;
-  }): Promise<AptosSignAndSubmitTransactionOutput>;
+  signAndSubmitTransaction(
+    transaction: InputTransactionData
+  ): Promise<AptosSignAndSubmitTransactionOutput>;
   signTransaction(args: {
     transactionOrPayload: AnyRawTransaction | InputTransactionData;
     asFeePayer?: boolean;
@@ -37,9 +36,9 @@ export interface WalletContextState {
   signMessageAndVerify(message: AptosSignMessageInput): Promise<boolean>;
   disconnect(): void;
   changeNetwork(network: Network): Promise<AptosChangeNetworkOutput>;
-  submitTransaction(args: {
-    transaction: InputSubmitTransactionData;
-  }): Promise<PendingTransactionResponse>;
+  submitTransaction(
+    transaction: InputSubmitTransactionData
+  ): Promise<PendingTransactionResponse>;
   wallet: AdapterWallet | null;
   wallets: ReadonlyArray<AdapterWallet>;
   notDetectedWallets: ReadonlyArray<AdapterNotDetectedWallet>;

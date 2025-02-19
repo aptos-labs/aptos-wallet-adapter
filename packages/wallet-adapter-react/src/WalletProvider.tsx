@@ -107,17 +107,14 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const signAndSubmitTransaction = async (args: {
-    transaction: InputTransactionData;
-  }): Promise<AptosSignAndSubmitTransactionOutput> => {
-    const { transaction } = args;
+  const signAndSubmitTransaction = async (
+    transaction: InputTransactionData
+  ): Promise<AptosSignAndSubmitTransactionOutput> => {
     try {
       if (!walletCore) {
         throw new Error("WalletCore is not initialized");
       }
-      return await walletCore.signAndSubmitTransaction({
-        transactionInput: transaction,
-      });
+      return await walletCore.signAndSubmitTransaction(transaction);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
@@ -150,17 +147,14 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const submitTransaction = async (args: {
-    transaction: InputSubmitTransactionData;
-  }): Promise<PendingTransactionResponse> => {
-    const { transaction } = args;
+  const submitTransaction = async (
+    transaction: InputSubmitTransactionData
+  ): Promise<PendingTransactionResponse> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
     }
     try {
-      return await walletCore?.submitTransaction({
-        transaction,
-      });
+      return await walletCore?.submitTransaction(transaction);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
@@ -174,9 +168,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       throw new Error("WalletCore is not initialized");
     }
     try {
-      return await walletCore?.signMessage({
-        message,
-      });
+      return await walletCore?.signMessage(message);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);

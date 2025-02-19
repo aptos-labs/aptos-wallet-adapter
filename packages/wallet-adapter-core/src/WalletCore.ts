@@ -590,10 +590,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param transactionInput InputTransactionData
    * @returns AptosSignAndSubmitTransactionOutput
    */
-  async signAndSubmitTransaction(args: {
-    transactionInput: InputTransactionData;
-  }): Promise<AptosSignAndSubmitTransactionOutput> {
-    const { transactionInput } = args;
+  async signAndSubmitTransaction(
+    transactionInput: InputTransactionData
+  ): Promise<AptosSignAndSubmitTransactionOutput> {
     try {
       if ("function" in transactionInput.data) {
         if (
@@ -682,10 +681,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         transactionOrPayload: transaction,
       });
       const response = await this.submitTransaction({
-        transaction: {
-          transaction,
-          senderAuthenticator: signTransactionResponse.authenticator,
-        },
+        transaction,
+        senderAuthenticator: signTransactionResponse.authenticator,
       });
       return { hash: response.hash };
     } catch (error: any) {
@@ -825,10 +822,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @return response from the wallet's signMessage function
    * @throws WalletSignMessageError
    */
-  async signMessage(args: {
-    message: AptosSignMessageInput;
-  }): Promise<AptosSignMessageOutput> {
-    const { message } = args;
+  async signMessage(
+    message: AptosSignMessageInput
+  ): Promise<AptosSignMessageOutput> {
     try {
       this.ensureWalletExists(this._wallet);
       this.recordEvent("sign_message");
@@ -852,10 +848,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param transaction - InputSubmitTransactionData
    * @returns PendingTransactionResponse
    */
-  async submitTransaction(args: {
-    transaction: InputSubmitTransactionData;
-  }): Promise<PendingTransactionResponse> {
-    const { transaction } = args;
+  async submitTransaction(
+    transaction: InputSubmitTransactionData
+  ): Promise<PendingTransactionResponse> {
     // The standard does not support submitTransaction, so we use the adapter to submit the transaction
     try {
       this.ensureWalletExists(this._wallet);

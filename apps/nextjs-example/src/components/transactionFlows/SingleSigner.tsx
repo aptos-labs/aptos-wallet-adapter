@@ -56,9 +56,7 @@ export function SingleSigner() {
       },
     };
     try {
-      const response = await signAndSubmitTransaction({
-        transaction,
-      });
+      const response = await signAndSubmitTransaction(transaction);
       await aptosClient(network).waitForTransaction({
         transactionHash: response.hash,
       });
@@ -76,15 +74,10 @@ export function SingleSigner() {
 
     try {
       const response = await signAndSubmitTransaction({
-        transaction: {
-          data: {
-            function: "0x1::coin::transfer",
-            typeArguments: [parseTypeTag(APTOS_COIN)],
-            functionArguments: [
-              AccountAddress.from(account.address),
-              new U64(1),
-            ], // 1 is in Octas
-          },
+        data: {
+          function: "0x1::coin::transfer",
+          typeArguments: [parseTypeTag(APTOS_COIN)],
+          functionArguments: [AccountAddress.from(account.address), new U64(1)], // 1 is in Octas
         },
       });
       await aptosClient(network).waitForTransaction({
