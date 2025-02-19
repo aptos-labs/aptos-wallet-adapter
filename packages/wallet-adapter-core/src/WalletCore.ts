@@ -29,6 +29,8 @@ import {
   AptosSignMessageInput,
   AptosSignMessageOutput,
   AptosChangeNetworkOutput,
+  AptosSignInInput,
+  AptosSignInOutput,
 } from "@aptos-labs/wallet-standard";
 import { AptosConnectWalletConfig } from "@aptos-connect/wallet-adapter-plugin";
 
@@ -67,6 +69,8 @@ import {
   WalletSignMessageAndVerifyError,
   WalletDisconnectionError,
   WalletSubmitTransactionError,
+  WalletNotSupportedMethod,
+  WalletNotFoundError,
 } from "./error";
 import { ChainIdToAnsSupportedNetworkMap, WalletReadyState } from "./constants";
 import { WALLET_ADAPTER_CORE_VERSION } from "./version";
@@ -555,6 +559,91 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this._connected = true;
       this.recordEvent("wallet_connect");
       this.emit("connect", account);
+    } catch (error: any) {
+      this.clearData();
+      const errMsg = generalizedErrorMessage(error);
+      throw new WalletConnectionError(errMsg).message;
+    } finally {
+      this._connecting = false;
+    }
+  }
+
+  async signIn(
+    input: AptosSignInInput,
+    walletName: string
+  ): Promise<void | AptosSignInOutput> {
+    const allDetectedWallets = this._standard_wallets;
+    const selectedWallet = allDetectedWallets.find(
+      (wallet: AdapterWallet) => wallet.name === walletName
+    );
+
+    if (!selectedWallet) {
+      throw new WalletNotFoundError(`Wallet ${walletName} not found`).message;
+    }
+
+    if (!selectedWallet.features["aptos:signIn"]) {
+      throw new WalletNotSupportedMethod(
+        `aptos:signIn is not supported by ${walletName}`
+      ).message;
+    }
+
+    // Check if we are in a redirectable view (i.e on mobile AND not in an in-app browser)
+    // If we are, navigate to the mobile app's browser instead.
+    //
+    // Ignore if wallet is installed (iOS extension)
+    if (isRedirectable()) {
+      if (selectedWallet.readyState === WalletReadyState.Installed) {
+        // If wallet has a openInMobileApp method, use it
+        if (selectedWallet.features["aptos:openInMobileApp"]?.openInMobileApp) {
+          selectedWallet.features["aptos:openInMobileApp"]?.openInMobileApp();
+          return;
+        }
+      }
+
+      if (selectedWallet.readyState === WalletReadyState.NotDetected) {
+        // If wallet has a deeplinkProvider property, i.e wallet is on the internal registry, use it
+        const uninstalledWallet =
+          selectedWallet as unknown as AptosStandardSupportedWallet;
+        if (uninstalledWallet.deeplinkProvider) {
+          const url = encodeURIComponent(window.location.href);
+          const location = uninstalledWallet.deeplinkProvider.concat(url);
+          window.location.href = location;
+          return;
+        }
+      }
+    }
+
+    return this.signInWallet(input, selectedWallet);
+  }
+
+  async signInWallet(
+    input: AptosSignInInput,
+    selectedWallet: AdapterWallet
+  ): Promise<void | AptosSignInOutput> {
+    try {
+      this._connecting = true;
+      this.setWallet(selectedWallet);
+      if (!selectedWallet.features["aptos:signIn"]) {
+        throw new WalletNotSupportedMethod(
+          `aptos:signIn is not supported by ${selectedWallet.name}`
+        ).message;
+      }
+      const response =
+        await selectedWallet.features["aptos:signIn"].signIn(input);
+      if (response.status === UserResponseStatus.REJECTED) {
+        throw new WalletConnectionError("User has rejected the request")
+          .message;
+      }
+      const output = response.args;
+      this.setAccount(output.account);
+      const network = await selectedWallet.features["aptos:network"].network();
+      this.setNetwork(network);
+      await this.setAnsName();
+      setLocalStorage(selectedWallet.name);
+      this._connected = true;
+      this.recordEvent("wallet_connect");
+      this.emit("connect", output.account);
+      return output;
     } catch (error: any) {
       this.clearData();
       const errMsg = generalizedErrorMessage(error);
