@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.0.0
+
+### Major Changes
+
+- ce53a2b: Major upgrade to only support AIP-62 standard compatible wallets
+
 ## 4.25.0
 
 ### Minor Changes
