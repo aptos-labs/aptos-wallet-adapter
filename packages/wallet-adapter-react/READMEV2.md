@@ -1,4 +1,6 @@
-> **_NOTE:_** This documentation is for Wallet Adapter React `v4.0.0` and up that is fully compatible with the Aptos TypeScript SDK V2. For Wallet Adapter React `v^3.*.*` refer to [this guide](./READMEV2.md)
+This README is for the `@aptos-labs/wallet-adapter-react v3.*.*`
+
+> **_NOTE:_** This documentation is for Wallet Adapter `v2.0.0` and up that is fully compatible with the Aptos TypeScript SDK V2. For Wallet Adapter `v^1.*.*` refer to [this guide](./READMEV1.md)
 
 # Wallet Adapter React Provider
 
@@ -8,26 +10,26 @@ Dapps that want to use the adapter should install this package and other support
 
 ### Support
 
-The React provider follows the [wallet standard](https://github.com/aptos-labs/wallet-standard/tree/main) and supports the following required functions
+The react provider supports all [wallet standard](https://aptos.dev/integration/wallet-adapter-for-wallets#aip-62-wallet-standard) functions and feature functions
 
-##### [Standard required functions](https://github.com/aptos-labs/wallet-standard/blob/main/src/detect.ts#L16)
+##### Standard functions
 
 ```
-account
 connect
 disconnect
+connected
+account
 network
-onAccountChange
-onNetworkChange
-signMessage
-signTransaction
-```
-
-##### Additional functions
-
-```
 signAndSubmitTransaction
+signMessage
+```
+
+##### Feature functions - functions that may not be supported by all wallets
+
+```
+signTransaction
 signMessageAndVerify
+signAndSubmitBCSTransaction
 submitTransaction
 ```
 
@@ -40,32 +42,42 @@ To do that, you can look at our [supported wallets list](https://github.com/apto
 
 Next, install the `@aptos-labs/wallet-adapter-react`
 
-```cli
+```
 pnpm i @aptos-labs/wallet-adapter-react
 ```
 
 using npm
 
-```cli
+```
 npm i @aptos-labs/wallet-adapter-react
 ```
 
 #### Import dependencies
 
+On the `App.jsx` file,
+
+Import the installed wallets.
+
+```js
+import { SomeAptosWallet } from "some-aptos-wallet-package";
+```
+
 Import the `AptosWalletAdapterProvider`.
 
-```tsx
+```js
 import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
 ```
 
 Wrap your app with the Provider, pass it the relevant props.
 
-```tsx
-import { Network } from "@aptos-labs/ts-sdk";
+```js
+const wallets = [new AptosLegacyStandardWallet()];
 
 <AptosWalletAdapterProvider
+  plugins={wallets}
   autoConnect={true}
-  dappConfig={{ network: Network.MAINNET, aptosApiKey: "my-generated-api-key" }}
+  optInWallets={["Petra"]}
+  dappConfig={{ network: network.MAINNET, aptosApiKey: "my-generated-api-key" }}
   onError={(error) => {
     console.log("error", error);
   }}
@@ -76,99 +88,66 @@ import { Network } from "@aptos-labs/ts-sdk";
 
 #### Available Provider Props
 
-- `autoConnect` - a prop indicates whether the dapp should auto connect with a previous connected wallet.
 - `dappConfig` - Config used to initialize the dapp with.
   - `network` - the network the dapp works with
   - `aptosApiKey` - an api key generated from https://developers.aptoslabs.com/docs/api-access
 - `onError` - a callback function to fire when the adapter throws an error
+- `plugins` - any legacy standard wallet, i.e a wallet that is not AIP-62 standard compatible, should be installed and passed in this array. [Check here](../../README.md#supported-wallet-packages) for a list of AIP-62 and legacy standard wallets.
+- `autoConnect` - a prop indicates whether the dapp should auto connect with a previous connected wallet.
 - `optInWallets` - the adapter detects and adds AIP-62 standard wallets by default, sometimes you might want to opt-in with specific wallets. This props lets you define the AIP-62 standard wallets you want to support in your dapp.
-
-```tsx
-<AptosWalletAdapterProvider
-  ...
-  optInWallets={["Petra"]}
-  ...
->
-  <App />
-</AptosWalletAdapterProvider>
-```
-
 - `disableTelemetry` - A boolean flag to disable the adapter telemetry tool, false by default
-
-```tsx
-<AptosWalletAdapterProvider
-  ...
-  disableTelemetry={true}
-  ...
->
-  <App />
-</AptosWalletAdapterProvider>
-```
 
 #### Use Wallet
 
 On any page you want to use the wallet props, import `useWallet` from `@aptos-labs/wallet-adapter-react`
 
-```tsx
+```js
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 ```
 
 Then you can use the exported properties
 
-```tsx
+```js
 const {
-  account,
-  changeNetwork,
   connect,
+  account,
+  network,
   connected,
   disconnect,
-  network,
-  signAndSubmitTransaction,
-  signMessage,
-  signMessageAndVerify,
-  signTransaction,
-  submitTransaction,
   wallet,
   wallets,
+  signAndSubmitTransaction,
+  signAndSubmitBCSTransaction,
+  signTransaction,
+  signMessage,
+  signMessageAndVerify,
 } = useWallet();
 ```
 
+### Use a UI package (recommended)
+
+As part of the wallet adapter repo we provide a wallet connect UI package that provides a wallet connect button and a wallet select modal.
+
+The available UI Packages are
+
+- [shadcn/ui](../../apps/nextjs-example/README.md#use-shadcnui-wallet-selector-for-your-own-app)
+- [Ant Design](<(../wallet-adapter-ant-design/)>)
+- [MUI](../wallet-adapter-mui-design/)
+
+If you want to create your own wallet selector UI from existing components and styles in your app, `@aptos-labs/wallet-adapter-react` provides a series of headless components and utilities to simplify this process so that you can focus on writing CSS instead of implementing business logic. For more information, check out the [Building Your Own Wallet Selector](./docs/BYO-wallet-selector.md) document.
+
 #### Examples
 
-##### Account
+##### Initialize Aptos
 
-```tsx
-// The account address as a typed AccountAddress
-<div>{account?.address.toString()}</div>
-// The account public key as a typed PublicKey
-<div>{account?.publicKey.toString()}</div>
-```
-
-##### Network
-
-```tsx
-<div>{network?.name}</div>
-```
-
-##### Wallet
-
-```tsx
-<div>{wallet?.name}</div>
-<div>{wallet?.icon}</div>
-<div>{wallet?.url}</div>
-```
-
-##### Wallets
-
-```tsx
-{
-  wallets.map((wallet) => <p>{wallet.name}</p>);
-}
+```js
+const aptosConfig = new AptosConfig({ network: Network.MAINNET });
+const aptos = new Aptos(aptosConfig);
 ```
 
 ##### connect(walletName)
 
-```tsx
+```js
 const onConnect = async (walletName) => {
   await connect(walletName);
 };
@@ -178,19 +157,20 @@ const onConnect = async (walletName) => {
 
 ##### disconnect()
 
-```tsx
+```js
 <button onClick={disconnect}>Disconnect</button>
 ```
 
 ##### signAndSubmitTransaction(payload)
 
-```tsx
+```js
 const onSignAndSubmitTransaction = async () => {
   const response = await signAndSubmitTransaction({
+    sender: account.address,
     data: {
       function: "0x1::coin::transfer",
-      typeArguments: [APTOS_COIN],
-      functionArguments: [account.address, 1], // 1 is in Octas
+      typeArguments: ["0x1::aptos_coin::AptosCoin"],
+      functionArguments: [account.address, 1],
     },
   });
   // if you want to wait for transaction
@@ -208,9 +188,10 @@ const onSignAndSubmitTransaction = async () => {
 
 ##### signAndSubmitBCSTransaction(payload)
 
-```tsx
+```js
 const onSignAndSubmitBCSTransaction = async () => {
   const response = await signAndSubmitTransaction({
+    sender: account.address,
     data: {
       function: "0x1::coin::transfer",
       typeArguments: [parseTypeTag(APTOS_COIN)],
@@ -232,7 +213,7 @@ const onSignAndSubmitBCSTransaction = async () => {
 
 ##### signMessage(payload)
 
-```tsx
+```js
 const onSignMessage = async () => {
   const payload = {
     message: "Hello from Aptos Wallet Adapter",
@@ -244,45 +225,54 @@ const onSignMessage = async () => {
 <button onClick={onSignMessage}>Sign message</button>;
 ```
 
-##### signTransaction(payload | transaction)
+##### Account
 
-```tsx
+```js
+<div>{account?.address}</div>
+<div>{account?.publicKey}</div>
+```
+
+##### Network
+
+```js
+<div>{network?.name}</div>
+```
+
+##### Wallet
+
+```js
+<div>{wallet?.name}</div>
+<div>{wallet?.icon}</div>
+<div>{wallet?.url}</div>
+```
+
+##### Wallets
+
+```js
+{
+  wallets.map((wallet) => <p>{wallet.name}</p>);
+}
+```
+
+##### signTransaction(payload)
+
+```js
 const onSignTransaction = async () => {
-  const payload: InputTransactionData = {
-    data: {
-      function: "0x1::coin::transfer",
-      typeArguments: [APTOS_COIN],
-      functionArguments: [account?.address.toString(), 1],
-    },
+  const payload = {
+    type: "entry_function_payload",
+    function: "0x1::coin::transfer",
+    type_arguments: ["0x1::aptos_coin::AptosCoin"],
+    arguments: [account?.address, 1], // 1 is in Octas
   };
-  const response = await signTransaction({
-    transactionOrPayload: payload,
-  });
-};
-
-const onSignRawTransaction = async () => {
-  const aptosConfig = new AptosConfig({ network: Network.MAINNET });
-  const aptos = new Aptos(aptosConfig);
-  const transactionToSign = await aptos.transaction.build.simple({
-    sender: account.address,
-    data: {
-      function: "0x1::coin::transfer",
-      typeArguments: [APTOS_COIN],
-      functionArguments: [account.address.toString(), 1],
-    },
-  });
-  const response = await signTransaction({
-    transactionOrPayload: transactionToSign,
-  });
+  const response = await signTransaction(payload);
 };
 
 <button onClick={onSignTransaction}>Sign transaction</button>;
-<button onClick={onSignRawTransaction}>Sign raw transaction</button>;
 ```
 
 ##### signMessageAndVerify(payload)
 
-```tsx
+```js
 const onSignMessageAndVerify = async () => {
   const payload = {
     message: "Hello from Aptos Wallet Adapter",
@@ -293,14 +283,3 @@ const onSignMessageAndVerify = async () => {
 
 <button onClick={onSignMessageAndVerify}>Sign message and verify</button>;
 ```
-
-### Use a UI package (recommended)
-
-As part of the wallet adapter repo we provide a wallet connect UI package that provides a wallet connect button and a wallet select modal.
-
-The available UI Packages are
-
-- [shadcn/ui](../../apps/nextjs-example/README.md#use-shadcnui-wallet-selector-for-your-own-app)
-- [MUI](../wallet-adapter-mui-design/)
-
-If you want to create your own wallet selector UI from existing components and styles in your app, `@aptos-labs/wallet-adapter-react` provides a series of headless components and utilities to simplify this process so that you can focus on writing CSS instead of implementing business logic. For more information, check out the [Building Your Own Wallet Selector](./docs/BYO-wallet-selector.md) document.
