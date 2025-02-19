@@ -46,10 +46,19 @@ export function WalletSelector({
     }
   }, [isModalOpen]);
 
-  const { account, connected, disconnect, wallets = [] } = useWallet();
+  const {
+    account,
+    connected,
+    disconnect,
+    wallets = [],
+    notDetectedWallets = [],
+  } = useWallet();
 
   const { aptosConnectWallets, availableWallets, installableWallets } =
-    groupAndSortWallets(wallets, walletSortingOptions);
+    groupAndSortWallets(
+      [...wallets, ...notDetectedWallets],
+      walletSortingOptions
+    );
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
 
