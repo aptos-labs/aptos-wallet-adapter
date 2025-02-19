@@ -24,10 +24,10 @@ export interface WalletContextState {
   account: AccountInfo | null;
   network: NetworkInfo | null;
   connect(walletName: string): void;
-  signIn(
-    walletName: string,
-    input: AptosSignInInput
-  ): Promise<AptosSignInOutput | void>;
+  signIn(args: {
+    walletName: string;
+    input: AptosSignInInput;
+  }): Promise<AptosSignInOutput | void>;
   signAndSubmitTransaction(
     transaction: InputTransactionData
   ): Promise<AptosSignAndSubmitTransactionOutput>;

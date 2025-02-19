@@ -100,13 +100,13 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     }
   };
 
-  const signIn = async (
-    walletName: string,
-    input: AptosSignInInput
-  ): Promise<void | AptosSignInOutput> => {
+  const signIn = async (args: {
+    walletName: string;
+    input: AptosSignInInput;
+  }): Promise<void | AptosSignInOutput> => {
     try {
       setIsLoading(true);
-      return await walletCore?.signIn(input, walletName);
+      return await walletCore?.signIn(args);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
