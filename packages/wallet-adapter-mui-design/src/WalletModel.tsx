@@ -1,6 +1,7 @@
 import {
   AboutAptosConnect,
   AboutAptosConnectEducationScreen,
+  AdapterNotDetectedWallet,
   AdapterWallet,
   AptosPrivacyPolicy,
   WalletItem,
@@ -253,7 +254,7 @@ export default function WalletsModal({
 }
 
 interface WalletRowProps {
-  wallet: AdapterWallet;
+  wallet: AdapterWallet | AdapterNotDetectedWallet;
   onConnect?: () => void;
 }
 
