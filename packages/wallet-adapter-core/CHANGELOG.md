@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.0.2
+
+### Patch Changes
+
+- 62d860d: Update @aptos-connect/wallet-adapter-plugin to 2.4.1
+
 ## 5.0.1
 
 ### Patch Changes
