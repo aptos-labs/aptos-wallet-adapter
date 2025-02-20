@@ -69,6 +69,30 @@ export function SingleSigner() {
     }
   };
 
+  const onSignAndSubmitScriptTransaction = async () => {
+    if (!account) return;
+    const transaction: InputTransactionData = {
+      data: {
+        bytecode:
+          "0xa11ceb0b0700000a06010002030206050806070e2508334010731f010200030001000103060c050300083c53454c463e5f30046d61696e0d6170746f735f6163636f756e74087472616e73666572ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000000000000000000114636f6d70696c6174696f6e5f6d65746164617461090003322e3003322e31000001050b000b010b02110002",
+        typeArguments: [],
+        functionArguments: [account.address, new U64(1)], // 1 is in Octas
+      },
+    };
+    try {
+      const response = await signAndSubmitTransaction(transaction);
+      await aptosClient(network).waitForTransaction({
+        transactionHash: response.hash,
+      });
+      toast({
+        title: "Success",
+        description: <TransactionHash hash={response.hash} network={network} />,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const onSignAndSubmitBCSTransaction = async () => {
     if (!account) return;
 
@@ -119,7 +143,7 @@ export function SingleSigner() {
 
     try {
       const transactionToSign = await aptosClient(
-        network
+        network,
       ).transaction.build.simple({
         sender: account.address,
         data: {
@@ -148,6 +172,9 @@ export function SingleSigner() {
       <CardContent className="flex flex-wrap gap-4">
         <Button onClick={onSignAndSubmitTransaction} disabled={!sendable}>
           Sign and submit transaction
+        </Button>
+        <Button onClick={onSignAndSubmitScriptTransaction} disabled={!sendable}>
+          Sign and submit script transaction
         </Button>
         <Button onClick={onSignAndSubmitBCSTransaction} disabled={!sendable}>
           Sign and submit BCS transaction
