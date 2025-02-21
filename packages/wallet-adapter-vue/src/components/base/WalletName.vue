@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { AnyAptosWallet } from "@aptos-labs/wallet-adapter-core";
+import { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
 interface WalletItemProps {
-  name: AnyAptosWallet["name"];
+  name: AdapterWallet["name"];
 }
 defineProps<WalletItemProps>();
 </script>

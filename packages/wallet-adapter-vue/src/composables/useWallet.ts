@@ -1,24 +1,20 @@
 import {
   AccountAuthenticator,
   AccountInfo,
+  AdapterWallet,
   AnyRawTransaction,
-  AptosChangeNetworkOutput,
-  AptosStandardSupportedWallet,
-  AvailableWallets,
-  InputGenerateTransactionOptions,
-  InputSubmitTransactionData,
   InputTransactionData,
-  Network,
   NetworkInfo,
+  AptosSignMessageInput,
+  AptosSignMessageOutput,
+  AdapterNotDetectedWallet,
+  Network,
+  AptosChangeNetworkOutput,
   PendingTransactionResponse,
-  SignMessagePayload,
-  SignMessageResponse,
-  Types,
-  Wallet,
+  InputSubmitTransactionData,
+  AvailableWallets,
   WalletCore,
   WalletCoreEvents,
-  WalletInfo,
-  WalletName,
 } from "@aptos-labs/wallet-adapter-core";
 import {
   ref,
@@ -36,27 +32,30 @@ export interface WalletContextState {
   isLoading: ComputedRef<boolean>;
   account: ComputedRef<AccountInfo | null>;
   network: ComputedRef<NetworkInfo | null>;
-  wallet: ComputedRef<WalletInfo | null>;
-  wallets?: Ref<ReadonlyArray<Wallet | AptosStandardSupportedWallet>>;
+  wallet: ComputedRef<AdapterWallet | null>;
+  wallets?: Ref<ReadonlyArray<AdapterWallet>>;
+  notDetectedWallets?: Ref<ReadonlyArray<AdapterNotDetectedWallet>>;
   autoConnect: Ref<boolean>;
-  connect(walletName: WalletName): void;
+  connect(walletName: string): void;
   disconnect(): void;
   signAndSubmitTransaction(transaction: InputTransactionData): Promise<any>;
   signTransaction(
-    transactionOrPayload: AnyRawTransaction | Types.TransactionPayload,
-    asFeePayer?: boolean,
-    options?: InputGenerateTransactionOptions,
-  ): Promise<AccountAuthenticator>;
+    transactionOrPayload: AnyRawTransaction | InputTransactionData,
+    asFeePayer?: boolean
+  ): Promise<{
+    authenticator: AccountAuthenticator;
+    rawTransaction: Uint8Array;
+  }>;
   submitTransaction(
-    transaction: InputSubmitTransactionData,
+    transaction: InputSubmitTransactionData
   ): Promise<PendingTransactionResponse>;
-  signMessage(message: SignMessagePayload): Promise<SignMessageResponse>;
-  signMessageAndVerify(message: SignMessagePayload): Promise<boolean>;
+  signMessage(message: AptosSignMessageInput): Promise<AptosSignMessageOutput>;
+  signMessageAndVerify(message: AptosSignMessageInput): Promise<boolean>;
   changeNetwork(network: Network): Promise<AptosChangeNetworkOutput>;
 }
 
 export interface AptosWalletProviderProps {
-  plugins?: ReadonlyArray<Wallet>;
+  disableTelemetry?: boolean;
   optInWallets?: ReadonlyArray<AvailableWallets>;
   dappConfig?: { network: Network };
   onError?: (error: any) => void;
@@ -68,7 +67,7 @@ const initialState: {
   account: AccountInfo | null;
   network: NetworkInfo | null;
   connected: boolean;
-  wallet: WalletInfo | null;
+  wallet: AdapterWallet | null;
 } = {
   account: null,
   network: null,
@@ -78,20 +77,21 @@ const initialState: {
 
 const walletCore = ref<WalletCore>();
 const state = ref(initialState);
-const wallets = ref<(Wallet | AptosStandardSupportedWallet)[]>([]);
+const wallets = ref<AdapterWallet[]>([]);
+const notDetectedWallets = ref<AdapterNotDetectedWallet[]>([]);
 const autoConnect = ref(false);
 const isConnecting = ref(false);
 
 function getWalletCoreInstance(
-  plugins: readonly Wallet[] | undefined,
   optInWallets: readonly AvailableWallets[] | undefined,
   dappConfig: { network: Network } | undefined,
+  disableTelemetry: boolean | undefined
 ) {
   if (!walletCore.value) {
     walletCore.value = new WalletCore(
-      plugins && Array.isArray(plugins) ? plugins : [],
       optInWallets ?? [],
       dappConfig,
+      disableTelemetry
     );
     Object.assign(wallets.value, walletCore.value.wallets);
   }
@@ -105,17 +105,17 @@ function getWalletCoreInstance(
  * @return {WalletContextState}
  */
 export function useWallet(
-  props?: AptosWalletProviderProps,
+  props?: AptosWalletProviderProps
 ): WalletContextState {
-  const { plugins, optInWallets, dappConfig, onError } = props ?? {};
+  const { disableTelemetry, optInWallets, dappConfig, onError } = props ?? {};
 
   const walletCoreInstance = getWalletCoreInstance(
-    plugins,
     optInWallets,
     dappConfig,
+    disableTelemetry
   );
 
-  const connect = async (walletName: WalletName) => {
+  const connect = async (walletName: string) => {
     try {
       isConnecting.value = true;
       await walletCoreInstance.connect(walletName);
@@ -137,16 +137,17 @@ export function useWallet(
   };
 
   const signTransaction = async (
-    transaction: AnyRawTransaction | Types.TransactionPayload,
-    asFeePayer?: boolean,
-    options?: InputGenerateTransactionOptions,
-  ): Promise<AccountAuthenticator> => {
+    transaction: AnyRawTransaction | InputTransactionData,
+    asFeePayer?: boolean
+  ): Promise<{
+    authenticator: AccountAuthenticator;
+    rawTransaction: Uint8Array;
+  }> => {
     try {
-      return await walletCoreInstance.signTransaction(
-        transaction,
+      return await walletCoreInstance.signTransaction({
+        transactionOrPayload: transaction,
         asFeePayer,
-        options,
-      );
+      });
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
@@ -154,8 +155,8 @@ export function useWallet(
   };
 
   const signMessage = async (
-    message: SignMessagePayload,
-  ): Promise<SignMessageResponse> => {
+    message: AptosSignMessageInput
+  ): Promise<AptosSignMessageOutput> => {
     try {
       return await walletCoreInstance.signMessage(message);
     } catch (error: any) {
@@ -165,7 +166,7 @@ export function useWallet(
   };
 
   const signMessageAndVerify = async (
-    message: SignMessagePayload,
+    message: AptosSignMessageInput
   ): Promise<boolean> => {
     try {
       return await walletCoreInstance.signMessageAndVerify(message);
@@ -176,7 +177,7 @@ export function useWallet(
   };
 
   const submitTransaction = async (
-    transaction: InputSubmitTransactionData,
+    transaction: InputSubmitTransactionData
   ): Promise<PendingTransactionResponse> => {
     try {
       return await walletCoreInstance.submitTransaction(transaction);
@@ -187,7 +188,7 @@ export function useWallet(
   };
 
   const signAndSubmitTransaction = async (
-    transaction: InputTransactionData,
+    transaction: InputTransactionData
   ) => {
     try {
       return await walletCoreInstance.signAndSubmitTransaction(transaction);
@@ -206,10 +207,10 @@ export function useWallet(
     }
   };
 
-  const handleReadyStateChange = (updatedWallet: MaybeRef<Wallet>) => {
+  const handleReadyStateChange = (updatedWallet: MaybeRef<AdapterWallet>) => {
     const _updatedWallet = unref(updatedWallet);
     const wallet = wallets.value.find(
-      (wallet) => wallet.name === _updatedWallet.name,
+      (wallet) => wallet.name === _updatedWallet.name
     );
     if (wallet) {
       wallet.readyState = _updatedWallet.readyState;
@@ -217,18 +218,34 @@ export function useWallet(
   };
 
   const handleStandardWalletsAdded = (
-    standardWallet: MaybeRef<Wallet | AptosStandardSupportedWallet>,
+    standardWallet: MaybeRef<AdapterWallet>
   ) => {
     const _standardWallet = unref(standardWallet);
 
     const existingWallet = wallets.value.find(
-      (wallet) => wallet.name == _standardWallet.name,
+      (wallet) => wallet.name == _standardWallet.name
     );
 
     if (existingWallet) {
       Object.assign(existingWallet, _standardWallet);
     } else {
       wallets.value.push(_standardWallet);
+    }
+  };
+
+  const handleStandardNotDetectedWalletsAdded = (
+    notDetectedWallet: MaybeRef<AdapterNotDetectedWallet>
+  ): void => {
+    const _notDetectedWallet = unref(notDetectedWallet);
+    // Manage current wallet state by removing optional duplications
+    // as new wallets are coming
+    const existingWallet = wallets.value.find(
+      (wallet) => wallet.name == _notDetectedWallet.name
+    );
+    if (existingWallet) {
+      Object.assign(existingWallet, _notDetectedWallet);
+    } else {
+      notDetectedWallets.value.push(_notDetectedWallet);
     }
   };
 
@@ -296,8 +313,8 @@ export function useWallet(
     disconnect: handleDisconnect,
     accountChange: handleAccountChange,
     networkChange: handleNetworkChange,
-    readyStateChange: handleReadyStateChange,
     standardWalletsAdded: handleStandardWalletsAdded,
+    standardNotDetectedWalletAdded: handleStandardNotDetectedWalletsAdded,
   };
 
   onBeforeUnmount(() => {
@@ -305,7 +322,7 @@ export function useWallet(
       Object.keys(eventHandlers).forEach((event) => {
         walletCoreInstance.off(
           event as keyof WalletCoreEvents,
-          eventHandlers[event as keyof WalletCoreEvents],
+          eventHandlers[event as keyof WalletCoreEvents]
         );
       });
     }
@@ -321,14 +338,14 @@ export function useWallet(
         Object.keys(eventHandlers).forEach((event) => {
           walletCoreInstance.on(
             event as keyof WalletCoreEvents,
-            eventHandlers[event as keyof WalletCoreEvents],
+            eventHandlers[event as keyof WalletCoreEvents]
           );
         });
       }
     },
     {
       immediate: true,
-    },
+    }
   );
 
   watch(
@@ -336,7 +353,7 @@ export function useWallet(
     async (newAutoConnect) => {
       if (newAutoConnect) {
         if (localStorage.getItem(LOCAL_STORAGE_KEY) && !state.value.connected) {
-          await connect(localStorage.getItem(LOCAL_STORAGE_KEY) as WalletName);
+          await connect(localStorage.getItem(LOCAL_STORAGE_KEY) as string);
         } else {
           isConnecting.value = false;
         }
@@ -344,7 +361,7 @@ export function useWallet(
     },
     {
       immediate: true,
-    },
+    }
   );
 
   watch(
@@ -357,7 +374,7 @@ export function useWallet(
     },
     {
       immediate: true,
-    },
+    }
   );
 
   return {

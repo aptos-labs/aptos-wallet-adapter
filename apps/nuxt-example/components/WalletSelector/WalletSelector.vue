@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
+  AdapterWallet,
   APTOS_CONNECT_ACCOUNT_URL,
-  AnyAptosWallet,
   isAptosConnectWallet,
   truncateAddress,
 } from "@aptos-labs/wallet-adapter-vue";
@@ -28,9 +28,9 @@ function closeDialog() {
 }
 
 async function copyAddress() {
-  if (!account?.address) return;
+  if (!account?.value?.address) return;
   try {
-    await navigator.clipboard.writeText(account.address);
+    await navigator.clipboard.writeText(account.value.address.toString());
     toast({
       title: "Success",
       description: "Copied wallet address to clipboard.",
@@ -44,7 +44,7 @@ async function copyAddress() {
   }
 }
 
-async function connectWallet(wallet: AnyAptosWallet) {
+async function connectWallet(wallet: AdapterWallet) {
   await connect(wallet.name);
 }
 </script>
@@ -55,7 +55,9 @@ async function connectWallet(wallet: AnyAptosWallet) {
       <DropdownMenuTrigger as-child>
         <Button>
           {{
-            account?.ansName || truncateAddress(account?.address) || "Unknown"
+            account?.ansName ||
+            truncateAddress(account?.address?.toString() || "") ||
+            "Unknown"
           }}
         </Button>
       </DropdownMenuTrigger>

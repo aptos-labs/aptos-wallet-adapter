@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
-  AnyAptosWallet,
+  AdapterWallet,
+  AdapterNotDetectedWallet,
   WalletItem,
   WalletInstallLink,
   isInstallRequired as _isInstallRequired,
@@ -8,7 +9,7 @@ import {
 import { computed, toRefs } from "vue";
 
 interface Props {
-  wallet: AnyAptosWallet;
+  wallet: AdapterWallet | AdapterNotDetectedWallet;
 }
 
 const props = defineProps<Props>();

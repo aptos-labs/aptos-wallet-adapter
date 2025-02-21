@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, toRefs } from "vue";
 import {
-  AnyAptosWallet,
+  AdapterWallet,
   WalletReadyState,
   isRedirectable,
   isInstallRequired,
+  AdapterNotDetectedWallet,
 } from "@aptos-labs/wallet-adapter-core";
 import WalletIcon from "./base/WalletIcon.vue";
 import WalletName from "./base/WalletName.vue";
@@ -12,7 +13,7 @@ import WalletConnectButton from "./base/WalletConnectButton.vue";
 import WalletInstallLink from "./base/WalletInstallLink.vue";
 
 interface WalletItemProps {
-  wallet: AnyAptosWallet;
+  wallet: AdapterWallet | AdapterNotDetectedWallet;
 }
 
 const props = defineProps<WalletItemProps>();
@@ -21,10 +22,7 @@ const emit = defineEmits(["connect"]);
 const { wallet } = toRefs(props);
 
 const isWalletReady = computed(() => {
-  return (
-    wallet.value.readyState === WalletReadyState.Installed ||
-    wallet.value.readyState === WalletReadyState.Loadable
-  );
+  return wallet.value.readyState === WalletReadyState.Installed;
 });
 
 const mobileSupport = computed(() => {
@@ -33,9 +31,7 @@ const mobileSupport = computed(() => {
 
 const isReady = computed(() => {
   return Boolean(
-    isWalletReady.value ||
-      (isRedirectable() && mobileSupport.value) ||
-      isInstallRequired(wallet.value),
+    isWalletReady.value || (isRedirectable() && mobileSupport.value)
   );
 });
 </script>
