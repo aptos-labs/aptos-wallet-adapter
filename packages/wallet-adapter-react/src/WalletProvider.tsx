@@ -16,16 +16,19 @@ import {
   Network,
   InputSubmitTransactionData,
   PendingTransactionResponse,
+  WalletReadyState,
   AptosSignInInput,
   AptosSignInOutput,
 } from "@aptos-labs/wallet-adapter-core";
-import { ReactNode, FC, useState, useEffect, useCallback } from "react";
+import { ReactNode, FC, useState, useEffect, useCallback, useRef } from "react";
 import { WalletContext } from "./useWallet";
 
 export interface AptosWalletProviderProps {
   children: ReactNode;
   optInWallets?: ReadonlyArray<AvailableWallets>;
-  autoConnect?: boolean;
+  autoConnect?:
+    | boolean
+    | ((core: WalletCore, adapter: AdapterWallet) => Promise<boolean>);
   dappConfig?: DappConfig;
   disableTelemetry?: boolean;
   onError?: (error: any) => void;
@@ -51,6 +54,8 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   disableTelemetry = false,
   onError,
 }: AptosWalletProviderProps) => {
+  const didAttemptAutoConnectRef = useRef(false);
+
   const [{ account, network, connected, wallet }, setState] =
     useState(initialState);
 
@@ -78,13 +83,62 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   }, [walletCore]);
 
   useEffect(() => {
-    if (autoConnect) {
-      if (localStorage.getItem("AptosWalletName") && !connected) {
-        connect(localStorage.getItem("AptosWalletName") as string);
-      } else {
-        // if we dont use autoconnect set the connect is loading to false
-        setIsLoading(false);
-      }
+    // Only attempt to auto connect once per render and only if there are wallets
+    if (didAttemptAutoConnectRef.current || !walletCore?.wallets.length) {
+      return;
+    }
+    didAttemptAutoConnectRef.current = true;
+
+    // If auto connect is not set or is false, ignore the attempt
+    if (!autoConnect) {
+      setIsLoading(false);
+      return;
+    }
+
+    // Make sure the user has a previously connected wallet
+    const walletName = localStorage.getItem("AptosWalletName");
+    if (!walletName) {
+      setIsLoading(false);
+      return;
+    }
+
+    // Make sure the wallet is installed
+    const selectedWallet = walletCore.wallets.find(
+      (e) => e.name === walletName
+    ) as AdapterWallet | undefined;
+    if (
+      !selectedWallet ||
+      selectedWallet.readyState !== WalletReadyState.Installed
+    ) {
+      setIsLoading(false);
+      return;
+    }
+
+    if (!connected) {
+      (async () => {
+        try {
+          let shouldConnect = true;
+
+          // Providing a function to autoConnect allows the dapp to determine
+          // whether to attempt to connect to the wallet using the `signIn`
+          // or `connect` method. If `signIn` is successful, the user can
+          // return `false` and skip the `connect` method.
+          if (typeof autoConnect === "function") {
+            shouldConnect = await autoConnect(walletCore, selectedWallet);
+          } else {
+            shouldConnect = autoConnect;
+          }
+
+          if (shouldConnect) connect(walletName);
+        } catch (error) {
+          if (onError) onError(error);
+          return Promise.reject(error);
+        } finally {
+          setIsLoading(false);
+        }
+      })();
+    } else {
+      setIsLoading(false);
     }
   }, [autoConnect, wallets]);
 
