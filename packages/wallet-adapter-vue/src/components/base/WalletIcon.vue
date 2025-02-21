@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { AnyAptosWallet } from "@aptos-labs/wallet-adapter-core";
+import { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
 
 interface WalletIconProps {
-  icon: AnyAptosWallet["icon"] | undefined;
-  name: AnyAptosWallet["name"] | undefined;
+  icon: AdapterWallet["icon"] | undefined;
+  name: AdapterWallet["name"] | undefined;
 }
 
 defineProps<WalletIconProps>();

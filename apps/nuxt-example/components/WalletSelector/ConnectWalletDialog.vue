@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Ref, toRefs, watch, unref } from "vue";
 import {
-  AnyAptosWallet,
+  AdapterWallet,
+  AdapterNotDetectedWallet,
   getAptosConnectWallets,
   partitionWallets,
   AptosPrivacyPolicy,
@@ -15,23 +16,23 @@ import {
 } from "radix-vue";
 
 interface Props {
-  wallets: Ref<AnyAptosWallet[]>;
+  wallets: Ref<AdapterWallet[] | AdapterNotDetectedWallet[]>;
 }
 
 const props = defineProps<Props>();
 const { wallets } = toRefs(props);
 const emit = defineEmits(["close", "connect"]);
 const walletsForConnect = ref({
-  aptosConnectWallets: [] as AnyAptosWallet[],
-  defaultWallets: [] as AnyAptosWallet[],
-  moreWallets: [] as AnyAptosWallet[],
+  aptosConnectWallets: [] as AdapterWallet[],
+  defaultWallets: [] as AdapterWallet[],
+  moreWallets: [] as AdapterNotDetectedWallet[],
 });
 
 watch(
   wallets,
   () => {
     const { aptosConnectWallets, otherWallets } = getAptosConnectWallets(
-      wallets.value,
+      wallets.value
     );
 
     const { defaultWallets, moreWallets } = partitionWallets(otherWallets);
@@ -45,7 +46,7 @@ watch(
   {
     immediate: true,
     deep: true,
-  },
+  }
 );
 
 function close() {
