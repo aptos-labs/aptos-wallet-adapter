@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-react
 
+## 4.1.0
+
+### Minor Changes
+
+- f11ea12: Add support for aptos:signIn feature
+
+### Patch Changes
+
+- e0107ac: Add support for async functions in `WalletProvider`'s `autoConnect` prop
+- Updated dependencies [f11ea12]
+  - @aptos-labs/wallet-adapter-core@5.1.0
+
 ## 4.0.2
 
 ### Patch Changes
