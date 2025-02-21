@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.1.0
+
+### Minor Changes
+
+- f11ea12: Add support for aptos:signIn feature
+
 ## 5.0.2
 
 ### Patch Changes
