@@ -14,6 +14,8 @@ import {
   AptosChangeNetworkOutput,
   PendingTransactionResponse,
   InputSubmitTransactionData,
+  AptosSignInInput,
+  AptosSignInOutput,
 } from "@aptos-labs/wallet-adapter-core";
 
 export interface WalletContextState {
@@ -22,6 +24,10 @@ export interface WalletContextState {
   account: AccountInfo | null;
   network: NetworkInfo | null;
   connect(walletName: string): void;
+  signIn(args: {
+    walletName: string;
+    input: AptosSignInInput;
+  }): Promise<AptosSignInOutput | void>;
   signAndSubmitTransaction(
     transaction: InputTransactionData
   ): Promise<AptosSignAndSubmitTransactionOutput>;

@@ -29,6 +29,8 @@ import {
   AptosSignMessageInput,
   AptosSignMessageOutput,
   AptosChangeNetworkOutput,
+  AptosSignInInput,
+  AptosSignInOutput,
 } from "@aptos-labs/wallet-standard";
 import { AptosConnectWalletConfig } from "@aptos-connect/wallet-adapter-plugin";
 
@@ -67,6 +69,8 @@ import {
   WalletSignMessageAndVerifyError,
   WalletDisconnectionError,
   WalletSubmitTransactionError,
+  WalletNotSupportedMethod,
+  WalletNotFoundError,
 } from "./error";
 import { ChainIdToAnsSupportedNetworkMap, WalletReadyState } from "./constants";
 import { WALLET_ADAPTER_CORE_VERSION } from "./version";
@@ -524,8 +528,66 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       }
     }
 
-    // Now we can connect to the wallet
-    await this.connectWallet(selectedWallet);
+    // If true, the wallet was redirected to the mobile app's browser.
+    if (this.redirectIfRedirectable(selectedWallet)) return;
+
+    await this.connectWallet(selectedWallet, async () => {
+      const response = await selectedWallet.features["aptos:connect"].connect();
+      if (response.status === UserResponseStatus.REJECTED) {
+        throw new WalletConnectionError("User has rejected the request")
+          .message;
+      }
+
+      return { account: response.args, output: undefined };
+    });
+  }
+
+  /**
+   * Signs into the wallet by connecting and signing an authentication messages.
+   *
+   * For more information, visit: https://siwa.aptos.dev
+   *
+   * @param args
+   * @param args.input The AptosSignInInput which defines how the SIWA Message should be constructed
+   * @param args.walletName The name of the wallet to sign into
+   * @returns The AptosSignInOutput which contains the account and signature information
+   */
+  async signIn(args: {
+    input: AptosSignInInput;
+    walletName: string;
+  }): Promise<AptosSignInOutput> {
+    const { input, walletName } = args;
+
+    const allDetectedWallets = this._standard_wallets;
+    const selectedWallet = allDetectedWallets.find(
+      (wallet: AdapterWallet) => wallet.name === walletName
+    );
+
+    if (!selectedWallet) {
+      throw new WalletNotFoundError(`Wallet ${walletName} not found`);
+    }
+
+    if (!selectedWallet.features["aptos:signIn"]) {
+      throw new WalletNotSupportedMethod(
+        `aptos:signIn is not supported by ${walletName}`
+      );
+    }
+
+    return await this.connectWallet(selectedWallet, async () => {
+      if (!selectedWallet.features["aptos:signIn"]) {
+        throw new WalletNotSupportedMethod(
+          `aptos:signIn is not supported by ${selectedWallet.name}`
+        );
+      }
+
+      const response =
+        await selectedWallet.features["aptos:signIn"].signIn(input);
+      if (response.status === UserResponseStatus.REJECTED) {
+        throw new WalletConnectionError("User has rejected the request");
+      }
+
+      return { account: response.args.account, output: response.args };
+    });
   }
 
   /**
@@ -537,16 +599,14 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @emit emits "connect" event
    * @throws WalletConnectionError
    */
-  async connectWallet(selectedWallet: AdapterWallet): Promise<void> {
+  private async connectWallet<T>(
+    selectedWallet: AdapterWallet,
+    onConnect: () => Promise<{ account: AccountInfo; output: T }>
+  ): Promise<T> {
     try {
       this._connecting = true;
       this.setWallet(selectedWallet);
-      const response = await selectedWallet.features["aptos:connect"].connect();
-      if (response.status === UserResponseStatus.REJECTED) {
-        throw new WalletConnectionError("User has rejected the request")
-          .message;
-      }
-      const account = response.args;
+      const { account, output } = await onConnect();
       this.setAccount(account);
       const network = await selectedWallet.features["aptos:network"].network();
       this.setNetwork(network);
@@ -555,6 +615,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this._connected = true;
       this.recordEvent("wallet_connect");
       this.emit("connect", account);
+      return output;
     } catch (error: any) {
       this.clearData();
       const errMsg = generalizedErrorMessage(error);
@@ -562,6 +623,39 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     } finally {
       this._connecting = false;
     }
+  }
+
+  /**
+   * If the wallet is in a Mobile browser, it should be redirected to the Mobile wallet's browser.
+   * 1. Check if we are in a redirectable view (i.e on mobile AND not in an in-app browser)
+   * 2. Ignore if wallet is installed (iOS extension)
+   *
+   * @returns boolean true if the wallet was redirected, false otherwise.
+   */
+  private redirectIfRedirectable(selectedWallet: AdapterWallet): boolean {
+    if (isRedirectable()) {
+      if (selectedWallet.readyState === WalletReadyState.Installed) {
+        // If wallet has a openInMobileApp method, use it
+        if (selectedWallet.features["aptos:openInMobileApp"]?.openInMobileApp) {
+          selectedWallet.features["aptos:openInMobileApp"]?.openInMobileApp();
+          return true;
+        }
+      }
+
+      if (selectedWallet.readyState === WalletReadyState.NotDetected) {
+        // If wallet has a deeplinkProvider property, i.e wallet is on the internal registry, use it
+        const uninstalledWallet =
+          selectedWallet as unknown as AptosStandardSupportedWallet;
+        if (uninstalledWallet.deeplinkProvider) {
+          const url = encodeURIComponent(window.location.href);
+          const location = uninstalledWallet.deeplinkProvider.concat(url);
+          window.location.href = location;
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   /**

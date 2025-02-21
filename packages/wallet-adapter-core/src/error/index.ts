@@ -109,3 +109,7 @@ export class WalletChangeNetworkError extends WalletError {
 export class WalletSubmitTransactionError extends WalletError {
   name = "WalletSubmitTransactionError";
 }
+
+export class WalletNotFoundError extends WalletError {
+  name = "WalletNotFoundError";
+}

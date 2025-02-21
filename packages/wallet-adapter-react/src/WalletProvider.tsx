@@ -16,6 +16,8 @@ import {
   Network,
   InputSubmitTransactionData,
   PendingTransactionResponse,
+  AptosSignInInput,
+  AptosSignInOutput,
 } from "@aptos-labs/wallet-adapter-core";
 import { ReactNode, FC, useState, useEffect, useCallback } from "react";
 import { WalletContext } from "./useWallet";
@@ -90,6 +92,21 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     try {
       setIsLoading(true);
       await walletCore?.connect(walletName);
+    } catch (error: any) {
+      if (onError) onError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const signIn = async (args: {
+    walletName: string;
+    input: AptosSignInInput;
+  }): Promise<void | AptosSignInOutput> => {
+    try {
+      setIsLoading(true);
+      return await walletCore?.signIn(args);
     } catch (error: any) {
       if (onError) onError(error);
       return Promise.reject(error);
@@ -325,6 +342,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     <WalletContext.Provider
       value={{
         connect,
+        signIn,
         disconnect,
         signAndSubmitTransaction,
         signTransaction,
