@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 4.1.0
+
+### Minor Changes
+
+- 225167e: Fix vue adapter to work with latest core version
+
 ## 4.0.3
 
 ### Patch Changes

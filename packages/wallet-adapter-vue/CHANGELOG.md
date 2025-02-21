@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-vue
 
+## 0.4.0
+
+### Minor Changes
+
+- 225167e: Fix vue adapter to work with latest core version
+
 ## 0.3.13
 
 ### Patch Changes

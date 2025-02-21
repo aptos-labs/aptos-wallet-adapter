@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-vue",
-  "version": "0.3.13",
+  "version": "0.4.0",
   "description": "Aptos Wallet Adapter Vue Provider",
   "license": "Apache-2.0",
   "type": "module",
