@@ -100,13 +100,11 @@ export async function signAndSendTransaction(
     }
   });
 
-  //const context = await getWormholeContextV2();
   const aptosConfig = new AptosConfig({
     network: AptosNetwork.TESTNET,
   });
   const aptos = new Aptos(aptosConfig);
-  //const aptos = context.getPlatform('Aptos');
-  //const rpc = (await aptos.getRpc('Aptos')) as Aptos;
+
   console.log("payload", payload);
   const tx = await wallet.signAndSubmitTransaction({
     data: payload,

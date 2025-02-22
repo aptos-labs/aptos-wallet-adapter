@@ -1,14 +1,14 @@
 import { Copy, LogOut } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { Button } from "../../ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "../../ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { useToast } from "./ui/use-toast";
+} from "../../ui/dropdown-menu";
+import { useToast } from "../../ui/use-toast";
 import {
   getSolanaStandardWallets,
   SolanaWallet,
@@ -19,10 +19,8 @@ import { SolanaWalletItem } from "./SolanaWalletItem";
 import { truncateAddress } from "@aptos-labs/wallet-adapter-react";
 
 export function SolanaWalletSelector({
-  setSourceWalletAddress,
   setSourceWallet,
 }: {
-  setSourceWalletAddress: (address: string | null) => void;
   setSourceWallet: (wallet: SolanaWallet | null) => void;
 }) {
   const [connected, setConnected] = useState(false);
@@ -39,7 +37,6 @@ export function SolanaWalletSelector({
   const onDisconnect = useCallback(async () => {
     await wallet?.disconnect();
     setConnected(false);
-    setSourceWalletAddress(null);
     setSourceWallet(null);
     setAccountAddress(undefined);
     setWallet(undefined);
@@ -86,7 +83,6 @@ export function SolanaWalletSelector({
         setAccountAddress={setAccountAddress}
         setConnected={setConnected}
         setWallet={setWallet}
-        setSourceWalletAddress={setSourceWalletAddress}
         setSourceWallet={setSourceWallet}
       />
     </Dialog>
@@ -98,7 +94,6 @@ interface ConnectWalletDialogProps {
   setAccountAddress: (address: string | undefined) => void;
   setConnected: (connected: boolean) => void;
   setWallet: (wallet: SolanaWallet | undefined) => void;
-  setSourceWalletAddress: (address: string | null) => void;
   setSourceWallet: (wallet: SolanaWallet | null) => void;
 }
 
@@ -107,7 +102,6 @@ function ConnectWalletDialog({
   setAccountAddress,
   setConnected,
   setWallet,
-  setSourceWalletAddress,
   setSourceWallet,
 }: ConnectWalletDialogProps) {
   const [wallets, setSolanaWallets] = useState<SolanaWallet[]>([]);
@@ -134,7 +128,6 @@ function ConnectWalletDialog({
       setAccountAddress(wallet.getAddress());
       setConnected(true);
       setWallet(wallet);
-      setSourceWalletAddress(wallet.getAddress() || null);
       setSourceWallet(wallet);
       close();
     },

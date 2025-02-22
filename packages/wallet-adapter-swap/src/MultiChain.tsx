@@ -1,6 +1,6 @@
 import "./global.css";
 import { Card, CardContent } from "./ui/card";
-import { WalletSelector } from "./WalletSelector";
+import { WalletSelector } from "./walletSelector/aptos/WalletSelector";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import {
@@ -17,34 +17,22 @@ import {
   PlatformContext,
   amount as amountUtils,
 } from "@wormhole-foundation/sdk";
-import { chainToIcon } from "@wormhole-foundation/sdk-icons";
 import aptos from "@wormhole-foundation/sdk/aptos";
 import solana from "@wormhole-foundation/sdk/solana";
 import evm from "@wormhole-foundation/sdk/evm";
 
-import { SolanaWalletSelector } from "./SolanaWalletSelector";
-import { SolanaWallet } from "@xlabs-libs/wallet-aggregator-solana";
-import { AptosWallet } from "@xlabs-libs/wallet-aggregator-aptos";
-import {
-  AptosMainnetUSDCToken,
-  AptosTestnetUSDCToken,
-  mainnetChainTokens,
-  testnetChainTokens,
-} from "./utils";
+import { SolanaWalletSelector } from "./walletSelector/solana/SolanaWalletSelector";
+import { AptosTestnetUSDCToken, testnetChainTokens } from "./utils";
 import { ChainSelect } from "./ChainSelect";
 import { Input } from "./ui/input";
-import { Signer } from "./Signer";
+import { Signer } from "./signer/Signer";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { AptosSigner } from "./AptosSigner";
-import { sleep } from "./SolanaSigner";
-import { Progress } from "./ui/progress";
-import { EthereumWalletSelector } from "./EthereumWalletSelector";
+import { AptosSigner } from "./signer/AptosSigner";
+import { sleep } from "./signer/SolanaSigner";
+import { EthereumWalletSelector } from "./walletSelector/ethereum/EthereumWalletSelector";
 import { Wallet } from "@xlabs-libs/wallet-aggregator-core";
 
 export const MultiChain = () => {
-  const [sourceWalletAddress, setSourceWalletAddress] = useState<string | null>(
-    null
-  );
   const [sourceWallet, setSourceWallet] = useState<Wallet | null>(null);
   const [selectedSourceChain, setSelectedSourceChain] =
     useState<Chain>("Solana");
@@ -52,9 +40,6 @@ export const MultiChain = () => {
 
   const [transactionReceipt, setTransactionReceipt] =
     useState<routes.Receipt<AttestationReceipt> | null>(null);
-
-  const [destinationWallet, setDestinationWallet] =
-    useState<AptosWallet | null>(null);
 
   const aptosWalletContext = useWallet();
   const { wallet, account, connected } = aptosWalletContext;
@@ -83,28 +68,6 @@ export const MultiChain = () => {
 
   const [sourceWalletUSDCBalance, setSourceWalletUSDCBalance] =
     useState<amountUtils.Amount | null>(null);
-
-  const [progress, setProgress] = useState(0);
-  const [transactionETA, setTransactionETA] = useState<number>(0);
-  const [startTime, setStartTime] = useState<number | null>(null);
-
-  const [transactionInitiated, setTransactionInitiated] = useState(false);
-
-  useEffect(() => {
-    if (!startTime || !transactionETA) return;
-
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      const progressPercent = Math.min((elapsed / transactionETA) * 100, 100);
-      setProgress(progressPercent);
-
-      if (progressPercent >= 100) {
-        clearInterval(interval);
-      }
-    }, 100); // Update every 100ms for smooth animation
-
-    return () => clearInterval(interval);
-  }, [startTime, transactionETA]);
 
   useEffect(() => {
     const initializeRoute = async () => {
@@ -220,11 +183,13 @@ export const MultiChain = () => {
     if (!cctpRequest) {
       throw new Error("Request is not initialized");
     }
+    if (!account) {
+      throw new Error("Destination account is not initialized");
+    }
 
     // TODO what is nativeGas for?
     const transferParams = { amount, options: { nativeGas: 0 } };
 
-    //const cctpRoute = route[0];
     const validated = await cctpRoute.validate(cctpRequest, transferParams);
     if (!validated.valid) {
       console.log("invalid", validated.valid);
@@ -242,19 +207,12 @@ export const MultiChain = () => {
       sourceWallet
     );
     console.log("quote", quote);
-    setProgress(0); // Reset progress
-    setTransactionETA(quote.eta ?? 0);
-    setStartTime(Date.now()); // Start the timer
     // initiate transfer
-    setTransactionInitiated(true);
     let receipt = await cctpRoute.initiate(
       cctpRequest,
       signer,
       quote,
-      Wormhole.chainAddress(
-        "Aptos",
-        "0x4bc9014919924c620b0b3cc370af637cb0aee3f73a0a525a28fe7e7a376338bc"
-      )
+      Wormhole.chainAddress("Aptos", account?.address)
     );
     console.log("Initiated transfer with receipt: ", receipt);
 
@@ -315,22 +273,25 @@ export const MultiChain = () => {
   return (
     <div className="w-full flex justify-center items-center p-4">
       <Card>
-        <CardContent className="flex flex-col gap-8">
+        <CardContent className="flex flex-col gap-8 pt-6">
           {/*From*/}
           <div className="flex flex-col gap-6">
+            <div className="flex flex-row w-full">
+              <ChainSelect
+                setSelectedSourceChain={setSelectedSourceChain}
+                selectedSourceChain={selectedSourceChain}
+              />
+            </div>
             <div className="flex flex-row justify-between">
               <p>From:</p>
               <p>
-                <SolanaWalletSelector
-                  setSourceWalletAddress={setSourceWalletAddress}
-                  setSourceWallet={setSourceWallet}
-                />
+                {selectedSourceChain === "Solana" ? (
+                  <SolanaWalletSelector setSourceWallet={setSourceWallet} />
+                ) : (
+                  <EthereumWalletSelector setSourceWallet={setSourceWallet} />
+                )}
               </p>
             </div>
-            <ChainSelect
-              setSelectedSourceChain={setSelectedSourceChain}
-              selectedSourceChain={selectedSourceChain}
-            />
           </div>
 
           {/*To*/}
@@ -341,21 +302,6 @@ export const MultiChain = () => {
                 <WalletSelector />
               </p>
             </div>
-            <Button
-              variant="outline"
-              className="w-full sm:w-[300px] gap-6 justify-start"
-              disabled
-            >
-              <>
-                <img
-                  src={chainToIcon("Aptos" as any)}
-                  alt="Aptos"
-                  height="32px"
-                  width="32px"
-                />
-                <span className="ml-2">USDC</span>
-              </>
-            </Button>
           </div>
           <div className="flex flex-row gap-2 items-center">
             <Input value={amount} onChange={(e) => setAmount(e.target.value)} />
@@ -379,8 +325,6 @@ export const MultiChain = () => {
           >
             Confirm
           </Button>
-          {/* {transactionInitiated && <Progress value={50} />} */}
-          <Progress value={50} />
           {transactionReceipt && <Button onClick={onClaimClick}>Claim</Button>}
         </CardContent>
       </Card>

@@ -30,7 +30,7 @@ export function ChainSelect({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="w-[200px] justify-between">
+        <Button variant="outline" className="w-full justify-between">
           {selectedItem ? (
             <>
               <img

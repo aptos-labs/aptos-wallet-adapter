@@ -1,14 +1,14 @@
 import { Copy, LogOut } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { Button } from "../../ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "../../ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { useToast } from "./ui/use-toast";
+} from "../../ui/dropdown-menu";
+import { useToast } from "../../ui/use-toast";
 import {
   BinanceWallet,
   EVMWallet,
@@ -28,10 +28,8 @@ const eip6963Wallets = Object.entries(Eip6963Wallets).reduce(
 );
 
 export function EthereumWalletSelector({
-  setSourceWalletAddress,
   setSourceWallet,
 }: {
-  setSourceWalletAddress: (address: string | null) => void;
   setSourceWallet: (wallet: Wallet | null) => void;
 }) {
   const [connected, setConnected] = useState(false);
@@ -48,7 +46,6 @@ export function EthereumWalletSelector({
   const onDisconnect = useCallback(async () => {
     await wallet?.disconnect();
     setConnected(false);
-    setSourceWalletAddress(null);
     setSourceWallet(null);
     setAccountAddress(undefined);
     setWallet(undefined);
@@ -95,7 +92,6 @@ export function EthereumWalletSelector({
         setAccountAddress={setAccountAddress}
         setConnected={setConnected}
         setWallet={setWallet}
-        setSourceWalletAddress={setSourceWalletAddress}
         setSourceWallet={setSourceWallet}
       />
     </Dialog>
@@ -107,7 +103,6 @@ interface ConnectWalletDialogProps {
   setAccountAddress: (address: string | undefined) => void;
   setConnected: (connected: boolean) => void;
   setWallet: (wallet: Eip6963Wallet | undefined) => void;
-  setSourceWalletAddress: (address: string | null) => void;
   setSourceWallet: (wallet: Eip6963Wallet | null) => void;
 }
 
@@ -116,7 +111,6 @@ function ConnectWalletDialog({
   setAccountAddress,
   setConnected,
   setWallet,
-  setSourceWalletAddress,
   setSourceWallet,
 }: ConnectWalletDialogProps) {
   const [wallets, setEthereumWallets] = useState<Eip6963Wallet[]>([]);
@@ -135,7 +129,6 @@ function ConnectWalletDialog({
       setAccountAddress(wallet.getAddress());
       setConnected(true);
       setWallet(wallet);
-      setSourceWalletAddress(wallet.getAddress() || null);
       setSourceWallet(wallet);
       close();
     },

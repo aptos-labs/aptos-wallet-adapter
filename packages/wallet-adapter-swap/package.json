@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-swap",
-  "version": "3.7.9",
+  "version": "0.0.0",
   "description": "Aptos Wallet Adapter Swap",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -55,7 +55,6 @@
   },
   "dependencies": {
     "@aptos-labs/ts-sdk": "^1.33.2",
-    "@aptos-labs/wallet-adapter-core": "workspace:*",
     "@radix-ui/react-collapsible": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
