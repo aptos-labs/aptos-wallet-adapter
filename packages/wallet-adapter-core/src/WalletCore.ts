@@ -114,6 +114,10 @@ export interface DappConfig {
     manifestURL: string;
     appId?: string;
   };
+  msafeWallet?: {
+    appId?: string;
+    appUrl?: string;
+  };
 }
 
 export declare interface WalletCoreEvents {
@@ -258,6 +262,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       const isValid = isWalletWithRequiredFeatureSet(wallet);
 
       if (isValid) {
+        // wallet.readyState = wallet.readyState ?? WalletReadyState.Installed;
         wallet.readyState = WalletReadyState.Installed;
         this._standard_wallets.push(wallet);
       }

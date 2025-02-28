@@ -5,6 +5,7 @@ import {
 import { Network } from "@aptos-labs/ts-sdk";
 import { DevTWallet, TWallet } from "@atomrigslab/aptos-wallet-adapter";
 import { MizuWallet } from "@mizuwallet-sdk/aptos-wallet-adapter";
+import { MSafeWallet, inMSafeWallet } from "@msafe/aptos-aip62-wallet";
 import { DappConfig, AdapterWallet } from "./WalletCore";
 
 export function getSDKWallets(dappConfig?: DappConfig) {
@@ -39,6 +40,13 @@ export function getSDKWallets(dappConfig?: DappConfig) {
         })
       );
     }
+
+    sdkWallets.push(
+      new MSafeWallet({
+        network: dappConfig?.network ?? Network.TESTNET,
+        ...dappConfig?.msafeWallet,
+      })
+    );
   }
 
   // Push production wallet if env is production, otherwise use dev wallet

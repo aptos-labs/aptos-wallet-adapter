@@ -25,11 +25,13 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
         },
         aptosConnect: {
           claimSecretKey,
-          dappId: "57fa42a9-29c6-4f1e-939c-4eefa36d9ff5",
+          dappId: process.env.NEXT_PUBLIC_APTOS_CONNECT_DAPP_ID,
         },
         mizuwallet: {
-          manifestURL:
-            "https://assets.mz.xyz/static/config/mizuwallet-connect-manifest.json",
+          manifestURL: process.env.NEXT_PUBLIC_MIZU_MANIFEST_URL ?? "",
+        },
+        msafeWallet: {
+          appUrl: process.env.NEXT_PUBLIC_MSAFE_APP_URL ?? "",
         },
       }}
       onError={(error) => {
