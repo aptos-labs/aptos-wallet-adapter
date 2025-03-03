@@ -1,4 +1,4 @@
-import { AdaptedWallet, Network } from '@aptos-labs/wallet-adapter-core/new';
+import { Network, WalletAdapter } from '@aptos-labs/wallet-adapter-core/new';
 import {
   AccountInfo,
   AptosFeatures,
@@ -9,7 +9,7 @@ import {
 } from '@aptos-labs/wallet-standard';
 import { useEffect, useMemo, useState } from 'react';
 import { useActiveWalletId } from './useActiveWalletId';
-import { useAvailableWallets } from './useAvailableWallets';
+import { useWalletManager } from './useWalletManager';
 
 export interface UninitializedWallet {
   isInitialized: false;
@@ -35,11 +35,11 @@ export interface ConnectedWallet {
   features: AptosFeatures;
   disconnect: () => Promise<void>;
   signMessage: (input: AptosSignMessageInput)
-    => ReturnType<AdaptedWallet['signMessage']>;
+    => ReturnType<WalletAdapter['signMessage']>;
   signTransaction: (input: Omit<AptosSignTransactionInputV1_1, 'signerAddress'>)
-    => ReturnType<AdaptedWallet['signTransaction']>;
+    => ReturnType<WalletAdapter['signTransaction']>;
   signAndSubmitTransaction: (input: AptosSignAndSubmitTransactionInput)
-    => ReturnType<AdaptedWallet['signAndSubmitTransaction']>;
+    => ReturnType<WalletAdapter['signAndSubmitTransaction']>;
 }
 
 type UseActiveWalletResult =
@@ -48,11 +48,9 @@ type UseActiveWalletResult =
   | ConnectedWallet;
 
 export function useActiveWallet(): UseActiveWalletResult {
-  const availableWallets = useAvailableWallets();
+  const { registeredWallets } = useWalletManager();
   const activeWalletId = useActiveWalletId();
-  const activeWallet = activeWalletId
-    ? availableWallets.find((w) => w.name === activeWalletId)
-    : undefined;
+  const activeWallet = registeredWallets.find((w) => w.name === activeWalletId);
 
   const [isInitialized, setIsInitialized] = useState(activeWallet === undefined);
   const [activeAccount, setActiveAccount] = useState<AccountInfo>();
