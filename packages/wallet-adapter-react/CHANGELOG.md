@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-react
 
+## 4.1.1
+
+### Patch Changes
+
+- 6520e32: Fix WalletProvider setting `isLoading` to `false` prematurely when `autoConnect` is enabled
+
 ## 4.1.0
 
 ### Minor Changes
