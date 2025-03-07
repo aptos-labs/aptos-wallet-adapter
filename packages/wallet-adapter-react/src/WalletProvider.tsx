@@ -129,7 +129,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
             shouldConnect = autoConnect;
           }
 
-          if (shouldConnect) connect(walletName);
+          if (shouldConnect) await connect(walletName);
         } catch (error) {
           if (onError) onError(error);
           return Promise.reject(error);
