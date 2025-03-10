@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-nextjs-example
 
+## 4.1.2
+
+### Patch Changes
+
+- 3b5f4cf: Fix mobile redirect logic
+- Updated dependencies [3b5f4cf]
+  - @aptos-labs/wallet-adapter-core@5.1.1
+  - @aptos-labs/wallet-adapter-react@4.1.2
+  - @aptos-labs/wallet-adapter-ant-design@4.0.5
+  - @aptos-labs/wallet-adapter-mui-design@4.0.5
+
 ## 4.1.1
 
 ### Patch Changes
