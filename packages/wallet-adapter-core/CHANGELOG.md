@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.1.1
+
+### Patch Changes
+
+- 3b5f4cf: Fix mobile redirect logic
+
 ## 5.1.0
 
 ### Minor Changes
