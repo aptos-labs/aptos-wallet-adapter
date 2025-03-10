@@ -486,6 +486,26 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param walletName. The wallet name we want to connect with.
    */
   async connect(walletName: string): Promise<void | string> {
+    // First, handle mobile case
+    // Check if we are in a redirectable view (i.e on mobile AND not in an in-app browser)
+    if (isRedirectable()) {
+      const selectedWallet = this._standard_not_detected_wallets.find(
+        (wallet: AdapterNotDetectedWallet) => wallet.name === walletName
+      );
+
+      if (selectedWallet) {
+        // If wallet has a deeplinkProvider property, use it
+        const uninstalledWallet =
+          selectedWallet as unknown as AptosStandardSupportedWallet;
+        if (uninstalledWallet.deeplinkProvider) {
+          const url = encodeURIComponent(window.location.href);
+          const location = uninstalledWallet.deeplinkProvider.concat(url);
+          window.location.href = location;
+          return;
+        }
+      }
+    }
+
     // Checks the wallet exists in the detected wallets array
     const allDetectedWallets = this._standard_wallets;
 
@@ -503,33 +523,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           `${walletName} wallet is already connected`
         ).message;
     }
-
-    // Check if we are in a redirectable view (i.e on mobile AND not in an in-app browser)
-    // Ignore if wallet is installed (iOS extension)
-    if (isRedirectable()) {
-      if (selectedWallet.readyState === WalletReadyState.Installed) {
-        // If wallet has a openInMobileApp method, use it
-        if (selectedWallet.features["aptos:openInMobileApp"]?.openInMobileApp) {
-          selectedWallet.features["aptos:openInMobileApp"]?.openInMobileApp();
-          return;
-        }
-      }
-
-      if (selectedWallet.readyState === WalletReadyState.NotDetected) {
-        // If wallet has a deeplinkProvider property, i.e wallet is on the internal registry, use it
-        const uninstalledWallet =
-          selectedWallet as unknown as AptosStandardSupportedWallet;
-        if (uninstalledWallet.deeplinkProvider) {
-          const url = encodeURIComponent(window.location.href);
-          const location = uninstalledWallet.deeplinkProvider.concat(url);
-          window.location.href = location;
-          return;
-        }
-      }
-    }
-
-    // If true, the wallet was redirected to the mobile app's browser.
-    if (this.redirectIfRedirectable(selectedWallet)) return;
 
     await this.connectWallet(selectedWallet, async () => {
       const response = await selectedWallet.features["aptos:connect"].connect();
@@ -623,39 +616,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     } finally {
       this._connecting = false;
     }
-  }
-
-  /**
-   * If the wallet is in a Mobile browser, it should be redirected to the Mobile wallet's browser.
-   * 1. Check if we are in a redirectable view (i.e on mobile AND not in an in-app browser)
-   * 2. Ignore if wallet is installed (iOS extension)
-   *
-   * @returns boolean true if the wallet was redirected, false otherwise.
-   */
-  private redirectIfRedirectable(selectedWallet: AdapterWallet): boolean {
-    if (isRedirectable()) {
-      if (selectedWallet.readyState === WalletReadyState.Installed) {
-        // If wallet has a openInMobileApp method, use it
-        if (selectedWallet.features["aptos:openInMobileApp"]?.openInMobileApp) {
-          selectedWallet.features["aptos:openInMobileApp"]?.openInMobileApp();
-          return true;
-        }
-      }
-
-      if (selectedWallet.readyState === WalletReadyState.NotDetected) {
-        // If wallet has a deeplinkProvider property, i.e wallet is on the internal registry, use it
-        const uninstalledWallet =
-          selectedWallet as unknown as AptosStandardSupportedWallet;
-        if (uninstalledWallet.deeplinkProvider) {
-          const url = encodeURIComponent(window.location.href);
-          const location = uninstalledWallet.deeplinkProvider.concat(url);
-          window.location.href = location;
-          return true;
-        }
-      }
-    }
-
-    return false;
   }
 
   /**
