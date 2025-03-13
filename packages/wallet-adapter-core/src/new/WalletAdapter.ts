@@ -113,8 +113,8 @@ export class WalletAdapter {
 
   // region Accounts
 
-  readonly onAccountConnectedListeners = new Set<(account: AccountInfo) => void>();
-  readonly onAccountDisconnectedListeners = new Set<() => void>();
+  private readonly onAccountConnectedListeners = new Set<(account: AccountInfo) => void>();
+  private readonly onAccountDisconnectedListeners = new Set<() => void>();
 
   async getConnectedAccounts(): Promise<AccountInfo[]> {
     // TODO: add explicit `getConnectedAccounts` feature
