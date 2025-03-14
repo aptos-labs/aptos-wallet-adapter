@@ -138,7 +138,17 @@ export class SolanaWallet extends AdapterWallet<
         "solana:signTransaction"
       ].signTransaction(transaction);
     if (result.status === UserResponseStatus.REJECTED) {
-      throw new Error("User rejected");
+      throw new Error("User rejected the request").message;
+    }
+    return result.args;
+  }
+
+  async signIn() {
+    const result = await this.solanaWallet.features["aptos:signIn"]!.signIn({
+      nonce: Math.random().toString(16),
+    });
+    if (result.status === UserResponseStatus.REJECTED) {
+      throw new Error("User rejected the request").message;
     }
     return result.args;
   }

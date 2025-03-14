@@ -8,6 +8,8 @@ import {
   APTOS_CHAINS,
   AptosFeatures,
   AptosOnAccountChangeInput,
+  AptosSignInInput,
+  AptosSignInOutput,
   AptosSignMessageInput,
   AptosSignMessageOutput,
   UserResponse,
@@ -56,7 +58,7 @@ const APTOS_REQUIRED_FEATURES = (
     "aptos:account": {
       account: async () => {
         if (!solanaWallet.publicKey) {
-          throw new Error("Disconnected");
+          throw new Error("No account found").message;
         }
         return deriveAccountInfoFromSolanaPublicKey(solanaWallet.publicKey);
       },
@@ -74,14 +76,13 @@ const APTOS_REQUIRED_FEATURES = (
             args: deriveAccountInfoFromSolanaPublicKey(solanaWallet.publicKey),
             status: UserResponseStatus.APPROVED,
           };
-        } catch (e) {
-          console.log("e", e);
+        } catch (e: any) {
           if (e instanceof WalletConnectionError) {
             return {
               status: UserResponseStatus.REJECTED,
             };
           }
-          throw e;
+          throw new Error("Error connecting to wallet" + e).message;
         }
       },
       version: "1.0.0",
@@ -90,8 +91,8 @@ const APTOS_REQUIRED_FEATURES = (
       disconnect: async () => {
         try {
           await solanaWallet.disconnect();
-        } catch (e) {
-          throw new Error("Failed to disconnect");
+        } catch (e: any) {
+          throw new Error("Failed to disconnect" + e).message;
         }
       },
       version: "1.0.0",
@@ -100,7 +101,7 @@ const APTOS_REQUIRED_FEATURES = (
       network: async () => {
         throw new Error(
           "Fetch network info not supported by Solana wallet adapter"
-        );
+        ).message;
       },
       version: "1.0.0",
     },
@@ -111,9 +112,11 @@ const APTOS_REQUIRED_FEATURES = (
           const messageToSign = new TextEncoder().encode(message.message);
           const signature = await solanaWallet.signMessage(messageToSign);
           const response: AptosSignMessageOutput = {
-            // address?: string;
+            address: deriveAccountInfoFromSolanaPublicKey(
+              new PublicKey(solanaWallet.publicKey!)
+            ).address.toString(),
             // application?: string;
-            // chainId?: number;
+            // chainId?: number; // TODO: get chain id once Solana RPC/Connection config is supported
             fullMessage: message.message,
             message: message.message,
             nonce: message.nonce,
@@ -124,20 +127,20 @@ const APTOS_REQUIRED_FEATURES = (
             status: UserResponseStatus.APPROVED,
             args: response,
           };
-        } catch (e) {
+        } catch (e: any) {
           if (e instanceof Error && e.message.includes("rejected")) {
             return {
               status: UserResponseStatus.REJECTED,
             };
           }
-          throw e;
+          throw new Error("Error signing message" + e).message;
         }
       },
       version: "1.0.0",
     },
     "aptos:signTransaction": {
       signTransaction: async (transaction: AnyRawTransaction) => {
-        throw new Error("Not yet implemented");
+        throw new Error("signTransaction not yet implemented").message;
       },
       version: "1.0.0",
     },
@@ -164,9 +167,56 @@ const APTOS_REQUIRED_FEATURES = (
       onNetworkChange: async () => {
         throw new Error(
           "onNetworkChange not yet implemented in solana wallet adapter"
-        );
+        ).message;
       },
       version: "1.0.0",
+    },
+    "aptos:signIn": {
+      signIn: async (input: AptosSignInInput) => {
+        try {
+          if (!solanaWallet.signIn) {
+            throw new Error(`signIn not supported in ${solanaWallet.name}`)
+              .message;
+          }
+          const result = await solanaWallet.signIn({
+            nonce: Math.random().toString(16),
+          });
+          const response: AptosSignInOutput = {
+            account: deriveAccountInfoFromSolanaPublicKey(
+              new PublicKey(result.account.publicKey)
+            ),
+            input: {
+              ...input,
+              domain: input.uri || "",
+              address: deriveAccountInfoFromSolanaPublicKey(
+                new PublicKey(result.account.publicKey)
+              ).address.toString(),
+              uri: input.uri || "",
+              version: input.version || "0.1.0",
+              chainId: input.chainId || "1", // TODO: get chain id once Solana RPC/Connection config is supported
+            },
+            plainText: new TextDecoder().decode(result.signedMessage),
+            signingMessage: result.signedMessage,
+            signature:
+              result.signatureType === "ed25519"
+                ? new Ed25519Signature(result.signature)
+                : (result.signature as any),
+            type: result.signatureType || "ed25519",
+          };
+          return {
+            status: UserResponseStatus.APPROVED,
+            args: response,
+          };
+        } catch (e: any) {
+          if (e instanceof Error && e.message.includes("rejected")) {
+            return {
+              status: UserResponseStatus.REJECTED,
+            };
+          }
+          throw new Error("Error signing in" + e).message;
+        }
+      },
+      version: "0.1.0",
     },
   };
 };
@@ -179,7 +229,8 @@ const SOLANA_ADDITIONAL_FEATURES = (
       signTransaction: async (
         transaction: Transaction
       ): Promise<UserResponse<Transaction>> => {
-        if (!solanaWallet.signTransaction) throw new Error("Not supported");
+        if (!solanaWallet.signTransaction)
+          throw new Error("signTransaction not supported").message;
         try {
           const signature = await solanaWallet.signTransaction(transaction);
           return {
@@ -192,7 +243,7 @@ const SOLANA_ADDITIONAL_FEATURES = (
               status: UserResponseStatus.REJECTED,
             };
           }
-          throw e;
+          throw new Error("Error signing transaction" + e).message;
         }
       },
       version: "1.0.0",
