@@ -557,26 +557,27 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     );
 
     if (!selectedWallet) {
-      throw new WalletNotFoundError(`Wallet ${walletName} not found`);
+      throw new WalletNotFoundError(`Wallet ${walletName} not found`).message;
     }
 
     if (!selectedWallet.features["aptos:signIn"]) {
       throw new WalletNotSupportedMethod(
         `aptos:signIn is not supported by ${walletName}`
-      );
+      ).message;
     }
 
     return await this.connectWallet(selectedWallet, async () => {
       if (!selectedWallet.features["aptos:signIn"]) {
         throw new WalletNotSupportedMethod(
           `aptos:signIn is not supported by ${selectedWallet.name}`
-        );
+        ).message;
       }
 
       const response =
         await selectedWallet.features["aptos:signIn"].signIn(input);
       if (response.status === UserResponseStatus.REJECTED) {
-        throw new WalletConnectionError("User has rejected the request");
+        throw new WalletConnectionError("User has rejected the request")
+          .message;
       }
 
       return { account: response.args.account, output: response.args };
