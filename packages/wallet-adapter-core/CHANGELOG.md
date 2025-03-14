@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.1.2
+
+### Patch Changes
+
+- 6a5737a: Fix signIn method to throw the message property
+
 ## 5.1.1
 
 ### Patch Changes
