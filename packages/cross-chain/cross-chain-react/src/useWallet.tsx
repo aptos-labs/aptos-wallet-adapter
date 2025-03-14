@@ -22,8 +22,8 @@ export interface WalletContextState {
   getEthereumWallets: () => ReadonlyArray<AdapterWallet>;
   getAptosWallets: () => ReadonlyArray<AdapterWallet>;
   connect: (wallet: AdapterWallet) => Promise<void>;
+  signInWith: (wallet: AdapterWallet) => Promise<void>;
   disconnect: () => Promise<void>;
-  signInWith: () => Promise<void>;
   getQuote: (
     amount: string,
     sourceChain: Chain

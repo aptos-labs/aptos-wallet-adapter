@@ -188,18 +188,6 @@ export default function Swap() {
     }
   };
 
-  const onSignIn = async () => {
-    try {
-      await signInWith();
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error,
-      });
-    }
-  };
-
   return (
     <div className="w-full flex justify-center items-center p-4">
       <Card className="w-96">
@@ -229,13 +217,6 @@ export default function Swap() {
             <p>Sign Message</p>
             <Button disabled={!wallet} onClick={onSignMessage}>
               Sign Message
-            </Button>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <p>Sign Message</p>
-            <Button disabled={!wallet} onClick={onSignIn}>
-              Sign In With {sourceChain}
             </Button>
           </div>
 

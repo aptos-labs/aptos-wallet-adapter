@@ -119,7 +119,12 @@ function ConnectWalletDialog({ close, sourceChain }: ConnectWalletDialogProps) {
       </DialogTitle>
       <div className="flex flex-col gap-3 pt-3">
         {wallets.map((wallet) => (
-          <WalletRow key={wallet.name} wallet={wallet} onConnect={close} />
+          <WalletRow
+            key={wallet.name}
+            wallet={wallet}
+            onConnect={close}
+            onSignInWith={close}
+          />
         ))}
       </div>
     </DialogContent>
@@ -129,13 +134,15 @@ function ConnectWalletDialog({ close, sourceChain }: ConnectWalletDialogProps) {
 interface WalletRowProps {
   wallet: AdapterWallet;
   onConnect?: () => void;
+  onSignInWith?: () => void;
 }
 
-function WalletRow({ wallet, onConnect }: WalletRowProps) {
+function WalletRow({ wallet, onConnect, onSignInWith }: WalletRowProps) {
   return (
     <WalletItem
       wallet={wallet}
       onConnect={onConnect}
+      onSignInWith={onSignInWith}
       className="flex items-center justify-between px-4 py-3 gap-4 border rounded-md"
     >
       <div className="flex items-center gap-4">
@@ -147,9 +154,15 @@ function WalletRow({ wallet, onConnect }: WalletRowProps) {
           <WalletItem.InstallLink />
         </Button>
       ) : (
-        <WalletItem.ConnectButton asChild>
-          <Button size="sm">Connect</Button>
-        </WalletItem.ConnectButton>
+        <div className="flex text-right gap-2 items-center">
+          <WalletItem.ConnectButton asChild>
+            <Button size="sm">Connect</Button>
+          </WalletItem.ConnectButton>
+          <span className="text-sm">or</span>
+          <WalletItem.SignInWithButton asChild>
+            <Button size="sm">Sign In With</Button>
+          </WalletItem.SignInWithButton>
+        </div>
       )}
     </WalletItem>
   );

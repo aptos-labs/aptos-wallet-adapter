@@ -3,6 +3,8 @@ import {
   AptosFeatures,
   AptosOnAccountChangeInput,
   AptosOnNetworkChangeInput,
+  AptosSignInInput,
+  AptosSignInOutput,
   AptosSignMessageInput,
   AptosSignMessageOutput,
   UserResponse,
@@ -56,7 +58,7 @@ const APTOS_REQUIRED_FEATURES = (
       disconnect: async () => {
         try {
           eip6963Wallet.provider.on("disconnect", (error: any) => {
-            console.error("EIP-6963 wallet disconnected", error);
+            throw new Error("EIP-6963 wallet disconnected" + error).message;
           });
         } catch (error) {
           throw new Error("Failed to disconnect").message;
@@ -81,10 +83,14 @@ const APTOS_REQUIRED_FEATURES = (
       signMessage: async (message: AptosSignMessageInput) => {
         const accounts = await eip6963Wallet.provider
           .request({ method: "eth_requestAccounts" })
-          .catch(console.error);
+          .catch((error: any) => {
+            throw new Error("Error signing message" + error).message;
+          });
+        const msg = `0x${Buffer.from(message.message, "utf8").toString("hex")}`;
+
         const signature = await eip6963Wallet.provider.request({
           method: "personal_sign",
-          params: [message.message, accounts[0]],
+          params: [msg, accounts[0]],
         });
         const response: AptosSignMessageOutput = {
           // address?: string;
@@ -115,10 +121,66 @@ const APTOS_REQUIRED_FEATURES = (
       },
       version: "1.0.0",
     },
+    "aptos:signIn": {
+      signIn: async (input: AptosSignInInput) => {
+        try {
+          const accounts = await eip6963Wallet.provider
+            .request({ method: "eth_requestAccounts" })
+            .catch((error: any) => {
+              throw new Error("Error signing in" + error).message;
+            });
+          const domain = window.location.origin;
+          const from = accounts[0];
+          const chainId = await eip6963Wallet.provider.request({
+            method: "eth_chainId",
+          });
+          const siweMessage = `${domain} wants you to sign in with your Ethereum account:\n${from}\n\n${input.statement}\n\nURI: ${domain}\nVersion: ${input.version ?? "0.1.0"}\nChain ID: ${parseInt(chainId, 16)}\nNonce: ${input.nonce}\nIssued At: ${new Date().toLocaleString()}`;
+          const msg = `0x${Buffer.from(siweMessage, "utf8").toString("hex")}`;
+          const signature = await eip6963Wallet.provider.request({
+            method: "personal_sign",
+            params: [msg, accounts[0]],
+          });
+          const response: AptosSignInOutput = {
+            //@ts-ignore
+            account: {
+              address: accounts[0],
+              publicKey: ethers.getBytes(accounts[0]) as any,
+            },
+            input: {
+              ...input,
+              domain: input.uri || "",
+              address: accounts[0],
+              uri: input.uri || "",
+              version: input.version || "0.1.0",
+              chainId: input.chainId || "1", // TODO: get chain id once Solana RPC/Connection config is supported
+            },
+            plainText: siweMessage,
+            signingMessage: new TextEncoder().encode(msg),
+            signature: signature as any,
+            type: "",
+          };
+
+          return {
+            status: UserResponseStatus.APPROVED,
+            args: response,
+          };
+        } catch (error: any) {
+          if (
+            error instanceof Error &&
+            error.message.includes("refused connection")
+          ) {
+            return {
+              status: UserResponseStatus.REJECTED,
+            };
+          }
+          throw error;
+        }
+      },
+      version: "0.1.0",
+    },
     "aptos:onNetworkChange": {
       onNetworkChange: async (callback: AptosOnNetworkChangeInput) => {
         eip6963Wallet.provider.on("chainChanged", (chainId: string) => {
-          console.log("chainId", chainId);
           callback({
             // TODO: create an internal chainId->name mapping database
             name: parseInt(chainId) as any,
@@ -139,7 +201,9 @@ const EIP6963_ADDITIONAL_FEATURES = (
       account: async () => {
         const accounts = await eip6963Wallet.provider
           .request({ method: "eth_requestAccounts" })
-          .catch(console.error);
+          .catch((error: any) => {
+            throw new Error("Error getting account" + error).message;
+          });
         return {
           address: accounts[0],
           publicKey: ethers.getBytes(accounts[0]),

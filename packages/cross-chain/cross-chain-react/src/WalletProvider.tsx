@@ -176,15 +176,18 @@ export const AptosCrossChainWalletProvider: FC<
     }
   };
 
-  const signInWith = async () => {
+  const signInWith = async (wallet: AdapterWallet) => {
     try {
-      if (!wallet) {
-        throw new Error("Wallet is not connected");
-      }
       if (!wallet.signIn) {
-        throw new Error("Wallet does not support signIn");
+        throw new Error("Wallet does not support signIn").message;
       }
       const response = await wallet.signIn();
+      setState((state) => ({
+        ...state,
+        connected: true,
+        wallet: wallet,
+        account: response.account,
+      }));
       console.log("WalletProvider signInWithWallet response", response);
     } catch (error) {
       if (onError) onError(error);

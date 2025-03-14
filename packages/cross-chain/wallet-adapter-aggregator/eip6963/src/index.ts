@@ -219,6 +219,16 @@ export class Eip6963Wallet extends AdapterWallet<
     return result.args;
   }
 
+  async signIn() {
+    const result = await this.eip6963Wallet.features["aptos:signIn"]!.signIn({
+      nonce: Math.random().toString(16),
+    });
+    if (result.status === UserResponseStatus.REJECTED) {
+      throw new Error("User rejected the request").message;
+    }
+    return result.args;
+  }
+
   async onAccountChange() {
     await this.eip6963Wallet.features[
       "eip6963:onAccountChange"
