@@ -1,0 +1,59 @@
+{
+  "name": "@aptos-labs/wallet-adapter-aggregator-solana",
+  "version": "0.0.1",
+  "description": "Aptos Wallet Adapter Aggregator for Solana",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "license": "Apache-2.0",
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aptos-labs/aptos-wallet-adapter.git"
+  },
+  "homepage": "https://github.com/aptos-labs/aptos-wallet-adapter",
+  "bugs": {
+    "url": "https://github.com/aptos-labs/aptos-wallet-adapter/issues"
+  },
+  "author": "aptoslabs.com",
+  "keywords": [
+    "Aptos",
+    "Aptos Labs",
+    "Wallet",
+    "Wallet Adapter",
+    "Wallet Adapter Aggregator",
+    "Solana"
+  ],
+  "scripts": {
+    "build:bundle": "tsup src/index.ts --format esm,cjs --sourcemap",
+    "build:declarations": "tsc --emitDeclarationOnly --declaration --declarationMap",
+    "build": "pnpm build:bundle && pnpm build:declarations",
+    "dev": "tsup src/index.ts --format esm,cjs --watch",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "lint": "TIMING=1 eslint \"src/**/*.ts*\""
+  },
+  "devDependencies": {
+    "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
+    "eslint": "^8.15.0",
+    "tsup": "^5.10.1",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@aptos-labs/wallet-adapter-aggregator-core": "workspace:*",
+    "@aptos-labs/ts-sdk": "^1.35.0",
+    "@aptos-labs/wallet-standard": "^0.3.0",
+    "@solana/wallet-adapter-base": "^0.9.23",
+    "@solana/wallet-standard-wallet-adapter-base": "^1.1.4",
+    "@solana/web3.js": "^1.95.8",
+    "@wallet-standard/app": "^1.1.0",
+    "eventemitter3": "^4.0.7"
+  },
+  "files": [
+    "dist",
+    "src"
+  ]
+}
