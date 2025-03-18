@@ -21,6 +21,7 @@ import * as ethereumSigner from "./EthereumSigner";
 import * as suiSigner from "./SuiSigner";
 
 import { ChainConfig } from "../../../config";
+import { CrossChainCore } from "../../../CrossChainCore";
 export class Signer<N extends Network, C extends Chain>
   implements SignAndSendSigner<N, C>
 {
@@ -28,17 +29,20 @@ export class Signer<N extends Network, C extends Chain>
   _address: string;
   _options: any;
   _wallet: AdapterWallet;
+  _crossChainCore?: CrossChainCore;
 
   constructor(
     chain: ChainConfig,
     address: string,
     options: any,
-    wallet: AdapterWallet
+    wallet: AdapterWallet,
+    crossChainCore?: CrossChainCore
   ) {
     this._chain = chain;
     this._address = address;
     this._options = options;
     this._wallet = wallet;
+    this._crossChainCore = crossChainCore;
   }
 
   chain(): C {
@@ -56,7 +60,8 @@ export class Signer<N extends Network, C extends Chain>
         this._chain,
         tx,
         this._wallet,
-        this._options
+        this._options,
+        this._crossChainCore
       );
       txHashes.push(txId);
     }
@@ -68,7 +73,8 @@ export const signAndSendTransaction = async (
   chain: ChainConfig,
   request: UnsignedTransaction<Network, Chain>,
   wallet: AdapterWallet,
-  options: any = {}
+  options: any = {},
+  crossChainCore?: CrossChainCore
 ): Promise<string> => {
   if (!wallet) {
     throw new Error("wallet is undefined");
@@ -78,7 +84,8 @@ export const signAndSendTransaction = async (
     const signature = await solanaSigner.signAndSendTransaction(
       request as SolanaUnsignedTransaction<Network>,
       wallet,
-      options
+      options,
+      crossChainCore
     );
     return signature;
   } else if (chain.context === "Ethereum") {

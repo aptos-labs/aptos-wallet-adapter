@@ -10,7 +10,7 @@ export default function SwapLayout({ children }: { children: ReactNode }) {
   return (
     <AptosCrossChainWalletProvider
       dappConfig={{
-        network: Network.TESTNET,
+        aptosNetwork: Network.TESTNET,
       }}
       onError={(error) => {
         toast({
