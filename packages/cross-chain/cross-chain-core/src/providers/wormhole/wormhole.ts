@@ -59,7 +59,7 @@ export class WormholeProvider
   }
 
   async setWormholeContext(sourceChain: Chain) {
-    const dappNetwork = this.crossChainCore._dappConfig?.network;
+    const dappNetwork = this.crossChainCore._dappConfig?.aptosNetwork;
     if (dappNetwork === Network.DEVNET) {
       throw new Error("Devnet is not supported on Wormhole");
     }
@@ -260,7 +260,7 @@ export class WormholeProvider
   async initiateCCTPTransfer(
     input: WormholeInitiateTransferRequest
   ): Promise<WormholeInitiateTransferResponse> {
-    if (this.crossChainCore._dappConfig?.network === Network.DEVNET) {
+    if (this.crossChainCore._dappConfig?.aptosNetwork === Network.DEVNET) {
       throw new Error("Devnet is not supported on Wormhole");
     }
     // if amount is provided, it is expected to get the quote internally

@@ -25,6 +25,7 @@ import {
 import { Connection } from "@solana/web3.js";
 import { Network } from "@wormhole-foundation/sdk";
 import { AdapterWallet } from "@aptos-labs/wallet-adapter-aggregator-core";
+import { CrossChainCore } from "../../../CrossChainCore";
 
 export type SolanaRpcProvider = "triton" | "helius" | "ankr" | "unknown";
 
@@ -32,13 +33,17 @@ export type SolanaRpcProvider = "triton" | "helius" | "ankr" | "unknown";
 export async function signAndSendTransaction(
   request: SolanaUnsignedTransaction<Network>,
   wallet: AdapterWallet | undefined,
-  options?: ConfirmOptions
+  options?: ConfirmOptions,
+  crossChainCore?: CrossChainCore
 ) {
   if (!wallet) throw new Error("Wallet not found").message;
 
   const commitment = options?.commitment ?? "finalized";
   // Solana rpc should come from dapp config
-  const connection = new Connection("https://api.devnet.solana.com");
+  const connection = new Connection(
+    crossChainCore?._dappConfig?.solanaConfig?.rpc ??
+      "https://api.devnet.solana.com"
+  );
   const { blockhash, lastValidBlockHeight } =
     await connection.getLatestBlockhash(commitment);
 
@@ -53,7 +58,8 @@ export async function signAndSendTransaction(
     connection,
     blockhash,
     lastValidBlockHeight,
-    request
+    request,
+    crossChainCore
   );
 
   let confirmTransactionPromise: Promise<
@@ -139,7 +145,8 @@ export async function setPriorityFeeInstructions(
   connection: Connection,
   blockhash: string,
   lastValidBlockHeight: number,
-  request: SolanaUnsignedTransaction<Network>
+  request: SolanaUnsignedTransaction<Network>,
+  crossChainCore?: CrossChainCore
 ): Promise<Transaction | VersionedTransaction> {
   const unsignedTx = request.transaction.transaction as Transaction;
 
@@ -154,7 +161,11 @@ export async function setPriorityFeeInstructions(
     computeBudgetIxFilter
   );
   unsignedTx.add(
-    ...(await createPriorityFeeInstructions(connection, unsignedTx))
+    ...(await createPriorityFeeInstructions(
+      connection,
+      unsignedTx,
+      crossChainCore
+    ))
   );
   if (request.transaction.signers) {
     unsignedTx.partialSign(...request.transaction.signers);
@@ -167,7 +178,7 @@ export async function setPriorityFeeInstructions(
 async function createPriorityFeeInstructions(
   connection: Connection,
   transaction: Transaction | VersionedTransaction,
-  commitment?: Commitment
+  crossChainCore?: CrossChainCore
 ) {
   let unitsUsed = 200_000;
   let simulationAttempts = 0;
@@ -218,19 +229,12 @@ async function createPriorityFeeInstructions(
     })
   );
 
-  // const priorityFeeConfig =
-  //   config.transactionSettings?.Solana?.priorityFee || {};
-
-  // const {
-  //   percentile = 0.9,
-  //   percentileMultiple = 1,
-  //   min = 100_000,
-  //   max = 100_000_000,
-  // } = priorityFeeConfig;
-  const percentile = 0.9;
-  const percentileMultiple = 1;
-  const min = 100_000;
-  const max = 100_000_000;
+  const {
+    percentile = 0.9,
+    percentileMultiple = 1,
+    min = 100_000,
+    max = 100_000_000,
+  } = crossChainCore?._dappConfig?.solanaConfig?.priorityFeeConfig ?? {};
 
   const calculateFee = async (
     rpcProvider?: SolanaRpcProvider

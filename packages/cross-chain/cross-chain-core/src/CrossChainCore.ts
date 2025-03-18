@@ -20,8 +20,17 @@ import {
 } from "./config";
 
 export interface CrossChainDappConfig {
-  network: Network;
+  aptosNetwork: Network;
   disableTelemetry?: boolean;
+  solanaConfig?: {
+    rpc?: string;
+    priorityFeeConfig?: {
+      percentile?: number;
+      percentileMultiple?: number;
+      min?: number;
+      max?: number;
+    };
+  };
 }
 export type { AccountAddressInput } from "@aptos-labs/ts-sdk";
 export type AptosAccount = Account;
@@ -58,7 +67,7 @@ export class CrossChainCore {
 
   constructor(args: { dappConfig: CrossChainDappConfig }) {
     this._dappConfig = args.dappConfig;
-    if (args.dappConfig?.network === Network.MAINNET) {
+    if (args.dappConfig?.aptosNetwork === Network.MAINNET) {
       this.CHAINS = mainnetChains;
       this.TOKENS = mainnetTokens;
       this.APTOS_TOKEN = AptosMainnetUSDCToken;
