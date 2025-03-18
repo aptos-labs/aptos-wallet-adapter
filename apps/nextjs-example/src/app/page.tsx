@@ -171,8 +171,7 @@ function WalletConnection({
     return true;
   };
 
-  // TODO: Do a proper check for network change support
-  const isNetworkChangeSupported = wallet?.name === "Nightly";
+  const isNetworkChangeSupported = wallet?.features['aptos:changeNetwork'] !== undefined;
 
   return (
     <Card>
