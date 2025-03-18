@@ -1,20 +1,34 @@
 import { FC, ReactNode, useEffect, useState } from "react";
-import { WalletContext } from "./useWallet";
 import {
   Chain,
   CrossChainCore,
   CrossChainDappConfig,
-  Network,
   WormholeQuoteResponse,
   WormholeInitiateTransferResponse,
   CrossChainProvider,
   AptosAccount,
+  GasStationApiKey,
+  AccountAddressInput,
+  ChainsConfig,
+  ChainConfig,
 } from "@aptos-labs/cross-chain-core";
-import { AccountInfo, NetworkInfo } from "@aptos-labs/wallet-standard";
+import {
+  AccountInfo,
+  AptosSignInInput,
+  NetworkInfo,
+} from "@aptos-labs/wallet-standard";
 import { getSolanaStandardWallets } from "@aptos-labs/wallet-adapter-aggregator-solana";
 import { AdapterWallet } from "@aptos-labs/wallet-adapter-aggregator-core";
 import { fetchEthereumWallets as fetchEthereumWalletsAggregator } from "@aptos-labs/wallet-adapter-aggregator-eip6963";
-import { getAptosWallets as getAptosStandardWallets } from "@aptos-labs/wallet-adapter-aggregator-aptos";
+import {
+  getAptosWallets as getAptosStandardWallets,
+  AptosNotDetectedWallet,
+  getAptosNotDetectedWallets,
+} from "@aptos-labs/wallet-adapter-aggregator-aptos";
+
+export type { AptosNotDetectedWallet };
+
+import { WalletContext } from "./useWallet";
 
 export interface AptosCrossChainWalletProviderProps {
   children: ReactNode;
@@ -62,7 +76,6 @@ export const AptosCrossChainWalletProvider: FC<
     setCrossChainCore(crossChainCore);
   }, []);
 
-  // TODO fix me, on first load I get an empty array
   const getSolanaWallets = (): ReadonlyArray<AdapterWallet> => {
     return getSolanaStandardWallets();
   };
@@ -75,6 +88,11 @@ export const AptosCrossChainWalletProvider: FC<
     return getAptosStandardWallets();
   };
 
+  const fetchAptosNotDetectedWallets =
+    (): ReadonlyArray<AptosNotDetectedWallet> => {
+      return getAptosNotDetectedWallets();
+    };
+
   useEffect(() => {
     if (!wallet) return;
 
@@ -84,7 +102,7 @@ export const AptosCrossChainWalletProvider: FC<
 
     const handleNetworkChange = (newNetwork: NetworkInfo | null) => {
       //setState((prev) => ({ ...prev, sourceChain: newNetwork.name }));
-      console.log("handleNetworkChange not implemented");
+      console.log("new network is", newNetwork);
     };
 
     // Register the listener
@@ -96,11 +114,12 @@ export const AptosCrossChainWalletProvider: FC<
     };
   }, [wallet]);
 
-  const getQuote = async <T extends QuoteResponse>(
-    amount: string,
-    sourceChain: Chain
-  ): Promise<T> => {
+  const getQuote = async <T extends QuoteResponse>(args: {
+    amount: string;
+    sourceChain: Chain;
+  }): Promise<T> => {
     try {
+      const { amount, sourceChain } = args;
       const provider = crossChainCore?.getProvider("Wormhole");
 
       if (!provider) {
@@ -120,12 +139,15 @@ export const AptosCrossChainWalletProvider: FC<
     }
   };
 
-  const initiateTransfer = async (
-    sourceChain: Chain,
-    mainSigner: AptosAccount,
-    sponsorAccount?: AptosAccount | Partial<Record<Network, string>>
-  ): Promise<{ originChainTxnId: string; destinationChainTxnId: string }> => {
+  const initiateTransfer = async (args: {
+    sourceChain: Chain;
+    destinationAddress: AccountAddressInput;
+    mainSigner: AptosAccount;
+    sponsorAccount?: AptosAccount | GasStationApiKey;
+  }): Promise<{ originChainTxnId: string; destinationChainTxnId: string }> => {
     try {
+      const { sourceChain, mainSigner, sponsorAccount, destinationAddress } =
+        args;
       if (!provider) {
         throw new Error("Provider is not set");
       }
@@ -133,9 +155,7 @@ export const AptosCrossChainWalletProvider: FC<
         await provider.initiateCCTPTransfer({
           sourceChain,
           wallet,
-          // TODO: should be set by the dapp, ideally it is be the DAA address
-          destinationAddress:
-            "0x38383091fdd9325e0b8ada990c474da8c7f5aa51580b65eb477885b6ce0a36b7",
+          destinationAddress,
           mainSigner,
           sponsorAccount,
         });
@@ -176,23 +196,38 @@ export const AptosCrossChainWalletProvider: FC<
     }
   };
 
-  const signInWith = async (wallet: AdapterWallet) => {
+  const signInWith = async (args: {
+    wallet: AdapterWallet;
+    input: Omit<AptosSignInInput, "nonce">;
+  }) => {
     try {
+      const { input, wallet } = args;
       if (!wallet.signIn) {
         throw new Error("Wallet does not support signIn").message;
       }
-      const response = await wallet.signIn();
+      const response = await wallet.signIn(input);
+      console.log("WalletProvider signInWith response", response);
       setState((state) => ({
         ...state,
         connected: true,
         wallet: wallet,
         account: response.account,
       }));
-      console.log("WalletProvider signInWithWallet response", response);
     } catch (error) {
       if (onError) onError(error);
       return Promise.reject(error);
     }
+  };
+
+  const getChainInfo = (chain: Chain): ChainConfig => {
+    if (!crossChainCore) {
+      throw new Error("CrossChainCore is not set");
+    }
+    const chainConfig = crossChainCore.CHAINS[chain];
+    if (!chainConfig) {
+      throw new Error(`Chain config not found for chain: ${chain}`);
+    }
+    return chainConfig;
   };
 
   return (
@@ -204,6 +239,8 @@ export const AptosCrossChainWalletProvider: FC<
         getSolanaWallets,
         getEthereumWallets,
         getAptosWallets,
+        fetchAptosNotDetectedWallets,
+        getChainInfo,
         connect,
         disconnect,
         signInWith,

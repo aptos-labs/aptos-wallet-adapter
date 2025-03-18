@@ -1,5 +1,7 @@
 import {
   APTOS_CHAINS,
+  AptosSignInInput,
+  AptosSignInOutput,
   AptosSignMessageInput,
   AptosSignMessageOutput,
   AptosWallet,
@@ -115,6 +117,7 @@ export class Eip6963Wallet extends AdapterWallet<
   TransactionRequest,
   string
 > {
+  readonly originChain = "Ethereum";
   readonly eip6963Wallet: Eip6963BaseWallet;
   readonly eip6963WalletProvider: EIP6963ProviderInfo;
   readonly version = "1.0.0";
@@ -219,13 +222,21 @@ export class Eip6963Wallet extends AdapterWallet<
     return result.args;
   }
 
-  async signIn() {
-    const result = await this.eip6963Wallet.features["aptos:signIn"]!.signIn({
-      nonce: Math.random().toString(16),
-    });
+  async signIn(input: AptosSignInInput): Promise<AptosSignInOutput> {
+    const result =
+      await this.eip6963Wallet.features["aptos:signIn"]!.signIn(input);
+
     if (result.status === UserResponseStatus.REJECTED) {
       throw new Error("User rejected the request").message;
     }
+    await this.onAccountChange();
+    await this.onNetworkChange();
+
+    this.provider = new ethers.BrowserProvider(
+      (await this.eip6963WalletProvider.provider) as ethers.Eip1193Provider,
+      "any"
+    );
+    this.connected = true;
     return result.args;
   }
 

@@ -12,24 +12,24 @@ export async function signAndSendTransaction(
   options: any
 ): Promise<string> {
   if (!wallet || !wallet.sendTransaction) {
-    throw new Error("wallet.sendTransaction is undefined");
+    throw new Error("wallet.sendTransaction is undefined").message;
   }
   // Ensure the signer is connected to the correct chain
   const actualChainId = await wallet.getConnectedNetwork();
 
-  if (!actualChainId) throw new Error("No signer found for chain" + chainName);
+  if (!actualChainId)
+    throw new Error("No signer found for chain" + chainName).message;
   const expectedChainId = request.transaction.chainId
     ? getBigInt(request.transaction.chainId)
     : undefined;
-
   if (
     !actualChainId ||
     !expectedChainId ||
-    BigInt(actualChainId) !== expectedChainId
+    BigInt(actualChainId.name) !== expectedChainId
   ) {
     throw new Error(
       `Signer is not connected to the right chain. Expected ${expectedChainId}, got ${actualChainId}`
-    );
+    ).message;
   }
 
   const txHash = await wallet.sendTransaction(request.transaction);

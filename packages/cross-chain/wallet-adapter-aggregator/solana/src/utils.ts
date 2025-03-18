@@ -178,9 +178,19 @@ const APTOS_REQUIRED_FEATURES = (
             throw new Error(`signIn not supported in ${solanaWallet.name}`)
               .message;
           }
-          const result = await solanaWallet.signIn({
-            nonce: Math.random().toString(16),
-          });
+
+          const signInInput = {
+            domain: window.location.host,
+            statement: input.statement,
+            nonce: Math.random().toString(36).slice(2),
+            uri: input.uri,
+            version: input.version,
+            chainId: input.chainId,
+            issuedAt: input.issuedAt,
+            expirationTime: input.expirationTime,
+            notBefore: input.notBefore,
+          };
+          const result = await solanaWallet.signIn(signInInput);
           const response: AptosSignInOutput = {
             account: deriveAccountInfoFromSolanaPublicKey(
               new PublicKey(result.account.publicKey)

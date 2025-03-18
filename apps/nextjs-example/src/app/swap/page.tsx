@@ -1,7 +1,7 @@
 "use client";
 
 import { Account, Ed25519PrivateKey, Network } from "@aptos-labs/ts-sdk";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Loader2, MoveDown } from "lucide-react";
 import {
   Chain,
@@ -10,6 +10,7 @@ import {
   testnetChains,
   mainnetChains,
   QuoteResponse,
+  WormholeInitiateTransferResponse,
 } from "@aptos-labs/cross-chain-react";
 
 import { Input } from "@/components/ui/input";
@@ -43,9 +44,13 @@ export default function Swap() {
     initiateTransfer,
     sourceChain,
     setSourceChain,
-    signInWith,
+    getChainInfo,
   } = useCrossChainWallet();
   const { toast } = useToast();
+  const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  );
+
   const [quote, setQuote] = useState<QuoteResponse | undefined>(undefined);
 
   const [transactionInProgress, setTransactionInProgress] =
@@ -54,11 +59,7 @@ export default function Swap() {
     useState<boolean>(false);
   const [amount, setAmount] = useState<string>("");
   const [transferResponse, setTransferResponse] = useState<
-    | {
-        originChainTxnId: string;
-        destinationChainTxnId: string;
-      }
-    | undefined
+    WormholeInitiateTransferResponse | undefined
   >(undefined);
   const [sourceWalletUSDCBalance, setSourceWalletUSDCBalance] = useState<
     UsdcBalance | undefined
@@ -69,61 +70,39 @@ export default function Swap() {
   const chains =
     dappNetwork === Network.TESTNET ? testnetChains : mainnetChains;
 
-  useEffect(
-    function getWalletUsdcBalance() {
-      if (!wallet || !sourceChain) {
-        setSourceWalletUSDCBalance(undefined);
+  const onSetAmount = useCallback(
+    (amount: string) => {
+      if (!sourceChain) return;
+      if (!amount) {
+        setAmount("");
+        setQuote(undefined);
+        setInvalidAmount(false);
         return;
       }
-      // const fetchUsdcBalance = async () => {
-      //   const balance = await getUsdcBalance(wallet, sourceChain);
-      //   return balance;
-      // };
-      // fetchUsdcBalance().then((balance) => {
-      //   setSourceWalletUSDCBalance(balance);
-      // });
-    },
-    [wallet, sourceChain]
-  );
-
-  // TODO use debounce
-  const onSetAmount = async (amount: string) => {
-    if (!sourceChain) return;
-    if (!amount) {
-      setAmount("");
-      setQuote(undefined);
+      setQuoteIsFetching(true);
       setInvalidAmount(false);
-      return;
-    }
-    setQuoteIsFetching(true);
-    setInvalidAmount(false);
-    setAmount(amount);
+      setAmount(amount);
 
-    if (invalidateAmount(amount)) {
-      setInvalidAmount(true);
-      setQuoteIsFetching(false);
-      return;
-    }
-    const fetchQuote = async () => {
-      const quote = await getQuote(amount, sourceChain);
-      console.log("quote", quote);
-      return quote;
-    };
-    fetchQuote()
-      .then((quote) => {
-        setQuote(quote);
-      })
-      .finally(() => {
+      if (invalidateAmount(amount)) {
+        setInvalidAmount(true);
         setQuoteIsFetching(false);
-      });
-  };
+        return;
+      }
 
-  const onSetMaxAmount = () => {
-    if (!sourceWalletUSDCBalance) {
-      return;
-    }
-    onSetAmount(sourceWalletUSDCBalance.display);
-  };
+      if (debounceTimeout) {
+        clearTimeout(debounceTimeout);
+      }
+
+      const newTimeout = setTimeout(async () => {
+        const quote = await getQuote({ amount, sourceChain });
+        setQuote(quote);
+        setQuoteIsFetching(false);
+      }, 500);
+
+      setDebounceTimeout(newTimeout);
+    },
+    [sourceChain, debounceTimeout]
+  );
 
   const humanReadableETA = (milliseconds: number): string => {
     if (milliseconds >= 60000) {
@@ -149,12 +128,18 @@ export default function Swap() {
         throw new Error("Missing required parameters");
       }
       const { originChainTxnId, destinationChainTxnId } =
-        await initiateTransfer(sourceChain, mainSigner, sponsorAccount);
+        await initiateTransfer({
+          sourceChain,
+          // TODO: ideally it is be the DAA address
+          destinationAddress:
+            "0x38383091fdd9325e0b8ada990c474da8c7f5aa51580b65eb477885b6ce0a36b7",
+          mainSigner,
+          sponsorAccount,
+        });
       return { originChainTxnId, destinationChainTxnId };
     };
     transfer()
       .then((response) => {
-        console.log("transfer", response);
         setTransferResponse(response);
         setTransactionInProgress(false);
         setTransactionCompleted(true);
@@ -178,7 +163,6 @@ export default function Swap() {
     };
     try {
       const signature = await wallet.signMessage(payload);
-      console.log("signature", signature);
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -227,10 +211,7 @@ export default function Swap() {
                 value={amount}
                 onChange={(e) => onSetAmount(e.target.value)}
               />
-              <div
-                className="flex flex-col cursor-pointer"
-                onClick={onSetMaxAmount}
-              >
+              <div className="flex flex-col cursor-pointer">
                 <span>Max</span>
                 <span>
                   {sourceWalletUSDCBalance
@@ -341,7 +322,9 @@ export default function Swap() {
 
             {!transactionInProgress && transactionCompleted && (
               <div className="flex flex-col gap-4">
-                <Button>Start a new Transaction</Button>
+                <Button onClick={() => window.location.reload()}>
+                  Start a new Transaction
+                </Button>
               </div>
             )}
 
@@ -350,13 +333,15 @@ export default function Swap() {
                 <p className="text-lg">Transaction submitted</p>
                 {transferResponse.originChainTxnId && (
                   <a
-                    href={`https://explorer.solana.com/tx/${transferResponse.originChainTxnId}?cluster=${
+                    href={`${getChainInfo(sourceChain!).explorerUrl}/tx/${transferResponse.originChainTxnId}?cluster=${
                       dappNetwork === Network.MAINNET ? "mainnet" : "devnet"
                     }`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <p className="text-md underline">View on Solana Explorer</p>
+                    <p className="text-md underline">
+                      View on {getChainInfo(sourceChain!).explorerName}
+                    </p>
                   </a>
                 )}
                 {transferResponse.destinationChainTxnId && (

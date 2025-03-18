@@ -34,7 +34,7 @@ export async function signAndSendTransaction(
   wallet: AdapterWallet | undefined,
   options?: ConfirmOptions
 ) {
-  if (!wallet) throw new Error("Wallet not found");
+  if (!wallet) throw new Error("Wallet not found").message;
 
   const commitment = options?.commitment ?? "finalized";
   // Solana rpc should come from dapp config
@@ -129,7 +129,7 @@ export async function signAndSendTransaction(
         errorMessage = `Transaction failed: Unknown error`;
       }
     }
-    throw new Error(`Transaction failed: ${errorMessage}`);
+    throw new Error(`Transaction failed: ${errorMessage}`).message;
   }
 
   return signature;
@@ -198,7 +198,7 @@ async function createPriorityFeeInstructions(
         `Simulation failed: ${JSON.stringify(response.value.err)}\nLogs:\n${(
           response.value.logs || []
         ).join("\n  ")}`
-      );
+      ).message;
     } else {
       // Simulation was successful
       if (response.value.unitsConsumed) {
