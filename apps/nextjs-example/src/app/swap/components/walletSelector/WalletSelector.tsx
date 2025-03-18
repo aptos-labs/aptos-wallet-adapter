@@ -1,5 +1,6 @@
 "use client";
 
+import { truncateAddress } from "@aptos-labs/ts-sdk";
 import {
   ChevronDown,
   ArrowRight,
@@ -81,7 +82,7 @@ export function WalletSelector({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button disabled={transactionInProgress}>
-          {account?.address?.toString() || ""}
+          {truncateAddress(account?.address?.toString() || "")}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
