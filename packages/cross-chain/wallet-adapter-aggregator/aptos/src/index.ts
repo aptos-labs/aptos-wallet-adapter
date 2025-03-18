@@ -10,6 +10,7 @@ import {
   AnyRawTransaction,
   InputTransactionData,
   AccountAuthenticator,
+  AdapterNotDetectedWallet,
 } from "@aptos-labs/wallet-adapter-core";
 import {
   APTOS_CHAINS,
@@ -20,7 +21,7 @@ import {
   WalletAccount,
 } from "@aptos-labs/wallet-standard";
 
-export const getAptosWallets = (): AptosWallet[] => {
+export const getAptosWallets = (): AdapterWallet[] => {
   const walletCore = new WalletCore();
   const wallets = walletCore.wallets.map(
     (wallet) => new AptosWallet(wallet, walletCore)
@@ -28,6 +29,39 @@ export const getAptosWallets = (): AptosWallet[] => {
   return wallets;
 };
 
+export const getAptosNotDetectedWallets = (): AptosNotDetectedWallet[] => {
+  const walletCore = new WalletCore();
+  const wallets = walletCore.notDetectedWallets.map(
+    (wallet) => new AptosNotDetectedWallet(wallet, walletCore)
+  );
+  return wallets;
+};
+
+export class AptosNotDetectedWallet {
+  readonly originChain = "Aptos";
+  readonly version = "1.0.0";
+  readonly aptosWallet: AdapterNotDetectedWallet;
+  readonly walletCore: WalletCore;
+
+  constructor(aptosWallet: AdapterNotDetectedWallet, walletCore: WalletCore) {
+    this.aptosWallet = aptosWallet;
+    this.walletCore = walletCore;
+  }
+
+  get icon() {
+    return this.aptosWallet.icon;
+  }
+  get name() {
+    return this.aptosWallet.name;
+  }
+  get url() {
+    return this.aptosWallet.url;
+  }
+
+  get readyState() {
+    return WalletReadyState.NotDetected;
+  }
+}
 export class AptosWallet extends AdapterWallet<
   AccountInfo,
   NetworkInfo,
@@ -46,6 +80,7 @@ export class AptosWallet extends AdapterWallet<
   NetworkInfo,
   AptosSignInOutput
 > {
+  readonly originChain = "Aptos";
   readonly aptosWallet: AptosBaseWallet;
   readonly walletCore: WalletCore;
   readonly version = "1.0.0";
@@ -130,9 +165,21 @@ export class AptosWallet extends AdapterWallet<
     return result;
   }
 
-  async signIn(input: { message?: string }): Promise<AptosSignInOutput> {
+  async signIn(input: AptosSignInInput): Promise<AptosSignInOutput> {
     const result = await this.walletCore.signIn({
-      input: { nonce: Math.random().toString(16) },
+      input: {
+        nonce: input.nonce ?? Math.random().toString(16),
+        uri: input.uri ?? window.location.origin,
+        version: input.version ?? "0.1.0",
+        chainId: input.chainId ?? "1",
+        issuedAt: input.issuedAt ?? new Date().toISOString(),
+        expirationTime:
+          input.expirationTime ??
+          new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
+        notBefore: input.notBefore ?? new Date().toISOString(),
+        requestId: input.requestId ?? Math.random().toString(16),
+        resources: input.resources ?? [],
+      },
       walletName: this.name,
     });
     return result;

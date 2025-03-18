@@ -8,11 +8,22 @@ import {
   WormholeQuoteResponse,
 } from "./providers/wormhole";
 
+import {
+  ChainsConfig,
+  testnetChains,
+  testnetTokens,
+  mainnetChains,
+  mainnetTokens,
+  TokenConfig,
+  AptosTestnetUSDCToken,
+  AptosMainnetUSDCToken,
+} from "./config";
+
 export interface CrossChainDappConfig {
   network: Network;
   disableTelemetry?: boolean;
 }
-
+export type { AccountAddressInput } from "@aptos-labs/ts-sdk";
 export type AptosAccount = Account;
 
 export type Chain = "Solana" | "Ethereum" | "Aptos";
@@ -40,8 +51,22 @@ export interface CrossChainProvider<
 export class CrossChainCore {
   readonly _dappConfig: CrossChainDappConfig | undefined;
 
+  readonly CHAINS: ChainsConfig = testnetChains;
+  readonly TOKENS: Record<string, TokenConfig> = testnetTokens;
+
+  readonly APTOS_TOKEN: TokenConfig = AptosTestnetUSDCToken;
+
   constructor(args: { dappConfig: CrossChainDappConfig }) {
     this._dappConfig = args.dappConfig;
+    if (args.dappConfig?.network === Network.MAINNET) {
+      this.CHAINS = mainnetChains;
+      this.TOKENS = mainnetTokens;
+      this.APTOS_TOKEN = AptosMainnetUSDCToken;
+    } else {
+      this.CHAINS = testnetChains;
+      this.TOKENS = testnetTokens;
+      this.APTOS_TOKEN = AptosTestnetUSDCToken;
+    }
   }
 
   getProvider(providerType: CCTPProviders): CrossChainProvider {

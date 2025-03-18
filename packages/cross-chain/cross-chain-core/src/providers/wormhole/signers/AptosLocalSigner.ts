@@ -18,6 +18,7 @@ import {
   AptosUnsignedTransaction,
   AptosChains,
 } from "@wormhole-foundation/sdk-aptos";
+import { GasStationApiKey } from "../types";
 
 export class AptosLocalSigner<N extends Network, C extends Chain>
   implements SignAndSendSigner<N, C>
@@ -25,14 +26,14 @@ export class AptosLocalSigner<N extends Network, C extends Chain>
   _chain: C;
   _options: any;
   _wallet: Account;
-  _sponsorAccount: Account | Partial<Record<AptosNetwork, string>> | undefined;
+  _sponsorAccount: Account | GasStationApiKey | undefined;
   _claimedTransactionHashes: string;
 
   constructor(
     chain: C,
     options: any,
     wallet: Account,
-    feePayerAccount: Account | Partial<Record<AptosNetwork, string>> | undefined
+    feePayerAccount: Account | GasStationApiKey | undefined
   ) {
     this._chain = chain;
     this._options = options;
@@ -54,7 +55,6 @@ export class AptosLocalSigner<N extends Network, C extends Chain>
   /* other methods... */
 
   async signAndSend(txs: UnsignedTransaction<N, C>[]): Promise<TxHash[]> {
-    console.log("Signer signAndSend txs", txs);
     const txHashes: TxHash[] = [];
 
     for (const tx of txs) {
@@ -73,7 +73,7 @@ export class AptosLocalSigner<N extends Network, C extends Chain>
 export async function signAndSendTransaction(
   request: UnsignedTransaction<Network, AptosChains>,
   wallet: Account,
-  sponsorAccount: Account | Partial<Record<AptosNetwork, string>> | undefined
+  sponsorAccount: Account | GasStationApiKey | undefined
 ) {
   if (!wallet) {
     throw new Error("Wallet is undefined");
@@ -116,14 +116,16 @@ export async function signAndSendTransaction(
   };
 
   if (sponsorAccount) {
-    const feePayerSignerAuthenticator = aptos.transaction.signAsFeePayer({
-      // TODO: handles sponsor account coming from gas station
-      signer: sponsorAccount as Account,
-      transaction: txnToSign,
-    });
-    txnToSubmit.feePayerAuthenticator = feePayerSignerAuthenticator;
+    if (typeof sponsorAccount === "string") {
+      // TODO: handle gas station integration here
+    } else {
+      const feePayerSignerAuthenticator = aptos.transaction.signAsFeePayer({
+        signer: sponsorAccount as Account,
+        transaction: txnToSign,
+      });
+      txnToSubmit.feePayerAuthenticator = feePayerSignerAuthenticator;
+    }
   }
-
   const response = await aptos.transaction.submit.simple(txnToSubmit);
 
   const tx = await aptos.waitForTransaction({

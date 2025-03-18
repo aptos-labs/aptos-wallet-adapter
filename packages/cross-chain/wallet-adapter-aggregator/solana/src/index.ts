@@ -1,6 +1,7 @@
 import {
   AccountInfo,
   APTOS_CHAINS,
+  AptosSignInInput,
   AptosSignMessageInput,
   AptosSignMessageOutput,
   AptosWallet,
@@ -61,6 +62,7 @@ export class SolanaWallet extends AdapterWallet<
   AccountInfo,
   NetworkInfo
 > {
+  readonly originChain = "Solana";
   readonly solanaWallet: SolanaBaseWallet;
   readonly version = "1.0.0";
 
@@ -143,10 +145,9 @@ export class SolanaWallet extends AdapterWallet<
     return result.args;
   }
 
-  async signIn() {
-    const result = await this.solanaWallet.features["aptos:signIn"]!.signIn({
-      nonce: Math.random().toString(16),
-    });
+  async signIn(input: AptosSignInInput) {
+    const result =
+      await this.solanaWallet.features["aptos:signIn"]!.signIn(input);
     if (result.status === UserResponseStatus.REJECTED) {
       throw new Error("User rejected the request").message;
     }

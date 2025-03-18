@@ -1,7 +1,13 @@
 "use client";
 
-import { AdapterWallet } from "@aptos-labs/wallet-adapter-aggregator-core";
-import { useCrossChainWallet } from "@aptos-labs/cross-chain-react";
+import {
+  AdapterWallet,
+  WalletReadyState,
+} from "@aptos-labs/wallet-adapter-aggregator-core";
+import {
+  AptosNotDetectedWallet,
+  useCrossChainWallet,
+} from "@aptos-labs/cross-chain-react";
 import { Slot } from "@radix-ui/react-slot";
 import {
   cloneElement,
@@ -13,10 +19,11 @@ import {
   useContext,
 } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { isRedirectable } from "@aptos-labs/wallet-adapter-core";
 
 export interface WalletItemProps extends HeadlessComponentProps {
   /** The wallet option to be displayed. */
-  wallet: AdapterWallet;
+  wallet: AdapterWallet | AptosNotDetectedWallet;
   /** A callback to be invoked when the wallet is connected. */
   onConnect?: () => void;
   /** A callback to be invoked when the wallet is signed in. */
@@ -34,7 +41,7 @@ function useWalletItemContext(displayName: string) {
 }
 
 const WalletItemContext = createContext<{
-  wallet: AdapterWallet;
+  wallet: AdapterWallet | AptosNotDetectedWallet;
   connectWallet: () => void;
   signInWithWallet: () => void;
 } | null>(null);
@@ -44,23 +51,28 @@ const Root = forwardRef<HTMLDivElement, WalletItemProps>(
     const { connect, signInWith } = useCrossChainWallet();
     const { toast } = useToast();
     const connectWallet = useCallback(async () => {
-      await connect(wallet);
+      await connect(wallet as AdapterWallet);
       onConnect?.();
     }, [wallet, onConnect]);
 
     const signInWithWallet = useCallback(async () => {
-      await signInWith(wallet);
+      await signInWith({
+        wallet: wallet as AdapterWallet,
+        input: {
+          statement: "address::module::function",
+        },
+      });
       onSignInWith?.();
     }, [wallet, onSignInWith]);
 
-    // const isWalletReady =
-    //   wallet.readyState === WalletReadyState.Installed ||
-    //   wallet.readyState === WalletReadyState.Loadable;
+    if (wallet.originChain === "Aptos") {
+      const isWalletReady = wallet.readyState === WalletReadyState.Installed;
 
-    // const mobileSupport =
-    //   "deeplinkProvider" in wallet && wallet.deeplinkProvider;
+      const mobileSupport =
+        "deeplinkProvider" in wallet && wallet.deeplinkProvider;
 
-    // if (!isWalletReady && isRedirectable() && !mobileSupport) return null;
+      if (!isWalletReady && isRedirectable() && !mobileSupport) return null;
+    }
 
     const Component = asChild ? Slot : "div";
 

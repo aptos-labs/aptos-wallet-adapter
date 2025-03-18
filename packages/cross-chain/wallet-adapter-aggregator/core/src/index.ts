@@ -13,6 +13,10 @@ export type UsdcBalance = {
   display: string;
 };
 
+export type SignInWithInput = {
+  message?: string;
+};
+
 export enum WalletReadyState {
   /**
    * Wallet can only be in one of two states - installed or not installed
@@ -42,8 +46,8 @@ export abstract class AdapterWallet<
   OnNetworkChangeInput = any,
   SendTransactionInput = any,
   SendTransactionOutput = any,
-  SignInOutput = any,
 > extends EventEmitter<WalletEvents> {
+  abstract readonly originChain: string;
   abstract readonly version: "1.0.0";
   abstract accounts: WalletAccount[];
   abstract get name(): string;
@@ -65,7 +69,9 @@ export abstract class AdapterWallet<
   abstract onNetworkChange(
     callback: (network: OnNetworkChangeInput) => void
   ): void;
-  signIn?(input?: { message?: string }): Promise<SignInOutput>;
+  abstract signIn(
+    input?: Omit<AptosSignInInput, "nonce">
+  ): Promise<AptosSignInOutput>;
   sendTransaction?(
     transaction: SendTransactionInput
   ): Promise<SendTransactionOutput> {

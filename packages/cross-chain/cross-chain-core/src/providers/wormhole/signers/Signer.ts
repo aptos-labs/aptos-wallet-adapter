@@ -20,7 +20,7 @@ import * as solanaSigner from "./SolanaSigner";
 import * as ethereumSigner from "./EthereumSigner";
 import * as suiSigner from "./SuiSigner";
 
-import { ChainConfig } from "../config";
+import { ChainConfig } from "../../../config";
 export class Signer<N extends Network, C extends Chain>
   implements SignAndSendSigner<N, C>
 {

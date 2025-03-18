@@ -11,7 +11,7 @@ import {
   UserResponseStatus,
 } from "@aptos-labs/wallet-standard";
 import { AnyRawTransaction } from "@aptos-labs/ts-sdk";
-import { ethers, TransactionRequest, version } from "ethers";
+import { ethers, TransactionRequest } from "ethers";
 import {
   Eip6963BaseWallet,
   Eip6963Features,
@@ -44,13 +44,13 @@ const APTOS_REQUIRED_FEATURES = (
   return {
     "aptos:account": {
       account: async () => {
-        throw new Error("Not yet implemented");
+        throw new Error("Not yet implemented").message;
       },
       version: "1.0.0",
     },
     "aptos:connect": {
       connect: async () => {
-        throw new Error("Not yet implemented");
+        throw new Error("Not yet implemented").message;
       },
       version: "1.0.0",
     },
@@ -111,13 +111,13 @@ const APTOS_REQUIRED_FEATURES = (
     },
     "aptos:signTransaction": {
       signTransaction: async (transaction: AnyRawTransaction) => {
-        throw new Error("Not yet implemented");
+        throw new Error("Not yet implemented").message;
       },
       version: "1.0.0",
     },
     "aptos:onAccountChange": {
       onAccountChange: async (callback: AptosOnAccountChangeInput) => {
-        throw new Error("Not yet implemented");
+        throw new Error("Not yet implemented").message;
       },
       version: "1.0.0",
     },
@@ -129,12 +129,12 @@ const APTOS_REQUIRED_FEATURES = (
             .catch((error: any) => {
               throw new Error("Error signing in" + error).message;
             });
-          const domain = window.location.origin;
+          const domain = input.uri || window.location.origin;
           const from = accounts[0];
           const chainId = await eip6963Wallet.provider.request({
             method: "eth_chainId",
           });
-          const siweMessage = `${domain} wants you to sign in with your Ethereum account:\n${from}\n\n${input.statement}\n\nURI: ${domain}\nVersion: ${input.version ?? "0.1.0"}\nChain ID: ${parseInt(chainId, 16)}\nNonce: ${input.nonce}\nIssued At: ${new Date().toLocaleString()}`;
+          const siweMessage = `${domain} wants you to sign in with your Ethereum account:\n${from}\n\n${input.statement}\n\nURI: ${domain}\nVersion: ${input.version ?? "0.1.0"}\nChain ID: ${parseInt(chainId, 16)}\nNonce: ${Math.random().toString(16)}\nIssued At: ${new Date().toLocaleString()}`;
           const msg = `0x${Buffer.from(siweMessage, "utf8").toString("hex")}`;
           const signature = await eip6963Wallet.provider.request({
             method: "personal_sign",
@@ -173,7 +173,7 @@ const APTOS_REQUIRED_FEATURES = (
               status: UserResponseStatus.REJECTED,
             };
           }
-          throw error;
+          throw new Error("Error signing in" + error).message;
         }
       },
       version: "0.1.0",
@@ -236,7 +236,7 @@ const EIP6963_ADDITIONAL_FEATURES = (
               status: UserResponseStatus.REJECTED,
             };
           }
-          throw error;
+          throw new Error("Error connecting to wallet" + error).message;
         }
       },
       version: "1.0.0",
@@ -249,7 +249,7 @@ const EIP6963_ADDITIONAL_FEATURES = (
         try {
           const signer = await provider.getSigner();
           if (!signer) {
-            throw new Error("No signer found");
+            throw new Error("No signer found").message;
           }
           const response = await signer.sendTransaction(transaction);
           const receipt = await response.wait();
@@ -263,7 +263,7 @@ const EIP6963_ADDITIONAL_FEATURES = (
               status: UserResponseStatus.REJECTED,
             };
           }
-          throw new Error(error).message;
+          throw new Error("Error sending transaction" + error).message;
         }
       },
       version: "1.0.0",
