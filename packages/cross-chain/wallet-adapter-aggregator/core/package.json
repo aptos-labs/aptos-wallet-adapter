@@ -42,7 +42,7 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
-    "@aptos-labs/ts-sdk": "^1.35.0",
+    "@aptos-labs/ts-sdk": "^1.36.0",
     "@aptos-labs/wallet-standard": "^0.3.0",
     "@wallet-standard/app": "^1.1.0",
     "eventemitter3": "^4.0.7"
