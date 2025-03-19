@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.1.3
+
+### Patch Changes
+
+- 25ab2ef: Allow users to perform connections when the wallet is `_connected` but `_account` is `null`
+
 ## 5.1.2
 
 ### Patch Changes
