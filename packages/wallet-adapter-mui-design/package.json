@@ -2,14 +2,21 @@
   "name": "@aptos-labs/wallet-adapter-mui-design",
   "version": "4.0.7",
   "description": "Aptos Wallet Adapter mui design",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.mjs",
+  "types": "./dist/types/index.d.ts",
   "license": "Apache-2.0",
   "exports": {
-    "require": "./dist/index.js",
-    "import": "./dist/index.mjs",
-    "types": "./dist/index.d.ts"
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.mjs"
+    },
+    "./new": {
+      "types": "./dist/types/new/index.d.ts",
+      "require": "./dist/cjs/new/index.js",
+      "import": "./dist/esm/new/index.mjs"
+    }
   },
   "repository": {
     "type": "git",
@@ -29,20 +36,43 @@
     "React"
   ],
   "scripts": {
-    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
-    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
+    "build": "tsup --onSuccess 'tsc'",
+    "dev": "tsup --watch & tsc --watch",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "lint": "TIMING=1 eslint \"src/**/*.ts*\""
   },
+  "tsup": [
+    {
+      "clean": true,
+      "sourcemap": true,
+      "entryPoints": [
+        "src/index.tsx",
+        "src/new/index.ts"
+      ],
+      "format": ["esm"],
+      "outDir": "dist/esm"
+    },
+    {
+      "clean": true,
+      "sourcemap": true,
+      "entryPoints": [
+        "src/index.tsx",
+        "src/new/index.ts"
+      ],
+      "format": ["cjs"],
+      "outDir": "dist/cjs"
+    }
+  ],
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "eslint": "^8.15.0",
     "tsup": "^5.10.1",
-    "typescript": "^4.5.3"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@aptos-labs/wallet-adapter-core": "workspace:*",
     "@aptos-labs/wallet-adapter-react": "workspace:*",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
@@ -53,5 +83,6 @@
     "react": "^18",
     "react-dom": "^18",
     "react-router-dom": "^6.8.0"
-  }
+  },
+  "sideEffects": false
 }

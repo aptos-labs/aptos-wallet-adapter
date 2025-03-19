@@ -7,9 +7,16 @@
   "types": "./dist/index.d.ts",
   "license": "Apache-2.0",
   "exports": {
-    "require": "./dist/index.js",
-    "import": "./dist/index.mjs",
-    "types": "./dist/index.d.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./new": {
+      "types": "./dist/new/index.d.ts",
+      "require": "./dist/new/index.js",
+      "import": "./dist/new/index.mjs"
+    }
   },
   "repository": {
     "type": "git",
@@ -30,13 +37,20 @@
   "scripts": {
     "update-version": "node -p \"'export const WALLET_ADAPTER_CORE_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
     "build-package": "export $(cat .env | xargs) && pnpm build:bundle && pnpm build:declarations",
-    "build:bundle": "tsup src/index.ts --format cjs,esm --sourcemap --env.GAID $GAID",
+    "build:bundle": "tsup --sourcemap --env.GAID $GAID",
     "build:declarations": "tsc --emitDeclarationOnly --declaration --declarationMap",
     "build": "pnpm run update-version && pnpm run build-package",
-    "dev": "export $(cat .env | xargs) && tsup src/index.ts --format esm,cjs --watch --dts --env.GAID $GAID",
+    "dev": "export $(cat .env | xargs) && tsup --watch --dts --env.GAID $GAID",
     "test": "jest",
     "lint": "TIMING=1 eslint \"src/**/*.ts*\"",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "tsup": {
+    "entryPoints": [
+      "src/index.ts",
+      "src/new/index.ts"
+    ],
+    "format": ["cjs", "esm"]
   },
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
@@ -46,8 +60,8 @@
     "eslint": "^8.15.0",
     "jest": "^29.3.1",
     "ts-jest": "^29.0.3",
-    "tsup": "^5.10.1",
-    "typescript": "^4.5.3"
+    "tsup": "^8.3.6",
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@aptos-connect/wallet-adapter-plugin": "2.4.1",
