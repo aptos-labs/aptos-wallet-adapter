@@ -1,0 +1,1 @@
+import{d as r,t,v as a,y as n}from"./Bs7hRfHq.js";const o=["href"],p=r({__name:"WalletLink",props:{href:{}},setup(s){return(e,l)=>(a(),t("a",{href:e.href,target:"_blank",rel:"noreferrer",class:"text-blue-600 dark:text-blue-300"},n(e.href),9,o))}});export{p as default};
