@@ -1,16 +1,7 @@
-import {
-  accountInfoFromPublicKey,
-  encodeStructuredMessage,
-  isNullCallback,
-  makeUserApproval,
-  makeUserRejection,
-  mapUserResponse,
-} from '@aptos-labs/derived-wallet-base';
+import { accountInfoFromPublicKey, isNullCallback } from '@aptos-labs/derived-wallet-base';
 import {
   AccountAuthenticator,
-  AccountAuthenticatorAbstraction,
   AnyRawTransaction,
-  Ed25519Signature,
   Network,
   NetworkToChainId,
   NetworkToNodeAPI,
@@ -29,33 +20,12 @@ import {
   UserResponseStatus,
   WalletIcon,
 } from "@aptos-labs/wallet-standard";
-import { WalletError } from '@solana/wallet-adapter-base';
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 import { PublicKey as SolanaPublicKey } from '@solana/web3.js';
-import {
-  createSiwsInputFromAptosStructuredMessage,
-  createSiwsInputFromAptosTransaction,
-} from './createSiwsMessageFromAptos';
+import { defaultAuthenticationFunction } from './shared';
+import { signAptosMessageWithSolana } from './signAptosMessage';
+import { signAptosTransactionWithSolana } from './signAptosTransaction';
 import { SolanaDerivedPublicKey } from './SolanaDerivedPublicKey';
-
-const defaultAuthenticationFunction = '0x7::solana::authenticate';
-
-/**
- * Adapt SolanaWalletAdapter response into a UserResponse.
- * `WalletError` will be converted into a rejection.
- */
-async function wrapSolanaUserResponse<TResponse>(promise: Promise<TResponse>): Promise<UserResponse<TResponse>> {
-  try {
-    const response = await promise;
-    return makeUserApproval(response);
-  } catch (err) {
-    if (err instanceof WalletError && err.message === 'User rejected the request.') {
-      return makeUserRejection();
-    }
-    throw err;
-  }
-}
-
 
 export interface SolanaDomainWalletOptions {
   authenticationFunction?: string;
@@ -231,52 +201,15 @@ export class SolanaDerivedWallet implements AptosWallet {
 
   // region Signatures
 
-  async signMessage({
-    message,
-    nonce,
-    ...flags
-  }: AptosSignMessageInput): Promise<UserResponse<AptosSignMessageOutput>> {
-    if (!this.solanaWallet.signIn) {
-      throw new Error('solana:signIn not available');
-    }
-    const aptosPublicKey = this.getActivePublicKey();
-    const aptosAddress = flags.address ? aptosPublicKey.authKey().derivedAddress() : undefined;
-    const application = flags.application ? this.domain : undefined;
-    const chainId = flags.chainId ? NetworkToChainId[this.defaultNetwork] : undefined;
-    const structuredMessage = {
-      address: aptosAddress?.toString(),
-      application,
-      chainId,
-      message,
-      nonce,
-    };
-
-    const siwsInput = createSiwsInputFromAptosStructuredMessage({
-      solanaPublicKey: aptosPublicKey.solanaPublicKey,
-      structuredMessage,
-    })
-
-    const response = await wrapSolanaUserResponse(this.solanaWallet.signIn(siwsInput));
-
-    return mapUserResponse(response, (output): AptosSignMessageOutput => {
-      if (output.signatureType && output.signatureType !== 'ed25519') {
-        throw new Error('Unsupported signature type');
-      }
-
-      // The wallet might change some of the fields in the SIWS input, so we
-      // might need to include the finalized input in the signature.
-      // For now, we can assume the input is unchanged.
-      const signature = new Ed25519Signature(output.signature);
-      const fullMessageBytes = encodeStructuredMessage(structuredMessage);
-      const fullMessage = new TextDecoder().decode(fullMessageBytes);
-
-      return {
-        prefix: 'APTOS',
-        fullMessage,
-        message,
-        nonce,
-        signature,
-      };
+  async signMessage(input: AptosSignMessageInput): Promise<UserResponse<AptosSignMessageOutput>> {
+    const chainId = input.chainId ? NetworkToChainId[this.defaultNetwork] : undefined;
+    return signAptosMessageWithSolana({
+      solanaWallet: this.solanaWallet,
+      authenticationFunction: this.authenticationFunction,
+      messageInput: {
+        ...input,
+        chainId,
+      },
     });
   }
 
@@ -284,37 +217,10 @@ export class SolanaDerivedWallet implements AptosWallet {
     rawTransaction: AnyRawTransaction,
     _asFeePayer?: boolean,
   ): Promise<UserResponse<AccountAuthenticator>> {
-    if (!this.solanaWallet.signIn) {
-      throw new Error('solana:signIn not available');
-    }
-
-    const aptosPublicKey = this.getActivePublicKey();
-    const solanaPublicKey = aptosPublicKey.solanaPublicKey;
-    const aptosAddress = aptosPublicKey.authKey().derivedAddress();
-
-    const siwsInput = createSiwsInputFromAptosTransaction({
-      solanaPublicKey,
-      aptosAddress,
+    return signAptosTransactionWithSolana({
+      solanaWallet: this.solanaWallet,
+      authenticationFunction: this.authenticationFunction,
       rawTransaction,
-    });
-
-    const response = await wrapSolanaUserResponse(this.solanaWallet.signIn(siwsInput));
-
-    return mapUserResponse(response, (output): AccountAuthenticator => {
-      if (output.signatureType && output.signatureType !== 'ed25519') {
-        throw new Error('Unsupported signature type');
-      }
-
-      // The wallet might change some of the fields in the SIWS input, so we
-      // might need to include the finalized input in the signature.
-      // For now, we can assume the input is unchanged.
-      const signature = new Ed25519Signature(output.signature);
-      return new AccountAuthenticatorAbstraction(
-        this.authenticationFunction,
-        // Not sure what the expected value is here
-        output.signedMessage,
-        signature.bcsToBytes(),
-      );
     });
   }
 

@@ -11,10 +11,9 @@ import {
 } from '@aptos-labs/ts-sdk';
 import { createSignInMessage } from '@solana/wallet-standard-util';
 import { PublicKey as SolanaPublicKey } from '@solana/web3.js';
-import {
-  createSiwsInputFromAptosStructuredMessage,
-  createSiwsInputFromAptosTransaction,
-} from './createSiwsMessageFromAptos';
+import { createSiwsEnvelopeForAptosStructuredMessage } from './createSiwsEnvelopeForStructuredMessage';
+import { createSiwsEnvelopeForAptosTransaction } from './createSiwsEnvelopeForTransaction';
+
 
 export interface SolanaDerivedPublicKeyParams {
   domain: string;
@@ -61,11 +60,11 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
     }
 
     const siwsInput = parsed.type === 'structuredMessage'
-      ? createSiwsInputFromAptosStructuredMessage({
+      ? createSiwsEnvelopeForAptosStructuredMessage({
         solanaPublicKey: this.solanaPublicKey,
         structuredMessage: parsed.structuredMessage,
       })
-      : createSiwsInputFromAptosTransaction({
+      : createSiwsEnvelopeForAptosTransaction({
         solanaPublicKey: this.solanaPublicKey,
         aptosAddress: this._authKey.derivedAddress(),
         rawTransaction: parsed.rawTransaction,
