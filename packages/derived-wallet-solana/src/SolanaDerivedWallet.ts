@@ -1,0 +1,322 @@
+import {
+  accountInfoFromPublicKey,
+  encodeStructuredMessage,
+  isNullCallback,
+  makeUserApproval,
+  makeUserRejection,
+  mapUserResponse,
+} from '@aptos-labs/derived-wallet-base';
+import {
+  AccountAuthenticator,
+  AccountAuthenticatorAbstraction,
+  AnyRawTransaction,
+  Ed25519Signature,
+  Network,
+  NetworkToChainId,
+  NetworkToNodeAPI,
+} from '@aptos-labs/ts-sdk';
+import {
+  AccountInfo,
+  APTOS_CHAINS,
+  AptosChangeNetworkOutput,
+  AptosConnectOutput,
+  AptosFeatures,
+  AptosSignMessageInput,
+  AptosSignMessageOutput,
+  AptosWallet,
+  NetworkInfo,
+  UserResponse,
+  UserResponseStatus,
+  WalletIcon,
+} from "@aptos-labs/wallet-standard";
+import { WalletError } from '@solana/wallet-adapter-base';
+import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
+import { PublicKey as SolanaPublicKey } from '@solana/web3.js';
+import {
+  createSiwsInputFromAptosStructuredMessage,
+  createSiwsInputFromAptosTransaction,
+} from './createSiwsMessageFromAptos';
+import { SolanaDerivedPublicKey } from './SolanaDerivedPublicKey';
+
+const defaultAuthenticationFunction = '0x7::solana::authenticate';
+
+/**
+ * Adapt SolanaWalletAdapter response into a UserResponse.
+ * `WalletError` will be converted into a rejection.
+ */
+async function wrapSolanaUserResponse<TResponse>(promise: Promise<TResponse>): Promise<UserResponse<TResponse>> {
+  try {
+    const response = await promise;
+    return makeUserApproval(response);
+  } catch (err) {
+    if (err instanceof WalletError && err.message === 'User rejected the request.') {
+      return makeUserRejection();
+    }
+    throw err;
+  }
+}
+
+
+export interface SolanaDomainWalletOptions {
+  authenticationFunction?: string;
+  defaultNetwork?: Network;
+}
+
+export class SolanaDerivedWallet implements AptosWallet {
+  readonly solanaWallet: SolanaWalletAdapter;
+  readonly domain: string;
+  readonly authenticationFunction: string;
+  defaultNetwork: Network;
+
+  readonly version = "1.0.0";
+  readonly name: string;
+  readonly icon: WalletIcon;
+  readonly url: string;
+  readonly accounts = [];
+  readonly chains = APTOS_CHAINS;
+
+  constructor(solanaWallet: SolanaWalletAdapter, options: SolanaDomainWalletOptions = {}) {
+    const {
+      authenticationFunction = defaultAuthenticationFunction,
+      defaultNetwork = Network.MAINNET,
+    } = options;
+
+    this.solanaWallet = solanaWallet;
+    this.domain = window.location.origin;
+    this.authenticationFunction = authenticationFunction;
+    this.defaultNetwork = defaultNetwork;
+    this.name = `${solanaWallet.name} (Solana)`;
+    this.icon = solanaWallet.icon;
+    this.url = solanaWallet.url;
+  }
+
+  readonly features: AptosFeatures = {
+    'aptos:connect': {
+      version: '1.0.0',
+      connect: () => this.connect(),
+    },
+    'aptos:disconnect': {
+      version: '1.0.0',
+      disconnect: () => this.disconnect(),
+    },
+    'aptos:account': {
+      version: '1.0.0',
+      account: () => this.getActiveAccount(),
+    },
+    'aptos:onAccountChange': {
+      version: '1.0.0',
+      onAccountChange: async (callback) => this.onActiveAccountChange(callback),
+    },
+    'aptos:network': {
+      version: '1.0.0',
+      network: () => this.getActiveNetwork(),
+    },
+    'aptos:changeNetwork': {
+      version: '1.0.0',
+      changeNetwork: (newNetwork) => this.changeNetwork(newNetwork),
+    },
+    'aptos:onNetworkChange': {
+      version: '1.0.0',
+      onNetworkChange: async (callback) => this.onActiveNetworkChange(callback),
+    },
+    "aptos:signMessage": {
+      version: '1.0.0',
+      signMessage: (args) => this.signMessage(args),
+    },
+    "aptos:signTransaction": {
+      version: '1.0.0',
+      signTransaction: (...args) => this.signTransaction(...args),
+    },
+  }
+
+  private derivePublicKey(solanaPublicKey: SolanaPublicKey) {
+    return new SolanaDerivedPublicKey({
+      domain: this.domain,
+      solanaPublicKey,
+      authenticationFunction: this.authenticationFunction,
+    });
+  }
+
+  // region Connection
+
+  async connect(): Promise<UserResponse<AptosConnectOutput>> {
+    await this.solanaWallet.connect();
+    if (!this.solanaWallet.publicKey) {
+      return { status: UserResponseStatus.REJECTED };
+    }
+
+    const aptosPublicKey = this.derivePublicKey(this.solanaWallet.publicKey);
+    return {
+      args: accountInfoFromPublicKey(aptosPublicKey),
+      status: UserResponseStatus.APPROVED,
+    };
+  }
+
+  async disconnect() {
+    await this.solanaWallet.disconnect();
+  }
+
+  // endregion
+
+  // region Accounts
+
+  private getActivePublicKey(): SolanaDerivedPublicKey {
+    if (!this.solanaWallet.publicKey) {
+      throw new Error('Account not connected');
+    }
+    return this.derivePublicKey(this.solanaWallet.publicKey);
+  }
+
+  async getActiveAccount() {
+    const aptosPublicKey = this.getActivePublicKey();
+    return accountInfoFromPublicKey(aptosPublicKey);
+  }
+
+  onActiveAccountChange(callback: (newAccount: AccountInfo) => void) {
+    if (isNullCallback(callback)) {
+      this.solanaWallet.off('connect')
+    } else {
+      this.solanaWallet.on('connect', (newSolanaPublicKey) => {
+        const aptosPublicKey = this.derivePublicKey(newSolanaPublicKey);
+        const newAptosAccount = accountInfoFromPublicKey(aptosPublicKey);
+        callback(newAptosAccount);
+      });
+    }
+  }
+
+  // endregion
+
+  // region Networks
+
+  readonly onActiveNetworkChangeListeners = new Set<(newNetwork: NetworkInfo) => void>();
+
+  async getActiveNetwork(): Promise<NetworkInfo> {
+    const chainId = NetworkToChainId[this.defaultNetwork];
+    const url = NetworkToNodeAPI[this.defaultNetwork];
+    return {
+      name: this.defaultNetwork,
+      chainId,
+      url,
+    };
+  }
+
+  async changeNetwork(newNetwork: NetworkInfo): Promise<UserResponse<AptosChangeNetworkOutput>> {
+    const { name, chainId, url } = newNetwork;
+    if (name === Network.CUSTOM) {
+      throw new Error('Custom network not currently supported');
+    }
+    this.defaultNetwork = name;
+    for (const listener of this.onActiveNetworkChangeListeners) {
+      listener({
+        name,
+        chainId: chainId ?? NetworkToChainId[name],
+        url: url ?? NetworkToNodeAPI[name],
+      });
+    }
+    return {
+      status: UserResponseStatus.APPROVED,
+      args: { success: true },
+    };
+  }
+
+  onActiveNetworkChange(callback: (newNetwork: NetworkInfo) => void) {
+    if (isNullCallback(callback)) {
+      this.onActiveNetworkChangeListeners.clear();
+    } else {
+      this.onActiveNetworkChangeListeners.add(callback);
+    }
+  }
+
+  // endregion
+
+  // region Signatures
+
+  async signMessage({
+    message,
+    nonce,
+    ...flags
+  }: AptosSignMessageInput): Promise<UserResponse<AptosSignMessageOutput>> {
+    if (!this.solanaWallet.signIn) {
+      throw new Error('solana:signIn not available');
+    }
+    const aptosPublicKey = this.getActivePublicKey();
+    const aptosAddress = flags.address ? aptosPublicKey.authKey().derivedAddress() : undefined;
+    const application = flags.application ? this.domain : undefined;
+    const chainId = flags.chainId ? NetworkToChainId[this.defaultNetwork] : undefined;
+    const structuredMessage = {
+      address: aptosAddress?.toString(),
+      application,
+      chainId,
+      message,
+      nonce,
+    };
+
+    const siwsInput = createSiwsInputFromAptosStructuredMessage({
+      solanaPublicKey: aptosPublicKey.solanaPublicKey,
+      structuredMessage,
+    })
+
+    const response = await wrapSolanaUserResponse(this.solanaWallet.signIn(siwsInput));
+
+    return mapUserResponse(response, (output): AptosSignMessageOutput => {
+      if (output.signatureType && output.signatureType !== 'ed25519') {
+        throw new Error('Unsupported signature type');
+      }
+
+      // The wallet might change some of the fields in the SIWS input, so we
+      // might need to include the finalized input in the signature.
+      // For now, we can assume the input is unchanged.
+      const signature = new Ed25519Signature(output.signature);
+      const fullMessageBytes = encodeStructuredMessage(structuredMessage);
+      const fullMessage = new TextDecoder().decode(fullMessageBytes);
+
+      return {
+        prefix: 'APTOS',
+        fullMessage,
+        message,
+        nonce,
+        signature,
+      };
+    });
+  }
+
+  async signTransaction(
+    rawTransaction: AnyRawTransaction,
+    _asFeePayer?: boolean,
+  ): Promise<UserResponse<AccountAuthenticator>> {
+    if (!this.solanaWallet.signIn) {
+      throw new Error('solana:signIn not available');
+    }
+
+    const aptosPublicKey = this.getActivePublicKey();
+    const solanaPublicKey = aptosPublicKey.solanaPublicKey;
+    const aptosAddress = aptosPublicKey.authKey().derivedAddress();
+
+    const siwsInput = createSiwsInputFromAptosTransaction({
+      solanaPublicKey,
+      aptosAddress,
+      rawTransaction,
+    });
+
+    const response = await wrapSolanaUserResponse(this.solanaWallet.signIn(siwsInput));
+
+    return mapUserResponse(response, (output): AccountAuthenticator => {
+      if (output.signatureType && output.signatureType !== 'ed25519') {
+        throw new Error('Unsupported signature type');
+      }
+
+      // The wallet might change some of the fields in the SIWS input, so we
+      // might need to include the finalized input in the signature.
+      // For now, we can assume the input is unchanged.
+      const signature = new Ed25519Signature(output.signature);
+      return new AccountAuthenticatorAbstraction(
+        this.authenticationFunction,
+        // Not sure what the expected value is here
+        output.signedMessage,
+        signature.bcsToBytes(),
+      );
+    });
+  }
+
+  // endregion
+}
