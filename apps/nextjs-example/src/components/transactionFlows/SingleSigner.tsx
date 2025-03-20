@@ -9,6 +9,14 @@ import { TransactionHash } from "../TransactionHash";
 
 const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
 
+/**
+ * Generate a nonce with alphanumeric characters only.
+ * This is a requirement for Sign in With Solana nonces
+ */
+function generateNonce() {
+  return crypto.randomUUID().replaceAll('-', '');
+}
+
 export function SingleSigner() {
   const { toast } = useToast();
   const {
@@ -25,7 +33,7 @@ export function SingleSigner() {
   const onSignMessageAndVerify = async () => {
     const payload = {
       message: "Hello from Aptos Wallet Adapter",
-      nonce: Math.random().toString(16),
+      nonce: generateNonce(),
     };
     const response = await signMessageAndVerify(payload);
     toast({
@@ -37,7 +45,7 @@ export function SingleSigner() {
   const onSignMessage = async () => {
     const payload = {
       message: "Hello from Aptos Wallet Adapter",
-      nonce: Math.random().toString(16),
+      nonce: generateNonce(),
     };
     const response = await signMessage(payload);
     toast({
