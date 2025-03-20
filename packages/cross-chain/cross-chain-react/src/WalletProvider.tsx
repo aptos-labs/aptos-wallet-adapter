@@ -11,6 +11,8 @@ import {
   AccountAddressInput,
   ChainsConfig,
   ChainConfig,
+  NetworkToChainId,
+  NetworkToNodeAPI,
 } from "@aptos-labs/cross-chain-core";
 import {
   AccountInfo,
@@ -49,18 +51,20 @@ const initialState: {
   wallet: AdapterWallet | null;
   sourceChain: Chain | null;
   setSourceChain: (chain: Chain) => void;
+  network: NetworkInfo | null;
 } = {
   connected: false,
   account: null,
   wallet: null,
   sourceChain: null,
   setSourceChain: () => {},
+  network: null,
 };
 
 export const AptosCrossChainWalletProvider: FC<
   AptosCrossChainWalletProviderProps
 > = ({ children, dappConfig, disableTelemetry, onError }) => {
-  const [{ connected, wallet, account, sourceChain }, setState] =
+  const [{ connected, wallet, account, sourceChain, network }, setState] =
     useState(initialState);
 
   const [provider, setProvider] = useState<CrossChainProvider>();
@@ -175,6 +179,11 @@ export const AptosCrossChainWalletProvider: FC<
         connected: true,
         wallet: wallet,
         account: response,
+        network: {
+          name: dappConfig.aptosNetwork,
+          chainId: NetworkToChainId[dappConfig.aptosNetwork],
+          url: NetworkToNodeAPI[dappConfig.aptosNetwork],
+        },
       }));
     } catch (error) {
       if (onError) onError(error);
@@ -189,6 +198,7 @@ export const AptosCrossChainWalletProvider: FC<
         ...state,
         connected: false,
         wallet: null,
+        network: null,
       }));
     } catch (error) {
       if (onError) onError(error);
@@ -212,6 +222,11 @@ export const AptosCrossChainWalletProvider: FC<
         connected: true,
         wallet: wallet,
         account: response.account,
+        network: {
+          name: dappConfig.aptosNetwork,
+          chainId: NetworkToChainId[dappConfig.aptosNetwork],
+          url: NetworkToNodeAPI[dappConfig.aptosNetwork],
+        },
       }));
     } catch (error) {
       if (onError) onError(error);
@@ -235,6 +250,7 @@ export const AptosCrossChainWalletProvider: FC<
       value={{
         connected,
         account,
+        network,
         isLoading: false,
         getSolanaWallets,
         getEthereumWallets,

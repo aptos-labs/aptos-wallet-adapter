@@ -8,7 +8,11 @@ import {
 } from "@aptos-labs/cross-chain-core";
 
 import { AdapterWallet } from "@aptos-labs/wallet-adapter-aggregator-core";
-import { AccountInfo, AptosSignInInput } from "@aptos-labs/wallet-standard";
+import {
+  AccountInfo,
+  AptosSignInInput,
+  NetworkInfo,
+} from "@aptos-labs/wallet-standard";
 import { createContext, useContext } from "react";
 import { AptosNotDetectedWallet } from "@aptos-labs/wallet-adapter-aggregator-aptos";
 const DEFAULT_CONTEXT = {
@@ -20,6 +24,7 @@ export interface WalletContextState {
   isLoading: boolean;
   wallet: AdapterWallet | null;
   account: AccountInfo | null;
+  network: NetworkInfo | null;
   getSolanaWallets: () => ReadonlyArray<AdapterWallet>;
   getEthereumWallets: () => ReadonlyArray<AdapterWallet>;
   getAptosWallets: () => ReadonlyArray<AdapterWallet>;

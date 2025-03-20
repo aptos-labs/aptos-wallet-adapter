@@ -28,8 +28,8 @@ import { Button } from "@/components/ui/button";
 import USDC from "./icons/USDC";
 import { chainToIcon } from "./icons";
 
-import { WalletSelector } from "./components/walletSelector/xchain/WalletSelector";
-import { AptosWalletSelector } from "./components/walletSelector/aptos/WalletSelector";
+import { WalletSelector } from "./components/walletSelector/WalletSelector";
+import { aptosClient } from "@/utils";
 
 const privateKey = new Ed25519PrivateKey(
   process.env.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY as string
@@ -53,14 +53,14 @@ export default function Swap() {
     sourceChain,
     setSourceChain,
     getChainInfo,
+    signInWith,
+    network,
+    account,
   } = useCrossChainWallet();
   const { toast } = useToast();
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
     null
   );
-  const [showDestinationAddressInput, setShowDestinationAddressInput] =
-    useState<boolean>(false);
-  const [destinationAddress, setDestinationAddress] = useState<string>("");
 
   const [quote, setQuote] = useState<QuoteResponse | undefined>(undefined);
 
@@ -78,15 +78,8 @@ export default function Swap() {
   const [invalidAmount, setInvalidAmount] = useState<boolean>(false);
   const [quoteIsFetching, setQuoteIsFetching] = useState<boolean>(false);
 
-  const [sourceWallet, setSourceWallet] = useState<AdapterWallet | undefined>(
-    undefined
-  );
-
-  const [destinationWallet, setDestinationWallet] = useState<
-    AdapterWallet | undefined
-  >(undefined);
-
-  const chains = Object.values(testnetChains);
+  const chains =
+    dappNetwork === Network.TESTNET ? testnetChains : mainnetChains;
 
   const onSetAmount = useCallback(
     (amount: string) => {
@@ -145,20 +138,12 @@ export default function Swap() {
       if (!sourceChain) {
         throw new Error("Missing required parameters");
       }
-      if (!destinationWallet) {
-        throw new Error("Missing destination wallet");
-      }
-      if (!sourceWallet) {
-        throw new Error("Missing source wallet");
-      }
       const { originChainTxnId, destinationChainTxnId } =
         await initiateTransfer({
           sourceChain,
+          // TODO: ideally it is be the DAA address
           destinationAddress:
-            // this is from the input field
-            destinationAddress ??
-            // this is from the connected wallet
-            (await destinationWallet?.getAccount())?.address?.toString(),
+            "0x9e97c6e59ffa062bf489401820df640bd6c46a127a656ef6298701c7842b825d", // this is the fungible store addr for https://explorer.aptoslabs.com/account/0xc131b5f54e31e55398514f1ebee9e4ce8e189be09d4ae2b4b1bbdbccbc07148a/coins?network=testnet
           mainSigner,
           sponsorAccount,
         });
@@ -198,81 +183,68 @@ export default function Swap() {
     }
   };
 
+  const onSignInWith = async () => {
+    // const transaction = await aptosClient(network).transaction.build.simple({
+    //   sender: account!.address, // TODO: need DAA address
+    //   data: {
+    //     function: "0x1::coin::transfer",
+    //     typeArguments: [APTOS_COIN],
+    //     functionArguments: [
+    //       (await (wallet as AdapterWallet).getAccount()).address,
+    //       1,
+    //     ],
+    //   },
+    // });
+
+    // const txnHash = generateSigningMessageForTransaction(transaction);
+    console.log("txnHash", onSignInWith);
+    // await signInWith({
+    //   wallet: wallet as AdapterWallet,
+    //   input: {
+    //     statement: new TextDecoder().decode(txnHash),
+    //   },
+    // });
+  };
+
   return (
     <div className="w-full flex justify-center items-center p-4">
       <Card className="w-96">
         <CardContent className="flex flex-col gap-8 pt-6">
           <div className="flex flex-row gap-2">
             {Object.values(chains).map((chain, index) => (
-              <div
+              <Button
                 key={index}
-                className="flex flex-col gap-2 items-center w-full"
+                className="w-full"
+                onClick={() => setSourceChain(chain.displayName as Chain)}
               >
-                <Button
-                  className="w-full"
-                  onClick={() => setSourceChain(chain.displayName as Chain)}
-                >
-                  <div className="flex flex-row gap-2 items-center">
-                    <img
-                      src={chainToIcon(chain.displayName as any)}
-                      alt={chain.displayName?.toString() ?? ""}
-                      height="32px"
-                      width="32px"
-                    />
-                    <p>USDC</p>
-                  </div>
-                </Button>
-                <span>{chain.chainId}</span>
-              </div>
+                {chain.displayName}
+              </Button>
             ))}
+            <Button className="w-full" onClick={() => setSourceChain("Aptos")}>
+              Aptos
+            </Button>
           </div>
           <div className="flex flex-col w-full">
-            <p className="text-md font-bold">From</p>
             <WalletSelector
               transactionInProgress={transactionInProgress}
               sourceChain={sourceChain}
-              onWalletConnect={(wallet) => setSourceWallet(wallet)}
-              wallet={sourceWallet}
             />
-          </div>
-          <div className="flex flex-col w-full">
-            {showDestinationAddressInput ? (
-              <>
-                <p
-                  className="text-sm text-gray-500 text-right cursor-pointer"
-                  onClick={() => setShowDestinationAddressInput(false)}
-                >
-                  Select Aptos Wallet
-                </p>
-                <Input
-                  placeholder="Enter destination address"
-                  value={destinationAddress}
-                  onChange={(e) => setDestinationAddress(e.target.value)}
-                />
-              </>
-            ) : (
-              <>
-                <div className="flex flex-row justify-between gap-2">
-                  <p className="text-md font-bold">To Aptos</p>
-                  <p
-                    className="text-sm text-gray-500 cursor-pointer"
-                    onClick={() => setShowDestinationAddressInput(true)}
-                  >
-                    Enter destination address
-                  </p>
-                </div>
-                <AptosWalletSelector
-                  transactionInProgress={transactionInProgress}
-                  sourceChain={sourceChain}
-                  onWalletConnect={(wallet) => setDestinationWallet(wallet)}
-                  wallet={destinationWallet}
-                />
-              </>
-            )}
           </div>
 
           <div className="flex flex-col gap-2">
-            <p>Amount</p>
+            <p>Sign In With</p>
+            <Button onClick={onSignInWith}>Sign In With</Button>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <p>Sign Message</p>
+            <Button disabled={!wallet} onClick={onSignMessage}>
+              Sign Message
+            </Button>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <p>CCTP transfer</p>
             <div className="flex flex-row gap-2 items-center">
               <Input
                 value={amount}
@@ -374,7 +346,7 @@ export default function Swap() {
                 onClick={onTransferClick}
                 disabled={!amount || !wallet || invalidAmount || !quote}
               >
-                Transfer
+                Confirm
               </Button>
             )}
 

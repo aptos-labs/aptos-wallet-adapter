@@ -33,6 +33,7 @@ export interface CrossChainDappConfig {
   };
 }
 export type { AccountAddressInput } from "@aptos-labs/ts-sdk";
+export { NetworkToChainId, NetworkToNodeAPI } from "@aptos-labs/ts-sdk";
 export type AptosAccount = Account;
 
 export type Chain = "Solana" | "Ethereum" | "Aptos";

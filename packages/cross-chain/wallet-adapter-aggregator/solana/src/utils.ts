@@ -197,7 +197,7 @@ const APTOS_REQUIRED_FEATURES = (
             ),
             input: {
               ...input,
-              domain: input.uri || "",
+              domain: input.uri || window.location.host,
               address: deriveAccountInfoFromSolanaPublicKey(
                 new PublicKey(result.account.publicKey)
               ).address.toString(),

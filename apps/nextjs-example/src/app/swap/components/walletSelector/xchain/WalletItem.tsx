@@ -18,7 +18,6 @@ import {
   useCallback,
   useContext,
 } from "react";
-import { useToast } from "@/components/ui/use-toast";
 import { isRedirectable } from "@aptos-labs/wallet-adapter-core";
 
 export interface WalletItemProps extends HeadlessComponentProps {
@@ -26,8 +25,6 @@ export interface WalletItemProps extends HeadlessComponentProps {
   wallet: AdapterWallet | AptosNotDetectedWallet;
   /** A callback to be invoked when the wallet is connected. */
   onConnect?: () => void;
-  /** A callback to be invoked when the wallet is signed in. */
-  onSignInWith?: () => void;
 }
 
 function useWalletItemContext(displayName: string) {
@@ -43,27 +40,15 @@ function useWalletItemContext(displayName: string) {
 const WalletItemContext = createContext<{
   wallet: AdapterWallet | AptosNotDetectedWallet;
   connectWallet: () => void;
-  signInWithWallet: () => void;
 } | null>(null);
 
 const Root = forwardRef<HTMLDivElement, WalletItemProps>(
-  ({ wallet, onConnect, className, asChild, children, onSignInWith }, ref) => {
-    const { connect, signInWith } = useCrossChainWallet();
-    const { toast } = useToast();
+  ({ wallet, onConnect, className, asChild, children }, ref) => {
+    const { connect } = useCrossChainWallet();
     const connectWallet = useCallback(async () => {
       await connect(wallet as AdapterWallet);
       onConnect?.();
     }, [wallet, onConnect]);
-
-    const signInWithWallet = useCallback(async () => {
-      await signInWith({
-        wallet: wallet as AdapterWallet,
-        input: {
-          statement: "address::module::function",
-        },
-      });
-      onSignInWith?.();
-    }, [wallet, onSignInWith]);
 
     if (wallet.originChain === "Aptos") {
       const isWalletReady = wallet.readyState === WalletReadyState.Installed;
@@ -77,9 +62,7 @@ const Root = forwardRef<HTMLDivElement, WalletItemProps>(
     const Component = asChild ? Slot : "div";
 
     return (
-      <WalletItemContext.Provider
-        value={{ wallet, connectWallet, signInWithWallet }}
-      >
+      <WalletItemContext.Provider value={{ wallet, connectWallet }}>
         <Component ref={ref} className={className}>
           {children}
         </Component>
@@ -127,19 +110,6 @@ const ConnectButton = createHeadlessComponent(
   }
 );
 
-const SignInWithButton = createHeadlessComponent(
-  "WalletItem.SignInWithButton",
-  "button",
-  (displayName) => {
-    const context = useWalletItemContext(displayName);
-
-    return {
-      onClick: context.signInWithWallet,
-      children: "Sign In",
-    };
-  }
-);
-
 const InstallLink = createHeadlessComponent(
   "WalletItem.InstallLink",
   "a",
@@ -161,7 +131,6 @@ export const WalletItem = Object.assign(Root, {
   Name,
   ConnectButton,
   InstallLink,
-  SignInWithButton,
 });
 
 export interface HeadlessComponentProps {
