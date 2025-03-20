@@ -1,0 +1,1 @@
+import{d as n,t as o,v as s,P as t}from"./CeFscXvW.js";const a=["src","alt"],i=n({__name:"WalletIcon",props:{icon:{},name:{}},setup(r){return(e,c)=>(s(),o("img",t({src:e.icon,alt:e.name,class:"icon",width:"24",height:"24"},e.$attrs),null,16,a))}});export{i as default};

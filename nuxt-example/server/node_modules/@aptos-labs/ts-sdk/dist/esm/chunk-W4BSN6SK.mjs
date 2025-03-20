@@ -1,0 +1,2 @@
+function i(r,o,t){let n=t.value;return t.value=async function(...e){let[a]=e;if(a.transaction.feePayerAddress&&!a.feePayerAuthenticator)throw new Error("You are submitting a Fee Payer transaction but missing the feePayerAuthenticator");return n.apply(this,e)},t}function u(r,o,t){let n=t.value;return t.value=async function(...e){return n.apply(this,e)},t}export{i as a,u as b};
+//# sourceMappingURL=chunk-W4BSN6SK.mjs.map

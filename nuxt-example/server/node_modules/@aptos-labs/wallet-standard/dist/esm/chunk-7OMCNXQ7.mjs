@@ -1,0 +1,2 @@
+import{getWallets as o}from"@wallet-standard/core";var n=["aptos:account","aptos:connect","aptos:disconnect","aptos:network","aptos:onAccountChange","aptos:onNetworkChange","aptos:signMessage","aptos:signTransaction"];function i(t,e=[]){return[...n,...e].every(s=>s in t.features)}function d(){let{get:t,on:e}=o(),s=t(),a=[];return s.map(l=>{i(l)&&a.push(l)}),{aptosWallets:a,on:e}}export{i as a,d as b};
+//# sourceMappingURL=chunk-7OMCNXQ7.mjs.map
