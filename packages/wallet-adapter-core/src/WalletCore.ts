@@ -366,11 +366,14 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
       const aptosConfig = getAptosConfig(this._network, this._dappConfig);
       const aptos = new Aptos(aptosConfig);
-      const name = await aptos.ans.getPrimaryName({
-        address: this._account.address.toString(),
-      });
-
-      this._account.ansName = name;
+      try {
+        const name = await aptos.ans.getPrimaryName({
+          address: this._account.address.toString(),
+        });
+        this._account.ansName = name;
+      } catch (error: any) {
+        console.log(`Error setting ANS name ${error}`);
+      }
     }
   }
 
