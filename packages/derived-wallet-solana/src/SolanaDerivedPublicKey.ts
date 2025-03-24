@@ -9,11 +9,10 @@ import {
   Serializer,
   VerifySignatureArgs,
 } from '@aptos-labs/ts-sdk';
-import { createSignInMessage } from '@solana/wallet-standard-util';
+import { createSignInMessage as createSolanaSignInMessage } from '@solana/wallet-standard-util';
 import { PublicKey as SolanaPublicKey } from '@solana/web3.js';
 import { createSiwsEnvelopeForAptosStructuredMessage } from './createSiwsEnvelopeForStructuredMessage';
 import { createSiwsEnvelopeForAptosTransaction } from './createSiwsEnvelopeForTransaction';
-
 
 export interface SolanaDerivedPublicKeyParams {
   domain: string;
@@ -41,7 +40,7 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
     const serializer = new Serializer();
     serializer.serializeBytes(utf8EncodedDomain);
     serializer.serializeFixedBytes(solanaPublicKeyBytes); // fixed length 32 bytes
-    const accountIdentifier = hashValues([serializer.toUint8Array()]);
+    const accountIdentifier = serializer.toUint8Array();
 
     this._authKey = computeDomainAuthenticationKey(
       authenticationFunction,
@@ -54,25 +53,38 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
   }
 
   verifySignature({ message, signature }: VerifySignatureArgs): boolean {
-    const parsed = parseAptosSigningMessage(message);
-    if (!parsed || !(signature instanceof Ed25519Signature)) {
+    const parsedSigningMessage = parseAptosSigningMessage(message);
+    if (!parsedSigningMessage || !(signature instanceof Ed25519Signature)) {
       return false;
     }
 
-    const siwsInput = parsed.type === 'structuredMessage'
+    const signingMessageDigest = hashValues([message]);
+
+    // Obtain SIWS envelope input for the signing message
+    const siwsEnvelopeInput = parsedSigningMessage.type === 'structuredMessage'
       ? createSiwsEnvelopeForAptosStructuredMessage({
         solanaPublicKey: this.solanaPublicKey,
-        structuredMessage: parsed.structuredMessage,
+        structuredMessage: parsedSigningMessage.structuredMessage,
+        digest: signingMessageDigest,
       })
       : createSiwsEnvelopeForAptosTransaction({
         solanaPublicKey: this.solanaPublicKey,
-        aptosAddress: this._authKey.derivedAddress(),
-        rawTransaction: parsed.rawTransaction,
+        rawTransaction: parsedSigningMessage.rawTransaction,
+        digest: signingMessageDigest,
       });
 
-    const signInMessage = createSignInMessage(siwsInput);
+    // Matching the signature will ensure that the following fields are matching:
+    // - domain
+    // - solanaPublicKey
+    // - signing message digest
+    // - chain
+    // - message and nonce (structured message)
+    // - entry function name (transaction)
+
+    // Match solana signature
+    const siwsEnvelopeBytes = createSolanaSignInMessage(siwsEnvelopeInput);
     const ed25519PublicKey = new Ed25519PublicKey(this.solanaPublicKey.toBytes());
-    return ed25519PublicKey.verifySignature({ message: signInMessage, signature });
+    return ed25519PublicKey.verifySignature({ message: siwsEnvelopeBytes, signature });
   }
 
   serialize(serializer: Serializer) {

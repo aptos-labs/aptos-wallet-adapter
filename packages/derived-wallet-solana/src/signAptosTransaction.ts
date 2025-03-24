@@ -4,11 +4,13 @@ import {
   AccountAuthenticatorAbstraction,
   AnyRawTransaction,
   Ed25519Signature,
+  generateSigningMessageForTransaction,
+  hashValues,
+  Serializer,
 } from '@aptos-labs/ts-sdk';
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 import { createSiwsEnvelopeForAptosTransaction } from './createSiwsEnvelopeForTransaction';
 import { wrapSolanaUserResponse } from './shared';
-import { SolanaDerivedPublicKey } from './SolanaDerivedPublicKey';
 
 export interface SignAptosTransactionWithSolanaInput {
   solanaWallet: SolanaWalletAdapter,
@@ -27,17 +29,13 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
     throw new Error('Account not connected');
   }
 
-  const aptosPublicKey = new SolanaDerivedPublicKey({
-    domain: window.location.origin,
-    solanaPublicKey,
-    authenticationFunction,
-  });
-  const aptosAddress = aptosPublicKey.authKey().derivedAddress();
+  const signingMessage = generateSigningMessageForTransaction(rawTransaction);
+  const signingMessageDigest = hashValues([signingMessage]);
 
   const siwsInput = createSiwsEnvelopeForAptosTransaction({
     solanaPublicKey,
-    aptosAddress,
     rawTransaction,
+    digest: signingMessageDigest,
   });
 
   const response = await wrapSolanaUserResponse(solanaWallet.signIn!(siwsInput));
@@ -50,12 +48,20 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
     // The wallet might change some of the fields in the SIWS input, so we
     // might need to include the finalized input in the signature.
     // For now, we can assume the input is unchanged.
+
     const signature = new Ed25519Signature(output.signature);
+
+    const serializer = new Serializer();
+    serializer.serialize(signature);
+    serializer.serialize(input.rawTransaction.rawTransaction);
+    serializer.serializeVector(input.rawTransaction.secondarySignerAddresses ?? []);
+    serializer.serializeOption(input.rawTransaction.feePayerAddress);
+    const authenticator = serializer.toUint8Array();
+
     return new AccountAuthenticatorAbstraction(
       authenticationFunction,
-      // Not sure what the expected value is here
-      output.signedMessage,
-      signature.bcsToBytes(),
+      signingMessageDigest,
+      authenticator,
     );
   });
 }

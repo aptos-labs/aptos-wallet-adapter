@@ -4,7 +4,7 @@ import {
   StructuredMessage,
   StructuredMessageInput,
 } from '@aptos-labs/derived-wallet-base';
-import { Ed25519Signature } from '@aptos-labs/ts-sdk';
+import { Ed25519Signature, hashValues } from '@aptos-labs/ts-sdk';
 import { AptosSignMessageOutput } from '@aptos-labs/wallet-standard';
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 import { createSiwsEnvelopeForAptosStructuredMessage } from './createSiwsEnvelopeForStructuredMessage';
@@ -50,10 +50,14 @@ export async function signAptosMessageWithSolana(input: SignAptosMessageWithSola
     nonce,
   };
 
+  const signingMessage = encodeStructuredMessage(structuredMessage);
+  const signingMessageDigest = hashValues([signingMessage]);
+
   const siwsInput = createSiwsEnvelopeForAptosStructuredMessage({
     solanaPublicKey: aptosPublicKey.solanaPublicKey,
     structuredMessage,
-  })
+    digest: signingMessageDigest,
+  });
 
   const response = await wrapSolanaUserResponse(solanaWallet.signIn(siwsInput));
 
@@ -66,8 +70,7 @@ export async function signAptosMessageWithSolana(input: SignAptosMessageWithSola
     // might need to include the finalized input in the signature.
     // For now, we can assume the input is unchanged.
     const signature = new Ed25519Signature(output.signature);
-    const fullMessageBytes = encodeStructuredMessage(structuredMessage);
-    const fullMessage = new TextDecoder().decode(fullMessageBytes);
+    const fullMessage = new TextDecoder().decode(signingMessage);
 
     return {
       prefix: 'APTOS',
