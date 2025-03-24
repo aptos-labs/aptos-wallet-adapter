@@ -7,7 +7,7 @@ import {
 import { Ed25519Signature, hashValues } from '@aptos-labs/ts-sdk';
 import { AptosSignMessageOutput } from '@aptos-labs/wallet-standard';
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
-import { createSiwsEnvelopeForAptosStructuredMessage } from './createSiwsEnvelopeForStructuredMessage';
+import { createSiwsEnvelopeForAptosStructuredMessage } from './createSiwsEnvelope';
 import { wrapSolanaUserResponse } from './shared';
 import { SolanaDerivedPublicKey } from './SolanaDerivedPublicKey';
 
@@ -56,7 +56,7 @@ export async function signAptosMessageWithSolana(input: SignAptosMessageWithSola
   const siwsInput = createSiwsEnvelopeForAptosStructuredMessage({
     solanaPublicKey: aptosPublicKey.solanaPublicKey,
     structuredMessage,
-    digest: signingMessageDigest,
+    signingMessageDigest,
   });
 
   const response = await wrapSolanaUserResponse(solanaWallet.signIn(siwsInput));

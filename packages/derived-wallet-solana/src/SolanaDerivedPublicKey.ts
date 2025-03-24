@@ -11,8 +11,10 @@ import {
 } from '@aptos-labs/ts-sdk';
 import { createSignInMessage as createSolanaSignInMessage } from '@solana/wallet-standard-util';
 import { PublicKey as SolanaPublicKey } from '@solana/web3.js';
-import { createSiwsEnvelopeForAptosStructuredMessage } from './createSiwsEnvelopeForStructuredMessage';
-import { createSiwsEnvelopeForAptosTransaction } from './createSiwsEnvelopeForTransaction';
+import {
+  createSiwsEnvelopeForAptosStructuredMessage,
+  createSiwsEnvelopeForAptosTransaction,
+} from './createSiwsEnvelope';
 
 export interface SolanaDerivedPublicKeyParams {
   domain: string;
@@ -58,19 +60,20 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
       return false;
     }
 
-    const signingMessageDigest = hashValues([message]);
+    const commonInput = {
+      solanaPublicKey: this.solanaPublicKey,
+      signingMessageDigest: hashValues([message]),
+    };
 
     // Obtain SIWS envelope input for the signing message
     const siwsEnvelopeInput = parsedSigningMessage.type === 'structuredMessage'
       ? createSiwsEnvelopeForAptosStructuredMessage({
-        solanaPublicKey: this.solanaPublicKey,
-        structuredMessage: parsedSigningMessage.structuredMessage,
-        digest: signingMessageDigest,
+        ...parsedSigningMessage,
+        ...commonInput,
       })
       : createSiwsEnvelopeForAptosTransaction({
-        solanaPublicKey: this.solanaPublicKey,
-        rawTransaction: parsedSigningMessage.rawTransaction,
-        digest: signingMessageDigest,
+        ...parsedSigningMessage,
+        ...commonInput,
       });
 
     // Matching the signature will ensure that the following fields are matching:

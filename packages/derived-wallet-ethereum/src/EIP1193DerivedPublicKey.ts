@@ -8,13 +8,13 @@ import {
   Serializer,
   VerifySignatureArgs,
 } from '@aptos-labs/ts-sdk';
-import { verifyMessage } from 'ethers';
-import { Address as EthereumAddress } from 'viem';
+import { verifyMessage as verifyEthereumMessage } from 'ethers';
 import {
-  createSiweMessageFromAptosStructuredMessage,
-  createSiweMessageFromAptosTransaction,
-} from './createSiweMessageFromAptos';
+  createSiweEnvelopeForAptosStructuredMessage,
+  createSiweEnvelopeForAptosTransaction,
+} from './createSiweEnvelope';
 import { EIP1193DerivedSignature } from './EIP1193DerivedSignature';
+import { EthereumAddress } from './shared';
 
 export interface EIP1193DerivedPublicKeyParams {
   domain: string;
@@ -54,28 +54,33 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
   }
 
   verifySignature({ message, signature }: VerifySignatureArgs): boolean {
-    const parsed = parseAptosSigningMessage(message);
-    if (!parsed || !(signature instanceof EIP1193DerivedSignature)) {
+    const parsedSigningMessage = parseAptosSigningMessage(message);
+    if (!parsedSigningMessage || !(signature instanceof EIP1193DerivedSignature)) {
       return false;
     }
 
-    const siweMessage = parsed.type === 'structuredMessage'
-      ? createSiweMessageFromAptosStructuredMessage({
-        ethereumAddress: this.ethereumAddress,
-        structuredMessage: parsed.structuredMessage,
-        issuedAt: signature.issuedAt,
+    const { ethereumChainId, issuedAt, siweSignature } = signature;
+    const signingMessageDigest = hashValues([message]);
+
+    // Obtain SIWE envelope for the signing message
+    const envelopeInput = {
+      ethereumAddress: this.ethereumAddress,
+      ethereumChainId,
+      signingMessageDigest,
+      issuedAt,
+    };
+
+    const siweMessage = parsedSigningMessage.type === 'structuredMessage'
+      ? createSiweEnvelopeForAptosStructuredMessage({
+        ...parsedSigningMessage,
+        ...envelopeInput,
       })
-      : createSiweMessageFromAptosTransaction({
-        ethereumAddress: this.ethereumAddress,
-        aptosAddress: this._authKey.derivedAddress(),
-        rawTransaction: parsed.rawTransaction,
-        issuedAt: signature.issuedAt,
+      : createSiweEnvelopeForAptosTransaction({
+        ...parsedSigningMessage,
+        ...envelopeInput,
       });
 
-    // This function is the only reason we have `ethers` as dependency, as `viem`
-    // unfortunately only provides an asynchronous `verifyMessage` that can't be used here.
-    // We might consider dropping `viem` and only using `ethers` but not worth it at this time.
-    const recoveredAddress = verifyMessage(siweMessage, signature.siweSignature);
+    const recoveredAddress = verifyEthereumMessage(siweMessage, siweSignature);
     return recoveredAddress === this.ethereumAddress;
   }
 
