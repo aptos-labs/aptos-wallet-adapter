@@ -1,4 +1,4 @@
-import { aptosChainIdToNetwork, encodeStructuredMessage, StructuredMessage } from '@aptos-labs/derived-wallet-base';
+import { aptosChainIdToNetwork } from '@aptos-labs/derived-wallet-base';
 import {
   AccountAddressInput,
   AnyRawTransaction,
@@ -22,7 +22,7 @@ export interface CreateSiwsEnvelopeForAptosTransactionInput {
  */
 export function createSiwsEnvelopeForAptosTransaction(
   input: CreateSiwsEnvelopeForAptosTransactionInput,
-): SolanaSignInInputWithRequiredFields {
+): SolanaSignInInputWithRequiredFields & { requestId: string } {
   const { solanaPublicKey, aptosAddress, rawTransaction } = input;
   const signingMessage = generateSigningMessageForTransaction(rawTransaction);
   const messageHash = hashValues([signingMessage]);

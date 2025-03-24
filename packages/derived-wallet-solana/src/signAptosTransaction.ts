@@ -4,6 +4,7 @@ import {
   AccountAuthenticatorAbstraction,
   AnyRawTransaction,
   Ed25519Signature,
+  Serializer,
 } from '@aptos-labs/ts-sdk';
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 import { createSiwsEnvelopeForAptosTransaction } from './createSiwsEnvelopeForTransaction';
@@ -50,12 +51,21 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
     // The wallet might change some of the fields in the SIWS input, so we
     // might need to include the finalized input in the signature.
     // For now, we can assume the input is unchanged.
+
     const signature = new Ed25519Signature(output.signature);
+    const transactionHash = siwsInput.requestId;
+
+    const serializer = new Serializer();
+    serializer.serialize(signature);
+    serializer.serialize(input.rawTransaction.rawTransaction);
+    serializer.serializeVector(input.rawTransaction.secondarySignerAddresses ?? []);
+    serializer.serializeOption(input.rawTransaction.feePayerAddress);
+    const authenticator = serializer.toUint8Array();
+
     return new AccountAuthenticatorAbstraction(
       authenticationFunction,
-      // Not sure what the expected value is here
-      output.signedMessage,
-      signature.bcsToBytes(),
+      transactionHash,
+      authenticator,
     );
   });
 }
