@@ -1,18 +1,28 @@
 import { aptosChainIdToNetwork } from '@aptos-labs/derived-wallet-base';
 import {
-  AccountAddressInput,
   AnyRawTransaction,
-  generateSigningMessageForTransaction,
-  hashValues,
   Hex,
+  HexInput,
+  TransactionPayload,
+  TransactionPayloadEntryFunction,
 } from '@aptos-labs/ts-sdk';
 import { SolanaSignInInputWithRequiredFields } from '@solana/wallet-standard-util';
 import { PublicKey as SolanaPublicKey } from '@solana/web3.js';
 
+function getEntryFunctionName(payload: TransactionPayload) {
+  if (!(payload instanceof TransactionPayloadEntryFunction)) {
+    return undefined;
+  }
+  const moduleAddress = payload.entryFunction.module_name.address.toString();
+  const moduleName = payload.entryFunction.module_name.name.identifier;
+  const functionName = payload.entryFunction.function_name.identifier;
+  return `${moduleAddress}::${moduleName}::${functionName}`;
+}
+
 export interface CreateSiwsEnvelopeForAptosTransactionInput {
   solanaPublicKey: SolanaPublicKey;
-  aptosAddress: AccountAddressInput;
   rawTransaction: AnyRawTransaction;
+  digest: HexInput;
 }
 
 /**
@@ -22,32 +32,24 @@ export interface CreateSiwsEnvelopeForAptosTransactionInput {
  */
 export function createSiwsEnvelopeForAptosTransaction(
   input: CreateSiwsEnvelopeForAptosTransactionInput,
-): SolanaSignInInputWithRequiredFields & { requestId: string } {
-  const { solanaPublicKey, aptosAddress, rawTransaction } = input;
-  const signingMessage = generateSigningMessageForTransaction(rawTransaction);
-  const messageHash = hashValues([signingMessage]);
-  const messageHashHex = Hex.fromHexInput(messageHash).toStringWithoutPrefix();
+): SolanaSignInInputWithRequiredFields {
+  const { solanaPublicKey, rawTransaction, digest } = input;
 
-  // TODO: consider using b58 or b64 instead
-  const requestId = messageHashHex;
-  const nonce = messageHashHex;
-
-  const chainId = rawTransaction.rawTransaction.chain_id.chainId;
+  const entryFunctionName = getEntryFunctionName(rawTransaction.rawTransaction.payload);
+  const humanReadableEntryFunction = entryFunctionName ? ` ${entryFunctionName}` : '';
+  const withHash = ` with hash ${Hex.fromHexInput(digest).toString()}`;
 
   // Attempt to convert chainId into a human-readable identifier
-  const networkId = aptosChainIdToNetwork(chainId) ?? `chainId: ${chainId}`;
+  const chainId = rawTransaction.rawTransaction.chain_id.chainId;
+  const chain = aptosChainIdToNetwork(chainId) ?? `chainId: ${chainId}`;
+  const onAptosChain = ` on Aptos blockchain (${chain})`;
 
-  const onAptosNetwork = ` on Aptos (${networkId})`;
-  const asAccount = ` with account ${aptosAddress.toString()}`;
-  // TODO: define a good way to display the transaction
-  const statement = `Sign the following transaction${onAptosNetwork}${asAccount}: TODO`;
+  const statement = `To execute transaction${humanReadableEntryFunction}${withHash}${onAptosChain}.`;
 
   return {
     address: solanaPublicKey.toString(),
     domain: window.location.host,
     uri: window.location.origin,
-    nonce,
-    requestId,
     statement,
     version: '1',
   };

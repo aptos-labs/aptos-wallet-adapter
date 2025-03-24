@@ -4,12 +4,13 @@ import {
   AccountAuthenticatorAbstraction,
   AnyRawTransaction,
   Ed25519Signature,
+  generateSigningMessageForTransaction,
+  hashValues,
   Serializer,
 } from '@aptos-labs/ts-sdk';
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 import { createSiwsEnvelopeForAptosTransaction } from './createSiwsEnvelopeForTransaction';
 import { wrapSolanaUserResponse } from './shared';
-import { SolanaDerivedPublicKey } from './SolanaDerivedPublicKey';
 
 export interface SignAptosTransactionWithSolanaInput {
   solanaWallet: SolanaWalletAdapter,
@@ -28,17 +29,13 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
     throw new Error('Account not connected');
   }
 
-  const aptosPublicKey = new SolanaDerivedPublicKey({
-    domain: window.location.origin,
-    solanaPublicKey,
-    authenticationFunction,
-  });
-  const aptosAddress = aptosPublicKey.authKey().derivedAddress();
+  const signingMessage = generateSigningMessageForTransaction(rawTransaction);
+  const signingMessageDigest = hashValues([signingMessage]);
 
   const siwsInput = createSiwsEnvelopeForAptosTransaction({
     solanaPublicKey,
-    aptosAddress,
     rawTransaction,
+    digest: signingMessageDigest,
   });
 
   const response = await wrapSolanaUserResponse(solanaWallet.signIn!(siwsInput));
@@ -53,7 +50,6 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
     // For now, we can assume the input is unchanged.
 
     const signature = new Ed25519Signature(output.signature);
-    const transactionHash = siwsInput.requestId;
 
     const serializer = new Serializer();
     serializer.serialize(signature);
@@ -64,7 +60,7 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
 
     return new AccountAuthenticatorAbstraction(
       authenticationFunction,
-      transactionHash,
+      signingMessageDigest,
       authenticator,
     );
   });

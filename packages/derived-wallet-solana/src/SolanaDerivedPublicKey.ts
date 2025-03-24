@@ -5,6 +5,7 @@ import {
   Deserializer,
   Ed25519PublicKey,
   Ed25519Signature,
+  hashValues,
   Serializer,
   VerifySignatureArgs,
 } from '@aptos-labs/ts-sdk';
@@ -12,7 +13,6 @@ import { createSignInMessage as createSolanaSignInMessage } from '@solana/wallet
 import { PublicKey as SolanaPublicKey } from '@solana/web3.js';
 import { createSiwsEnvelopeForAptosStructuredMessage } from './createSiwsEnvelopeForStructuredMessage';
 import { createSiwsEnvelopeForAptosTransaction } from './createSiwsEnvelopeForTransaction';
-
 
 export interface SolanaDerivedPublicKeyParams {
   domain: string;
@@ -58,24 +58,26 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
       return false;
     }
 
-    // obtain siws envelope input
+    const signingMessageDigest = hashValues([message]);
+
+    // Obtain SIWS envelope input for the signing message
     const siwsEnvelopeInput = parsedSigningMessage.type === 'structuredMessage'
       ? createSiwsEnvelopeForAptosStructuredMessage({
         solanaPublicKey: this.solanaPublicKey,
         structuredMessage: parsedSigningMessage.structuredMessage,
+        digest: signingMessageDigest,
       })
       : createSiwsEnvelopeForAptosTransaction({
         solanaPublicKey: this.solanaPublicKey,
-        aptosAddress: this._authKey.derivedAddress(),
         rawTransaction: parsedSigningMessage.rawTransaction,
+        digest: signingMessageDigest,
       });
 
     // Matching the signature will ensure that the following fields are matching:
     // - domain
     // - solanaPublicKey
-    // - digest (hash of signing message)
-    // - chainId / network
-    // - aptosAccountAddress
+    // - signing message digest
+    // - chain
     // - message and nonce (structured message)
     // - entry function name (transaction)
 
