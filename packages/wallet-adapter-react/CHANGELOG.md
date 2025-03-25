@@ -1,5 +1,33 @@
 # @aptos-labs/wallet-adapter-react
 
+## 4.1.4
+
+### Patch Changes
+
+- 25ab2ef: Allow users to perform connections when the wallet is `_connected` but `_account` is `null`
+- Updated dependencies [25ab2ef]
+  - @aptos-labs/wallet-adapter-core@5.1.3
+
+## 4.1.3
+
+### Patch Changes
+
+- Updated dependencies [6a5737a]
+  - @aptos-labs/wallet-adapter-core@5.1.2
+
+## 4.1.2
+
+### Patch Changes
+
+- Updated dependencies [3b5f4cf]
+  - @aptos-labs/wallet-adapter-core@5.1.1
+
+## 4.1.1
+
+### Patch Changes
+
+- 6520e32: Fix WalletProvider setting `isLoading` to `false` prematurely when `autoConnect` is enabled
+
 ## 4.1.0
 
 ### Minor Changes

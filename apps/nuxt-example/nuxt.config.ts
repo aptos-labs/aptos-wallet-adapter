@@ -1,3 +1,4 @@
+const isProd = process.env.NODE_ENV === "production";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -6,9 +7,14 @@ export default defineNuxtConfig({
   devServer: {
     port: 3001,
   },
+  ssr: false, // Ensure static generation
+  app: {
+    baseURL: isProd ? "/aptos-wallet-adapter/nuxt-example" : "", // Must match your GitHub Pages repo path
+    cdnURL: isProd ? "/aptos-wallet-adapter/nuxt-example" : "", // Ensures assets load from correct path
+  },
 
   modules: ["@nuxtjs/color-mode", "@nuxtjs/google-fonts"],
-
+  plugins: ["~/plugins/buffer"],
   components: [
     {
       path: "~/components",
@@ -19,6 +25,7 @@ export default defineNuxtConfig({
 
   nitro: {
     compressPublicAssets: true,
+    preset: "static",
   },
 
   css: ["~/assets/css/main.css"],

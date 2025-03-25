@@ -1,5 +1,32 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 4.0.7
+
+### Patch Changes
+
+- 25ab2ef: Allow users to perform connections when the wallet is `_connected` but `_account` is `null`
+- Updated dependencies [25ab2ef]
+  - @aptos-labs/wallet-adapter-react@4.1.4
+
+## 4.0.6
+
+### Patch Changes
+
+- @aptos-labs/wallet-adapter-react@4.1.3
+
+## 4.0.5
+
+### Patch Changes
+
+- @aptos-labs/wallet-adapter-react@4.1.2
+
+## 4.0.4
+
+### Patch Changes
+
+- Updated dependencies [6520e32]
+  - @aptos-labs/wallet-adapter-react@4.1.1
+
 ## 4.0.3
 
 ### Patch Changes

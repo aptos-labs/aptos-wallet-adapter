@@ -1,5 +1,23 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.1.3
+
+### Patch Changes
+
+- 25ab2ef: Allow users to perform connections when the wallet is `_connected` but `_account` is `null`
+
+## 5.1.2
+
+### Patch Changes
+
+- 6a5737a: Fix signIn method to throw the message property
+
+## 5.1.1
+
+### Patch Changes
+
+- 3b5f4cf: Fix mobile redirect logic
+
 ## 5.1.0
 
 ### Minor Changes
