@@ -20,10 +20,8 @@ function createSiwsEnvelope(input: CreateSiwsEnvelopeInput & {
   return {
     address: solanaPublicKey.toString(),
     domain: window.location.host,
-    uri: window.location.origin,
     nonce: digestHex,
     statement,
-    version: '1',
   };
 }
 

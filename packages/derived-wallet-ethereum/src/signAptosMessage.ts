@@ -19,12 +19,13 @@ export interface StructuredMessageInputWithChainId extends StructuredMessageInpu
 export interface SignAptosMessageWithEthereumInput {
   eip1193Provider: Eip1193Provider | BrowserProvider;
   ethereumAddress?: EthereumAddress;
+  aptosChainId: number;
   authenticationFunction: string;
   messageInput: StructuredMessageInputWithChainId;
 }
 
 export async function signAptosMessageWithEthereum(input: SignAptosMessageWithEthereumInput): Promise<UserResponse<AptosSignMessageOutput>> {
-  const { authenticationFunction, messageInput } = input;
+  const { authenticationFunction, messageInput, aptosChainId } = input;
   const eip1193Provider = input.eip1193Provider instanceof BrowserProvider
     ? input.eip1193Provider
     : new BrowserProvider(input.eip1193Provider);
@@ -38,8 +39,6 @@ export async function signAptosMessageWithEthereum(input: SignAptosMessageWithEt
   }
   const ethereumAddress = ethereumAccount.address as EthereumAddress;
 
-  const ethereumNetwork = await eip1193Provider.getNetwork();
-  const ethereumChainId = Number(ethereumNetwork.chainId);
 
   const aptosPublicKey = new EIP1193DerivedPublicKey({
     domain: window.location.origin,
@@ -65,7 +64,7 @@ export async function signAptosMessageWithEthereum(input: SignAptosMessageWithEt
   const issuedAt = new Date();
   const siweMessage = createSiweEnvelopeForAptosStructuredMessage({
     ethereumAddress,
-    ethereumChainId,
+    chainId: aptosChainId,
     structuredMessage,
     signingMessageDigest,
     issuedAt,
@@ -74,7 +73,7 @@ export async function signAptosMessageWithEthereum(input: SignAptosMessageWithEt
   const response = await wrapEthersUserResponse(ethereumAccount.signMessage(siweMessage));
 
   return mapUserResponse(response, (siweSignature) => {
-    const signature = new EIP1193DerivedSignature(siweSignature, ethereumChainId, issuedAt);
+    const signature = new EIP1193DerivedSignature(siweSignature, aptosChainId, issuedAt);
     const fullMessage = new TextDecoder().decode(signingMessage);
     return {
       prefix: 'APTOS',

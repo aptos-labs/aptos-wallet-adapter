@@ -219,6 +219,7 @@ export class EIP1193DerivedWallet implements AptosWallet {
     return signAptosMessageWithEthereum({
       eip1193Provider: this.eip1193Provider,
       authenticationFunction: this.authenticationFunction,
+      aptosChainId: NetworkToChainId[this.defaultNetwork],
       messageInput: {
         ...input,
         chainId,
@@ -233,6 +234,7 @@ export class EIP1193DerivedWallet implements AptosWallet {
     return signAptosTransactionWithEthereum({
       eip1193Provider: this.eip1193Provider,
       authenticationFunction: this.authenticationFunction,
+      aptosChainId: NetworkToChainId[this.defaultNetwork],
       rawTransaction,
     })
   }
