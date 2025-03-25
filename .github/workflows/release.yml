@@ -16,6 +16,13 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
+      - name: Authenticate as Aptos Labs Bot
+        uses: actions/create-github-app-token@v1
+        id: authenticate
+        with:
+          app-id: ${{ vars.APTOS_LABS_BOT_APP_ID }}
+          private-key: ${{ secrets.APTOS_LABS_BOT_APP_PRIVATE_KEY }}
+
       - name: Checkout Repo
         uses: actions/checkout@v3
 
@@ -44,6 +51,6 @@ jobs:
         with:
           publish: pnpm run publish-packages
         env:
-          GITHUB_TOKEN: ${{ secrets.APTOS_WALLET_ADAPTER_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.authenticate.outputs.token }}
+          NPM_TOKEN: ${{ secrets.APTOS_LABS_NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
