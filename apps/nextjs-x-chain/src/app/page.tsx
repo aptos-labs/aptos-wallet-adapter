@@ -56,24 +56,17 @@ export default function Home() {
     address: string;
   } | null>(null);
 
-  // TODO: this logic should ideally live in the relative wallet package
+  // TODO: this logic should ideally live in provider package
   useEffect(() => {
     const fetchOriginWalletDetails = async () => {
       if (wallet instanceof SolanaDerivedWallet) {
-        const publicKey = wallet.solanaWallet.publicKey;
-        const publicKeyString = publicKey?.toBase58();
         setOriginWalletDetails({
-          publicKey: publicKeyString,
-          address: publicKeyString ?? "",
+          publicKey: wallet.originalAccount?.publicKey?.toBase58() ?? "",
+          address: wallet.originalAccount?.address ?? "",
         });
       } else if (wallet instanceof EIP1193DerivedWallet) {
-        const [address] = await wallet.eip1193Provider.request({
-          method: "eth_requestAccounts",
-        });
-        if (!address) return;
         setOriginWalletDetails({
-          publicKey: undefined,
-          address: address,
+          address: wallet.originalAccount?.address ?? "",
         });
       } else {
         // is Aptos Wallet

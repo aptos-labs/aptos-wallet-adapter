@@ -29,6 +29,10 @@ import { signAptosTransactionWithEthereum } from './signAptosTransaction';
 
 const defaultAuthenticationFunction = '0x7::eip1193::authenticate';
 
+export type EthereumAccount = {
+  publicKey?: string;
+  address: string;
+}
 export interface EIP1193DerivedWalletOptions {
   authenticationFunction?: string;
   defaultNetwork?: Network;
@@ -39,7 +43,9 @@ export class EIP1193DerivedWallet implements AptosWallet {
   readonly eip1193Ethers: BrowserProvider;
   readonly domain: string;
   readonly authenticationFunction: string;
+
   defaultNetwork: Network;
+  originalAccount: EthereumAccount | null = null;
 
   readonly version = "1.0.0";
   readonly name: string;
@@ -121,6 +127,9 @@ export class EIP1193DerivedWallet implements AptosWallet {
     return mapUserResponse(response, (account) => {
       const publicKey = this.derivePublicKey(account.address as EthereumAddress);
       const aptosAddress = publicKey.authKey().derivedAddress();
+      this.originalAccount = {
+        address: account.address,
+      };
       return new AccountInfo({ publicKey, address: aptosAddress });
     });
   }
@@ -160,6 +169,9 @@ export class EIP1193DerivedWallet implements AptosWallet {
         const publicKey = this.derivePublicKey(ethereumAddress);
         const aptosAddress = publicKey.authKey().derivedAddress();
         const account = new AccountInfo({ publicKey, address: aptosAddress });
+        this.originalAccount = {
+          address: ethereumAddress,
+        };
         callback(account);
       };
       this.onAccountsChangedListeners.push(listener);

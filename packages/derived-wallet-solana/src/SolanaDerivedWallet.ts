@@ -27,6 +27,11 @@ import { signAptosMessageWithSolana } from './signAptosMessage';
 import { signAptosTransactionWithSolana } from './signAptosTransaction';
 import { SolanaDerivedPublicKey } from './SolanaDerivedPublicKey';
 
+export type SolanaAccount = {
+  publicKey: SolanaPublicKey;
+  address: string;
+}
+
 export interface SolanaDomainWalletOptions {
   authenticationFunction?: string;
   defaultNetwork?: Network;
@@ -36,7 +41,9 @@ export class SolanaDerivedWallet implements AptosWallet {
   readonly solanaWallet: SolanaWalletAdapter;
   readonly domain: string;
   readonly authenticationFunction: string;
+  
   defaultNetwork: Network;
+  originalAccount: SolanaAccount | null = null;
 
   readonly version = "1.0.0";
   readonly name: string;
@@ -114,6 +121,10 @@ export class SolanaDerivedWallet implements AptosWallet {
     if (!this.solanaWallet.publicKey) {
       return { status: UserResponseStatus.REJECTED };
     }
+    this.originalAccount = {
+      publicKey: this.solanaWallet.publicKey,
+      address: this.solanaWallet.publicKey.toBase58(),
+    };
 
     const aptosPublicKey = this.derivePublicKey(this.solanaWallet.publicKey);
     return {
@@ -124,6 +135,7 @@ export class SolanaDerivedWallet implements AptosWallet {
 
   async disconnect() {
     await this.solanaWallet.disconnect();
+    this.originalAccount = null;
   }
 
   // endregion
@@ -149,6 +161,10 @@ export class SolanaDerivedWallet implements AptosWallet {
       this.solanaWallet.on('connect', (newSolanaPublicKey) => {
         const aptosPublicKey = this.derivePublicKey(newSolanaPublicKey);
         const newAptosAccount = accountInfoFromPublicKey(aptosPublicKey);
+        this.originalAccount = {
+          publicKey: newSolanaPublicKey,
+          address: newSolanaPublicKey.toBase58(),
+        };
         callback(newAptosAccount);
       });
     }
