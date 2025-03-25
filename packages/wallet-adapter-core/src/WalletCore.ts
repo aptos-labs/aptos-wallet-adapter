@@ -1083,43 +1083,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           throw new WalletConnectionError("Failed to sign a message").message;
         }
 
-        // For Keyless wallet accounts we skip verification for now.
-        // TODO: Remove when client-side verification is done in SDK.
-        if (
-          this._account.publicKey instanceof AnyPublicKey &&
-          this._account.publicKey.variant === AnyPublicKeyVariant.Keyless
-        ) {
-          return true;
-        }
-
-        let verified = false;
-        // if is a multi sig wallet with a MultiEd25519Signature type
-        if (response.args.signature instanceof MultiEd25519Signature) {
-          if (!(this._account.publicKey instanceof MultiEd25519PublicKey)) {
-            throw new WalletSignMessageAndVerifyError(
-              "Public key and Signature type mismatch"
-            ).message;
-          }
-          const { fullMessage, signature } = response.args;
-          const bitmap = signature.bitmap;
-          if (bitmap) {
-            const minKeysRequired = this._account.publicKey.threshold;
-            if (signature.signatures.length < minKeysRequired) {
-              verified = false;
-            } else {
-              verified = this._account.publicKey.verifySignature({
-                message: new TextEncoder().encode(fullMessage),
-                signature,
-              });
-            }
-          }
-        } else {
-          verified = this._account.publicKey.verifySignature({
-            message: new TextEncoder().encode(response.args.fullMessage),
-            signature: response.args.signature,
-          });
-        }
-        return verified;
+        const publicKey = this._account.publicKey;
+        const aptosConfig = getAptosConfig(this._network, this._dappConfig);
+        const messageBytes = new TextEncoder().encode(message.message);
+        return await publicKey.verifySignatureAsync({ aptosConfig, message: messageBytes, signature: response.args.signature, options: { throwErrorWithReason: true } })
       } catch (error: any) {
         const errMsg = generalizedErrorMessage(error);
         throw new WalletSignMessageAndVerifyError(errMsg).message;
