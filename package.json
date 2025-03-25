@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev --no-cache --parallel --continue",
+    "dev": "turbo run dev --no-cache --parallel --continue --filter=!nuxt-app",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
@@ -22,7 +22,10 @@
     "deploy:example": "pnpm run example:build && pnpm run example:export && touch ./apps/nextjs-example/out/.nojekyll && gh-pages --dist apps/nextjs-example/out --dotfiles",
     "deploy:example-testing": "pnpm run example:build && pnpm run example:export && touch ./apps/nextjs-example/out/.nojekyll && gh-pages --dist apps/nextjs-example/out --dest nextjs-example-testing --dotfiles",
     "vue-example:build": "pnpm run --filter {apps/nuxt-example} build",
-    "deploy:example-vue": "pnpm run vue-example:build && touch ./apps/nuxt-example/.output/public/.nojekyll && gh-pages --dist apps/nuxt-example/.output/public --dest nuxt-example --dotfiles"
+    "deploy:example-vue": "pnpm run vue-example:build && touch ./apps/nuxt-example/.output/public/.nojekyll && gh-pages --dist apps/nuxt-example/.output/public --dest nuxt-example --dotfiles",
+    "cross-chain-example:export": "pnpm run --filter {apps/nextjs-x-chain} export",
+    "cross-chain-example:build": "pnpm run --filter {apps/nextjs-x-chain} build",
+    "deploy:cross-chain-example": "pnpm run cross-chain-example:build && pnpm run cross-chain-example:export && touch ./apps/nextjs-x-chain/out/.nojekyll && gh-pages --dist apps/nextjs-x-chain/out --dest nextjs-cross-chain-example --dotfiles"
   },
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
