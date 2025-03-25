@@ -9,13 +9,13 @@ import {
   Serializer,
 } from '@aptos-labs/ts-sdk';
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
-import { createSiwsEnvelopeForAptosTransaction } from './createSiwsEnvelopeForTransaction';
+import { createSiwsEnvelopeForAptosTransaction } from './createSiwsEnvelope';
 import { wrapSolanaUserResponse } from './shared';
 
 export interface SignAptosTransactionWithSolanaInput {
-  solanaWallet: SolanaWalletAdapter,
-  authenticationFunction: string,
-  rawTransaction: AnyRawTransaction,
+  solanaWallet: SolanaWalletAdapter;
+  authenticationFunction: string;
+  rawTransaction: AnyRawTransaction;
 }
 
 export async function signAptosTransactionWithSolana(input: SignAptosTransactionWithSolanaInput) {
@@ -35,7 +35,7 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
   const siwsInput = createSiwsEnvelopeForAptosTransaction({
     solanaPublicKey,
     rawTransaction,
-    digest: signingMessageDigest,
+    signingMessageDigest,
   });
 
   const response = await wrapSolanaUserResponse(solanaWallet.signIn!(siwsInput));

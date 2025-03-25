@@ -1,13 +1,6 @@
-import {
-  encodeStructuredMessage,
-  isNullCallback,
-  makeUserApproval,
-  makeUserRejection,
-  mapUserResponse,
-} from '@aptos-labs/derived-wallet-base';
+import { isNullCallback, mapUserResponse } from '@aptos-labs/derived-wallet-base';
 import {
   AccountAuthenticator,
-  AccountAuthenticatorAbstraction,
   AnyRawTransaction,
   Network,
   NetworkToChainId,
@@ -27,40 +20,14 @@ import {
   UserResponseStatus,
   WalletIcon,
 } from "@aptos-labs/wallet-standard";
-import type { EIP6963ProviderDetail } from 'mipd';
-import {
-  Address as EthereumAddress,
-  createWalletClient,
-  custom,
-  CustomTransport,
-  EIP1193Provider,
-  UserRejectedRequestError,
-  WalletClient,
-} from 'viem'
-import {
-  createSiweMessageFromAptosStructuredMessage,
-  createSiweMessageFromAptosTransaction,
-} from './createSiweMessageFromAptos';
+import { BrowserProvider } from 'ethers';
+import type { EIP1193Provider, EIP6963ProviderDetail } from 'mipd';
 import { EIP1193DerivedPublicKey } from './EIP1193DerivedPublicKey';
-import { EIP1193DerivedSignature } from './EIP1193DerivedSignature';
+import { EthereumAddress, wrapEthersUserResponse } from './shared';
+import { signAptosMessageWithEthereum } from './signAptosMessage';
+import { signAptosTransactionWithEthereum } from './signAptosTransaction';
 
 const defaultAuthenticationFunction = '0x7::eip1193::authenticate';
-
-/**
- * Adapt EIP1193 response into a UserResponse.
- * `UserRejectedRequestError` will be converted into a rejection.
- */
-async function wrapEIP1193UserResponse<TResponse>(promise: Promise<TResponse>): Promise<UserResponse<TResponse>> {
-  try {
-    const response = await promise;
-    return makeUserApproval(response);
-  } catch (err) {
-    if (err instanceof UserRejectedRequestError) {
-      return makeUserRejection();
-    }
-    throw err;
-  }
-}
 
 export interface EIP1193DerivedWalletOptions {
   authenticationFunction?: string;
@@ -69,7 +36,7 @@ export interface EIP1193DerivedWalletOptions {
 
 export class EIP1193DerivedWallet implements AptosWallet {
   readonly eip1193Provider: EIP1193Provider;
-  readonly eip1193Wallet: WalletClient<CustomTransport>;
+  readonly eip1193Ethers: BrowserProvider;
   readonly domain: string;
   readonly authenticationFunction: string;
   defaultNetwork: Network;
@@ -89,9 +56,7 @@ export class EIP1193DerivedWallet implements AptosWallet {
     } = options;
 
     this.eip1193Provider = provider;
-    this.eip1193Wallet = createWalletClient({
-      transport: custom(this.eip1193Provider),
-    })
+    this.eip1193Ethers = new BrowserProvider(provider);
 
     this.domain = window.location.origin;
     this.authenticationFunction = authenticationFunction;
@@ -152,10 +117,9 @@ export class EIP1193DerivedWallet implements AptosWallet {
   // region Connection
 
   async connect(): Promise<UserResponse<AptosConnectOutput>> {
-    const response = await wrapEIP1193UserResponse(this.eip1193Wallet.requestAddresses());
-
-    return mapUserResponse(response, ([ethereumAddress]) => {
-      const publicKey = this.derivePublicKey(ethereumAddress);
+    const response = await wrapEthersUserResponse(this.eip1193Ethers.getSigner());
+    return mapUserResponse(response, (account) => {
+      const publicKey = this.derivePublicKey(account.address as EthereumAddress);
       const aptosAddress = publicKey.authKey().derivedAddress();
       return new AccountInfo({ publicKey, address: aptosAddress });
     });
@@ -169,17 +133,12 @@ export class EIP1193DerivedWallet implements AptosWallet {
 
   // region Accounts
 
-  private async getActiveAccountAddress(): Promise<EthereumAddress> {
-    const [activeAddress] = await this.eip1193Wallet.getAddresses();
-    if (!activeAddress) {
+  async getActiveAccount() {
+    const [activeAccount] = await this.eip1193Ethers.listAccounts();
+    if (!activeAccount) {
       throw new Error('Account not connected');
     }
-    return activeAddress;
-  }
-
-  async getActiveAccount() {
-    const ethereumAddress = await this.getActiveAccountAddress();
-    const publicKey = this.derivePublicKey(ethereumAddress);
+    const publicKey = this.derivePublicKey(activeAccount.address as EthereumAddress);
     const aptosAddress = publicKey.authKey().derivedAddress();
     return new AccountInfo({ publicKey, address: aptosAddress });
   }
@@ -255,82 +214,27 @@ export class EIP1193DerivedWallet implements AptosWallet {
 
   // region Signatures
 
-  async signMessage({
-    message,
-    nonce,
-    ...flags
-  }: AptosSignMessageInput): Promise<UserResponse<AptosSignMessageOutput>> {
-    const ethereumAddress = await this.getActiveAccountAddress();
-    const publicKey = this.derivePublicKey(ethereumAddress);
-
-    const aptosAddress = flags.address ? publicKey.authKey().derivedAddress() : undefined;
-    const application = flags.application ? this.domain : undefined;
-    const chainId = flags.chainId ? NetworkToChainId[this.defaultNetwork] : undefined;
-    const structuredMessage = {
-      address: aptosAddress?.toString(),
-      application,
-      chainId,
-      message,
-      nonce,
-    };
-
-    // We need to provide `issuedAt` externally so that we can match it with the signature
-    const issuedAt = new Date();
-    const siweMessage = createSiweMessageFromAptosStructuredMessage({
-      ethereumAddress,
-      structuredMessage,
-      issuedAt,
-    });
-
-    const response = await wrapEIP1193UserResponse(this.eip1193Wallet.signMessage({
-      account: ethereumAddress,
-      message: siweMessage,
-    }));
-
-    return mapUserResponse(response, (siweSignature) => {
-      const signature = new EIP1193DerivedSignature(siweSignature, issuedAt);
-      const fullMessageBytes = encodeStructuredMessage(structuredMessage);
-      const fullMessage = new TextDecoder().decode(fullMessageBytes);
-      return {
-        prefix: 'APTOS',
-        fullMessage,
-        message,
-        nonce,
-        signature,
-      };
-    });
+  async signMessage(input: AptosSignMessageInput): Promise<UserResponse<AptosSignMessageOutput>> {
+    const chainId = input.chainId ? NetworkToChainId[this.defaultNetwork] : undefined;
+    return signAptosMessageWithEthereum({
+      eip1193Provider: this.eip1193Provider,
+      authenticationFunction: this.authenticationFunction,
+      messageInput: {
+        ...input,
+        chainId,
+      },
+    })
   }
 
-  async signTransaction(rawTransaction: AnyRawTransaction, asFeePayer?: boolean): Promise<UserResponse<AccountAuthenticator>> {
-    const ethereumAddress = await this.getActiveAccountAddress();
-    const publicKey = this.derivePublicKey(ethereumAddress);
-    const aptosAddress = publicKey.authKey().derivedAddress();
-
-    // We need to provide `issuedAt` externally so that we can match it with the signature
-    const issuedAt = new Date();
-    const siweMessage = createSiweMessageFromAptosTransaction({
-      aptosAddress,
-      ethereumAddress,
+  async signTransaction(
+    rawTransaction: AnyRawTransaction,
+    _asFeePayer?: boolean,
+  ): Promise<UserResponse<AccountAuthenticator>> {
+    return signAptosTransactionWithEthereum({
+      eip1193Provider: this.eip1193Provider,
+      authenticationFunction: this.authenticationFunction,
       rawTransaction,
-      issuedAt,
-    });
-
-    const response = await wrapEIP1193UserResponse(this.eip1193Wallet.signMessage({
-      account: ethereumAddress,
-      message: siweMessage,
-    }));
-
-    return mapUserResponse(response, (siweSignature) => {
-      const utf8EncodedSiweMessage = new TextEncoder().encode(siweMessage);
-      const signature = new EIP1193DerivedSignature(siweSignature, issuedAt);
-      const authenticator: AccountAuthenticator = new AccountAuthenticatorAbstraction(
-        this.authenticationFunction,
-        // Not sure what the expected value is here
-        utf8EncodedSiweMessage,
-        signature.bcsToBytes(),
-      );
-      return authenticator;
-    });
+    })
   }
 
   // endregion
