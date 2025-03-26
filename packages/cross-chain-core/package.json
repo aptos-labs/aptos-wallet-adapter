@@ -74,7 +74,7 @@
     "typescript": "^5.7.3"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^1.36.0"
+    "@aptos-labs/ts-sdk": "^1.37.1"
   },
   "files": [
     "dist",
