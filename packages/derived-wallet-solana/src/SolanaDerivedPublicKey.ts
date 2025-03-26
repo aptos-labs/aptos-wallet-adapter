@@ -1,11 +1,14 @@
 import { computeDomainAuthenticationKey, parseAptosSigningMessage } from '@aptos-labs/derived-wallet-base';
 import {
   AccountPublicKey,
+  AptosConfig,
   AuthenticationKey,
   Deserializer,
   Ed25519PublicKey,
   Ed25519Signature,
   hashValues,
+  HexInput,
+  Signature,
   Serializer,
   VerifySignatureArgs,
 } from '@aptos-labs/ts-sdk';
@@ -88,6 +91,14 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
     const siwsEnvelopeBytes = createSolanaSignInMessage(siwsEnvelopeInput);
     const ed25519PublicKey = new Ed25519PublicKey(this.solanaPublicKey.toBytes());
     return ed25519PublicKey.verifySignature({ message: siwsEnvelopeBytes, signature });
+  }
+
+  async verifySignatureAsync(args: {
+    aptosConfig: AptosConfig;
+    message: HexInput;
+    signature: Signature;
+  }): Promise<boolean> {
+    return this.verifySignature(args);
   }
 
   serialize(serializer: Serializer) {

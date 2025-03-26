@@ -1,11 +1,14 @@
 import { computeDomainAuthenticationKey, parseAptosSigningMessage } from '@aptos-labs/derived-wallet-base';
 import {
   AccountPublicKey,
+  AptosConfig,
   AuthenticationKey,
   Deserializer,
   hashValues,
   Hex,
+  HexInput,
   Serializer,
+  Signature,
   VerifySignatureArgs,
 } from '@aptos-labs/ts-sdk';
 import { verifyMessage as verifyEthereumMessage } from 'ethers';
@@ -82,6 +85,14 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
 
     const recoveredAddress = verifyEthereumMessage(siweMessage, siweSignature);
     return recoveredAddress === this.ethereumAddress;
+  }
+
+  async verifySignatureAsync(args: {
+    aptosConfig: AptosConfig;
+    message: HexInput;
+    signature: Signature;
+  }): Promise<boolean> {
+    return this.verifySignature(args);
   }
 
   // region Serialization
