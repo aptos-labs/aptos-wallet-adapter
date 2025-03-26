@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/derived-wallet-ethereum",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/types/index.d.ts",
@@ -19,8 +19,13 @@
     "lint": "TIMING=1 eslint \"src/**/*.ts*\""
   },
   "tsup": {
-    "entryPoints": ["src/index.ts"],
-    "format": ["cjs", "esm"]
+    "entryPoints": [
+      "src/index.ts"
+    ],
+    "format": [
+      "cjs",
+      "esm"
+    ]
   },
   "dependencies": {
     "@aptos-labs/derived-wallet-base": "workspace:^",
