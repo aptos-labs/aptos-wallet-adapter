@@ -13,19 +13,18 @@ import { EIP1193DerivedSignature } from './EIP1193DerivedSignature';
 import { EthereumAddress, wrapEthersUserResponse } from './shared';
 
 export interface StructuredMessageInputWithChainId extends StructuredMessageInput {
-  chainId?: number;
+  chainId: number;
 }
 
 export interface SignAptosMessageWithEthereumInput {
   eip1193Provider: Eip1193Provider | BrowserProvider;
   ethereumAddress?: EthereumAddress;
-  aptosChainId: number;
   authenticationFunction: string;
   messageInput: StructuredMessageInputWithChainId;
 }
 
 export async function signAptosMessageWithEthereum(input: SignAptosMessageWithEthereumInput): Promise<UserResponse<AptosSignMessageOutput>> {
-  const { authenticationFunction, messageInput, aptosChainId } = input;
+  const { authenticationFunction, messageInput } = input;
   const eip1193Provider = input.eip1193Provider instanceof BrowserProvider
     ? input.eip1193Provider
     : new BrowserProvider(input.eip1193Provider);
@@ -64,7 +63,7 @@ export async function signAptosMessageWithEthereum(input: SignAptosMessageWithEt
   const issuedAt = new Date();
   const siweMessage = createSiweEnvelopeForAptosStructuredMessage({
     ethereumAddress,
-    chainId: aptosChainId,
+    chainId,
     structuredMessage,
     signingMessageDigest,
     issuedAt,
@@ -73,7 +72,7 @@ export async function signAptosMessageWithEthereum(input: SignAptosMessageWithEt
   const response = await wrapEthersUserResponse(ethereumAccount.signMessage(siweMessage));
 
   return mapUserResponse(response, (siweSignature) => {
-    const signature = new EIP1193DerivedSignature(siweSignature, aptosChainId, issuedAt);
+    const signature = new EIP1193DerivedSignature(siweSignature, chainId, issuedAt);
     const fullMessage = new TextDecoder().decode(signingMessage);
     return {
       prefix: 'APTOS',
