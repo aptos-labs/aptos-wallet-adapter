@@ -8,8 +8,8 @@ import {
   Ed25519Signature,
   hashValues,
   HexInput,
-  Signature,
   Serializer,
+  Signature,
   VerifySignatureArgs,
 } from '@aptos-labs/ts-sdk';
 import { createSignInMessage as createSolanaSignInMessage } from '@solana/wallet-standard-util';
@@ -93,11 +93,7 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
     return ed25519PublicKey.verifySignature({ message: siwsEnvelopeBytes, signature });
   }
 
-  async verifySignatureAsync(args: {
-    aptosConfig: AptosConfig;
-    message: HexInput;
-    signature: Signature;
-  }): Promise<boolean> {
+  async verifySignatureAsync(args: { aptosConfig: AptosConfig, message: HexInput, signature: Signature }): Promise<boolean> {
     return this.verifySignature(args);
   }
 

@@ -87,11 +87,7 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
     return recoveredAddress === this.ethereumAddress;
   }
 
-  async verifySignatureAsync(args: {
-    aptosConfig: AptosConfig;
-    message: HexInput;
-    signature: Signature;
-  }): Promise<boolean> {
+  async verifySignatureAsync(args: { aptosConfig: AptosConfig, message: HexInput, signature: Signature }): Promise<boolean> {
     return this.verifySignature(args);
   }
 
