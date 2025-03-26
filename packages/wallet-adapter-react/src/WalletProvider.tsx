@@ -19,9 +19,16 @@ import {
   WalletReadyState,
   AptosSignInInput,
   AptosSignInOutput,
+  AnyPublicKey as AptosAnyPublicKey,
+  AccountAddress,
 } from "@aptos-labs/wallet-adapter-core";
 import { ReactNode, FC, useState, useEffect, useCallback, useRef } from "react";
 import { WalletContext } from "./useWallet";
+import {
+  SolanaDerivedWallet,
+  SolanaPublicKey,
+} from "@aptos-labs/derived-wallet-solana";
+import { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
 
 export interface AptosWalletProviderProps {
   children: ReactNode;
@@ -33,6 +40,14 @@ export interface AptosWalletProviderProps {
   disableTelemetry?: boolean;
   onError?: (error: any) => void;
 }
+
+export type OriginWalletDetails =
+  | {
+      address: string | AccountAddress;
+      publicKey?: SolanaPublicKey | AptosAnyPublicKey | undefined;
+    }
+  | AccountInfo
+  | null;
 
 const initialState: {
   account: AccountInfo | null;
@@ -392,6 +407,57 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       );
     };
   }, [wallets, account]);
+
+  // Define specific return types based on wallet type
+  type SolanaWalletDetails = { address: string; publicKey: SolanaPublicKey };
+  type EVMWalletDetails = { address: string; publicKey?: undefined };
+  type AptosWalletDetails = AccountInfo | null;
+
+  // Function overloads
+  function getOriginWalletDetails(
+    wallet: SolanaDerivedWallet
+  ): Promise<SolanaWalletDetails>;
+  function getOriginWalletDetails(
+    wallet: EIP1193DerivedWallet
+  ): Promise<EVMWalletDetails>;
+  function getOriginWalletDetails(
+    wallet: AdapterWallet
+  ): Promise<AptosWalletDetails>;
+
+  // Implementation
+  async function getOriginWalletDetails(
+    wallet: AdapterWallet
+  ): Promise<OriginWalletDetails> {
+    if (isSolanaDerivedWallet(wallet)) {
+      const publicKey = wallet.solanaWallet.publicKey;
+      return {
+        publicKey: publicKey ?? undefined,
+        address: publicKey?.toBase58() ?? "",
+      };
+    } else if (isEIP1193DerivedWallet(wallet)) {
+      const [activeAccount] = await wallet.eip1193Ethers.listAccounts();
+      return {
+        publicKey: undefined, // No public key for EVM wallets
+        address: activeAccount.address,
+      };
+    } else {
+      // Assume Aptos Wallet
+      return account;
+    }
+  }
+
+  function isSolanaDerivedWallet(
+    wallet: AdapterWallet
+  ): wallet is SolanaDerivedWallet {
+    return wallet instanceof SolanaDerivedWallet;
+  }
+
+  function isEIP1193DerivedWallet(
+    wallet: AdapterWallet
+  ): wallet is EIP1193DerivedWallet {
+    return wallet instanceof EIP1193DerivedWallet;
+  }
+
   return (
     <WalletContext.Provider
       value={{
@@ -404,6 +470,9 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         signMessageAndVerify,
         changeNetwork,
         submitTransaction,
+        getOriginWalletDetails,
+        isSolanaDerivedWallet,
+        isEIP1193DerivedWallet,
         account,
         network,
         connected,

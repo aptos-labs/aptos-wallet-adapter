@@ -30,7 +30,7 @@ export const getSolanaWalletUSDCBalance = async (
     splToken.value.length > 0 ? splToken.value[0]!.pubkey : address;
 
   const balance = await connection.getTokenAccountBalance(checkAddress);
-  console.log("balance", balance);
+
   return (
     balance.value.uiAmountString ??
     (Number(balance.value.amount) / 10 ** balance.value.decimals).toString()

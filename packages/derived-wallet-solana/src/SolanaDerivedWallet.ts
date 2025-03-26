@@ -27,6 +27,7 @@ import { signAptosMessageWithSolana } from './signAptosMessage';
 import { signAptosTransactionWithSolana } from './signAptosTransaction';
 import { SolanaDerivedPublicKey } from './SolanaDerivedPublicKey';
 
+export type { SolanaPublicKey };
 export interface SolanaDomainWalletOptions {
   authenticationFunction?: string;
   defaultNetwork?: Network;

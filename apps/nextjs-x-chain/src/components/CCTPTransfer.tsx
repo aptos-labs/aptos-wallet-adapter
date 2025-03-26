@@ -9,7 +9,13 @@ import {
 } from "./ui/card";
 import { Input } from "./ui/input";
 import { ChainConfig, CrossChainCore } from "@aptos-labs/cross-chain-core";
-import { Account, Ed25519PrivateKey, Network } from "@aptos-labs/ts-sdk";
+import {
+  Account,
+  Ed25519PrivateKey,
+  Network,
+  PrivateKey,
+  PrivateKeyVariants,
+} from "@aptos-labs/ts-sdk";
 import {
   Chain,
   WormholeInitiateTransferResponse,
@@ -21,7 +27,10 @@ import { Loader2, MoveDown } from "lucide-react";
 import USDC from "@/app/icons/USDC";
 import { chainToIcon } from "@/app/icons";
 import { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import {
+  OriginWalletDetails,
+  useWallet,
+} from "@aptos-labs/wallet-adapter-react";
 
 const dappNetwork: Network.MAINNET | Network.TESTNET = Network.TESTNET;
 
@@ -35,7 +44,10 @@ let sponsorAccount: Account;
 
 try {
   const privateKey = new Ed25519PrivateKey(
-    process.env.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY as string
+    PrivateKey.formatPrivateKey(
+      process.env.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY as string,
+      PrivateKeyVariants.Ed25519
+    )
   );
   mainSigner = Account.fromPrivateKey({ privateKey });
 } catch (error) {
@@ -46,7 +58,10 @@ try {
 
 try {
   const feePayerPrivateKey = new Ed25519PrivateKey(
-    process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY as string
+    PrivateKey.formatPrivateKey(
+      process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY as string,
+      PrivateKeyVariants.Ed25519
+    )
   );
   sponsorAccount = Account.fromPrivateKey({
     privateKey: feePayerPrivateKey,
@@ -62,10 +77,7 @@ export function CCTPTransfer({
   originWalletDetails,
 }: {
   wallet: AdapterWallet | null;
-  originWalletDetails: {
-    publicKey?: string;
-    address: string;
-  } | null;
+  originWalletDetails: OriginWalletDetails | null;
 }) {
   const { account } = useWallet();
 
@@ -109,7 +121,7 @@ export function CCTPTransfer({
     if (!originWalletDetails) return;
     const fetchWalletUsdcBalance = async () => {
       const balance = await crossChainCore.getWalletUSDCBalance(
-        originWalletDetails.address,
+        originWalletDetails.address.toString(),
         sourceChain
       );
       setWalletUSDCBalance(balance);
