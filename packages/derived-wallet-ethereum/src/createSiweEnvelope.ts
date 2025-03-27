@@ -9,19 +9,19 @@ import { EthereumAddress } from './shared';
 
 export interface CreateSiweEnvelopeInput {
   ethereumAddress: EthereumAddress;
-  ethereumChainId: number;
+  chainId: number;
   signingMessageDigest: HexInput;
   issuedAt: Date;
 }
 
 function createSiweEnvelope(input: CreateSiweEnvelopeInput & { statement: string }) {
-  const { ethereumAddress, ethereumChainId, signingMessageDigest, issuedAt, statement } = input;
+  const { ethereumAddress, chainId, signingMessageDigest, issuedAt, statement } = input;
   const digestHex = Hex.fromHexInput(signingMessageDigest).toString();
   return createSiweMessage({
     address: ethereumAddress,
     domain: window.location.host,
     uri: window.location.origin,
-    chainId: ethereumChainId,
+    chainId,
     nonce: digestHex,
     statement,
     version: '1',
