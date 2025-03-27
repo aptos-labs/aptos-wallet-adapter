@@ -1,4 +1,4 @@
-import { AccountPublicKey } from '@aptos-labs/ts-sdk';
+import { AccountPublicKey, Aptos } from '@aptos-labs/ts-sdk';
 import { AccountInfo } from '@aptos-labs/wallet-standard';
 
 export function accountInfoFromPublicKey(publicKey: AccountPublicKey) {
@@ -11,3 +11,11 @@ export function accountInfoFromPublicKey(publicKey: AccountPublicKey) {
 export function isNullCallback(callback: Function) {
   return '_isNull' in callback && callback._isNull === true;
 }
+
+/**
+ * Helper function to fetch Devnet chain id
+ */
+export const fetchDevnetChainId = async (): Promise<number> => {
+  const aptos = new Aptos(); // default to devnet
+  return await aptos.getChainId();
+};
