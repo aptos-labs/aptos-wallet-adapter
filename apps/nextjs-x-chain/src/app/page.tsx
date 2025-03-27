@@ -176,6 +176,46 @@ function WalletConnection({
   const isNetworkChangeSupported =
     wallet?.features["aptos:changeNetwork"] !== undefined;
 
+  const aptosAccountInfoLabels = [
+    {
+      label: "Address",
+      value: (
+        <DisplayValue
+          value={account?.address?.toString() ?? "Not Present"}
+          isCorrect={!!account?.address}
+        />
+      ),
+    },
+    {
+      label: "Public key",
+      value: (
+        <DisplayValue
+          value={account?.publicKey?.toString() ?? "Not Present"}
+          isCorrect={!!account?.publicKey}
+        />
+      ),
+    },
+    {
+      label: "ANS name",
+      subLabel: "(only if attached)",
+      value: <p>{account?.ansName ?? "Not Present"}</p>,
+    },
+  ];
+  if (
+    wallet &&
+    (isSolanaDerivedWallet(wallet) || isEIP1193DerivedWallet(wallet))
+  ) {
+    aptosAccountInfoLabels.push({
+      label: "Origin Wallet Address",
+      value: (
+        <DisplayValue
+          value={originWalletDetails?.address.toString() ?? "Not Present"}
+          isCorrect={!!originWalletDetails?.address}
+        />
+      ),
+    });
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -224,69 +264,8 @@ function WalletConnection({
 
         <div className="flex flex-col gap-6">
           <h4 className="text-lg font-medium">Aptos Account Info</h4>
-          <LabelValueGrid
-            items={[
-              {
-                label: "Address",
-                value: (
-                  <DisplayValue
-                    value={account?.address?.toString() ?? "Not Present"}
-                    isCorrect={!!account?.address}
-                  />
-                ),
-              },
-              {
-                label: "Public key",
-                value: (
-                  <DisplayValue
-                    value={account?.publicKey?.toString() ?? "Not Present"}
-                    isCorrect={!!account?.publicKey}
-                  />
-                ),
-              },
-              {
-                label: "ANS name",
-                subLabel: "(only if attached)",
-                value: <p>{account?.ansName ?? "Not Present"}</p>,
-              },
-            ]}
-          />
+          <LabelValueGrid items={aptosAccountInfoLabels} />
         </div>
-
-        {wallet &&
-          (isSolanaDerivedWallet(wallet) || isEIP1193DerivedWallet(wallet)) && (
-            <div className="flex flex-col gap-6">
-              <h4 className="text-lg font-medium">Original Account Info</h4>
-              <LabelValueGrid
-                items={[
-                  {
-                    label: "Address",
-                    value: (
-                      <DisplayValue
-                        value={
-                          originWalletDetails?.address.toString() ??
-                          "Not Present"
-                        }
-                        isCorrect={!!originWalletDetails?.address}
-                      />
-                    ),
-                  },
-                  {
-                    label: "Public key",
-                    value: (
-                      <DisplayValue
-                        value={
-                          originWalletDetails?.publicKey?.toString() ??
-                          "Not Present"
-                        }
-                        isCorrect={!!originWalletDetails?.publicKey}
-                      />
-                    ),
-                  },
-                ]}
-              />
-            </div>
-          )}
 
         <div className="flex flex-col gap-6">
           <h4 className="text-lg font-medium">Network Info</h4>
