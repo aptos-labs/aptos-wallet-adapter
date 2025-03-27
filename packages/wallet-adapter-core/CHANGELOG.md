@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.1.4
+
+### Patch Changes
+
+- 6bfd2fb: Upgrade the ts-sdk version
+
 ## 5.1.3
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.1.1
+
+### Patch Changes
+
+- 6bfd2fb: Upgrade the ts-sdk version
+
 ## 0.1.0
 
 ### Minor Changes
