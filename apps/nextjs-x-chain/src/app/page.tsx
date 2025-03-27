@@ -56,8 +56,9 @@ export default function Home() {
     getOriginWalletDetails,
   } = useWallet();
 
-  const [originWalletDetails, setOriginWalletDetails] =
-    useState<OriginWalletDetails | null>(null);
+  const [originWalletDetails, setOriginWalletDetails] = useState<
+    OriginWalletDetails | undefined
+  >(undefined);
 
   useEffect(() => {
     if (!wallet) return;
@@ -151,7 +152,7 @@ interface WalletConnectionProps {
   account: AccountInfo | null;
   network: NetworkInfo | null;
   wallet: AdapterWallet | null;
-  originWalletDetails: OriginWalletDetails | null;
+  originWalletDetails: OriginWalletDetails | undefined;
   changeNetwork: (network: Network) => Promise<AptosChangeNetworkOutput>;
 }
 

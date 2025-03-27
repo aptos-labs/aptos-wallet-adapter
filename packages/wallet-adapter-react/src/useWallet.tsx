@@ -46,7 +46,9 @@ export interface WalletContextState {
   submitTransaction(
     transaction: InputSubmitTransactionData
   ): Promise<PendingTransactionResponse>;
-  getOriginWalletDetails(wallet: AdapterWallet): Promise<OriginWalletDetails>;
+  getOriginWalletDetails(
+    wallet: AdapterWallet
+  ): Promise<OriginWalletDetails | undefined>;
   isSolanaDerivedWallet(wallet: AdapterWallet): boolean;
   isEIP1193DerivedWallet(wallet: AdapterWallet): boolean;
   wallet: AdapterWallet | null;

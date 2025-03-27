@@ -77,7 +77,7 @@ export function CCTPTransfer({
   originWalletDetails,
 }: {
   wallet: AdapterWallet | null;
-  originWalletDetails: OriginWalletDetails | null;
+  originWalletDetails: OriginWalletDetails | undefined;
 }) {
   const { account } = useWallet();
 

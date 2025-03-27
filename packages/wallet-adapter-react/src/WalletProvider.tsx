@@ -420,14 +420,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   function getOriginWalletDetails(
     wallet: EIP1193DerivedWallet
   ): Promise<EVMWalletDetails>;
-  function getOriginWalletDetails(
-    wallet: AdapterWallet
-  ): Promise<AptosWalletDetails>;
 
   // Implementation
   async function getOriginWalletDetails(
     wallet: AdapterWallet
-  ): Promise<OriginWalletDetails> {
+  ): Promise<OriginWalletDetails | undefined> {
     if (isSolanaDerivedWallet(wallet)) {
       const publicKey = wallet.solanaWallet.publicKey;
       return {
@@ -442,7 +439,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       };
     } else {
       // Assume Aptos Wallet
-      return account;
+      return undefined;
     }
   }
 
