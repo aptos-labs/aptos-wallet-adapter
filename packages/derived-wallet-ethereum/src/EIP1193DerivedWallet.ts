@@ -215,7 +215,7 @@ export class EIP1193DerivedWallet implements AptosWallet {
   // region Signatures
 
   async signMessage(input: AptosSignMessageInput): Promise<UserResponse<AptosSignMessageOutput>> {
-    const chainId = input.chainId ? NetworkToChainId[this.defaultNetwork] : undefined;
+    const chainId = NetworkToChainId[this.defaultNetwork];
     return signAptosMessageWithEthereum({
       eip1193Provider: this.eip1193Provider,
       authenticationFunction: this.authenticationFunction,

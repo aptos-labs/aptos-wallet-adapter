@@ -34,17 +34,17 @@ export async function signAptosTransactionWithEthereum(input: SignAptosTransacti
   }
   const ethereumAddress = ethereumAccount.address as EthereumAddress;
 
-  const ethereumNetwork = await eip1193Provider.getNetwork();
-  const ethereumChainId = Number(ethereumNetwork.chainId);
-
   const signingMessage = generateSigningMessageForTransaction(rawTransaction);
   const signingMessageDigest = hashValues([signingMessage]);
 
+  const chainId = rawTransaction.rawTransaction.chain_id.chainId;
+
   // We need to provide `issuedAt` externally so that we can match it with the signature
   const issuedAt = new Date();
+
   const siweMessage = createSiweEnvelopeForAptosTransaction({
     ethereumAddress,
-    ethereumChainId,
+    chainId,
     rawTransaction,
     signingMessageDigest,
     issuedAt,
@@ -53,7 +53,7 @@ export async function signAptosTransactionWithEthereum(input: SignAptosTransacti
   const response = await wrapEthersUserResponse(ethereumAccount.signMessage(siweMessage));
 
   return mapUserResponse(response, (siweSignature) => {
-    const signature = new EIP1193DerivedSignature(siweSignature, ethereumChainId, issuedAt);
+    const signature = new EIP1193DerivedSignature(siweSignature, chainId, issuedAt);
     const authenticator = signature.bcsToBytes();
     return new AccountAuthenticatorAbstraction(
       authenticationFunction,
