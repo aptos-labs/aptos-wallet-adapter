@@ -1,4 +1,4 @@
-import { accountInfoFromPublicKey, isNullCallback } from '@aptos-labs/derived-wallet-base';
+import { accountInfoFromPublicKey, fetchDevnetChainId, isNullCallback } from '@aptos-labs/derived-wallet-base';
 import {
   AccountAuthenticator,
   AnyRawTransaction,
@@ -203,7 +203,7 @@ export class SolanaDerivedWallet implements AptosWallet {
   // region Signatures
 
   async signMessage(input: AptosSignMessageInput): Promise<UserResponse<AptosSignMessageOutput>> {
-    const chainId = input.chainId ? NetworkToChainId[this.defaultNetwork] : undefined;
+    const chainId = input.chainId ? this.defaultNetwork === Network.DEVNET ? await fetchDevnetChainId() : NetworkToChainId[this.defaultNetwork] : undefined;
     return signAptosMessageWithSolana({
       solanaWallet: this.solanaWallet,
       authenticationFunction: this.authenticationFunction,
