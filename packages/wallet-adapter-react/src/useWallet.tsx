@@ -17,6 +17,7 @@ import {
   AptosSignInInput,
   AptosSignInOutput,
 } from "@aptos-labs/wallet-adapter-core";
+import { OriginWalletDetails } from "./WalletProvider";
 
 export interface WalletContextState {
   connected: boolean;
@@ -45,6 +46,11 @@ export interface WalletContextState {
   submitTransaction(
     transaction: InputSubmitTransactionData
   ): Promise<PendingTransactionResponse>;
+  getOriginWalletDetails(
+    wallet: AdapterWallet
+  ): Promise<OriginWalletDetails | undefined>;
+  isSolanaDerivedWallet(wallet: AdapterWallet): boolean;
+  isEIP1193DerivedWallet(wallet: AdapterWallet): boolean;
   wallet: AdapterWallet | null;
   wallets: ReadonlyArray<AdapterWallet>;
   notDetectedWallets: ReadonlyArray<AdapterNotDetectedWallet>;
