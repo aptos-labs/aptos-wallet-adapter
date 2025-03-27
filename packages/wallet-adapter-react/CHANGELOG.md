@@ -1,5 +1,13 @@
 # @aptos-labs/wallet-adapter-react
 
+## 4.1.5
+
+### Patch Changes
+
+- 8fea651: Add React version 19 to the wallet-adapter-react peer dependencies list
+- Updated dependencies [6bfd2fb]
+  - @aptos-labs/wallet-adapter-core@5.1.4
+
 ## 4.1.4
 
 ### Patch Changes
