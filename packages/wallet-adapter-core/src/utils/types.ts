@@ -30,6 +30,7 @@ export type AvailableWallets =
   | "T wallet"
   | "Pontem Wallet"
   | "Mizu Wallet"
+  | "OKX Wallet"
   | "Continue with Google";
 
 export type InputTransactionData = {
