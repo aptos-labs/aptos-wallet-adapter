@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.2.1
+
+### Patch Changes
+
+- 6d7b28c: include "OKX Wallet" in AvailableWallets type
+
 ## 5.2.0
 
 ### Minor Changes
