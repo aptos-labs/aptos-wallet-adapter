@@ -31,7 +31,8 @@ export type AvailableWallets =
   | "Pontem Wallet"
   | "Mizu Wallet"
   | "OKX Wallet"
-  | "Continue with Google";
+  | "Continue with Google"
+  | "Continue with Apple";
 
 export type InputTransactionData = {
   sender?: AccountAddressInput;
