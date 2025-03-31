@@ -16,10 +16,11 @@ export interface SignAptosTransactionWithSolanaInput {
   solanaWallet: SolanaWalletAdapter;
   authenticationFunction: string;
   rawTransaction: AnyRawTransaction;
+  domain: string;
 }
 
 export async function signAptosTransactionWithSolana(input: SignAptosTransactionWithSolanaInput) {
-  const { solanaWallet, authenticationFunction, rawTransaction } = input;
+  const { solanaWallet, authenticationFunction, rawTransaction, domain } = input;
   if (!solanaWallet.signIn) {
     throw new Error('solana:signIn not available');
   }
@@ -58,10 +59,13 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
     serializer.serializeOption(input.rawTransaction.feePayerAddress);
     const authenticator = serializer.toUint8Array();
 
+    const accountIdentity = `${solanaPublicKey.toBase58()}:${domain}`
+    
     return new AccountAuthenticatorAbstraction(
       authenticationFunction,
       signingMessageDigest,
       authenticator,
+      new TextEncoder().encode(accountIdentity)
     );
   });
 }
