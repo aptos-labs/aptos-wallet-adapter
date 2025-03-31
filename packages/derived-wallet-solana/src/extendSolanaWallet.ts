@@ -40,6 +40,7 @@ export function extendSolanaWallet(
     solanaWallet,
     authenticationFunction,
     rawTransaction,
+    domain:""
   });
   extended.signAptosMessage = (messageInput) => {
     return signAptosMessageWithSolana({

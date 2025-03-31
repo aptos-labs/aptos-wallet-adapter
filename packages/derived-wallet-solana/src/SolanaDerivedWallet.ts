@@ -222,6 +222,7 @@ export class SolanaDerivedWallet implements AptosWallet {
       solanaWallet: this.solanaWallet,
       authenticationFunction: this.authenticationFunction,
       rawTransaction,
+      domain: this.domain,
     });
   }
 
