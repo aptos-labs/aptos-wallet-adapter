@@ -24,11 +24,12 @@ jobs:
           private-key: ${{ secrets.APTOS_LABS_BOT_APP_PRIVATE_KEY }}
 
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
+          registry-url: 'https://registry.npmjs.org'
 
       - uses: pnpm/action-setup@v4
         name: Install pnpm
@@ -54,3 +55,9 @@ jobs:
           GITHUB_TOKEN: ${{ steps.authenticate.outputs.token }}
           NPM_TOKEN: ${{ secrets.APTOS_LABS_NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Deploy example dapps on Publish to npm
+        if: steps.changesets.outputs.published == 'true' # Runs only if publishing happened
+        run: |
+          pnpm run deploy:example
+          pnpm run deploy:cross-chain-example

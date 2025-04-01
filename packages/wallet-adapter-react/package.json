@@ -1,15 +1,15 @@
 {
   "name": "@aptos-labs/wallet-adapter-react",
-  "version": "4.1.4",
+  "version": "5.0.0",
   "description": "Aptos Wallet Adapter React Provider",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "license": "Apache-2.0",
   "exports": {
+    "types": "./dist/index.d.ts",
     "require": "./dist/index.js",
-    "import": "./dist/index.mjs",
-    "types": "./dist/index.d.ts"
+    "import": "./dist/index.mjs"
   },
   "repository": {
     "type": "git",
@@ -41,15 +41,19 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "eslint": "^8.15.0",
-    "tsup": "^5.10.1",
-    "typescript": "^4.5.3"
+    "tsup": "^8.3.6",
+    "typescript": "^5.4.5",
+    "@aptos-labs/derived-wallet-solana": "workspace:*",
+    "@aptos-labs/derived-wallet-ethereum": "workspace:*"
   },
   "dependencies": {
     "@aptos-labs/wallet-adapter-core": "workspace:*",
     "@radix-ui/react-slot": "^1.0.2"
   },
   "peerDependencies": {
-    "react": "^18"
+    "react": "^18.0.0 || ^19.0.0",
+    "@aptos-labs/derived-wallet-solana": "workspace:*",
+    "@aptos-labs/derived-wallet-ethereum": "workspace:*"
   },
   "files": [
     "dist",

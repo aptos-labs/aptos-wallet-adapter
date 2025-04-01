@@ -62,13 +62,13 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
       return false;
     }
 
-    const { ethereumChainId, issuedAt, siweSignature } = signature;
+    const { chainId, issuedAt, siweSignature } = signature;
     const signingMessageDigest = hashValues([message]);
 
     // Obtain SIWE envelope for the signing message
     const envelopeInput = {
       ethereumAddress: this.ethereumAddress,
-      ethereumChainId,
+      chainId,
       signingMessageDigest,
       issuedAt,
     };

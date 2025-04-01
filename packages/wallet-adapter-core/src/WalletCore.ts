@@ -50,6 +50,8 @@ export type {
   PendingTransactionResponse,
   InputSubmitTransactionData,
   Network,
+  AnyPublicKey,
+  AccountAddress,
 } from "@aptos-labs/ts-sdk";
 
 import { GA4 } from "./ga";

@@ -18,19 +18,17 @@ import {
   AdapterWallet,
   AptosChangeNetworkOutput,
   NetworkInfo,
+  OriginWalletDetails,
   isAptosNetwork,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
 import { init as initTelegram } from "@telegram-apps/sdk";
 import { AlertCircle } from "lucide-react";
 import Image from "next/image";
-import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
 // Imports for registering a browser extension wallet plugin on page load
 import { MyWallet } from "@/utils/standardWallet";
 import { registerWallet } from "@aptos-labs/wallet-standard";
-import { SolanaDerivedWallet } from "@aptos-labs/derived-wallet-solana";
 import { CCTPTransfer } from "@/components/CCTPTransfer";
-import { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
 
 // Example of how to register a browser extension wallet plugin.
 // Browser extension wallets should call registerWallet once on page load.
@@ -49,39 +47,24 @@ if (isTelegramMiniApp) {
 }
 
 export default function Home() {
-  const { account, connected, network, wallet, changeNetwork } = useWallet();
+  const {
+    account,
+    connected,
+    network,
+    wallet,
+    changeNetwork,
+    getOriginWalletDetails,
+  } = useWallet();
 
-  const [originWalletDetails, setOriginWalletDetails] = useState<{
-    publicKey?: string;
-    address: string;
-  } | null>(null);
+  const [originWalletDetails, setOriginWalletDetails] = useState<
+    OriginWalletDetails | undefined
+  >(undefined);
 
-  // TODO: this logic should ideally live in the relative wallet package
   useEffect(() => {
+    if (!wallet) return;
     const fetchOriginWalletDetails = async () => {
-      if (wallet instanceof SolanaDerivedWallet) {
-        const publicKey = wallet.solanaWallet.publicKey;
-        const publicKeyString = publicKey?.toBase58();
-        setOriginWalletDetails({
-          publicKey: publicKeyString,
-          address: publicKeyString ?? "",
-        });
-      } else if (wallet instanceof EIP1193DerivedWallet) {
-        const [address] = await wallet.eip1193Provider.request({
-          method: "eth_requestAccounts",
-        });
-        if (!address) return;
-        setOriginWalletDetails({
-          publicKey: undefined,
-          address: address,
-        });
-      } else {
-        // is Aptos Wallet
-        setOriginWalletDetails({
-          publicKey: account?.publicKey?.toString() ?? "",
-          address: account?.address?.toString() ?? "",
-        });
-      }
+      const details = await getOriginWalletDetails(wallet);
+      setOriginWalletDetails(details);
     };
     fetchOriginWalletDetails();
   }, [wallet]);
@@ -169,10 +152,7 @@ interface WalletConnectionProps {
   account: AccountInfo | null;
   network: NetworkInfo | null;
   wallet: AdapterWallet | null;
-  originWalletDetails: {
-    publicKey?: string;
-    address: string;
-  } | null;
+  originWalletDetails: OriginWalletDetails | undefined;
   changeNetwork: (network: Network) => Promise<AptosChangeNetworkOutput>;
 }
 
@@ -183,6 +163,8 @@ function WalletConnection({
   changeNetwork,
   originWalletDetails,
 }: WalletConnectionProps) {
+  const { isSolanaDerivedWallet, isEIP1193DerivedWallet } = useWallet();
+
   const isValidNetworkName = () => {
     if (isAptosNetwork(network)) {
       return Object.values<string | undefined>(Network).includes(network?.name);
@@ -194,6 +176,46 @@ function WalletConnection({
 
   const isNetworkChangeSupported =
     wallet?.features["aptos:changeNetwork"] !== undefined;
+
+  const aptosAccountInfoLabels = [
+    {
+      label: "Address",
+      value: (
+        <DisplayValue
+          value={account?.address?.toString() ?? "Not Present"}
+          isCorrect={!!account?.address}
+        />
+      ),
+    },
+    {
+      label: "Public key",
+      value: (
+        <DisplayValue
+          value={account?.publicKey?.toString() ?? "Not Present"}
+          isCorrect={!!account?.publicKey}
+        />
+      ),
+    },
+    {
+      label: "ANS name",
+      subLabel: "(only if attached)",
+      value: <p>{account?.ansName ?? "Not Present"}</p>,
+    },
+  ];
+  if (
+    wallet &&
+    (isSolanaDerivedWallet(wallet) || isEIP1193DerivedWallet(wallet))
+  ) {
+    aptosAccountInfoLabels.push({
+      label: "Origin Wallet Address",
+      value: (
+        <DisplayValue
+          value={originWalletDetails?.address.toString() ?? "Not Present"}
+          isCorrect={!!originWalletDetails?.address}
+        />
+      ),
+    });
+  }
 
   return (
     <Card>
@@ -243,63 +265,8 @@ function WalletConnection({
 
         <div className="flex flex-col gap-6">
           <h4 className="text-lg font-medium">Aptos Account Info</h4>
-          <LabelValueGrid
-            items={[
-              {
-                label: "Address",
-                value: (
-                  <DisplayValue
-                    value={account?.address?.toString() ?? "Not Present"}
-                    isCorrect={!!account?.address}
-                  />
-                ),
-              },
-              {
-                label: "Public key",
-                value: (
-                  <DisplayValue
-                    value={account?.publicKey?.toString() ?? "Not Present"}
-                    isCorrect={!!account?.publicKey}
-                  />
-                ),
-              },
-              {
-                label: "ANS name",
-                subLabel: "(only if attached)",
-                value: <p>{account?.ansName ?? "Not Present"}</p>,
-              },
-            ]}
-          />
+          <LabelValueGrid items={aptosAccountInfoLabels} />
         </div>
-
-        {(wallet instanceof SolanaDerivedWallet ||
-          wallet instanceof EIP1193DerivedWallet) && (
-          <div className="flex flex-col gap-6">
-            <h4 className="text-lg font-medium">Original Account Info</h4>
-            <LabelValueGrid
-              items={[
-                {
-                  label: "Address",
-                  value: (
-                    <DisplayValue
-                      value={originWalletDetails?.address ?? "Not Present"}
-                      isCorrect={!!originWalletDetails?.address}
-                    />
-                  ),
-                },
-                {
-                  label: "Public key",
-                  value: (
-                    <DisplayValue
-                      value={originWalletDetails?.publicKey ?? "Not Present"}
-                      isCorrect={!!originWalletDetails?.publicKey}
-                    />
-                  ),
-                },
-              ]}
-            />
-          </div>
-        )}
 
         <div className="flex flex-col gap-6">
           <h4 className="text-lg font-medium">Network Info</h4>
