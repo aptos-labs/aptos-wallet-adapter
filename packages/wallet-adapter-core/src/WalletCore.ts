@@ -6,6 +6,7 @@ import {
   AnyPublicKeyVariant,
   AnyRawTransaction,
   Aptos,
+  Ed25519PublicKey,
   InputSubmitTransactionData,
   MultiEd25519PublicKey,
   MultiEd25519Signature,
@@ -1039,24 +1040,29 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.ensureAccountExists(this._account);
       this.recordEvent("sign_message_and_verify");
 
-      try {
-        // sign the message
-        const response = (await this._wallet.features[
-          "aptos:signMessage"
-        ].signMessage(message)) as UserResponse<AptosSignMessageOutput>;
+      // sign the message
+      const response = (await this._wallet.features[
+        "aptos:signMessage"
+      ].signMessage(message)) as UserResponse<AptosSignMessageOutput>;
 
-        if (response.status === UserResponseStatus.REJECTED) {
-          throw new WalletConnectionError("Failed to sign a message").message;
-        }
-
-        const publicKey = this._account.publicKey;
-        const aptosConfig = getAptosConfig(this._network, this._dappConfig);
-        const messageBytes = new TextEncoder().encode(message.message);
-        return await publicKey.verifySignatureAsync({ aptosConfig, message: messageBytes, signature: response.args.signature, options: { throwErrorWithReason: true } })
-      } catch (error: any) {
-        const errMsg = generalizedErrorMessage(error);
-        throw new WalletSignMessageAndVerifyError(errMsg).message;
+      if (response.status === UserResponseStatus.REJECTED) {
+        throw new WalletConnectionError("Failed to sign a message").message;
       }
+
+      const aptosConfig = getAptosConfig(this._network, this._dappConfig);
+      const signingMessage = new TextEncoder().encode(response.args.fullMessage);
+      if ("verifySignatureAsync" in (this._account.publicKey as Object)) {
+        return await this._account.publicKey.verifySignatureAsync({
+          aptosConfig,
+          message: signingMessage,
+          signature: response.args.signature,
+          options: { throwErrorWithReason: true }
+        });
+      }
+      return this._account.publicKey.verifySignature({
+        message: signingMessage,
+        signature: response.args.signature,
+      });
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
       throw new WalletSignMessageAndVerifyError(errMsg).message;
