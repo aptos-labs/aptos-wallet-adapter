@@ -39,5 +39,10 @@
   "dependencies": {
     "gh-pages": "^5.0.0"
   },
-  "packageManager": "pnpm@9.15.5"
+  "packageManager": "pnpm@9.15.5",
+  "pnpm": {
+    "overrides": {
+      "@aptos-labs/aptos-client": "^1.0.0"
+    }
+  }
 }
