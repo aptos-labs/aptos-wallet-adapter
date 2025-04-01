@@ -8,9 +8,9 @@
   "license": "Apache-2.0",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     },
     "./dist/index.css": {
       "import": "./dist/index.css",
