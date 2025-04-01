@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.3.0
+
+### Minor Changes
+
+- 2ab3a0c: Adds multikey and keyless signAndVerify functionality
+
+### Patch Changes
+
+- f4a423b: include "Continue with Apple" in AvailableWallets type
+- 6d7b28c: include "OKX Wallet" in AvailableWallets type
+
 ## 5.2.0
 
 ### Minor Changes
