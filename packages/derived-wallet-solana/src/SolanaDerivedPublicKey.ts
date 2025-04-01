@@ -94,7 +94,7 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
   }
 
   async verifySignatureAsync(args: { aptosConfig: AptosConfig, message: HexInput, signature: Signature }): Promise<boolean> {
-    return this.verifySignature(args);
+    return this.verifySignature({message: args.message, signature: args.signature});
   }
 
   serialize(serializer: Serializer) {
