@@ -42,35 +42,25 @@ const provider = crossChainCore.getProvider("Wormhole");
 let mainSigner: Account;
 let sponsorAccount: Account;
 
-try {
-  const privateKey = new Ed25519PrivateKey(
-    PrivateKey.formatPrivateKey(
-      process.env.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY as string,
-      PrivateKeyVariants.Ed25519
-    )
-  );
-  mainSigner = Account.fromPrivateKey({ privateKey });
-} catch (error) {
-  throw new Error(
-    `Failed to create main signer. Please ensure NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY is properly set in your environment variables - ${error instanceof Error ? error.message : String(error)}`
-  );
-}
+const privateKey = new Ed25519PrivateKey(
+  PrivateKey.formatPrivateKey(
+    (process.env.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY as string) ??
+      "0x0000000000000000000000000000000000000000000000000000000000000000",
+    PrivateKeyVariants.Ed25519
+  )
+);
+mainSigner = Account.fromPrivateKey({ privateKey });
 
-try {
-  const feePayerPrivateKey = new Ed25519PrivateKey(
-    PrivateKey.formatPrivateKey(
-      process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY as string,
-      PrivateKeyVariants.Ed25519
-    )
-  );
-  sponsorAccount = Account.fromPrivateKey({
-    privateKey: feePayerPrivateKey,
-  });
-} catch (error) {
-  throw new Error(
-    `Failed to create sponsor account. Please ensure NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY is properly set in your environment variables - ${error instanceof Error ? error.message : String(error)}`
-  );
-}
+const feePayerPrivateKey = new Ed25519PrivateKey(
+  PrivateKey.formatPrivateKey(
+    (process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY as string) ??
+      "0x0000000000000000000000000000000000000000000000000000000000000000",
+    PrivateKeyVariants.Ed25519
+  )
+);
+sponsorAccount = Account.fromPrivateKey({
+  privateKey: feePayerPrivateKey,
+});
 
 export function CCTPTransfer({
   wallet,
