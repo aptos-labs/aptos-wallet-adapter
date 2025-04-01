@@ -6,6 +6,7 @@ import {
   AnyPublicKeyVariant,
   AnyRawTransaction,
   Aptos,
+  Ed25519PublicKey,
   InputSubmitTransactionData,
   MultiEd25519PublicKey,
   MultiEd25519Signature,
@@ -1039,57 +1040,29 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.ensureAccountExists(this._account);
       this.recordEvent("sign_message_and_verify");
 
-      try {
-        // sign the message
-        const response = (await this._wallet.features[
-          "aptos:signMessage"
-        ].signMessage(message)) as UserResponse<AptosSignMessageOutput>;
+      // sign the message
+      const response = (await this._wallet.features[
+        "aptos:signMessage"
+      ].signMessage(message)) as UserResponse<AptosSignMessageOutput>;
 
-        if (response.status === UserResponseStatus.REJECTED) {
-          throw new WalletConnectionError("Failed to sign a message").message;
-        }
-
-        // For Keyless wallet accounts we skip verification for now.
-        // TODO: Remove when client-side verification is done in SDK.
-        if (
-          this._account.publicKey instanceof AnyPublicKey &&
-          this._account.publicKey.variant === AnyPublicKeyVariant.Keyless
-        ) {
-          return true;
-        }
-
-        let verified = false;
-        // if is a multi sig wallet with a MultiEd25519Signature type
-        if (response.args.signature instanceof MultiEd25519Signature) {
-          if (!(this._account.publicKey instanceof MultiEd25519PublicKey)) {
-            throw new WalletSignMessageAndVerifyError(
-              "Public key and Signature type mismatch"
-            ).message;
-          }
-          const { fullMessage, signature } = response.args;
-          const bitmap = signature.bitmap;
-          if (bitmap) {
-            const minKeysRequired = this._account.publicKey.threshold;
-            if (signature.signatures.length < minKeysRequired) {
-              verified = false;
-            } else {
-              verified = this._account.publicKey.verifySignature({
-                message: new TextEncoder().encode(fullMessage),
-                signature,
-              });
-            }
-          }
-        } else {
-          verified = this._account.publicKey.verifySignature({
-            message: new TextEncoder().encode(response.args.fullMessage),
-            signature: response.args.signature,
-          });
-        }
-        return verified;
-      } catch (error: any) {
-        const errMsg = generalizedErrorMessage(error);
-        throw new WalletSignMessageAndVerifyError(errMsg).message;
+      if (response.status === UserResponseStatus.REJECTED) {
+        throw new WalletConnectionError("Failed to sign a message").message;
       }
+
+      const aptosConfig = getAptosConfig(this._network, this._dappConfig);
+      const signingMessage = new TextEncoder().encode(response.args.fullMessage);
+      if ("verifySignatureAsync" in (this._account.publicKey as Object)) {
+        return await this._account.publicKey.verifySignatureAsync({
+          aptosConfig,
+          message: signingMessage,
+          signature: response.args.signature,
+          options: { throwErrorWithReason: true }
+        });
+      }
+      return this._account.publicKey.verifySignature({
+        message: signingMessage,
+        signature: response.args.signature,
+      });
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
       throw new WalletSignMessageAndVerifyError(errMsg).message;
