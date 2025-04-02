@@ -114,53 +114,42 @@ export function SingleSigner() {
     if (!account) return;
 
     try {
-      const sponsorPrivateKeyHex = process.env
-        .NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY;
-
       const rawTransaction = await aptosClient(
-        network,
+        network
       ).transaction.build.simple({
         data: {
-          function: "0x1::aptos_account::transfer",
-          functionArguments: [account.address.toString(), 717],
-        },
-        options: {
-          maxGasAmount: 2000,
+          function: "0x1::coin::transfer",
+          typeArguments: [APTOS_COIN],
+          functionArguments: [account.address.toString(), 1],
         },
         sender: account.address,
-        withFeePayer: sponsorPrivateKeyHex !== undefined,
+        withFeePayer: true,
       });
-
       const response = await signTransaction({
         transactionOrPayload: rawTransaction,
       });
 
-      let sponsorAuthenticator: AccountAuthenticator | undefined;
-      if (sponsorPrivateKeyHex) {
-        const sponsorPrivateKey = new Ed25519PrivateKey(
-          PrivateKey.formatPrivateKey(
-            sponsorPrivateKeyHex,
-            PrivateKeyVariants.Ed25519,
-          ),
-        );
-        const sponsor = Account.fromPrivateKey({ privateKey: sponsorPrivateKey });
-        sponsorAuthenticator = aptosClient(network).transaction.signAsFeePayer({
-          signer: sponsor,
-          transaction: rawTransaction,
-        });
-      }
+      const privateKey = new Ed25519PrivateKey(
+        PrivateKey.formatPrivateKey(
+          process.env
+            .NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY as string,
+          PrivateKeyVariants.Ed25519
+        )
+      );
+      const sponsor = Account.fromPrivateKey({ privateKey });
+
+      const aponsorAuth = aptosClient(network).transaction.signAsFeePayer({
+        signer: sponsor,
+        transaction: rawTransaction,
+      });
 
       const txnSubmitted = await aptosClient(network).transaction.submit.simple(
         {
           transaction: rawTransaction,
           senderAuthenticator: response.authenticator,
-          feePayerAuthenticator: sponsorAuthenticator,
-        },
+          feePayerAuthenticator: aponsorAuth,
+        }
       );
-
-      await aptosClient(network).waitForTransaction({
-        transactionHash: txnSubmitted.hash,
-      });
 
       toast({
         title: "Success",
@@ -168,14 +157,8 @@ export function SingleSigner() {
           <TransactionHash hash={txnSubmitted.hash} network={network} />
         ),
       });
-
-      void aptBalance.refetch();
     } catch (error) {
-      console.log(`Error signing and submitting transaction: ${error}`);
-      toast({
-        title: "Error",
-        description: `${error}`,
-      });
+      throw new Error(`Error signing and submitting transaction: ${error}`);
     }
   };
 
