@@ -1,8 +1,16 @@
-import { isSendableNetwork, aptosClient } from "@/utils";
+import {
+  Ed25519PrivateKey,
+  PrivateKey,
+  PrivateKeyVariants,
+  Account,
+} from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
+
+import { isSendableNetwork, aptosClient } from "@/utils";
 import { Button } from "../ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { useToast } from "../ui/use-toast";
+import { TransactionHash } from "../TransactionHash";
 
 const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
 
@@ -109,6 +117,58 @@ export function SingleSigner() {
     }
   };
 
+  const onSignAndSubmitTransaction = async () => {
+    if (!account) return;
+
+    try {
+      const rawTransaction = await aptosClient(
+        network
+      ).transaction.build.simple({
+        data: {
+          function: "0x1::coin::transfer",
+          typeArguments: [APTOS_COIN],
+          functionArguments: [account.address.toString(), 1],
+        },
+        sender: account.address,
+        withFeePayer: true,
+      });
+      const response = await signTransaction({
+        transactionOrPayload: rawTransaction,
+      });
+
+      const privateKey = new Ed25519PrivateKey(
+        PrivateKey.formatPrivateKey(
+          process.env
+            .NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY as string,
+          PrivateKeyVariants.Ed25519
+        )
+      );
+      const sponsor = Account.fromPrivateKey({ privateKey });
+
+      const aponsorAuth = aptosClient(network).transaction.signAsFeePayer({
+        signer: sponsor,
+        transaction: rawTransaction,
+      });
+
+      const txnSubmitted = await aptosClient(network).transaction.submit.simple(
+        {
+          transaction: rawTransaction,
+          senderAuthenticator: response.authenticator,
+          feePayerAuthenticator: aponsorAuth,
+        }
+      );
+
+      toast({
+        title: "Success",
+        description: (
+          <TransactionHash hash={txnSubmitted.hash} network={network} />
+        ),
+      });
+    } catch (error) {
+      throw new Error(`Error signing and submitting transaction: ${error}`);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -126,6 +186,9 @@ export function SingleSigner() {
         </Button>
         <Button onClick={onSignMessageAndVerify} disabled={!sendable}>
           Sign message and verify
+        </Button>
+        <Button onClick={onSignAndSubmitTransaction} disabled={!sendable}>
+          Sign and submit transaction
         </Button>
       </CardContent>
     </Card>

@@ -234,7 +234,6 @@ export class EIP1193DerivedWallet implements AptosWallet {
       eip1193Provider: this.eip1193Provider,
       authenticationFunction: this.authenticationFunction,
       rawTransaction,
-      domain: this.domain,
     })
   }
 

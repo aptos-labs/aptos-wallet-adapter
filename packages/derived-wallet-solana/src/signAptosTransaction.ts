@@ -6,7 +6,6 @@ import {
   Ed25519Signature,
   generateSigningMessageForTransaction,
   hashValues,
-  Serializer,
 } from '@aptos-labs/ts-sdk';
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 import { createSiwsEnvelopeForAptosTransaction } from './createSiwsEnvelope';
@@ -40,31 +39,21 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
   });
 
   const response = await wrapSolanaUserResponse(solanaWallet.signIn!(siwsInput));
-
   return mapUserResponse(response, (output): AccountAuthenticator => {
     if (output.signatureType && output.signatureType !== 'ed25519') {
       throw new Error('Unsupported signature type');
     }
-
     // The wallet might change some of the fields in the SIWS input, so we
     // might need to include the finalized input in the signature.
     // For now, we can assume the input is unchanged.
-
     const signature = new Ed25519Signature(output.signature);
 
-    const serializer = new Serializer();
-    serializer.serialize(signature);
-    serializer.serialize(input.rawTransaction.rawTransaction);
-    serializer.serializeVector(input.rawTransaction.secondarySignerAddresses ?? []);
-    serializer.serializeOption(input.rawTransaction.feePayerAddress);
-    const authenticator = serializer.toUint8Array();
+    const accountIdentity = `${solanaPublicKey.toBase58()}${domain}`
 
-    const accountIdentity = `${solanaPublicKey.toBase58()}:${domain}`
-    
     return new AccountAuthenticatorAbstraction(
       authenticationFunction,
       signingMessageDigest,
-      authenticator,
+      signature.toUint8Array(),
       new TextEncoder().encode(accountIdentity)
     );
   });

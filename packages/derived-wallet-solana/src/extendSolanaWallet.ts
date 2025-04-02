@@ -33,14 +33,14 @@ export function extendSolanaWallet(
   const extended = solanaWallet as SolanaWalletAdapterWithAptosFeatures;
   extended.getAptosPublicKey = (solanaPublicKey: SolanaPublicKey) => new SolanaDerivedPublicKey({
     solanaPublicKey,
-    domain: window.location.origin,
+    domain: window.location.host,
     authenticationFunction,
   });
   extended.signAptosTransaction = (rawTransaction: AnyRawTransaction) => signAptosTransactionWithSolana({
     solanaWallet,
     authenticationFunction,
     rawTransaction,
-    domain:""
+    domain: window.location.host,
   });
   extended.signAptosMessage = (messageInput) => {
     return signAptosMessageWithSolana({
