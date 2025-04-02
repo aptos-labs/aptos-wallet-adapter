@@ -39,17 +39,10 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
     this.solanaPublicKey = solanaPublicKey;
     this.authenticationFunction = authenticationFunction;
 
-    const utf8EncodedDomain = new TextEncoder().encode(domain);
-    const solanaPublicKeyBytes = solanaPublicKey.toBytes();
-
-    const serializer = new Serializer();
-    serializer.serializeBytes(utf8EncodedDomain);
-    serializer.serializeFixedBytes(solanaPublicKeyBytes); // fixed length 32 bytes
-    const accountIdentifier = serializer.toUint8Array();
-
+    const accountIdentifier = `${solanaPublicKey.toBase58()}${domain}`;
     this._authKey = computeDomainAuthenticationKey(
       authenticationFunction,
-      accountIdentifier,
+      new TextEncoder().encode(accountIdentifier),
     );
   }
 

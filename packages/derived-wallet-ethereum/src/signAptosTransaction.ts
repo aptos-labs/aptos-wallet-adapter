@@ -17,11 +17,10 @@ export interface SignAptosTransactionWithEthereumInput {
   ethereumAddress?: EthereumAddress;
   authenticationFunction: string;
   rawTransaction: AnyRawTransaction;
-  domain: string;
 }
 
 export async function signAptosTransactionWithEthereum(input: SignAptosTransactionWithEthereumInput): Promise<UserResponse<AccountAuthenticator>> {
-  const { authenticationFunction, rawTransaction, domain } = input;
+  const { authenticationFunction, rawTransaction } = input;
   const eip1193Provider = input.eip1193Provider instanceof BrowserProvider
     ? input.eip1193Provider
     : new BrowserProvider(input.eip1193Provider);
@@ -56,9 +55,6 @@ export async function signAptosTransactionWithEthereum(input: SignAptosTransacti
   return mapUserResponse(response, (siweSignature) => {
     const signature = new EIP1193DerivedSignature(siweSignature, chainId, issuedAt);
     const authenticator = signature.bcsToBytes();
-
-    const accountIdentity = `${ethereumAddress.toString()}:${domain}`
-
     return new AccountAuthenticatorAbstraction(
       authenticationFunction,
       signingMessageDigest,

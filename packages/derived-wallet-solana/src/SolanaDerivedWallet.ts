@@ -53,7 +53,7 @@ export class SolanaDerivedWallet implements AptosWallet {
     } = options;
 
     this.solanaWallet = solanaWallet;
-    this.domain = window.location.origin;
+    this.domain = window.location.host;
     this.authenticationFunction = authenticationFunction;
     this.defaultNetwork = defaultNetwork;
     this.name = `${solanaWallet.name} (Solana)`;
