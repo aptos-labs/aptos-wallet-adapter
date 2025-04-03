@@ -1,6 +1,7 @@
 import { computeDerivableAuthenticationKey, parseAptosSigningMessage } from '@aptos-labs/derived-wallet-base';
 import {
   AccountPublicKey,
+  Aptos,
   AptosConfig,
   AuthenticationKey,
   Deserializer,
@@ -25,6 +26,8 @@ export interface EIP1193DerivedPublicKeyParams {
   authenticationFunction: string;
 }
 
+export type VerifySignatureArgsWithChainId = VerifySignatureArgs & { chainId: number };
+
 export class EIP1193DerivedPublicKey extends AccountPublicKey {
   readonly domain: string;
   readonly ethereumAddress: EthereumAddress;
@@ -38,14 +41,6 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
     this.ethereumAddress = ethereumAddress;
     this.authenticationFunction = authenticationFunction;
 
-    const utf8EncodedDomain = new TextEncoder().encode(domain);
-    const ethereumAddressBytes = Hex.fromHexInput(ethereumAddress).toUint8Array();
-
-    const serializer = new Serializer();
-    serializer.serializeBytes(utf8EncodedDomain);
-    serializer.serializeBytes(ethereumAddressBytes);
-    const accountIdentifier = hashValues([serializer.toUint8Array()]);
-
     this._authKey = computeDerivableAuthenticationKey(
       authenticationFunction,
       ethereumAddress,
@@ -57,13 +52,13 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
     return this._authKey;
   }
 
-  verifySignature({ message, signature }: VerifySignatureArgs): boolean {
+  verifySignature({ message, signature, chainId }: VerifySignatureArgsWithChainId): boolean {
     const parsedSigningMessage = parseAptosSigningMessage(message);
     if (!parsedSigningMessage || !(signature instanceof EIP1193DerivedSignature)) {
       return false;
     }
 
-    const { chainId, issuedAt, siweSignature } = signature;
+    const { issuedAt, siweSignature } = signature;
     const signingMessageDigest = hashValues([message]);
 
     // Obtain SIWE envelope for the signing message
@@ -89,7 +84,9 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
   }
 
   async verifySignatureAsync(args: { aptosConfig: AptosConfig, message: HexInput, signature: Signature }): Promise<boolean> {
-    return this.verifySignature({message: args.message, signature: args.signature});
+    const aptos = new Aptos(args.aptosConfig);
+    const chainId = await aptos.getChainId();
+    return this.verifySignature({message: args.message, signature: args.signature, chainId});
   }
 
   // region Serialization

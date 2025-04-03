@@ -1,12 +1,18 @@
-import { getAptBalanceQueryOptions } from '@/utils/getAptBalanceQueryOptions';
-import { Account, AccountAuthenticator, Ed25519PrivateKey, PrivateKey, PrivateKeyVariants } from '@aptos-labs/ts-sdk';
+import { getAptBalanceQueryOptions } from "@/utils/getAptBalanceQueryOptions";
+import {
+  Account,
+  AccountAuthenticator,
+  Ed25519PrivateKey,
+  PrivateKey,
+  PrivateKeyVariants,
+} from "@aptos-labs/ts-sdk";
 import {
   InputTransactionData,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
 
 import { isSendableNetwork, aptosClient } from "@/utils";
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "../ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { useToast } from "../ui/use-toast";
@@ -105,7 +111,10 @@ export function SingleSigner() {
 
   const aptBalance = useQuery({
     enabled: account !== undefined && network !== undefined,
-    ...getAptBalanceQueryOptions({ accountAddress: account!.address, network: network!.name }),
+    ...getAptBalanceQueryOptions({
+      accountAddress: account!.address,
+      network: network!.name,
+    }),
   });
 
   const hasEnoughApt = aptBalance.isSuccess && aptBalance.data > 0;
@@ -184,7 +193,7 @@ export function SingleSigner() {
         <Button onClick={onSignMessageAndVerify} disabled={!sendable}>
           Sign message and verify
         </Button>
-        <Button onClick={onSignAndSubmitTransaction} disabled={!sendable || !hasEnoughApt}>
+        <Button onClick={onSignAndSubmitTransaction} disabled={!sendable}>
           Sign and submit transaction
         </Button>
       </CardContent>
