@@ -4,15 +4,16 @@ import {
   PrivateKeyVariants,
   Account,
 } from "@aptos-labs/ts-sdk";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import {
+  InputTransactionData,
+  useWallet,
+} from "@aptos-labs/wallet-adapter-react";
 
 import { isSendableNetwork, aptosClient } from "@/utils";
 import { Button } from "../ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { useToast } from "../ui/use-toast";
 import { TransactionHash } from "../TransactionHash";
-
-const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
 
 /**
  * Generate a nonce with alphanumeric characters only.
@@ -36,48 +37,60 @@ export function SingleSigner() {
 
   const onSignMessageAndVerify = async () => {
     if (!account) return;
-    const payload = {
-      message: "Hello from Aptos Wallet Adapter",
-      nonce: generateNonce(),
-    };
-    const response = await signMessageAndVerify(payload);
-    console.log("sign message and verify response", response);
-    toast({
-      title: "Success",
-      description: JSON.stringify({ onSignMessageAndVerify: response }),
-    });
+    try {
+      const payload = {
+        message: "Hello from Aptos Wallet Adapter",
+        nonce: generateNonce(),
+      };
+      const response = await signMessageAndVerify(payload);
+      console.log("sign message and verify response", response);
+      toast({
+        title: "Success",
+        description: JSON.stringify({ onSignMessageAndVerify: response }),
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: `${error}`,
+      });
+    }
   };
 
   const onSignMessage = async () => {
     if (!account) return;
-    const payload = {
-      message: "Hello from Aptos Wallet Adapter",
-      nonce: generateNonce(),
-    };
-    const response = await signMessage(payload);
-    console.log("sign message response", response);
-    toast({
-      title: "Success",
-      description: JSON.stringify({ onSignMessage: response }),
-    });
+    try {
+      const payload = {
+        message: "Hello from Aptos Wallet Adapter",
+        nonce: generateNonce(),
+      };
+      const response = await signMessage(payload);
+      console.log("sign message response", response);
+      toast({
+        title: "Success",
+        description: JSON.stringify({ onSignMessage: response }),
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: `${error}`,
+      });
+    }
   };
 
   const onSignTransaction = async () => {
     try {
       if (!account) return;
-      const rawTransaction = await aptosClient(
-        network
-      ).transaction.build.simple({
+      const payload: InputTransactionData = {
         data: {
-          function: "0x1::coin::transfer",
-          typeArguments: [APTOS_COIN],
+          function: "0x1::aptos_account::transfer",
           functionArguments: [account.address.toString(), 1],
         },
-        sender: account.address,
         withFeePayer: true,
-      });
+      };
       const response = await signTransaction({
-        transactionOrPayload: rawTransaction,
+        transactionOrPayload: payload,
       });
       console.log("sign transaction response", response);
       toast({
@@ -86,34 +99,10 @@ export function SingleSigner() {
       });
     } catch (error) {
       console.error(error);
-    }
-  };
-
-  const onSignRawTransaction = async () => {
-    if (!account) return;
-
-    try {
-      const rawTransaction = await aptosClient(
-        network
-      ).transaction.build.simple({
-        data: {
-          function: "0x1::coin::transfer",
-          typeArguments: [APTOS_COIN],
-          functionArguments: [account.address.toString(), 1],
-        },
-        sender: account.address,
-        withFeePayer: true,
-      });
-      const response = await signTransaction({
-        transactionOrPayload: rawTransaction,
-      });
-      console.log("sign raw transaction response", response);
       toast({
-        title: "Success",
-        description: JSON.stringify(response),
+        title: "Error",
+        description: `${error}`,
       });
-    } catch (error) {
-      console.error(error);
     }
   };
 
@@ -125,8 +114,7 @@ export function SingleSigner() {
         network
       ).transaction.build.simple({
         data: {
-          function: "0x1::coin::transfer",
-          typeArguments: [APTOS_COIN],
+          function: "0x1::aptos_account::transfer",
           functionArguments: [account.address.toString(), 1],
         },
         sender: account.address,
@@ -158,6 +146,10 @@ export function SingleSigner() {
         }
       );
 
+      await aptosClient(network).waitForTransaction({
+        transactionHash: txnSubmitted.hash,
+      });
+
       toast({
         title: "Success",
         description: (
@@ -165,7 +157,11 @@ export function SingleSigner() {
         ),
       });
     } catch (error) {
-      throw new Error(`Error signing and submitting transaction: ${error}`);
+      console.log(`Error signing and submitting transaction: ${error}`);
+      toast({
+        title: "Error",
+        description: `${error}`,
+      });
     }
   };
 
@@ -177,9 +173,6 @@ export function SingleSigner() {
       <CardContent className="flex flex-wrap gap-4">
         <Button onClick={onSignTransaction} disabled={!sendable}>
           Sign transaction
-        </Button>
-        <Button onClick={onSignRawTransaction} disabled={!sendable}>
-          Sign raw transaction
         </Button>
         <Button onClick={onSignMessage} disabled={!sendable}>
           Sign message
