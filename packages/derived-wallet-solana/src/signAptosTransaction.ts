@@ -36,6 +36,7 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
     solanaPublicKey,
     rawTransaction,
     signingMessageDigest,
+    domain
   });
 
   const response = await wrapSolanaUserResponse(solanaWallet.signIn!(siwsInput));

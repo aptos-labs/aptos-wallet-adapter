@@ -47,6 +47,7 @@ export function extendSolanaWallet(
       solanaWallet,
       authenticationFunction,
       messageInput,
+      domain: window.location.host,
     });
   }
   return extended;
