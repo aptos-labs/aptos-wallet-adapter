@@ -211,6 +211,7 @@ export class SolanaDerivedWallet implements AptosWallet {
         ...input,
         chainId,
       },
+      domain: this.domain,
     });
   }
 

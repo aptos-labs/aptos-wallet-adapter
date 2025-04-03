@@ -66,10 +66,12 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
       ? createSiwsEnvelopeForAptosStructuredMessage({
         ...parsedSigningMessage,
         ...commonInput,
+        domain: this.domain,
       })
       : createSiwsEnvelopeForAptosTransaction({
         ...parsedSigningMessage,
         ...commonInput,
+        domain: this.domain,
       });
 
     // Matching the signature will ensure that the following fields are matching:
