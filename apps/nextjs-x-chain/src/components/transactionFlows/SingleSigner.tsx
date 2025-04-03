@@ -118,8 +118,7 @@ export function SingleSigner() {
         network
       ).transaction.build.simple({
         data: {
-          function: "0x1::coin::transfer",
-          typeArguments: [APTOS_COIN],
+          function: "0x1::aptos_account::transfer",
           functionArguments: [account.address.toString(), 1],
         },
         sender: account.address,
@@ -151,6 +150,10 @@ export function SingleSigner() {
         }
       );
 
+      await aptosClient(network).waitForTransaction({
+        transactionHash: txnSubmitted.hash,
+      });
+
       toast({
         title: "Success",
         description: (
@@ -158,7 +161,11 @@ export function SingleSigner() {
         ),
       });
     } catch (error) {
-      throw new Error(`Error signing and submitting transaction: ${error}`);
+      console.log(`Error signing and submitting transaction: ${error}`);
+      toast({
+        title: "Error",
+        description: `${error}`,
+      });
     }
   };
 
