@@ -1,4 +1,4 @@
-import { computeDomainAuthenticationKey, parseAptosSigningMessage } from '@aptos-labs/derived-wallet-base';
+import { computeDerivableAuthenticationKey, parseAptosSigningMessage } from '@aptos-labs/derived-wallet-base';
 import {
   AccountPublicKey,
   AptosConfig,
@@ -39,17 +39,10 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
     this.solanaPublicKey = solanaPublicKey;
     this.authenticationFunction = authenticationFunction;
 
-    const utf8EncodedDomain = new TextEncoder().encode(domain);
-    const solanaPublicKeyBytes = solanaPublicKey.toBytes();
-
-    const serializer = new Serializer();
-    serializer.serializeBytes(utf8EncodedDomain);
-    serializer.serializeFixedBytes(solanaPublicKeyBytes); // fixed length 32 bytes
-    const accountIdentifier = serializer.toUint8Array();
-
-    this._authKey = computeDomainAuthenticationKey(
+    this._authKey = computeDerivableAuthenticationKey(
       authenticationFunction,
-      accountIdentifier,
+      solanaPublicKey.toBase58(),
+      domain
     );
   }
 
@@ -73,10 +66,12 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
       ? createSiwsEnvelopeForAptosStructuredMessage({
         ...parsedSigningMessage,
         ...commonInput,
+        domain: this.domain,
       })
       : createSiwsEnvelopeForAptosTransaction({
         ...parsedSigningMessage,
         ...commonInput,
+        domain: this.domain,
       });
 
     // Matching the signature will ensure that the following fields are matching:

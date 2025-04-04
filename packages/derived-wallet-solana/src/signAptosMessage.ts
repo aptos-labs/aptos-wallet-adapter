@@ -19,10 +19,11 @@ export interface SignAptosMessageWithSolanaInput {
   solanaWallet: SolanaWalletAdapter;
   authenticationFunction: string;
   messageInput: StructuredMessageInputWithChainId;
+  domain: string;
 }
 
 export async function signAptosMessageWithSolana(input: SignAptosMessageWithSolanaInput) {
-  const { solanaWallet, authenticationFunction, messageInput } = input;
+  const { solanaWallet, authenticationFunction, messageInput, domain } = input;
 
   if (!solanaWallet.signIn) {
     throw new Error('solana:signIn not available');
@@ -34,7 +35,7 @@ export async function signAptosMessageWithSolana(input: SignAptosMessageWithSola
   }
 
   const aptosPublicKey = new SolanaDerivedPublicKey({
-    domain: window.location.origin,
+    domain,
     solanaPublicKey,
     authenticationFunction,
   });
@@ -57,6 +58,7 @@ export async function signAptosMessageWithSolana(input: SignAptosMessageWithSola
     solanaPublicKey: aptosPublicKey.solanaPublicKey,
     structuredMessage,
     signingMessageDigest,
+    domain,
   });
 
   const response = await wrapSolanaUserResponse(solanaWallet.signIn(siwsInput));

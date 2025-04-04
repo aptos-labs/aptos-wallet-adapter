@@ -1,4 +1,4 @@
-import { mapUserResponse } from '@aptos-labs/derived-wallet-base';
+import { mapUserResponse, DerivableAbstractPublicKey } from '@aptos-labs/derived-wallet-base';
 import {
   AccountAuthenticator,
   AccountAuthenticatorAbstraction,
@@ -12,14 +12,21 @@ import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-sta
 import { createSiwsEnvelopeForAptosTransaction } from './createSiwsEnvelope';
 import { wrapSolanaUserResponse } from './shared';
 
+/**
+ * A first byte of the signature that indicates the "message type", this is defined in the
+ * authentication function on chain, and lets us identify the type of the message and to make
+ * changes in the future if needed.
+ */
+export const SIGNATURE_TYPE = 0;
 export interface SignAptosTransactionWithSolanaInput {
   solanaWallet: SolanaWalletAdapter;
   authenticationFunction: string;
   rawTransaction: AnyRawTransaction;
+  domain: string;
 }
 
 export async function signAptosTransactionWithSolana(input: SignAptosTransactionWithSolanaInput) {
-  const { solanaWallet, authenticationFunction, rawTransaction } = input;
+  const { solanaWallet, authenticationFunction, rawTransaction, domain } = input;
   if (!solanaWallet.signIn) {
     throw new Error('solana:signIn not available');
   }
@@ -36,10 +43,10 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
     solanaPublicKey,
     rawTransaction,
     signingMessageDigest,
+    domain
   });
 
   const response = await wrapSolanaUserResponse(solanaWallet.signIn!(siwsInput));
-
   return mapUserResponse(response, (output): AccountAuthenticator => {
     if (output.signatureType && output.signatureType !== 'ed25519') {
       throw new Error('Unsupported signature type');
@@ -48,20 +55,22 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
     // The wallet might change some of the fields in the SIWS input, so we
     // might need to include the finalized input in the signature.
     // For now, we can assume the input is unchanged.
-
     const signature = new Ed25519Signature(output.signature);
 
+    // Serialize the signature with the signature type as the first byte.
     const serializer = new Serializer();
-    serializer.serialize(signature);
-    serializer.serialize(input.rawTransaction.rawTransaction);
-    serializer.serializeVector(input.rawTransaction.secondarySignerAddresses ?? []);
-    serializer.serializeOption(input.rawTransaction.feePayerAddress);
-    const authenticator = serializer.toUint8Array();
+    serializer.serializeU8(SIGNATURE_TYPE);
+    serializer.serializeBytes(signature.toUint8Array());
+    const abstractSignature = serializer.toUint8Array();
+
+    // Serialize the abstract public key.
+    const abstractPublicKey = new DerivableAbstractPublicKey(solanaPublicKey.toBase58(), domain);
 
     return new AccountAuthenticatorAbstraction(
       authenticationFunction,
       signingMessageDigest,
-      authenticator,
+      abstractSignature,
+      abstractPublicKey.bcsToBytes()
     );
   });
 }

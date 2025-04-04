@@ -10,16 +10,17 @@ import { PublicKey as SolanaPublicKey } from '@solana/web3.js';
 export interface CreateSiwsEnvelopeInput {
   solanaPublicKey: SolanaPublicKey;
   signingMessageDigest: HexInput;
+  domain: string;
 }
 
 function createSiwsEnvelope(input: CreateSiwsEnvelopeInput & {
   statement: string
 }): SolanaSignInInputWithRequiredFields {
-  const { solanaPublicKey, signingMessageDigest, statement } = input;
+  const { solanaPublicKey, signingMessageDigest, statement, domain } = input;
   const digestHex = Hex.fromHexInput(signingMessageDigest).toString();
   return {
     address: solanaPublicKey.toString(),
-    domain: window.location.host,
+    domain,
     nonce: digestHex,
     statement,
   };

@@ -37,7 +37,7 @@
     "viem": "^2.23.12"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^1.37.1"
+    "@aptos-labs/ts-sdk": "^1.38.0"
   },
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
