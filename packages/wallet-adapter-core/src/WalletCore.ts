@@ -851,7 +851,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         const aptosConfig = getAptosConfig(this._network, this._dappConfig);
         const aptos = new Aptos(aptosConfig);
 
-        console.log("transactionOrPayload", transactionOrPayload);
         const transaction = await aptos.transaction.build.simple({
           sender: this._account.address,
           data: transactionOrPayload.data,

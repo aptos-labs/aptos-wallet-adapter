@@ -1,4 +1,4 @@
-import { computeDomainAuthenticationKey, parseAptosSigningMessage } from '@aptos-labs/derived-wallet-base';
+import { computeDerivableAuthenticationKey, parseAptosSigningMessage } from '@aptos-labs/derived-wallet-base';
 import {
   AccountPublicKey,
   AptosConfig,
@@ -46,9 +46,10 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
     serializer.serializeBytes(ethereumAddressBytes);
     const accountIdentifier = hashValues([serializer.toUint8Array()]);
 
-    this._authKey = computeDomainAuthenticationKey(
+    this._authKey = computeDerivableAuthenticationKey(
       authenticationFunction,
-      accountIdentifier,
+      ethereumAddress,
+      domain
     );
   }
 

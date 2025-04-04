@@ -1,4 +1,4 @@
-import { mapUserResponse } from '@aptos-labs/derived-wallet-base';
+import { mapUserResponse, DerivableAbstractPublicKey } from '@aptos-labs/derived-wallet-base';
 import {
   AccountAuthenticator,
   AccountAuthenticatorAbstraction,
@@ -49,13 +49,13 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
     // For now, we can assume the input is unchanged.
     const signature = new Ed25519Signature(output.signature);
 
-    const accountIdentity = `${solanaPublicKey.toBase58()}${domain}`
+    const abstractPublicKey = new DerivableAbstractPublicKey(solanaPublicKey.toBase58(), domain);
 
     return new AccountAuthenticatorAbstraction(
       authenticationFunction,
       signingMessageDigest,
       signature.toUint8Array(),
-      new TextEncoder().encode(accountIdentity)
+      abstractPublicKey.bcsToBytes()
     );
   });
 }
