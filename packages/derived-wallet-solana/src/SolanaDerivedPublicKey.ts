@@ -1,4 +1,4 @@
-import { computeDomainAuthenticationKey, parseAptosSigningMessage } from '@aptos-labs/derived-wallet-base';
+import { computeDerivableAuthenticationKey, parseAptosSigningMessage } from '@aptos-labs/derived-wallet-base';
 import {
   AccountPublicKey,
   AptosConfig,
@@ -39,10 +39,10 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
     this.solanaPublicKey = solanaPublicKey;
     this.authenticationFunction = authenticationFunction;
 
-    const accountIdentifier = `${solanaPublicKey.toBase58()}${domain}`;
-    this._authKey = computeDomainAuthenticationKey(
+    this._authKey = computeDerivableAuthenticationKey(
       authenticationFunction,
-      new TextEncoder().encode(accountIdentifier),
+      solanaPublicKey.toBase58(),
+      domain
     );
   }
 

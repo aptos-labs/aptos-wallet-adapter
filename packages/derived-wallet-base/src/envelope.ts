@@ -17,7 +17,7 @@ function getChainName(chainId: number) {
     }
   }
   // Otherwise return a chain id descriptor
-  return `chainId: ${chainId}`;
+  return `custom network: ${chainId}`;
 }
 
 /**
