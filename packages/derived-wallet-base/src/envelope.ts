@@ -40,7 +40,8 @@ export function getEntryFunctionName(payload: TransactionPayload) {
 export function createStructuredMessageStatement({ message, chainId }: StructuredMessage) {
   // `statement` does not allow newlines, so we escape them
   const escapedMessage = message.replaceAll('\n', '\\n');
-  const onAptosChainSuffix = getAptosChainSuffix(chainId);
+
+  const onAptosChainSuffix = chainId ? ` (${getChainName(chainId)})` : '';
   const onAptosChain = ` on Aptos blockchain${onAptosChainSuffix}`;
 
   return `To sign the following message${onAptosChain}: ${escapedMessage}`;
@@ -55,22 +56,8 @@ export function createTransactionStatement(rawTransaction: AnyRawTransaction) {
   const humanReadableEntryFunction = entryFunctionName ? ` ${entryFunctionName}` : '';
 
   const chainId = rawTransaction.rawTransaction.chain_id.chainId;
-  const onAptosChainSuffix = getAptosChainSuffix(chainId);
-  const onAptosChain = ` on Aptos blockchain${onAptosChainSuffix}`;
+  const chainName = getChainName(chainId);
+  const onAptosChain = ` on Aptos blockchain (${chainName})`;
 
   return `Please confirm you explicitly initiated this request from ${window.location.host}. You are approving to execute transaction${humanReadableEntryFunction}${onAptosChain}.`;
-}
-
-/**
- * Attempt to convert the specified chainId into a human-readable identifier.
- * If the chainId is not provided, return an empty string.
- * Note: If the chainId is devnet, return an empty string as the on-chain auth function 
- * does not expect a chain id for devnet.
- */
-export function getAptosChainSuffix(chainId: number | undefined) {
-  if (!chainId) {
-    return '';
-  }
-  const chainName = getChainName(chainId);
-  return chainName ? ` (${chainName})` : '';
 }

@@ -203,12 +203,13 @@ export class SolanaDerivedWallet implements AptosWallet {
   // region Signatures
 
   async signMessage(input: AptosSignMessageInput): Promise<UserResponse<AptosSignMessageOutput>> {
+    const chainId = input.chainId ? this.defaultNetwork === Network.DEVNET ? await fetchDevnetChainId() : NetworkToChainId[this.defaultNetwork] : undefined;
     return signAptosMessageWithSolana({
       solanaWallet: this.solanaWallet,
       authenticationFunction: this.authenticationFunction,
       messageInput: {
         ...input,
-        chainId:  NetworkToChainId[this.defaultNetwork],
+        chainId,
       },
       domain: this.domain,
     });
