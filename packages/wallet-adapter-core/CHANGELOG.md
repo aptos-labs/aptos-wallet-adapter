@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.4.0
+
+### Minor Changes
+
+- 613e592: Added support for MSafe Wallet
+
 ## 5.3.0
 
 ### Minor Changes
