@@ -5,6 +5,7 @@ import {
 import { Network } from "@aptos-labs/ts-sdk";
 import { DevTWallet, TWallet } from "@atomrigslab/aptos-wallet-adapter";
 import { MizuWallet } from "@mizuwallet-sdk/aptos-wallet-adapter";
+import { MSafeWallet } from "@msafe/aptos-aip62-wallet";
 import { DappConfig, AdapterWallet } from "./WalletCore";
 
 export function getSDKWallets(dappConfig?: DappConfig) {
@@ -48,6 +49,15 @@ export function getSDKWallets(dappConfig?: DappConfig) {
     sdkWallets.push(new TWallet() as any);
   } else {
     sdkWallets.push(new DevTWallet() as any);
+  }
+
+  if (dappConfig?.network) {
+    sdkWallets.push(
+      new MSafeWallet({
+        ...dappConfig?.msafeWalletConfig,
+        network: dappConfig?.network,
+      })
+    );
   }
 
   // Add new SDK wallet plugins (ones that should be installed as packages) here:

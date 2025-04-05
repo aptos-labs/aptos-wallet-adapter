@@ -32,7 +32,8 @@ export type AvailableWallets =
   | "Mizu Wallet"
   | "OKX Wallet"
   | "Continue with Google"
-  | "Continue with Apple";
+  | "Continue with Apple"
+  | "MSafe Wallet";
 
 export type InputTransactionData = {
   sender?: AccountAddressInput;
