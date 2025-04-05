@@ -117,6 +117,10 @@ export interface DappConfig {
     manifestURL: string;
     appId?: string;
   };
+  msafeWalletConfig?: {
+    appId?: string;
+    appUrl?: string;
+  };
 }
 
 export declare interface WalletCoreEvents {
