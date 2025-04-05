@@ -55,7 +55,7 @@ export function getSDKWallets(dappConfig?: DappConfig) {
     sdkWallets.push(
       new MSafeWallet({
         ...dappConfig?.msafeWalletConfig,
-        network: dappConfig?.network,
+        network: dappConfig.network,
       })
     );
   }
