@@ -30,14 +30,14 @@
   "dependencies": {
     "@aptos-labs/derived-wallet-base": "workspace:^",
     "@aptos-labs/siwa": "^0.2.5",
-    "@aptos-labs/wallet-standard": "^0.3.0",
+    "@aptos-labs/wallet-standard": "^0.3.1",
     "@wallet-standard/app": "^1.1.0",
     "ethers": "^6.13.5",
     "mipd": "^0.0.7",
     "viem": "^2.23.12"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^1.37.1"
+    "@aptos-labs/ts-sdk": "^1.38.0"
   },
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",

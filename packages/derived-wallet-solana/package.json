@@ -30,7 +30,7 @@
   "dependencies": {
     "@aptos-labs/derived-wallet-base": "workspace:^",
     "@aptos-labs/siwa": "^0.2.5",
-    "@aptos-labs/wallet-standard": "^0.3.0",
+    "@aptos-labs/wallet-standard": "^0.3.1",
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-standard-util": "^1.1.2",
     "@solana/wallet-standard-wallet-adapter-base": "^1.1.4",
@@ -38,7 +38,7 @@
     "@wallet-standard/app": "^1.1.0"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^1.35.0"
+    "@aptos-labs/ts-sdk": "^1.38.0"
   },
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
