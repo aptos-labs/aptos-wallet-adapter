@@ -37,12 +37,13 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "gh-pages": "^5.0.0"
+    "gh-pages": "^6.3.0"
   },
   "packageManager": "pnpm@9.15.5",
   "pnpm": {
     "overrides": {
-      "@aptos-labs/aptos-client": "^1.0.0"
+      "@aptos-labs/wallet-standard": "^0.3.1",
+      "@aptos-labs/aptos-client": "^1.2.0"
     }
   }
 }

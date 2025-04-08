@@ -14,7 +14,7 @@ const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
  * This is a requirement for Sign in With Solana nonces
  */
 function generateNonce() {
-  return crypto.randomUUID().replaceAll('-', '');
+  return crypto.randomUUID().replaceAll("-", "");
 }
 
 export function SingleSigner() {

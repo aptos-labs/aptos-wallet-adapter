@@ -3,8 +3,8 @@ import {
   NetworkToChainId,
   TransactionPayload,
   TransactionPayloadEntryFunction,
-} from '@aptos-labs/ts-sdk';
-import { StructuredMessage } from './StructuredMessage';
+} from "@aptos-labs/ts-sdk";
+import { StructuredMessage } from "./StructuredMessage";
 
 /**
  * Attempt to convert the specified chainId into a human-readable identifier.
@@ -37,11 +37,14 @@ export function getEntryFunctionName(payload: TransactionPayload) {
  * Create a human-readable statement for the specified Aptos message,
  * suitable to be included into a "Sign in with ..." envelope
  */
-export function createStructuredMessageStatement({ message, chainId }: StructuredMessage) {
+export function createStructuredMessageStatement({
+  message,
+  chainId,
+}: StructuredMessage) {
   // `statement` does not allow newlines, so we escape them
-  const escapedMessage = message.replaceAll('\n', '\\n');
+  const escapedMessage = message.replaceAll("\n", "\\n");
 
-  const onAptosChainSuffix = chainId ? ` (${getChainName(chainId)})` : '';
+  const onAptosChainSuffix = chainId ? ` (${getChainName(chainId)})` : "";
   const onAptosChain = ` on Aptos blockchain${onAptosChainSuffix}`;
 
   return `To sign the following message${onAptosChain}: ${escapedMessage}`;
@@ -52,8 +55,12 @@ export function createStructuredMessageStatement({ message, chainId }: Structure
  * suitable to be included into a "Sign in with ..." envelope.
  */
 export function createTransactionStatement(rawTransaction: AnyRawTransaction) {
-  const entryFunctionName = getEntryFunctionName(rawTransaction.rawTransaction.payload);
-  const humanReadableEntryFunction = entryFunctionName ? ` ${entryFunctionName}` : '';
+  const entryFunctionName = getEntryFunctionName(
+    rawTransaction.rawTransaction.payload,
+  );
+  const humanReadableEntryFunction = entryFunctionName
+    ? ` ${entryFunctionName}`
+    : "";
 
   const chainId = rawTransaction.rawTransaction.chain_id.chainId;
   const chainName = getChainName(chainId);

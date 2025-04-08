@@ -33,7 +33,7 @@ export class AptosLocalSigner<N extends Network, C extends Chain>
     chain: C,
     options: any,
     wallet: Account,
-    feePayerAccount: Account | GasStationApiKey | undefined
+    feePayerAccount: Account | GasStationApiKey | undefined,
   ) {
     this._chain = chain;
     this._options = options;
@@ -61,7 +61,7 @@ export class AptosLocalSigner<N extends Network, C extends Chain>
       const txId = await signAndSendTransaction(
         tx as AptosUnsignedTransaction<Network, AptosChains>,
         this._wallet,
-        this._sponsorAccount
+        this._sponsorAccount,
       );
       txHashes.push(txId);
       this._claimedTransactionHashes = txId;
@@ -73,7 +73,7 @@ export class AptosLocalSigner<N extends Network, C extends Chain>
 export async function signAndSendTransaction(
   request: UnsignedTransaction<Network, AptosChains>,
   wallet: Account,
-  sponsorAccount: Account | GasStationApiKey | undefined
+  sponsorAccount: Account | GasStationApiKey | undefined,
 ) {
   if (!wallet) {
     throw new Error("Wallet is undefined");

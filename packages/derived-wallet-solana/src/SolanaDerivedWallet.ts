@@ -1,11 +1,15 @@
-import { accountInfoFromPublicKey, fetchDevnetChainId, isNullCallback } from '@aptos-labs/derived-wallet-base';
+import {
+  accountInfoFromPublicKey,
+  fetchDevnetChainId,
+  isNullCallback,
+} from "@aptos-labs/derived-wallet-base";
 import {
   AccountAuthenticator,
   AnyRawTransaction,
   Network,
   NetworkToChainId,
   NetworkToNodeAPI,
-} from '@aptos-labs/ts-sdk';
+} from "@aptos-labs/ts-sdk";
 import {
   AccountInfo,
   APTOS_CHAINS,
@@ -21,11 +25,11 @@ import {
   WalletIcon,
 } from "@aptos-labs/wallet-standard";
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
-import { PublicKey as SolanaPublicKey } from '@solana/web3.js';
-import { defaultAuthenticationFunction } from './shared';
-import { signAptosMessageWithSolana } from './signAptosMessage';
-import { signAptosTransactionWithSolana } from './signAptosTransaction';
-import { SolanaDerivedPublicKey } from './SolanaDerivedPublicKey';
+import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
+import { defaultAuthenticationFunction } from "./shared";
+import { signAptosMessageWithSolana } from "./signAptosMessage";
+import { signAptosTransactionWithSolana } from "./signAptosTransaction";
+import { SolanaDerivedPublicKey } from "./SolanaDerivedPublicKey";
 
 export type { SolanaPublicKey };
 export interface SolanaDomainWalletOptions {
@@ -46,7 +50,10 @@ export class SolanaDerivedWallet implements AptosWallet {
   readonly accounts = [];
   readonly chains = APTOS_CHAINS;
 
-  constructor(solanaWallet: SolanaWalletAdapter, options: SolanaDomainWalletOptions = {}) {
+  constructor(
+    solanaWallet: SolanaWalletAdapter,
+    options: SolanaDomainWalletOptions = {},
+  ) {
     const {
       authenticationFunction = defaultAuthenticationFunction,
       defaultNetwork = Network.MAINNET,
@@ -62,43 +69,43 @@ export class SolanaDerivedWallet implements AptosWallet {
   }
 
   readonly features: AptosFeatures = {
-    'aptos:connect': {
-      version: '1.0.0',
+    "aptos:connect": {
+      version: "1.0.0",
       connect: () => this.connect(),
     },
-    'aptos:disconnect': {
-      version: '1.0.0',
+    "aptos:disconnect": {
+      version: "1.0.0",
       disconnect: () => this.disconnect(),
     },
-    'aptos:account': {
-      version: '1.0.0',
+    "aptos:account": {
+      version: "1.0.0",
       account: () => this.getActiveAccount(),
     },
-    'aptos:onAccountChange': {
-      version: '1.0.0',
+    "aptos:onAccountChange": {
+      version: "1.0.0",
       onAccountChange: async (callback) => this.onActiveAccountChange(callback),
     },
-    'aptos:network': {
-      version: '1.0.0',
+    "aptos:network": {
+      version: "1.0.0",
       network: () => this.getActiveNetwork(),
     },
-    'aptos:changeNetwork': {
-      version: '1.0.0',
+    "aptos:changeNetwork": {
+      version: "1.0.0",
       changeNetwork: (newNetwork) => this.changeNetwork(newNetwork),
     },
-    'aptos:onNetworkChange': {
-      version: '1.0.0',
+    "aptos:onNetworkChange": {
+      version: "1.0.0",
       onNetworkChange: async (callback) => this.onActiveNetworkChange(callback),
     },
     "aptos:signMessage": {
-      version: '1.0.0',
+      version: "1.0.0",
       signMessage: (args) => this.signMessage(args),
     },
     "aptos:signTransaction": {
-      version: '1.0.0',
+      version: "1.0.0",
       signTransaction: (...args) => this.signTransaction(...args),
     },
-  }
+  };
 
   private derivePublicKey(solanaPublicKey: SolanaPublicKey) {
     return new SolanaDerivedPublicKey({
@@ -133,7 +140,7 @@ export class SolanaDerivedWallet implements AptosWallet {
 
   private getActivePublicKey(): SolanaDerivedPublicKey {
     if (!this.solanaWallet.publicKey) {
-      throw new Error('Account not connected');
+      throw new Error("Account not connected");
     }
     return this.derivePublicKey(this.solanaWallet.publicKey);
   }
@@ -145,9 +152,9 @@ export class SolanaDerivedWallet implements AptosWallet {
 
   onActiveAccountChange(callback: (newAccount: AccountInfo) => void) {
     if (isNullCallback(callback)) {
-      this.solanaWallet.off('connect')
+      this.solanaWallet.off("connect");
     } else {
-      this.solanaWallet.on('connect', (newSolanaPublicKey) => {
+      this.solanaWallet.on("connect", (newSolanaPublicKey) => {
         const aptosPublicKey = this.derivePublicKey(newSolanaPublicKey);
         const newAptosAccount = accountInfoFromPublicKey(aptosPublicKey);
         callback(newAptosAccount);
@@ -159,7 +166,9 @@ export class SolanaDerivedWallet implements AptosWallet {
 
   // region Networks
 
-  readonly onActiveNetworkChangeListeners = new Set<(newNetwork: NetworkInfo) => void>();
+  readonly onActiveNetworkChangeListeners = new Set<
+    (newNetwork: NetworkInfo) => void
+  >();
 
   async getActiveNetwork(): Promise<NetworkInfo> {
     const chainId = NetworkToChainId[this.defaultNetwork];
@@ -171,10 +180,12 @@ export class SolanaDerivedWallet implements AptosWallet {
     };
   }
 
-  async changeNetwork(newNetwork: NetworkInfo): Promise<UserResponse<AptosChangeNetworkOutput>> {
+  async changeNetwork(
+    newNetwork: NetworkInfo,
+  ): Promise<UserResponse<AptosChangeNetworkOutput>> {
     const { name, chainId, url } = newNetwork;
     if (name === Network.CUSTOM) {
-      throw new Error('Custom network not currently supported');
+      throw new Error("Custom network not currently supported");
     }
     this.defaultNetwork = name;
     for (const listener of this.onActiveNetworkChangeListeners) {
@@ -202,8 +213,14 @@ export class SolanaDerivedWallet implements AptosWallet {
 
   // region Signatures
 
-  async signMessage(input: AptosSignMessageInput): Promise<UserResponse<AptosSignMessageOutput>> {
-    const chainId = input.chainId ? this.defaultNetwork === Network.DEVNET ? await fetchDevnetChainId() : NetworkToChainId[this.defaultNetwork] : undefined;
+  async signMessage(
+    input: AptosSignMessageInput,
+  ): Promise<UserResponse<AptosSignMessageOutput>> {
+    const chainId = input.chainId
+      ? this.defaultNetwork === Network.DEVNET
+        ? await fetchDevnetChainId()
+        : NetworkToChainId[this.defaultNetwork]
+      : undefined;
     return signAptosMessageWithSolana({
       solanaWallet: this.solanaWallet,
       authenticationFunction: this.authenticationFunction,

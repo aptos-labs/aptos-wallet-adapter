@@ -50,7 +50,7 @@ export function MultiAgent() {
     setSecondarySignerAccount(secondarySigner);
 
     const transactionToSign = await aptosClient(
-      network
+      network,
     ).transaction.build.multiAgent({
       sender: account.address,
       secondarySignerAddresses: [secondarySigner.accountAddress],

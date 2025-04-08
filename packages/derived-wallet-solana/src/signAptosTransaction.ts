@@ -1,4 +1,4 @@
-import { mapUserResponse } from '@aptos-labs/derived-wallet-base';
+import { mapUserResponse } from "@aptos-labs/derived-wallet-base";
 import {
   AccountAuthenticator,
   AccountAuthenticatorAbstraction,
@@ -7,10 +7,10 @@ import {
   generateSigningMessageForTransaction,
   hashValues,
   Serializer,
-} from '@aptos-labs/ts-sdk';
+} from "@aptos-labs/ts-sdk";
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
-import { createSiwsEnvelopeForAptosTransaction } from './createSiwsEnvelope';
-import { wrapSolanaUserResponse } from './shared';
+import { createSiwsEnvelopeForAptosTransaction } from "./createSiwsEnvelope";
+import { wrapSolanaUserResponse } from "./shared";
 
 export interface SignAptosTransactionWithSolanaInput {
   solanaWallet: SolanaWalletAdapter;
@@ -18,15 +18,17 @@ export interface SignAptosTransactionWithSolanaInput {
   rawTransaction: AnyRawTransaction;
 }
 
-export async function signAptosTransactionWithSolana(input: SignAptosTransactionWithSolanaInput) {
+export async function signAptosTransactionWithSolana(
+  input: SignAptosTransactionWithSolanaInput,
+) {
   const { solanaWallet, authenticationFunction, rawTransaction } = input;
   if (!solanaWallet.signIn) {
-    throw new Error('solana:signIn not available');
+    throw new Error("solana:signIn not available");
   }
 
   const solanaPublicKey = solanaWallet.publicKey;
   if (!solanaPublicKey) {
-    throw new Error('Account not connected');
+    throw new Error("Account not connected");
   }
 
   const signingMessage = generateSigningMessageForTransaction(rawTransaction);
@@ -38,11 +40,13 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
     signingMessageDigest,
   });
 
-  const response = await wrapSolanaUserResponse(solanaWallet.signIn!(siwsInput));
+  const response = await wrapSolanaUserResponse(
+    solanaWallet.signIn!(siwsInput),
+  );
 
   return mapUserResponse(response, (output): AccountAuthenticator => {
-    if (output.signatureType && output.signatureType !== 'ed25519') {
-      throw new Error('Unsupported signature type');
+    if (output.signatureType && output.signatureType !== "ed25519") {
+      throw new Error("Unsupported signature type");
     }
 
     // The wallet might change some of the fields in the SIWS input, so we
@@ -54,7 +58,9 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
     const serializer = new Serializer();
     serializer.serialize(signature);
     serializer.serialize(input.rawTransaction.rawTransaction);
-    serializer.serializeVector(input.rawTransaction.secondarySignerAddresses ?? []);
+    serializer.serializeVector(
+      input.rawTransaction.secondarySignerAddresses ?? [],
+    );
     serializer.serializeOption(input.rawTransaction.feePayerAddress);
     const authenticator = serializer.toUint8Array();
 

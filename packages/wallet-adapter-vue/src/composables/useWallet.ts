@@ -41,13 +41,13 @@ export interface WalletContextState {
   signAndSubmitTransaction(transaction: InputTransactionData): Promise<any>;
   signTransaction(
     transactionOrPayload: AnyRawTransaction | InputTransactionData,
-    asFeePayer?: boolean
+    asFeePayer?: boolean,
   ): Promise<{
     authenticator: AccountAuthenticator;
     rawTransaction: Uint8Array;
   }>;
   submitTransaction(
-    transaction: InputSubmitTransactionData
+    transaction: InputSubmitTransactionData,
   ): Promise<PendingTransactionResponse>;
   signMessage(message: AptosSignMessageInput): Promise<AptosSignMessageOutput>;
   signMessageAndVerify(message: AptosSignMessageInput): Promise<boolean>;
@@ -85,13 +85,13 @@ const isConnecting = ref(false);
 function getWalletCoreInstance(
   optInWallets: readonly AvailableWallets[] | undefined,
   dappConfig: { network: Network } | undefined,
-  disableTelemetry: boolean | undefined
+  disableTelemetry: boolean | undefined,
 ) {
   if (!walletCore.value) {
     walletCore.value = new WalletCore(
       optInWallets ?? [],
       dappConfig,
-      disableTelemetry
+      disableTelemetry,
     );
     Object.assign(wallets.value, walletCore.value.wallets);
   }
@@ -105,14 +105,14 @@ function getWalletCoreInstance(
  * @return {WalletContextState}
  */
 export function useWallet(
-  props?: AptosWalletProviderProps
+  props?: AptosWalletProviderProps,
 ): WalletContextState {
   const { disableTelemetry, optInWallets, dappConfig, onError } = props ?? {};
 
   const walletCoreInstance = getWalletCoreInstance(
     optInWallets,
     dappConfig,
-    disableTelemetry
+    disableTelemetry,
   );
 
   const connect = async (walletName: string) => {
@@ -138,7 +138,7 @@ export function useWallet(
 
   const signTransaction = async (
     transaction: AnyRawTransaction | InputTransactionData,
-    asFeePayer?: boolean
+    asFeePayer?: boolean,
   ): Promise<{
     authenticator: AccountAuthenticator;
     rawTransaction: Uint8Array;
@@ -155,7 +155,7 @@ export function useWallet(
   };
 
   const signMessage = async (
-    message: AptosSignMessageInput
+    message: AptosSignMessageInput,
   ): Promise<AptosSignMessageOutput> => {
     try {
       return await walletCoreInstance.signMessage(message);
@@ -166,7 +166,7 @@ export function useWallet(
   };
 
   const signMessageAndVerify = async (
-    message: AptosSignMessageInput
+    message: AptosSignMessageInput,
   ): Promise<boolean> => {
     try {
       return await walletCoreInstance.signMessageAndVerify(message);
@@ -177,7 +177,7 @@ export function useWallet(
   };
 
   const submitTransaction = async (
-    transaction: InputSubmitTransactionData
+    transaction: InputSubmitTransactionData,
   ): Promise<PendingTransactionResponse> => {
     try {
       return await walletCoreInstance.submitTransaction(transaction);
@@ -188,7 +188,7 @@ export function useWallet(
   };
 
   const signAndSubmitTransaction = async (
-    transaction: InputTransactionData
+    transaction: InputTransactionData,
   ) => {
     try {
       return await walletCoreInstance.signAndSubmitTransaction(transaction);
@@ -210,7 +210,7 @@ export function useWallet(
   const handleReadyStateChange = (updatedWallet: MaybeRef<AdapterWallet>) => {
     const _updatedWallet = unref(updatedWallet);
     const wallet = wallets.value.find(
-      (wallet) => wallet.name === _updatedWallet.name
+      (wallet) => wallet.name === _updatedWallet.name,
     );
     if (wallet) {
       wallet.readyState = _updatedWallet.readyState;
@@ -218,12 +218,12 @@ export function useWallet(
   };
 
   const handleStandardWalletsAdded = (
-    standardWallet: MaybeRef<AdapterWallet>
+    standardWallet: MaybeRef<AdapterWallet>,
   ) => {
     const _standardWallet = unref(standardWallet);
 
     const existingWallet = wallets.value.find(
-      (wallet) => wallet.name == _standardWallet.name
+      (wallet) => wallet.name == _standardWallet.name,
     );
 
     if (existingWallet) {
@@ -234,13 +234,13 @@ export function useWallet(
   };
 
   const handleStandardNotDetectedWalletsAdded = (
-    notDetectedWallet: MaybeRef<AdapterNotDetectedWallet>
+    notDetectedWallet: MaybeRef<AdapterNotDetectedWallet>,
   ): void => {
     const _notDetectedWallet = unref(notDetectedWallet);
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
     const existingWallet = wallets.value.find(
-      (wallet) => wallet.name == _notDetectedWallet.name
+      (wallet) => wallet.name == _notDetectedWallet.name,
     );
     if (existingWallet) {
       Object.assign(existingWallet, _notDetectedWallet);
@@ -322,7 +322,7 @@ export function useWallet(
       Object.keys(eventHandlers).forEach((event) => {
         walletCoreInstance.off(
           event as keyof WalletCoreEvents,
-          eventHandlers[event as keyof WalletCoreEvents]
+          eventHandlers[event as keyof WalletCoreEvents],
         );
       });
     }
@@ -338,14 +338,14 @@ export function useWallet(
         Object.keys(eventHandlers).forEach((event) => {
           walletCoreInstance.on(
             event as keyof WalletCoreEvents,
-            eventHandlers[event as keyof WalletCoreEvents]
+            eventHandlers[event as keyof WalletCoreEvents],
           );
         });
       }
     },
     {
       immediate: true,
-    }
+    },
   );
 
   watch(
@@ -361,7 +361,7 @@ export function useWallet(
     },
     {
       immediate: true,
-    }
+    },
   );
 
   watch(
@@ -374,7 +374,7 @@ export function useWallet(
     },
     {
       immediate: true,
-    }
+    },
   );
 
   return {

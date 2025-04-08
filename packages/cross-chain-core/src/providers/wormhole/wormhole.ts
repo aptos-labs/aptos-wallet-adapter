@@ -103,7 +103,7 @@ export class WormholeProvider
         destination: destToken,
       },
       sourceContext,
-      destContext
+      destContext,
     );
 
     const resolver = this._wormholeContext.resolver([
@@ -150,7 +150,7 @@ export class WormholeProvider
   }
 
   async submitCCTPTransfer(
-    input: WormholeSubmitTransferRequest
+    input: WormholeSubmitTransferRequest,
   ): Promise<WormholeStartTransferResponse> {
     const { sourceChain, wallet, destinationAddress } = input;
 
@@ -184,14 +184,14 @@ export class WormholeProvider
       this.getChainConfig(sourceChain),
       signerAddress,
       {},
-      wallet
+      wallet,
     );
 
     let receipt = await this.wormholeRoute.initiate(
       this.wormholeRequest,
       signer,
       this.wormholeQuote,
-      Wormhole.chainAddress("Aptos", destinationAddress.toString())
+      Wormhole.chainAddress("Aptos", destinationAddress.toString()),
     );
 
     const originChainTxnId =
@@ -203,7 +203,7 @@ export class WormholeProvider
   }
 
   async claimCCTPTransfer(
-    input: WormholeClaimTransferRequest
+    input: WormholeClaimTransferRequest,
   ): Promise<{ destinationChainTxnId: string }> {
     let { receipt, mainSigner, sponsorAccount } = input;
     if (!this.wormholeRoute) {
@@ -227,7 +227,7 @@ export class WormholeProvider
                 "Aptos",
                 {},
                 mainSigner, // the account that signs the "claim" transaction
-                sponsorAccount ? sponsorAccount : undefined // the fee payer account
+                sponsorAccount ? sponsorAccount : undefined, // the fee payer account
               );
 
               if (routes.isManual(this.wormholeRoute)) {
@@ -249,7 +249,7 @@ export class WormholeProvider
       } catch (e) {
         console.error(
           `Error tracking transfer (attempt ${retries + 1} / ${maxRetries}):`,
-          e
+          e,
         );
         const delay = baseDelay * Math.pow(2, retries); // Exponential backoff
         await sleep(delay);
@@ -266,7 +266,7 @@ export class WormholeProvider
    * @returns
    */
   async initiateCCTPTransfer(
-    input: WormholeInitiateTransferRequest
+    input: WormholeInitiateTransferRequest,
   ): Promise<WormholeInitiateTransferResponse> {
     if (this.crossChainCore._dappConfig?.aptosNetwork === Network.DEVNET) {
       throw new Error("Devnet is not supported on Wormhole");
@@ -307,12 +307,12 @@ export class WormholeProvider
   } {
     const sourceToken: TokenId = Wormhole.tokenId(
       this.crossChainCore.TOKENS[sourceChain].tokenId.chain as Chain,
-      this.crossChainCore.TOKENS[sourceChain].tokenId.address
+      this.crossChainCore.TOKENS[sourceChain].tokenId.address,
     );
 
     const destToken: TokenId = Wormhole.tokenId(
       this.crossChainCore.APTOS_TOKEN.tokenId.chain as Chain,
-      this.crossChainCore.APTOS_TOKEN.tokenId.address
+      this.crossChainCore.APTOS_TOKEN.tokenId.address,
     );
 
     return { sourceToken, destToken };

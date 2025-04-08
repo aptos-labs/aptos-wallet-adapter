@@ -16,7 +16,7 @@ export default function WalletButton({
   const { connected, account, wallet } = useWallet();
 
   const [popoverAnchor, setPopoverAnchor] = useState<HTMLButtonElement | null>(
-    null
+    null,
   );
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setPopoverAnchor(event.currentTarget);

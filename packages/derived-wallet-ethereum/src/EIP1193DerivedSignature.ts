@@ -1,4 +1,10 @@
-import { Deserializer, Hex, HexInput, Serializer, Signature } from '@aptos-labs/ts-sdk';
+import {
+  Deserializer,
+  Hex,
+  HexInput,
+  Serializer,
+  Signature,
+} from "@aptos-labs/ts-sdk";
 
 export class EIP1193DerivedSignature extends Signature {
   static readonly LENGTH = 65;
@@ -11,7 +17,7 @@ export class EIP1193DerivedSignature extends Signature {
     super();
     this._siweSignature = Hex.fromHexInput(siweSignature).toUint8Array();
     if (this._siweSignature.length !== EIP1193DerivedSignature.LENGTH) {
-      throw new Error('Expected signature length to be 65 bytes');
+      throw new Error("Expected signature length to be 65 bytes");
     }
     this.chainId = chainId;
     this.issuedAt = issuedAt;
@@ -28,7 +34,9 @@ export class EIP1193DerivedSignature extends Signature {
   }
 
   static deserialize(deserializer: Deserializer) {
-    const siweSignature = deserializer.deserializeFixedBytes(EIP1193DerivedSignature.LENGTH);
+    const siweSignature = deserializer.deserializeFixedBytes(
+      EIP1193DerivedSignature.LENGTH,
+    );
     const chainId = deserializer.deserializeUleb128AsU32();
     // Number can safely contain a unix timestamp
     const issuedAt = new Date(Number(deserializer.deserializeU64()));
