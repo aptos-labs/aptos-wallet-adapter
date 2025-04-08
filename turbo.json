@@ -13,6 +13,7 @@
       "outputs": ["dist/**", ".next/**"]
     },
     "lint": {
+      "env": ["NODE_ENV"],
       "outputs": []
     },
     "dev": {
