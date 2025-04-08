@@ -1,4 +1,10 @@
-import { AccountAddress, AuthenticationKey, hashValues, isValidFunctionInfo, Serializer } from '@aptos-labs/ts-sdk';
+import {
+  AccountAddress,
+  AuthenticationKey,
+  hashValues,
+  isValidFunctionInfo,
+  Serializer,
+} from "@aptos-labs/ts-sdk";
 
 /**
  * The domain separator used to calculate the DAA account address.
@@ -14,7 +20,10 @@ export const ADDRESS_DOMAIN_SEPARATOR = 5;
  * @param accountIdentifier - The account identity
  * @returns The account address
  */
-export function computeDomainAuthenticationKey(functionInfo: string, accountIdentifier: Uint8Array) {
+export function computeDomainAuthenticationKey(
+  functionInfo: string,
+  accountIdentifier: Uint8Array,
+) {
   if (!isValidFunctionInfo(functionInfo)) {
     throw new Error(`Invalid authentication function ${functionInfo}`);
   }

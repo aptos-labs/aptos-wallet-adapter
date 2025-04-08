@@ -28,7 +28,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
       <body
         className={cn(
           "flex justify-center min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
+          fontSans.variable,
         )}
       >
         <ThemeProvider

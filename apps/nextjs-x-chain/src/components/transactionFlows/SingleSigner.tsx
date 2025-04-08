@@ -58,7 +58,7 @@ export function SingleSigner() {
     try {
       if (!account) return;
       const rawTransaction = await aptosClient(
-        network
+        network,
       ).transaction.build.simple({
         data: {
           function: "0x1::coin::transfer",
@@ -86,7 +86,7 @@ export function SingleSigner() {
 
     try {
       const rawTransaction = await aptosClient(
-        network
+        network,
       ).transaction.build.simple({
         data: {
           function: "0x1::coin::transfer",

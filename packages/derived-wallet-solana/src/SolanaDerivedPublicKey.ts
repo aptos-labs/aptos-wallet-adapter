@@ -1,4 +1,7 @@
-import { computeDomainAuthenticationKey, parseAptosSigningMessage } from '@aptos-labs/derived-wallet-base';
+import {
+  computeDomainAuthenticationKey,
+  parseAptosSigningMessage,
+} from "@aptos-labs/derived-wallet-base";
 import {
   AccountPublicKey,
   AptosConfig,
@@ -11,13 +14,13 @@ import {
   Serializer,
   Signature,
   VerifySignatureArgs,
-} from '@aptos-labs/ts-sdk';
-import { createSignInMessage as createSolanaSignInMessage } from '@solana/wallet-standard-util';
-import { PublicKey as SolanaPublicKey } from '@solana/web3.js';
+} from "@aptos-labs/ts-sdk";
+import { createSignInMessage as createSolanaSignInMessage } from "@solana/wallet-standard-util";
+import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
 import {
   createSiwsEnvelopeForAptosStructuredMessage,
   createSiwsEnvelopeForAptosTransaction,
-} from './createSiwsEnvelope';
+} from "./createSiwsEnvelope";
 
 export interface SolanaDerivedPublicKeyParams {
   domain: string;
@@ -69,15 +72,16 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
     };
 
     // Obtain SIWS envelope input for the signing message
-    const siwsEnvelopeInput = parsedSigningMessage.type === 'structuredMessage'
-      ? createSiwsEnvelopeForAptosStructuredMessage({
-        ...parsedSigningMessage,
-        ...commonInput,
-      })
-      : createSiwsEnvelopeForAptosTransaction({
-        ...parsedSigningMessage,
-        ...commonInput,
-      });
+    const siwsEnvelopeInput =
+      parsedSigningMessage.type === "structuredMessage"
+        ? createSiwsEnvelopeForAptosStructuredMessage({
+            ...parsedSigningMessage,
+            ...commonInput,
+          })
+        : createSiwsEnvelopeForAptosTransaction({
+            ...parsedSigningMessage,
+            ...commonInput,
+          });
 
     // Matching the signature will ensure that the following fields are matching:
     // - domain
@@ -89,12 +93,24 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
 
     // Match solana signature
     const siwsEnvelopeBytes = createSolanaSignInMessage(siwsEnvelopeInput);
-    const ed25519PublicKey = new Ed25519PublicKey(this.solanaPublicKey.toBytes());
-    return ed25519PublicKey.verifySignature({ message: siwsEnvelopeBytes, signature });
+    const ed25519PublicKey = new Ed25519PublicKey(
+      this.solanaPublicKey.toBytes(),
+    );
+    return ed25519PublicKey.verifySignature({
+      message: siwsEnvelopeBytes,
+      signature,
+    });
   }
 
-  async verifySignatureAsync(args: { aptosConfig: AptosConfig, message: HexInput, signature: Signature }): Promise<boolean> {
-    return this.verifySignature({message: args.message, signature: args.signature});
+  async verifySignatureAsync(args: {
+    aptosConfig: AptosConfig;
+    message: HexInput;
+    signature: Signature;
+  }): Promise<boolean> {
+    return this.verifySignature({
+      message: args.message,
+      signature: args.signature,
+    });
   }
 
   serialize(serializer: Serializer) {
@@ -106,8 +122,12 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
   static deserialize(deserializer: Deserializer) {
     const domain = deserializer.deserializeStr();
     const solanaPublicKeyBytes = deserializer.deserializeFixedBytes(32);
-    const solanaPublicKey = new SolanaPublicKey(solanaPublicKeyBytes)
+    const solanaPublicKey = new SolanaPublicKey(solanaPublicKeyBytes);
     const authenticationFunction = deserializer.deserializeStr();
-    return new SolanaDerivedPublicKey({ domain, solanaPublicKey, authenticationFunction });
+    return new SolanaDerivedPublicKey({
+      domain,
+      solanaPublicKey,
+      authenticationFunction,
+    });
   }
 }

@@ -2,19 +2,21 @@ import {
   createStructuredMessageStatement,
   createTransactionStatement,
   StructuredMessage,
-} from '@aptos-labs/derived-wallet-base';
-import { AnyRawTransaction, Hex, HexInput } from '@aptos-labs/ts-sdk';
-import { SolanaSignInInputWithRequiredFields } from '@solana/wallet-standard-util';
-import { PublicKey as SolanaPublicKey } from '@solana/web3.js';
+} from "@aptos-labs/derived-wallet-base";
+import { AnyRawTransaction, Hex, HexInput } from "@aptos-labs/ts-sdk";
+import { SolanaSignInInputWithRequiredFields } from "@solana/wallet-standard-util";
+import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
 
 export interface CreateSiwsEnvelopeInput {
   solanaPublicKey: SolanaPublicKey;
   signingMessageDigest: HexInput;
 }
 
-function createSiwsEnvelope(input: CreateSiwsEnvelopeInput & {
-  statement: string
-}): SolanaSignInInputWithRequiredFields {
+function createSiwsEnvelope(
+  input: CreateSiwsEnvelopeInput & {
+    statement: string;
+  },
+): SolanaSignInInputWithRequiredFields {
   const { solanaPublicKey, signingMessageDigest, statement } = input;
   const digestHex = Hex.fromHexInput(signingMessageDigest).toString();
   return {

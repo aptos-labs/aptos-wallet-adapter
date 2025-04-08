@@ -3,15 +3,16 @@ import {
   mapUserResponse,
   StructuredMessage,
   StructuredMessageInput,
-} from '@aptos-labs/derived-wallet-base';
-import { Ed25519Signature, hashValues } from '@aptos-labs/ts-sdk';
-import { AptosSignMessageOutput } from '@aptos-labs/wallet-standard';
+} from "@aptos-labs/derived-wallet-base";
+import { Ed25519Signature, hashValues } from "@aptos-labs/ts-sdk";
+import { AptosSignMessageOutput } from "@aptos-labs/wallet-standard";
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
-import { createSiwsEnvelopeForAptosStructuredMessage } from './createSiwsEnvelope';
-import { wrapSolanaUserResponse } from './shared';
-import { SolanaDerivedPublicKey } from './SolanaDerivedPublicKey';
+import { createSiwsEnvelopeForAptosStructuredMessage } from "./createSiwsEnvelope";
+import { wrapSolanaUserResponse } from "./shared";
+import { SolanaDerivedPublicKey } from "./SolanaDerivedPublicKey";
 
-export interface StructuredMessageInputWithChainId extends StructuredMessageInput {
+export interface StructuredMessageInputWithChainId
+  extends StructuredMessageInput {
   chainId?: number;
 }
 
@@ -21,16 +22,18 @@ export interface SignAptosMessageWithSolanaInput {
   messageInput: StructuredMessageInputWithChainId;
 }
 
-export async function signAptosMessageWithSolana(input: SignAptosMessageWithSolanaInput) {
+export async function signAptosMessageWithSolana(
+  input: SignAptosMessageWithSolanaInput,
+) {
   const { solanaWallet, authenticationFunction, messageInput } = input;
 
   if (!solanaWallet.signIn) {
-    throw new Error('solana:signIn not available');
+    throw new Error("solana:signIn not available");
   }
 
   const solanaPublicKey = solanaWallet.publicKey;
   if (!solanaPublicKey) {
-    throw new Error('Account not connected');
+    throw new Error("Account not connected");
   }
 
   const aptosPublicKey = new SolanaDerivedPublicKey({
@@ -40,7 +43,9 @@ export async function signAptosMessageWithSolana(input: SignAptosMessageWithSola
   });
 
   const { message, nonce, chainId, ...flags } = messageInput;
-  const aptosAddress = flags.address ? aptosPublicKey.authKey().derivedAddress() : undefined;
+  const aptosAddress = flags.address
+    ? aptosPublicKey.authKey().derivedAddress()
+    : undefined;
   const application = flags.application ? window.location.origin : undefined;
   const structuredMessage: StructuredMessage = {
     address: aptosAddress?.toString(),
@@ -62,8 +67,8 @@ export async function signAptosMessageWithSolana(input: SignAptosMessageWithSola
   const response = await wrapSolanaUserResponse(solanaWallet.signIn(siwsInput));
 
   return mapUserResponse(response, (output): AptosSignMessageOutput => {
-    if (output.signatureType && output.signatureType !== 'ed25519') {
-      throw new Error('Unsupported signature type');
+    if (output.signatureType && output.signatureType !== "ed25519") {
+      throw new Error("Unsupported signature type");
     }
 
     // The wallet might change some of the fields in the SIWS input, so we
@@ -73,7 +78,7 @@ export async function signAptosMessageWithSolana(input: SignAptosMessageWithSola
     const fullMessage = new TextDecoder().decode(signingMessage);
 
     return {
-      prefix: 'APTOS',
+      prefix: "APTOS",
       fullMessage,
       message,
       nonce,
