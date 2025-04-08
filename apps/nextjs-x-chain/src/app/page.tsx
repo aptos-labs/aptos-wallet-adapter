@@ -67,7 +67,7 @@ export default function Home() {
       setOriginWalletDetails(details);
     };
     fetchOriginWalletDetails();
-  }, [wallet]);
+  }, [wallet, getOriginWalletDetails]);
 
   return (
     <main className="flex flex-col w-1/2 p-6 pb-12 md:px-8 gap-6">

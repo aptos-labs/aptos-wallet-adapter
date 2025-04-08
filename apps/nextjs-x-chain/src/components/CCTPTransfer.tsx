@@ -31,6 +31,7 @@ import {
   OriginWalletDetails,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
+import Image from "next/image";
 
 const dappNetwork: Network.MAINNET | Network.TESTNET = Network.TESTNET;
 
@@ -117,7 +118,7 @@ export function CCTPTransfer({
       setWalletUSDCBalance(balance);
     };
     fetchWalletUsdcBalance();
-  }, [originWalletDetails]);
+  }, [originWalletDetails, sourceChain]);
 
   const humanReadableETA = (milliseconds: number): string => {
     if (milliseconds >= 60000) {
@@ -142,6 +143,10 @@ export function CCTPTransfer({
       setInvalidAmount(false);
       setAmount(amount);
 
+      const invalidateAmount = (amount: string) => {
+        return Number(amount) > Number(walletUSDCBalance ?? "0");
+      };
+
       if (invalidateAmount(amount)) {
         setInvalidAmount(true);
         setQuoteIsFetching(false);
@@ -163,12 +168,8 @@ export function CCTPTransfer({
 
       setDebounceTimeout(newTimeout);
     },
-    [sourceChain, debounceTimeout],
+    [sourceChain, debounceTimeout, walletUSDCBalance],
   );
-
-  const invalidateAmount = (amount: string) => {
-    return Number(amount) > Number(walletUSDCBalance ?? "0");
-  };
 
   const onTransferClick = async () => {
     setTransactionInProgress(true);
@@ -261,11 +262,11 @@ export function CCTPTransfer({
                     borderRadius: 4,
                   }}
                 >
-                  <img
-                    src={chainToIcon(sourceChain as any)}
+                  <Image
+                    src={chainToIcon(sourceChain as any)?.toString() ?? ""}
                     alt={sourceChain?.toString() ?? ""}
-                    height="32px"
-                    width="32px"
+                    height={32}
+                    width={32}
                   />
                 </div>
                 <div>
@@ -291,11 +292,11 @@ export function CCTPTransfer({
                     borderRadius: 4,
                   }}
                 >
-                  <img
-                    src={chainToIcon("Aptos")}
+                  <Image
+                    src={chainToIcon("Aptos")?.toString() ?? ""}
                     alt="Aptos"
-                    height="32px"
-                    width="32px"
+                    height={32}
+                    width={32}
                   />
                 </div>
                 <div>
