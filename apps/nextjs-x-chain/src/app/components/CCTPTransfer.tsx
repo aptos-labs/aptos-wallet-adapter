@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardTitle,
   CardContent,
   CardHeader,
   CardDescription,
-} from "./ui/card";
-import { Input } from "./ui/input";
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { ChainConfig, CrossChainCore } from "@aptos-labs/cross-chain-core";
 import {
   Account,

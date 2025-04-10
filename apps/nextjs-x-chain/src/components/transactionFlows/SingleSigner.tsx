@@ -1,15 +1,12 @@
-import {
-  Ed25519PrivateKey,
-  PrivateKey,
-  PrivateKeyVariants,
-  Account,
-} from "@aptos-labs/ts-sdk";
+import { getAptBalanceQueryOptions } from '@/utils/getAptBalanceQueryOptions';
+import { Account, AccountAuthenticator, Ed25519PrivateKey, PrivateKey, PrivateKeyVariants } from '@aptos-labs/ts-sdk';
 import {
   InputTransactionData,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
 
 import { isSendableNetwork, aptosClient } from "@/utils";
+import { useQuery } from '@tanstack/react-query';
 import { Button } from "../ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { useToast } from "../ui/use-toast";
@@ -106,44 +103,59 @@ export function SingleSigner() {
     }
   };
 
+  const aptBalance = useQuery({
+    enabled: account !== undefined && network !== undefined,
+    ...getAptBalanceQueryOptions({ accountAddress: account!.address, network: network!.name }),
+  });
+
+  const hasEnoughApt = aptBalance.isSuccess && aptBalance.data > 0;
+
   const onSignAndSubmitTransaction = async () => {
     if (!account) return;
 
     try {
+      const sponsorPrivateKeyHex = process.env
+        .NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY;
+
       const rawTransaction = await aptosClient(
-        network
+        network,
       ).transaction.build.simple({
         data: {
           function: "0x1::aptos_account::transfer",
-          functionArguments: [account.address.toString(), 1],
+          functionArguments: [account.address.toString(), 717],
+        },
+        options: {
+          maxGasAmount: 2000,
         },
         sender: account.address,
-        withFeePayer: true,
+        withFeePayer: sponsorPrivateKeyHex !== undefined,
       });
+
       const response = await signTransaction({
         transactionOrPayload: rawTransaction,
       });
 
-      const privateKey = new Ed25519PrivateKey(
-        PrivateKey.formatPrivateKey(
-          process.env
-            .NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY as string,
-          PrivateKeyVariants.Ed25519
-        )
-      );
-      const sponsor = Account.fromPrivateKey({ privateKey });
-
-      const aponsorAuth = aptosClient(network).transaction.signAsFeePayer({
-        signer: sponsor,
-        transaction: rawTransaction,
-      });
+      let sponsorAuthenticator: AccountAuthenticator | undefined;
+      if (sponsorPrivateKeyHex) {
+        const sponsorPrivateKey = new Ed25519PrivateKey(
+          PrivateKey.formatPrivateKey(
+            sponsorPrivateKeyHex,
+            PrivateKeyVariants.Ed25519,
+          ),
+        );
+        const sponsor = Account.fromPrivateKey({ privateKey: sponsorPrivateKey });
+        sponsorAuthenticator = aptosClient(network).transaction.signAsFeePayer({
+          signer: sponsor,
+          transaction: rawTransaction,
+        });
+      }
 
       const txnSubmitted = await aptosClient(network).transaction.submit.simple(
         {
           transaction: rawTransaction,
           senderAuthenticator: response.authenticator,
-          feePayerAuthenticator: aponsorAuth,
-        }
+          feePayerAuthenticator: sponsorAuthenticator,
+        },
       );
 
       await aptosClient(network).waitForTransaction({
@@ -156,6 +168,8 @@ export function SingleSigner() {
           <TransactionHash hash={txnSubmitted.hash} network={network} />
         ),
       });
+
+      void aptBalance.refetch();
     } catch (error) {
       console.log(`Error signing and submitting transaction: ${error}`);
       toast({
@@ -180,7 +194,7 @@ export function SingleSigner() {
         <Button onClick={onSignMessageAndVerify} disabled={!sendable}>
           Sign message and verify
         </Button>
-        <Button onClick={onSignAndSubmitTransaction} disabled={!sendable}>
+        <Button onClick={onSignAndSubmitTransaction} disabled={!sendable || !hasEnoughApt}>
           Sign and submit transaction
         </Button>
       </CardContent>
