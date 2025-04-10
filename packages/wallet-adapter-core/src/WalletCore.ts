@@ -855,6 +855,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           sender: this._account.address,
           data: transactionOrPayload.data,
           options: transactionOrPayload.options,
+          withFeePayer: transactionOrPayload.withFeePayer,
         });
 
         const response = (await this._wallet?.features[
@@ -1054,13 +1055,15 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       }
 
       const aptosConfig = getAptosConfig(this._network, this._dappConfig);
-      const signingMessage = new TextEncoder().encode(response.args.fullMessage);
+      const signingMessage = new TextEncoder().encode(
+        response.args.fullMessage
+      );
       if ("verifySignatureAsync" in (this._account.publicKey as Object)) {
         return await this._account.publicKey.verifySignatureAsync({
           aptosConfig,
           message: signingMessage,
           signature: response.args.signature,
-          options: { throwErrorWithReason: true }
+          options: { throwErrorWithReason: true },
         });
       }
       return this._account.publicKey.verifySignature({

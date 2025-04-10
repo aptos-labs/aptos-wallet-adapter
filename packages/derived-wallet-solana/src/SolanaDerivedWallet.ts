@@ -53,7 +53,7 @@ export class SolanaDerivedWallet implements AptosWallet {
     } = options;
 
     this.solanaWallet = solanaWallet;
-    this.domain = window.location.origin;
+    this.domain = window.location.host;
     this.authenticationFunction = authenticationFunction;
     this.defaultNetwork = defaultNetwork;
     this.name = `${solanaWallet.name} (Solana)`;
@@ -211,6 +211,7 @@ export class SolanaDerivedWallet implements AptosWallet {
         ...input,
         chainId,
       },
+      domain: this.domain,
     });
   }
 
@@ -222,6 +223,7 @@ export class SolanaDerivedWallet implements AptosWallet {
       solanaWallet: this.solanaWallet,
       authenticationFunction: this.authenticationFunction,
       rawTransaction,
+      domain: this.domain,
     });
   }
 

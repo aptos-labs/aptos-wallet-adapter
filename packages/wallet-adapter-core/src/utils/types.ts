@@ -42,6 +42,7 @@ export type InputTransactionData = {
     expirationSecondsFromNow?: number;
     expirationTimestamp?: number;
   };
+  withFeePayer?: boolean;
 };
 
 export type WalletInfo = {
