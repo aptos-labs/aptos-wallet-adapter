@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.2.1
+
+### Patch Changes
+
+- 1779749: Updated DAA SIWS authentication function identifier
+
 ## 0.2.0
 
 ### Minor Changes
