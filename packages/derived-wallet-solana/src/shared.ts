@@ -2,7 +2,7 @@ import { makeUserApproval, makeUserRejection } from '@aptos-labs/derived-wallet-
 import { UserResponse } from '@aptos-labs/wallet-standard';
 import { WalletError } from '@solana/wallet-adapter-base';
 
-export const defaultAuthenticationFunction = '0x7::solana::authenticate';
+export const defaultAuthenticationFunction = '0x1::daa_siws::authenticate';
 
 /**
  * Adapt SolanaWalletAdapter response into a UserResponse.
