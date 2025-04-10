@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.2.2
+
+### Patch Changes
+
+- 255400a: Add the accountIdentity when creating the AccountAuthenticatorAbstraction in the derived wallet"
+
 ## 0.2.1
 
 ### Patch Changes
