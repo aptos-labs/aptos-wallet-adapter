@@ -12,6 +12,11 @@ export function setupAutomaticSolanaWalletDerivation(options: SolanaDomainWallet
   type UnsubscribeCallback = () => void;
   let registrations: { [name: string]: UnsubscribeCallback } = {};
 
+  const isWhitelisted = (wallet: WalletAdapterCompatibleStandardWallet) => {
+    // Using "Phantom" as only whitelisted by default, as it's the only one known to work well with SIWS
+    return wallet.name === 'Phantom';
+  };
+
   const deriveAndRegisterWallet = (wallet: WalletAdapterCompatibleStandardWallet) => {
     const adapter = new StandardWalletAdapter({ wallet });
     const derivedWallet = new SolanaDerivedWallet(adapter, options);
@@ -19,13 +24,13 @@ export function setupAutomaticSolanaWalletDerivation(options: SolanaDomainWallet
   };
 
   for (const wallet of api.get()) {
-    if (isWalletAdapterCompatibleStandardWallet(wallet)) {
+    if (isWalletAdapterCompatibleStandardWallet(wallet) && isWhitelisted(wallet)) {
       deriveAndRegisterWallet(wallet);
     }
   }
 
   const offRegister = api.on('register', (wallet) => {
-    if (isWalletAdapterCompatibleStandardWallet(wallet)) {
+    if (isWalletAdapterCompatibleStandardWallet(wallet) && isWhitelisted(wallet)) {
       deriveAndRegisterWallet(wallet);
     }
   });
