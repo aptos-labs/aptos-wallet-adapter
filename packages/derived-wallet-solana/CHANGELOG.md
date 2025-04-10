@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 1779749: Updated DAA SIWS authentication function
+- 1779749: Updated DAA SIWS authentication function identifier
 
 ## 0.2.0
 
