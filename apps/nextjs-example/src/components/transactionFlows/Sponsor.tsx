@@ -44,7 +44,7 @@ export function Sponsor() {
       data: {
         function: "0x1::coin::transfer",
         typeArguments: [APTOS_COIN],
-        functionArguments: [account.address, 1], // 1 is in Octas
+        functionArguments: [account.address.toString(), 1], // 1 is in Octas
       },
     });
     return transactionToSign;
