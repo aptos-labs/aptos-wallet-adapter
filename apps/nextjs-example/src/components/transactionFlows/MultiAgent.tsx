@@ -67,7 +67,7 @@ export function MultiAgent() {
       secondarySignerAddresses: [secondarySigner.accountAddress],
       data: {
         bytecode: TRANSFER_SCRIPT,
-        typeArguments: [parseTypeTag(APTOS_COIN)],
+        typeArguments: [],
         functionArguments: [account.address, new U64(1)],
       },
     });
@@ -95,10 +95,11 @@ export function MultiAgent() {
       throw new Error("No secondarySignerAccount");
     }
     try {
-      const response = await signTransaction({
-        transactionOrPayload: transactionToSubmit,
-      });
-      setSecondarySignerAuthenticator(response.authenticator);
+      if(!secondarySignerAccount) {
+        throw new Error("No secondarySignerAccount");
+      }
+      const authenticator = aptosClient(network).sign({signer: secondarySignerAccount, transaction: transactionToSubmit});
+      setSecondarySignerAuthenticator(authenticator);
     } catch (error) {
       console.error(error);
     }
