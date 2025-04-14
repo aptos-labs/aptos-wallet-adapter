@@ -1,5 +1,14 @@
 # @aptos-labs/cross-chain-core
 
+## 4.24.4
+
+### Patch Changes
+
+- Updated dependencies [c62ccb7]
+- Updated dependencies [3effbab]
+  - @aptos-labs/derived-wallet-ethereum@0.1.3
+  - @aptos-labs/derived-wallet-solana@0.2.3
+
 ## 4.24.3
 
 ### Patch Changes

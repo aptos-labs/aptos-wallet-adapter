@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-base
 
+## 0.1.2
+
+### Patch Changes
+
+- c62ccb7: Add the accountIdentity when creating the AccountAuthenticatorAbstraction in the derived wallet
+
 ## 0.1.1
 
 ### Patch Changes
