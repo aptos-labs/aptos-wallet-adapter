@@ -17,9 +17,15 @@ import { useToast } from "../ui/use-toast";
 import { LabelValueGrid } from "../LabelValueGrid";
 
 const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
-const TRANSFER_SCRIPT =
-  "0xa11ceb0b0600000006010002030206040802050a10071a1d0837200000000103010100000204060c060c05030001090003060c05030d6170746f735f6163636f756e740e7472616e736665725f636f696e73000000000000000000000000000000000000000000000000000000000000000101000001050b010b020b03380002";
-
+/*
+script {
+    fun main(signer_1: &signer, signer_2: &signer, to: address, amount: u64){
+        aptos_framework::aptos_account::transfer(signer_1,to,amount);
+        aptos_framework::aptos_account::transfer(signer_2,to,amount);
+    }
+}
+*/
+const TRANSFER_SCRIPT = "0xa11ceb0b0700000a0601000203020605080d071525083a40107a1f010200030201000104060c060c05030003060c0503083c53454c463e5f30046d61696e0d6170746f735f6163636f756e74087472616e73666572ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000000000000000000114636f6d70696c6174696f6e5f6d65746164617461090003322e3003322e31000001090b000a020a0311000b010b020b03110002"
 export function MultiAgent() {
   const { toast } = useToast();
   const { connected, account, network, signTransaction, submitTransaction } =
