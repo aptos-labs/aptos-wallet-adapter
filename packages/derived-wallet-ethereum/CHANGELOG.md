@@ -1,5 +1,13 @@
 # @aptos-labs/derived-wallet-ethereum
 
+## 0.1.3
+
+### Patch Changes
+
+- c62ccb7: Add the accountIdentity when creating the AccountAuthenticatorAbstraction in the derived wallet
+- Updated dependencies [c62ccb7]
+  - @aptos-labs/derived-wallet-base@0.1.2
+
 ## 0.1.2
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.2.3
+
+### Patch Changes
+
+- 3effbab: Only allowing Phantom as whitelisted wallet for now
+- Updated dependencies [c62ccb7]
+  - @aptos-labs/derived-wallet-base@0.1.2
+
 ## 0.2.2
 
 ### Patch Changes
