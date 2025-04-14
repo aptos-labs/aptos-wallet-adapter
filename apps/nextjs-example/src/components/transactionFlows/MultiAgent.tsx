@@ -68,7 +68,7 @@ export function MultiAgent() {
       data: {
         bytecode: TRANSFER_SCRIPT,
         typeArguments: [parseTypeTag(APTOS_COIN)],
-        functionArguments: [AccountAddress.fromString(account.address), new U64(1)],
+        functionArguments: [account.address, new U64(1)],
       },
     });
     return transactionToSign;
@@ -78,8 +78,10 @@ export function MultiAgent() {
     const transaction = await generateTransaction();
     setTransactionToSubmit(transaction);
     try {
-      const authenticator = await signTransaction(transaction);
-      setSenderAuthenticator(authenticator);
+      const response = await signTransaction({
+        transactionOrPayload: transaction,
+      });
+      setSenderAuthenticator(response.authenticator);
     } catch (error) {
       console.error(error);
     }
@@ -93,8 +95,10 @@ export function MultiAgent() {
       throw new Error("No secondarySignerAccount");
     }
     try {
-      const authenticator = await signTransaction(transactionToSubmit);
-      setSecondarySignerAuthenticator(authenticator);
+      const response = await signTransaction({
+        transactionOrPayload: transactionToSubmit,
+      });
+      setSecondarySignerAuthenticator(response.authenticator);
     } catch (error) {
       console.error(error);
     }
