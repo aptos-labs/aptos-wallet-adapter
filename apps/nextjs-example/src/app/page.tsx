@@ -171,7 +171,8 @@ function WalletConnection({
     return true;
   };
 
-  const isNetworkChangeSupported = wallet?.features['aptos:changeNetwork'] !== undefined;
+  const isNetworkChangeSupported =
+    wallet?.features["aptos:changeNetwork"] !== undefined;
 
   return (
     <Card>

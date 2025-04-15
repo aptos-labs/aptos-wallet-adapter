@@ -1,25 +1,28 @@
 "use client";
 
 import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
-import { setupAutomaticEthereumWalletDerivation } from '@aptos-labs/derived-wallet-ethereum';
-import { setupAutomaticSolanaWalletDerivation } from '@aptos-labs/derived-wallet-solana';
+import { setupAutomaticEthereumWalletDerivation } from "@aptos-labs/derived-wallet-ethereum";
+import { setupAutomaticSolanaWalletDerivation } from "@aptos-labs/derived-wallet-solana";
 import { PropsWithChildren } from "react";
 import { Network } from "@aptos-labs/ts-sdk";
 import { useClaimSecretKey } from "@/hooks/useClaimSecretKey";
 import { useAutoConnect } from "./AutoConnectProvider";
 import { useToast } from "./ui/use-toast";
 
-const searchParams = typeof window !== "undefined" ? new URL(window.location.href).searchParams : undefined
-const deriveWalletsFrom = searchParams?.get('deriveWalletsFrom')?.split(',');
-if (deriveWalletsFrom?.includes('ethereum')) {
+const searchParams =
+  typeof window !== "undefined"
+    ? new URL(window.location.href).searchParams
+    : undefined;
+const deriveWalletsFrom = searchParams?.get("deriveWalletsFrom")?.split(",");
+if (deriveWalletsFrom?.includes("ethereum")) {
   setupAutomaticEthereumWalletDerivation({ defaultNetwork: Network.TESTNET });
 }
-if (deriveWalletsFrom?.includes('solana')) {
+if (deriveWalletsFrom?.includes("solana")) {
   setupAutomaticSolanaWalletDerivation({ defaultNetwork: Network.TESTNET });
 }
 
 let dappImageURI: string | undefined;
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   dappImageURI = `${window.location.origin}${window.location.pathname}favicon.ico`;
 }
 

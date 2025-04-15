@@ -10,7 +10,7 @@ export async function signAndSendTransaction(
   request: EvmUnsignedTransaction<Network, EvmChains>,
   wallet: AdapterWallet,
   chainName: string,
-  options: any
+  options: any,
 ): Promise<string> {
   if (!wallet) {
     throw new Error("wallet.sendTransaction is undefined").message;
@@ -34,12 +34,12 @@ export async function signAndSendTransaction(
     BigInt(actualChainId) !== expectedChainId
   ) {
     throw new Error(
-      `Signer is not connected to the right chain. Expected ${expectedChainId}, got ${actualChainId}`
+      `Signer is not connected to the right chain. Expected ${expectedChainId}, got ${actualChainId}`,
     ).message;
   }
 
   const provider = new ethers.BrowserProvider(
-    (wallet as EIP1193DerivedWallet).eip1193Provider
+    (wallet as EIP1193DerivedWallet).eip1193Provider,
   );
   const signer = await provider.getSigner();
   const response = await signer.sendTransaction(request.transaction);

@@ -1,10 +1,14 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { getAptBalanceQueryOptions } from '@/utils/getAptBalanceQueryOptions';
-import { Aptos, AptosConfig, Network } from '@aptos-labs/ts-sdk';
-import { AccountInfo, AdapterWallet, NetworkInfo } from '@aptos-labs/wallet-adapter-react';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getAptBalanceQueryOptions } from "@/utils/getAptBalanceQueryOptions";
+import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
+import {
+  AccountInfo,
+  AdapterWallet,
+  NetworkInfo,
+} from "@aptos-labs/wallet-adapter-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 
 interface AccountBalanceProps {
   account: AccountInfo;
@@ -26,8 +30,8 @@ export function AccountBalance({ account, network }: AccountBalanceProps) {
       const aptos = new Aptos(new AptosConfig({ network: network.name }));
       await aptos.fundAccount({
         accountAddress: account.address,
-        amount: 0.1e8
-      })
+        amount: 0.1e8,
+      });
     },
     onSuccess: () => {
       void aptBalance.refetch();
@@ -35,10 +39,10 @@ export function AccountBalance({ account, network }: AccountBalanceProps) {
   });
 
   const balanceSection = useMemo(() => {
-    if (aptBalance.status === 'pending') {
+    if (aptBalance.status === "pending") {
       return <span>Fetching...</span>;
     }
-    if (aptBalance.status === 'error') {
+    if (aptBalance.status === "error") {
       return <span>Error</span>;
     }
 
