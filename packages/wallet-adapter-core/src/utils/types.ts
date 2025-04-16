@@ -25,15 +25,17 @@ export interface AptosStandardSupportedWallet {
 
 // Update this with the name of your wallet when you create a new wallet plugin.
 export type AvailableWallets =
-  | "Nightly"
-  | "Petra"
-  | "T wallet"
-  | "Pontem Wallet"
-  | "Mizu Wallet"
-  | "OKX Wallet"
-  | "Continue with Google"
   | "Continue with Apple"
-  | "MSafe Wallet";
+  | "Continue with Google"
+  | "Leap Wallet"
+  | "MSafe"
+  | "Mizu Wallet"
+  | "Nightly"
+  | "OKX Wallet"
+  | "Petra"
+  | "Pontem Wallet"
+  | "Rimosafe"
+  | "T wallet";
 
 export type InputTransactionData = {
   sender?: AccountAddressInput;
