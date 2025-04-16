@@ -1,9 +1,12 @@
 import { aptosClient, isSendableNetwork } from "@/utils";
 import {
   Account,
+  AccountAddress,
   AccountAuthenticator,
   AnyRawTransaction,
   Ed25519Account,
+  parseTypeTag,
+  U64,
 } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useState } from "react";
@@ -14,7 +17,14 @@ import { useToast } from "../ui/use-toast";
 import { LabelValueGrid } from "../LabelValueGrid";
 
 const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
-
+/*
+script {
+    fun main(signer_1: &signer, _signer_2: &signer, to: address, amount: u64){
+        aptos_framework::aptos_account::transfer(signer_1,to,amount);
+    }
+}
+*/
+const TRANSFER_SCRIPT = "0xa11ceb0b0700000a0601000203020605080d071525083a40107a1f010200030201000104060c060c05030003060c0503083c53454c463e5f30046d61696e0d6170746f735f6163636f756e74087472616e73666572ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000000000000000000114636f6d70696c6174696f6e5f6d65746164617461090003322e3003322e31000001070b000b01010b020b03110002"
 export function MultiAgent() {
   const { toast } = useToast();
   const { connected, account, network, signTransaction, submitTransaction } =
@@ -41,12 +51,6 @@ export function MultiAgent() {
     }
 
     const secondarySigner = Account.generate();
-    // TODO: support custom network
-    await aptosClient(network).fundAccount({
-      accountAddress: secondarySigner.accountAddress.toString(),
-      amount: 100_000_000,
-      options: { waitForIndexer: false },
-    });
     setSecondarySignerAccount(secondarySigner);
 
     const transactionToSign = await aptosClient(
@@ -55,9 +59,9 @@ export function MultiAgent() {
       sender: account.address,
       secondarySignerAddresses: [secondarySigner.accountAddress],
       data: {
-        function: "0x1::coin::transfer",
-        typeArguments: [APTOS_COIN],
-        functionArguments: [account.address.toString(), 1], // 1 is in Octas
+        bytecode: TRANSFER_SCRIPT,
+        typeArguments: [],
+        functionArguments: [account.address, new U64(1)],
       },
     });
     return transactionToSign;
@@ -80,11 +84,15 @@ export function MultiAgent() {
     if (!transactionToSubmit) {
       throw new Error("No Transaction to sign");
     }
+    if (!secondarySignerAccount) {
+      throw new Error("No secondarySignerAccount");
+    }
     try {
-      const response = await signTransaction({
-        transactionOrPayload: transactionToSubmit,
-      });
-      setSecondarySignerAuthenticator(response.authenticator);
+      if(!secondarySignerAccount) {
+        throw new Error("No secondarySignerAccount");
+      }
+      const authenticator = aptosClient(network).sign({signer: secondarySignerAccount, transaction: transactionToSubmit});
+      setSecondarySignerAuthenticator(authenticator);
     } catch (error) {
       console.error(error);
     }
