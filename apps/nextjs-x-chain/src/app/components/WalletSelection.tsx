@@ -1,8 +1,8 @@
-import { useAutoConnect } from '@/components/AutoConnectProvider';
-import { Card, CardContent } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { WalletSelector as ShadcnWalletSelector } from '@/components/WalletSelector';
+import { useAutoConnect } from "@/components/AutoConnectProvider";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { WalletSelector as ShadcnWalletSelector } from "@/components/WalletSelector";
 
 export function WalletSelection() {
   const { autoConnect, setAutoConnect } = useAutoConnect();

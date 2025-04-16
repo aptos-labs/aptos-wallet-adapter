@@ -30,7 +30,7 @@ export interface WalletContextState {
     input: AptosSignInInput;
   }): Promise<AptosSignInOutput | void>;
   signAndSubmitTransaction(
-    transaction: InputTransactionData
+    transaction: InputTransactionData,
   ): Promise<AptosSignAndSubmitTransactionOutput>;
   signTransaction(args: {
     transactionOrPayload: AnyRawTransaction | InputTransactionData;
@@ -44,10 +44,10 @@ export interface WalletContextState {
   disconnect(): void;
   changeNetwork(network: Network): Promise<AptosChangeNetworkOutput>;
   submitTransaction(
-    transaction: InputSubmitTransactionData
+    transaction: InputSubmitTransactionData,
   ): Promise<PendingTransactionResponse>;
   getOriginWalletDetails(
-    wallet: AdapterWallet
+    wallet: AdapterWallet,
   ): Promise<OriginWalletDetails | undefined>;
   isSolanaDerivedWallet(wallet: AdapterWallet): boolean;
   isEIP1193DerivedWallet(wallet: AdapterWallet): boolean;
@@ -61,7 +61,7 @@ const DEFAULT_CONTEXT = {
 };
 
 export const WalletContext = createContext<WalletContextState>(
-  DEFAULT_CONTEXT as WalletContextState
+  DEFAULT_CONTEXT as WalletContextState,
 );
 
 export function useWallet(): WalletContextState {

@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
 function USDC() {
   return (
     <svg
-      style={{ maxHeight: '100%', maxWidth: '100%' }}
+      style={{ maxHeight: "100%", maxWidth: "100%" }}
       xmlns="http://www.w3.org/2000/svg"
       data-name="86977684-12db-4850-8f30-233a7c267d11"
       width="2000"

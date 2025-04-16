@@ -1,9 +1,14 @@
-import { getWallets } from '@wallet-standard/app';
-import { createStore } from 'mipd';
-import { EIP6963ProviderDetail } from 'mipd/src/types';
-import { EIP1193DerivedWallet, EIP1193DerivedWalletOptions } from './EIP1193DerivedWallet';
+import { getWallets } from "@wallet-standard/app";
+import { createStore } from "mipd";
+import { EIP6963ProviderDetail } from "mipd/src/types";
+import {
+  EIP1193DerivedWallet,
+  EIP1193DerivedWalletOptions,
+} from "./EIP1193DerivedWallet";
 
-export function setupAutomaticEthereumWalletDerivation(options: EIP1193DerivedWalletOptions = {}) {
+export function setupAutomaticEthereumWalletDerivation(
+  options: EIP1193DerivedWalletOptions = {},
+) {
   const walletsApi = getWallets();
   const eip6963Store = createStore();
 
