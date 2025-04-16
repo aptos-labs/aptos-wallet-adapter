@@ -42,7 +42,7 @@ export function Sponsor() {
       data: {
         function: "0x1::resource_account::create_resource_account",
         typeArguments: [],
-        functionArguments: ["My Resource Account", AccountAddress.from("0x0").toUint8Array()],
+        functionArguments: [account.address.toString(), AccountAddress.from("0x0").toUint8Array()],
       },
     });
     transactionToSign.feePayerAddress = account.address;
@@ -100,7 +100,6 @@ export function Sponsor() {
         senderAuthenticator: senderAuthenticator,
         feePayerAuthenticator: feepayerAuthenticator,
       });
-      console.log(response);
       toast({
         title: "Success",
         description: <TransactionHash hash={response.hash} network={network} />,
