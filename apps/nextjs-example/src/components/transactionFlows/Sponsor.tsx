@@ -1,6 +1,7 @@
 import { aptosClient, isSendableNetwork } from "@/utils";
 import {
   Account,
+  AccountAddress,
   AccountAuthenticator,
   AnyRawTransaction,
 } from "@aptos-labs/ts-sdk";
@@ -10,8 +11,6 @@ import { TransactionHash } from "../TransactionHash";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useToast } from "../ui/use-toast";
-
-const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
 
 export function Sponsor() {
   const { toast } = useToast();
@@ -25,40 +24,46 @@ export function Sponsor() {
   const [feepayerAuthenticator, setFeepayerAuthenticator] =
     useState<AccountAuthenticator>();
 
+  const [senderAccount, setSenderAccount] =
+    useState<Account | null>();
+
   let sendable = isSendableNetwork(connected, network?.name);
 
-  // create sponsor account
-  const SPONSOR_INITIAL_BALANCE = 100_000_000;
-  const sponsor = Account.generate();
-
   // Generate a raw transaction using the SDK
-  const generateTransaction = async (): Promise<AnyRawTransaction> => {
+  const generateTransaction = async (sender: Account): Promise<AnyRawTransaction> => {
     if (!account) {
       throw new Error("no account");
     }
     const transactionToSign = await aptosClient(
       network
     ).transaction.build.simple({
-      sender: account.address,
+      sender: sender.accountAddress,
       withFeePayer: true,
       data: {
-        function: "0x1::coin::transfer",
-        typeArguments: [APTOS_COIN],
-        functionArguments: [account.address.toString(), 1], // 1 is in Octas
+        function: "0x1::resource_account::create_resource_account",
+        typeArguments: [],
+        functionArguments: ["My Resource Account", AccountAddress.from("0x0").toUint8Array()],
       },
     });
+    transactionToSign.feePayerAddress = account.address;
     return transactionToSign;
   };
 
   const onSignTransaction = async () => {
-    const transaction = await generateTransaction();
+    let sender = Account.generate();
+    setSenderAccount(sender);
+
+    const transaction = await generateTransaction(sender);
     setTransactionToSubmit(transaction);
 
     try {
-      const response = await signTransaction({
-        transactionOrPayload: transaction,
+      const authenticator = aptosClient(
+        network
+      ).transaction.sign({
+        signer: sender,
+        transaction: transaction,
       });
-      setSenderAuthenticator(response.authenticator);
+      setSenderAuthenticator(authenticator);
     } catch (error) {
       console.error(error);
     }
@@ -69,17 +74,11 @@ export function Sponsor() {
       throw new Error("No Transaction to sign");
     }
     try {
-      await aptosClient(network).fundAccount({
-        accountAddress: sponsor.accountAddress,
-        amount: SPONSOR_INITIAL_BALANCE,
+      const response = await signTransaction({
+        transactionOrPayload: transactionToSubmit,
+        asFeePayer: true,
       });
-      const authenticator = await aptosClient(
-        network
-      ).transaction.signAsFeePayer({
-        signer: sponsor,
-        transaction: transactionToSubmit,
-      });
-      setFeepayerAuthenticator(authenticator);
+      setFeepayerAuthenticator(response.authenticator);
     } catch (error) {
       console.error(error);
     }
@@ -101,6 +100,7 @@ export function Sponsor() {
         senderAuthenticator: senderAuthenticator,
         feePayerAuthenticator: feepayerAuthenticator,
       });
+      console.log(response);
       toast({
         title: "Success",
         description: <TransactionHash hash={response.hash} network={network} />,
