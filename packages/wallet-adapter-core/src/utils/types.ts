@@ -27,7 +27,6 @@ export interface AptosStandardSupportedWallet {
 export type AvailableWallets =
   | "Continue with Apple"
   | "Continue with Google"
-  | "Leap Wallet"
   | "MSafe"
   | "Mizu Wallet"
   | "Nightly"
