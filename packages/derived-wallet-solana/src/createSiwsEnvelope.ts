@@ -62,20 +62,18 @@ export function createSiwsEnvelopeForAptosTransaction(
  * <domain> wants you to sign in with your Solana account:
  * <base58_public_key>
  * 
- * To execute transaction <entry_function> on Aptos blockchain (<network_name>).
+ * Please confirm you explicitly initiated this request from <domain>. You are approving to execute transaction <entry_function> on Aptos blockchain (<network_name>).
  * 
  * Nonce: <aptos_txn_digest>
  */
 export function createSolanaSignMessageStatementForAptosTransaction(args:{accountAddress:string, signingMessageDigest: HexInput, rawTransaction: AnyRawTransaction  } ) {
   const {accountAddress, signingMessageDigest, rawTransaction} = args;
-  const entryFunctionName = getEntryFunctionName(rawTransaction.rawTransaction.payload);
-  const humanReadableEntryFunction = entryFunctionName ? `${entryFunctionName}` : '';
-
-  const chainId = rawTransaction.rawTransaction.chain_id.chainId;
-  const chainName = getChainName(chainId);
   
   const domain = window.location.host;
   const digestHex = Hex.fromHexInput(signingMessageDigest).toString();
 
-  return `${domain} wants you to sign in with your Solana account:\n${accountAddress}\n\nTo execute transaction ${humanReadableEntryFunction} on Aptos blockchain (${chainName}).\n\nNonce: ${digestHex}`
+  const messageStatementPrefix = `${domain} wants you to sign in with your Solana account:\n${accountAddress}`;
+  const messageStatementBody = createTransactionStatement(rawTransaction);
+
+  return `${messageStatementPrefix}\n\n${messageStatementBody}\n\nNonce: ${digestHex}`
 }
