@@ -27,16 +27,16 @@
     "vue-router": "^4.3.3"
   },
   "devDependencies": {
-    "@nuxtjs/color-mode": "^3.4.2",
+    "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/eslint-config-typescript": "12.1.0",
     "@nuxtjs/eslint-module": "4.1.0",
-    "@nuxtjs/tailwindcss": "^6.13.1",
-    "consola": "^3.2.3",
-    "eslint": "^8.15.0",
-    "nuxt": "^3.16.0",
-    "prettier": "^3.3.1",
+    "@nuxtjs/tailwindcss": "^6.13.2",
+    "consola": "^3.4.2",
+    "eslint": "^8.57.1",
+    "nuxt": "^3.16.2",
+    "prettier": "^3.3.3",
     "shadcn-nuxt": "^0.10.4",
-    "typescript": "^5.4.5",
-    "ufo": "1.5.3"
+    "typescript": "^5.8.3",
+    "ufo": "1.6.1"
   }
 }
