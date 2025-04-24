@@ -9,7 +9,7 @@ import { StructuredMessage } from './StructuredMessage';
 /**
  * Attempt to convert the specified chainId into a human-readable identifier.
  */
-export function getChainName(chainId: number) {
+function getChainName(chainId: number) {
   // Obtain the network name if available
   for (const [network, otherChainId] of Object.entries(NetworkToChainId)) {
     if (otherChainId === chainId) {

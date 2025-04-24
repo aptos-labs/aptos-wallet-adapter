@@ -1,3 +1,4 @@
+import { createSignInMessage } from '@solana/wallet-standard-util';
 import { mapUserResponse, DerivableAbstractPublicKey } from '@aptos-labs/derived-wallet-base';
 import {
   AccountAuthenticator,
@@ -10,7 +11,7 @@ import {
 } from '@aptos-labs/ts-sdk';
 import { PublicKey as SolanaPublicKey } from '@solana/web3.js';
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
-import { createSiwsEnvelopeForAptosTransaction, createSolanaSignMessageStatementForAptosTransaction } from './createSiwsEnvelope';
+import { createSiwsEnvelopeForAptosTransaction } from './createSiwsEnvelope';
 import { wrapSolanaUserResponse } from './shared';
 
 /**
@@ -37,15 +38,15 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
   const signingMessage = generateSigningMessageForTransaction(rawTransaction);
   const signingMessageDigest = hashValues([signingMessage]);
 
+  const siwsInput = createSiwsEnvelopeForAptosTransaction({
+    solanaPublicKey,
+    rawTransaction,
+    signingMessageDigest,
+    domain
+  });
 
   // Prioritize SIWS if available
   if(solanaWallet.signIn){
-    const siwsInput = createSiwsEnvelopeForAptosTransaction({
-      solanaPublicKey,
-      rawTransaction,
-      signingMessageDigest,
-      domain
-    });
 
     const response = await wrapSolanaUserResponse(solanaWallet.signIn!(siwsInput));
     return mapUserResponse(response, (output): AccountAuthenticator => {
@@ -62,9 +63,7 @@ export async function signAptosTransactionWithSolana(input: SignAptosTransaction
     });
   }else if(solanaWallet.signMessage){
     // Fallback to signMessage if SIWS is not available
-    const signMessageInput = createSolanaSignMessageStatementForAptosTransaction({accountAddress: solanaPublicKey.toBase58(), signingMessageDigest, rawTransaction});
-    const signMessageInputBytes = new TextEncoder().encode(signMessageInput);
-    const response = await wrapSolanaUserResponse(solanaWallet.signMessage(signMessageInputBytes));
+    const response = await wrapSolanaUserResponse(solanaWallet.signMessage(createSignInMessage(siwsInput)));
     return mapUserResponse(response, (output): AccountAuthenticator => {
       
       // Solana signMessage standard always returns a Ed25519 signature type
