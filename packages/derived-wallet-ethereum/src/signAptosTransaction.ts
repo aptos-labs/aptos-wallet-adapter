@@ -51,40 +51,10 @@ export async function signAptosTransactionWithEthereum(input: SignAptosTransacti
     signingMessageDigest,
     issuedAt,
   });
-  console.log("siweMessage",siweMessage)
 
   const response = await wrapEthersUserResponse(ethereumAccount.signMessage(siweMessage));
 
   return mapUserResponse(response, (siweSignature) => {
-    console.log("response",response)
-    console.log("siweSignature",siweSignature)
-
-    const prefix = `\x19Ethereum Signed Message:\n${siweMessage.length}`;
-    const fullMessage = prefix + siweMessage;
-
-    const metamaskMessage = keccak256(toUtf8Bytes(fullMessage));
-    console.log("metamaskMessage",metamaskMessage)
-    
-    const publicKey = SigningKey.recoverPublicKey(metamaskMessage, siweSignature);
-    console.log("Public Key:", publicKey);
-
-    const publicKeyBytes = getBytes(publicKey);
-    // 1. Hash with keccak256
-    const kexHash = keccak256(publicKeyBytes); // returns a hex string
-    console.log("kexHash",kexHash)
-
-    // 2. Slice last 20 bytes (same as vector::slice(&kexHash, 12, 32))
-    const kexHashBytes = getBytes(kexHash); // convert hash to bytes
-    console.log("kexHashBytes",kexHashBytes)
-    const keccak = keccak256(publicKeyBytes.slice(1)); // skip 0x04 prefix
-    const address = "0x" + keccak.slice(-40);
-    console.log("address",address)
-    // 3. Convert to address (optional)
-    //const recoveredAddressHex = "0x" + Buffer.from(recoveredAddressBytes).toString("hex");
-    //console.log("Recovered address:", recoveredAddressHex);
-
-    const recoveredAddress = verifyMessage(siweMessage, siweSignature);
-    console.log("Recovered address:", recoveredAddress);
 
     // Serialize the signature with the signature type as the first byte.
     const serializer = new Serializer();
