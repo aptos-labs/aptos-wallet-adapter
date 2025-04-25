@@ -58,4 +58,5 @@ jobs:
         if: steps.changesets.outputs.published == 'true' # Runs only if publishing happened
         run: |
           pnpm run deploy:example
-          pnpm run deploy:cross-chain-example
+        env:
+          GITHUB_TOKEN: ${{ steps.authenticate.outputs.token }}
