@@ -25,7 +25,6 @@ export class EIP1193DerivedSignature extends Signature {
   }
 
   static deserialize(deserializer: Deserializer) {
-    // Number can safely contain a unix timestamp
     const issuedAt = new Date(deserializer.deserializeStr());
     const siweSignature = deserializer.deserializeBytes();
     return new EIP1193DerivedSignature(issuedAt, siweSignature);

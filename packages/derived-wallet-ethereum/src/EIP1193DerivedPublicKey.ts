@@ -52,7 +52,7 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
     return this._authKey;
   }
 
-  verifySignature({ message, signature, chainId }: VerifySignatureArgsWithChainId): boolean {
+  verifySignature({ message, signature }: VerifySignatureArgs): boolean {
     const parsedSigningMessage = parseAptosSigningMessage(message);
     if (!parsedSigningMessage || !(signature instanceof EIP1193DerivedSignature)) {
       return false;
@@ -64,7 +64,6 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
     // Obtain SIWE envelope for the signing message
     const envelopeInput = {
       ethereumAddress: this.ethereumAddress,
-      chainId,
       signingMessageDigest,
       issuedAt,
     };
@@ -73,10 +72,12 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
       ? createSiweEnvelopeForAptosStructuredMessage({
         ...parsedSigningMessage,
         ...envelopeInput,
+        chainId: 0 // TODO: remove this once we rewrite the regular sign message to use the default wallet signMessage
       })
       : createSiweEnvelopeForAptosTransaction({
         ...parsedSigningMessage,
         ...envelopeInput,
+        chainId: parsedSigningMessage.rawTransaction.rawTransaction.chain_id.chainId,
       });
 
     const recoveredAddress = verifyEthereumMessage(siweMessage, siweSignature);
@@ -84,9 +85,7 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
   }
 
   async verifySignatureAsync(args: { aptosConfig: AptosConfig, message: HexInput, signature: Signature }): Promise<boolean> {
-    const aptos = new Aptos(args.aptosConfig);
-    const chainId = await aptos.getChainId();
-    return this.verifySignature({message: args.message, signature: args.signature, chainId});
+    return this.verifySignature({message: args.message, signature: args.signature});
   }
 
   // region Serialization

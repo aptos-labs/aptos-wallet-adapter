@@ -5,11 +5,10 @@ import {
   AnyRawTransaction,
   generateSigningMessageForTransaction,
   hashValues,
-  Hex,
   Serializer,
 } from '@aptos-labs/ts-sdk';
 import { UserResponse } from "@aptos-labs/wallet-standard";
-import { BrowserProvider, Eip1193Provider, keccak256,getBytes, id, SigningKey, toUtf8Bytes, verifyMessage } from 'ethers';
+import { BrowserProvider, Eip1193Provider } from 'ethers';
 import { createSiweEnvelopeForAptosTransaction } from './createSiweEnvelope';
 import { EIP1193DerivedSignature } from './EIP1193DerivedSignature';
 import { EthereumAddress, wrapEthersUserResponse } from './shared';
