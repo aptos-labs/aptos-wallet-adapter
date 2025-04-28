@@ -168,10 +168,16 @@ function WalletConnection({
     }
     // If the configured network is not an Aptos network, i.e is a custom network
     // we resolve it as a valid network name
-    return true;
+    if (network?.name === "custom") {
+      return true;
+    }
+
+    // Otherwise, the network is not valid
+    return false;
   };
 
-  const isNetworkChangeSupported = wallet?.features['aptos:changeNetwork'] !== undefined;
+  const isNetworkChangeSupported =
+    wallet?.features["aptos:changeNetwork"] !== undefined;
 
   return (
     <Card>
