@@ -72,7 +72,7 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
       ? createSiweEnvelopeForAptosStructuredMessage({
         ...parsedSigningMessage,
         ...envelopeInput,
-        chainId: 0 // TODO: remove this once we rewrite the regular sign message to use the default wallet signMessage
+        chainId: 0 // TODO: use 0 does not really work, either way remove this once we rewrite the regular sign message to use the default wallet signMessage
       })
       : createSiweEnvelopeForAptosTransaction({
         ...parsedSigningMessage,
