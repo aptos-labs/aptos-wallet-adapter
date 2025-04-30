@@ -59,5 +59,5 @@ export function createTransactionStatement(rawTransaction: AnyRawTransaction) {
   const chainName = getChainName(chainId);
   const onAptosChain = ` on Aptos blockchain (${chainName})`;
 
-  return `To execute transaction${humanReadableEntryFunction}${onAptosChain}.`;
+  return `Please confirm you explicitly initiated this request from ${window.location.host}. You are approving to execute transaction${humanReadableEntryFunction}${onAptosChain}.`;
 }
