@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.4.1
+
+### Patch Changes
+
+- cdcec83: Rename Msafe wallet to MSafe in AvailableWallets + Add Rimosafe
+
 ## 5.4.0
 
 ### Minor Changes
