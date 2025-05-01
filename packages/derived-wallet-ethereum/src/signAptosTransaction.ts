@@ -1,10 +1,11 @@
-import { mapUserResponse } from '@aptos-labs/derived-wallet-base';
+import { DerivableAbstractPublicKey, mapUserResponse } from '@aptos-labs/derived-wallet-base';
 import {
   AccountAuthenticator,
   AccountAuthenticatorAbstraction,
   AnyRawTransaction,
   generateSigningMessageForTransaction,
   hashValues,
+  Serializer,
 } from '@aptos-labs/ts-sdk';
 import { UserResponse } from "@aptos-labs/wallet-standard";
 import { BrowserProvider, Eip1193Provider } from 'ethers';
@@ -53,12 +54,22 @@ export async function signAptosTransactionWithEthereum(input: SignAptosTransacti
   const response = await wrapEthersUserResponse(ethereumAccount.signMessage(siweMessage));
 
   return mapUserResponse(response, (siweSignature) => {
-    const signature = new EIP1193DerivedSignature(siweSignature, chainId, issuedAt);
-    const authenticator = signature.bcsToBytes();
+
+    // Serialize the signature with the signature type as the first byte.
+    const serializer = new Serializer();
+    serializer.serializeU8(0);
+    const signature = new EIP1193DerivedSignature(issuedAt, siweSignature);
+    signature.serialize(serializer)
+    const abstractSignature = serializer.toUint8Array();
+
+    // Serialize the abstract public key.
+    const abstractPublicKey = new DerivableAbstractPublicKey(ethereumAddress, window.location.host);
+    
     return new AccountAuthenticatorAbstraction(
       authenticationFunction,
       signingMessageDigest,
-      authenticator,
+      abstractSignature,
+      abstractPublicKey.bcsToBytes()
     );
   });
 }

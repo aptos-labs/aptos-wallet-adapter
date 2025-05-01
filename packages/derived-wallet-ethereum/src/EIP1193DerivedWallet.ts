@@ -27,7 +27,7 @@ import { EthereumAddress, wrapEthersUserResponse } from './shared';
 import { signAptosMessageWithEthereum } from './signAptosMessage';
 import { signAptosTransactionWithEthereum } from './signAptosTransaction';
 
-const defaultAuthenticationFunction = '0x7::eip1193::authenticate';
+const defaultAuthenticationFunction = '0x1::ethereum_derivable_account::authenticate';
 
 export interface EIP1193DerivedWalletOptions {
   authenticationFunction?: string;
@@ -58,7 +58,7 @@ export class EIP1193DerivedWallet implements AptosWallet {
     this.eip1193Provider = provider;
     this.eip1193Ethers = new BrowserProvider(provider);
 
-    this.domain = window.location.origin;
+    this.domain = window.location.host;
     this.authenticationFunction = authenticationFunction;
     this.defaultNetwork = defaultNetwork;
     this.name = `${info.name} (Ethereum)`;

@@ -1,6 +1,7 @@
 import { computeDerivableAuthenticationKey, parseAptosSigningMessage } from '@aptos-labs/derived-wallet-base';
 import {
   AccountPublicKey,
+  Aptos,
   AptosConfig,
   AuthenticationKey,
   Deserializer,
@@ -38,14 +39,6 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
     this.ethereumAddress = ethereumAddress;
     this.authenticationFunction = authenticationFunction;
 
-    const utf8EncodedDomain = new TextEncoder().encode(domain);
-    const ethereumAddressBytes = Hex.fromHexInput(ethereumAddress).toUint8Array();
-
-    const serializer = new Serializer();
-    serializer.serializeBytes(utf8EncodedDomain);
-    serializer.serializeBytes(ethereumAddressBytes);
-    const accountIdentifier = hashValues([serializer.toUint8Array()]);
-
     this._authKey = computeDerivableAuthenticationKey(
       authenticationFunction,
       ethereumAddress,
@@ -63,13 +56,12 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
       return false;
     }
 
-    const { chainId, issuedAt, siweSignature } = signature;
+    const { issuedAt, siweSignature } = signature;
     const signingMessageDigest = hashValues([message]);
 
     // Obtain SIWE envelope for the signing message
     const envelopeInput = {
       ethereumAddress: this.ethereumAddress,
-      chainId,
       signingMessageDigest,
       issuedAt,
     };
@@ -78,10 +70,12 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
       ? createSiweEnvelopeForAptosStructuredMessage({
         ...parsedSigningMessage,
         ...envelopeInput,
+        chainId: 0 // TODO: use 0 does not really work, either way remove this once we rewrite the regular sign message to use the default wallet signMessage
       })
       : createSiweEnvelopeForAptosTransaction({
         ...parsedSigningMessage,
         ...envelopeInput,
+        chainId: parsedSigningMessage.rawTransaction.rawTransaction.chain_id.chainId,
       });
 
     const recoveredAddress = verifyEthereumMessage(siweMessage, siweSignature);

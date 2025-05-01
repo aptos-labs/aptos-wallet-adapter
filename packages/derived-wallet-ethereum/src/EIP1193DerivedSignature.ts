@@ -4,16 +4,14 @@ export class EIP1193DerivedSignature extends Signature {
   static readonly LENGTH = 65;
 
   private readonly _siweSignature: Uint8Array;
-  readonly chainId: number;
   readonly issuedAt: Date;
 
-  constructor(siweSignature: HexInput, chainId: number, issuedAt: Date) {
+  constructor(issuedAt: Date, siweSignature: HexInput) {
     super();
     this._siweSignature = Hex.fromHexInput(siweSignature).toUint8Array();
     if (this._siweSignature.length !== EIP1193DerivedSignature.LENGTH) {
       throw new Error('Expected signature length to be 65 bytes');
     }
-    this.chainId = chainId;
     this.issuedAt = issuedAt;
   }
 
@@ -22,16 +20,13 @@ export class EIP1193DerivedSignature extends Signature {
   }
 
   serialize(serializer: Serializer) {
-    serializer.serializeFixedBytes(this._siweSignature);
-    serializer.serializeU32AsUleb128(this.chainId);
-    serializer.serializeU64(this.issuedAt.getTime());
+    serializer.serializeStr(this.issuedAt.toISOString());
+    serializer.serializeBytes(this._siweSignature);
   }
 
   static deserialize(deserializer: Deserializer) {
-    const siweSignature = deserializer.deserializeFixedBytes(EIP1193DerivedSignature.LENGTH);
-    const chainId = deserializer.deserializeUleb128AsU32();
-    // Number can safely contain a unix timestamp
-    const issuedAt = new Date(Number(deserializer.deserializeU64()));
-    return new EIP1193DerivedSignature(siweSignature, chainId, issuedAt);
+    const issuedAt = new Date(deserializer.deserializeStr());
+    const siweSignature = deserializer.deserializeBytes();
+    return new EIP1193DerivedSignature(issuedAt, siweSignature);
   }
 }

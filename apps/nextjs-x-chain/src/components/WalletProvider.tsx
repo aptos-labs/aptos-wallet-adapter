@@ -9,8 +9,7 @@ import { useClaimSecretKey } from "@/hooks/useClaimSecretKey";
 import { useAutoConnect } from "./AutoConnectProvider";
 import { useToast } from "./ui/use-toast";
 
-// Temporarily disabling this, as there's no on-chain support
-// setupAutomaticEthereumWalletDerivation({ defaultNetwork: Network.DEVNET });
+setupAutomaticEthereumWalletDerivation({ defaultNetwork: Network.DEVNET });
 setupAutomaticSolanaWalletDerivation({ defaultNetwork: Network.DEVNET });
 
 let dappImageURI: string | undefined;
