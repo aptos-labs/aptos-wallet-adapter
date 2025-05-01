@@ -10,7 +10,7 @@ export interface createSuiEnvelopeInput {
 function createSuiEnvelope(
   input: createSuiEnvelopeInput & {
     statement: string;
-  },
+  }
 ): string {
   const { suiAddress, signingMessageDigest, statement, domain } = input;
   const digestHex = Hex.fromHexInput(signingMessageDigest).toString();
@@ -28,7 +28,7 @@ function createSuiEnvelope(
  * considered as valid signature on the Aptos blockchain for the provided transaction.
  */
 export function createSuiEnvelopeForAptosTransaction(
-  input: createSuiEnvelopeInput & { rawTransaction: AnyRawTransaction },
+  input: createSuiEnvelopeInput & { rawTransaction: AnyRawTransaction }
 ): string {
   const { rawTransaction, ...rest } = input;
   const statement = createTransactionStatement(rawTransaction);

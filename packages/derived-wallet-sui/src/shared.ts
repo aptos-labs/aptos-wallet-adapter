@@ -13,7 +13,7 @@ export const defaultAuthenticationFunction =
  * for each validated supported wallet.
  */
 export async function wrapSuiUserResponse<TResponse>(
-  promise: Promise<TResponse>,
+  promise: Promise<TResponse>
 ): Promise<UserResponse<TResponse>> {
   try {
     const response = await promise;

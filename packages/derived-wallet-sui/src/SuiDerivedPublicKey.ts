@@ -47,7 +47,7 @@ export class SuiDerivedPublicKey extends AccountPublicKey {
     this._authKey = computeDerivableAuthenticationKey(
       authenticationFunction,
       this.suiAccountAddress,
-      domain,
+      domain
     );
   }
 
@@ -83,7 +83,7 @@ export class SuiDerivedPublicKey extends AccountPublicKey {
 
     if (parsedSigningMessage.type === "structuredMessage") {
       messageBytes = encodeStructuredMessage(
-        parsedSigningMessage.structuredMessage,
+        parsedSigningMessage.structuredMessage
       );
     } else {
       // Handle transaction message
@@ -98,7 +98,7 @@ export class SuiDerivedPublicKey extends AccountPublicKey {
     try {
       await verifyPersonalMessageSignature(
         messageBytes,
-        signature.signatureBase64,
+        signature.signatureBase64
       );
       return true;
     } catch (e) {
@@ -111,7 +111,7 @@ export class SuiDerivedPublicKey extends AccountPublicKey {
   serialize(serializer: Serializer) {
     serializer.serializeStr(this.domain);
     serializer.serializeFixedBytes(
-      Hex.fromHexInput(this.suiAccountAddress).toUint8Array(),
+      Hex.fromHexInput(this.suiAccountAddress).toUint8Array()
     );
     serializer.serializeStr(this.authenticationFunction);
   }
@@ -119,10 +119,10 @@ export class SuiDerivedPublicKey extends AccountPublicKey {
   static deserialize(deserializer: Deserializer) {
     const domain = deserializer.deserializeStr();
     const suiAccountAddressBytes = deserializer.deserializeFixedBytes(
-      SuiDerivedPublicKey.SUI_PUBLIC_KEY_LENGTH,
+      SuiDerivedPublicKey.SUI_PUBLIC_KEY_LENGTH
     );
     const suiAccountAddress = Hex.fromHexInput(
-      suiAccountAddressBytes,
+      suiAccountAddressBytes
     ).toString();
     const authenticationFunction = deserializer.deserializeStr();
     return new SuiDerivedPublicKey({
