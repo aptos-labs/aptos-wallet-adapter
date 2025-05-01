@@ -124,28 +124,32 @@ function ConnectWalletDialog({
   const { aptosConnectWallets, availableWallets, installableWallets } =
     groupAndSortWallets(
       [...wallets, ...notDetectedWallets],
-      walletSortingOptions,
+      walletSortingOptions
     );
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
 
-  const { evmWallets, solanaWallets, aptosWallets } = availableWallets.reduce<{
-    evmWallets: AdapterWallet[];
-    solanaWallets: AdapterWallet[];
-    aptosWallets: AdapterWallet[];
-  }>(
-    (acc, wallet) => {
-      if (wallet.name.includes("Ethereum")) {
-        acc.evmWallets.push(wallet);
-      } else if (wallet.name.includes("Solana")) {
-        acc.solanaWallets.push(wallet);
-      } else {
-        acc.aptosWallets.push(wallet);
-      }
-      return acc;
-    },
-    { evmWallets: [], solanaWallets: [], aptosWallets: [] },
-  );
+  const { evmWallets, solanaWallets, aptosWallets, suiWallets } =
+    availableWallets.reduce<{
+      evmWallets: AdapterWallet[];
+      solanaWallets: AdapterWallet[];
+      aptosWallets: AdapterWallet[];
+      suiWallets: AdapterWallet[];
+    }>(
+      (acc, wallet) => {
+        if (wallet.name.includes("Ethereum")) {
+          acc.evmWallets.push(wallet);
+        } else if (wallet.name.includes("Solana")) {
+          acc.solanaWallets.push(wallet);
+        } else if (wallet.name.includes("Sui")) {
+          acc.suiWallets.push(wallet);
+        } else {
+          acc.aptosWallets.push(wallet);
+        }
+        return acc;
+      },
+      { evmWallets: [], solanaWallets: [], aptosWallets: [], suiWallets: [] }
+    );
 
   const {
     evmInstallableWallets,
@@ -170,7 +174,7 @@ function ConnectWalletDialog({
       evmInstallableWallets: [],
       solanaInstallableWallets: [],
       aptosInstallableWallets: [],
-    },
+    }
   );
 
   return (
@@ -223,10 +227,11 @@ function ConnectWalletDialog({
         <div className="flex flex-col gap-3 pt-3">
           {/* Handle Aptos wallets */}
           <Tabs defaultValue="aptos">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="aptos">Aptos</TabsTrigger>
               <TabsTrigger value="solana">Solana</TabsTrigger>
               <TabsTrigger value="ethereum">Ethereum</TabsTrigger>
+              <TabsTrigger value="sui">Sui</TabsTrigger>
             </TabsList>
             <TabsContent value="aptos">
               {aptosWallets.map((wallet) => (
@@ -310,6 +315,16 @@ function ConnectWalletDialog({
                   </CollapsibleContent>
                 </Collapsible>
               )}
+            </TabsContent>
+            {/* Handle Sui wallets */}
+            <TabsContent value="sui">
+              {suiWallets.map((wallet) => (
+                <WalletRow
+                  key={wallet.name}
+                  wallet={wallet}
+                  onConnect={close}
+                />
+              ))}
             </TabsContent>
           </Tabs>
         </div>
