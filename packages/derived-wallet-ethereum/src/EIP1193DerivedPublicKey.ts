@@ -26,8 +26,6 @@ export interface EIP1193DerivedPublicKeyParams {
   authenticationFunction: string;
 }
 
-export type VerifySignatureArgsWithChainId = VerifySignatureArgs & { chainId: number };
-
 export class EIP1193DerivedPublicKey extends AccountPublicKey {
   readonly domain: string;
   readonly ethereumAddress: EthereumAddress;
