@@ -1,5 +1,17 @@
 # @aptos-labs/derived-wallet-ethereum
 
+## 0.2.0
+
+### Minor Changes
+
+- 476003f: Add a warning to the message to sign in the wallet
+
+### Patch Changes
+
+- Updated dependencies [1b67719]
+- Updated dependencies [476003f]
+  - @aptos-labs/derived-wallet-base@0.2.0
+
 ## 0.1.3
 
 ### Patch Changes
