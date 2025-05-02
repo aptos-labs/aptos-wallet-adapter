@@ -1,5 +1,15 @@
 # @aptos-labs/wallet-adapter-react
 
+## 6.0.0
+
+### Patch Changes
+
+- Updated dependencies [476003f]
+- Updated dependencies [1b67719]
+- Updated dependencies [476003f]
+  - @aptos-labs/derived-wallet-solana@0.2.4
+  - @aptos-labs/derived-wallet-ethereum@0.2.0
+
 ## 5.0.5
 
 ### Patch Changes

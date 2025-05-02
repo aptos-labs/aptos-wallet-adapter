@@ -1,5 +1,15 @@
 # @aptos-labs/derived-wallet-base
 
+## 0.2.0
+
+### Minor Changes
+
+- 476003f: Add a warning to the message to sign in the wallet
+
+### Patch Changes
+
+- 1b67719: Add Solana sign message fallback support
+
 ## 0.1.2
 
 ### Patch Changes

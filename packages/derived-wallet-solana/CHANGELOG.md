@@ -1,5 +1,15 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.2.4
+
+### Patch Changes
+
+- 476003f: Add the accountIdentity when creating the AccountAuthenticatorAbstraction in the derived wallet"
+- 1b67719: Add Solana sign message fallback support
+- Updated dependencies [1b67719]
+- Updated dependencies [476003f]
+  - @aptos-labs/derived-wallet-base@0.2.0
+
 ## 0.2.3
 
 ### Patch Changes
