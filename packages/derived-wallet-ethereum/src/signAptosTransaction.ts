@@ -64,7 +64,9 @@ export async function signAptosTransactionWithEthereum(input: SignAptosTransacti
     // Serialize the signature with the signature type as the first byte.
     const serializer = new Serializer();
     serializer.serializeU8(SIGNATURE_TYPE);
-    const signature = new EIP1193DerivedSignature(window.location.origin, issuedAt, siweSignature);
+    // Remove the trailing colon from the scheme
+    const scheme = window.location.protocol.slice(0, -1);
+    const signature = new EIP1193DerivedSignature(scheme, issuedAt, siweSignature);
     signature.serialize(serializer)
     const abstractSignature = serializer.toUint8Array();
 
