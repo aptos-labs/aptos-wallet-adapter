@@ -72,7 +72,7 @@ export async function signAptosMessageWithEthereum(input: SignAptosMessageWithEt
   const response = await wrapEthersUserResponse(ethereumAccount.signMessage(siweMessage));
 
   return mapUserResponse(response, (siweSignature) => {
-    const signature = new EIP1193DerivedSignature(issuedAt, siweSignature);
+    const signature = new EIP1193DerivedSignature(window.location.origin, issuedAt, siweSignature);
     const fullMessage = new TextDecoder().decode(signingMessage);
     return {
       prefix: 'APTOS',

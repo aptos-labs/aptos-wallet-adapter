@@ -20,7 +20,7 @@ function createSiweEnvelope(input: CreateSiweEnvelopeInput & { statement: string
   return createSiweMessage({
     address: ethereumAddress,
     domain: window.location.host,
-    uri: window.location.host,
+    uri: window.location.origin,
     chainId,
     nonce: digestHex,
     statement,

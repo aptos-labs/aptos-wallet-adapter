@@ -13,6 +13,12 @@ import { createSiweEnvelopeForAptosTransaction } from './createSiweEnvelope';
 import { EIP1193DerivedSignature } from './EIP1193DerivedSignature';
 import { EthereumAddress, wrapEthersUserResponse } from './shared';
 
+/**
+ * A first byte of the signature that indicates the "message type", this is defined in the
+ * authentication function on chain, and lets us identify the type of the message and to make
+ * changes in the future if needed.
+ */
+export const SIGNATURE_TYPE = 0;
 export interface SignAptosTransactionWithEthereumInput {
   eip1193Provider: Eip1193Provider | BrowserProvider;
   ethereumAddress?: EthereumAddress;
@@ -57,8 +63,8 @@ export async function signAptosTransactionWithEthereum(input: SignAptosTransacti
 
     // Serialize the signature with the signature type as the first byte.
     const serializer = new Serializer();
-    serializer.serializeU8(0);
-    const signature = new EIP1193DerivedSignature(issuedAt, siweSignature);
+    serializer.serializeU8(SIGNATURE_TYPE);
+    const signature = new EIP1193DerivedSignature(window.location.origin, issuedAt, siweSignature);
     signature.serialize(serializer)
     const abstractSignature = serializer.toUint8Array();
 
