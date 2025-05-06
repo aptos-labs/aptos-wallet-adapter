@@ -11,8 +11,8 @@ import { isRedirectable } from "./helpers";
 export function partitionWallets(
   wallets: ReadonlyArray<AdapterWallet | AdapterNotDetectedWallet>,
   partitionFunction: (
-    wallet: AdapterWallet | AdapterNotDetectedWallet
-  ) => boolean = isInstalledOrLoadable
+    wallet: AdapterWallet | AdapterNotDetectedWallet,
+  ) => boolean = isInstalledOrLoadable,
 ) {
   const defaultWallets: Array<AdapterWallet> = [];
   const moreWallets: Array<AdapterNotDetectedWallet> = [];
@@ -27,7 +27,7 @@ export function partitionWallets(
 
 /** Returns true if the wallet is installed or loadable. */
 export function isInstalledOrLoadable(
-  wallet: AdapterWallet | AdapterNotDetectedWallet
+  wallet: AdapterWallet | AdapterNotDetectedWallet,
 ) {
   return wallet.readyState === WalletReadyState.Installed;
 }
@@ -37,7 +37,7 @@ export function isInstalledOrLoadable(
  * This can be used to decide whether to show a "Connect" button or "Install" link in the UI.
  */
 export function isInstallRequired(
-  wallet: AdapterWallet | AdapterNotDetectedWallet
+  wallet: AdapterWallet | AdapterNotDetectedWallet,
 ) {
   const isWalletReady = isInstalledOrLoadable(wallet);
   const isMobile = !isWalletReady && isRedirectable();
@@ -62,11 +62,11 @@ export function isAptosConnectWallet(wallet: WalletInfo | AdapterWallet) {
  * Aptos Connect is a web wallet that uses social login to create accounts on the blockchain.
  */
 export function getAptosConnectWallets(
-  wallets: ReadonlyArray<AdapterWallet | AdapterNotDetectedWallet>
+  wallets: ReadonlyArray<AdapterWallet | AdapterNotDetectedWallet>,
 ) {
   const { defaultWallets, moreWallets } = partitionWallets(
     wallets,
-    isAptosConnectWallet
+    isAptosConnectWallet,
   );
   return { aptosConnectWallets: defaultWallets, otherWallets: moreWallets };
 }
@@ -77,12 +77,12 @@ export interface WalletSortingOptions {
   /** An optional function for sorting wallets that are currently installed or loadable. */
   sortAvailableWallets?: (
     a: AdapterWallet | AdapterNotDetectedWallet,
-    b: AdapterWallet | AdapterNotDetectedWallet
+    b: AdapterWallet | AdapterNotDetectedWallet,
   ) => number;
   /** An optional function for sorting wallets that are NOT currently installed or loadable. */
   sortInstallableWallets?: (
     a: AdapterWallet | AdapterNotDetectedWallet,
-    b: AdapterWallet | AdapterNotDetectedWallet
+    b: AdapterWallet | AdapterNotDetectedWallet,
   ) => number;
 }
 
@@ -101,7 +101,7 @@ export interface WalletSortingOptions {
  */
 export function groupAndSortWallets(
   wallets: ReadonlyArray<AdapterWallet | AdapterNotDetectedWallet>,
-  options?: WalletSortingOptions
+  options?: WalletSortingOptions,
 ) {
   const { aptosConnectWallets, otherWallets } = getAptosConnectWallets(wallets);
   const { defaultWallets, moreWallets } = partitionWallets(otherWallets);

@@ -24,7 +24,8 @@ script {
     }
 }
 */
-const TRANSFER_SCRIPT = "0xa11ceb0b0700000a0601000203020605080d071525083a40107a1f010200030201000104060c060c05030003060c0503083c53454c463e5f30046d61696e0d6170746f735f6163636f756e74087472616e73666572ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000000000000000000114636f6d70696c6174696f6e5f6d65746164617461090003322e3003322e31000001070b000b01010b020b03110002"
+const TRANSFER_SCRIPT =
+  "0xa11ceb0b0700000a0601000203020605080d071525083a40107a1f010200030201000104060c060c05030003060c0503083c53454c463e5f30046d61696e0d6170746f735f6163636f756e74087472616e73666572ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000000000000000000114636f6d70696c6174696f6e5f6d65746164617461090003322e3003322e31000001070b000b01010b020b03110002";
 export function MultiAgent() {
   const { toast } = useToast();
   const { connected, account, network, signTransaction, submitTransaction } =
@@ -54,7 +55,7 @@ export function MultiAgent() {
     setSecondarySignerAccount(secondarySigner);
 
     const transactionToSign = await aptosClient(
-      network
+      network,
     ).transaction.build.multiAgent({
       sender: account.address,
       secondarySignerAddresses: [secondarySigner.accountAddress],
@@ -88,10 +89,13 @@ export function MultiAgent() {
       throw new Error("No secondarySignerAccount");
     }
     try {
-      if(!secondarySignerAccount) {
+      if (!secondarySignerAccount) {
         throw new Error("No secondarySignerAccount");
       }
-      const authenticator = aptosClient(network).sign({signer: secondarySignerAccount, transaction: transactionToSubmit});
+      const authenticator = aptosClient(network).sign({
+        signer: secondarySignerAccount,
+        transaction: transactionToSubmit,
+      });
       setSecondarySignerAuthenticator(authenticator);
     } catch (error) {
       console.error(error);

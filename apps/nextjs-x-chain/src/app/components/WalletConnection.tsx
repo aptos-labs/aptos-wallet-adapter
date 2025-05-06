@@ -1,16 +1,18 @@
-import { DisplayValue, LabelValueGrid } from '@/components/LabelValueGrid';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Network } from '@aptos-labs/ts-sdk';
+import { DisplayValue, LabelValueGrid } from "@/components/LabelValueGrid";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Network } from "@aptos-labs/ts-sdk";
 import {
   AccountInfo,
   AdapterWallet,
-  AptosChangeNetworkOutput, isAptosNetwork,
+  AptosChangeNetworkOutput,
+  isAptosNetwork,
   NetworkInfo,
-  OriginWalletDetails, useWallet,
-} from '@aptos-labs/wallet-adapter-react';
-import Image from 'next/image';
+  OriginWalletDetails,
+  useWallet,
+} from "@aptos-labs/wallet-adapter-react";
+import Image from "next/image";
 
 interface WalletConnectionProps {
   account: AccountInfo | null;

@@ -24,25 +24,29 @@ export function Sponsor() {
   const [feepayerAuthenticator, setFeepayerAuthenticator] =
     useState<AccountAuthenticator>();
 
-  const [senderAccount, setSenderAccount] =
-    useState<Account | null>();
+  const [senderAccount, setSenderAccount] = useState<Account | null>();
 
   let sendable = isSendableNetwork(connected, network?.name);
 
   // Generate a raw transaction using the SDK
-  const generateTransaction = async (sender: Account): Promise<AnyRawTransaction> => {
+  const generateTransaction = async (
+    sender: Account,
+  ): Promise<AnyRawTransaction> => {
     if (!account) {
       throw new Error("no account");
     }
     const transactionToSign = await aptosClient(
-      network
+      network,
     ).transaction.build.simple({
       sender: sender.accountAddress,
       withFeePayer: true,
       data: {
         function: "0x1::resource_account::create_resource_account",
         typeArguments: [],
-        functionArguments: [account.address.toString(), AccountAddress.from("0x0").toUint8Array()],
+        functionArguments: [
+          account.address.toString(),
+          AccountAddress.from("0x0").toUint8Array(),
+        ],
       },
     });
     transactionToSign.feePayerAddress = account.address;
@@ -57,9 +61,7 @@ export function Sponsor() {
     setTransactionToSubmit(transaction);
 
     try {
-      const authenticator = aptosClient(
-        network
-      ).transaction.sign({
+      const authenticator = aptosClient(network).transaction.sign({
         signer: sender,
         transaction: transaction,
       });
