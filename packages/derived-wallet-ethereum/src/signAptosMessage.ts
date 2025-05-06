@@ -4,20 +4,18 @@ import {
   StructuredMessage,
   StructuredMessageInput,
 } from "@aptos-labs/derived-wallet-base";
-import { hashValues } from "@aptos-labs/ts-sdk";
 import {
   AptosSignMessageOutput,
   UserResponse,
 } from "@aptos-labs/wallet-standard";
 import { BrowserProvider, Eip1193Provider } from "ethers";
-import { createSiweEnvelopeForAptosStructuredMessage } from "./createSiweEnvelope";
 import { EIP1193DerivedPublicKey } from "./EIP1193DerivedPublicKey";
-import { EIP1193DerivedSignature } from "./EIP1193DerivedSignature";
+import { EIP1193Signature } from "./EIP1193DerivedSignature";
 import { EthereumAddress, wrapEthersUserResponse } from "./shared";
 
 export interface StructuredMessageInputWithChainId
   extends StructuredMessageInput {
-  chainId: number;
+  chainId?: number;
 }
 
 export interface SignAptosMessageWithEthereumInput {
@@ -28,7 +26,7 @@ export interface SignAptosMessageWithEthereumInput {
 }
 
 export async function signAptosMessageWithEthereum(
-  input: SignAptosMessageWithEthereumInput,
+  input: SignAptosMessageWithEthereumInput
 ): Promise<UserResponse<AptosSignMessageOutput>> {
   const { authenticationFunction, messageInput } = input;
   const eip1193Provider =
@@ -65,29 +63,13 @@ export async function signAptosMessageWithEthereum(
   };
 
   const signingMessage = encodeStructuredMessage(structuredMessage);
-  const signingMessageDigest = hashValues([signingMessage]);
-
-  // We need to provide `issuedAt` externally so that we can match it with the signature
-  const issuedAt = new Date();
-  const siweMessage = createSiweEnvelopeForAptosStructuredMessage({
-    ethereumAddress,
-    chainId,
-    structuredMessage,
-    signingMessageDigest,
-    issuedAt,
-  });
 
   const response = await wrapEthersUserResponse(
-    ethereumAccount.signMessage(siweMessage),
+    ethereumAccount.signMessage(signingMessage)
   );
 
   return mapUserResponse(response, (siweSignature) => {
-    const scheme = window.location.protocol.slice(0, -1);
-    const signature = new EIP1193DerivedSignature(
-      scheme,
-      issuedAt,
-      siweSignature,
-    );
+    const signature = new EIP1193Signature(siweSignature);
     const fullMessage = new TextDecoder().decode(signingMessage);
     return {
       prefix: "APTOS",
