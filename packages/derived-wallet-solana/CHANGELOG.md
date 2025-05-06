@@ -1,5 +1,13 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.2.5
+
+### Patch Changes
+
+- 33d0055: Use aptos ts-sdk version 2.0.0 as a peer dependency
+- Updated dependencies [33d0055]
+  - @aptos-labs/derived-wallet-base@0.2.1
+
 ## 0.2.4
 
 ### Patch Changes
