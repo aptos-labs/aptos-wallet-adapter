@@ -3,7 +3,7 @@ import {
   UserRejection,
   UserResponse,
   UserResponseStatus,
-} from '@aptos-labs/wallet-standard';
+} from "@aptos-labs/wallet-standard";
 
 export function makeUserApproval<T>(args: T): UserApproval<T> {
   return {
@@ -18,9 +18,18 @@ export function makeUserRejection(): UserRejection {
 
 export type MaybeAsync<T> = T | Promise<T>;
 
-export function mapUserResponse<Src, Dst>(response: UserResponse<Src>, mapFn: (src: Src) => Dst): UserResponse<Dst>
-export function mapUserResponse<Src, Dst>(response: UserResponse<Src>, mapFn: (src: Src) => Promise<Dst>): Promise<UserResponse<Dst>>
-export function mapUserResponse<Src, Dst>(response: UserResponse<Src>, mapFn: (src: Src) => MaybeAsync<Dst>): MaybeAsync<UserResponse<Dst>> {
+export function mapUserResponse<Src, Dst>(
+  response: UserResponse<Src>,
+  mapFn: (src: Src) => Dst,
+): UserResponse<Dst>;
+export function mapUserResponse<Src, Dst>(
+  response: UserResponse<Src>,
+  mapFn: (src: Src) => Promise<Dst>,
+): Promise<UserResponse<Dst>>;
+export function mapUserResponse<Src, Dst>(
+  response: UserResponse<Src>,
+  mapFn: (src: Src) => MaybeAsync<Dst>,
+): MaybeAsync<UserResponse<Dst>> {
   if (response.status === UserResponseStatus.REJECTED) {
     return makeUserRejection();
   }

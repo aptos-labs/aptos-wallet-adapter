@@ -6,13 +6,21 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 // Imports for registering a browser extension wallet plugin on page load
 import { MyWallet } from "@/utils/standardWallet";
 import { Network } from "@aptos-labs/ts-sdk";
-import { OriginWalletDetails, useWallet } from "@aptos-labs/wallet-adapter-react";
+import {
+  OriginWalletDetails,
+  useWallet,
+} from "@aptos-labs/wallet-adapter-react";
 import { registerWallet } from "@aptos-labs/wallet-standard";
 import { init as initTelegram } from "@telegram-apps/sdk";
 import { AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { AccountBalance, CCTPTransfer, WalletConnection, WalletSelection } from './components';
+import {
+  AccountBalance,
+  CCTPTransfer,
+  WalletConnection,
+  WalletSelection,
+} from "./components";
 
 // Example of how to register a browser extension wallet plugin.
 // Browser extension wallets should call registerWallet once on page load.
@@ -88,15 +96,12 @@ export default function Home() {
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Warning</AlertTitle>
               <AlertDescription>
-                The transactions flows below will not work on the Mainnet network.
+                The transactions flows below will not work on the Mainnet
+                network.
               </AlertDescription>
             </Alert>
           )}
-          <AccountBalance
-            account={account}
-            network={network}
-            wallet={wallet}
-          />
+          <AccountBalance account={account} network={network} wallet={wallet} />
           <SingleSigner />
           {network?.name !== Network.DEVNET && (
             <CCTPTransfer
@@ -109,4 +114,3 @@ export default function Home() {
     </main>
   );
 }
-

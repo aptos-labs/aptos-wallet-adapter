@@ -1,4 +1,10 @@
-import { Deserializer, Hex, HexInput, Serializer, Signature } from '@aptos-labs/ts-sdk';
+import {
+  Deserializer,
+  Hex,
+  HexInput,
+  Serializer,
+  Signature,
+} from "@aptos-labs/ts-sdk";
 
 export class EIP1193DerivedSignature extends Signature {
   static readonly LENGTH = 65;
@@ -14,7 +20,9 @@ export class EIP1193DerivedSignature extends Signature {
     super();
     this._siweSignature = Hex.fromHexInput(siweSignature).toUint8Array();
     if (this._siweSignature.length !== EIP1193DerivedSignature.LENGTH) {
-      throw new Error(`Expected signature length to be ${EIP1193DerivedSignature.LENGTH} bytes`);
+      throw new Error(
+        `Expected signature length to be ${EIP1193DerivedSignature.LENGTH} bytes`,
+      );
     }
     this.issuedAt = issuedAt;
     this.scheme = scheme;
