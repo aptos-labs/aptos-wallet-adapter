@@ -1,5 +1,14 @@
 # @aptos-labs/derived-wallet-ethereum
 
+## 0.2.1
+
+### Patch Changes
+
+- 33d0055: Use aptos ts-sdk version 2.0.0 as a peer dependency
+- a64a658: Add the URI scheme to the message URI field and EIP1193DerivedSignature
+- Updated dependencies [33d0055]
+  - @aptos-labs/derived-wallet-base@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes
