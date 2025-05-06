@@ -23,7 +23,7 @@ export function getSDKWallets(dappConfig?: DappConfig) {
         network: dappConfig?.network,
         dappId: dappConfig?.aptosConnectDappId,
         ...dappConfig?.aptosConnect,
-      }),
+      })
     );
 
     if (
@@ -37,7 +37,7 @@ export function getSDKWallets(dappConfig?: DappConfig) {
           network: dappConfig.network as Network.MAINNET | Network.TESTNET,
           manifestURL: dappConfig.mizuwallet.manifestURL,
           appId: dappConfig.mizuwallet.appId,
-        }),
+        }) as any // TODO: fix type mismatch
       );
     }
   }
@@ -56,7 +56,7 @@ export function getSDKWallets(dappConfig?: DappConfig) {
       new MSafeWallet({
         ...dappConfig?.msafeWalletConfig,
         network: dappConfig.network,
-      }),
+      })
     );
   }
 
