@@ -1,4 +1,7 @@
-import { DerivableAbstractPublicKey, mapUserResponse } from '@aptos-labs/derived-wallet-base';
+import {
+  DerivableAbstractPublicKey,
+  mapUserResponse,
+} from "@aptos-labs/derived-wallet-base";
 import {
   AccountAuthenticator,
   AccountAuthenticatorAbstraction,
@@ -6,12 +9,12 @@ import {
   generateSigningMessageForTransaction,
   hashValues,
   Serializer,
-} from '@aptos-labs/ts-sdk';
+} from "@aptos-labs/ts-sdk";
 import { UserResponse } from "@aptos-labs/wallet-standard";
-import { BrowserProvider, Eip1193Provider } from 'ethers';
-import { createSiweEnvelopeForAptosTransaction } from './createSiweEnvelope';
-import { EIP1193DerivedSignature } from './EIP1193DerivedSignature';
-import { EthereumAddress, wrapEthersUserResponse } from './shared';
+import { BrowserProvider, Eip1193Provider } from "ethers";
+import { createSiweEnvelopeForAptosTransaction } from "./createSiweEnvelope";
+import { EIP1193DerivedSignature } from "./EIP1193DerivedSignature";
+import { EthereumAddress, wrapEthersUserResponse } from "./shared";
 
 /**
  * A first byte of the signature that indicates the "message type", this is defined in the
@@ -26,18 +29,21 @@ export interface SignAptosTransactionWithEthereumInput {
   rawTransaction: AnyRawTransaction;
 }
 
-export async function signAptosTransactionWithEthereum(input: SignAptosTransactionWithEthereumInput): Promise<UserResponse<AccountAuthenticator>> {
+export async function signAptosTransactionWithEthereum(
+  input: SignAptosTransactionWithEthereumInput,
+): Promise<UserResponse<AccountAuthenticator>> {
   const { authenticationFunction, rawTransaction } = input;
-  const eip1193Provider = input.eip1193Provider instanceof BrowserProvider
-    ? input.eip1193Provider
-    : new BrowserProvider(input.eip1193Provider);
+  const eip1193Provider =
+    input.eip1193Provider instanceof BrowserProvider
+      ? input.eip1193Provider
+      : new BrowserProvider(input.eip1193Provider);
 
   const accounts = await eip1193Provider.listAccounts();
   const ethereumAccount = input.ethereumAddress
     ? accounts.find((account) => account.address === input.ethereumAddress)
     : accounts[0];
   if (!ethereumAccount) {
-    throw new Error('Account not connected');
+    throw new Error("Account not connected");
   }
   const ethereumAddress = ethereumAccount.address as EthereumAddress;
 
@@ -57,27 +63,35 @@ export async function signAptosTransactionWithEthereum(input: SignAptosTransacti
     issuedAt,
   });
 
-  const response = await wrapEthersUserResponse(ethereumAccount.signMessage(siweMessage));
+  const response = await wrapEthersUserResponse(
+    ethereumAccount.signMessage(siweMessage),
+  );
 
   return mapUserResponse(response, (siweSignature) => {
-
     // Serialize the signature with the signature type as the first byte.
     const serializer = new Serializer();
     serializer.serializeU8(SIGNATURE_TYPE);
     // Remove the trailing colon from the scheme
     const scheme = window.location.protocol.slice(0, -1);
-    const signature = new EIP1193DerivedSignature(scheme, issuedAt, siweSignature);
-    signature.serialize(serializer)
+    const signature = new EIP1193DerivedSignature(
+      scheme,
+      issuedAt,
+      siweSignature,
+    );
+    signature.serialize(serializer);
     const abstractSignature = serializer.toUint8Array();
 
     // Serialize the abstract public key.
-    const abstractPublicKey = new DerivableAbstractPublicKey(ethereumAddress, window.location.host);
-    
+    const abstractPublicKey = new DerivableAbstractPublicKey(
+      ethereumAddress,
+      window.location.host,
+    );
+
     return new AccountAuthenticatorAbstraction(
       authenticationFunction,
       signingMessageDigest,
       abstractSignature,
-      abstractPublicKey.bcsToBytes()
+      abstractPublicKey.bcsToBytes(),
     );
   });
 }

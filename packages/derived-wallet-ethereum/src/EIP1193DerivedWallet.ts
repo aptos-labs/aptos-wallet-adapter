@@ -1,11 +1,15 @@
-import { fetchDevnetChainId, isNullCallback, mapUserResponse } from '@aptos-labs/derived-wallet-base';
+import {
+  fetchDevnetChainId,
+  isNullCallback,
+  mapUserResponse,
+} from "@aptos-labs/derived-wallet-base";
 import {
   AccountAuthenticator,
   AnyRawTransaction,
   Network,
   NetworkToChainId,
   NetworkToNodeAPI,
-} from '@aptos-labs/ts-sdk';
+} from "@aptos-labs/ts-sdk";
 import {
   AccountInfo,
   APTOS_CHAINS,
@@ -20,14 +24,15 @@ import {
   UserResponseStatus,
   WalletIcon,
 } from "@aptos-labs/wallet-standard";
-import { BrowserProvider } from 'ethers';
-import type { EIP1193Provider, EIP6963ProviderDetail } from 'mipd';
-import { EIP1193DerivedPublicKey } from './EIP1193DerivedPublicKey';
-import { EthereumAddress, wrapEthersUserResponse } from './shared';
-import { signAptosMessageWithEthereum } from './signAptosMessage';
-import { signAptosTransactionWithEthereum } from './signAptosTransaction';
+import { BrowserProvider } from "ethers";
+import type { EIP1193Provider, EIP6963ProviderDetail } from "mipd";
+import { EIP1193DerivedPublicKey } from "./EIP1193DerivedPublicKey";
+import { EthereumAddress, wrapEthersUserResponse } from "./shared";
+import { signAptosMessageWithEthereum } from "./signAptosMessage";
+import { signAptosTransactionWithEthereum } from "./signAptosTransaction";
 
-const defaultAuthenticationFunction = '0x1::ethereum_derivable_account::authenticate';
+const defaultAuthenticationFunction =
+  "0x1::ethereum_derivable_account::authenticate";
 
 export interface EIP1193DerivedWalletOptions {
   authenticationFunction?: string;
@@ -48,7 +53,10 @@ export class EIP1193DerivedWallet implements AptosWallet {
   readonly accounts = [];
   readonly chains = APTOS_CHAINS;
 
-  constructor(providerDetail: EIP6963ProviderDetail, options: EIP1193DerivedWalletOptions = {}) {
+  constructor(
+    providerDetail: EIP6963ProviderDetail,
+    options: EIP1193DerivedWalletOptions = {},
+  ) {
     const { info, provider } = providerDetail;
     const {
       authenticationFunction = defaultAuthenticationFunction,
@@ -68,43 +76,43 @@ export class EIP1193DerivedWallet implements AptosWallet {
   }
 
   readonly features: AptosFeatures = {
-    'aptos:connect': {
-      version: '1.0.0',
+    "aptos:connect": {
+      version: "1.0.0",
       connect: () => this.connect(),
     },
-    'aptos:disconnect': {
-      version: '1.0.0',
+    "aptos:disconnect": {
+      version: "1.0.0",
       disconnect: () => this.disconnect(),
     },
-    'aptos:account': {
-      version: '1.0.0',
+    "aptos:account": {
+      version: "1.0.0",
       account: () => this.getActiveAccount(),
     },
-    'aptos:onAccountChange': {
-      version: '1.0.0',
+    "aptos:onAccountChange": {
+      version: "1.0.0",
       onAccountChange: async (callback) => this.onActiveAccountChange(callback),
     },
-    'aptos:network': {
-      version: '1.0.0',
+    "aptos:network": {
+      version: "1.0.0",
       network: () => this.getActiveNetwork(),
     },
-    'aptos:changeNetwork': {
-      version: '1.0.0',
+    "aptos:changeNetwork": {
+      version: "1.0.0",
       changeNetwork: (newNetwork) => this.changeNetwork(newNetwork),
     },
-    'aptos:onNetworkChange': {
-      version: '1.0.0',
+    "aptos:onNetworkChange": {
+      version: "1.0.0",
       onNetworkChange: async (callback) => this.onActiveNetworkChange(callback),
     },
     "aptos:signMessage": {
-      version: '1.0.0',
+      version: "1.0.0",
       signMessage: (args) => this.signMessage(args),
     },
     "aptos:signTransaction": {
-      version: '1.0.0',
+      version: "1.0.0",
       signTransaction: (...args) => this.signTransaction(...args),
     },
-  }
+  };
 
   private derivePublicKey(ethereumAddress: EthereumAddress) {
     return new EIP1193DerivedPublicKey({
@@ -117,9 +125,13 @@ export class EIP1193DerivedWallet implements AptosWallet {
   // region Connection
 
   async connect(): Promise<UserResponse<AptosConnectOutput>> {
-    const response = await wrapEthersUserResponse(this.eip1193Ethers.getSigner());
+    const response = await wrapEthersUserResponse(
+      this.eip1193Ethers.getSigner(),
+    );
     return mapUserResponse(response, (account) => {
-      const publicKey = this.derivePublicKey(account.address as EthereumAddress);
+      const publicKey = this.derivePublicKey(
+        account.address as EthereumAddress,
+      );
       const aptosAddress = publicKey.authKey().derivedAddress();
       return new AccountInfo({ publicKey, address: aptosAddress });
     });
@@ -136,19 +148,23 @@ export class EIP1193DerivedWallet implements AptosWallet {
   async getActiveAccount() {
     const [activeAccount] = await this.eip1193Ethers.listAccounts();
     if (!activeAccount) {
-      throw new Error('Account not connected');
+      throw new Error("Account not connected");
     }
-    const publicKey = this.derivePublicKey(activeAccount.address as EthereumAddress);
+    const publicKey = this.derivePublicKey(
+      activeAccount.address as EthereumAddress,
+    );
     const aptosAddress = publicKey.authKey().derivedAddress();
     return new AccountInfo({ publicKey, address: aptosAddress });
   }
 
-  private onAccountsChangedListeners: ((newAccounts: EthereumAddress[]) => void)[] = []
+  private onAccountsChangedListeners: ((
+    newAccounts: EthereumAddress[],
+  ) => void)[] = [];
 
   onActiveAccountChange(callback: (newAccount: AccountInfo) => void) {
     if (isNullCallback(callback)) {
       for (const listener of this.onAccountsChangedListeners) {
-        this.eip1193Provider.removeListener('accountsChanged', listener);
+        this.eip1193Provider.removeListener("accountsChanged", listener);
       }
       this.onAccountsChangedListeners = [];
     } else {
@@ -163,7 +179,7 @@ export class EIP1193DerivedWallet implements AptosWallet {
         callback(account);
       };
       this.onAccountsChangedListeners.push(listener);
-      this.eip1193Provider.on('accountsChanged', listener);
+      this.eip1193Provider.on("accountsChanged", listener);
     }
   }
 
@@ -171,7 +187,9 @@ export class EIP1193DerivedWallet implements AptosWallet {
 
   // region Networks
 
-  private onActiveNetworkChangeListeners: ((newNetwork: NetworkInfo) => void)[] = [];
+  private onActiveNetworkChangeListeners: ((
+    newNetwork: NetworkInfo,
+  ) => void)[] = [];
 
   async getActiveNetwork(): Promise<NetworkInfo> {
     const chainId = NetworkToChainId[this.defaultNetwork];
@@ -183,10 +201,12 @@ export class EIP1193DerivedWallet implements AptosWallet {
     };
   }
 
-  async changeNetwork(newNetwork: NetworkInfo): Promise<UserResponse<AptosChangeNetworkOutput>> {
+  async changeNetwork(
+    newNetwork: NetworkInfo,
+  ): Promise<UserResponse<AptosChangeNetworkOutput>> {
     const { name, chainId, url } = newNetwork;
     if (name === Network.CUSTOM) {
-      throw new Error('Custom network not currently supported');
+      throw new Error("Custom network not currently supported");
     }
     this.defaultNetwork = name;
     for (const listener of this.onActiveNetworkChangeListeners) {
@@ -214,8 +234,13 @@ export class EIP1193DerivedWallet implements AptosWallet {
 
   // region Signatures
 
-  async signMessage(input: AptosSignMessageInput): Promise<UserResponse<AptosSignMessageOutput>> {
-    const chainId = this.defaultNetwork === Network.DEVNET ? await fetchDevnetChainId() :NetworkToChainId[this.defaultNetwork];
+  async signMessage(
+    input: AptosSignMessageInput,
+  ): Promise<UserResponse<AptosSignMessageOutput>> {
+    const chainId =
+      this.defaultNetwork === Network.DEVNET
+        ? await fetchDevnetChainId()
+        : NetworkToChainId[this.defaultNetwork];
     return signAptosMessageWithEthereum({
       eip1193Provider: this.eip1193Provider,
       authenticationFunction: this.authenticationFunction,
@@ -223,7 +248,7 @@ export class EIP1193DerivedWallet implements AptosWallet {
         ...input,
         chainId,
       },
-    })
+    });
   }
 
   async signTransaction(
@@ -234,7 +259,7 @@ export class EIP1193DerivedWallet implements AptosWallet {
       eip1193Provider: this.eip1193Provider,
       authenticationFunction: this.authenticationFunction,
       rawTransaction,
-    })
+    });
   }
 
   // endregion

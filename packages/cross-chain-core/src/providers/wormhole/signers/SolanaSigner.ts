@@ -34,7 +34,7 @@ export async function signAndSendTransaction(
   request: SolanaUnsignedTransaction<Network>,
   wallet: AdapterWallet | undefined,
   options?: ConfirmOptions,
-  crossChainCore?: CrossChainCore
+  crossChainCore?: CrossChainCore,
 ) {
   if (!wallet || !(wallet instanceof SolanaDerivedWallet)) {
     throw new Error("Invalid wallet type or missing Solana wallet").message;
@@ -44,7 +44,7 @@ export async function signAndSendTransaction(
   // Solana rpc should come from dapp config
   const connection = new Connection(
     crossChainCore?._dappConfig?.solanaConfig?.rpc ??
-      "https://api.devnet.solana.com"
+      "https://api.devnet.solana.com",
   );
   const { blockhash, lastValidBlockHeight } =
     await connection.getLatestBlockhash(commitment);
@@ -61,7 +61,7 @@ export async function signAndSendTransaction(
     blockhash,
     lastValidBlockHeight,
     request,
-    crossChainCore
+    crossChainCore,
   );
 
   let confirmTransactionPromise: Promise<
@@ -96,7 +96,7 @@ export async function signAndSendTransaction(
       blockhash,
       lastValidBlockHeight,
     },
-    commitment
+    commitment,
   );
 
   // This loop will break once the transaction has been confirmed or the block height is exceeded.
@@ -109,7 +109,7 @@ export async function signAndSendTransaction(
       new Promise<null>((resolve) =>
         setTimeout(() => {
           resolve(null);
-        }, txRetryInterval)
+        }, txRetryInterval),
       ),
     ]);
     if (confirmedTx) {
@@ -118,7 +118,7 @@ export async function signAndSendTransaction(
     console.log(
       `Tx not confirmed after ${
         txRetryInterval * txSendAttempts++
-      }ms, resending`
+      }ms, resending`,
     );
     try {
       await connection.sendRawTransaction(serializedTx, sendOptions);
@@ -134,7 +134,7 @@ export async function signAndSendTransaction(
         errorMessage = `Transaction failed: ${JSON.stringify(
           confirmedTx.value.err,
           (_key, value) =>
-            typeof value === "bigint" ? value.toString() : value // Handle bigint props
+            typeof value === "bigint" ? value.toString() : value, // Handle bigint props
         )}`;
       } catch (e: unknown) {
         // Most likely a circular reference error, we can't stringify this error object.
@@ -154,7 +154,7 @@ export async function setPriorityFeeInstructions(
   blockhash: string,
   lastValidBlockHeight: number,
   request: SolanaUnsignedTransaction<Network>,
-  crossChainCore?: CrossChainCore
+  crossChainCore?: CrossChainCore,
 ): Promise<Transaction | VersionedTransaction> {
   const unsignedTx = request.transaction.transaction as Transaction;
 
@@ -166,14 +166,14 @@ export async function setPriorityFeeInstructions(
 
   // Remove existing compute budget instructions if they were added by the SDK
   unsignedTx.instructions = unsignedTx.instructions.filter(
-    computeBudgetIxFilter
+    computeBudgetIxFilter,
   );
   unsignedTx.add(
     ...(await createPriorityFeeInstructions(
       connection,
       unsignedTx,
-      crossChainCore
-    ))
+      crossChainCore,
+    )),
   );
   if (request.transaction.signers) {
     unsignedTx.partialSign(...request.transaction.signers);
@@ -186,14 +186,14 @@ export async function setPriorityFeeInstructions(
 async function createPriorityFeeInstructions(
   connection: Connection,
   transaction: Transaction | VersionedTransaction,
-  crossChainCore?: CrossChainCore
+  crossChainCore?: CrossChainCore,
 ) {
   let unitsUsed = 200_000;
   let simulationAttempts = 0;
 
   simulationLoop: while (true) {
     const response = await connection.simulateTransaction(
-      transaction as Transaction
+      transaction as Transaction,
     );
 
     if (response.value.err) {
@@ -216,7 +216,7 @@ async function createPriorityFeeInstructions(
       throw new Error(
         `Simulation failed: ${JSON.stringify(response.value.err)}\nLogs:\n${(
           response.value.logs || []
-        ).join("\n  ")}`
+        ).join("\n  ")}`,
       ).message;
     } else {
       // Simulation was successful
@@ -234,7 +234,7 @@ async function createPriorityFeeInstructions(
     ComputeBudgetProgram.setComputeUnitLimit({
       // Set compute budget to 120% of the units used in the simulated transaction
       units: unitBudget,
-    })
+    }),
   );
 
   const {
@@ -245,7 +245,7 @@ async function createPriorityFeeInstructions(
   } = crossChainCore?._dappConfig?.solanaConfig?.priorityFeeConfig ?? {};
 
   const calculateFee = async (
-    rpcProvider?: SolanaRpcProvider
+    rpcProvider?: SolanaRpcProvider,
   ): Promise<{ fee: number; methodUsed: "triton" | "default" | "minimum" }> => {
     if (rpcProvider === "triton") {
       // Triton has an experimental RPC method that accepts a percentile paramater
@@ -257,7 +257,7 @@ async function createPriorityFeeInstructions(
           percentile,
           percentileMultiple,
           min,
-          max
+          max,
         );
 
         return {
@@ -277,7 +277,7 @@ async function createPriorityFeeInstructions(
         percentile,
         percentileMultiple,
         min,
-        max
+        max,
       );
 
       return {
@@ -318,7 +318,7 @@ async function createPriorityFeeInstructions(
   });
 
   instructions.push(
-    ComputeBudgetProgram.setComputeUnitPrice({ microLamports: fee })
+    ComputeBudgetProgram.setComputeUnitPrice({ microLamports: fee }),
   );
   return instructions;
 }
@@ -326,7 +326,7 @@ async function createPriorityFeeInstructions(
 // Checks response logs for known errors.
 // Returns when the first error is encountered.
 function checkKnownSimulationError(
-  response: SimulatedTransactionResponse
+  response: SimulatedTransactionResponse,
 ): boolean {
   const errors = {} as any;
 

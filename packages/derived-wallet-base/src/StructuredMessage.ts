@@ -1,6 +1,6 @@
-import { AccountAddressInput } from '@aptos-labs/ts-sdk';
+import { AccountAddressInput } from "@aptos-labs/ts-sdk";
 
-export const structuredMessagePrefix = 'APTOS' as const;
+export const structuredMessagePrefix = "APTOS" as const;
 
 export interface StructuredMessageInput {
   message: string;
@@ -18,7 +18,9 @@ export interface StructuredMessage {
   address?: string;
 }
 
-export function encodeStructuredMessage(structuredMessage: StructuredMessage): Uint8Array {
+export function encodeStructuredMessage(
+  structuredMessage: StructuredMessage,
+): Uint8Array {
   const { address, application, chainId, message, nonce } = structuredMessage;
 
   const optionalParts: string[] = [];
@@ -39,48 +41,52 @@ export function encodeStructuredMessage(structuredMessage: StructuredMessage): U
     `nonce: ${nonce}`,
   ];
 
-  const input = parts.join('\n');
+  const input = parts.join("\n");
   return new TextEncoder().encode(input);
 }
 
 function parsePart(part: string, name: string) {
   const partPrefix = `${name}: `;
-  return part.startsWith(partPrefix) ? part.slice(partPrefix.length) : undefined;
+  return part.startsWith(partPrefix)
+    ? part.slice(partPrefix.length)
+    : undefined;
 }
 
-export function decodeStructuredMessage(encoded: Uint8Array): StructuredMessage {
+export function decodeStructuredMessage(
+  encoded: Uint8Array,
+): StructuredMessage {
   const utf8Decoded = new TextDecoder().decode(encoded);
-  const [prefix, ...parts] = utf8Decoded.split('\n');
+  const [prefix, ...parts] = utf8Decoded.split("\n");
   if (prefix !== structuredMessagePrefix) {
-    throw new Error('Invalid message prefix');
+    throw new Error("Invalid message prefix");
   }
 
   let i = 0;
 
-  const address = parsePart(parts[i], 'address');
+  const address = parsePart(parts[i], "address");
   if (address !== undefined) {
     i += 1;
   }
 
-  const application = parsePart(parts[i], 'application');
+  const application = parsePart(parts[i], "application");
   if (application !== undefined) {
     i += 1;
   }
 
-  const chainIdStr = parsePart(parts[i], 'chainId');
+  const chainIdStr = parsePart(parts[i], "chainId");
   if (chainIdStr !== undefined) {
     i += 1;
   }
 
-  const nonce = parsePart(parts[parts.length - 1], 'nonce');
+  const nonce = parsePart(parts[parts.length - 1], "nonce");
   if (!nonce) {
-    throw new Error('Expected nonce');
+    throw new Error("Expected nonce");
   }
 
-  const messageParts = parts.slice(i, parts.length - 1).join('\n');
-  const message = parsePart(messageParts, 'message');
+  const messageParts = parts.slice(i, parts.length - 1).join("\n");
+  const message = parsePart(messageParts, "message");
   if (!message) {
-    throw new Error('Expected message');
+    throw new Error("Expected message");
   }
 
   return {

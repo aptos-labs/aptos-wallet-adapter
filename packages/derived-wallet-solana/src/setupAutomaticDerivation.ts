@@ -3,10 +3,15 @@ import {
   WalletAdapterCompatibleStandardWallet,
 } from "@solana/wallet-adapter-base";
 import { StandardWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
-import { getWallets } from '@wallet-standard/app';
-import { SolanaDerivedWallet, SolanaDomainWalletOptions } from './SolanaDerivedWallet';
+import { getWallets } from "@wallet-standard/app";
+import {
+  SolanaDerivedWallet,
+  SolanaDomainWalletOptions,
+} from "./SolanaDerivedWallet";
 
-export function setupAutomaticSolanaWalletDerivation(options: SolanaDomainWalletOptions = {}) {
+export function setupAutomaticSolanaWalletDerivation(
+  options: SolanaDomainWalletOptions = {},
+) {
   const api = getWallets();
 
   type UnsubscribeCallback = () => void;
@@ -17,25 +22,33 @@ export function setupAutomaticSolanaWalletDerivation(options: SolanaDomainWallet
     return true;
   };
 
-  const deriveAndRegisterWallet = (wallet: WalletAdapterCompatibleStandardWallet) => {
+  const deriveAndRegisterWallet = (
+    wallet: WalletAdapterCompatibleStandardWallet,
+  ) => {
     const adapter = new StandardWalletAdapter({ wallet });
     const derivedWallet = new SolanaDerivedWallet(adapter, options);
     registrations[wallet.name] = api.register(derivedWallet);
   };
 
   for (const wallet of api.get()) {
-    if (isWalletAdapterCompatibleStandardWallet(wallet) && isWhitelisted(wallet)) {
+    if (
+      isWalletAdapterCompatibleStandardWallet(wallet) &&
+      isWhitelisted(wallet)
+    ) {
       deriveAndRegisterWallet(wallet);
     }
   }
 
-  const offRegister = api.on('register', (wallet) => {
-    if (isWalletAdapterCompatibleStandardWallet(wallet) && isWhitelisted(wallet)) {
+  const offRegister = api.on("register", (wallet) => {
+    if (
+      isWalletAdapterCompatibleStandardWallet(wallet) &&
+      isWhitelisted(wallet)
+    ) {
       deriveAndRegisterWallet(wallet);
     }
   });
 
-  const offUnregister = api.on('unregister', (wallet) => {
+  const offUnregister = api.on("unregister", (wallet) => {
     if (isWalletAdapterCompatibleStandardWallet(wallet)) {
       const unregisterWallet = registrations[wallet.name];
       if (unregisterWallet) {

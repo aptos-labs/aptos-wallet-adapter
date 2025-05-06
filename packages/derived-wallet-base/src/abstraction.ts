@@ -22,7 +22,7 @@ export const ADDRESS_DOMAIN_SEPARATOR = 5;
 export function computeDerivableAuthenticationKey(
   functionInfo: string,
   identity: string,
-  domain: string
+  domain: string,
 ): AuthenticationKey {
   try {
     // TODO: move it to the ts-sdk as the general computation function once we are finalized on the on-chain auth function
@@ -59,14 +59,14 @@ export function computeDerivableAuthenticationKey(
 
 /**
  * The derivable abstract public key of the DAA account.
- * 
+ *
  * @param identity - The identity of the account. Typically it is the wallet public key or account address
  * @param domain - The dapp domain
  */
 export class DerivableAbstractPublicKey extends Serializable {
   constructor(
     public identity: string,
-    public domain: string
+    public domain: string,
   ) {
     super();
   }
