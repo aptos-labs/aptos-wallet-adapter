@@ -1,5 +1,15 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.5.0
+
+### Minor Changes
+
+- 69f2846: Remove Mizu wallet
+
+### Patch Changes
+
+- 69f2846: Bump @aptos-labs/wallet-standard version to 0.4.0
+
 ## 5.4.2
 
 ### Patch Changes
