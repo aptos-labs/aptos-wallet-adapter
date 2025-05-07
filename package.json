@@ -17,7 +17,7 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "publish-packages": "changeset version && changeset publish",
-    "deploy:example": "pnpm run deploy:adapter-example && pnpm run deploy:cross-chain-example",
+    "deploy:example": "(pnpm run deploy:adapter-example) && (pnpm run deploy:cross-chain-example)",
     "deploy:adapter-example": "pnpm run adapter-example:build && pnpm run adapter-example:export && touch ./apps/nextjs-example/out/.nojekyll && gh-pages --dist apps/nextjs-example/out --dotfiles",
     "adapter-example:export": "pnpm run --filter {apps/nextjs-example} export",
     "adapter-example:build": "pnpm run --filter {apps/nextjs-example} build",
