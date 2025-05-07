@@ -4,7 +4,6 @@ import {
 } from "@aptos-connect/wallet-adapter-plugin";
 import { Network } from "@aptos-labs/ts-sdk";
 import { DevTWallet, TWallet } from "@atomrigslab/aptos-wallet-adapter";
-import { MizuWallet } from "@mizuwallet-sdk/aptos-wallet-adapter";
 import { MSafeWallet } from "@msafe/aptos-aip62-wallet";
 import { DappConfig, AdapterWallet } from "./WalletCore";
 
@@ -25,21 +24,6 @@ export function getSDKWallets(dappConfig?: DappConfig) {
         ...dappConfig?.aptosConnect,
       })
     );
-
-    if (
-      dappConfig?.mizuwallet &&
-      dappConfig?.network &&
-      [Network.MAINNET, Network.TESTNET].includes(dappConfig.network)
-    ) {
-      sdkWallets.push(
-        new MizuWallet({
-          // mizo supports only TESTNET and MAINNET and holds a custom type for network
-          network: dappConfig.network as Network.MAINNET | Network.TESTNET,
-          manifestURL: dappConfig.mizuwallet.manifestURL,
-          appId: dappConfig.mizuwallet.appId,
-        }) as any // TODO: fix type mismatch
-      );
-    }
   }
 
   // Push production wallet if env is production, otherwise use dev wallet
