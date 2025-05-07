@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@aptos-connect/wallet-adapter-plugin": "2.4.1",
-    "@aptos-labs/wallet-standard": "^0.3.0",
+    "@aptos-labs/wallet-standard": "^0.4.0",
     "@atomrigslab/aptos-wallet-adapter": "^0.1.20",
     "@msafe/aptos-aip62-wallet": "^1.0.17",
     "buffer": "^6.0.3",
