@@ -44,6 +44,8 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { useToast } from "./ui/use-toast";
+import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import { TabsContent } from "./ui/tabs";
 
 export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
   const { account, connected, disconnect, wallet } = useWallet();
@@ -122,10 +124,28 @@ function ConnectWalletDialog({
   const { aptosConnectWallets, availableWallets, installableWallets } =
     groupAndSortWallets(
       [...wallets, ...notDetectedWallets],
-      walletSortingOptions,
+      walletSortingOptions
     );
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
+
+  const { evmWallets, solanaWallets, aptosWallets } = availableWallets.reduce<{
+    evmWallets: AdapterWallet[];
+    solanaWallets: AdapterWallet[];
+    aptosWallets: AdapterWallet[];
+  }>(
+    (acc, wallet) => {
+      if (wallet.name.includes("Ethereum")) {
+        acc.evmWallets.push(wallet);
+      } else if (wallet.name.includes("Solana")) {
+        acc.solanaWallets.push(wallet);
+      } else {
+        acc.aptosWallets.push(wallet);
+      }
+      return acc;
+    },
+    { evmWallets: [], solanaWallets: [], aptosWallets: [] }
+  );
 
   return (
     <DialogContent className="max-h-screen overflow-auto">
@@ -175,27 +195,61 @@ function ConnectWalletDialog({
         )}
 
         <div className="flex flex-col gap-3 pt-3">
-          {availableWallets.map((wallet) => (
-            <WalletRow key={wallet.name} wallet={wallet} onConnect={close} />
-          ))}
-          {!!installableWallets.length && (
-            <Collapsible className="flex flex-col gap-3">
-              <CollapsibleTrigger asChild>
-                <Button size="sm" variant="ghost" className="gap-2">
-                  More wallets <ChevronDown />
-                </Button>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="flex flex-col gap-3">
-                {installableWallets.map((wallet) => (
-                  <WalletRow
-                    key={wallet.name}
-                    wallet={wallet}
-                    onConnect={close}
-                  />
-                ))}
-              </CollapsibleContent>
-            </Collapsible>
-          )}
+          {/* Handle Aptos wallets */}
+          <Tabs defaultValue="aptos">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="aptos">Aptos</TabsTrigger>
+              <TabsTrigger value="solana">Solana</TabsTrigger>
+              {/* <TabsTrigger value="ethereum">Ethereum</TabsTrigger> */}
+            </TabsList>
+            <TabsContent value="aptos">
+              {aptosWallets.map((wallet) => (
+                <WalletRow
+                  key={wallet.name}
+                  wallet={wallet}
+                  onConnect={close}
+                />
+              ))}
+              {!!installableWallets.length && (
+                <Collapsible className="flex flex-col gap-3 pt-3">
+                  <CollapsibleTrigger asChild>
+                    <Button size="sm" variant="ghost" className="gap-2">
+                      More wallets <ChevronDown />
+                    </Button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="flex flex-col gap-3">
+                    {installableWallets.map((wallet) => (
+                      <WalletRow
+                        key={wallet.name}
+                        wallet={wallet}
+                        onConnect={close}
+                      />
+                    ))}
+                  </CollapsibleContent>
+                </Collapsible>
+              )}
+            </TabsContent>
+            {/* Handle Solana wallets */}
+            <TabsContent value="solana">
+              {solanaWallets.map((wallet) => (
+                <WalletRow
+                  key={wallet.name}
+                  wallet={wallet}
+                  onConnect={close}
+                />
+              ))}
+            </TabsContent>
+            {/* Handle Ethereum wallets */}
+            {/* <TabsContent value="ethereum">
+              {evmWallets.map((wallet) => (
+                <WalletRow
+                  key={wallet.name}
+                  wallet={wallet}
+                  onConnect={close}
+                />
+              ))}
+            </TabsContent> */}
+          </Tabs>
         </div>
       </AboutAptosConnect>
     </DialogContent>
