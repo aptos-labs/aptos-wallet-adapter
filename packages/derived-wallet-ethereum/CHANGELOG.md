@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-ethereum
 
+## 0.2.2
+
+### Patch Changes
+
+- 63f5cf7: Change the signature type for signing a transaction message signature
+
 ## 0.2.1
 
 ### Patch Changes
