@@ -13,16 +13,11 @@ import { EIP1193DerivedPublicKey } from "./EIP1193DerivedPublicKey";
 import { EIP1193Signature } from "./EIP1193DerivedSignature";
 import { EthereumAddress, wrapEthersUserResponse } from "./shared";
 
-export interface StructuredMessageInputWithChainId
-  extends StructuredMessageInput {
-  chainId?: number;
-}
-
 export interface SignAptosMessageWithEthereumInput {
   eip1193Provider: Eip1193Provider | BrowserProvider;
   ethereumAddress?: EthereumAddress;
   authenticationFunction: string;
-  messageInput: StructuredMessageInputWithChainId;
+  messageInput: StructuredMessageInput;
 }
 
 export async function signAptosMessageWithEthereum(

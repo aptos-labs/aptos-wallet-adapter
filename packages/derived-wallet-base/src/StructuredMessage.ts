@@ -6,7 +6,7 @@ export interface StructuredMessageInput {
   message: string;
   nonce: string;
   application?: boolean;
-  chainId?: number | boolean;
+  chainId?: number;
   address?: AccountAddressInput | boolean;
 }
 
