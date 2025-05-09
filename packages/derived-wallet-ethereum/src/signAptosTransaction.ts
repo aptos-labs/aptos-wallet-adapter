@@ -21,7 +21,7 @@ import { EthereumAddress, wrapEthersUserResponse } from "./shared";
  * authentication function on chain, and lets us identify the type of the message and to make
  * changes in the future if needed.
  */
-export const SIGNATURE_TYPE = 0;
+export const SIGNATURE_TYPE = 1;
 export interface SignAptosTransactionWithEthereumInput {
   eip1193Provider: Eip1193Provider | BrowserProvider;
   ethereumAddress?: EthereumAddress;
@@ -30,7 +30,7 @@ export interface SignAptosTransactionWithEthereumInput {
 }
 
 export async function signAptosTransactionWithEthereum(
-  input: SignAptosTransactionWithEthereumInput,
+  input: SignAptosTransactionWithEthereumInput
 ): Promise<UserResponse<AccountAuthenticator>> {
   const { authenticationFunction, rawTransaction } = input;
   const eip1193Provider =
@@ -64,7 +64,7 @@ export async function signAptosTransactionWithEthereum(
   });
 
   const response = await wrapEthersUserResponse(
-    ethereumAccount.signMessage(siweMessage),
+    ethereumAccount.signMessage(siweMessage)
   );
 
   return mapUserResponse(response, (siweSignature) => {
@@ -76,7 +76,7 @@ export async function signAptosTransactionWithEthereum(
     const signature = new EIP1193DerivedSignature(
       scheme,
       issuedAt,
-      siweSignature,
+      siweSignature
     );
     signature.serialize(serializer);
     const abstractSignature = serializer.toUint8Array();
@@ -84,14 +84,14 @@ export async function signAptosTransactionWithEthereum(
     // Serialize the abstract public key.
     const abstractPublicKey = new DerivableAbstractPublicKey(
       ethereumAddress,
-      window.location.host,
+      window.location.host
     );
 
     return new AccountAuthenticatorAbstraction(
       authenticationFunction,
       signingMessageDigest,
       abstractSignature,
-      abstractPublicKey.bcsToBytes(),
+      abstractPublicKey.bcsToBytes()
     );
   });
 }
