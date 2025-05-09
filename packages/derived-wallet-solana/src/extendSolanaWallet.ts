@@ -15,13 +15,13 @@ import { SolanaDerivedPublicKey } from "./SolanaDerivedPublicKey";
 
 export type SolanaWalletAdapterWithAptosFeatures = SolanaWalletAdapter & {
   getAptosPublicKey: (
-    solanaPublicKey: SolanaPublicKey,
+    solanaPublicKey: SolanaPublicKey
   ) => SolanaDerivedPublicKey;
   signAptosTransaction: (
-    rawTransaction: AnyRawTransaction,
+    rawTransaction: AnyRawTransaction
   ) => Promise<UserResponse<AccountAuthenticator>>;
   signAptosMessage: (
-    input: StructuredMessageInputWithChainId,
+    input: StructuredMessageInputWithChainId
   ) => Promise<UserResponse<AptosSignMessageOutput>>;
 };
 
@@ -40,7 +40,7 @@ export type SolanaWalletAdapterWithAptosFeatures = SolanaWalletAdapter & {
  */
 export function extendSolanaWallet(
   solanaWallet: SolanaWalletAdapter,
-  authenticationFunction = defaultAuthenticationFunction,
+  authenticationFunction = defaultAuthenticationFunction
 ) {
   const extended = solanaWallet as SolanaWalletAdapterWithAptosFeatures;
   extended.getAptosPublicKey = (solanaPublicKey: SolanaPublicKey) =>

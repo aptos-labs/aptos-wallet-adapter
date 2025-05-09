@@ -1,5 +1,6 @@
 import {
   computeDerivableAuthenticationKey,
+  encodeStructuredMessage,
   parseAptosSigningMessage,
 } from "@aptos-labs/derived-wallet-base";
 import {
@@ -17,10 +18,7 @@ import {
 } from "@aptos-labs/ts-sdk";
 import { createSignInMessage as createSolanaSignInMessage } from "@solana/wallet-standard-util";
 import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
-import {
-  createSiwsEnvelopeForAptosStructuredMessage,
-  createSiwsEnvelopeForAptosTransaction,
-} from "./createSiwsEnvelope";
+import { createSiwsEnvelopeForAptosTransaction } from "./createSiwsEnvelope";
 
 export interface SolanaDerivedPublicKeyParams {
   domain: string;
@@ -45,7 +43,7 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
     this._authKey = computeDerivableAuthenticationKey(
       authenticationFunction,
       solanaPublicKey.toBase58(),
-      domain,
+      domain
     );
   }
 
@@ -64,35 +62,35 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
       signingMessageDigest: hashValues([message]),
     };
 
-    // Obtain SIWS envelope input for the signing message
-    const siwsEnvelopeInput =
-      parsedSigningMessage.type === "structuredMessage"
-        ? createSiwsEnvelopeForAptosStructuredMessage({
-            ...parsedSigningMessage,
-            ...commonInput,
-            domain: this.domain,
-          })
-        : createSiwsEnvelopeForAptosTransaction({
-            ...parsedSigningMessage,
-            ...commonInput,
-            domain: this.domain,
-          });
-
-    // Matching the signature will ensure that the following fields are matching:
-    // - domain
-    // - solanaPublicKey
-    // - signing message digest
-    // - chain
-    // - message and nonce (structured message)
-    // - entry function name (transaction)
+    let messageBytes: Uint8Array;
+    // Handle structured message, i.e. a message signed with AptosSignMessageInput
+    if (parsedSigningMessage.type === "structuredMessage") {
+      messageBytes = encodeStructuredMessage(
+        parsedSigningMessage.structuredMessage
+      );
+    } else {
+      // Handle transaction message
+      const siwsEnvelopeInput = createSiwsEnvelopeForAptosTransaction({
+        ...parsedSigningMessage,
+        ...commonInput,
+        domain: this.domain,
+      });
+      // Matching the signature will ensure that the following fields are matching:
+      // - domain
+      // - solanaPublicKey
+      // - signing message digest
+      // - chain
+      // - message and nonce (structured message)
+      // - entry function name (transaction)
+      messageBytes = createSolanaSignInMessage(siwsEnvelopeInput);
+    }
 
     // Match solana signature
-    const siwsEnvelopeBytes = createSolanaSignInMessage(siwsEnvelopeInput);
     const ed25519PublicKey = new Ed25519PublicKey(
-      this.solanaPublicKey.toBytes(),
+      this.solanaPublicKey.toBytes()
     );
     return ed25519PublicKey.verifySignature({
-      message: siwsEnvelopeBytes,
+      message: messageBytes,
       signature,
     });
   }
