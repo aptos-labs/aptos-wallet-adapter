@@ -197,10 +197,10 @@ function ConnectWalletDialog({
         <div className="flex flex-col gap-3 pt-3">
           {/* Handle Aptos wallets */}
           <Tabs defaultValue="aptos">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="aptos">Aptos</TabsTrigger>
               <TabsTrigger value="solana">Solana</TabsTrigger>
-              {/* <TabsTrigger value="ethereum">Ethereum</TabsTrigger> */}
+              <TabsTrigger value="ethereum">Ethereum</TabsTrigger>
             </TabsList>
             <TabsContent value="aptos">
               {aptosWallets.map((wallet) => (
@@ -240,7 +240,7 @@ function ConnectWalletDialog({
               ))}
             </TabsContent>
             {/* Handle Ethereum wallets */}
-            {/* <TabsContent value="ethereum">
+            <TabsContent value="ethereum">
               {evmWallets.map((wallet) => (
                 <WalletRow
                   key={wallet.name}
@@ -248,7 +248,7 @@ function ConnectWalletDialog({
                   onConnect={close}
                 />
               ))}
-            </TabsContent> */}
+            </TabsContent>
           </Tabs>
         </div>
       </AboutAptosConnect>
