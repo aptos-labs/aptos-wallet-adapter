@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.5.1
+
+### Patch Changes
+
+- e2d66c4: Bump mSafe version to 1.0.18
+
 ## 5.5.0
 
 ### Minor Changes
