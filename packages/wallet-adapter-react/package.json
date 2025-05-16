@@ -55,6 +55,14 @@
     "@aptos-labs/derived-wallet-solana": "workspace:*",
     "@aptos-labs/derived-wallet-ethereum": "workspace:*"
   },
+  "peerDependenciesMeta": {
+    "@aptos-labs/derived-wallet-solana": {
+      "optional": true
+    },
+    "@aptos-labs/derived-wallet-ethereum": {
+      "optional": true
+    }
+  },
   "files": [
     "dist",
     "src",
