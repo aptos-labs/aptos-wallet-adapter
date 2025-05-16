@@ -31,6 +31,8 @@ import {
   OriginWalletDetails,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
+import { isEIP1193DerivedWallet } from "@/utils/derivedWallet";
+import { isSolanaDerivedWallet } from "@/utils/derivedWallet";
 
 const dappNetwork: Network.MAINNET | Network.TESTNET = Network.TESTNET;
 
@@ -97,9 +99,10 @@ export function CCTPTransfer({
   const [sourceChain, setSourceChain] = useState<Chain | null>(null);
 
   useEffect(() => {
-    if (wallet instanceof SolanaDerivedWallet) {
+    if (!wallet) return;
+    if (isSolanaDerivedWallet(wallet)) {
       setSourceChain("Solana");
-    } else if (wallet instanceof EIP1193DerivedWallet) {
+    } else if (isEIP1193DerivedWallet(wallet)) {
       setSourceChain("Sepolia");
     } else {
       setSourceChain("Aptos");

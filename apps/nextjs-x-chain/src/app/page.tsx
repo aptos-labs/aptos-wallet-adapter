@@ -21,6 +21,7 @@ import {
   WalletConnection,
   WalletSelection,
 } from "./components";
+import { getOriginWalletDetails } from "@/utils/derivedWallet";
 
 // Example of how to register a browser extension wallet plugin.
 // Browser extension wallets should call registerWallet once on page load.
@@ -39,14 +40,7 @@ if (isTelegramMiniApp) {
 }
 
 export default function Home() {
-  const {
-    account,
-    connected,
-    network,
-    wallet,
-    changeNetwork,
-    getOriginWalletDetails,
-  } = useWallet();
+  const { account, connected, network, wallet, changeNetwork } = useWallet();
 
   const [originWalletDetails, setOriginWalletDetails] = useState<
     OriginWalletDetails | undefined
