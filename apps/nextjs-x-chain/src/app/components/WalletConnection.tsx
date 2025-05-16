@@ -2,6 +2,8 @@ import { DisplayValue, LabelValueGrid } from "@/components/LabelValueGrid";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { isSolanaDerivedWallet } from "@/utils/derivedWallet";
+import { isEIP1193DerivedWallet } from "@/utils/derivedWallet";
 import { Network } from "@aptos-labs/ts-sdk";
 import {
   AccountInfo,
@@ -29,8 +31,6 @@ export function WalletConnection({
   changeNetwork,
   originWalletDetails,
 }: WalletConnectionProps) {
-  const { isSolanaDerivedWallet, isEIP1193DerivedWallet } = useWallet();
-
   const isValidNetworkName = () => {
     if (isAptosNetwork(network)) {
       return Object.values<string | undefined>(Network).includes(network?.name);

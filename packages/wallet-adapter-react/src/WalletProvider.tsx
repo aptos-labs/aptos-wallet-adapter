@@ -19,16 +19,9 @@ import {
   WalletReadyState,
   AptosSignInInput,
   AptosSignInOutput,
-  AnyPublicKey as AptosAnyPublicKey,
-  AccountAddress,
 } from "@aptos-labs/wallet-adapter-core";
 import { ReactNode, FC, useState, useEffect, useCallback, useRef } from "react";
 import { WalletContext } from "./useWallet";
-import {
-  SolanaDerivedWallet,
-  SolanaPublicKey,
-} from "@aptos-labs/derived-wallet-solana";
-import { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
 
 export interface AptosWalletProviderProps {
   children: ReactNode;
@@ -40,14 +33,6 @@ export interface AptosWalletProviderProps {
   disableTelemetry?: boolean;
   onError?: (error: any) => void;
 }
-
-export type OriginWalletDetails =
-  | {
-      address: string | AccountAddress;
-      publicKey?: SolanaPublicKey | AptosAnyPublicKey | undefined;
-    }
-  | AccountInfo
-  | null;
 
 const initialState: {
   account: AccountInfo | null;
@@ -86,7 +71,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     const walletCore = new WalletCore(
       optInWallets,
       dappConfig,
-      disableTelemetry,
+      disableTelemetry
     );
     setWalletCore(walletCore);
   }, []);
@@ -119,7 +104,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
 
     // Make sure the wallet is installed
     const selectedWallet = walletCore.wallets.find(
-      (e) => e.name === walletName,
+      (e) => e.name === walletName
     ) as AdapterWallet | undefined;
     if (
       !selectedWallet ||
@@ -194,7 +179,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signAndSubmitTransaction = async (
-    transaction: InputTransactionData,
+    transaction: InputTransactionData
   ): Promise<AptosSignAndSubmitTransactionOutput> => {
     try {
       if (!walletCore) {
@@ -234,7 +219,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const submitTransaction = async (
-    transaction: InputSubmitTransactionData,
+    transaction: InputSubmitTransactionData
   ): Promise<PendingTransactionResponse> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -248,7 +233,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signMessage = async (
-    message: AptosSignMessageInput,
+    message: AptosSignMessageInput
   ): Promise<AptosSignMessageOutput> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -262,7 +247,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signMessageAndVerify = async (
-    message: AptosSignMessageInput,
+    message: AptosSignMessageInput
   ): Promise<boolean> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -349,7 +334,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
     const existingWalletIndex = wallets.findIndex(
-      (wallet) => wallet.name == standardWallet.name,
+      (wallet) => wallet.name == standardWallet.name
     );
     if (existingWalletIndex !== -1) {
       // If wallet exists, replace it with the new wallet
@@ -365,12 +350,12 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const handleStandardNotDetectedWalletsAdded = (
-    notDetectedWallet: AdapterNotDetectedWallet,
+    notDetectedWallet: AdapterNotDetectedWallet
   ): void => {
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
     const existingWalletIndex = wallets.findIndex(
-      (wallet) => wallet.name == notDetectedWallet.name,
+      (wallet) => wallet.name == notDetectedWallet.name
     );
     if (existingWalletIndex !== -1) {
       // If wallet exists, replace it with the new wallet
@@ -393,7 +378,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     walletCore?.on("standardWalletsAdded", handleStandardWalletsAdded);
     walletCore?.on(
       "standardNotDetectedWalletAdded",
-      handleStandardNotDetectedWalletsAdded,
+      handleStandardNotDetectedWalletsAdded
     );
     return () => {
       walletCore?.off("connect", handleConnect);
@@ -403,57 +388,10 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       walletCore?.off("standardWalletsAdded", handleStandardWalletsAdded);
       walletCore?.off(
         "standardNotDetectedWalletAdded",
-        handleStandardNotDetectedWalletsAdded,
+        handleStandardNotDetectedWalletsAdded
       );
     };
   }, [wallets, account]);
-
-  // Define specific return types based on wallet type
-  type SolanaWalletDetails = { address: string; publicKey: SolanaPublicKey };
-  type EVMWalletDetails = { address: string; publicKey?: undefined };
-  type AptosWalletDetails = AccountInfo | null;
-
-  // Function overloads
-  function getOriginWalletDetails(
-    wallet: SolanaDerivedWallet,
-  ): Promise<SolanaWalletDetails>;
-  function getOriginWalletDetails(
-    wallet: EIP1193DerivedWallet,
-  ): Promise<EVMWalletDetails>;
-
-  // Implementation
-  async function getOriginWalletDetails(
-    wallet: AdapterWallet,
-  ): Promise<OriginWalletDetails | undefined> {
-    if (isSolanaDerivedWallet(wallet)) {
-      const publicKey = wallet.solanaWallet.publicKey;
-      return {
-        publicKey: publicKey ?? undefined,
-        address: publicKey?.toBase58() ?? "",
-      };
-    } else if (isEIP1193DerivedWallet(wallet)) {
-      const [activeAccount] = await wallet.eip1193Ethers.listAccounts();
-      return {
-        publicKey: undefined, // No public key for EVM wallets
-        address: activeAccount.address,
-      };
-    } else {
-      // Assume Aptos Wallet
-      return undefined;
-    }
-  }
-
-  function isSolanaDerivedWallet(
-    wallet: AdapterWallet,
-  ): wallet is SolanaDerivedWallet {
-    return wallet instanceof SolanaDerivedWallet;
-  }
-
-  function isEIP1193DerivedWallet(
-    wallet: AdapterWallet,
-  ): wallet is EIP1193DerivedWallet {
-    return wallet instanceof EIP1193DerivedWallet;
-  }
 
   return (
     <WalletContext.Provider
@@ -467,9 +405,6 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         signMessageAndVerify,
         changeNetwork,
         submitTransaction,
-        getOriginWalletDetails,
-        isSolanaDerivedWallet,
-        isEIP1193DerivedWallet,
         account,
         network,
         connected,

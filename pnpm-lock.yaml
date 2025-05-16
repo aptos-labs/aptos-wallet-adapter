@@ -773,12 +773,6 @@ importers:
         specifier: ^18.0.0 || ^19.0.0
         version: 18.3.1
     devDependencies:
-      '@aptos-labs/derived-wallet-ethereum':
-        specifier: workspace:*
-        version: link:../derived-wallet-ethereum
-      '@aptos-labs/derived-wallet-solana':
-        specifier: workspace:*
-        version: link:../derived-wallet-solana
       '@aptos-labs/wallet-adapter-tsconfig':
         specifier: workspace:*
         version: link:../tsconfig

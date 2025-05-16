@@ -31,6 +31,8 @@ import {
   OriginWalletDetails,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
+import { isEIP1193DerivedWallet } from "@/utils/derivedWallet";
+import { isSolanaDerivedWallet } from "@/utils/derivedWallet";
 
 const dappNetwork: Network.MAINNET | Network.TESTNET = Network.TESTNET;
 
@@ -46,8 +48,8 @@ const privateKey = new Ed25519PrivateKey(
   PrivateKey.formatPrivateKey(
     (process.env.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY as string) ??
       "0x0000000000000000000000000000000000000000000000000000000000000000",
-    PrivateKeyVariants.Ed25519,
-  ),
+    PrivateKeyVariants.Ed25519
+  )
 );
 mainSigner = Account.fromPrivateKey({ privateKey });
 
@@ -55,8 +57,8 @@ const feePayerPrivateKey = new Ed25519PrivateKey(
   PrivateKey.formatPrivateKey(
     (process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY as string) ??
       "0x0000000000000000000000000000000000000000000000000000000000000000",
-    PrivateKeyVariants.Ed25519,
-  ),
+    PrivateKeyVariants.Ed25519
+  )
 );
 sponsorAccount = Account.fromPrivateKey({
   privateKey: feePayerPrivateKey,
@@ -69,17 +71,17 @@ export function CCTPTransfer({
   wallet: AdapterWallet | null;
   originWalletDetails: OriginWalletDetails | undefined;
 }) {
-  const { account } = useWallet();
+  const { account, network } = useWallet();
 
   const [amount, setAmount] = useState<string>("");
 
   const [quote, setQuote] = useState<WormholeQuoteResponse | undefined>(
-    undefined,
+    undefined
   );
   const [invalidAmount, setInvalidAmount] = useState<boolean>(false);
   const [quoteIsFetching, setQuoteIsFetching] = useState<boolean>(false);
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
-    null,
+    null
   );
 
   const [walletUSDCBalance, setWalletUSDCBalance] = useState<
@@ -97,9 +99,10 @@ export function CCTPTransfer({
   const [sourceChain, setSourceChain] = useState<Chain | null>(null);
 
   useEffect(() => {
-    if (wallet instanceof SolanaDerivedWallet) {
+    if (!wallet) return;
+    if (isSolanaDerivedWallet(wallet)) {
       setSourceChain("Solana");
-    } else if (wallet instanceof EIP1193DerivedWallet) {
+    } else if (isEIP1193DerivedWallet(wallet)) {
       setSourceChain("Sepolia");
     } else {
       setSourceChain("Aptos");
@@ -112,12 +115,12 @@ export function CCTPTransfer({
     const fetchWalletUsdcBalance = async () => {
       const balance = await crossChainCore.getWalletUSDCBalance(
         originWalletDetails.address.toString(),
-        sourceChain,
+        sourceChain
       );
       setWalletUSDCBalance(balance);
     };
     fetchWalletUsdcBalance();
-  }, [originWalletDetails]);
+  }, [originWalletDetails, sourceChain]);
 
   const humanReadableETA = (milliseconds: number): string => {
     if (milliseconds >= 60000) {
@@ -163,7 +166,7 @@ export function CCTPTransfer({
 
       setDebounceTimeout(newTimeout);
     },
-    [sourceChain, debounceTimeout],
+    [sourceChain, debounceTimeout]
   );
 
   const invalidateAmount = (amount: string) => {
