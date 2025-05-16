@@ -1,10 +1,10 @@
 import {
   computeDerivableAuthenticationKey,
+  encodeStructuredMessage,
   parseAptosSigningMessage,
 } from "@aptos-labs/derived-wallet-base";
 import {
   AccountPublicKey,
-  Aptos,
   AptosConfig,
   AuthenticationKey,
   Deserializer,
@@ -16,11 +16,11 @@ import {
   VerifySignatureArgs,
 } from "@aptos-labs/ts-sdk";
 import { verifyMessage as verifyEthereumMessage } from "ethers";
+import { createSiweEnvelopeForAptosTransaction } from "./createSiweEnvelope";
 import {
-  createSiweEnvelopeForAptosStructuredMessage,
-  createSiweEnvelopeForAptosTransaction,
-} from "./createSiweEnvelope";
-import { EIP1193DerivedSignature } from "./EIP1193DerivedSignature";
+  EIP1193DerivedSignature,
+  EIP1193Signature,
+} from "./EIP1193DerivedSignature";
 import { EthereumAddress } from "./shared";
 
 export interface EIP1193DerivedPublicKeyParams {
@@ -49,7 +49,7 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
     this._authKey = computeDerivableAuthenticationKey(
       authenticationFunction,
       ethereumAddress,
-      domain,
+      domain
     );
   }
 
@@ -59,39 +59,43 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
 
   verifySignature({ message, signature }: VerifySignatureArgs): boolean {
     const parsedSigningMessage = parseAptosSigningMessage(message);
-    if (
-      !parsedSigningMessage ||
-      !(signature instanceof EIP1193DerivedSignature)
-    ) {
+
+    if (!parsedSigningMessage) {
       return false;
     }
 
-    const { issuedAt, siweSignature } = signature;
-    const signingMessageDigest = hashValues([message]);
+    let messageBytes: Uint8Array | string;
+    // Handle structured message, i.e. a message signed withAptosSignMessageInput
+    if (parsedSigningMessage.type === "structuredMessage") {
+      if (!(signature instanceof EIP1193Signature)) return false;
 
-    // Obtain SIWE envelope for the signing message
-    const envelopeInput = {
-      ethereumAddress: this.ethereumAddress,
-      signingMessageDigest,
-      issuedAt,
-    };
+      messageBytes = encodeStructuredMessage(
+        parsedSigningMessage.structuredMessage
+      );
+    } else {
+      // Handle transaction
+      if (!(signature instanceof EIP1193DerivedSignature)) return false;
+      const { issuedAt } = signature;
+      const signingMessageDigest = hashValues([message]);
+      // Obtain SIWE envelope for the signing message
+      const envelopeInput = {
+        ethereumAddress: this.ethereumAddress,
+        signingMessageDigest,
+        issuedAt,
+      };
 
-    const siweMessage =
-      parsedSigningMessage.type === "structuredMessage"
-        ? createSiweEnvelopeForAptosStructuredMessage({
-            ...parsedSigningMessage,
-            ...envelopeInput,
-            chainId: 0, // TODO: use 0 does not really work, either way remove this once we rewrite the regular sign message to use the default wallet signMessage
-          })
-        : createSiweEnvelopeForAptosTransaction({
-            ...parsedSigningMessage,
-            ...envelopeInput,
-            chainId:
-              parsedSigningMessage.rawTransaction.rawTransaction.chain_id
-                .chainId,
-          });
+      messageBytes = createSiweEnvelopeForAptosTransaction({
+        ...parsedSigningMessage,
+        ...envelopeInput,
+        chainId:
+          parsedSigningMessage.rawTransaction.rawTransaction.chain_id.chainId,
+      });
+    }
 
-    const recoveredAddress = verifyEthereumMessage(siweMessage, siweSignature);
+    // Verify the signature
+    const { siweSignature } = signature;
+
+    const recoveredAddress = verifyEthereumMessage(messageBytes, siweSignature);
     return recoveredAddress === this.ethereumAddress;
   }
 
@@ -111,7 +115,7 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
   serialize(serializer: Serializer) {
     serializer.serializeStr(this.domain);
     serializer.serializeFixedBytes(
-      Hex.fromHexInput(this.ethereumAddress).toUint8Array(),
+      Hex.fromHexInput(this.ethereumAddress).toUint8Array()
     );
     serializer.serializeStr(this.authenticationFunction);
   }
@@ -120,7 +124,7 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
     const domain = deserializer.deserializeStr();
     const ethereumAddressBytes = deserializer.deserializeFixedBytes(20);
     const ethereumAddress = Hex.fromHexInput(
-      ethereumAddressBytes,
+      ethereumAddressBytes
     ).toString() as EthereumAddress;
     const authenticationFunction = deserializer.deserializeStr();
     return new EIP1193DerivedPublicKey({
