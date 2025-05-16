@@ -98,6 +98,7 @@ import {
 // An adapter wallet types is a wallet that is compatible with the wallet standard and the wallet adapter properties
 export type AdapterWallet = AptosWallet & {
   readyState?: WalletReadyState;
+  isAptosNativeWallet?: boolean;
 };
 
 // An adapter not detected wallet types is a wallet that is compatible with the wallet standard but not detected
@@ -251,6 +252,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         }
 
         wallet.readyState = WalletReadyState.Installed;
+        // Aptos native wallets do not have an authenticationFunction property
+        wallet.isAptosNativeWallet = !("authenticationFunction" in wallet);
         this._standard_wallets.push(wallet);
         this.emit("standardWalletsAdded", wallet);
       }
@@ -269,6 +272,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
       if (isValid) {
         wallet.readyState = WalletReadyState.Installed;
+        // Aptos native wallets do not have an authenticationFunction property
+        wallet.isAptosNativeWallet = !("authenticationFunction" in wallet);
         this._standard_wallets.push(wallet);
       }
     });
@@ -280,26 +285,32 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   // when wallet is not installed on the user machine
   private appendNotDetectedStandardSupportedWallets(): void {
     // Loop over the registry map
-    aptosStandardSupportedWalletList.map((supportedWallet) => {
-      // Check if we already have this wallet as a detected AIP-62 wallet standard
-      const existingStandardWallet = this._standard_wallets.find(
-        (wallet) => wallet.name == supportedWallet.name
-      );
-      // If it is detected, it means the user has the wallet installed, so dont add it to the wallets array
-      if (existingStandardWallet) {
-        return;
+    aptosStandardSupportedWalletList.map(
+      (supportedWallet: AptosStandardSupportedWallet) => {
+        // Check if we already have this wallet as a detected AIP-62 wallet standard
+        const existingStandardWallet = this._standard_wallets.find(
+          (wallet) => wallet.name == supportedWallet.name
+        );
+        // If it is detected, it means the user has the wallet installed, so dont add it to the wallets array
+        if (existingStandardWallet) {
+          return;
+        }
+        // If AIP-62 wallet detected but it is excluded by the dapp, dont add it to the wallets array
+        if (this.excludeWallet(supportedWallet)) {
+          return;
+        }
+        // If AIP-62 wallet does not exist, append it to the wallet selector modal
+        // as an undetected wallet
+        if (!existingStandardWallet) {
+          // Aptos native wallets do not have an authenticationFunction property
+          supportedWallet.isAptosNativeWallet = !(
+            "authenticationFunction" in supportedWallet
+          );
+          this._standard_not_detected_wallets.push(supportedWallet);
+          this.emit("standardNotDetectedWalletAdded", supportedWallet);
+        }
       }
-      // If AIP-62 wallet detected but it is excluded by the dapp, dont add it to the wallets array
-      if (this.excludeWallet(supportedWallet)) {
-        return;
-      }
-      // If AIP-62 wallet does not exist, append it to the wallet selector modal
-      // as an undetected wallet
-      if (!existingStandardWallet) {
-        this._standard_not_detected_wallets.push(supportedWallet);
-        this.emit("standardNotDetectedWalletAdded", supportedWallet);
-      }
-    });
+    );
   }
 
   /**

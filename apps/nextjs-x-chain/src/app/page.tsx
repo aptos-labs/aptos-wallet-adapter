@@ -92,22 +92,47 @@ export default function Home() {
             originWalletDetails={originWalletDetails}
           />
           {network?.name === Network.MAINNET && (
-            <Alert variant="warning">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Warning</AlertTitle>
-              <AlertDescription>
-                The transactions flows below will not work on the Mainnet
-                network.
-              </AlertDescription>
-            </Alert>
+            <>
+              <Alert variant="warning">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Warning</AlertTitle>
+                <AlertDescription>
+                  The transactions flows below will not work on the Mainnet
+                  network.
+                </AlertDescription>
+              </Alert>
+              {/* Transaction actions are disabled on mainnet */}
+              <SingleSigner />
+            </>
           )}
-          <AccountBalance account={account} network={network} wallet={wallet} />
-          <SingleSigner />
-          {network?.name !== Network.DEVNET && (
-            <CCTPTransfer
-              wallet={wallet}
-              originWalletDetails={originWalletDetails}
-            />
+          {network?.name === Network.TESTNET && (
+            <>
+              {/* CCTP transfer is enabled for non-Aptos wallets */}
+              {!wallet.isAptosNativeWallet && (
+                <CCTPTransfer
+                  wallet={wallet}
+                  originWalletDetails={originWalletDetails}
+                />
+              )}
+              <SingleSigner
+                sponsorPrivateKeyHex={
+                  process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY
+                }
+              />
+            </>
+          )}
+          {network?.name === Network.DEVNET && (
+            <>
+              {/* Fund + balance account is enabled for non-Aptos wallets */}
+              {!wallet.isAptosNativeWallet && (
+                <AccountBalance
+                  account={account}
+                  network={network}
+                  wallet={wallet}
+                />
+              )}
+              <SingleSigner />
+            </>
           )}
         </>
       )}

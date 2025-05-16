@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { getAptBalanceQueryOptions } from "@/utils/getAptBalanceQueryOptions";
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 import {
@@ -54,6 +60,9 @@ export function AccountBalance({ account, network }: AccountBalanceProps) {
     <Card>
       <CardHeader>
         <CardTitle>Account balance</CardTitle>
+        <CardDescription>
+          Fund your account with APT to pay for the transaction fees
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex flex-row items-center justify-between w-full">
