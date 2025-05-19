@@ -26,7 +26,11 @@ function generateNonce() {
   return crypto.randomUUID().replaceAll("-", "");
 }
 
-export function SingleSigner() {
+export type SingleSignerProps = {
+  sponsorPrivateKeyHex?: string;
+};
+
+export function SingleSigner({ sponsorPrivateKeyHex }: SingleSignerProps) {
   const { toast } = useToast();
   const {
     connected,
@@ -117,17 +121,12 @@ export function SingleSigner() {
     }),
   });
 
-  const hasEnoughApt = aptBalance.isSuccess && aptBalance.data > 0;
-
   const onSignAndSubmitTransaction = async () => {
     if (!account) return;
 
     try {
-      const sponsorPrivateKeyHex =
-        process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY;
-
       const rawTransaction = await aptosClient(
-        network,
+        network
       ).transaction.build.simple({
         data: {
           function: "0x1::aptos_account::transfer",
@@ -149,8 +148,8 @@ export function SingleSigner() {
         const sponsorPrivateKey = new Ed25519PrivateKey(
           PrivateKey.formatPrivateKey(
             sponsorPrivateKeyHex,
-            PrivateKeyVariants.Ed25519,
-          ),
+            PrivateKeyVariants.Ed25519
+          )
         );
         const sponsor = Account.fromPrivateKey({
           privateKey: sponsorPrivateKey,
@@ -166,7 +165,7 @@ export function SingleSigner() {
           transaction: rawTransaction,
           senderAuthenticator: response.authenticator,
           feePayerAuthenticator: sponsorAuthenticator,
-        },
+        }
       );
 
       await aptosClient(network).waitForTransaction({

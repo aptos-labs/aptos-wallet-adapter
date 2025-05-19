@@ -2,6 +2,7 @@ import {
   AccountAddressInput,
   Aptos,
   AptosConfig,
+  InputViewFunctionJsonData,
   Network,
 } from "@aptos-labs/ts-sdk";
 import { queryOptions } from "@tanstack/react-query";
@@ -23,10 +24,14 @@ export function getAptBalanceQueryOptions({
     ],
     queryFn: async () => {
       const aptos = new Aptos(new AptosConfig({ network: network }));
-      return aptos.getAccountCoinAmount({
-        accountAddress,
-        coinType: "0x1::aptos_coin::AptosCoin",
-      });
+
+      const payload: InputViewFunctionJsonData = {
+        function: "0x1::coin::balance",
+        typeArguments: ["0x1::aptos_coin::AptosCoin"],
+        functionArguments: [accountAddress.toString()],
+      };
+      const [balance] = await aptos.viewJson<[number]>({ payload: payload });
+      return balance;
     },
     gcTime: 60000, // 1 minute
     staleTime: 5000, // 5 seconds
