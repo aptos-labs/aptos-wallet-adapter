@@ -253,7 +253,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         );
         if (!alreadyExists) {
           wallet.readyState = WalletReadyState.Installed;
-          wallet.isAptosNativeWallet = !("authenticationFunction" in wallet);
+          wallet.isAptosNativeWallet = this.isAptosNativeWallet(wallet);
           this._standard_wallets.push(wallet);
           this.emit("standardWalletsAdded", wallet);
         }
@@ -273,11 +273,15 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
       if (isValid) {
         wallet.readyState = WalletReadyState.Installed;
-        // Aptos native wallets do not have an authenticationFunction property
-        wallet.isAptosNativeWallet = !("authenticationFunction" in wallet);
+        wallet.isAptosNativeWallet = this.isAptosNativeWallet(wallet);
         this._standard_wallets.push(wallet);
       }
     });
+  }
+
+  // Aptos native wallets do not have an authenticationFunction property
+  private isAptosNativeWallet(wallet: AptosWallet): boolean {
+    return !("authenticationFunction" in wallet);
   }
 
   // Since we can't discover AIP-62 wallets that are not installed on the user machine,
