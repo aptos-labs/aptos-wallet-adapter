@@ -21,17 +21,15 @@ import {
   WormholeInitiateTransferResponse,
   WormholeQuoteResponse,
 } from "@aptos-labs/cross-chain-core";
-import { SolanaDerivedWallet } from "@aptos-labs/derived-wallet-solana";
 import { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
 import { Loader2, MoveDown } from "lucide-react";
 import USDC from "@/app/icons/USDC";
 import { chainToIcon } from "@/app/icons";
-import { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import {
+  isEIP1193DerivedWallet,
   OriginWalletDetails,
-  useWallet,
-} from "@aptos-labs/wallet-adapter-react";
-import { isEIP1193DerivedWallet } from "@/utils/derivedWallet";
+} from "@/utils/derivedWallet";
 import { isSolanaDerivedWallet } from "@/utils/derivedWallet";
 
 const dappNetwork: Network.MAINNET | Network.TESTNET = Network.TESTNET;
