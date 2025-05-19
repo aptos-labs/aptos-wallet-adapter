@@ -4,7 +4,7 @@ import {
 } from "@aptos-connect/wallet-adapter-plugin";
 import { Network } from "@aptos-labs/ts-sdk";
 import { DevTWallet, TWallet } from "@atomrigslab/aptos-wallet-adapter";
-import { MSafeWallet } from "@msafe/aptos-aip62-wallet";
+import { inMSafeWallet, MSafeWallet } from "@msafe/aptos-aip62-wallet";
 import { DappConfig, AdapterWallet } from "./WalletCore";
 
 export function getSDKWallets(dappConfig?: DappConfig) {
@@ -35,7 +35,9 @@ export function getSDKWallets(dappConfig?: DappConfig) {
     sdkWallets.push(new DevTWallet() as any);
   }
 
-  if (dappConfig?.network) {
+  // MSafe only works if the dapp is open within the MSafe App store
+  // https://doc.m-safe.io/aptos/developers/integrate-with-msafe-dapp/faq
+  if (dappConfig?.msafeWalletConfig && dappConfig.network && inMSafeWallet()) {
     sdkWallets.push(
       new MSafeWallet({
         ...dappConfig?.msafeWalletConfig,
