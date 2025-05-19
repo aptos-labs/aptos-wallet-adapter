@@ -234,12 +234,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         return;
       }
 
-      // Remove optional duplications in the _all_wallets array
-      this._standard_wallets = this._standard_wallets.filter(
-        (item) => item.name !== wallet.name
-      );
-
       const isValid = isWalletWithRequiredFeatureSet(wallet);
+
       if (isValid) {
         // check if we already have this wallet as a not detected wallet
         const index = this._standard_not_detected_wallets.findIndex(
@@ -250,9 +246,15 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           this._standard_not_detected_wallets.splice(index, 1);
         }
 
-        wallet.readyState = WalletReadyState.Installed;
-        this._standard_wallets.push(wallet);
-        this.emit("standardWalletsAdded", wallet);
+        // ✅ Check if wallet already exists in _standard_wallets
+        const alreadyExists = this._standard_wallets.some(
+          (w) => w.name === wallet.name
+        );
+        if (!alreadyExists) {
+          wallet.readyState = WalletReadyState.Installed;
+          this._standard_wallets.push(wallet);
+          this.emit("standardWalletsAdded", wallet);
+        }
       }
     });
   }
