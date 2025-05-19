@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-base
 
+## 0.3.0
+
+### Minor Changes
+
+- 4e3fe69: Use the default cross-chain wallet's signMessage API for when signing a regular message
+
 ## 0.2.1
 
 ### Patch Changes
