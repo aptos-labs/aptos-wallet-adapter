@@ -15,6 +15,7 @@
     "build": "pnpm build:bundle && pnpm build:declarations",
     "build:bundle": "tsup --sourcemap",
     "build:declarations": "tsc --emitDeclarationOnly --declaration --declarationMap",
+    "dev": "tsup src/index.ts --format esm,cjs --watch",
     "test": "jest",
     "lint": "TIMING=1 eslint \"src/**/*.ts*\""
   },

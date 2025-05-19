@@ -52,7 +52,7 @@ export class SolanaDerivedWallet implements AptosWallet {
 
   constructor(
     solanaWallet: SolanaWalletAdapter,
-    options: SolanaDomainWalletOptions = {},
+    options: SolanaDomainWalletOptions = {}
   ) {
     const {
       authenticationFunction = defaultAuthenticationFunction,
@@ -181,7 +181,7 @@ export class SolanaDerivedWallet implements AptosWallet {
   }
 
   async changeNetwork(
-    newNetwork: NetworkInfo,
+    newNetwork: NetworkInfo
   ): Promise<UserResponse<AptosChangeNetworkOutput>> {
     const { name, chainId, url } = newNetwork;
     if (name === Network.CUSTOM) {
@@ -214,7 +214,7 @@ export class SolanaDerivedWallet implements AptosWallet {
   // region Signatures
 
   async signMessage(
-    input: AptosSignMessageInput,
+    input: AptosSignMessageInput
   ): Promise<UserResponse<AptosSignMessageOutput>> {
     const chainId = input.chainId
       ? this.defaultNetwork === Network.DEVNET
@@ -234,7 +234,7 @@ export class SolanaDerivedWallet implements AptosWallet {
 
   async signTransaction(
     rawTransaction: AnyRawTransaction,
-    _asFeePayer?: boolean,
+    _asFeePayer?: boolean
   ): Promise<UserResponse<AccountAuthenticator>> {
     return signAptosTransactionWithSolana({
       solanaWallet: this.solanaWallet,

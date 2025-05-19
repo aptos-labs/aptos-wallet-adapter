@@ -13,7 +13,7 @@ import {
 import { UserResponse } from "@aptos-labs/wallet-standard";
 import { BrowserProvider, Eip1193Provider } from "ethers";
 import { createSiweEnvelopeForAptosTransaction } from "./createSiweEnvelope";
-import { EIP1193DerivedSignature } from "./EIP1193DerivedSignature";
+import { EIP1193SiweSignature } from "./EIP1193DerivedSignature";
 import { EthereumAddress, wrapEthersUserResponse } from "./shared";
 
 /**
@@ -73,11 +73,7 @@ export async function signAptosTransactionWithEthereum(
     serializer.serializeU8(SIGNATURE_TYPE);
     // Remove the trailing colon from the scheme
     const scheme = window.location.protocol.slice(0, -1);
-    const signature = new EIP1193DerivedSignature(
-      scheme,
-      issuedAt,
-      siweSignature
-    );
+    const signature = new EIP1193SiweSignature(scheme, issuedAt, siweSignature);
     signature.serialize(serializer);
     const abstractSignature = serializer.toUint8Array();
 

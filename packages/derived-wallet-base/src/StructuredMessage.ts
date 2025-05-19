@@ -6,7 +6,7 @@ export interface StructuredMessageInput {
   message: string;
   nonce: string;
   application?: boolean;
-  chainId?: number | boolean;
+  chainId?: number;
   address?: AccountAddressInput | boolean;
 }
 
@@ -19,7 +19,7 @@ export interface StructuredMessage {
 }
 
 export function encodeStructuredMessage(
-  structuredMessage: StructuredMessage,
+  structuredMessage: StructuredMessage
 ): Uint8Array {
   const { address, application, chainId, message, nonce } = structuredMessage;
 
@@ -36,9 +36,9 @@ export function encodeStructuredMessage(
 
   const parts = [
     structuredMessagePrefix,
-    ...optionalParts,
     `message: ${message}`,
     `nonce: ${nonce}`,
+    ...optionalParts,
   ];
 
   const input = parts.join("\n");
@@ -53,7 +53,7 @@ function parsePart(part: string, name: string) {
 }
 
 export function decodeStructuredMessage(
-  encoded: Uint8Array,
+  encoded: Uint8Array
 ): StructuredMessage {
   const utf8Decoded = new TextDecoder().decode(encoded);
   const [prefix, ...parts] = utf8Decoded.split("\n");
