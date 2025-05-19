@@ -1,5 +1,18 @@
 # @aptos-labs/wallet-adapter-react
 
+## 6.1.0
+
+### Minor Changes
+
+- 8675c83: Remove derived wallet packages peer dependecies
+
+### Patch Changes
+
+- Updated dependencies [1a5571b]
+- Updated dependencies [17d3f27]
+- Updated dependencies [e097767]
+  - @aptos-labs/wallet-adapter-core@5.6.0
+
 ## 6.0.4
 
 ### Patch Changes

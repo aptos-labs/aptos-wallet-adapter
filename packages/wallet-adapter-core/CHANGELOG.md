@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.6.0
+
+### Minor Changes
+
+- 17d3f27: Add isAptosNativeWallet boolean property to the wallet
+
+### Patch Changes
+
+- 1a5571b: Display MSafe wallet only if the app is open within the MSafe app store
+- e097767: Fix potential wallet duplications by not pushing the wallet if it already exists in the known standard wallets array
+
 ## 5.5.1
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.3.0
+
+### Minor Changes
+
+- 4e3fe69: Use the default cross-chain wallet's signMessage API for when signing a regular message
+
+### Patch Changes
+
+- Updated dependencies [4e3fe69]
+  - @aptos-labs/derived-wallet-base@0.3.0
+
 ## 0.2.5
 
 ### Patch Changes
