@@ -6,10 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 // Imports for registering a browser extension wallet plugin on page load
 import { MyWallet } from "@/utils/standardWallet";
 import { Network } from "@aptos-labs/ts-sdk";
-import {
-  OriginWalletDetails,
-  useWallet,
-} from "@aptos-labs/wallet-adapter-react";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { registerWallet } from "@aptos-labs/wallet-standard";
 import { init as initTelegram } from "@telegram-apps/sdk";
 import { AlertCircle } from "lucide-react";
@@ -21,6 +18,10 @@ import {
   WalletConnection,
   WalletSelection,
 } from "./components";
+import {
+  getOriginWalletDetails,
+  OriginWalletDetails,
+} from "@/utils/derivedWallet";
 
 // Example of how to register a browser extension wallet plugin.
 // Browser extension wallets should call registerWallet once on page load.
@@ -39,14 +40,7 @@ if (isTelegramMiniApp) {
 }
 
 export default function Home() {
-  const {
-    account,
-    connected,
-    network,
-    wallet,
-    changeNetwork,
-    getOriginWalletDetails,
-  } = useWallet();
+  const { account, connected, network, wallet, changeNetwork } = useWallet();
 
   const [originWalletDetails, setOriginWalletDetails] = useState<
     OriginWalletDetails | undefined
