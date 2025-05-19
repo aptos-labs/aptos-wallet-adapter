@@ -9,7 +9,7 @@ import {
 /**
  * A classs representing a signature of a message signed with EIP1193
  */
-export class EIP1193Signature extends Signature {
+export class EIP1193PersonalSignature extends Signature {
   static readonly LENGTH = 65;
   protected readonly _siweSignature: Uint8Array;
 
@@ -28,14 +28,14 @@ export class EIP1193Signature extends Signature {
 
   static deserialize(deserializer: Deserializer) {
     const signature = deserializer.deserializeBytes();
-    return new EIP1193Signature(signature);
+    return new EIP1193PersonalSignature(signature);
   }
 }
 
 /**
  * A class representing a signature of a message signed with EIP1193 and following the SIWE standard
  */
-export class EIP1193DerivedSignature extends EIP1193Signature {
+export class EIP1193SiweSignature extends EIP1193PersonalSignature {
   // The date and time when the signature was issued
   readonly issuedAt: Date;
   // The scheme in the URI of the message, e.g. the scheme of the website that requested the signature (http, https, etc.)
@@ -57,6 +57,6 @@ export class EIP1193DerivedSignature extends EIP1193Signature {
     const scheme = deserializer.deserializeStr();
     const issuedAt = new Date(deserializer.deserializeStr());
     const siweSignature = deserializer.deserializeBytes();
-    return new EIP1193DerivedSignature(scheme, issuedAt, siweSignature);
+    return new EIP1193SiweSignature(scheme, issuedAt, siweSignature);
   }
 }

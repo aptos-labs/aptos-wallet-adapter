@@ -10,7 +10,7 @@ import {
 } from "@aptos-labs/wallet-standard";
 import { BrowserProvider, Eip1193Provider } from "ethers";
 import { EIP1193DerivedPublicKey } from "./EIP1193DerivedPublicKey";
-import { EIP1193Signature } from "./EIP1193DerivedSignature";
+import { EIP1193PersonalSignature } from "./EIP1193DerivedSignature";
 import { EthereumAddress, wrapEthersUserResponse } from "./shared";
 
 export interface SignAptosMessageWithEthereumInput {
@@ -64,7 +64,7 @@ export async function signAptosMessageWithEthereum(
   );
 
   return mapUserResponse(response, (siweSignature) => {
-    const signature = new EIP1193Signature(siweSignature);
+    const signature = new EIP1193PersonalSignature(siweSignature);
     const fullMessage = new TextDecoder().decode(signingMessage);
     return {
       prefix: "APTOS",

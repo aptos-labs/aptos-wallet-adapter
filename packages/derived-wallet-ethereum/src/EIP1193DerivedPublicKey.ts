@@ -18,8 +18,8 @@ import {
 import { verifyMessage as verifyEthereumMessage } from "ethers";
 import { createSiweEnvelopeForAptosTransaction } from "./createSiweEnvelope";
 import {
-  EIP1193DerivedSignature,
-  EIP1193Signature,
+  EIP1193SiweSignature,
+  EIP1193PersonalSignature,
 } from "./EIP1193DerivedSignature";
 import { EthereumAddress } from "./shared";
 
@@ -67,14 +67,14 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
     let messageBytes: Uint8Array | string;
     // Handle structured message, i.e. a message signed withAptosSignMessageInput
     if (parsedSigningMessage.type === "structuredMessage") {
-      if (!(signature instanceof EIP1193Signature)) return false;
+      if (!(signature instanceof EIP1193PersonalSignature)) return false;
 
       messageBytes = encodeStructuredMessage(
         parsedSigningMessage.structuredMessage
       );
     } else {
       // Handle transaction
-      if (!(signature instanceof EIP1193DerivedSignature)) return false;
+      if (!(signature instanceof EIP1193SiweSignature)) return false;
       const { issuedAt } = signature;
       const signingMessageDigest = hashValues([message]);
       // Obtain SIWE envelope for the signing message
