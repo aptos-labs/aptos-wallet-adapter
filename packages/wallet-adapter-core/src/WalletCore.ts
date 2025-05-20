@@ -527,8 +527,16 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         const uninstalledWallet =
           selectedWallet as unknown as AptosStandardSupportedWallet;
         if (uninstalledWallet.deeplinkProvider) {
-          const url = encodeURIComponent(window.location.href);
-          const location = uninstalledWallet.deeplinkProvider.concat(url);
+          let parameter = "";
+          if (uninstalledWallet.name.includes("Phantom")) {
+            // Phantom required parameters https://docs.phantom.com/phantom-deeplinks/other-methods/browse#parameters
+            let url = encodeURIComponent(window.location.href);
+            let ref = encodeURIComponent(window.location.origin);
+            parameter = `${url}?ref=${ref}`;
+          } else {
+            parameter = encodeURIComponent(window.location.href);
+          }
+          const location = uninstalledWallet.deeplinkProvider.concat(parameter);
           window.location.href = location;
           return;
         }
