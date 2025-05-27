@@ -1,10 +1,15 @@
+import { AptosSignInBoundFields } from "@aptos-labs/wallet-standard";
 import { WALLET_ADAPTER_CORE_VERSION } from "./version";
 
 export type {
   AptosSignInOutput,
   AptosSignInInput,
-  AptosSignInRequiredFields,
+  AptosSignInBoundFields,
 } from "@aptos-labs/wallet-standard";
+/**
+ * @deprecated Use `AptosSignInBoundFields` instead. This will be removed in future versions.
+ */
+export type AptosSignInRequiredFields = AptosSignInBoundFields;
 
 export * from "./WalletCore";
 export * from "./constants";
