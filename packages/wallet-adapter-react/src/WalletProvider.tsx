@@ -157,7 +157,11 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const signIn = async (args: {
     walletName: string;
     input: AptosSignInInput;
-  }): Promise<void | AptosSignInOutput> => {
+  }): Promise<AptosSignInOutput> => {
+    if (!walletCore) {
+      throw new Error("WalletCore is not initialized");
+    }
+
     try {
       setIsLoading(true);
       return await walletCore?.signIn(args);

@@ -29,7 +29,7 @@
     ]
   },
   "dependencies": {
-    "@aptos-labs/wallet-standard": "^0.3.0"
+    "@aptos-labs/wallet-standard": "^0.5.0"
   },
   "peerDependencies": {
     "@aptos-labs/ts-sdk": "^1.38.0 || ^2.0.0"
