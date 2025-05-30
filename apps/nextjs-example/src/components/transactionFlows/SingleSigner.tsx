@@ -151,7 +151,7 @@ export function SingleSigner() {
 
     try {
       const transactionToSign = await aptosClient(
-        network,
+        network
       ).transaction.build.simple({
         sender: account.address,
         data: {
@@ -172,34 +172,76 @@ export function SingleSigner() {
     }
   };
 
+  const onAddAuthenticationFunction = async () => {
+    if (!account) return;
+    alert("This method tests the wallet displays a warning message.");
+    const transaction: InputTransactionData = {
+      data: {
+        function: "0x1::account_abstraction::add_authentication_function",
+        functionArguments: [account.address, "dummyModule", "dummyFunction"],
+      },
+    };
+    try {
+      const response = await signAndSubmitTransaction(transaction);
+      await aptosClient(network).waitForTransaction({
+        transactionHash: response.hash,
+      });
+      toast({
+        title: "Success",
+        description: <TransactionHash hash={response.hash} network={network} />,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Single Signer Flow</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-wrap gap-4">
-        <Button onClick={onSignAndSubmitTransaction} disabled={!sendable}>
-          Sign and submit transaction
-        </Button>
-        <Button onClick={onSignAndSubmitScriptTransaction} disabled={!sendable}>
-          Sign and submit script transaction
-        </Button>
-        <Button onClick={onSignAndSubmitBCSTransaction} disabled={!sendable}>
-          Sign and submit BCS transaction
-        </Button>
-        <Button onClick={onSignTransaction} disabled={!sendable}>
-          Sign transaction
-        </Button>
-        <Button onClick={onSignRawTransaction} disabled={!sendable}>
-          Sign raw transaction
-        </Button>
-        <Button onClick={onSignMessage} disabled={!sendable}>
-          Sign message
-        </Button>
-        <Button onClick={onSignMessageAndVerify} disabled={!sendable}>
-          Sign message and verify
-        </Button>
-      </CardContent>
-    </Card>
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>Single Signer Flow</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-wrap gap-4">
+          <Button onClick={onSignAndSubmitTransaction} disabled={!sendable}>
+            Sign and submit transaction
+          </Button>
+          <Button
+            onClick={onSignAndSubmitScriptTransaction}
+            disabled={!sendable}
+          >
+            Sign and submit script transaction
+          </Button>
+          <Button onClick={onSignAndSubmitBCSTransaction} disabled={!sendable}>
+            Sign and submit BCS transaction
+          </Button>
+          <Button onClick={onSignTransaction} disabled={!sendable}>
+            Sign transaction
+          </Button>
+          <Button onClick={onSignRawTransaction} disabled={!sendable}>
+            Sign raw transaction
+          </Button>
+          <Button onClick={onSignMessage} disabled={!sendable}>
+            Sign message
+          </Button>
+          <Button onClick={onSignMessageAndVerify} disabled={!sendable}>
+            Sign message and verify
+          </Button>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Account Abstraction</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-wrap gap-4">
+          <Button
+            onClick={onAddAuthenticationFunction}
+            disabled={!sendable}
+            variant="secondary"
+          >
+            Add authentication function
+          </Button>
+        </CardContent>
+      </Card>
+    </>
   );
 }
