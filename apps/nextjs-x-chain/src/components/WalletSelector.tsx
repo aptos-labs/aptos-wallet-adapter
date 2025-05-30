@@ -147,6 +147,32 @@ function ConnectWalletDialog({
     { evmWallets: [], solanaWallets: [], aptosWallets: [] }
   );
 
+  const {
+    evmInstallableWallets,
+    solanaInstallableWallets,
+    aptosInstallableWallets,
+  } = installableWallets.reduce<{
+    evmInstallableWallets: AdapterNotDetectedWallet[];
+    solanaInstallableWallets: AdapterNotDetectedWallet[];
+    aptosInstallableWallets: AdapterNotDetectedWallet[];
+  }>(
+    (acc, wallet) => {
+      if (wallet.name.includes("Ethereum")) {
+        acc.evmInstallableWallets.push(wallet);
+      } else if (wallet.name.includes("Solana")) {
+        acc.solanaInstallableWallets.push(wallet);
+      } else {
+        acc.aptosInstallableWallets.push(wallet);
+      }
+      return acc;
+    },
+    {
+      evmInstallableWallets: [],
+      solanaInstallableWallets: [],
+      aptosInstallableWallets: [],
+    }
+  );
+
   return (
     <DialogContent className="max-h-screen overflow-auto">
       <AboutAptosConnect renderEducationScreen={renderEducationScreen}>
@@ -210,7 +236,7 @@ function ConnectWalletDialog({
                   onConnect={close}
                 />
               ))}
-              {!!installableWallets.length && (
+              {!!aptosInstallableWallets.length && (
                 <Collapsible className="flex flex-col gap-3 pt-3">
                   <CollapsibleTrigger asChild>
                     <Button size="sm" variant="ghost" className="gap-2">
@@ -218,7 +244,7 @@ function ConnectWalletDialog({
                     </Button>
                   </CollapsibleTrigger>
                   <CollapsibleContent className="flex flex-col gap-3">
-                    {installableWallets.map((wallet) => (
+                    {aptosInstallableWallets.map((wallet) => (
                       <WalletRow
                         key={wallet.name}
                         wallet={wallet}
@@ -238,6 +264,24 @@ function ConnectWalletDialog({
                   onConnect={close}
                 />
               ))}
+              {!!solanaInstallableWallets.length && (
+                <Collapsible className="flex flex-col gap-3 pt-3">
+                  <CollapsibleTrigger asChild>
+                    <Button size="sm" variant="ghost" className="gap-2">
+                      More wallets <ChevronDown />
+                    </Button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="flex flex-col gap-3">
+                    {solanaInstallableWallets.map((wallet) => (
+                      <WalletRow
+                        key={wallet.name}
+                        wallet={wallet}
+                        onConnect={close}
+                      />
+                    ))}
+                  </CollapsibleContent>
+                </Collapsible>
+              )}
             </TabsContent>
             {/* Handle Ethereum wallets */}
             <TabsContent value="ethereum">
@@ -248,6 +292,24 @@ function ConnectWalletDialog({
                   onConnect={close}
                 />
               ))}
+              {!!evmInstallableWallets.length && (
+                <Collapsible className="flex flex-col gap-3 pt-3">
+                  <CollapsibleTrigger asChild>
+                    <Button size="sm" variant="ghost" className="gap-2">
+                      More wallets <ChevronDown />
+                    </Button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="flex flex-col gap-3">
+                    {evmInstallableWallets.map((wallet) => (
+                      <WalletRow
+                        key={wallet.name}
+                        wallet={wallet}
+                        onConnect={close}
+                      />
+                    ))}
+                  </CollapsibleContent>
+                </Collapsible>
+              )}
             </TabsContent>
           </Tabs>
         </div>
