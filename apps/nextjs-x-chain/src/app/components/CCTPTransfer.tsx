@@ -42,21 +42,21 @@ const provider = crossChainCore.getProvider("Wormhole");
 let mainSigner: Account;
 let sponsorAccount: Account;
 
+// Set the main signer account
+const mainSignerPrivateKey =
+  process.env.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY ||
+  "0x0000000000000000000000000000000000000000000000000000000000000000";
 const privateKey = new Ed25519PrivateKey(
-  PrivateKey.formatPrivateKey(
-    (process.env.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY as string) ??
-      "0x0000000000000000000000000000000000000000000000000000000000000000",
-    PrivateKeyVariants.Ed25519
-  )
+  PrivateKey.formatPrivateKey(mainSignerPrivateKey, PrivateKeyVariants.Ed25519)
 );
 mainSigner = Account.fromPrivateKey({ privateKey });
 
+// Set the sponsor account
+const sponsorPrivateKey =
+  process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY ||
+  "0x0000000000000000000000000000000000000000000000000000000000000000";
 const feePayerPrivateKey = new Ed25519PrivateKey(
-  PrivateKey.formatPrivateKey(
-    (process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY as string) ??
-      "0x0000000000000000000000000000000000000000000000000000000000000000",
-    PrivateKeyVariants.Ed25519
-  )
+  PrivateKey.formatPrivateKey(sponsorPrivateKey, PrivateKeyVariants.Ed25519)
 );
 sponsorAccount = Account.fromPrivateKey({
   privateKey: feePayerPrivateKey,
