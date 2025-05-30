@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.7.0
+
+### Minor Changes
+
+- 1a4ed58: Support cross chain wallet deep linking
+
 ## 5.6.0
 
 ### Minor Changes
