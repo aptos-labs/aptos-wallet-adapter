@@ -1,4 +1,4 @@
-> **_NOTE:_** The feature is currently only available on DEVNET and is considered an alpha version; therefore, you can expect breaking changes.
+> **_NOTE:_** The feature is currently only available on DEVNET and TESTNET and is considered an alpha version; therefore, you can expect breaking changes.
 
 # Derived Wallet Ethereum
 
@@ -23,12 +23,12 @@ Currently, the wallets that have been tested and support cross-chain accounts ar
 
 |          | Aptos Devnet | Aptos Testnet | Aptos Mainnet |
 | -------- | ------------ | ------------- | ------------- |
-| Metamask | ✅           |               |
-| Phantom  | ✅           |               |
-| Coinbase | ✅           |               |
-| OKX      | ✅           |               |
-| Exodus   | ✅           |               |
-| Backpack | ✅           |               |
+| Metamask | ✅           | ✅            |
+| Phantom  | ✅           | ✅            |
+| Coinbase | ✅           | ✅            |
+| OKX      | ✅           | ✅            |
+| Exodus   | ✅           | ✅            |
+| Backpack | ✅           | ✅            |
 
 ### Usage
 
@@ -50,13 +50,13 @@ npm install @aptos-labs/derived-wallet-ethereum
 import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
 import { setupAutomaticEthereumWalletDerivation } from "@aptos-labs/derived-wallet-ethereum";
 
-setupAutomaticEthereumWalletDerivation({ defaultNetwork: Network.DEVNET }); // Network.DEVNET is the Aptos network your dapp is working with
+setupAutomaticEthereumWalletDerivation({ defaultNetwork: Network.TESTNET }); // Network.TESTNET is the Aptos network your dapp is working with
 
 .....
 
 <AptosWalletAdapterProvider
  dappConfig={{
-    network: Network.DEVNET,
+    network: Network.TESTNET,
   }}
 >
   {children}
@@ -83,7 +83,7 @@ import {
 } from "@aptos-labs/ts-sdk";
 
 // Initialize an Aptos client
-const config = new AptosConfig({ network: Network.DEVNET });
+const config = new AptosConfig({ network: Network.TESTNET });
 const aptos = new Aptos(config);
 
 // Generate a sponsor account or use an existing account

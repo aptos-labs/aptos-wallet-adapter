@@ -3,6 +3,8 @@ import {
   Account,
   AccountAuthenticator,
   Ed25519PrivateKey,
+  InputGenerateTransactionPayloadData,
+  Network,
   PrivateKey,
   PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk";
@@ -27,10 +29,10 @@ function generateNonce() {
 }
 
 export type SingleSignerProps = {
-  sponsorPrivateKeyHex?: string;
+  dappNetwork: Network;
 };
 
-export function SingleSigner({ sponsorPrivateKeyHex }: SingleSignerProps) {
+export function SingleSigner({ dappNetwork }: SingleSignerProps) {
   const { toast } = useToast();
   const {
     connected,
@@ -124,19 +126,35 @@ export function SingleSigner({ sponsorPrivateKeyHex }: SingleSignerProps) {
   const onSignAndSubmitTransaction = async () => {
     if (!account) return;
 
+    let transactionData: InputGenerateTransactionPayloadData;
+
+    // On testnet, derived account can't just fund their account with APT on the UI (but need to go to the faucet to get APT),
+    // we will post a message to the message board as an example.
+    // We can guarantee that the message board is deployed on Testnet as it is not getting wiped (like devnet).
+    if (dappNetwork === Network.TESTNET) {
+      transactionData = {
+        function:
+          "0xeadc81e5ac02adc11308f643761294e27103a4a36822761633fd40cb08f59ed9::message_board::post_message",
+        functionArguments: ["Hello from Aptos Wallet Adapter"],
+      };
+    } else {
+      // We are on Devnet, so just use a simple transfer transaction as the derived account can fund their own account with APT.
+      transactionData = {
+        function: "0x1::aptos_account::transfer",
+        functionArguments: [account.address.toString(), 717],
+      };
+    }
+
     try {
       const rawTransaction = await aptosClient(
         network
       ).transaction.build.simple({
-        data: {
-          function: "0x1::aptos_account::transfer",
-          functionArguments: [account.address.toString(), 717],
-        },
+        data: transactionData,
         options: {
           maxGasAmount: 2000,
         },
         sender: account.address,
-        withFeePayer: sponsorPrivateKeyHex !== undefined,
+        withFeePayer: dappNetwork === Network.TESTNET ? true : false,
       });
 
       const response = await signTransaction({
@@ -144,10 +162,11 @@ export function SingleSigner({ sponsorPrivateKeyHex }: SingleSignerProps) {
       });
 
       let sponsorAuthenticator: AccountAuthenticator | undefined;
-      if (sponsorPrivateKeyHex) {
+      if (dappNetwork === Network.TESTNET) {
         const sponsorPrivateKey = new Ed25519PrivateKey(
           PrivateKey.formatPrivateKey(
-            sponsorPrivateKeyHex,
+            process.env
+              .NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY as string,
             PrivateKeyVariants.Ed25519
           )
         );
