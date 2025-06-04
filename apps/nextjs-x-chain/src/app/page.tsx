@@ -96,7 +96,7 @@ export default function Home() {
                 </AlertDescription>
               </Alert>
               {/* Transaction actions are disabled on mainnet */}
-              <SingleSigner />
+              <SingleSigner dappNetwork={Network.MAINNET} />
             </>
           )}
           {network?.name === Network.TESTNET && (
@@ -108,11 +108,7 @@ export default function Home() {
                   originWalletDetails={originWalletDetails}
                 />
               )}
-              <SingleSigner
-                sponsorPrivateKeyHex={
-                  process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY
-                }
-              />
+              <SingleSigner dappNetwork={Network.TESTNET} />
             </>
           )}
           {network?.name === Network.DEVNET && (
@@ -125,7 +121,7 @@ export default function Home() {
                   wallet={wallet}
                 />
               )}
-              <SingleSigner />
+              <SingleSigner dappNetwork={Network.DEVNET} />
             </>
           )}
         </>

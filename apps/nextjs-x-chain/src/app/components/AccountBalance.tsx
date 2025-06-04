@@ -67,10 +67,7 @@ export function AccountBalance({ account, network }: AccountBalanceProps) {
       <CardContent>
         <div className="flex flex-row items-center justify-between w-full">
           {balanceSection}
-          <Button
-            onClick={() => fundAccount()}
-            disabled={network.name !== Network.DEVNET || isFunding}
-          >
+          <Button onClick={() => fundAccount()} disabled={isFunding}>
             Fund account
           </Button>
         </div>
