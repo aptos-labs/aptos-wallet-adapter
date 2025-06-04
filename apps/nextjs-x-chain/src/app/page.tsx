@@ -22,6 +22,7 @@ import {
   getOriginWalletDetails,
   OriginWalletDetails,
 } from "@/utils/derivedWallet";
+import { CCTPWithdraw } from "./components/CCTPWithdraw";
 
 // Example of how to register a browser extension wallet plugin.
 // Browser extension wallets should call registerWallet once on page load.
@@ -102,12 +103,28 @@ export default function Home() {
           {network?.name === Network.TESTNET && (
             <>
               {/* CCTP transfer is enabled for non-Aptos wallets */}
-              {!wallet.isAptosNativeWallet && (
+              {/* {!wallet.isAptosNativeWallet && (
+                <>
+                  <CCTPTransfer
+                    wallet={wallet}
+                    originWalletDetails={originWalletDetails}
+                  />
+                  <CCTPWithdraw
+                    wallet={wallet}
+                    originWalletDetails={originWalletDetails}
+                  />
+                </>
+              )} */}
+              <>
                 <CCTPTransfer
                   wallet={wallet}
                   originWalletDetails={originWalletDetails}
                 />
-              )}
+                <CCTPWithdraw
+                  wallet={wallet}
+                  originWalletDetails={originWalletDetails}
+                />
+              </>
               <SingleSigner dappNetwork={Network.TESTNET} />
             </>
           )}

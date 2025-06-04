@@ -62,7 +62,7 @@ sponsorAccount = Account.fromPrivateKey({
   privateKey: feePayerPrivateKey,
 });
 
-export function CCTPTransfer({
+export function CCTPWithdraw({
   wallet,
   originWalletDetails,
 }: {
@@ -108,16 +108,16 @@ export function CCTPTransfer({
   }, [wallet]);
 
   const fetchWalletUsdcBalance = async () => {
-    if (!sourceChain) return;
-    if (!originWalletDetails) return;
+    if (!account?.address) return;
     const balance = await crossChainCore.getWalletUSDCBalance(
-      originWalletDetails.address.toString(),
-      sourceChain
+      account.address.toString(),
+      "Aptos"
     );
     setWalletUSDCBalance(balance);
   };
 
   useEffect(() => {
+    if (!sourceChain) return;
     fetchWalletUsdcBalance();
   }, [originWalletDetails, network, sourceChain]);
 
@@ -158,7 +158,7 @@ export function CCTPTransfer({
         const quote = await provider?.getQuote({
           amount,
           originChain: sourceChain,
-          type: "transfer",
+          type: "withdraw",
         });
         setQuote(quote);
         setQuoteIsFetching(false);
@@ -173,37 +173,6 @@ export function CCTPTransfer({
     return Number(amount) > Number(walletUSDCBalance ?? "0");
   };
 
-  const onTransferClick = async () => {
-    setTransactionInProgress(true);
-    const transfer = async () => {
-      if (!sourceChain) {
-        throw new Error("Missing required parameters sourceChain");
-      }
-      const { originChainTxnId, destinationChainTxnId } =
-        await provider.transfer({
-          sourceChain,
-          wallet,
-          destinationAddress: account?.address?.toString() ?? "",
-          mainSigner,
-          sponsorAccount,
-        });
-      return { originChainTxnId, destinationChainTxnId };
-    };
-    transfer()
-      .then((response) => {
-        setTransferResponse(response);
-        setTransactionInProgress(false);
-        setTransactionCompleted(true);
-        fetchWalletUsdcBalance();
-      })
-      .catch((error) => {
-        console.error("Error transferring", error);
-      })
-      .finally(() => {
-        setTransactionInProgress(false);
-      });
-  };
-
   const getChainInfo = (chain: Chain): ChainConfig => {
     if (!crossChainCore) {
       throw new Error("CrossChainCore is not set");
@@ -215,12 +184,41 @@ export function CCTPTransfer({
     return chainConfig;
   };
 
+  const onWithdrawClick = async () => {
+    setTransactionInProgress(true);
+    const transfer = async () => {
+      const { originChainTxnId, destinationChainTxnId } =
+        await provider.withdraw({
+          sourceChain,
+          wallet,
+          destinationAddress: originWalletDetails?.address.toString(),
+          sponsorAccount,
+        });
+      return { originChainTxnId, destinationChainTxnId };
+    };
+    transfer()
+      .then((response) => {
+        console.log("response", response);
+        setTransferResponse(response);
+        setTransactionInProgress(false);
+        setTransactionCompleted(true);
+        // refetch balance after the process
+        fetchWalletUsdcBalance();
+      })
+      .catch((error) => {
+        console.error("Error transferring", error);
+      })
+      .finally(() => {
+        setTransactionInProgress(false);
+      });
+  };
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>CCTP transfer</CardTitle>
+        <CardTitle>CCTP withdraw</CardTitle>
         <CardDescription>
-          Transfer USDC to your derived Aptos account
+          Withdraw USDC from your derived Aptos account
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
@@ -318,10 +316,10 @@ export function CCTPTransfer({
 
         {!transactionInProgress && !transactionCompleted && (
           <Button
-            onClick={onTransferClick}
+            onClick={onWithdrawClick}
             disabled={!amount || !wallet || !quote}
           >
-            Transfer
+            Withdraw
           </Button>
         )}
 
@@ -347,7 +345,18 @@ export function CCTPTransfer({
             <p className="text-lg">Transaction submitted</p>
             {transferResponse.originChainTxnId && (
               <a
-                href={`${getChainInfo(sourceChain!).explorerUrl}/tx/${transferResponse.originChainTxnId}?cluster=${
+                href={`https://explorer.aptoslabs.com/txn/${transferResponse.originChainTxnId}?network=${
+                  dappNetwork === Network.MAINNET ? "mainnet" : "testnet"
+                }`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <p className="text-md underline">View on Aptos Explorer</p>
+              </a>
+            )}
+            {transferResponse.destinationChainTxnId && (
+              <a
+                href={`${getChainInfo(sourceChain!).explorerUrl}/tx/${transferResponse.destinationChainTxnId}?cluster=${
                   dappNetwork === Network.MAINNET ? "mainnet" : "devnet"
                 }`}
                 target="_blank"
@@ -356,17 +365,6 @@ export function CCTPTransfer({
                 <p className="text-md underline">
                   View on {getChainInfo(sourceChain!).explorerName}
                 </p>
-              </a>
-            )}
-            {transferResponse.destinationChainTxnId && (
-              <a
-                href={`https://explorer.aptoslabs.com/txn/${transferResponse.destinationChainTxnId}?network=${
-                  dappNetwork === Network.MAINNET ? "mainnet" : "testnet"
-                }`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <p className="text-md underline">View on Aptos Explorer</p>
               </a>
             )}
           </div>

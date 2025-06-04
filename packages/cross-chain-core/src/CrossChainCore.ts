@@ -1,11 +1,13 @@
 import { Account, Network } from "@aptos-labs/ts-sdk";
 
 import {
-  WormholeInitiateTransferRequest,
-  WormholeInitiateTransferResponse,
+  WormholeTransferRequest,
+  WormholeTransferResponse,
   WormholeProvider,
   WormholeQuoteRequest,
   WormholeQuoteResponse,
+  WormholeWithdrawRequest,
+  WormholeWithdrawResponse,
 } from "./providers/wormhole";
 
 import {
@@ -48,13 +50,14 @@ export type CCTPProviders = "Wormhole";
 export interface CrossChainProvider<
   TQuoteRequest = any,
   TQuoteResponse = any,
-  TInitiateTransferRequest = any,
-  TInitiateTransferResponse = any,
+  TTransferRequest = any,
+  TTransferResponse = any,
+  TWithdrawRequest = any,
+  TWithdrawResponse = any,
 > {
   getQuote(params: TQuoteRequest): Promise<TQuoteResponse>;
-  initiateCCTPTransfer(
-    params: TInitiateTransferRequest,
-  ): Promise<TInitiateTransferResponse>;
+  transfer(params: TTransferRequest): Promise<TTransferResponse>;
+  withdraw(params: TWithdrawRequest): Promise<TWithdrawResponse>;
 }
 
 export class CrossChainCore {
@@ -86,8 +89,10 @@ export class CrossChainCore {
         return new WormholeProvider(this) as CrossChainProvider<
           WormholeQuoteRequest,
           WormholeQuoteResponse,
-          WormholeInitiateTransferRequest,
-          WormholeInitiateTransferResponse
+          WormholeTransferRequest,
+          WormholeTransferResponse,
+          WormholeWithdrawRequest,
+          WormholeWithdrawResponse
         >;
       default:
         throw new Error(`Unknown provider: ${providerType}`);
@@ -96,12 +101,12 @@ export class CrossChainCore {
 
   async getWalletUSDCBalance(
     walletAddress: string,
-    sourceChain: Chain,
+    sourceChain: Chain
   ): Promise<string> {
     if (sourceChain === "Aptos") {
       return await getAptosWalletUSDCBalance(
         walletAddress,
-        this._dappConfig.aptosNetwork,
+        this._dappConfig.aptosNetwork
       );
     }
     if (!this.CHAINS[sourceChain]) {
@@ -113,7 +118,7 @@ export class CrossChainCore {
           walletAddress,
           this._dappConfig.aptosNetwork,
           this._dappConfig?.solanaConfig?.rpc ??
-            this.CHAINS[sourceChain].defaultRpc,
+            this.CHAINS[sourceChain].defaultRpc
         );
       case "Ethereum":
       case "Sepolia":
@@ -121,7 +126,7 @@ export class CrossChainCore {
           walletAddress,
           this._dappConfig.aptosNetwork,
           // TODO: maybe let the user config it
-          this.CHAINS[sourceChain].defaultRpc,
+          this.CHAINS[sourceChain].defaultRpc
         );
       default:
         throw new Error(`Unsupported chain: ${sourceChain}`);

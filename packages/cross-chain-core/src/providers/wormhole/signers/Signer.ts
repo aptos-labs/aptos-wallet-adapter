@@ -14,6 +14,7 @@ import {
 
 import * as solanaSigner from "./SolanaSigner";
 import * as ethereumSigner from "./EthereumSigner";
+import * as aptosSigner from "./AptosSigner";
 // import {
 //   SuiChains,
 //   SuiUnsignedTransaction,
@@ -22,6 +23,10 @@ import * as ethereumSigner from "./EthereumSigner";
 
 import { ChainConfig } from "../../../config";
 import { CrossChainCore } from "../../../CrossChainCore";
+import { AptosChains } from "@wormhole-foundation/sdk-aptos/dist/cjs/types";
+import { AptosUnsignedTransaction } from "@wormhole-foundation/sdk-aptos/dist/cjs/unsignedTransaction";
+import { GasStationApiKey } from "../types";
+import { Account } from "@aptos-labs/ts-sdk";
 export class Signer<N extends Network, C extends Chain>
   implements SignAndSendSigner<N, C>
 {
@@ -30,6 +35,8 @@ export class Signer<N extends Network, C extends Chain>
   _options: any;
   _wallet: AdapterWallet;
   _crossChainCore?: CrossChainCore;
+  _sponsorAccount: Account | GasStationApiKey | undefined;
+  _claimedTransactionHashes: string;
 
   constructor(
     chain: ChainConfig,
@@ -37,12 +44,15 @@ export class Signer<N extends Network, C extends Chain>
     options: any,
     wallet: AdapterWallet,
     crossChainCore?: CrossChainCore,
+    sponsorAccount?: Account | GasStationApiKey | undefined
   ) {
     this._chain = chain;
     this._address = address;
     this._options = options;
     this._wallet = wallet;
     this._crossChainCore = crossChainCore;
+    this._sponsorAccount = sponsorAccount;
+    this._claimedTransactionHashes = "";
   }
 
   chain(): C {
@@ -50,6 +60,10 @@ export class Signer<N extends Network, C extends Chain>
   }
   address(): string {
     return this._address;
+  }
+
+  claimedTransactionHashes(): string {
+    return this._claimedTransactionHashes;
   }
 
   async signAndSend(txs: UnsignedTransaction<N, C>[]): Promise<TxHash[]> {
@@ -62,8 +76,10 @@ export class Signer<N extends Network, C extends Chain>
         this._wallet,
         this._options,
         this._crossChainCore,
+        this._sponsorAccount
       );
       txHashes.push(txId);
+      this._claimedTransactionHashes = txId;
     }
     return txHashes;
   }
@@ -75,6 +91,7 @@ export const signAndSendTransaction = async (
   wallet: AdapterWallet,
   options: any = {},
   crossChainCore?: CrossChainCore,
+  sponsorAccount?: Account | GasStationApiKey | undefined
 ): Promise<string> => {
   if (!wallet) {
     throw new Error("wallet is undefined");
@@ -85,7 +102,7 @@ export const signAndSendTransaction = async (
       request as SolanaUnsignedTransaction<Network>,
       wallet,
       options,
-      crossChainCore,
+      crossChainCore
     );
     return signature;
   } else if (chain.context === "Ethereum") {
@@ -93,7 +110,14 @@ export const signAndSendTransaction = async (
       request as EvmUnsignedTransaction<Network, EvmChains>,
       wallet,
       chain.displayName,
-      options,
+      options
+    );
+    return tx;
+  } else if (chain.context === "Aptos") {
+    const tx = await aptosSigner.signAndSendTransaction(
+      request as AptosUnsignedTransaction<Network, AptosChains>,
+      wallet,
+      sponsorAccount
     );
     return tx;
   } else {

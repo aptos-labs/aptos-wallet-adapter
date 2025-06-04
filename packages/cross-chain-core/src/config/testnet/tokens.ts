@@ -19,6 +19,17 @@ export const testnetTokens: Record<string, TokenConfig> = {
     icon: "USDC",
     decimals: 6,
   },
+  Aptos: {
+    // TODO: revert ?
+    symbol: "USDC",
+    decimals: 6,
+    tokenId: {
+      chain: "Aptos",
+      address:
+        "0x69091fbab5f7d635ee7ac5098cf0c1efbe31d68fec0f2cd565e8d168daf52832",
+    },
+    icon: "USDC",
+  },
   // Sui: {
   //   symbol: "USDC",
   //   tokenId: {

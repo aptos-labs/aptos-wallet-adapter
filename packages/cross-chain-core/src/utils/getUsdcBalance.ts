@@ -11,7 +11,7 @@ import { ethers, JsonRpcProvider } from "ethers";
 export const getSolanaWalletUSDCBalance = async (
   walletAddress: string,
   aptosNetwork: Network,
-  rpc: string,
+  rpc: string
 ): Promise<string> => {
   const address = new PublicKey(walletAddress);
   const tokenAddress =
@@ -40,7 +40,7 @@ export const getSolanaWalletUSDCBalance = async (
 export const getEthereumWalletUSDCBalance = async (
   walletAddress: string,
   aptosNetwork: Network,
-  rpc: string,
+  rpc: string
 ): Promise<string> => {
   const token =
     aptosNetwork === Network.MAINNET
@@ -57,7 +57,7 @@ export const getEthereumWalletUSDCBalance = async (
 
 export const getAptosWalletUSDCBalance = async (
   walletAddress: string,
-  aptosNetwork: Network,
+  aptosNetwork: Network
 ): Promise<string> => {
   const token =
     aptosNetwork === Network.MAINNET
@@ -74,6 +74,9 @@ export const getAptosWalletUSDCBalance = async (
       },
     },
   });
+  if (response.length === 0) {
+    return "0";
+  }
   const balance = (
     Number(response[0].amount) /
     10 ** token.decimals
