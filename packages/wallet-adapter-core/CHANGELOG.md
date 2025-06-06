@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 5.7.1
+
+### Patch Changes
+
+- aad3b8d: Fix not detected cross chain wallets show up by default bug
+
 ## 5.7.0
 
 ### Minor Changes
