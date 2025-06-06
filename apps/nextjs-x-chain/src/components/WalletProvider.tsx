@@ -42,6 +42,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
           manifestURL:
             "https://assets.mz.xyz/static/config/mizuwallet-connect-manifest.json",
         },
+        crossChainWallets: true,
       }}
       onError={(error) => {
         toast({
