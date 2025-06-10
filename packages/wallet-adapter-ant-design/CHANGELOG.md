@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 4.1.0
+
+### Minor Changes
+
+- 858d764: Add React version ^19 as a peer dependency
+
 ## 4.0.22
 
 ### Patch Changes
