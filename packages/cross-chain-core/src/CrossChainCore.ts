@@ -23,6 +23,7 @@ import {
   getAptosWalletUSDCBalance,
   getEthereumWalletUSDCBalance,
   getSolanaWalletUSDCBalance,
+  getSuiWalletUSDCBalance,
 } from "./utils/getUsdcBalance";
 
 export interface CrossChainDappConfig {
@@ -54,7 +55,8 @@ export type Chain =
   | "Base"
   | "Arbitrum"
   | "PolygonSepolia"
-  | "Polygon";
+  | "Polygon"
+  | "Sui";
 
 // Map of Ethereum chain id to testnet chain config
 export const EthereumChainIdToTestnetChain: Record<string, ChainConfig> = {
@@ -126,14 +128,15 @@ export class CrossChainCore {
 
   async getWalletUSDCBalance(
     walletAddress: string,
-    sourceChain: Chain,
+    sourceChain: Chain
   ): Promise<string> {
     if (sourceChain === "Aptos") {
       return await getAptosWalletUSDCBalance(
         walletAddress,
-        this._dappConfig.aptosNetwork,
+        this._dappConfig.aptosNetwork
       );
     }
+    console.log("sourceChain", sourceChain);
     if (!this.CHAINS[sourceChain]) {
       throw new Error(`Unsupported chain: ${sourceChain}`);
     }
@@ -143,7 +146,7 @@ export class CrossChainCore {
           walletAddress,
           this._dappConfig.aptosNetwork,
           this._dappConfig?.solanaConfig?.rpc ??
-            this.CHAINS[sourceChain].defaultRpc,
+            this.CHAINS[sourceChain].defaultRpc
         );
       case "Ethereum":
       case "BaseSepolia":
@@ -159,7 +162,13 @@ export class CrossChainCore {
           this._dappConfig.aptosNetwork,
           sourceChain,
           // TODO: maybe let the user config it
-          this.CHAINS[sourceChain].defaultRpc,
+          this.CHAINS[sourceChain].defaultRpc
+        );
+      case "Sui":
+        return await getSuiWalletUSDCBalance(
+          walletAddress,
+          this._dappConfig.aptosNetwork,
+          this.CHAINS[sourceChain].defaultRpc
         );
       default:
         throw new Error(`Unsupported chain: ${sourceChain}`);

@@ -32,6 +32,7 @@ import { chainToIcon } from "@/app/icons";
 import { AdapterWallet, useWallet } from "@aptos-labs/wallet-adapter-react";
 import {
   isEIP1193DerivedWallet,
+  isSuiDerivedWallet,
   OriginWalletDetails,
 } from "@/utils/derivedWallet";
 import { isSolanaDerivedWallet } from "@/utils/derivedWallet";
@@ -70,12 +71,12 @@ export function CCTPTransfer({
   const [amount, setAmount] = useState<string>("");
 
   const [quote, setQuote] = useState<WormholeQuoteResponse | undefined>(
-    undefined,
+    undefined
   );
   const [invalidAmount, setInvalidAmount] = useState<boolean>(false);
   const [quoteIsFetching, setQuoteIsFetching] = useState<boolean>(false);
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
-    null,
+    null
   );
 
   const [transactionCompleted, setTransactionCompleted] =
@@ -108,6 +109,9 @@ export function CCTPTransfer({
             : EthereumChainIdToTestnetChain[actualChainId];
         setSourceChain(chain.key);
       });
+      setSourceChain("Sepolia");
+    } else if (isSuiDerivedWallet(wallet)) {
+      setSourceChain("Sui");
     } else {
       setSourceChain("Aptos");
     }
@@ -163,7 +167,7 @@ export function CCTPTransfer({
 
       setDebounceTimeout(newTimeout);
     },
-    [sourceChain, debounceTimeout, originBalance],
+    [sourceChain, debounceTimeout, originBalance]
   );
 
   const invalidateAmount = (amount: string) => {

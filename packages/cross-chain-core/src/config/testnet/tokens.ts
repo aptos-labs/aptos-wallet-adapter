@@ -65,14 +65,14 @@ export const testnetTokens: Record<string, TokenConfig> = {
       address: "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582",
     },
   },
-  // Sui: {
-  //   symbol: "USDC",
-  //   tokenId: {
-  //     chain: "Sui",
-  //     address:
-  //       "0xa1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29::usdc::USDC",
-  //   },
-  //   icon: "USDC",
-  //   decimals: 6,
-  // },
+  Sui: {
+    symbol: "USDC",
+    tokenId: {
+      chain: "Sui",
+      address:
+        "0xa1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29::usdc::USDC",
+    },
+    icon: "USDC",
+    decimals: 6,
+  },
 };

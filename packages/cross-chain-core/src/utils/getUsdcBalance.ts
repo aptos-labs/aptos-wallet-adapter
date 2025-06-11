@@ -3,11 +3,12 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import { mainnetTokens, testnetTokens } from "../config";
 import { ethers, JsonRpcProvider } from "ethers";
 import { Chain } from "../CrossChainCore";
+import { SuiClient } from "@mysten/sui/client";
 
 export const getSolanaWalletUSDCBalance = async (
   walletAddress: string,
   aptosNetwork: Network,
-  rpc: string,
+  rpc: string
 ): Promise<string> => {
   const address = new PublicKey(walletAddress);
   const tokenAddress =
@@ -37,7 +38,7 @@ export const getEthereumWalletUSDCBalance = async (
   walletAddress: string,
   aptosNetwork: Network,
   chain: Chain,
-  rpc: string,
+  rpc: string
 ): Promise<string> => {
   const token =
     aptosNetwork === Network.MAINNET
@@ -54,7 +55,7 @@ export const getEthereumWalletUSDCBalance = async (
 
 export const getAptosWalletUSDCBalance = async (
   walletAddress: string,
-  aptosNetwork: Network,
+  aptosNetwork: Network
 ): Promise<string> => {
   const token =
     aptosNetwork === Network.MAINNET
@@ -79,4 +80,28 @@ export const getAptosWalletUSDCBalance = async (
     10 ** token.decimals
   ).toString();
   return balance;
+};
+
+export const getSuiWalletUSDCBalance = async (
+  walletAddress: string,
+  aptosNetwork: Network,
+  rpc: string
+): Promise<string> => {
+  const token =
+    aptosNetwork === Network.MAINNET
+      ? mainnetTokens["Sui"]
+      : testnetTokens["Sui"];
+
+  const client = new SuiClient({
+    url: rpc,
+  });
+  const balance = await client.getBalance({
+    owner: walletAddress,
+    coinType: token.tokenId.address,
+  });
+  const balanceString = (
+    Number(balance.totalBalance) /
+    10 ** token.decimals
+  ).toString();
+  return balanceString;
 };
