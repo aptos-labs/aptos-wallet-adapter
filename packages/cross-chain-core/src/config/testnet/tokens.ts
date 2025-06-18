@@ -29,6 +29,42 @@ export const testnetTokens: Record<string, TokenConfig> = {
     },
     icon: "USDC",
   },
+  BaseSepolia: {
+    symbol: "USDC",
+    icon: "USDC",
+    decimals: 6,
+    tokenId: {
+      chain: "BaseSepolia",
+      address: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+    },
+  },
+  Avalanche: {
+    symbol: "USDC",
+    icon: "USDC",
+    decimals: 6,
+    tokenId: {
+      chain: "Avalanche",
+      address: "0x5425890298aed601595a70AB815c96711a31Bc65",
+    },
+  },
+  ArbitrumSepolia: {
+    symbol: "USDC",
+    icon: "USDC",
+    decimals: 6,
+    tokenId: {
+      chain: "ArbitrumSepolia",
+      address: "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",
+    },
+  },
+  PolygonSepolia: {
+    symbol: "USDC",
+    icon: "USDC",
+    decimals: 6,
+    tokenId: {
+      chain: "PolygonSepolia",
+      address: "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582",
+    },
+  },
   // Sui: {
   //   symbol: "USDC",
   //   tokenId: {
