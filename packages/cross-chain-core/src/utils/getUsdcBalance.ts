@@ -2,6 +2,7 @@ import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { mainnetTokens, testnetTokens } from "../config";
 import { ethers, JsonRpcProvider } from "ethers";
+import { Chain } from "../CrossChainCore";
 
 export const getSolanaWalletUSDCBalance = async (
   walletAddress: string,
@@ -35,12 +36,13 @@ export const getSolanaWalletUSDCBalance = async (
 export const getEthereumWalletUSDCBalance = async (
   walletAddress: string,
   aptosNetwork: Network,
+  chain: Chain,
   rpc: string
 ): Promise<string> => {
   const token =
     aptosNetwork === Network.MAINNET
-      ? mainnetTokens["Ethereum"]
-      : testnetTokens["Sepolia"];
+      ? mainnetTokens[chain]
+      : testnetTokens[chain];
 
   const tokenAddress = token.tokenId.address;
   const connection = new JsonRpcProvider(rpc);

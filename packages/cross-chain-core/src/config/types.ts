@@ -1,4 +1,3 @@
-import { ChainId } from "@wormhole-foundation/sdk";
 import { Chain } from "../CrossChainCore";
 
 export enum Context {
@@ -9,9 +8,7 @@ export enum Context {
 
 export type BaseChainConfig = {
   key: Chain;
-  id: ChainId;
   context: Context;
-  finalityThreshold: number;
   disabledAsSource?: boolean;
   disabledAsDestination?: boolean;
 };
@@ -21,11 +18,8 @@ export interface ChainConfig extends BaseChainConfig {
   displayName: string;
   explorerUrl: string;
   explorerName: string;
-  gasToken: string;
-  wrappedGasToken?: string;
   chainId: number | string;
   icon: Chain;
-  maxBlockSearch: number;
   symbol?: string;
 }
 

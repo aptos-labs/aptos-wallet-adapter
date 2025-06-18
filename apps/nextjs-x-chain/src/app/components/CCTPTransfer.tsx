@@ -8,7 +8,12 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ChainConfig, CrossChainCore } from "@aptos-labs/cross-chain-core";
+import {
+  ChainConfig,
+  EthereumChainIdToTestnetChain,
+  CrossChainCore,
+  EthereumChainIdToMainnetChain,
+} from "@aptos-labs/cross-chain-core";
 import {
   Account,
   Ed25519PrivateKey,
@@ -107,7 +112,20 @@ export function CCTPTransfer({
     if (isSolanaDerivedWallet(wallet)) {
       setSourceChain("Solana");
     } else if (isEIP1193DerivedWallet(wallet)) {
-      setSourceChain("Sepolia");
+      const fetchWalletChainId = async () => {
+        const chainId = await wallet.eip1193Provider.request({
+          method: "eth_chainId",
+        });
+        return chainId;
+      };
+      fetchWalletChainId().then((chainId: string) => {
+        const actualChainId = parseInt(chainId, 16);
+        const chain =
+          network?.name === Network.MAINNET
+            ? EthereumChainIdToMainnetChain[actualChainId]
+            : EthereumChainIdToTestnetChain[actualChainId];
+        setSourceChain(chain.key);
+      });
     } else {
       setSourceChain("Aptos");
     }
