@@ -46,7 +46,7 @@ export class Signer<N extends Network, C extends Chain>
   }
 
   chain(): C {
-    return this._chain.displayName as C;
+    return this._chain.key as C;
   }
   address(): string {
     return this._address;
