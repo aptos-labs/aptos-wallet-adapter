@@ -3,7 +3,6 @@ import {
   AptosConnectGoogleWallet,
 } from "@aptos-connect/wallet-adapter-plugin";
 import { Network } from "@aptos-labs/ts-sdk";
-import { DevTWallet, TWallet } from "@atomrigslab/aptos-wallet-adapter";
 import { inMSafeWallet, MSafeWallet } from "@msafe/aptos-aip62-wallet";
 import { DappConfig, AdapterWallet } from "./WalletCore";
 
@@ -24,15 +23,6 @@ export function getSDKWallets(dappConfig?: DappConfig) {
         ...dappConfig?.aptosConnect,
       })
     );
-  }
-
-  // Push production wallet if env is production, otherwise use dev wallet
-  if (dappConfig?.network === Network.MAINNET) {
-    // TODO twallet uses @aptos-labs/wallet-standard at version 0.0.11 while adapter uses
-    // a newer version (0.1.0) - this causes type mismatch. We should figure out how to handle it.
-    sdkWallets.push(new TWallet() as any);
-  } else {
-    sdkWallets.push(new DevTWallet() as any);
   }
 
   // MSafe only works if the dapp is open within the MSafe App store

@@ -668,9 +668,6 @@ importers:
       '@aptos-labs/wallet-standard':
         specifier: ^0.4.0
         version: 0.4.0(@aptos-labs/ts-sdk@2.0.0(axios@1.8.4)(got@11.8.6))(@wallet-standard/core@1.1.0)
-      '@atomrigslab/aptos-wallet-adapter':
-        specifier: ^0.1.20
-        version: 0.1.21(@aptos-labs/ts-sdk@2.0.0(axios@1.8.4)(got@11.8.6))(axios@1.8.4)(got@11.8.6)
       '@msafe/aptos-aip62-wallet':
         specifier: ^1.0.18
         version: 1.0.18(@aptos-labs/ts-sdk@2.0.0(axios@1.8.4)(got@11.8.6))(@aptos-labs/wallet-adapter-core@5.7.1(@aptos-labs/ts-sdk@2.0.0(axios@1.8.4)(got@11.8.6))(@mizuwallet-sdk/protocol@0.0.6)(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.8.4)(got@11.8.6))(axios@1.8.4)(got@11.8.6))(@aptos-labs/wallet-standard@0.4.0(@aptos-labs/ts-sdk@2.0.0(axios@1.8.4)(got@11.8.6))(@wallet-standard/core@1.1.0))(@mizuwallet-sdk/protocol@0.0.6)(@wallet-standard/core@1.1.0)
