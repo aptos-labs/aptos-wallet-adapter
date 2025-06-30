@@ -29,14 +29,12 @@ export interface AptosStandardSupportedWallet {
 export type AvailableWallets =
   | "Continue with Apple"
   | "Continue with Google"
-  | "MSafe"
-  | "Mizu Wallet"
-  | "Nightly"
   | "OKX Wallet"
   | "Petra"
+  | "Nightly"
   | "Pontem Wallet"
-  | "Rimosafe"
-  | "T wallet";
+  | "MSafe"
+  | "Rimosafe";
 
 export type InputTransactionData = {
   sender?: AccountAddressInput;

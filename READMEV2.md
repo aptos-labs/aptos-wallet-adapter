@@ -14,19 +14,14 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 
 #### Supported wallet packages
 
-Note: These are in alphabetical order, any new wallets must be in alphabetical order
-
 [AIP-62](https://github.com/aptos-foundation/AIPs/blob/main/aips/aip-62.md) standard compatible
 
-- [AptosConnect](https://aptosconnect.app/)
-- [Mizu](https://www.mizu.io/)
-- [MizuWallet](https://www.npmjs.com/package/@mizuwallet-sdk/aptos-wallet-adapter)
-- [MSafe](https://www.npmjs.com/package/@msafe/aptos-wallet-adapter)
-- [Nightly](https://chromewebstore.google.com/detail/nightly/fiikommddbeccaoicoejoniammnalkfa)
 - [OKX](https://www.npmjs.com/package/@okwallet/aptos-wallet-adapter)
+- [AptosConnect](https://aptosconnect.app/)
 - [Petra](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
+- [Nightly](https://chromewebstore.google.com/detail/nightly/fiikommddbeccaoicoejoniammnalkfa)
 - [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
-- T wallet
+- [MSafe](https://www.npmjs.com/package/@msafe/aptos-wallet-adapter)
 
 Legacy standard compatible
 
