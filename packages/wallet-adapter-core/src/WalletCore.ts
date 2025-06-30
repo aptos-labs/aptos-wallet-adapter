@@ -6,6 +6,7 @@ import {
   AnyPublicKeyVariant,
   AnyRawTransaction,
   Aptos,
+  AptosSettings,
   Ed25519PublicKey,
   InputSubmitTransactionData,
   MultiEd25519PublicKey,
@@ -114,6 +115,15 @@ export type AdapterNotDetectedWallet = Omit<
 
 export interface DappConfig {
   network: Network;
+  /**
+   * These settings will be used as a base when building an Aptos client. Certain
+   * settings here such as nodeUrl, API keys, etc. may be overridden.
+   */
+  baseSettings?: Omit<AptosSettings, "network">;
+  /**
+   * If both additionalSettings and aptosApiKeys are provided, aptosApiKeys will take
+   * precedence.
+   */
   aptosApiKeys?: Partial<Record<Network, string>>;
   aptosConnectDappId?: string;
   aptosConnect?: Omit<AptosConnectWalletConfig, "network">;

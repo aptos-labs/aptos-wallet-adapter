@@ -352,7 +352,7 @@ importers:
         specifier: workspace:*
         version: link:../derived-wallet-solana
       '@aptos-labs/ts-sdk':
-        specifier: ^1.38.0 || ^2.0.0
+        specifier: ^1.38.0 || ^2.0.0 || ^3.0.0
         version: 2.0.0(axios@1.8.4)(got@11.8.6)
       '@aptos-labs/wallet-adapter-core':
         specifier: workspace:*
@@ -449,7 +449,7 @@ importers:
   packages/derived-wallet-base:
     dependencies:
       '@aptos-labs/ts-sdk':
-        specifier: ^1.38.0 || ^2.0.0
+        specifier: ^1.38.0 || ^2.0.0 || ^3.0.0
         version: 2.0.0(axios@1.8.4)(got@11.8.6)
       '@aptos-labs/wallet-standard':
         specifier: ^0.3.0
@@ -492,7 +492,7 @@ importers:
         specifier: ^0.2.5
         version: 0.2.5(@aptos-labs/ts-sdk@2.0.0(axios@1.8.4)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@aptos-labs/ts-sdk':
-        specifier: ^1.38.0 || ^2.0.0
+        specifier: ^1.38.0 || ^2.0.0 || ^3.0.0
         version: 2.0.0(axios@1.8.4)(got@11.8.6)
       '@aptos-labs/wallet-standard':
         specifier: ^0.3.0
@@ -547,7 +547,7 @@ importers:
         specifier: ^0.2.5
         version: 0.2.5(@aptos-labs/ts-sdk@2.0.0(axios@1.8.4)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@aptos-labs/ts-sdk':
-        specifier: ^1.38.0 || ^2.0.0
+        specifier: ^1.38.0 || ^2.0.0 || ^3.0.0
         version: 2.0.0(axios@1.8.4)(got@11.8.6)
       '@aptos-labs/wallet-standard':
         specifier: ^0.3.0

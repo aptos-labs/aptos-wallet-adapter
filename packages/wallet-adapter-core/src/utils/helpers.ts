@@ -68,12 +68,14 @@ export const getAptosConfig = (
     if (isAptosLiveNetwork(currentNetwork)) {
       const apiKey = dappConfig?.aptosApiKeys;
       return new AptosConfig({
+        ...dappConfig?.baseSettings,
         network: currentNetwork,
         clientConfig: { API_KEY: apiKey ? apiKey[currentNetwork] : undefined },
       });
     }
 
     return new AptosConfig({
+      ...dappConfig?.baseSettings,
       network: currentNetwork,
     });
   }
@@ -89,6 +91,7 @@ export const getAptosConfig = (
 
     if (isKnownNetwork) {
       return new AptosConfig({
+        ...dappConfig?.baseSettings,
         network: Network.CUSTOM,
         fullnode: networkInfo.url,
       });
