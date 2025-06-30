@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-base
 
+## 0.4.0
+
+### Minor Changes
+
+- fae2bf0: Bump @aptos-labs/wallet-standard to 0.5.0 which removes the `message` and `signingMessage` fields from the `AptosSignInInput` of the `signIn` request.
+
 ## 0.3.0
 
 ### Minor Changes

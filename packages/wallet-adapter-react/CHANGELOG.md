@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-react
 
+## 6.2.0
+
+### Minor Changes
+
+- fae2bf0: Bump @aptos-labs/wallet-standard to 0.5.0 which removes the `message` and `signingMessage` fields from the `AptosSignInInput` of the `signIn` request.
+
+### Patch Changes
+
+- Updated dependencies [fae2bf0]
+  - @aptos-labs/wallet-adapter-core@5.8.0
+
 ## 6.1.2
 
 ### Patch Changes
