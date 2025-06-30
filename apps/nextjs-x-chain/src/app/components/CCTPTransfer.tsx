@@ -31,6 +31,7 @@ import {
   OriginWalletDetails,
 } from "@/utils/derivedWallet";
 import { isSolanaDerivedWallet } from "@/utils/derivedWallet";
+import { useUSDCBalance } from "@/contexts/USDCBalanceContext";
 
 const dappNetwork: Network.MAINNET | Network.TESTNET = Network.TESTNET;
 
@@ -70,6 +71,15 @@ export function CCTPTransfer({
   originWalletDetails: OriginWalletDetails | undefined;
 }) {
   const { account, network } = useWallet();
+  const {
+    originBalance,
+    fetchOriginBalance,
+    refetchBalancesWithDelay,
+    globalTransactionInProgress,
+    setGlobalTransactionInProgress,
+  } = useUSDCBalance();
+
+  const [transferInProgress, setTransferInProgress] = useState(false);
 
   const [amount, setAmount] = useState<string>("");
 
@@ -82,17 +92,13 @@ export function CCTPTransfer({
     null
   );
 
-  const [walletUSDCBalance, setWalletUSDCBalance] = useState<
-    string | undefined
-  >(undefined);
-
-  const [transactionInProgress, setTransactionInProgress] =
-    useState<boolean>(false);
   const [transactionCompleted, setTransactionCompleted] =
     useState<boolean>(false);
   const [transferResponse, setTransferResponse] = useState<
     WormholeTransferResponse | undefined
   >(undefined);
+  const [balanceUpdatePending, setBalanceUpdatePending] =
+    useState<boolean>(false);
 
   const [sourceChain, setSourceChain] = useState<Chain | null>(null);
 
@@ -107,19 +113,10 @@ export function CCTPTransfer({
     }
   }, [wallet]);
 
-  const fetchWalletUsdcBalance = async () => {
-    if (!sourceChain) return;
-    if (!originWalletDetails) return;
-    const balance = await crossChainCore.getWalletUSDCBalance(
-      originWalletDetails.address.toString(),
-      sourceChain
-    );
-    setWalletUSDCBalance(balance);
-  };
-
   useEffect(() => {
-    fetchWalletUsdcBalance();
-  }, [originWalletDetails, network, sourceChain]);
+    if (!sourceChain || !originWalletDetails) return;
+    fetchOriginBalance(originWalletDetails.address.toString(), sourceChain);
+  }, [originWalletDetails, network, sourceChain, fetchOriginBalance]);
 
   const humanReadableETA = (milliseconds: number): string => {
     if (milliseconds >= 60000) {
@@ -166,15 +163,16 @@ export function CCTPTransfer({
 
       setDebounceTimeout(newTimeout);
     },
-    [sourceChain, debounceTimeout, walletUSDCBalance]
+    [sourceChain, debounceTimeout, originBalance]
   );
 
   const invalidateAmount = (amount: string) => {
-    return Number(amount) > Number(walletUSDCBalance ?? "0");
+    return Number(amount) > Number(originBalance ?? "0");
   };
 
   const onTransferClick = async () => {
-    setTransactionInProgress(true);
+    setGlobalTransactionInProgress(true);
+    setTransferInProgress(true);
     const transfer = async () => {
       if (!sourceChain) {
         throw new Error("Missing required parameters sourceChain");
@@ -192,15 +190,22 @@ export function CCTPTransfer({
     transfer()
       .then((response) => {
         setTransferResponse(response);
-        setTransactionInProgress(false);
         setTransactionCompleted(true);
-        fetchWalletUsdcBalance();
+        setBalanceUpdatePending(true);
+        // Use delayed refetch for cross-chain transfers - origin updates immediately, Aptos balance updates after delay
+        refetchBalancesWithDelay(8000); // 8 second delay for cross-chain processing
+
+        // Clear the pending state after the delay
+        setTimeout(() => {
+          setBalanceUpdatePending(false);
+        }, 8500);
       })
       .catch((error) => {
         console.error("Error transferring", error);
       })
       .finally(() => {
-        setTransactionInProgress(false);
+        setGlobalTransactionInProgress(false);
+        setTransferInProgress(false);
       });
   };
 
@@ -220,7 +225,8 @@ export function CCTPTransfer({
       <CardHeader>
         <CardTitle>CCTP transfer</CardTitle>
         <CardDescription>
-          Transfer USDC to your derived Aptos account
+          Transfer USDC from your original {sourceChain?.toString()} account to
+          your derived Aptos account
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
@@ -228,8 +234,8 @@ export function CCTPTransfer({
           <Input value={amount} onChange={(e) => onSetAmount(e.target.value)} />
           <div className="flex flex-col cursor-pointer">
             <span>Max</span>
-            <span onClick={() => onSetAmount(walletUSDCBalance ?? "0")}>
-              {walletUSDCBalance ?? "0"}
+            <span onClick={() => onSetAmount(originBalance ?? "0")}>
+              {originBalance ?? "0"}
             </span>
           </div>
         </div>
@@ -243,6 +249,13 @@ export function CCTPTransfer({
         {invalidAmount && (
           <p className="text-red-500">
             Amount is greater than the balance of the source wallet
+          </p>
+        )}
+
+        {balanceUpdatePending && (
+          <p className="text-blue-500 text-sm">
+            ⏳ Aptos balance will update shortly after cross-chain transaction
+            completes...
           </p>
         )}
 
@@ -316,16 +329,25 @@ export function CCTPTransfer({
           </Card>
         )}
 
-        {!transactionInProgress && !transactionCompleted && (
+        {!transferInProgress && !transactionCompleted && (
           <Button
             onClick={onTransferClick}
-            disabled={!amount || !wallet || !quote}
+            disabled={
+              !amount || !wallet || !quote || globalTransactionInProgress
+            }
           >
             Transfer
           </Button>
         )}
 
-        {transactionInProgress && !transactionCompleted && (
+        {transferInProgress && !transactionCompleted && (
+          <Button disabled>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Transfer
+          </Button>
+        )}
+
+        {transferInProgress && transactionCompleted && (
           <div className="flex flex-col gap-4">
             <p className="text-lg text-center">Submitting transaction</p>
             <Button disabled>
@@ -334,7 +356,7 @@ export function CCTPTransfer({
           </div>
         )}
 
-        {!transactionInProgress && transactionCompleted && (
+        {!transferInProgress && transactionCompleted && (
           <div className="flex flex-col gap-4">
             <Button onClick={() => window.location.reload()}>
               Start a new Transaction

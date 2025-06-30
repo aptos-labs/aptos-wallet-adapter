@@ -31,6 +31,7 @@ import {
   OriginWalletDetails,
 } from "@/utils/derivedWallet";
 import { isSolanaDerivedWallet } from "@/utils/derivedWallet";
+import { useUSDCBalance } from "@/contexts/USDCBalanceContext";
 
 const dappNetwork: Network.MAINNET | Network.TESTNET = Network.TESTNET;
 
@@ -70,6 +71,15 @@ export function CCTPWithdraw({
   originWalletDetails: OriginWalletDetails | undefined;
 }) {
   const { account, network } = useWallet();
+  const {
+    aptosBalance,
+    fetchAptosBalance,
+    refetchBalances,
+    globalTransactionInProgress,
+    setGlobalTransactionInProgress,
+  } = useUSDCBalance();
+
+  const [withdrawInProgress, setWithdrawInProgress] = useState(false);
 
   const [amount, setAmount] = useState<string>("");
 
@@ -82,12 +92,6 @@ export function CCTPWithdraw({
     null
   );
 
-  const [walletUSDCBalance, setWalletUSDCBalance] = useState<
-    string | undefined
-  >(undefined);
-
-  const [transactionInProgress, setTransactionInProgress] =
-    useState<boolean>(false);
   const [transactionCompleted, setTransactionCompleted] =
     useState<boolean>(false);
   const [transferResponse, setTransferResponse] = useState<
@@ -107,19 +111,10 @@ export function CCTPWithdraw({
     }
   }, [wallet]);
 
-  const fetchWalletUsdcBalance = async () => {
-    if (!account?.address) return;
-    const balance = await crossChainCore.getWalletUSDCBalance(
-      account.address.toString(),
-      "Aptos"
-    );
-    setWalletUSDCBalance(balance);
-  };
-
   useEffect(() => {
-    if (!sourceChain) return;
-    fetchWalletUsdcBalance();
-  }, [originWalletDetails, network, sourceChain]);
+    if (!account?.address) return;
+    fetchAptosBalance(account.address.toString());
+  }, [account?.address, network, fetchAptosBalance]);
 
   const humanReadableETA = (milliseconds: number): string => {
     if (milliseconds >= 60000) {
@@ -166,11 +161,11 @@ export function CCTPWithdraw({
 
       setDebounceTimeout(newTimeout);
     },
-    [sourceChain, debounceTimeout, walletUSDCBalance]
+    [sourceChain, debounceTimeout, aptosBalance]
   );
 
   const invalidateAmount = (amount: string) => {
-    return Number(amount) > Number(walletUSDCBalance ?? "0");
+    return Number(amount) > Number(aptosBalance ?? "0");
   };
 
   const getChainInfo = (chain: Chain): ChainConfig => {
@@ -185,7 +180,8 @@ export function CCTPWithdraw({
   };
 
   const onWithdrawClick = async () => {
-    setTransactionInProgress(true);
+    setGlobalTransactionInProgress(true);
+    setWithdrawInProgress(true);
     const transfer = async () => {
       const { originChainTxnId, destinationChainTxnId } =
         await provider.withdraw({
@@ -200,16 +196,16 @@ export function CCTPWithdraw({
       .then((response) => {
         console.log("response", response);
         setTransferResponse(response);
-        setTransactionInProgress(false);
         setTransactionCompleted(true);
-        // refetch balance after the process
-        fetchWalletUsdcBalance();
+        // refetch all balances after the process
+        refetchBalances();
       })
       .catch((error) => {
         console.error("Error transferring", error);
       })
       .finally(() => {
-        setTransactionInProgress(false);
+        setGlobalTransactionInProgress(false);
+        setWithdrawInProgress(false);
       });
   };
 
@@ -218,7 +214,8 @@ export function CCTPWithdraw({
       <CardHeader>
         <CardTitle>CCTP withdraw</CardTitle>
         <CardDescription>
-          Withdraw USDC from your derived Aptos account
+          Withdraw USDC from your derived Aptos account to your original{" "}
+          {sourceChain?.toString()} account
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
@@ -226,8 +223,8 @@ export function CCTPWithdraw({
           <Input value={amount} onChange={(e) => onSetAmount(e.target.value)} />
           <div className="flex flex-col cursor-pointer">
             <span>Max</span>
-            <span onClick={() => onSetAmount(walletUSDCBalance ?? "0")}>
-              {walletUSDCBalance ?? "0"}
+            <span onClick={() => onSetAmount(aptosBalance ?? "0")}>
+              {aptosBalance ?? "0"}
             </span>
           </div>
         </div>
@@ -314,16 +311,25 @@ export function CCTPWithdraw({
           </Card>
         )}
 
-        {!transactionInProgress && !transactionCompleted && (
+        {!withdrawInProgress && !transactionCompleted && (
           <Button
             onClick={onWithdrawClick}
-            disabled={!amount || !wallet || !quote}
+            disabled={
+              !amount || !wallet || !quote || globalTransactionInProgress
+            }
           >
             Withdraw
           </Button>
         )}
 
-        {transactionInProgress && !transactionCompleted && (
+        {withdrawInProgress && !transactionCompleted && (
+          <Button disabled>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Withdraw
+          </Button>
+        )}
+
+        {withdrawInProgress && transactionCompleted && (
           <div className="flex flex-col gap-4">
             <p className="text-lg text-center">Submitting transaction</p>
             <Button disabled>
@@ -332,7 +338,7 @@ export function CCTPWithdraw({
           </div>
         )}
 
-        {!transactionInProgress && transactionCompleted && (
+        {!withdrawInProgress && transactionCompleted && (
           <div className="flex flex-col gap-4">
             <Button onClick={() => window.location.reload()}>
               Start a new Transaction

@@ -10,6 +10,7 @@ import { Inter as FontSans } from "next/font/google";
 import { PropsWithChildren } from "react";
 import { AutoConnectProvider } from "@/components/AutoConnectProvider";
 import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
+import { USDCBalanceProvider } from "@/contexts/USDCBalanceContext";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -28,7 +29,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
       <body
         className={cn(
           "flex justify-center min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
+          fontSans.variable
         )}
       >
         <ThemeProvider
@@ -40,8 +41,10 @@ export default function RootLayout({ children }: PropsWithChildren) {
           <AutoConnectProvider>
             <ReactQueryClientProvider>
               <WalletProvider>
-                {children}
-                <Toaster />
+                <USDCBalanceProvider>
+                  {children}
+                  <Toaster />
+                </USDCBalanceProvider>
               </WalletProvider>
             </ReactQueryClientProvider>
           </AutoConnectProvider>
