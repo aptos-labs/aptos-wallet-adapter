@@ -125,6 +125,10 @@ export interface DappConfig {
    * precedence.
    */
   aptosApiKeys?: Partial<Record<Network, string>>;
+  /**
+   * If true txn submission will always be handled by the wallet adapter, not the wallet.
+   */
+  forceSubmitTransactionWithAdapter?: boolean;
   aptosConnectDappId?: string;
   aptosConnect?: Omit<AptosConnectWalletConfig, "network">;
   /**
@@ -726,7 +730,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.ensureAccountExists(this._account);
       this.recordEvent("sign_and_submit_transaction");
 
-      if (this._wallet.features["aptos:signAndSubmitTransaction"]) {
+      if (this._wallet.features["aptos:signAndSubmitTransaction"] && this._dappConfig?.forceSubmitTransactionWithAdapter !== true) {
         // check for backward compatibility. before version 1.1.0 the standard expected
         // AnyRawTransaction input so the adapter built the transaction before sending it to the wallet
         if (
