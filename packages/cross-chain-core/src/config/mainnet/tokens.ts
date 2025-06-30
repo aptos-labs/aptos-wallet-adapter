@@ -19,6 +19,16 @@ export const mainnetTokens: Record<string, TokenConfig> = {
     icon: "USDC",
     decimals: 6,
   },
+  Aptos: {
+    symbol: "USDC",
+    decimals: 6,
+    tokenId: {
+      chain: "Aptos",
+      address:
+        "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b",
+    },
+    icon: "USDC",
+  },
   // Sui: {
   //   symbol: "USDC",
   //   decimals: 6,
@@ -29,15 +39,4 @@ export const mainnetTokens: Record<string, TokenConfig> = {
   //   },
   //   icon: "USDC",
   // },
-};
-
-export const AptosMainnetUSDCToken: TokenConfig = {
-  symbol: "USDC",
-  tokenId: {
-    chain: "Aptos",
-    address:
-      "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b",
-  },
-  icon: "USDC",
-  decimals: 6,
 };

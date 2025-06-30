@@ -261,8 +261,8 @@ export function CCTPWithdraw({
                   }}
                 >
                   <img
-                    src={chainToIcon(sourceChain as any)}
-                    alt={sourceChain?.toString() ?? ""}
+                    src={chainToIcon("Aptos")}
+                    alt="Aptos"
                     height="32px"
                     width="32px"
                   />
@@ -291,8 +291,8 @@ export function CCTPWithdraw({
                   }}
                 >
                   <img
-                    src={chainToIcon("Aptos")}
-                    alt="Aptos"
+                    src={chainToIcon(sourceChain as any)}
+                    alt={sourceChain?.toString() ?? ""}
                     height="32px"
                     width="32px"
                   />

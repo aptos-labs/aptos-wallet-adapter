@@ -17,8 +17,6 @@ import {
   mainnetChains,
   mainnetTokens,
   TokenConfig,
-  AptosTestnetUSDCToken,
-  AptosMainnetUSDCToken,
 } from "./config";
 import {
   getAptosWalletUSDCBalance,
@@ -68,18 +66,14 @@ export class CrossChainCore {
   readonly CHAINS: ChainsConfig = testnetChains;
   readonly TOKENS: Record<string, TokenConfig> = testnetTokens;
 
-  readonly APTOS_TOKEN: TokenConfig = AptosTestnetUSDCToken;
-
   constructor(args: { dappConfig: CrossChainDappConfig }) {
     this._dappConfig = args.dappConfig;
     if (args.dappConfig?.aptosNetwork === Network.MAINNET) {
       this.CHAINS = mainnetChains;
       this.TOKENS = mainnetTokens;
-      this.APTOS_TOKEN = AptosMainnetUSDCToken;
     } else {
       this.CHAINS = testnetChains;
       this.TOKENS = testnetTokens;
-      this.APTOS_TOKEN = AptosTestnetUSDCToken;
     }
   }
 

@@ -31,6 +31,21 @@ export const mainnetChains: ChainsConfig = {
     symbol: "SOL",
     defaultRpc: "https://solana-mainnet.rpc.extrnode.com",
   },
+  Aptos: {
+    key: "Aptos",
+    id: 22,
+    context: Context.APTOS,
+    finalityThreshold: 0,
+    displayName: "Aptos",
+    explorerUrl: "https://explorer.aptoslabs.com/",
+    explorerName: "Aptos Explorer",
+    gasToken: "APT",
+    chainId: 0,
+    icon: "Aptos",
+    maxBlockSearch: 0,
+    symbol: "APT",
+    defaultRpc: "https://fullnode.mainnet.aptos.dev",
+  },
   // Sui: {
   //   key: "Sui",
   //   id: 21,
@@ -46,19 +61,4 @@ export const mainnetChains: ChainsConfig = {
   //   maxBlockSearch: 0,
   //   symbol: "SUI",
   // },
-};
-
-export const AptosMainnetChain = {
-  key: "Aptos",
-  id: 22,
-  context: "Aptos",
-  finalityThreshold: 0,
-  displayName: "Aptos",
-  explorerUrl: "https://explorer.aptoslabs.com/",
-  explorerName: "Aptos Explorer",
-  gasToken: "APT",
-  chainId: 0,
-  icon: "Aptos",
-  maxBlockSearch: 0,
-  symbol: "APT",
 };

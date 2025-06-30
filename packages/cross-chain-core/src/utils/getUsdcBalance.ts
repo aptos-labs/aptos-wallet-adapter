@@ -1,11 +1,6 @@
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 import { Connection, PublicKey } from "@solana/web3.js";
-import {
-  AptosMainnetUSDCToken,
-  AptosTestnetUSDCToken,
-  mainnetTokens,
-  testnetTokens,
-} from "../config";
+import { mainnetTokens, testnetTokens } from "../config";
 import { ethers, JsonRpcProvider } from "ethers";
 
 export const getSolanaWalletUSDCBalance = async (
@@ -61,8 +56,8 @@ export const getAptosWalletUSDCBalance = async (
 ): Promise<string> => {
   const token =
     aptosNetwork === Network.MAINNET
-      ? AptosMainnetUSDCToken
-      : AptosTestnetUSDCToken;
+      ? mainnetTokens["Aptos"]
+      : testnetTokens["Aptos"];
   const tokenAddress = token.tokenId.address;
   const aptosConfig = new AptosConfig({ network: aptosNetwork });
   const connection = new Aptos(aptosConfig);

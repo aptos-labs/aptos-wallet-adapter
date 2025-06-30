@@ -48,13 +48,17 @@ export default function Home() {
   >(undefined);
 
   useEffect(() => {
-    if (!wallet) return;
+    if (!wallet) {
+      // Clear originWalletDetails when wallet disconnects
+      setOriginWalletDetails(undefined);
+      return;
+    }
     const fetchOriginWalletDetails = async () => {
       const details = await getOriginWalletDetails(wallet);
       setOriginWalletDetails(details);
     };
     void fetchOriginWalletDetails();
-  }, [wallet, getOriginWalletDetails]);
+  }, [wallet]);
 
   return (
     <main className="flex flex-col w-1/2 p-6 pb-12 md:px-8 gap-6">
