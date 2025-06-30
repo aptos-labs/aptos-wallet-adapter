@@ -53,7 +53,7 @@
     "@aptos-labs/wallet-adapter-core": "workspace:*",
     "@aptos-labs/derived-wallet-ethereum": "workspace:*",
     "@aptos-labs/derived-wallet-solana": "workspace:*",
-    "@aptos-labs/wallet-standard": "^0.3.0",
+    "@aptos-labs/wallet-standard": "^0.5.0",
     "@mysten/sui": "^1.21.2",
     "@mysten/wallet-standard": "^0.13.26",
     "@solana/spl-token": "^0.4.12",

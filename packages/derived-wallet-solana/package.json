@@ -30,8 +30,8 @@
   },
   "dependencies": {
     "@aptos-labs/derived-wallet-base": "workspace:^",
-    "@aptos-labs/siwa": "^0.2.5",
-    "@aptos-labs/wallet-standard": "^0.3.0",
+    "@aptos-labs/siwa": "^0.3.0",
+    "@aptos-labs/wallet-standard": "^0.5.0",
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-standard-util": "^1.1.2",
     "@solana/wallet-standard-wallet-adapter-base": "^1.1.4",
