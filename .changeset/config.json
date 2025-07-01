@@ -8,5 +8,5 @@
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "privatePackages": false,
-  "ignore": []
+  "ignore": ["@aptos-labs/wallet-adapter-vue", "nuxt-app"]
 }
