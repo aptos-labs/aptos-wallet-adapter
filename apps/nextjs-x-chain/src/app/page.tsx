@@ -106,19 +106,6 @@ export default function Home() {
           )}
           {network?.name === Network.TESTNET && (
             <>
-              {/* CCTP transfer is enabled for non-Aptos wallets */}
-              {/* {!wallet.isAptosNativeWallet && (
-                <>
-                  <CCTPTransfer
-                    wallet={wallet}
-                    originWalletDetails={originWalletDetails}
-                  />
-                  <CCTPWithdraw
-                    wallet={wallet}
-                    originWalletDetails={originWalletDetails}
-                  />
-                </>
-              )} */}
               <>
                 <CCTPTransfer
                   wallet={wallet}
