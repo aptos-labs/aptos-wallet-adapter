@@ -37,44 +37,26 @@ import {
 } from "@/utils/derivedWallet";
 import { isSolanaDerivedWallet } from "@/utils/derivedWallet";
 import { useUSDCBalance } from "@/contexts/USDCBalanceContext";
-
-const dappNetwork: Network.MAINNET | Network.TESTNET = Network.TESTNET;
-
-const crossChainCore = new CrossChainCore({
-  dappConfig: { aptosNetwork: dappNetwork },
-});
-const provider = crossChainCore.getProvider("Wormhole");
-
-let mainSigner: Account;
-let sponsorAccount: Account;
-
-// Set the main signer account
-const mainSignerPrivateKey =
-  process.env.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY ||
-  "0x0000000000000000000000000000000000000000000000000000000000000000";
-const privateKey = new Ed25519PrivateKey(
-  PrivateKey.formatPrivateKey(mainSignerPrivateKey, PrivateKeyVariants.Ed25519)
-);
-mainSigner = Account.fromPrivateKey({ privateKey });
-
-// Set the sponsor account
-const sponsorPrivateKey =
-  process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY ||
-  "0x0000000000000000000000000000000000000000000000000000000000000000";
-const feePayerPrivateKey = new Ed25519PrivateKey(
-  PrivateKey.formatPrivateKey(sponsorPrivateKey, PrivateKeyVariants.Ed25519)
-);
-sponsorAccount = Account.fromPrivateKey({
-  privateKey: feePayerPrivateKey,
-});
+import { useToast } from "@/components/ui/use-toast";
 
 export function CCTPTransfer({
   wallet,
   originWalletDetails,
+  mainSigner,
+  sponsorAccount,
+  dappNetwork,
+  crossChainCore,
+  provider,
 }: {
   wallet: AdapterWallet | null;
   originWalletDetails: OriginWalletDetails | undefined;
+  mainSigner: Account;
+  sponsorAccount: Account;
+  dappNetwork: Network.MAINNET | Network.TESTNET;
+  crossChainCore: CrossChainCore;
+  provider: any; // We'll type this properly later
 }) {
+  const { toast } = useToast();
   const { account, network } = useWallet();
   const {
     originBalance,
@@ -120,6 +102,7 @@ export function CCTPTransfer({
       };
       fetchWalletChainId().then((chainId: string) => {
         const actualChainId = parseInt(chainId, 16);
+        console.log("actualChainId", actualChainId);
         const chain =
           network?.name === Network.MAINNET
             ? EthereumChainIdToMainnetChain[actualChainId]
@@ -220,6 +203,11 @@ export function CCTPTransfer({
       })
       .catch((error) => {
         console.error("Error transferring", error);
+        toast({
+          title: "Error transferring",
+          description: error.message,
+          variant: "destructive",
+        });
       })
       .finally(() => {
         setGlobalTransactionInProgress(false);
