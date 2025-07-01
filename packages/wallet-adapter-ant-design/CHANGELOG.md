@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 5.0.0
+
+### Major Changes
+
+- b80eff6: Add support for transactionSubmitter, bump minimum TS SDK version to 3.x.x
+
+### Patch Changes
+
+- Updated dependencies [b80eff6]
+  - @aptos-labs/wallet-adapter-react@7.0.0
+
 ## 4.1.1
 
 ### Patch Changes
