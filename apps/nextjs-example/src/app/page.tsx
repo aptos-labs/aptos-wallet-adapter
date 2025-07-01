@@ -28,7 +28,6 @@ import {
   AdapterWallet,
   AptosChangeNetworkOutput,
   NetworkInfo,
-  WalletInfo,
   isAptosNetwork,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
@@ -39,6 +38,7 @@ import Image from "next/image";
 // Imports for registering a browser extension wallet plugin on page load
 import { MyWallet } from "@/utils/standardWallet";
 import { registerWallet } from "@aptos-labs/wallet-standard";
+import { TransactionSubmitterToggle } from "@/components/TransactionSubmitterToggle";
 
 // Example of how to register a browser extension wallet plugin.
 // Browser extension wallets should call registerWallet once on page load.
@@ -76,7 +76,10 @@ export default function Home() {
             Demo App Source Code
           </a>
         </div>
-        <ThemeToggle />
+        <div className="flex items-center gap-2">
+          <TransactionSubmitterToggle />
+          <ThemeToggle />
+        </div>
       </div>
       <WalletSelection />
       {connected && (

@@ -1,6 +1,7 @@
 import {
   AccountAddressInput,
   InputGenerateTransactionOptions,
+  InputTransactionPluginData,
 } from "@aptos-labs/ts-sdk";
 import { InputGenerateTransactionPayloadData } from "@aptos-labs/ts-sdk";
 import { WalletReadyState } from "../constants";
@@ -36,15 +37,27 @@ export type AvailableWallets =
   | "MSafe"
   | "Rimosafe";
 
-export type InputTransactionData = {
+type InputTransactionDataInner = {
   sender?: AccountAddressInput;
   data: InputGenerateTransactionPayloadData;
   options?: InputGenerateTransactionOptions & {
     expirationSecondsFromNow?: number;
     expirationTimestamp?: number;
   };
+  /** This will always be set to true if a custom transaction submitter is provided. */
   withFeePayer?: boolean;
 };
+
+/**
+ * If `transactionSubmitter` is set it will be used, and override any transaction
+ * submitter configured in the DappConfig.
+ *
+ * The `pluginParams` parameter is used to provide additional parameters to a
+ * transaction submitter plugin, whether provided here or configured in the
+ * DappConfig.
+ */
+export type InputTransactionData = InputTransactionDataInner &
+  InputTransactionPluginData;
 
 export type WalletInfo = {
   name: string;

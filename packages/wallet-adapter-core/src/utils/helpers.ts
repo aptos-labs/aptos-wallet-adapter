@@ -4,6 +4,7 @@ import {
   Hex,
   Network,
   NetworkToNodeAPI,
+  PluginSettings,
 } from "@aptos-labs/ts-sdk";
 import {
   NetworkInfo,
@@ -62,6 +63,10 @@ export const getAptosConfig = (
     throw new Error("Undefined network");
   }
 
+  const pluginSettings: PluginSettings = {
+    TRANSACTION_SUBMITTER: dappConfig?.transactionSubmitter,
+  };
+
   if (isAptosNetwork(networkInfo)) {
     const currentNetwork = convertNetwork(networkInfo);
 
@@ -70,11 +75,13 @@ export const getAptosConfig = (
       return new AptosConfig({
         network: currentNetwork,
         clientConfig: { API_KEY: apiKey ? apiKey[currentNetwork] : undefined },
+        pluginSettings,
       });
     }
 
     return new AptosConfig({
       network: currentNetwork,
+      pluginSettings,
     });
   }
 
@@ -91,6 +98,7 @@ export const getAptosConfig = (
       return new AptosConfig({
         network: Network.CUSTOM,
         fullnode: networkInfo.url,
+        pluginSettings,
       });
     }
   }
