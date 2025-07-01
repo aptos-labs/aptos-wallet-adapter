@@ -20,7 +20,7 @@ const onSignAndSubmitTransaction = async () => {
     data: {
       function: "0x1::coin::transfer",
       typeArguments: [APTOS_COIN],
-      functionArguments: [account.value?.address, 1], // 1 is in Octas
+      functionArguments: [account.value?.address.toString(), 1], // 1 is in Octas
     },
     options: { maxGasAmount: MaxGasAMount },
   };

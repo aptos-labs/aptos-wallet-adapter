@@ -57,7 +57,7 @@ const generateTransaction = async (): Promise<AnyRawTransaction> => {
     data: {
       function: "0x1::coin::transfer",
       typeArguments: [APTOS_COIN],
-      functionArguments: [account.value?.address, 1], // 1 is in Octas
+      functionArguments: [account.value?.address.toString(), 1], // 1 is in Octas
     },
   });
   return transactionToSign;
