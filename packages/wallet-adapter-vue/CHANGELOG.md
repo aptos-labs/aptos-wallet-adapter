@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-vue
 
+## 1.0.1
+
+### Patch Changes
+
+- 5e1d3b7: Revert @aptos-labs/wallet-adapter-core dependency version to 5.0.0
+
 ## 1.0.0
 
 ### Major Changes
