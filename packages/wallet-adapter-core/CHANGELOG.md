@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 6.0.0
+
+### Major Changes
+
+- b80eff6: Add support for transactionSubmitter, bump minimum TS SDK version to 3.x.x
+
 ## 5.8.0
 
 ### Minor Changes

@@ -1,5 +1,22 @@
 # @aptos-labs/cross-chain-core
 
+## 5.0.0
+
+### Major Changes
+
+- b80eff6: Add support for transactionSubmitter, bump minimum TS SDK version to 3.x.x
+
+### Minor Changes
+
+- 73955a7: Support Withdraw flow for x-chain accounts
+
+### Patch Changes
+
+- Updated dependencies [b80eff6]
+  - @aptos-labs/derived-wallet-ethereum@0.5.0
+  - @aptos-labs/derived-wallet-solana@0.5.0
+  - @aptos-labs/wallet-adapter-core@6.0.0
+
 ## 4.25.0
 
 ### Minor Changes

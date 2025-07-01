@@ -1,5 +1,16 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.5.0
+
+### Minor Changes
+
+- b80eff6: Add support for transactionSubmitter, bump minimum TS SDK version to 3.x.x
+
+### Patch Changes
+
+- Updated dependencies [b80eff6]
+  - @aptos-labs/derived-wallet-base@0.5.0
+
 ## 0.4.0
 
 ### Minor Changes
