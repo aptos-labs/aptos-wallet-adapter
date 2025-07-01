@@ -200,12 +200,18 @@ export class WormholeProvider
     }
     logger.log("signerAddress", signerAddress);
 
+    //const chainContext =
+
     const signer = new Signer(
       this.getChainConfig(sourceChain),
       signerAddress,
       {},
       wallet
     );
+
+    logger.log("signer", signer);
+    logger.log("wormholeRequest", this.wormholeRequest);
+    logger.log("wormholeQuote", this.wormholeQuote);
 
     let receipt = await this.wormholeRoute.initiate(
       this.wormholeRequest,
