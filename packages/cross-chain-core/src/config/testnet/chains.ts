@@ -35,6 +35,21 @@ export const testnetChains: ChainsConfig = {
     defaultRpc: "https://api.devnet.solana.com",
     wrappedGasToken: "So11111111111111111111111111111111111111112",
   },
+  Aptos: {
+    key: "Aptos",
+    id: 22,
+    context: Context.APTOS,
+    finalityThreshold: 0,
+    displayName: "Aptos",
+    explorerUrl: "https://explorer.aptoslabs.com?network=testnet",
+    explorerName: "Aptos Explorer",
+    gasToken: "APT",
+    chainId: 0,
+    icon: "Aptos",
+    maxBlockSearch: 0,
+    symbol: "APT",
+    defaultRpc: "https://fullnode.testnet.aptos.dev",
+  },
   // Sui: {
   //   key: "Sui",
   //   id: 21,
@@ -50,20 +65,4 @@ export const testnetChains: ChainsConfig = {
   //   symbol: "SUI",
   //   sdkName: "Sui",
   // },
-};
-
-export const AptosTestnetChain = {
-  key: "Aptos",
-  id: 22,
-  context: Context.APTOS,
-  finalityThreshold: 0,
-  displayName: "Aptos",
-  explorerUrl: "https://explorer.aptoslabs.com?network=testnet",
-  explorerName: "Aptos Explorer",
-  gasToken: "APT",
-  chainId: 0,
-  icon: "Aptos",
-  maxBlockSearch: 0,
-  symbol: "APT",
-  sdkName: "Aptos",
 };

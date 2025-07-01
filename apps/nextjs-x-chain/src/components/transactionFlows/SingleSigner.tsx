@@ -19,6 +19,7 @@ import { Button } from "../ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { useToast } from "../ui/use-toast";
 import { TransactionHash } from "../TransactionHash";
+import { useUSDCBalance } from "@/contexts/USDCBalanceContext";
 
 /**
  * Generate a nonce with alphanumeric characters only.
@@ -42,6 +43,9 @@ export function SingleSigner({ dappNetwork }: SingleSignerProps) {
     signMessage,
     signTransaction,
   } = useWallet();
+  const { globalTransactionInProgress, setGlobalTransactionInProgress } =
+    useUSDCBalance();
+
   let sendable = isSendableNetwork(connected, network?.name);
 
   const onSignMessageAndVerify = async () => {
@@ -145,6 +149,7 @@ export function SingleSigner({ dappNetwork }: SingleSignerProps) {
       };
     }
 
+    setGlobalTransactionInProgress(true);
     try {
       const rawTransaction = await aptosClient(
         network
@@ -205,6 +210,8 @@ export function SingleSigner({ dappNetwork }: SingleSignerProps) {
         title: "Error",
         description: `${error}`,
       });
+    } finally {
+      setGlobalTransactionInProgress(false);
     }
   };
 
@@ -214,16 +221,28 @@ export function SingleSigner({ dappNetwork }: SingleSignerProps) {
         <CardTitle>Actions</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-wrap gap-4">
-        <Button onClick={onSignTransaction} disabled={!sendable}>
+        <Button
+          onClick={onSignTransaction}
+          disabled={!sendable || globalTransactionInProgress}
+        >
           Sign transaction
         </Button>
-        <Button onClick={onSignMessage} disabled={!sendable}>
+        <Button
+          onClick={onSignMessage}
+          disabled={!sendable || globalTransactionInProgress}
+        >
           Sign message
         </Button>
-        <Button onClick={onSignMessageAndVerify} disabled={!sendable}>
+        <Button
+          onClick={onSignMessageAndVerify}
+          disabled={!sendable || globalTransactionInProgress}
+        >
           Sign message and verify
         </Button>
-        <Button onClick={onSignAndSubmitTransaction} disabled={!sendable}>
+        <Button
+          onClick={onSignAndSubmitTransaction}
+          disabled={!sendable || globalTransactionInProgress}
+        >
           Sign and submit transaction
         </Button>
       </CardContent>

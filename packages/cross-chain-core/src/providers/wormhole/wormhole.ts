@@ -24,13 +24,15 @@ import { ChainConfig } from "../../config";
 import {
   WormholeQuoteRequest,
   WormholeQuoteResponse,
-  WormholeInitiateTransferRequest,
-  WormholeInitiateTransferResponse,
+  WormholeTransferRequest,
+  WormholeTransferResponse,
   WormholeRouteResponse,
   WormholeRequest,
   WormholeSubmitTransferRequest,
   WormholeStartTransferResponse,
   WormholeClaimTransferRequest,
+  WormholeWithdrawRequest,
+  WormholeWithdrawResponse,
 } from "./types";
 import { SolanaDerivedWallet } from "@aptos-labs/derived-wallet-solana";
 import { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
@@ -40,8 +42,10 @@ export class WormholeProvider
     CrossChainProvider<
       WormholeQuoteRequest,
       WormholeQuoteResponse,
-      WormholeInitiateTransferRequest,
-      WormholeInitiateTransferResponse
+      WormholeTransferRequest,
+      WormholeTransferResponse,
+      WormholeWithdrawRequest,
+      WormholeWithdrawResponse
     >
 {
   private crossChainCore: CrossChainCore;
@@ -60,7 +64,7 @@ export class WormholeProvider
     return this._wormholeContext;
   }
 
-  async setWormholeContext(sourceChain: Chain) {
+  private async setWormholeContext(sourceChain: Chain) {
     const dappNetwork = this.crossChainCore._dappConfig?.aptosNetwork;
     if (dappNetwork === Network.DEVNET) {
       throw new Error("Devnet is not supported on Wormhole");
@@ -74,7 +78,10 @@ export class WormholeProvider
     this._wormholeContext = wh;
   }
 
-  async getRoute(sourceChain: Chain): Promise<{
+  private async getRoute(
+    sourceChain: Chain,
+    destinationChain: Chain
+  ): Promise<{
     route: WormholeRouteResponse;
     request: WormholeRequest;
   }> {
@@ -82,19 +89,23 @@ export class WormholeProvider
       throw new Error("Wormhole context not initialized");
     }
 
-    const { sourceToken, destToken } = this.getTokenInfo(sourceChain);
+    const { sourceToken, destToken } = this.getTokenInfo(
+      sourceChain,
+      destinationChain
+    );
 
+    const destContext = this._wormholeContext
+      .getPlatform(chainToPlatform(destinationChain))
+      .getChain(destinationChain);
     const sourceContext = this._wormholeContext
       .getPlatform(chainToPlatform(sourceChain))
       .getChain(sourceChain);
 
     logger.log("sourceContext", sourceContext);
-
-    const destContext = this._wormholeContext
-      .getPlatform(chainToPlatform("Aptos"))
-      .getChain("Aptos");
+    logger.log("sourceToken", sourceToken);
 
     logger.log("destContext", destContext);
+    logger.log("destToken", destToken);
 
     const request = await routes.RouteTransferRequest.create(
       this._wormholeContext,
@@ -103,7 +114,7 @@ export class WormholeProvider
         destination: destToken,
       },
       sourceContext,
-      destContext,
+      destContext
     );
 
     const resolver = this._wormholeContext.resolver([
@@ -120,13 +131,22 @@ export class WormholeProvider
   }
 
   async getQuote(input: WormholeQuoteRequest): Promise<WormholeQuoteResponse> {
-    const { amount, sourceChain } = input;
+    const { amount, originChain, type } = input;
 
     if (!this._wormholeContext) {
-      await this.setWormholeContext(sourceChain);
+      await this.setWormholeContext(originChain);
     }
 
-    const { route, request } = await this.getRoute(sourceChain);
+    logger.log("type", type);
+    // If the type of the transaction is "transfer", we want to transfer from a x-chain wallet to the Aptos wallet
+    // If the type of the transaction is "withdraw", we want to transfer from the Aptos wallet to a x-chain wallet
+    const sourceChain = type === "transfer" ? originChain : "Aptos";
+    const destinationChain = type === "transfer" ? "Aptos" : originChain;
+
+    const { route, request } = await this.getRoute(
+      sourceChain,
+      destinationChain
+    );
 
     // TODO what is nativeGas for?
     const transferParams = {
@@ -150,7 +170,7 @@ export class WormholeProvider
   }
 
   async submitCCTPTransfer(
-    input: WormholeSubmitTransferRequest,
+    input: WormholeSubmitTransferRequest
   ): Promise<WormholeStartTransferResponse> {
     const { sourceChain, wallet, destinationAddress } = input;
 
@@ -184,14 +204,14 @@ export class WormholeProvider
       this.getChainConfig(sourceChain),
       signerAddress,
       {},
-      wallet,
+      wallet
     );
 
     let receipt = await this.wormholeRoute.initiate(
       this.wormholeRequest,
       signer,
       this.wormholeQuote,
-      Wormhole.chainAddress("Aptos", destinationAddress.toString()),
+      Wormhole.chainAddress("Aptos", destinationAddress.toString())
     );
 
     const originChainTxnId =
@@ -203,7 +223,7 @@ export class WormholeProvider
   }
 
   async claimCCTPTransfer(
-    input: WormholeClaimTransferRequest,
+    input: WormholeClaimTransferRequest
   ): Promise<{ destinationChainTxnId: string }> {
     let { receipt, mainSigner, sponsorAccount } = input;
     if (!this.wormholeRoute) {
@@ -227,7 +247,7 @@ export class WormholeProvider
                 "Aptos",
                 {},
                 mainSigner, // the account that signs the "claim" transaction
-                sponsorAccount ? sponsorAccount : undefined, // the fee payer account
+                sponsorAccount ? sponsorAccount : undefined // the fee payer account
               );
 
               if (routes.isManual(this.wormholeRoute)) {
@@ -249,7 +269,7 @@ export class WormholeProvider
       } catch (e) {
         console.error(
           `Error tracking transfer (attempt ${retries + 1} / ${maxRetries}):`,
-          e,
+          e
         );
         const delay = baseDelay * Math.pow(2, retries); // Exponential backoff
         await sleep(delay);
@@ -265,9 +285,9 @@ export class WormholeProvider
    * @param args
    * @returns
    */
-  async initiateCCTPTransfer(
-    input: WormholeInitiateTransferRequest,
-  ): Promise<WormholeInitiateTransferResponse> {
+  async transfer(
+    input: WormholeTransferRequest
+  ): Promise<WormholeTransferResponse> {
     if (this.crossChainCore._dappConfig?.aptosNetwork === Network.DEVNET) {
       throw new Error("Devnet is not supported on Wormhole");
     }
@@ -276,7 +296,8 @@ export class WormholeProvider
     if (input.amount) {
       await this.getQuote({
         amount: input.amount,
-        sourceChain: input.sourceChain,
+        originChain: input.sourceChain,
+        type: "transfer",
       });
     }
     // Submit transfer transaction from origin chain
@@ -290,6 +311,118 @@ export class WormholeProvider
     return { originChainTxnId, destinationChainTxnId };
   }
 
+  async withdraw(
+    input: WormholeWithdrawRequest
+  ): Promise<WormholeWithdrawResponse> {
+    const { sourceChain, wallet, destinationAddress, sponsorAccount } = input;
+    logger.log("sourceChain", sourceChain);
+    logger.log("wallet", wallet);
+    logger.log("destinationAddress", destinationAddress);
+    logger.log("sponsorAccount", sponsorAccount);
+
+    if (!this._wormholeContext) {
+      await this.setWormholeContext(sourceChain);
+    }
+    if (!this._wormholeContext) {
+      throw new Error("Wormhole context not initialized");
+    }
+    if (!this.wormholeRoute || !this.wormholeRequest || !this.wormholeQuote) {
+      throw new Error("Wormhole route, request, or quote not initialized");
+    }
+
+    const signer = new Signer(
+      this.getChainConfig("Aptos"),
+      (
+        await input.wallet.features["aptos:account"].account()
+      ).address.toString(),
+      {},
+      input.wallet,
+      undefined,
+      sponsorAccount
+    );
+
+    logger.log("signer", signer);
+    logger.log("wormholeRequest", this.wormholeRequest);
+    logger.log("wormholeQuote", this.wormholeQuote);
+    logger.log(
+      "Wormhole.chainAddress",
+      Wormhole.chainAddress(sourceChain, input.destinationAddress.toString())
+    );
+
+    let receipt = await this.wormholeRoute.initiate(
+      this.wormholeRequest,
+      signer,
+      this.wormholeQuote,
+      Wormhole.chainAddress(sourceChain, input.destinationAddress.toString())
+    );
+    logger.log("receipt", receipt);
+
+    const originChainTxnId =
+      "originTxs" in receipt
+        ? receipt.originTxs[receipt.originTxs.length - 1].txid
+        : undefined;
+
+    let retries = 0;
+    const maxRetries = 5;
+    const baseDelay = 1000; // Initial delay of 1 second
+
+    while (retries < maxRetries) {
+      try {
+        for await (receipt of this.wormholeRoute.track(receipt, 120 * 1000)) {
+          if (receipt.state >= TransferState.SourceInitiated) {
+            logger.log("Receipt is on track ", receipt);
+
+            try {
+              const signer = new Signer(
+                this.getChainConfig(sourceChain),
+                destinationAddress.toString(),
+                {},
+                wallet
+              );
+
+              if (routes.isManual(this.wormholeRoute)) {
+                const circleAttestationReceipt =
+                  await this.wormholeRoute.complete(signer, receipt);
+                logger.log("Claim receipt: ", circleAttestationReceipt);
+
+                const destinationChainTxnId = signer.claimedTransactionHashes();
+                return {
+                  originChainTxnId: originChainTxnId || "",
+                  destinationChainTxnId,
+                };
+              } else {
+                // Should be unreachable
+                return {
+                  originChainTxnId: originChainTxnId || "",
+                  destinationChainTxnId: "",
+                };
+              }
+            } catch (e) {
+              console.error("Failed to claim", e);
+              return {
+                originChainTxnId: originChainTxnId || "",
+                destinationChainTxnId: "",
+              };
+            }
+          }
+        }
+      } catch (e) {
+        console.error(
+          `Error tracking transfer (attempt ${retries + 1} / ${maxRetries}):`,
+          e
+        );
+        const delay = baseDelay * Math.pow(2, retries); // Exponential backoff
+        await sleep(delay);
+        retries++;
+      }
+    }
+
+    return {
+      originChainTxnId: originChainTxnId || "",
+      destinationChainTxnId: "",
+    };
+  }
+
   getChainConfig(chain: Chain): ChainConfig {
     const chainConfig =
       this.crossChainCore.CHAINS[
@@ -301,18 +434,21 @@ export class WormholeProvider
     return chainConfig;
   }
 
-  getTokenInfo(sourceChain: Chain): {
+  getTokenInfo(
+    sourceChain: Chain,
+    destinationChain: Chain
+  ): {
     sourceToken: TokenId;
     destToken: TokenId;
   } {
     const sourceToken: TokenId = Wormhole.tokenId(
       this.crossChainCore.TOKENS[sourceChain].tokenId.chain as Chain,
-      this.crossChainCore.TOKENS[sourceChain].tokenId.address,
+      this.crossChainCore.TOKENS[sourceChain].tokenId.address
     );
 
     const destToken: TokenId = Wormhole.tokenId(
-      this.crossChainCore.APTOS_TOKEN.tokenId.chain as Chain,
-      this.crossChainCore.APTOS_TOKEN.tokenId.address,
+      this.crossChainCore.TOKENS[destinationChain].tokenId.chain as Chain,
+      this.crossChainCore.TOKENS[destinationChain].tokenId.address
     );
 
     return { sourceToken, destToken };

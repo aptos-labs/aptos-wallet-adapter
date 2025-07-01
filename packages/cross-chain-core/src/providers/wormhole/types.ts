@@ -22,17 +22,25 @@ export type WormholeQuoteResponse = routes.Quote<
 
 export interface WormholeQuoteRequest {
   amount: string;
-  sourceChain: Chain;
+  originChain: Chain;
+  type: "transfer" | "withdraw";
 }
 
 export type GasStationApiKey = string;
 
-export interface WormholeInitiateTransferRequest {
+export interface WormholeTransferRequest {
   sourceChain: Chain;
   wallet: AdapterWallet;
   destinationAddress: AccountAddressInput;
   mainSigner: Account;
   amount?: string;
+  sponsorAccount?: Account | GasStationApiKey;
+}
+
+export interface WormholeWithdrawRequest {
+  sourceChain: Chain;
+  wallet: AdapterWallet;
+  destinationAddress: AccountAddressInput;
   sponsorAccount?: Account | GasStationApiKey;
 }
 
@@ -48,7 +56,12 @@ export interface WormholeClaimTransferRequest {
   sponsorAccount?: AptosAccount | GasStationApiKey;
 }
 
-export interface WormholeInitiateTransferResponse {
+export interface WormholeTransferResponse {
+  destinationChainTxnId: string;
+  originChainTxnId: string;
+}
+
+export interface WormholeWithdrawResponse {
   destinationChainTxnId: string;
   originChainTxnId: string;
 }
