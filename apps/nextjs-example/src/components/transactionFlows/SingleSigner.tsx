@@ -60,7 +60,7 @@ export function SingleSigner() {
       data: {
         function: "0x1::coin::transfer",
         typeArguments: [APTOS_COIN],
-        functionArguments: [account.address.toString(), 1], // 1 is in Octas
+        functionArguments: [account.address, 1], // 1 is in Octas
       },
     };
     try {
@@ -68,7 +68,7 @@ export function SingleSigner() {
         ...transaction,
         pluginParams: {
           customParam: "customValue",
-        }
+        },
       });
       await aptosClient(network).waitForTransaction({
         transactionHash: response.hash,
@@ -114,7 +114,7 @@ export function SingleSigner() {
         data: {
           function: "0x1::coin::transfer",
           typeArguments: [parseTypeTag(APTOS_COIN)],
-          functionArguments: [AccountAddress.from(account.address).toString(), new U64(1)], // 1 is in Octas
+          functionArguments: [AccountAddress.from(account.address), new U64(1)], // 1 is in Octas
         },
       });
       await aptosClient(network).waitForTransaction({
@@ -136,7 +136,7 @@ export function SingleSigner() {
         data: {
           function: "0x1::coin::transfer",
           typeArguments: [APTOS_COIN],
-          functionArguments: [account?.address.toString(), 1],
+          functionArguments: [account?.address, 1],
         },
       };
       const response = await signTransaction({
@@ -156,13 +156,13 @@ export function SingleSigner() {
 
     try {
       const transactionToSign = await aptosClient(
-        network,
+        network
       ).transaction.build.simple({
         sender: account.address,
         data: {
           function: "0x1::coin::transfer",
           typeArguments: [APTOS_COIN],
-          functionArguments: [account.address.toString(), 1],
+          functionArguments: [account.address, 1],
         },
       });
       const response = await signTransaction({
@@ -183,7 +183,7 @@ export function SingleSigner() {
     const transaction: InputTransactionData = {
       data: {
         function: "0x1::account_abstraction::add_authentication_function",
-        functionArguments: [account.address.toString(), "dummyModule", "dummyFunction"],
+        functionArguments: [account.address, "dummyModule", "dummyFunction"],
       },
     };
     try {
