@@ -1,5 +1,15 @@
 # @aptos-labs/cross-chain-core
 
+## 5.0.1
+
+### Patch Changes
+
+- fd7f880: Bump aptos ts-sdk version
+- Updated dependencies [fd7f880]
+  - @aptos-labs/derived-wallet-ethereum@0.5.1
+  - @aptos-labs/derived-wallet-solana@0.5.1
+  - @aptos-labs/wallet-adapter-core@6.0.1
+
 ## 5.0.0
 
 ### Major Changes

@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 6.0.1
+
+### Patch Changes
+
+- fd7f880: Bump aptos ts-sdk version
+
 ## 6.0.0
 
 ### Major Changes
