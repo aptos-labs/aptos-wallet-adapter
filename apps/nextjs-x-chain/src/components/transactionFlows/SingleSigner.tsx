@@ -98,7 +98,7 @@ export function SingleSigner({ dappNetwork }: SingleSignerProps) {
       const payload: InputTransactionData = {
         data: {
           function: "0x1::aptos_account::transfer",
-          functionArguments: [account.address.toString(), 1],
+          functionArguments: [account.address, 1],
         },
         withFeePayer: true,
       };
@@ -145,7 +145,7 @@ export function SingleSigner({ dappNetwork }: SingleSignerProps) {
       // We are on Devnet, so just use a simple transfer transaction as the derived account can fund their own account with APT.
       transactionData = {
         function: "0x1::aptos_account::transfer",
-        functionArguments: [account.address.toString(), 717],
+        functionArguments: [account.address, 717],
       };
     }
 

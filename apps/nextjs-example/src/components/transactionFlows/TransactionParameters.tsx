@@ -22,7 +22,7 @@ export function TransactionParameters() {
       data: {
         function: "0x1::coin::transfer",
         typeArguments: [APTOS_COIN],
-        functionArguments: [account.address.toString(), 1], // 1 is in Octas
+        functionArguments: [account.address, 1], // 1 is in Octas
       },
       options: { maxGasAmount: MaxGasAMount },
     };
@@ -31,7 +31,7 @@ export function TransactionParameters() {
       const executedTransaction = await aptosClient(network).waitForTransaction(
         {
           transactionHash: commitedTransaction.hash,
-        },
+        }
       );
       // Check maxGasAmount is respected by the current connected Wallet
       if ((executedTransaction as any).max_gas_amount == MaxGasAMount) {

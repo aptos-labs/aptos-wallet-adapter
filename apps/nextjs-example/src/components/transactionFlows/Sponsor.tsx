@@ -30,13 +30,13 @@ export function Sponsor() {
 
   // Generate a raw transaction using the SDK
   const generateTransaction = async (
-    sender: Account,
+    sender: Account
   ): Promise<AnyRawTransaction> => {
     if (!account) {
       throw new Error("no account");
     }
     const transactionToSign = await aptosClient(
-      network,
+      network
     ).transaction.build.simple({
       sender: sender.accountAddress,
       withFeePayer: true,
@@ -44,7 +44,7 @@ export function Sponsor() {
         function: "0x1::resource_account::create_resource_account",
         typeArguments: [],
         functionArguments: [
-          account.address.toString(),
+          account.address,
           AccountAddress.from("0x0").toUint8Array(),
         ],
       },

@@ -32,7 +32,7 @@
     "@aptos-labs/wallet-standard": "^0.5.0"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^3.1.1"
+    "@aptos-labs/ts-sdk": "^3.1.2"
   },
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
