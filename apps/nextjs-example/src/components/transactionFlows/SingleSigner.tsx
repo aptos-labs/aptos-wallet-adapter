@@ -20,6 +20,7 @@ function generateNonce() {
 export function SingleSigner() {
   const { toast } = useToast();
   const {
+    wallet,
     connected,
     account,
     network,
@@ -27,8 +28,63 @@ export function SingleSigner() {
     signMessageAndVerify,
     signMessage,
     signTransaction,
+    signIn,
   } = useWallet();
   let sendable = isSendableNetwork(connected, network?.name);
+
+  const onSignIn = async () => {
+    if (!wallet) {
+      return toast({
+        title: "Error",
+        description: "Wallet not connected",
+      });
+    }
+
+    const response = await signIn({
+      walletName: wallet.name,
+      input: {
+        domain: "localhost:3000",
+        nonce: Math.random().toString(16),
+        statement: "Signing into demo application",
+        notBefore: new Date().toISOString(),
+        expirationTime: new Date(
+          Date.now() + 1000 * 60 * 60 * 24
+        ).toISOString(),
+        issuedAt: new Date().toISOString(),
+        requestId: "abc",
+        resources: ["resource.1", "resource.2"],
+      },
+    });
+
+    console.log(response);
+    toast({ title: "Success", description: "Check console for response" });
+  };
+
+  const onSignInError = async () => {
+    if (!wallet) {
+      return toast({ title: "Error", description: "Wallet not connected" });
+    }
+
+    await signIn({
+      walletName: wallet.name,
+      input: {
+        nonce: Math.random().toString(16),
+        statement: "Signing into demo application",
+        notBefore: new Date().toISOString(),
+        expirationTime: new Date(
+          Date.now() + 1000 * 60 * 60 * 24
+        ).toISOString(),
+        issuedAt: new Date().toISOString(),
+        requestId: "abc",
+        resources: ["resource.1", "resource.2"],
+        address: "0x1",
+        chainId: "1",
+        domain: "example.com",
+        uri: "http://example.com",
+        version: "3",
+      } as any,
+    });
+  };
 
   const onSignMessageAndVerify = async () => {
     const payload = {
@@ -230,6 +286,12 @@ export function SingleSigner() {
           </Button>
           <Button onClick={onSignMessageAndVerify} disabled={!sendable}>
             Sign message and verify
+          </Button>
+          <Button onClick={onSignIn} disabled={!sendable}>
+            Sign in
+          </Button>
+          <Button onClick={onSignInError} disabled={!sendable}>
+            Sign in Error
           </Button>
         </CardContent>
       </Card>
