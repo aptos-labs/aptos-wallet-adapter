@@ -1,4 +1,9 @@
-import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+  CopyOutlined,
+  DisconnectOutlined,
+} from "@ant-design/icons";
 import {
   AboutAptosConnect,
   AboutAptosConnectEducationScreen,
@@ -16,10 +21,13 @@ import {
   Button,
   Collapse,
   Divider,
+  Dropdown,
   Flex,
+  MenuProps,
   Modal,
   ModalProps,
   Typography,
+  message,
 } from "antd";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import "./styles.css";
@@ -57,7 +65,7 @@ export function WalletSelector({
   const { aptosConnectWallets, availableWallets, installableWallets } =
     groupAndSortWallets(
       [...wallets, ...notDetectedWallets],
-      walletSortingOptions,
+      walletSortingOptions
     );
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
@@ -69,6 +77,32 @@ export function WalletSelector({
       setWalletSelectorModalOpen(true);
     }
   };
+
+  const handleCopyAddress = () => {
+    if (account?.address) {
+      navigator.clipboard.writeText(account.address.toString());
+      message.success("Address copied to clipboard");
+    }
+  };
+
+  const handleDisconnect = () => {
+    disconnect();
+  };
+
+  const dropdownItems: MenuProps["items"] = [
+    {
+      key: "copy",
+      label: "Copy Address",
+      icon: <CopyOutlined />,
+      onClick: handleCopyAddress,
+    },
+    {
+      key: "disconnect",
+      label: "Disconnect",
+      icon: <DisconnectOutlined />,
+      onClick: handleDisconnect,
+    },
+  ];
 
   const closeModal = () => {
     setWalletSelectorModalOpen(false);
@@ -146,9 +180,15 @@ export function WalletSelector({
 
   return (
     <>
-      <Button className="wallet-button" onClick={onWalletButtonClick}>
-        {connected ? buttonText : "Connect Wallet"}
-      </Button>
+      {connected ? (
+        <Dropdown menu={{ items: dropdownItems }} trigger={["click"]}>
+          <Button className="wallet-button">{buttonText}</Button>
+        </Dropdown>
+      ) : (
+        <Button className="wallet-button" onClick={onWalletButtonClick}>
+          Connect Wallet
+        </Button>
+      )}
       <AboutAptosConnect renderEducationScreen={renderEducationScreens}>
         <Modal
           {...modalProps}
