@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 5.1.0
+
+### Minor Changes
+
+- 4d0b4ec: Modify the wallet button to have a dropdown with two options: "Copy Address" and "Disconnect"
+
 ## 5.0.1
 
 ### Patch Changes
