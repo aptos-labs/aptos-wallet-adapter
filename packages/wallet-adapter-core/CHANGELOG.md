@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.0.0
+
+### Major Changes
+
+- 6605dd6: Bump Aptos Connect version to 2.5.1, Remove mSafe default support
+
 ## 6.0.1
 
 ### Patch Changes
