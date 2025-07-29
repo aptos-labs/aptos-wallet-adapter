@@ -47,13 +47,6 @@ export const aptosStandardSupportedWalletList: Array<AptosStandardSupportedWalle
       readyState: WalletReadyState.NotDetected,
       isAIP62Standard: true,
     },
-    {
-      name: "Rimosafe",
-      url: "https://chromewebstore.google.com/detail/rimo-safe-wallet/kiicddjcakdmobjkcpppkgcjbpakcagp",
-      icon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIGZpbGw9Im5vbmUiLz4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzLCAzKSBzY2FsZSgwLjgpIj4KICAgIDxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMjkuNTMxMSA5Ljg0MzY5VjBIMTkuNjg3NEwxOS42ODc3IDAuMDAwMzQwNTU1TDAgMC4wMDAzNDE0MTVMNC4zMjEzNGUtMDcgOS44NDQwM0g5Ljg0MzY5QzQuNDA3MTcgOS44NDQwMyAwIDE0LjI1MTIgMCAxOS42ODc3VjMwLjAwMDFIOS44NDM2OVYxOS42ODc5TDE5LjY4NzEgMzAuMDAwMUwxOS42ODcxIDE5LjY4NzdMMjkuNTMwOCA5Ljg0NDAzTDI5LjUzMTEgOS44NDQwM1Y5Ljg0MzY1TDI5LjUzMTEgOS44NDM2OVpNMTkuNjg3MSAxOS42ODc2TDE5LjY4NzEgOS44NDQwM0g5Ljg0MzY5VjE5LjY4NzZIMTkuNjg3MVpNMjkuNTMxMSA5Ljg0MzY1TDE5LjY4NzcgMC4wMDAzNDA1NTVMMjkuNTMxMSAwLjAwMDM0MDEyNVY5Ljg0MzY1Wk0xOS42ODc0IDE5LjY4NzZIMjkuNTMxMVYzMC4wMDAxSDE5LjY4NzRWMTkuNjg3NloiIGZpbGw9IiNGRjVDMjgiLz4KICA8L2c+Cjwvc3ZnPgo=",
-      readyState: WalletReadyState.NotDetected,
-      isAIP62Standard: true,
-    },
   ];
 
 export const crossChainStandardSupportedWalletList: Array<AptosStandardSupportedWallet> =
