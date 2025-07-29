@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.1.1
+
+### Patch Changes
+
+- 8ca938e: Updates petra icon
+
 ## 7.1.0
 
 ### Minor Changes
