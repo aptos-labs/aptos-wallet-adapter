@@ -11,12 +11,6 @@ import {
   ReactNode,
 } from "react";
 
-const dappNetwork: Network.MAINNET | Network.TESTNET = Network.TESTNET;
-
-const crossChainCore = new CrossChainCore({
-  dappConfig: { aptosNetwork: dappNetwork },
-});
-
 interface USDCBalanceContextType {
   aptosBalance: string | undefined;
   originBalance: string | undefined;
@@ -37,9 +31,18 @@ const USDCBalanceContext = createContext<USDCBalanceContextType | undefined>(
 
 interface USDCBalanceProviderProps {
   children: ReactNode;
+  dappNetwork: Network.MAINNET | Network.TESTNET;
 }
 
-export function USDCBalanceProvider({ children }: USDCBalanceProviderProps) {
+export function USDCBalanceProvider({
+  children,
+  dappNetwork,
+}: USDCBalanceProviderProps) {
+  // Initialize crossChainCore with the prop
+  const crossChainCore = new CrossChainCore({
+    dappConfig: { aptosNetwork: dappNetwork },
+  });
+
   const [aptosBalance, setAptosBalance] = useState<string | undefined>(
     undefined
   );

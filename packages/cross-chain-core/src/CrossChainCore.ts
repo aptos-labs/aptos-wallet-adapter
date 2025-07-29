@@ -17,6 +17,7 @@ import {
   mainnetChains,
   mainnetTokens,
   TokenConfig,
+  ChainConfig,
 } from "./config";
 import {
   getAptosWalletUSDCBalance,
@@ -41,7 +42,37 @@ export type { AccountAddressInput } from "@aptos-labs/ts-sdk";
 export { NetworkToChainId, NetworkToNodeAPI } from "@aptos-labs/ts-sdk";
 export type AptosAccount = Account;
 
-export type Chain = "Solana" | "Ethereum" | "Sepolia" | "Aptos";
+// List of all the supported chain
+export type Chain =
+  | "Solana"
+  | "Ethereum"
+  | "Sepolia"
+  | "Aptos"
+  | "BaseSepolia"
+  | "ArbitrumSepolia"
+  | "Avalanche"
+  | "Base"
+  | "Arbitrum"
+  | "PolygonSepolia"
+  | "Polygon";
+
+// Map of Ethereum chain id to testnet chain config
+export const EthereumChainIdToTestnetChain: Record<string, ChainConfig> = {
+  11155111: testnetChains.Sepolia!,
+  84532: testnetChains.BaseSepolia!,
+  421614: testnetChains.ArbitrumSepolia!,
+  43113: testnetChains.Avalanche!,
+  80002: testnetChains.PolygonSepolia!,
+};
+
+// Map of Ethereum chain id to mainnet chain config
+export const EthereumChainIdToMainnetChain: Record<string, ChainConfig> = {
+  1: mainnetChains.Ethereum!,
+  8453: mainnetChains.Base!,
+  42161: mainnetChains.Arbitrum!,
+  43114: mainnetChains.Avalanche!,
+  137: mainnetChains.Polygon!,
+};
 
 export type CCTPProviders = "Wormhole";
 
@@ -115,10 +146,18 @@ export class CrossChainCore {
             this.CHAINS[sourceChain].defaultRpc
         );
       case "Ethereum":
+      case "BaseSepolia":
       case "Sepolia":
+      case "Avalanche":
+      case "ArbitrumSepolia":
+      case "Arbitrum":
+      case "Base":
+      case "PolygonSepolia":
+      case "Polygon":
         return await getEthereumWalletUSDCBalance(
           walletAddress,
           this._dappConfig.aptosNetwork,
+          sourceChain,
           // TODO: maybe let the user config it
           this.CHAINS[sourceChain].defaultRpc
         );
