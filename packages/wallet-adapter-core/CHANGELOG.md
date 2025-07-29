@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.1.0
+
+### Minor Changes
+
+- dfa6eb3: Hide Remosafe wallet option is it is not supported anymore
+
 ## 7.0.0
 
 ### Major Changes
