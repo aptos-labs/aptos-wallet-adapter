@@ -1,5 +1,16 @@
 # @aptos-labs/cross-chain-core
 
+## 5.1.0
+
+### Minor Changes
+
+- e189651: Support Ethereum L2 networks for CCTP - Avalanche, Base, Arbitrum, Polygon
+
+### Patch Changes
+
+- Updated dependencies [dfa6eb3]
+  - @aptos-labs/wallet-adapter-core@7.1.0
+
 ## 5.0.2
 
 ### Patch Changes
