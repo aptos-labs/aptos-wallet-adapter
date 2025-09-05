@@ -410,6 +410,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         return;
       }
 
+      // If the address isn't a valid address, skip fetching it
+      if (!!this._account?.address || !AccountAddress.isValid({input: this._account?.address, strict: false})) {
+          this._account.ansName = undefined;
+          return;
+      }
+
       const aptosConfig = getAptosConfig(this._network, this._dappConfig);
       const aptos = new Aptos(aptosConfig);
       try {
