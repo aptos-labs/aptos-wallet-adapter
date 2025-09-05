@@ -70,8 +70,6 @@
     "bs58": "^6.0.0",
     "ethers": "^6.13.5",
     "eventemitter3": "^4.0.7",
-    "evm": "link:@wormhole-foundation/sdk/evm",
-    "solana": "link:@wormhole-foundation/sdk/solana",
     "tweetnacl": "^1.0.3"
   },
   "peerDependencies": {
