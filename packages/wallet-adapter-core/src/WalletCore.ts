@@ -729,9 +729,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.recordEvent("sign_and_submit_transaction");
 
       // We'll submit ourselves if a custom transaction submitter has been provided.
-      const shouldUseTxnSubmitter =
-        this._dappConfig?.transactionSubmitter !== undefined ||
-        transactionInput.transactionSubmitter !== undefined;
+      const shouldUseTxnSubmitter = !!(
+        this._dappConfig?.transactionSubmitter ||
+        transactionInput.transactionSubmitter
+      );
 
       if (
         this._wallet.features["aptos:signAndSubmitTransaction"] &&
