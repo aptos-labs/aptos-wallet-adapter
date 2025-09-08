@@ -411,12 +411,6 @@ importers:
       eventemitter3:
         specifier: ^4.0.7
         version: 4.0.7
-      evm:
-        specifier: link:@wormhole-foundation/sdk/evm
-        version: link:@wormhole-foundation/sdk/evm
-      solana:
-        specifier: link:@wormhole-foundation/sdk/solana
-        version: link:@wormhole-foundation/sdk/solana
       tweetnacl:
         specifier: ^1.0.3
         version: 1.0.3
