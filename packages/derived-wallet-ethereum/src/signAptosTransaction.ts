@@ -3,6 +3,7 @@ import {
   mapUserResponse,
 } from "@aptos-labs/derived-wallet-base";
 import {
+  AbstractedAccount,
   AccountAuthenticator,
   AccountAuthenticatorAbstraction,
   AnyRawTransaction,
@@ -48,7 +49,11 @@ export async function signAptosTransactionWithEthereum(
   const ethereumAddress = ethereumAccount.address as EthereumAddress;
 
   const signingMessage = generateSigningMessageForTransaction(rawTransaction);
-  const signingMessageDigest = hashValues([signingMessage]);
+  const message = AbstractedAccount.generateAccountAbstractionMessage(
+    signingMessage,
+    authenticationFunction
+  );
+  const signingMessageDigest = hashValues([message]);
 
   const chainId = rawTransaction.rawTransaction.chain_id.chainId;
 
