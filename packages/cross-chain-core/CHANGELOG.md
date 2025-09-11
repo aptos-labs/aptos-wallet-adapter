@@ -1,5 +1,13 @@
 # @aptos-labs/cross-chain-core
 
+## 5.1.2
+
+### Patch Changes
+
+- 14a9cd1: Remove unneeded dependencies from cross chain core package
+- Updated dependencies [545b26d]
+  - @aptos-labs/wallet-adapter-core@7.1.2
+
 ## 5.1.1
 
 ### Patch Changes
