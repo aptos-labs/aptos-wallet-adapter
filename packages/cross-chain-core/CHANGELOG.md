@@ -1,5 +1,18 @@
 # @aptos-labs/cross-chain-core
 
+## 5.3.0
+
+### Minor Changes
+
+- c066004: Bump wallet-standard and siwa packages
+
+### Patch Changes
+
+- Updated dependencies [c066004]
+  - @aptos-labs/derived-wallet-ethereum@0.7.0
+  - @aptos-labs/derived-wallet-solana@0.7.0
+  - @aptos-labs/wallet-adapter-core@7.3.0
+
 ## 5.2.0
 
 ### Minor Changes
