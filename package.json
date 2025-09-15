@@ -35,7 +35,7 @@
     "turbo": "latest"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "gh-pages": "^5.0.0"
@@ -43,7 +43,7 @@
   "packageManager": "pnpm@9.15.5",
   "pnpm": {
     "overrides": {
-      "@aptos-labs/aptos-client": "^1.2.0"
+      "@aptos-labs/aptos-client": "^2.0.0"
     }
   }
 }
