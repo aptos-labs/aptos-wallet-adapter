@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
-    "@changesets/cli": "^2.22.0",
+    "@changesets/cli": "^2.29.7",
     "prettier": "latest",
     "turbo": "latest"
   },
