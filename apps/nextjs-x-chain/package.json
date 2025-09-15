@@ -18,7 +18,7 @@
     "@aptos-labs/ts-sdk": "^5.0.0",
     "@aptos-labs/wallet-adapter-core": "workspace:*",
     "@aptos-labs/wallet-adapter-react": "workspace:*",
-    "@aptos-labs/wallet-standard": "^0.5.1",
+    "@aptos-labs/wallet-standard": "^0.5.2",
     "@radix-ui/react-collapsible": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
