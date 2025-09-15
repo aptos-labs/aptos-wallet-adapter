@@ -137,8 +137,8 @@ importers:
         specifier: ^8.4.38
         version: 8.5.3
       prettier:
-        specifier: ^3.3.1
-        version: 3.5.3
+        specifier: ^3.6.2
+        version: 3.6.2
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.17
@@ -258,8 +258,8 @@ importers:
         specifier: ^8.4.38
         version: 8.5.3
       prettier:
-        specifier: ^3.3.1
-        version: 3.5.3
+        specifier: ^3.6.2
+        version: 3.6.2
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.17
@@ -334,8 +334,8 @@ importers:
         specifier: ^8.57.1
         version: 8.57.1
       prettier:
-        specifier: ^3.3.3
-        version: 3.5.3
+        specifier: ^3.6.2
+        version: 3.6.2
       shadcn-nuxt:
         specifier: ^0.10.4
         version: 0.10.4(magicast@0.3.5)
@@ -8108,11 +8108,6 @@ packages:
   prettier@2.8.8:
     resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
-    hasBin: true
-
-  prettier@3.5.3:
-    resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
-    engines: {node: '>=14'}
     hasBin: true
 
   prettier@3.6.2:
@@ -19366,8 +19361,6 @@ snapshots:
   prelude-ls@1.2.1: {}
 
   prettier@2.8.8: {}
-
-  prettier@3.5.3: {}
 
   prettier@3.6.2: {}
 

@@ -34,7 +34,7 @@
     "consola": "^3.4.2",
     "eslint": "^8.57.1",
     "nuxt": "^3.16.2",
-    "prettier": "^3.3.3",
+    "prettier": "^3.6.2",
     "shadcn-nuxt": "^0.10.4",
     "typescript": "^5.8.3",
     "ufo": "1.6.1"
