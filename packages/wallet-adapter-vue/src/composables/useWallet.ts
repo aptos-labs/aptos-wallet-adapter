@@ -220,16 +220,37 @@ export function useWallet(
   const handleStandardWalletsAdded = (
     standardWallet: MaybeRef<AdapterWallet>,
   ) => {
-    const _standardWallet = unref(standardWallet);
+    const stdWallet = unref(standardWallet);
 
-    const existingWallet = wallets.value.find(
-      (wallet) => wallet.name == _standardWallet.name,
-    );
+    console.log("WALLETS", wallets.value);
+    console.log("STANDARD WALLETS", stdWallet);
+
+    const existingWallet = ("value" in wallets && "find" in wallets.value) ? wallets.value.find(
+      (wallet) => {
+          try {
+            // Safely access wallet name using bracket notation to avoid private member issues
+            const walletName = wallet && typeof wallet === 'object' && 'name' in wallet ? (wallet as any).name : null;
+            const standardWalletName = stdWallet && typeof stdWallet === 'object' && 'name' in stdWallet ? stdWallet.name : null;
+            return walletName && standardWalletName && walletName === standardWalletName;
+          } catch (error) {
+              console.warn(`FAILING: ${JSON.stringify(wallet)}`, )
+            console.warn("Error accessing wallet name:", error);
+            return false;
+          }
+      }
+    ) : null;
 
     if (existingWallet) {
-      Object.assign(existingWallet, _standardWallet);
+      Object.assign(existingWallet, stdWallet);
     } else {
-      wallets.value.push(_standardWallet);
+        // Now check if we can access the 'name' property safely
+        try {
+            stdWallet.name
+            wallets.value.push(stdWallet);
+        } catch (error) {
+            console.warn(`FAILING: ${JSON.stringify(stdWallet)}`, )
+            console.warn("Wallet name is still not accessible", error);
+        }
     }
   };
 

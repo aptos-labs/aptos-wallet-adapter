@@ -337,6 +337,8 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const handleStandardWalletsAdded = (standardWallet: AdapterWallet): void => {
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
+      console.log("NEW WALLET:", standardWallet)
+
     const existingWalletIndex = wallets.findIndex(
       (wallet) => wallet.name == standardWallet.name
     );
@@ -348,6 +350,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         ...wallets.slice(existingWalletIndex + 1),
       ]);
     } else {
+        console.error("ADDING:", standardWallet)
       // If wallet doesn't exist, add it to the array
       setWallets((wallets) => [...wallets, standardWallet]);
     }
@@ -369,6 +372,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         ...wallets.slice(existingWalletIndex + 1),
       ]);
     } else {
+        console.error("ADDING not detected:", notDetectedWallet)
       // If wallet doesn't exist, add it to the array
       setNotDetectedWallets((wallets) => [...wallets, notDetectedWallet]);
     }

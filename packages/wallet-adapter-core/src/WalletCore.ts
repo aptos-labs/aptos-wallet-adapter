@@ -236,12 +236,14 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   /**
    * Set AIP-62 extension wallets
    *
-   * @param extensionwWallets
+   * @param extensionWallets
    */
   private setExtensionAIP62Wallets(
-    extensionwWallets: readonly AptosWallet[]
+    extensionWallets: readonly AptosWallet[]
   ): void {
-    extensionwWallets.map((wallet: AdapterWallet) => {
+      console.error("WALLETS?", extensionWallets);
+    extensionWallets.map((wallet: AdapterWallet) => {
+        console.error("Wallet?", wallet);
       if (this.excludeWallet(wallet)) {
         return;
       }
@@ -256,9 +258,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       if (isValid) {
         // check if we already have this wallet as a not detected wallet
         const index = this._standard_not_detected_wallets.findIndex(
-          (notDetctedWallet) => notDetctedWallet.name == wallet.name
+          (notDetectedWallet) => notDetectedWallet.name == wallet.name
         );
-        // if we do, remove it from the not detected wallets array as it is now become detected
+        // if we do, remove it from the not detected wallets array as it is now detected
         if (index !== -1) {
           this._standard_not_detected_wallets.splice(index, 1);
         }
@@ -383,7 +385,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   /**
-   * Helper function to ensure account exists
+   * Helper function to ensure an account exists
    *
    * @param account An account
    */
