@@ -1,5 +1,16 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.7.0
+
+### Minor Changes
+
+- c066004: Bump wallet-standard and siwa packages
+
+### Patch Changes
+
+- Updated dependencies [c066004]
+  - @aptos-labs/derived-wallet-base@0.7.0
+
 ## 0.6.0
 
 ### Minor Changes
