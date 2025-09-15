@@ -165,6 +165,7 @@ export function SingleSigner({ dappNetwork, wallet }: SingleSignerProps) {
 
       // If is testnet, and is not a native aptos wallet,we use gas station to sponsor the transaction
       if (!wallet.isAptosNativeWallet && dappNetwork === Network.TESTNET) {
+        // @ts-ignore
         transactionInput.transactionSubmitter = getTransactionSubmitter();
       }
 
