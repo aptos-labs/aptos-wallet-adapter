@@ -32,7 +32,7 @@ export interface SignAptosTransactionWithSolanaInput {
 }
 
 export async function signAptosTransactionWithSolana(
-  input: SignAptosTransactionWithSolanaInput
+  input: SignAptosTransactionWithSolanaInput,
 ) {
   const { solanaWallet, authenticationFunction, rawTransaction, domain } =
     input;
@@ -45,7 +45,7 @@ export async function signAptosTransactionWithSolana(
   const signingMessage = generateSigningMessageForTransaction(rawTransaction);
   const message = AbstractedAccount.generateAccountAbstractionMessage(
     signingMessage,
-    authenticationFunction
+    authenticationFunction,
   );
 
   const signingMessageDigest = hashValues([message]);
@@ -60,7 +60,7 @@ export async function signAptosTransactionWithSolana(
   // Prioritize SIWS if available
   if (solanaWallet.signIn) {
     const response = await wrapSolanaUserResponse(
-      solanaWallet.signIn!(siwsInput)
+      solanaWallet.signIn!(siwsInput),
     );
     return mapUserResponse(response, (output): AccountAuthenticator => {
       if (output.signatureType && output.signatureType !== "ed25519") {
@@ -77,13 +77,13 @@ export async function signAptosTransactionWithSolana(
         solanaPublicKey,
         domain,
         authenticationFunction,
-        signingMessageDigest
+        signingMessageDigest,
       );
     });
   } else if (solanaWallet.signMessage) {
     // Fallback to signMessage if SIWS is not available
     const response = await wrapSolanaUserResponse(
-      solanaWallet.signMessage(createSignInMessage(siwsInput))
+      solanaWallet.signMessage(createSignInMessage(siwsInput)),
     );
     return mapUserResponse(response, (output): AccountAuthenticator => {
       // Solana signMessage standard always returns a Ed25519 signature type
@@ -94,12 +94,12 @@ export async function signAptosTransactionWithSolana(
         solanaPublicKey,
         domain,
         authenticationFunction,
-        signingMessageDigest
+        signingMessageDigest,
       );
     });
   } else {
     throw new Error(
-      `${solanaWallet.name} does not support SIWS or signMessage`
+      `${solanaWallet.name} does not support SIWS or signMessage`,
     );
   }
 }
@@ -110,7 +110,7 @@ function createAccountAuthenticatorForSolanaTransaction(
   solanaPublicKey: SolanaPublicKey,
   domain: string,
   authenticationFunction: string,
-  signingMessageDigest: Uint8Array
+  signingMessageDigest: Uint8Array,
 ): AccountAuthenticator {
   // Serialize the signature with the signature type as the first byte.
   const serializer = new Serializer();
@@ -121,13 +121,13 @@ function createAccountAuthenticatorForSolanaTransaction(
   // Serialize the abstract public key.
   const abstractPublicKey = new DerivableAbstractPublicKey(
     solanaPublicKey.toBase58(),
-    domain
+    domain,
   );
 
   return new AccountAuthenticatorAbstraction(
     authenticationFunction,
     signingMessageDigest,
     abstractSignature,
-    abstractPublicKey.bcsToBytes()
+    abstractPublicKey.bcsToBytes(),
   );
 }

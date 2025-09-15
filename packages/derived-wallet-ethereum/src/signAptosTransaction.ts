@@ -31,7 +31,7 @@ export interface SignAptosTransactionWithEthereumInput {
 }
 
 export async function signAptosTransactionWithEthereum(
-  input: SignAptosTransactionWithEthereumInput
+  input: SignAptosTransactionWithEthereumInput,
 ): Promise<UserResponse<AccountAuthenticator>> {
   const { authenticationFunction, rawTransaction } = input;
   const eip1193Provider =
@@ -51,7 +51,7 @@ export async function signAptosTransactionWithEthereum(
   const signingMessage = generateSigningMessageForTransaction(rawTransaction);
   const message = AbstractedAccount.generateAccountAbstractionMessage(
     signingMessage,
-    authenticationFunction
+    authenticationFunction,
   );
   const signingMessageDigest = hashValues([message]);
 
@@ -69,7 +69,7 @@ export async function signAptosTransactionWithEthereum(
   });
 
   const response = await wrapEthersUserResponse(
-    ethereumAccount.signMessage(siweMessage)
+    ethereumAccount.signMessage(siweMessage),
   );
 
   return mapUserResponse(response, (siweSignature) => {
@@ -85,14 +85,14 @@ export async function signAptosTransactionWithEthereum(
     // Serialize the abstract public key.
     const abstractPublicKey = new DerivableAbstractPublicKey(
       ethereumAddress,
-      window.location.host
+      window.location.host,
     );
 
     return new AccountAuthenticatorAbstraction(
       authenticationFunction,
       signingMessageDigest,
       abstractSignature,
-      abstractPublicKey.bcsToBytes()
+      abstractPublicKey.bcsToBytes(),
     );
   });
 }

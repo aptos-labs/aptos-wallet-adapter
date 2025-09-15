@@ -26,7 +26,7 @@ import { UserResponseStatus } from "@aptos-labs/wallet-standard";
 export async function signAndSendTransaction(
   request: AptosUnsignedTransaction<Network, AptosChains>,
   wallet: AdapterWallet,
-  sponsorAccount: Account | GasStationApiKey | undefined
+  sponsorAccount: Account | GasStationApiKey | undefined,
 ) {
   if (!wallet) {
     throw new Error("wallet.sendTransaction is undefined").message;
@@ -59,7 +59,7 @@ export async function signAndSendTransaction(
   // Also, tranfering the arguments as it brings some errors (which not sure if bug or not), so we first extract them
   // and then tranform them into the functionArguments.
   const functionArguments = extractFunctionArguments(
-    payload.functionArguments as unknown as ScriptFunctionArgumentTypes[]
+    payload.functionArguments as unknown as ScriptFunctionArgumentTypes[],
   );
 
   const transactionData: InputGenerateTransactionPayloadData = {
@@ -123,7 +123,7 @@ export async function signAndSendTransaction(
  * @returns The function arguments.
  */
 function extractFunctionArguments(
-  functionArguments: ScriptFunctionArgumentTypes[]
+  functionArguments: ScriptFunctionArgumentTypes[],
 ) {
   const deserializer1 = new Deserializer(functionArguments[0].bcsToBytes());
   const amount = deserializer1.deserializeU64();

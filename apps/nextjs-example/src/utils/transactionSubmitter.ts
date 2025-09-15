@@ -21,10 +21,10 @@ class MyTransactionSubmitter implements TransactionSubmitter {
     console.log("Submitting transaction with MyTransactionSubmitter", args);
     const aptos = new Aptos(aptosConfig);
     return aptos.transaction.submit.simple({
-        ...args,
-        // We do this so we don't recurse back to this function but instead use the
-        // proper regular txn submitter.
-        transactionSubmitter: null,
+      ...args,
+      // We do this so we don't recurse back to this function but instead use the
+      // proper regular txn submitter.
+      transactionSubmitter: null,
     });
   }
 }

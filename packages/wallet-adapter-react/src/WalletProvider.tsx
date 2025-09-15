@@ -71,7 +71,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     const walletCore = new WalletCore(
       optInWallets,
       dappConfig,
-      disableTelemetry
+      disableTelemetry,
     );
     setWalletCore(walletCore);
   }, []);
@@ -104,7 +104,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
 
     // Make sure the wallet is installed
     const selectedWallet = walletCore.wallets.find(
-      (e) => e.name === walletName
+      (e) => e.name === walletName,
     ) as AdapterWallet | undefined;
     if (
       !selectedWallet ||
@@ -183,7 +183,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signAndSubmitTransaction = async (
-    transaction: InputTransactionData
+    transaction: InputTransactionData,
   ): Promise<AptosSignAndSubmitTransactionOutput> => {
     try {
       if (!walletCore) {
@@ -223,7 +223,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const submitTransaction = async (
-    transaction: InputSubmitTransactionData
+    transaction: InputSubmitTransactionData,
   ): Promise<PendingTransactionResponse> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -237,7 +237,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signMessage = async (
-    message: AptosSignMessageInput
+    message: AptosSignMessageInput,
   ): Promise<AptosSignMessageOutput> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -251,7 +251,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signMessageAndVerify = async (
-    message: AptosSignMessageInput
+    message: AptosSignMessageInput,
   ): Promise<boolean> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -338,7 +338,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
     const existingWalletIndex = wallets.findIndex(
-      (wallet) => wallet.name == standardWallet.name
+      (wallet) => wallet.name == standardWallet.name,
     );
     if (existingWalletIndex !== -1) {
       // If wallet exists, replace it with the new wallet
@@ -354,12 +354,12 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const handleStandardNotDetectedWalletsAdded = (
-    notDetectedWallet: AdapterNotDetectedWallet
+    notDetectedWallet: AdapterNotDetectedWallet,
   ): void => {
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
     const existingWalletIndex = wallets.findIndex(
-      (wallet) => wallet.name == notDetectedWallet.name
+      (wallet) => wallet.name == notDetectedWallet.name,
     );
     if (existingWalletIndex !== -1) {
       // If wallet exists, replace it with the new wallet
@@ -382,7 +382,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     walletCore?.on("standardWalletsAdded", handleStandardWalletsAdded);
     walletCore?.on(
       "standardNotDetectedWalletAdded",
-      handleStandardNotDetectedWalletsAdded
+      handleStandardNotDetectedWalletsAdded,
     );
     return () => {
       walletCore?.off("connect", handleConnect);
@@ -392,7 +392,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       walletCore?.off("standardWalletsAdded", handleStandardWalletsAdded);
       walletCore?.off(
         "standardNotDetectedWalletAdded",
-        handleStandardNotDetectedWalletsAdded
+        handleStandardNotDetectedWalletsAdded,
       );
     };
   }, [wallets, account]);

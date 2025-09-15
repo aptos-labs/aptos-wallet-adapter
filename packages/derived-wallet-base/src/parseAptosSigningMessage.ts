@@ -36,7 +36,7 @@ export function parseRawTransaction(message: Uint8Array) {
     bufferStartsWith(message, transactionWithDataSigningMessagePrefix)
   ) {
     const serialized = message.slice(
-      transactionWithDataSigningMessagePrefix.length
+      transactionWithDataSigningMessagePrefix.length,
     );
     const deserializer = new Deserializer(serialized);
     return RawTransactionWithData.deserialize(deserializer);
@@ -59,7 +59,7 @@ export type ParseSigningMessageResult =
   | ParseSigningMessageStructuredMessageResult;
 
 export function parseAptosSigningMessage(
-  message: HexInput
+  message: HexInput,
 ): ParseSigningMessageResult | undefined {
   const messageBytes = Hex.fromHexInput(message).toUint8Array();
 
@@ -71,7 +71,7 @@ export function parseAptosSigningMessage(
     } else if (parsedRawTransaction instanceof MultiAgentRawTransaction) {
       rawTransaction = new MultiAgentTransaction(
         parsedRawTransaction.raw_txn,
-        parsedRawTransaction.secondary_signer_addresses
+        parsedRawTransaction.secondary_signer_addresses,
       );
     } else if (parsedRawTransaction instanceof FeePayerRawTransaction) {
       const { raw_txn, secondary_signer_addresses, fee_payer_address } =
@@ -81,7 +81,7 @@ export function parseAptosSigningMessage(
           ? new MultiAgentTransaction(
               raw_txn,
               secondary_signer_addresses,
-              fee_payer_address
+              fee_payer_address,
             )
           : new SimpleTransaction(raw_txn, fee_payer_address);
     } else {

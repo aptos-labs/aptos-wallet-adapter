@@ -26,7 +26,7 @@ interface USDCBalanceContextType {
 }
 
 const USDCBalanceContext = createContext<USDCBalanceContextType | undefined>(
-  undefined
+  undefined,
 );
 
 interface USDCBalanceProviderProps {
@@ -44,10 +44,10 @@ export function USDCBalanceProvider({
   });
 
   const [aptosBalance, setAptosBalance] = useState<string | undefined>(
-    undefined
+    undefined,
   );
   const [originBalance, setOriginBalance] = useState<string | undefined>(
-    undefined
+    undefined,
   );
   const [isLoadingAptosBalance, setIsLoadingAptosBalance] = useState(false);
   const [isLoadingOriginBalance, setIsLoadingOriginBalance] = useState(false);
@@ -56,13 +56,13 @@ export function USDCBalanceProvider({
 
   // Store the last used parameters for refetching
   const [lastAptosAddress, setLastAptosAddress] = useState<string | undefined>(
-    undefined
+    undefined,
   );
   const [lastOriginAddress, setLastOriginAddress] = useState<
     string | undefined
   >(undefined);
   const [lastOriginChain, setLastOriginChain] = useState<Chain | undefined>(
-    undefined
+    undefined,
   );
 
   const fetchAptosBalance = useCallback(async (address: string) => {
@@ -74,7 +74,7 @@ export function USDCBalanceProvider({
     try {
       const balance = await crossChainCore.getWalletUSDCBalance(
         address,
-        "Aptos"
+        "Aptos",
       );
       setAptosBalance(balance);
     } catch (error) {
@@ -96,7 +96,7 @@ export function USDCBalanceProvider({
       try {
         const balance = await crossChainCore.getWalletUSDCBalance(
           address,
-          chain
+          chain,
         );
         setOriginBalance(balance);
       } catch (error) {
@@ -106,7 +106,7 @@ export function USDCBalanceProvider({
         setIsLoadingOriginBalance(false);
       }
     },
-    []
+    [],
   );
 
   const refetchBalances = useCallback(async () => {
@@ -142,7 +142,7 @@ export function USDCBalanceProvider({
             try {
               const balance = await crossChainCore.getWalletUSDCBalance(
                 lastAptosAddress,
-                "Aptos"
+                "Aptos",
               );
 
               // Check if balance actually changed (indicating transaction was processed)
@@ -157,7 +157,7 @@ export function USDCBalanceProvider({
                 retryCount++;
                 const nextDelay = delayMs * 1.5; // Exponential backoff
                 console.log(
-                  `Aptos balance unchanged, retrying in ${nextDelay}ms (attempt ${retryCount}/${maxRetries})`
+                  `Aptos balance unchanged, retrying in ${nextDelay}ms (attempt ${retryCount}/${maxRetries})`,
                 );
                 await attemptFetch(nextDelay);
                 resolve();
@@ -169,7 +169,7 @@ export function USDCBalanceProvider({
             } catch (error) {
               console.error(
                 `Error fetching Aptos balance (attempt ${retryCount + 1}):`,
-                error
+                error,
               );
               if (retryCount < maxRetries) {
                 retryCount++;
@@ -184,7 +184,7 @@ export function USDCBalanceProvider({
 
       await attemptFetch(initialDelayMs);
     },
-    [lastAptosAddress, aptosBalance]
+    [lastAptosAddress, aptosBalance],
   );
 
   const refetchBalancesWithDelay = useCallback(
@@ -202,7 +202,7 @@ export function USDCBalanceProvider({
       lastOriginChain,
       fetchOriginBalance,
       refetchAptosBalanceWithRetry,
-    ]
+    ],
   );
 
   const refetchAptosBalanceWithDelay = useCallback(
@@ -213,7 +213,7 @@ export function USDCBalanceProvider({
         }, delayMs);
       }
     },
-    [lastAptosAddress, fetchAptosBalance]
+    [lastAptosAddress, fetchAptosBalance],
   );
 
   const value: USDCBalanceContextType = {
