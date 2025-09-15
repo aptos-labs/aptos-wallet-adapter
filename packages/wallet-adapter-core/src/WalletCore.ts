@@ -871,7 +871,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         };
       } // dapp sends a transaction data input (i.e InputTransactionData), which is supported by the wallet standard at signTransaction version 1.1.0
       else if (
-        this._wallet.features["aptos:signTransaction"]?.version === "1.1"
+        this._wallet.features["aptos:signTransaction"]?.version === "1.1.0"
       ) {
         // convert input to standard expected input
         const signTransactionV1_1StandardInput: AptosSignTransactionInputV1_1 =
