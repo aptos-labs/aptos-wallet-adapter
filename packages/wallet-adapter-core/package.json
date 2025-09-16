@@ -51,7 +51,7 @@
     "typescript": "^4.5.3"
   },
   "dependencies": {
-    "@aptos-connect/wallet-adapter-plugin": "2.5.1",
+    "@aptos-connect/wallet-adapter-plugin": "2.5.2",
     "@aptos-labs/wallet-standard": "^0.5.2",
     "buffer": "^6.0.3",
     "eventemitter3": "^4.0.7",
