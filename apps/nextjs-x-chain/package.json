@@ -14,7 +14,7 @@
     "@aptos-labs/cross-chain-core": "workspace:*",
     "@aptos-labs/derived-wallet-ethereum": "workspace:^",
     "@aptos-labs/derived-wallet-solana": "workspace:^",
-    "@aptos-labs/gas-station-client": "^2.0.2",
+    "@aptos-labs/gas-station-client": "^2.0.3",
     "@aptos-labs/ts-sdk": "^5.0.0",
     "@aptos-labs/wallet-adapter-core": "workspace:*",
     "@aptos-labs/wallet-adapter-react": "workspace:*",
