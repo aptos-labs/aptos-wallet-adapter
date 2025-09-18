@@ -1,5 +1,19 @@
 # @aptos-labs/wallet-adapter-react
 
+## 7.1.0
+
+### Minor Changes
+
+- e554d03: Upgrade underlying dependencies for the wallet adapter
+
+### Patch Changes
+
+- Updated dependencies [02b3abc]
+- Updated dependencies [911f353]
+- Updated dependencies [e554d03]
+- Updated dependencies [4ddaeaa]
+  - @aptos-labs/wallet-adapter-core@7.4.0
+
 ## 7.0.7
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 5.2.0
+
+### Minor Changes
+
+- e554d03: Upgrade underlying dependencies for the wallet adapter
+
+### Patch Changes
+
+- Updated dependencies [e554d03]
+  - @aptos-labs/wallet-adapter-react@7.1.0
+
 ## 5.1.6
 
 ### Patch Changes

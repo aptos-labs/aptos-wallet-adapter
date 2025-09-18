@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.4.0
+
+### Minor Changes
+
+- 02b3abc: Add support for Bitget Wallet as an AIP-62 standard compatible
+- e554d03: Upgrade underlying dependencies for the wallet adapter
+- 4ddaeaa: Add Backpack wallet to registry
+
+### Patch Changes
+
+- 911f353: Bump aptos-connect dependency version
+
 ## 7.3.0
 
 ### Minor Changes
