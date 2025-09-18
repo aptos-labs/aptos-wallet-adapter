@@ -7,7 +7,7 @@ import { Chain } from "../CrossChainCore";
 export const getSolanaWalletUSDCBalance = async (
   walletAddress: string,
   aptosNetwork: Network,
-  rpc: string
+  rpc: string,
 ): Promise<string> => {
   const address = new PublicKey(walletAddress);
   const tokenAddress =
@@ -37,7 +37,7 @@ export const getEthereumWalletUSDCBalance = async (
   walletAddress: string,
   aptosNetwork: Network,
   chain: Chain,
-  rpc: string
+  rpc: string,
 ): Promise<string> => {
   const token =
     aptosNetwork === Network.MAINNET
@@ -54,7 +54,7 @@ export const getEthereumWalletUSDCBalance = async (
 
 export const getAptosWalletUSDCBalance = async (
   walletAddress: string,
-  aptosNetwork: Network
+  aptosNetwork: Network,
 ): Promise<string> => {
   const token =
     aptosNetwork === Network.MAINNET

@@ -1,6 +1,9 @@
 "use client";
 
-import { AptosWalletAdapterProvider, DappConfig } from "@aptos-labs/wallet-adapter-react";
+import {
+  AptosWalletAdapterProvider,
+  DappConfig,
+} from "@aptos-labs/wallet-adapter-react";
 import { setupAutomaticEthereumWalletDerivation } from "@aptos-labs/derived-wallet-ethereum";
 import { setupAutomaticSolanaWalletDerivation } from "@aptos-labs/derived-wallet-solana";
 import { PropsWithChildren } from "react";
@@ -51,7 +54,9 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       manifestURL:
         "https://assets.mz.xyz/static/config/mizuwallet-connect-manifest.json",
     },
-    transactionSubmitter: useCustomSubmitter ? myTransactionSubmitter : undefined,
+    transactionSubmitter: useCustomSubmitter
+      ? myTransactionSubmitter
+      : undefined,
   };
 
   return (

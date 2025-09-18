@@ -69,12 +69,12 @@ export function CCTPWithdraw({
   const [amount, setAmount] = useState<string>("");
 
   const [quote, setQuote] = useState<WormholeQuoteResponse | undefined>(
-    undefined
+    undefined,
   );
   const [invalidAmount, setInvalidAmount] = useState<boolean>(false);
   const [quoteIsFetching, setQuoteIsFetching] = useState<boolean>(false);
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
-    null
+    null,
   );
 
   const [transactionCompleted, setTransactionCompleted] =
@@ -159,7 +159,7 @@ export function CCTPWithdraw({
 
       setDebounceTimeout(newTimeout);
     },
-    [sourceChain, debounceTimeout, aptosBalance]
+    [sourceChain, debounceTimeout, aptosBalance],
   );
 
   const invalidateAmount = (amount: string) => {

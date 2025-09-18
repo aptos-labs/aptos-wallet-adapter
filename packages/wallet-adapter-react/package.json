@@ -40,9 +40,9 @@
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "eslint": "^8.15.0",
+    "eslint": "^8.57.1",
     "tsup": "^8.4.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "@aptos-labs/wallet-adapter-core": "workspace:*",

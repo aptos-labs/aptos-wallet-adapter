@@ -55,7 +55,7 @@ export class EIP1193DerivedWallet implements AptosWallet {
 
   constructor(
     providerDetail: EIP6963ProviderDetail,
-    options: EIP1193DerivedWalletOptions = {}
+    options: EIP1193DerivedWalletOptions = {},
   ) {
     const { info, provider } = providerDetail;
     const {
@@ -126,11 +126,11 @@ export class EIP1193DerivedWallet implements AptosWallet {
 
   async connect(): Promise<UserResponse<AptosConnectOutput>> {
     const response = await wrapEthersUserResponse(
-      this.eip1193Ethers.getSigner()
+      this.eip1193Ethers.getSigner(),
     );
     return mapUserResponse(response, (account) => {
       const publicKey = this.derivePublicKey(
-        account.address as EthereumAddress
+        account.address as EthereumAddress,
       );
       const aptosAddress = publicKey.authKey().derivedAddress();
       return new AccountInfo({ publicKey, address: aptosAddress });
@@ -151,14 +151,14 @@ export class EIP1193DerivedWallet implements AptosWallet {
       throw new Error("Account not connected");
     }
     const publicKey = this.derivePublicKey(
-      activeAccount.address as EthereumAddress
+      activeAccount.address as EthereumAddress,
     );
     const aptosAddress = publicKey.authKey().derivedAddress();
     return new AccountInfo({ publicKey, address: aptosAddress });
   }
 
   private onAccountsChangedListeners: ((
-    newAccounts: EthereumAddress[]
+    newAccounts: EthereumAddress[],
   ) => void)[] = [];
 
   onActiveAccountChange(callback: (newAccount: AccountInfo) => void) {
@@ -188,7 +188,7 @@ export class EIP1193DerivedWallet implements AptosWallet {
   // region Networks
 
   private onActiveNetworkChangeListeners: ((
-    newNetwork: NetworkInfo
+    newNetwork: NetworkInfo,
   ) => void)[] = [];
 
   async getActiveNetwork(): Promise<NetworkInfo> {
@@ -202,7 +202,7 @@ export class EIP1193DerivedWallet implements AptosWallet {
   }
 
   async changeNetwork(
-    newNetwork: NetworkInfo
+    newNetwork: NetworkInfo,
   ): Promise<UserResponse<AptosChangeNetworkOutput>> {
     const { name, chainId, url } = newNetwork;
     if (name === Network.CUSTOM) {
@@ -235,7 +235,7 @@ export class EIP1193DerivedWallet implements AptosWallet {
   // region Signatures
 
   async signMessage(
-    input: AptosSignMessageInput
+    input: AptosSignMessageInput,
   ): Promise<UserResponse<AptosSignMessageOutput>> {
     const chainId = input.chainId
       ? this.defaultNetwork === Network.DEVNET
@@ -254,7 +254,7 @@ export class EIP1193DerivedWallet implements AptosWallet {
 
   async signTransaction(
     rawTransaction: AnyRawTransaction,
-    _asFeePayer?: boolean
+    _asFeePayer?: boolean,
   ): Promise<UserResponse<AccountAuthenticator>> {
     return signAptosTransactionWithEthereum({
       eip1193Provider: this.eip1193Provider,

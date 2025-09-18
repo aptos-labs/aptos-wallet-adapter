@@ -15,7 +15,9 @@ export function TransactionSubmitterToggle() {
     setUseCustomSubmitter(newValue);
 
     toast({
-      title: newValue ? "Custom Transaction Submitter Enabled" : "Custom Transaction Submitter Disabled",
+      title: newValue
+        ? "Custom Transaction Submitter Enabled"
+        : "Custom Transaction Submitter Disabled",
       description: newValue
         ? "Using custom transaction submitter. Transaction details will be logged to the console."
         : "Using default transaction submission.",
@@ -24,11 +26,7 @@ export function TransactionSubmitterToggle() {
   };
 
   return (
-    <Button
-      variant="outline"
-      size="icon"
-      onClick={handleToggle}
-    >
+    <Button variant="outline" size="icon" onClick={handleToggle}>
       <Settings
         className={`h-[1.2rem] w-[1.2rem] transition-all ${
           useCustomSubmitter

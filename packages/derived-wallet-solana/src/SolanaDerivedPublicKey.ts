@@ -43,7 +43,7 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
     this._authKey = computeDerivableAuthenticationKey(
       authenticationFunction,
       solanaPublicKey.toBase58(),
-      domain
+      domain,
     );
   }
 
@@ -66,7 +66,7 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
     // Handle structured message, i.e. a message signed with AptosSignMessageInput
     if (parsedSigningMessage.type === "structuredMessage") {
       messageBytes = encodeStructuredMessage(
-        parsedSigningMessage.structuredMessage
+        parsedSigningMessage.structuredMessage,
       );
     } else {
       // Handle transaction message
@@ -87,7 +87,7 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
 
     // Match solana signature
     const ed25519PublicKey = new Ed25519PublicKey(
-      this.solanaPublicKey.toBytes()
+      this.solanaPublicKey.toBytes(),
     );
     return ed25519PublicKey.verifySignature({
       message: messageBytes,

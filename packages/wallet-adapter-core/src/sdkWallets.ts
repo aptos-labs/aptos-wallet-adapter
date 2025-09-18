@@ -19,7 +19,7 @@ export function getSDKWallets(dappConfig?: DappConfig) {
         network: dappConfig?.network,
         dappId: dappConfig?.aptosConnectDappId,
         ...dappConfig?.aptosConnect,
-      })
+      }),
     );
   }
 
