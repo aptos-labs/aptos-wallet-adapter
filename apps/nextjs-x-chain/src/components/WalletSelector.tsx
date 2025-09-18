@@ -124,7 +124,7 @@ function ConnectWalletDialog({
   const { aptosConnectWallets, availableWallets, installableWallets } =
     groupAndSortWallets(
       [...wallets, ...notDetectedWallets],
-      walletSortingOptions
+      walletSortingOptions,
     );
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
@@ -144,7 +144,7 @@ function ConnectWalletDialog({
       }
       return acc;
     },
-    { evmWallets: [], solanaWallets: [], aptosWallets: [] }
+    { evmWallets: [], solanaWallets: [], aptosWallets: [] },
   );
 
   const {
@@ -170,7 +170,7 @@ function ConnectWalletDialog({
       evmInstallableWallets: [],
       solanaInstallableWallets: [],
       aptosInstallableWallets: [],
-    }
+    },
   );
 
   return (

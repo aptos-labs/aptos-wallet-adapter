@@ -44,11 +44,11 @@
     "@swc/core": "^1.11.16",
     "@types/jest": "^29.2.4",
     "@types/node": "^20.10.4",
-    "eslint": "^8.15.0",
+    "eslint": "^8.57.1",
     "jest": "^29.3.1",
     "ts-jest": "^29.0.3",
     "tsup": "^8.4.0",
-    "typescript": "^4.5.3"
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "@aptos-connect/wallet-adapter-plugin": "2.5.2",

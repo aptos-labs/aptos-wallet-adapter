@@ -21,7 +21,7 @@ export interface SignAptosMessageWithEthereumInput {
 }
 
 export async function signAptosMessageWithEthereum(
-  input: SignAptosMessageWithEthereumInput
+  input: SignAptosMessageWithEthereumInput,
 ): Promise<UserResponse<AptosSignMessageOutput>> {
   const { authenticationFunction, messageInput } = input;
   const eip1193Provider =
@@ -60,7 +60,7 @@ export async function signAptosMessageWithEthereum(
   const signingMessage = encodeStructuredMessage(structuredMessage);
 
   const response = await wrapEthersUserResponse(
-    ethereumAccount.signMessage(signingMessage)
+    ethereumAccount.signMessage(signingMessage),
   );
 
   return mapUserResponse(response, (siweSignature) => {

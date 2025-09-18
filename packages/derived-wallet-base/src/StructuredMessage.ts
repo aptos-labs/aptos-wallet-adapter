@@ -19,7 +19,7 @@ export interface StructuredMessage {
 }
 
 export function encodeStructuredMessage(
-  structuredMessage: StructuredMessage
+  structuredMessage: StructuredMessage,
 ): Uint8Array {
   const { address, application, chainId, message, nonce } = structuredMessage;
 
@@ -53,7 +53,7 @@ function parsePart(part: string, name: string) {
 }
 
 export function decodeStructuredMessage(
-  encoded: Uint8Array
+  encoded: Uint8Array,
 ): StructuredMessage {
   const utf8Decoded = new TextDecoder().decode(encoded);
   const [prefix, ...parts] = utf8Decoded.split("\n");

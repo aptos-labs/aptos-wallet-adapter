@@ -9,7 +9,7 @@ const gasStationClient = new GasStationTransactionSubmitter(
   new GasStationClient({
     network,
     apiKey: process.env.NEXT_PUBLIC_GAS_STATION_API_KEY,
-  })
+  }),
 );
 
 export const getTransactionSubmitter = (): GasStationTransactionSubmitter => {

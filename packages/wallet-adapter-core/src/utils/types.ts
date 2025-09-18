@@ -35,7 +35,8 @@ export type AvailableWallets =
   | "Nightly"
   | "Pontem Wallet"
   | "Backpack"
-  | "MSafe";
+  | "MSafe"
+  | "Bitget Wallet";
 
 type InputTransactionDataInner = {
   sender?: AccountAddressInput;

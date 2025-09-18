@@ -49,7 +49,7 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
     this._authKey = computeDerivableAuthenticationKey(
       authenticationFunction,
       ethereumAddress,
-      domain
+      domain,
     );
   }
 
@@ -70,7 +70,7 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
       if (!(signature instanceof EIP1193PersonalSignature)) return false;
 
       messageBytes = encodeStructuredMessage(
-        parsedSigningMessage.structuredMessage
+        parsedSigningMessage.structuredMessage,
       );
     } else {
       // Handle transaction
@@ -115,7 +115,7 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
   serialize(serializer: Serializer) {
     serializer.serializeStr(this.domain);
     serializer.serializeFixedBytes(
-      Hex.fromHexInput(this.ethereumAddress).toUint8Array()
+      Hex.fromHexInput(this.ethereumAddress).toUint8Array(),
     );
     serializer.serializeStr(this.authenticationFunction);
   }
@@ -124,7 +124,7 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
     const domain = deserializer.deserializeStr();
     const ethereumAddressBytes = deserializer.deserializeFixedBytes(20);
     const ethereumAddress = Hex.fromHexInput(
-      ethereumAddressBytes
+      ethereumAddressBytes,
     ).toString() as EthereumAddress;
     const authenticationFunction = deserializer.deserializeStr();
     return new EIP1193DerivedPublicKey({

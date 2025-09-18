@@ -88,7 +88,7 @@ const aptos = new Aptos(config);
 
 // Generate a sponsor account or use an existing account
 const privateKey = new Ed25519PrivateKey(
-  PrivateKey.formatPrivateKey("0x123", PrivateKeyVariants.Ed25519)
+  PrivateKey.formatPrivateKey("0x123", PrivateKeyVariants.Ed25519),
 );
 const sponsor = Account.fromPrivateKey({ privateKey });
 
@@ -98,7 +98,7 @@ const SignAndSubmit = () => {
   const onSignAndSubmitTransaction = async () => {
     if (!account) {
       throw new Error(
-        "Account is not connected and unable to sign transaction"
+        "Account is not connected and unable to sign transaction",
       );
     }
 
@@ -130,7 +130,7 @@ const SignAndSubmit = () => {
           transaction: rawTransaction,
           senderAuthenticator: walletSignedTransaction.authenticator,
           feePayerAuthenticator: sponsorAuthenticator,
-        }
+        },
       );
 
       // if you want to wait for transaction

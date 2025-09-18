@@ -23,7 +23,7 @@ export interface SignAptosMessageWithSolanaInput {
 }
 
 export async function signAptosMessageWithSolana(
-  input: SignAptosMessageWithSolanaInput
+  input: SignAptosMessageWithSolanaInput,
 ) {
   const { solanaWallet, authenticationFunction, messageInput, domain } = input;
 
@@ -60,7 +60,7 @@ export async function signAptosMessageWithSolana(
   const signingMessage = encodeStructuredMessage(structuredMessage);
 
   const response = await wrapSolanaUserResponse(
-    solanaWallet.signMessage(signingMessage)
+    solanaWallet.signMessage(signingMessage),
   );
 
   return mapUserResponse(response, (output): AptosSignMessageOutput => {

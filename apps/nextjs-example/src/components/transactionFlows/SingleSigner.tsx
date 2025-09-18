@@ -48,7 +48,7 @@ export function SingleSigner() {
         statement: "Signing into demo application",
         notBefore: new Date().toISOString(),
         expirationTime: new Date(
-          Date.now() + 1000 * 60 * 60 * 24
+          Date.now() + 1000 * 60 * 60 * 24,
         ).toISOString(),
         issuedAt: new Date().toISOString(),
         requestId: "abc",
@@ -72,7 +72,7 @@ export function SingleSigner() {
         statement: "Signing into demo application",
         notBefore: new Date().toISOString(),
         expirationTime: new Date(
-          Date.now() + 1000 * 60 * 60 * 24
+          Date.now() + 1000 * 60 * 60 * 24,
         ).toISOString(),
         issuedAt: new Date().toISOString(),
         requestId: "abc",
@@ -212,7 +212,7 @@ export function SingleSigner() {
 
     try {
       const transactionToSign = await aptosClient(
-        network
+        network,
       ).transaction.build.simple({
         sender: account.address,
         data: {
