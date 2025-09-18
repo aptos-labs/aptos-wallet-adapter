@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.3.0
+
+### Minor Changes
+
+- c066004: Bump wallet-standard and siwa packages
+
+## 7.2.0
+
+### Minor Changes
+
+- b6b9fc8: Fix DAA signing message and bump aptos ts-sdk version to 5.0.0
+
 ## 7.1.2
 
 ### Patch Changes
