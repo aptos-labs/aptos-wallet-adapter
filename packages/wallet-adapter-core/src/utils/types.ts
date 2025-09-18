@@ -34,6 +34,7 @@ export type AvailableWallets =
   | "Petra"
   | "Nightly"
   | "Pontem Wallet"
+  | "Backpack"
   | "MSafe"
   | "Bitget Wallet";
 
