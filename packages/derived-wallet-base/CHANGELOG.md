@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-base
 
+## 0.8.0
+
+### Minor Changes
+
+- e554d03: Upgrade underlying dependencies for the wallet adapter
+
 ## 0.7.0
 
 ### Minor Changes

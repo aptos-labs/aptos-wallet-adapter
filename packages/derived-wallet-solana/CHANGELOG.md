@@ -1,5 +1,16 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.8.0
+
+### Minor Changes
+
+- e554d03: Upgrade underlying dependencies for the wallet adapter
+
+### Patch Changes
+
+- Updated dependencies [e554d03]
+  - @aptos-labs/derived-wallet-base@0.8.0
+
 ## 0.7.0
 
 ### Minor Changes
