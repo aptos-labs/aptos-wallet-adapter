@@ -126,12 +126,12 @@ export class CrossChainCore {
 
   async getWalletUSDCBalance(
     walletAddress: string,
-    sourceChain: Chain
+    sourceChain: Chain,
   ): Promise<string> {
     if (sourceChain === "Aptos") {
       return await getAptosWalletUSDCBalance(
         walletAddress,
-        this._dappConfig.aptosNetwork
+        this._dappConfig.aptosNetwork,
       );
     }
     if (!this.CHAINS[sourceChain]) {
@@ -143,7 +143,7 @@ export class CrossChainCore {
           walletAddress,
           this._dappConfig.aptosNetwork,
           this._dappConfig?.solanaConfig?.rpc ??
-            this.CHAINS[sourceChain].defaultRpc
+            this.CHAINS[sourceChain].defaultRpc,
         );
       case "Ethereum":
       case "BaseSepolia":
@@ -159,7 +159,7 @@ export class CrossChainCore {
           this._dappConfig.aptosNetwork,
           sourceChain,
           // TODO: maybe let the user config it
-          this.CHAINS[sourceChain].defaultRpc
+          this.CHAINS[sourceChain].defaultRpc,
         );
       default:
         throw new Error(`Unsupported chain: ${sourceChain}`);

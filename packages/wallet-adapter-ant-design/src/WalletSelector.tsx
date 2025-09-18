@@ -65,7 +65,7 @@ export function WalletSelector({
   const { aptosConnectWallets, availableWallets, installableWallets } =
     groupAndSortWallets(
       [...wallets, ...notDetectedWallets],
-      walletSortingOptions
+      walletSortingOptions,
     );
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
