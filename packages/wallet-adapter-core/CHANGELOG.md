@@ -1,5 +1,23 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.3.0
+
+### Minor Changes
+
+- c066004: Bump wallet-standard and siwa packages
+
+## 7.2.0
+
+### Minor Changes
+
+- b6b9fc8: Fix DAA signing message and bump aptos ts-sdk version to 5.0.0
+
+## 7.1.2
+
+### Patch Changes
+
+- 545b26d: Use gas station to sponsor x chain account transactions
+
 ## 7.1.1
 
 ### Patch Changes
@@ -587,7 +605,6 @@
 
 - 31e0084: Support TypeScript SDK V2. Fully compatible with existing SDK V1 and Wallet Adapter V1
   but with a full SDK V2 support for the dapp.
-
   - Add support for SDK V2 input types
   - `signAndSubmitTransaction()` accept only SDK V2 transaction input type
   - Implement a `submitTransaction()` function for multi signers transactions

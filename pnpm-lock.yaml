@@ -23,10 +23,10 @@ importers:
         version: 2.28.1
       prettier:
         specifier: latest
-        version: 3.5.3
+        version: 3.6.2
       turbo:
         specifier: latest
-        version: 2.5.3
+        version: 2.5.6
 
   apps/nextjs-example:
     dependencies:
@@ -37,8 +37,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/derived-wallet-solana
       '@aptos-labs/ts-sdk':
-        specifier: ^3.1.3
-        version: 3.1.3(axios@1.10.0)(got@11.8.6)
+        specifier: ^5.0.0
+        version: 5.0.0(axios@1.10.0)(got@11.8.6)
       '@aptos-labs/wallet-adapter-ant-design':
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-ant-design
@@ -52,8 +52,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-react
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.1
-        version: 0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+        specifier: ^0.5.2
+        version: 0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@radix-ui/react-collapsible':
         specifier: ^1.0.3
         version: 1.1.3(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -157,9 +157,12 @@ importers:
       '@aptos-labs/derived-wallet-solana':
         specifier: workspace:^
         version: link:../../packages/derived-wallet-solana
+      '@aptos-labs/gas-station-client':
+        specifier: ^2.0.3
+        version: 2.0.3(axios@1.10.0)(got@11.8.6)
       '@aptos-labs/ts-sdk':
-        specifier: ^3.1.3
-        version: 3.1.3(axios@1.10.0)(got@11.8.6)
+        specifier: ^5.0.0
+        version: 5.0.0(axios@1.10.0)(got@11.8.6)
       '@aptos-labs/wallet-adapter-core':
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-core
@@ -167,8 +170,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-react
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.1
-        version: 0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+        specifier: ^0.5.2
+        version: 0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@radix-ui/react-collapsible':
         specifier: ^1.0.3
         version: 1.1.3(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -267,8 +270,8 @@ importers:
   apps/nuxt-example:
     dependencies:
       '@aptos-labs/ts-sdk':
-        specifier: ^3.1.2
-        version: 3.1.2(axios@1.10.0)(got@11.8.6)
+        specifier: ^5.0.0
+        version: 5.0.0(axios@1.10.0)(got@11.8.6)
       '@aptos-labs/wallet-adapter-core':
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-core
@@ -276,8 +279,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-vue
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.0
-        version: 0.5.0(@aptos-labs/ts-sdk@3.1.2(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+        specifier: ^0.5.2
+        version: 0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@nuxtjs/google-fonts':
         specifier: ^3.2.0
         version: 3.2.0(magicast@0.3.5)
@@ -295,7 +298,7 @@ importers:
         version: 0.396.0(vue@3.5.13(typescript@5.8.3))
       nuxt:
         specifier: ^3.16.0
-        version: 3.16.1(@parcel/watcher@2.5.1)(@types/node@22.15.15)(bufferutil@4.0.9)(db0@0.3.1)(eslint@8.57.1)(ioredis@5.6.0)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.37.0)(terser@5.39.0)(typescript@5.8.3)(utf-8-validate@5.0.10)(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue-tsc@2.2.10(typescript@5.8.3))(yaml@2.7.0)
+        version: 3.16.1(@parcel/watcher@2.5.1)(@types/node@24.5.0)(bufferutil@4.0.9)(db0@0.3.1)(eslint@8.57.1)(ioredis@5.6.0)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.37.0)(terser@5.44.0)(typescript@5.8.3)(utf-8-validate@5.0.10)(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(vue-tsc@2.2.10(typescript@5.8.3))(yaml@2.7.0)
       radix-vue:
         specifier: ^1.9.1
         version: 1.9.17(vue@3.5.13(typescript@5.8.3))
@@ -320,7 +323,7 @@ importers:
         version: 12.1.0(eslint@8.57.1)(typescript@5.8.3)
       '@nuxtjs/eslint-module':
         specifier: 4.1.0
-        version: 4.1.0(eslint@8.57.1)(magicast@0.3.5)(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(webpack@5.98.0)
+        version: 4.1.0(eslint@8.57.1)(magicast@0.3.5)(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(webpack@5.98.0)
       '@nuxtjs/tailwindcss':
         specifier: ^6.13.2
         version: 6.13.2(magicast@0.3.5)
@@ -352,14 +355,14 @@ importers:
         specifier: workspace:*
         version: link:../derived-wallet-solana
       '@aptos-labs/ts-sdk':
-        specifier: ^3.1.3
-        version: 3.1.3(axios@1.10.0)(got@11.8.6)
+        specifier: ^5.0.0
+        version: 5.0.0(axios@1.10.0)(got@11.8.6)
       '@aptos-labs/wallet-adapter-core':
         specifier: workspace:*
         version: link:../wallet-adapter-core
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.1
-        version: 0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+        specifier: ^0.5.2
+        version: 0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@mysten/sui':
         specifier: ^1.21.2
         version: 1.25.0(typescript@5.8.2)
@@ -408,12 +411,6 @@ importers:
       eventemitter3:
         specifier: ^4.0.7
         version: 4.0.7
-      evm:
-        specifier: link:@wormhole-foundation/sdk/evm
-        version: link:@wormhole-foundation/sdk/evm
-      solana:
-        specifier: link:@wormhole-foundation/sdk/solana
-        version: link:@wormhole-foundation/sdk/solana
       tweetnacl:
         specifier: ^1.0.3
         version: 1.0.3
@@ -441,7 +438,7 @@ importers:
         version: 29.3.0(@babel/core@7.26.10)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.10))(esbuild@0.25.1)(jest@29.7.0(@types/node@20.17.27)(babel-plugin-macros@3.1.0))(typescript@5.8.2)
       tsup:
         specifier: ^8.4.0
-        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.3)(typescript@5.8.2)(yaml@2.7.0)
+        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.6)(typescript@5.8.2)(yaml@2.7.0)
       typescript:
         specifier: ^5.4.5
         version: 5.8.2
@@ -449,11 +446,11 @@ importers:
   packages/derived-wallet-base:
     dependencies:
       '@aptos-labs/ts-sdk':
-        specifier: ^3.1.3
-        version: 3.1.3(axios@1.10.0)(got@11.8.6)
+        specifier: ^5.0.0
+        version: 5.0.0(axios@1.10.0)(got@11.8.6)
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.1
-        version: 0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+        specifier: ^0.5.2
+        version: 0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
     devDependencies:
       '@aptos-labs/eslint-config-adapter':
         specifier: workspace:*
@@ -478,7 +475,7 @@ importers:
         version: 29.3.0(@babel/core@7.26.10)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.10))(esbuild@0.25.1)(jest@29.7.0(@types/node@20.17.27)(babel-plugin-macros@3.1.0))(typescript@5.8.2)
       tsup:
         specifier: ^8.4.0
-        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.3)(typescript@5.8.2)(yaml@2.7.0)
+        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.6)(typescript@5.8.2)(yaml@2.7.0)
       typescript:
         specifier: ^5.4.5
         version: 5.8.2
@@ -489,14 +486,14 @@ importers:
         specifier: workspace:^
         version: link:../derived-wallet-base
       '@aptos-labs/siwa':
-        specifier: ^0.3.0
-        version: 0.3.0(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+        specifier: ^0.4.0
+        version: 0.4.0(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@aptos-labs/ts-sdk':
-        specifier: ^3.1.3
-        version: 3.1.3(axios@1.10.0)(got@11.8.6)
+        specifier: ^5.0.0
+        version: 5.0.0(axios@1.10.0)(got@11.8.6)
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.1
-        version: 0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+        specifier: ^0.5.2
+        version: 0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@wallet-standard/app':
         specifier: ^1.1.0
         version: 1.1.0
@@ -533,7 +530,7 @@ importers:
         version: 29.3.0(@babel/core@7.26.10)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.10))(esbuild@0.25.1)(jest@29.7.0(@types/node@20.17.27)(babel-plugin-macros@3.1.0))(typescript@5.8.2)
       tsup:
         specifier: ^8.4.0
-        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.3)(typescript@5.8.2)(yaml@2.7.0)
+        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.6)(typescript@5.8.2)(yaml@2.7.0)
       typescript:
         specifier: ^5.4.5
         version: 5.8.2
@@ -544,14 +541,14 @@ importers:
         specifier: workspace:^
         version: link:../derived-wallet-base
       '@aptos-labs/siwa':
-        specifier: ^0.3.0
-        version: 0.3.0(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+        specifier: ^0.4.0
+        version: 0.4.0(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@aptos-labs/ts-sdk':
-        specifier: ^3.1.3
-        version: 3.1.3(axios@1.10.0)(got@11.8.6)
+        specifier: ^5.0.0
+        version: 5.0.0(axios@1.10.0)(got@11.8.6)
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.1
-        version: 0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+        specifier: ^0.5.2
+        version: 0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@solana/wallet-adapter-base':
         specifier: ^0.9.23
         version: 0.9.24(@solana/web3.js@1.98.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
@@ -591,7 +588,7 @@ importers:
         version: 29.3.0(@babel/core@7.26.10)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.10))(esbuild@0.25.1)(jest@29.7.0(@types/node@20.17.27)(babel-plugin-macros@3.1.0))(typescript@5.8.2)
       tsup:
         specifier: ^8.4.0
-        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.3)(typescript@5.8.2)(yaml@2.7.0)
+        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.6)(typescript@5.8.2)(yaml@2.7.0)
       typescript:
         specifier: ^5.4.5
         version: 5.8.2
@@ -609,7 +606,7 @@ importers:
         version: 8.10.0(eslint@7.32.0)
       eslint-config-turbo:
         specifier: latest
-        version: 2.5.3(eslint@7.32.0)(turbo@2.5.3)
+        version: 2.5.6(eslint@7.32.0)(turbo@2.5.6)
       eslint-plugin-react:
         specifier: 7.31.8
         version: 7.31.8(eslint@7.32.0)
@@ -652,7 +649,7 @@ importers:
         version: 8.57.1
       tsup:
         specifier: ^8.4.0
-        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@22.15.15))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.3)(typescript@4.9.5)(yaml@2.7.0)
+        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@24.5.0))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.6)(typescript@4.9.5)(yaml@2.7.0)
       typescript:
         specifier: ^4.5.3
         version: 4.9.5
@@ -660,14 +657,14 @@ importers:
   packages/wallet-adapter-core:
     dependencies:
       '@aptos-connect/wallet-adapter-plugin':
-        specifier: 2.5.1
-        version: 2.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
+        specifier: 2.5.2
+        version: 2.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
       '@aptos-labs/ts-sdk':
-        specifier: ^3.1.3
-        version: 3.1.3(axios@1.10.0)(got@11.8.6)
+        specifier: ^5.0.0
+        version: 5.0.0(axios@1.10.0)(got@11.8.6)
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.1
-        version: 0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+        specifier: ^0.5.2
+        version: 0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
@@ -704,7 +701,7 @@ importers:
         version: 29.3.0(@babel/core@7.26.10)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.10))(jest@29.7.0(@types/node@20.17.27)(babel-plugin-macros@3.1.0))(typescript@4.9.5)
       tsup:
         specifier: ^8.4.0
-        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.3)(typescript@4.9.5)(yaml@2.7.0)
+        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.6)(typescript@4.9.5)(yaml@2.7.0)
       typescript:
         specifier: ^4.5.3
         version: 4.9.5
@@ -750,7 +747,7 @@ importers:
         version: 8.57.1
       tsup:
         specifier: ^8.4.0
-        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@22.15.15))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.3)(typescript@4.9.5)(yaml@2.7.0)
+        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@24.5.0))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.6)(typescript@4.9.5)(yaml@2.7.0)
       typescript:
         specifier: ^4.5.3
         version: 4.9.5
@@ -781,7 +778,7 @@ importers:
         version: 8.57.1
       tsup:
         specifier: ^8.4.0
-        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@22.15.15))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.3)(typescript@5.8.2)(yaml@2.7.0)
+        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@24.5.0))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.6)(typescript@5.8.2)(yaml@2.7.0)
       typescript:
         specifier: ^5.4.5
         version: 5.8.2
@@ -797,28 +794,28 @@ importers:
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: 5.2.3
-        version: 5.2.3(vite@5.4.19(@types/node@22.15.15)(terser@5.39.0))(vue@3.5.13(typescript@5.8.3))
+        version: 5.2.3(vite@5.4.20(@types/node@24.5.0)(terser@5.44.0))(vue@3.5.13(typescript@5.8.3))
       eslint:
         specifier: ^8.57.1
         version: 8.57.1
       rollup-plugin-typescript2:
         specifier: ^0.36.0
-        version: 0.36.0(rollup@4.40.2)(typescript@5.8.3)
+        version: 0.36.0(rollup@4.50.2)(typescript@5.8.3)
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
       vite:
-        specifier: 5.4.19
-        version: 5.4.19(@types/node@22.15.15)(terser@5.39.0)
+        specifier: 5.4.20
+        version: 5.4.20(@types/node@24.5.0)(terser@5.44.0)
       vite-plugin-compression:
         specifier: ^0.5.1
-        version: 0.5.1(vite@5.4.19(@types/node@22.15.15)(terser@5.39.0))
+        version: 0.5.1(vite@5.4.20(@types/node@24.5.0)(terser@5.44.0))
       vite-plugin-css-injected-by-js:
         specifier: ^3.5.2
-        version: 3.5.2(vite@5.4.19(@types/node@22.15.15)(terser@5.39.0))
+        version: 3.5.2(vite@5.4.20(@types/node@24.5.0)(terser@5.44.0))
       vite-plugin-dts:
         specifier: 3.9.1
-        version: 3.9.1(@types/node@22.15.15)(rollup@4.40.2)(typescript@5.8.3)(vite@5.4.19(@types/node@22.15.15)(terser@5.39.0))
+        version: 3.9.1(@types/node@24.5.0)(rollup@4.50.2)(typescript@5.8.3)(vite@5.4.20(@types/node@24.5.0)(terser@5.44.0))
       vue-tsc:
         specifier: ^2.2.10
         version: 2.2.10(typescript@5.8.3)
@@ -911,10 +908,10 @@ packages:
       '@aptos-labs/ts-sdk': 1.26.0
       '@aptos-labs/wallet-standard': 0.2.0
 
-  '@aptos-connect/wallet-adapter-plugin@2.5.1':
-    resolution: {integrity: sha512-yihmS3oC5G9qUD56+FHvwAxpy6lv/6IxxJiuOlmm7tkkjsclpOqGUJx11G1UhQT3KgwSsMstzTL8FLw1QkHrIQ==}
+  '@aptos-connect/wallet-adapter-plugin@2.5.2':
+    resolution: {integrity: sha512-AR0wm9TNRaF13AYToJdwqWFmjCjqpvbSlUGdJX2mvp2XpsbkpHYr8iy6Y1i6qvXDZqOd7OSSSUzX34lI/vN+vg==}
     peerDependencies:
-      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0
+      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
 
   '@aptos-connect/wallet-api@0.1.9':
     resolution: {integrity: sha512-Olxvg/Jpf426uiEIUbxFuoRluhX3dja9EUqklY29yw/wOY7QDFv0+Es71xp8R2lgaU3gPFJxUwko1Jwz0XjswQ==}
@@ -922,10 +919,10 @@ packages:
       '@aptos-labs/ts-sdk': ^1.33.1
       aptos: ^1.20.0
 
-  '@aptos-connect/wallet-api@0.3.1':
-    resolution: {integrity: sha512-04zXCzK/wCv9rSt71nAkuSHbgV8WJ4xy104QGfdJiEOyDGkocVoZGyc4vbG9olivqSrG/jlrnO8N1eRQ9NL6AA==}
+  '@aptos-connect/wallet-api@0.3.2':
+    resolution: {integrity: sha512-U85pKOb8oWmOdT/yusbq+SkWcYNRRi5C1J08bBvI9j14T/c3R7MaTKYjAXPggx3tTtPWF9B7huKduYbwL2GtWw==}
     peerDependencies:
-      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0
+      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
       aptos: ^1.20.0
 
   '@aptos-connect/web-transport@0.1.3':
@@ -936,10 +933,10 @@ packages:
       '@telegram-apps/bridge': ^1.0.0
       aptos: ^1.20.0
 
-  '@aptos-connect/web-transport@0.3.1':
-    resolution: {integrity: sha512-ZTgtr/BjGnE2Z1u0p84lLKxG5ScFEid5X+5nte54lbvAIcTroRp3FAG2HZ4Jf2KxtYaArry77BJ2ocKTL7XpLw==}
+  '@aptos-connect/web-transport@0.3.2':
+    resolution: {integrity: sha512-qEfanBmCbPhqommSydckfK66EOkqWcb1LDg59zlPrU4nu7bSzfhfRBSUgkmkulNEhPDPqFPYshDLvjytcEIIRg==}
     peerDependencies:
-      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0
+      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
       '@aptos-labs/wallet-standard': ^0.5.0
       '@telegram-apps/bridge': ^1.0.0
       aptos: ^1.20.0
@@ -958,24 +955,23 @@ packages:
   '@aptos-labs/aptos-dynamic-transaction-composer@0.1.3':
     resolution: {integrity: sha512-bJl+Zq5QbhpcPIJakAkl9tnT3T02mxCYhZThQDhUmjsOZ5wMRlKJ0P7aaq1dmlybSHkVj7vRgOy2t86/NDKKng==}
 
+  '@aptos-labs/gas-station-client@2.0.3':
+    resolution: {integrity: sha512-zKy/gy6rHE9q9+58Oi+AjLukv1rGhVopAlBreil5TDvjVZvpIV4S05cXSRBVgo1UK7c+ClrXgKqCFgGn/q7udg==}
+
   '@aptos-labs/script-composer-pack@0.0.9':
     resolution: {integrity: sha512-Y3kA1rgF65HETgoTn2omDymsgO+fnZouPLrKJZ9sbxTGdOekIIHtGee3A2gk84eCqa02ZKBumZmP+IDCXRtU/g==}
 
-  '@aptos-labs/siwa@0.3.0':
-    resolution: {integrity: sha512-7czUL8++or7DAk8KX9R6UicgluuR/WbACJoqGV7SI8TRz2quLGHheu75G743Zxzns4JHRMsYK97L9cyoVtm4jA==}
+  '@aptos-labs/siwa@0.4.0':
+    resolution: {integrity: sha512-BpDD7/PP7IqSvJx6gFR4CgoIIBBS9AcaquJ5HMhU/2cl22E073FzU/O7jYLy+p/dL3aZLmkAFpWoDYjAPz040g==}
     peerDependencies:
-      '@aptos-labs/ts-sdk': '>=1.37.0'
+      '@aptos-labs/ts-sdk': '>=1.37.0 || >=2.0.0'
 
   '@aptos-labs/ts-sdk@1.38.0':
     resolution: {integrity: sha512-cflGyknECg11wTkQ1o1OK759v1m+mpz0S0/ZXsHbPMO0dO6eQGLjH/Uk5/YWMe1Nat8/szcgIipKk8Xr6Unvzg==}
     engines: {node: '>=20.0.0'}
 
-  '@aptos-labs/ts-sdk@3.1.2':
-    resolution: {integrity: sha512-wEe8+JhtjfuDHLsAUHfUcLmR3EvWHN9LzhE98vKAI5nDJmme6dC5JnBwwK+p+XIrbQqCc6qFEAEpzjMpJLpE6A==}
-    engines: {node: '>=20.0.0'}
-
-  '@aptos-labs/ts-sdk@3.1.3':
-    resolution: {integrity: sha512-42CiChUnHzsZXE25p3gPiETFUTlchTd20zl9vAiq6es1vQaaf95LvVQ0q3GxeOgmW9ENn2q72gAsuGLIOYRohg==}
+  '@aptos-labs/ts-sdk@5.0.0':
+    resolution: {integrity: sha512-s0vfH9Yduaosv+1eKsHjf5W0Fc02BlEpPL68488D7e4XsGQuzpVMxQPjjajYtSyyd9Bmmjat+wxM3mH5QBZkYg==}
     engines: {node: '>=20.0.0'}
 
   '@aptos-labs/wallet-adapter-core@5.0.0':
@@ -1004,16 +1000,10 @@ packages:
       '@aptos-labs/ts-sdk': ^1.37.1
       '@wallet-standard/core': ^1.0.3
 
-  '@aptos-labs/wallet-standard@0.5.0':
-    resolution: {integrity: sha512-OEzajPOgdyosFHDCqRbu5Ql6NsiQnkspcVKUPe4iSWx93mZOEmCLE2MHfmqPDMqKBBPxbGZNc1+I7vjrPGZJCw==}
+  '@aptos-labs/wallet-standard@0.5.2':
+    resolution: {integrity: sha512-aFQOMLLRSmEYXHBGzhLGSOICoQRKqrtRyaMR7kDdyKtEI+4Ocgf2QeW+5yNZEUKoeWlydcBZGIuO7xAQpWU7dw==}
     peerDependencies:
-      '@aptos-labs/ts-sdk': ^2.0.0
-      '@wallet-standard/core': ^1.0.3
-
-  '@aptos-labs/wallet-standard@0.5.1':
-    resolution: {integrity: sha512-jrdWH4qibIZRVn3h7eJhTpkvlLhwJgViC0XLoEz/+deMGZUUbga47LDX3SyZi/Sms7MvlN8oDI40pbCZX6PhaA==}
-    peerDependencies:
-      '@aptos-labs/ts-sdk': ^3.1.3
+      '@aptos-labs/ts-sdk': ^3.1.3 || ^4.0.0 || ^5.0.0
       '@wallet-standard/core': ^1.0.3
 
   '@atomrigslab/aptos-wallet-adapter@0.1.21':
@@ -1850,10 +1840,10 @@ packages:
     peerDependencies:
       '@aptos-labs/ts-sdk': ^1.33.1
 
-  '@identity-connect/crypto@0.2.8':
-    resolution: {integrity: sha512-Yzhc+cjaUQdZ7hdK2ck/PWSHAAhsMKxKbVtQ4ySfKhBouV8Aysc1XzPhlHtCi0SlfzMW2KEhhT2yKFGgHoeYZA==}
+  '@identity-connect/crypto@0.2.9':
+    resolution: {integrity: sha512-LPTCTSVp+L2JoLdYvu/281GqBn/gWjEBsRO3OMlqY3+JGbvhsz7IT9oYDZwvn3+PWddR3djCz/MDdqd3JST8FA==}
     peerDependencies:
-      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0
+      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
 
   '@identity-connect/dapp-sdk@0.10.4':
     resolution: {integrity: sha512-wC1yh0K2EbmIG6oCN7+KRaVXHBUKasuBsm2z/Lq1x5zGJNtFtg6pXQl087ngHixpSCPINx5QqZXd9uXI/oqSmQ==}
@@ -1861,10 +1851,10 @@ packages:
       '@aptos-labs/ts-sdk': ^1.33.1
       '@aptos-labs/wallet-standard': ^0.3.0
 
-  '@identity-connect/dapp-sdk@0.11.1':
-    resolution: {integrity: sha512-fll2b15nz/ZtjM/xLRjnJcNwpramYNEW8oARBPHWXtmEUOtD/z9gepmCbUssgobCjSJs8OMUjHfNKvIDXFpxlg==}
+  '@identity-connect/dapp-sdk@0.11.2':
+    resolution: {integrity: sha512-ZA8zeWpMaJMMGkGzzAPDPB4E0vafEbACVjQNV6RVSuDe3k5ALSAXqimZF9L7A6Jajd/Jj+jAEUGk2HOcRGmaCQ==}
     peerDependencies:
-      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0
+      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
       '@aptos-labs/wallet-standard': ^0.5.0
 
   '@identity-connect/wallet-api@0.1.2':
@@ -1873,10 +1863,10 @@ packages:
       '@aptos-labs/ts-sdk': ^1.33.1
       aptos: ^1.20.0
 
-  '@identity-connect/wallet-api@0.1.3':
-    resolution: {integrity: sha512-sIXauLKpywxfR1VBsC9mbAMebMRC1kXkW1DIOMdcXF7csjhOraC8qJE7M84GM4ZLVgRZHWSHS9PjQNcKU6QW5w==}
+  '@identity-connect/wallet-api@0.1.4':
+    resolution: {integrity: sha512-nXEfUYl1t9mgQu1RRmqH7lcWnsxet5IWtnsno5Vx5jw8PibVZDD5kgy5sZ3k/Brvw8DlhKPIjDwcYNAgcNHhvg==}
     peerDependencies:
-      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0
+      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
       aptos: ^1.20.0
 
   '@injectivelabs/abacus-proto-ts@1.14.0':
@@ -2015,6 +2005,9 @@ packages:
     resolution: {integrity: sha512-u3UPsIilWKOM3F9CXtrG8LEJmNxwoCQC/XVj4IKYXvvpx7QIi/Kg1LI5uDmDpKlac62NUtX7eLjRh+jVZcLOzw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
 
+  '@jridgewell/gen-mapping@0.3.13':
+    resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
+
   '@jridgewell/gen-mapping@0.3.8':
     resolution: {integrity: sha512-imAbBGkb+ebQyxKgzv5Hu2nmROxoDOXHh80evxdoXNOrvAnVx7zimzc1Oo5h9RlfV4vPXaE2iM5pOFbvOCClWA==}
     engines: {node: '>=6.0.0'}
@@ -2027,14 +2020,23 @@ packages:
     resolution: {integrity: sha512-R8gLRTZeyp03ymzP/6Lil/28tGeGEzhx1q2k703KGWRAI1VdvPIXdG70VJc2pAMw3NA6JKL5hhFu1sJX0Mnn/A==}
     engines: {node: '>=6.0.0'}
 
+  '@jridgewell/source-map@0.3.11':
+    resolution: {integrity: sha512-ZMp1V8ZFcPG5dIWnQLr3NSI1MiCU7UETdS/A0G8V/XWHvJv3ZsFqutJn1Y5RPmAPX6F3BiE397OqveU/9NCuIA==}
+
   '@jridgewell/source-map@0.3.6':
     resolution: {integrity: sha512-1ZJTZebgqllO79ue2bm3rIGud/bOe0pP5BjSRCRxxYkEZS8STV7zN84UBbiYu7jy+eCKSnVIUgoWWE/tt+shMQ==}
 
   '@jridgewell/sourcemap-codec@1.5.0':
     resolution: {integrity: sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==}
 
+  '@jridgewell/sourcemap-codec@1.5.5':
+    resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
+
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
+
+  '@jridgewell/trace-mapping@0.3.31':
+    resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
   '@koa/router@12.0.2':
     resolution: {integrity: sha512-sYcHglGKTxGF+hQ6x67xDfkE9o+NhVlRHBqq6gLywaMc6CojK/5vFZByphdonKinYlMLkEkacm+HEse9HzwgTA==}
@@ -3244,8 +3246,8 @@ packages:
     cpu: [arm]
     os: [android]
 
-  '@rollup/rollup-android-arm-eabi@4.40.2':
-    resolution: {integrity: sha512-JkdNEq+DFxZfUwxvB58tHMHBHVgX23ew41g1OQinthJ+ryhdRk67O31S7sYw8u2lTjHUPFxwar07BBt1KHp/hg==}
+  '@rollup/rollup-android-arm-eabi@4.50.2':
+    resolution: {integrity: sha512-uLN8NAiFVIRKX9ZQha8wy6UUs06UNSZ32xj6giK/rmMXAgKahwExvK6SsmgU5/brh4w/nSgj8e0k3c1HBQpa0A==}
     cpu: [arm]
     os: [android]
 
@@ -3259,8 +3261,8 @@ packages:
     cpu: [arm64]
     os: [android]
 
-  '@rollup/rollup-android-arm64@4.40.2':
-    resolution: {integrity: sha512-13unNoZ8NzUmnndhPTkWPWbX3vtHodYmy+I9kuLxN+F+l+x3LdVF7UCu8TWVMt1POHLh6oDHhnOA04n8oJZhBw==}
+  '@rollup/rollup-android-arm64@4.50.2':
+    resolution: {integrity: sha512-oEouqQk2/zxxj22PNcGSskya+3kV0ZKH+nQxuCCOGJ4oTXBdNTbv+f/E3c74cNLeMO1S5wVWacSws10TTSB77g==}
     cpu: [arm64]
     os: [android]
 
@@ -3274,8 +3276,8 @@ packages:
     cpu: [arm64]
     os: [darwin]
 
-  '@rollup/rollup-darwin-arm64@4.40.2':
-    resolution: {integrity: sha512-Gzf1Hn2Aoe8VZzevHostPX23U7N5+4D36WJNHK88NZHCJr7aVMG4fadqkIf72eqVPGjGc0HJHNuUaUcxiR+N/w==}
+  '@rollup/rollup-darwin-arm64@4.50.2':
+    resolution: {integrity: sha512-OZuTVTpj3CDSIxmPgGH8en/XtirV5nfljHZ3wrNwvgkT5DQLhIKAeuFSiwtbMto6oVexV0k1F1zqURPKf5rI1Q==}
     cpu: [arm64]
     os: [darwin]
 
@@ -3289,8 +3291,8 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@rollup/rollup-darwin-x64@4.40.2':
-    resolution: {integrity: sha512-47N4hxa01a4x6XnJoskMKTS8XZ0CZMd8YTbINbi+w03A2w4j1RTlnGHOz/P0+Bg1LaVL6ufZyNprSg+fW5nYQQ==}
+  '@rollup/rollup-darwin-x64@4.50.2':
+    resolution: {integrity: sha512-Wa/Wn8RFkIkr1vy1k1PB//VYhLnlnn5eaJkfTQKivirOvzu5uVd2It01ukeQstMursuz7S1bU+8WW+1UPXpa8A==}
     cpu: [x64]
     os: [darwin]
 
@@ -3304,8 +3306,8 @@ packages:
     cpu: [arm64]
     os: [freebsd]
 
-  '@rollup/rollup-freebsd-arm64@4.40.2':
-    resolution: {integrity: sha512-8t6aL4MD+rXSHHZUR1z19+9OFJ2rl1wGKvckN47XFRVO+QL/dUSpKA2SLRo4vMg7ELA8pzGpC+W9OEd1Z/ZqoQ==}
+  '@rollup/rollup-freebsd-arm64@4.50.2':
+    resolution: {integrity: sha512-QkzxvH3kYN9J1w7D1A+yIMdI1pPekD+pWx7G5rXgnIlQ1TVYVC6hLl7SOV9pi5q9uIDF9AuIGkuzcbF7+fAhow==}
     cpu: [arm64]
     os: [freebsd]
 
@@ -3319,8 +3321,8 @@ packages:
     cpu: [x64]
     os: [freebsd]
 
-  '@rollup/rollup-freebsd-x64@4.40.2':
-    resolution: {integrity: sha512-C+AyHBzfpsOEYRFjztcYUFsH4S7UsE9cDtHCtma5BK8+ydOZYgMmWg1d/4KBytQspJCld8ZIujFMAdKG1xyr4Q==}
+  '@rollup/rollup-freebsd-x64@4.50.2':
+    resolution: {integrity: sha512-dkYXB0c2XAS3a3jmyDkX4Jk0m7gWLFzq1C3qUnJJ38AyxIF5G/dyS4N9B30nvFseCfgtCEdbYFhk0ChoCGxPog==}
     cpu: [x64]
     os: [freebsd]
 
@@ -3334,8 +3336,8 @@ packages:
     cpu: [arm]
     os: [linux]
 
-  '@rollup/rollup-linux-arm-gnueabihf@4.40.2':
-    resolution: {integrity: sha512-de6TFZYIvJwRNjmW3+gaXiZ2DaWL5D5yGmSYzkdzjBDS3W+B9JQ48oZEsmMvemqjtAFzE16DIBLqd6IQQRuG9Q==}
+  '@rollup/rollup-linux-arm-gnueabihf@4.50.2':
+    resolution: {integrity: sha512-9VlPY/BN3AgbukfVHAB8zNFWB/lKEuvzRo1NKev0Po8sYFKx0i+AQlCYftgEjcL43F2h9Ui1ZSdVBc4En/sP2w==}
     cpu: [arm]
     os: [linux]
 
@@ -3349,8 +3351,8 @@ packages:
     cpu: [arm]
     os: [linux]
 
-  '@rollup/rollup-linux-arm-musleabihf@4.40.2':
-    resolution: {integrity: sha512-urjaEZubdIkacKc930hUDOfQPysezKla/O9qV+O89enqsqUmQm8Xj8O/vh0gHg4LYfv7Y7UsE3QjzLQzDYN1qg==}
+  '@rollup/rollup-linux-arm-musleabihf@4.50.2':
+    resolution: {integrity: sha512-+GdKWOvsifaYNlIVf07QYan1J5F141+vGm5/Y8b9uCZnG/nxoGqgCmR24mv0koIWWuqvFYnbURRqw1lv7IBINw==}
     cpu: [arm]
     os: [linux]
 
@@ -3364,8 +3366,8 @@ packages:
     cpu: [arm64]
     os: [linux]
 
-  '@rollup/rollup-linux-arm64-gnu@4.40.2':
-    resolution: {integrity: sha512-KlE8IC0HFOC33taNt1zR8qNlBYHj31qGT1UqWqtvR/+NuCVhfufAq9fxO8BMFC22Wu0rxOwGVWxtCMvZVLmhQg==}
+  '@rollup/rollup-linux-arm64-gnu@4.50.2':
+    resolution: {integrity: sha512-df0Eou14ojtUdLQdPFnymEQteENwSJAdLf5KCDrmZNsy1c3YaCNaJvYsEUHnrg+/DLBH612/R0xd3dD03uz2dg==}
     cpu: [arm64]
     os: [linux]
 
@@ -3379,9 +3381,14 @@ packages:
     cpu: [arm64]
     os: [linux]
 
-  '@rollup/rollup-linux-arm64-musl@4.40.2':
-    resolution: {integrity: sha512-j8CgxvfM0kbnhu4XgjnCWJQyyBOeBI1Zq91Z850aUddUmPeQvuAy6OiMdPS46gNFgy8gN1xkYyLgwLYZG3rBOg==}
+  '@rollup/rollup-linux-arm64-musl@4.50.2':
+    resolution: {integrity: sha512-iPeouV0UIDtz8j1YFR4OJ/zf7evjauqv7jQ/EFs0ClIyL+by++hiaDAfFipjOgyz6y6xbDvJuiU4HwpVMpRFDQ==}
     cpu: [arm64]
+    os: [linux]
+
+  '@rollup/rollup-linux-loong64-gnu@4.50.2':
+    resolution: {integrity: sha512-OL6KaNvBopLlj5fTa5D5bau4W82f+1TyTZRr2BdnfsrnQnmdxh4okMxR2DcDkJuh4KeoQZVuvHvzuD/lyLn2Kw==}
+    cpu: [loong64]
     os: [linux]
 
   '@rollup/rollup-linux-loongarch64-gnu@4.37.0':
@@ -3391,11 +3398,6 @@ packages:
 
   '@rollup/rollup-linux-loongarch64-gnu@4.38.0':
     resolution: {integrity: sha512-hz5oqQLXTB3SbXpfkKHKXLdIp02/w3M+ajp8p4yWOWwQRtHWiEOCKtc9U+YXahrwdk+3qHdFMDWR5k+4dIlddg==}
-    cpu: [loong64]
-    os: [linux]
-
-  '@rollup/rollup-linux-loongarch64-gnu@4.40.2':
-    resolution: {integrity: sha512-Ybc/1qUampKuRF4tQXc7G7QY9YRyeVSykfK36Y5Qc5dmrIxwFhrOzqaVTNoZygqZ1ZieSWTibfFhQ5qK8jpWxw==}
     cpu: [loong64]
     os: [linux]
 
@@ -3409,8 +3411,8 @@ packages:
     cpu: [ppc64]
     os: [linux]
 
-  '@rollup/rollup-linux-powerpc64le-gnu@4.40.2':
-    resolution: {integrity: sha512-3FCIrnrt03CCsZqSYAOW/k9n625pjpuMzVfeI+ZBUSDT3MVIFDSPfSUgIl9FqUftxcUXInvFah79hE1c9abD+Q==}
+  '@rollup/rollup-linux-ppc64-gnu@4.50.2':
+    resolution: {integrity: sha512-I21VJl1w6z/K5OTRl6aS9DDsqezEZ/yKpbqlvfHbW0CEF5IL8ATBMuUx6/mp683rKTK8thjs/0BaNrZLXetLag==}
     cpu: [ppc64]
     os: [linux]
 
@@ -3424,8 +3426,8 @@ packages:
     cpu: [riscv64]
     os: [linux]
 
-  '@rollup/rollup-linux-riscv64-gnu@4.40.2':
-    resolution: {integrity: sha512-QNU7BFHEvHMp2ESSY3SozIkBPaPBDTsfVNGx3Xhv+TdvWXFGOSH2NJvhD1zKAT6AyuuErJgbdvaJhYVhVqrWTg==}
+  '@rollup/rollup-linux-riscv64-gnu@4.50.2':
+    resolution: {integrity: sha512-Hq6aQJT/qFFHrYMjS20nV+9SKrXL2lvFBENZoKfoTH2kKDOJqff5OSJr4x72ZaG/uUn+XmBnGhfr4lwMRrmqCQ==}
     cpu: [riscv64]
     os: [linux]
 
@@ -3439,8 +3441,8 @@ packages:
     cpu: [riscv64]
     os: [linux]
 
-  '@rollup/rollup-linux-riscv64-musl@4.40.2':
-    resolution: {integrity: sha512-5W6vNYkhgfh7URiXTO1E9a0cy4fSgfE4+Hl5agb/U1sa0kjOLMLC1wObxwKxecE17j0URxuTrYZZME4/VH57Hg==}
+  '@rollup/rollup-linux-riscv64-musl@4.50.2':
+    resolution: {integrity: sha512-82rBSEXRv5qtKyr0xZ/YMF531oj2AIpLZkeNYxmKNN6I2sVE9PGegN99tYDLK2fYHJITL1P2Lgb4ZXnv0PjQvw==}
     cpu: [riscv64]
     os: [linux]
 
@@ -3454,8 +3456,8 @@ packages:
     cpu: [s390x]
     os: [linux]
 
-  '@rollup/rollup-linux-s390x-gnu@4.40.2':
-    resolution: {integrity: sha512-B7LKIz+0+p348JoAL4X/YxGx9zOx3sR+o6Hj15Y3aaApNfAshK8+mWZEf759DXfRLeL2vg5LYJBB7DdcleYCoQ==}
+  '@rollup/rollup-linux-s390x-gnu@4.50.2':
+    resolution: {integrity: sha512-4Q3S3Hy7pC6uaRo9gtXUTJ+EKo9AKs3BXKc2jYypEcMQ49gDPFU2P1ariX9SEtBzE5egIX6fSUmbmGazwBVF9w==}
     cpu: [s390x]
     os: [linux]
 
@@ -3469,8 +3471,8 @@ packages:
     cpu: [x64]
     os: [linux]
 
-  '@rollup/rollup-linux-x64-gnu@4.40.2':
-    resolution: {integrity: sha512-lG7Xa+BmBNwpjmVUbmyKxdQJ3Q6whHjMjzQplOs5Z+Gj7mxPtWakGHqzMqNER68G67kmCX9qX57aRsW5V0VOng==}
+  '@rollup/rollup-linux-x64-gnu@4.50.2':
+    resolution: {integrity: sha512-9Jie/At6qk70dNIcopcL4p+1UirusEtznpNtcq/u/C5cC4HBX7qSGsYIcG6bdxj15EYWhHiu02YvmdPzylIZlA==}
     cpu: [x64]
     os: [linux]
 
@@ -3484,10 +3486,15 @@ packages:
     cpu: [x64]
     os: [linux]
 
-  '@rollup/rollup-linux-x64-musl@4.40.2':
-    resolution: {integrity: sha512-tD46wKHd+KJvsmije4bUskNuvWKFcTOIM9tZ/RrmIvcXnbi0YK/cKS9FzFtAm7Oxi2EhV5N2OpfFB348vSQRXA==}
+  '@rollup/rollup-linux-x64-musl@4.50.2':
+    resolution: {integrity: sha512-HPNJwxPL3EmhzeAnsWQCM3DcoqOz3/IC6de9rWfGR8ZCuEHETi9km66bH/wG3YH0V3nyzyFEGUZeL5PKyy4xvw==}
     cpu: [x64]
     os: [linux]
+
+  '@rollup/rollup-openharmony-arm64@4.50.2':
+    resolution: {integrity: sha512-nMKvq6FRHSzYfKLHZ+cChowlEkR2lj/V0jYj9JnGUVPL2/mIeFGmVM2mLaFeNa5Jev7W7TovXqXIG2d39y1KYA==}
+    cpu: [arm64]
+    os: [openharmony]
 
   '@rollup/rollup-win32-arm64-msvc@4.37.0':
     resolution: {integrity: sha512-Jm7biMazjNzTU4PrQtr7VS8ibeys9Pn29/1bm4ph7CP2kf21950LgN+BaE2mJ1QujnvOc6p54eWWiVvn05SOBg==}
@@ -3499,8 +3506,8 @@ packages:
     cpu: [arm64]
     os: [win32]
 
-  '@rollup/rollup-win32-arm64-msvc@4.40.2':
-    resolution: {integrity: sha512-Bjv/HG8RRWLNkXwQQemdsWw4Mg+IJ29LK+bJPW2SCzPKOUaMmPEppQlu/Fqk1d7+DX3V7JbFdbkh/NMmurT6Pg==}
+  '@rollup/rollup-win32-arm64-msvc@4.50.2':
+    resolution: {integrity: sha512-eFUvvnTYEKeTyHEijQKz81bLrUQOXKZqECeiWH6tb8eXXbZk+CXSG2aFrig2BQ/pjiVRj36zysjgILkqarS2YA==}
     cpu: [arm64]
     os: [win32]
 
@@ -3514,8 +3521,8 @@ packages:
     cpu: [ia32]
     os: [win32]
 
-  '@rollup/rollup-win32-ia32-msvc@4.40.2':
-    resolution: {integrity: sha512-dt1llVSGEsGKvzeIO76HToiYPNPYPkmjhMHhP00T9S4rDern8P2ZWvWAQUEJ+R1UdMWJ/42i/QqJ2WV765GZcA==}
+  '@rollup/rollup-win32-ia32-msvc@4.50.2':
+    resolution: {integrity: sha512-cBaWmXqyfRhH8zmUxK3d3sAhEWLrtMjWBRwdMMHJIXSjvjLKvv49adxiEz+FJ8AP90apSDDBx2Tyd/WylV6ikA==}
     cpu: [ia32]
     os: [win32]
 
@@ -3529,8 +3536,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rollup/rollup-win32-x64-msvc@4.40.2':
-    resolution: {integrity: sha512-bwspbWB04XJpeElvsp+DCylKfF4trJDa2Y9Go8O6A7YLX2LIKGcNK/CYImJN6ZP4DcuOHB4Utl3iCbnR62DudA==}
+  '@rollup/rollup-win32-x64-msvc@4.50.2':
+    resolution: {integrity: sha512-APwKy6YUhvZaEoHyM+9xqmTpviEI+9eL7LoCH+aLcvWYHJ663qG5zx7WzWZY+a9qkg5JtzcMyJ9z0WtQBMDmgA==}
     cpu: [x64]
     os: [win32]
 
@@ -3804,6 +3811,7 @@ packages:
 
   '@telegram-apps/bridge@1.9.2':
     resolution: {integrity: sha512-SJLcNWLXhbbZr9MiqFH/g2ceuitSJKMxUIZysK4zUNyTUNuonrQG80Q/yrO+XiNbKUj8WdDNM86NBARhuyyinQ==}
+    deprecated: This package is not supported anymore. Use @tma.js/bridge instead
 
   '@telegram-apps/navigation@1.0.13':
     resolution: {integrity: sha512-TsUueB5LQp77GQHoMa93nq26Uw7GJjrFCPbyseMVU7aBBxAc+8CV2IYytRwcVp5sv/q7ThK5X4JaKn2V1yBHDQ==}
@@ -3819,9 +3827,11 @@ packages:
 
   '@telegram-apps/transformers@1.2.2':
     resolution: {integrity: sha512-vvMwXckd1D7Ozc0h66PSUwF5QLrRV9HlGJFFeBuUex8QEk5mSPtsJkLiqB8aBbwuFDa91+TUSM/CxqPZO/e9YQ==}
+    deprecated: This package is not supported anymore. Use @tma.js/transfomers instead
 
   '@telegram-apps/types@1.2.1':
     resolution: {integrity: sha512-so4HLh7clur0YyMthi9KVIgWoGpZdXlFOuQjk3+Q5NAvJZ11nAheBSwPlGw/Ko92+zwvrSBE/lQyN2+p17RP+w==}
+    deprecated: This package is not supported anymore. Use @tma.js/types instead
 
   '@trysound/sax@0.2.0':
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
@@ -3875,6 +3885,9 @@ packages:
   '@types/estree@1.0.7':
     resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
 
+  '@types/estree@1.0.8':
+    resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
+
   '@types/filesystem@0.0.36':
     resolution: {integrity: sha512-vPDXOZuannb9FZdxgHnqSwAG/jvdGM8Wq+6N4D/d80z+D4HWH+bItqsZaVRQykAn6WEVeEkLm2oQigyHtgb0RA==}
 
@@ -3920,14 +3933,14 @@ packages:
   '@types/node@20.17.27':
     resolution: {integrity: sha512-U58sbKhDrthHlxHRJw7ZLiLDZGmAUOZUbpw0S6nL27sYUdhvgBLCRu/keSd6qcTsfArd1sRFCCBxzWATGr/0UA==}
 
-  '@types/node@20.17.44':
-    resolution: {integrity: sha512-50sE4Ibb4BgUMxHrcJQSAU0Fu7fLcTdwcXwRzEF7wnVMWvImFLg2Rxc7SW0vpvaJm4wvhoWEZaQiPpBpocZiUA==}
-
-  '@types/node@22.15.15':
-    resolution: {integrity: sha512-R5muMcZob3/Jjchn5LcO8jdKwSCbzqmPB6ruBxMcf9kbxtniZHP327s6C37iOfuw8mbKK3cAQa7sEl7afLrQ8A==}
+  '@types/node@20.19.15':
+    resolution: {integrity: sha512-W3bqcbLsRdFDVcmAM5l6oLlcl67vjevn8j1FPZ4nx+K5jNoWCh+FC/btxFoBPnvQlrHHDwfjp1kjIEDfwJ0Mog==}
 
   '@types/node@22.7.5':
     resolution: {integrity: sha512-jML7s2NAzMWc//QSJ1a3prpk78cOPchGvXJsC3C6R6PSMoooztvRVQEz89gmBTBY1SPMaqo5teB4uNHPdetShQ==}
+
+  '@types/node@24.5.0':
+    resolution: {integrity: sha512-y1dMvuvJspJiPSDZUQ+WMBvF7dpnEqN4x9DDC9ie5Fs/HUZJA3wFp7EhHoVaKX/iI0cRoECV8X2jL8zi0xrHCg==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -4590,6 +4603,11 @@ packages:
 
   acorn@8.14.1:
     resolution: {integrity: sha512-OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg==}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
+
+  acorn@8.15.0:
+    resolution: {integrity: sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
 
@@ -5641,8 +5659,15 @@ packages:
   end-of-stream@1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
 
+  end-of-stream@1.4.5:
+    resolution: {integrity: sha512-ooEGc6HP26xXq/N+GCGOT0JKCLDGrq2bQUZrQ7gyrJiZANJ/8YDTxTpQBXGMn+WbIQXNVpyWymm7KYVICQnyOg==}
+
   enhanced-resolve@5.18.1:
     resolution: {integrity: sha512-ZSW3ma5GkcQBIpwZTSRAI8N71Uuwgs93IezB7mf7R60tC8ZbJideoDNKjHn2O9KIlx6rkGTTEk1xUCK2E1Y2Yg==}
+    engines: {node: '>=10.13.0'}
+
+  enhanced-resolve@5.18.3:
+    resolution: {integrity: sha512-d4lC8xfavMeBjzGr2vECC3fsGXziXZQyJxD868h2M/mBI3PwAuODxAkLkq5HYuvrPYcUtiLzsTo8U3PgX3Ocww==}
     engines: {node: '>=10.13.0'}
 
   enquirer@2.4.1:
@@ -5772,8 +5797,8 @@ packages:
       eslint-plugin-n: '^15.0.0 || ^16.0.0 '
       eslint-plugin-promise: ^6.0.0
 
-  eslint-config-turbo@2.5.3:
-    resolution: {integrity: sha512-KuW20TUDfLooS38gSquL6Gi+ZjaMlno0N3hBe8c+F8+nRYUhbF2fNhuyzl9ScNHx6aJT2eVhLBfGELg7N5+sog==}
+  eslint-config-turbo@2.5.6:
+    resolution: {integrity: sha512-1EV/UqdKE75st9q6y0MCxz7qp2v7RyGvbQsMLSuCz+VH8ScnSfmhd8FcAbqx3BshCy5IluujzMB6T5iCgL3/sA==}
     peerDependencies:
       eslint: '>6.6.0'
       turbo: '>2.0.0'
@@ -5892,8 +5917,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7
 
-  eslint-plugin-turbo@2.5.3:
-    resolution: {integrity: sha512-DlXZd+LgpDlxH/6IsiAXLhy82x0jeJDm0XBEqP6Le08uy0HBQkjCUt7SmXNp8esAtX9RYe6oDClbNbmI1jtK5g==}
+  eslint-plugin-turbo@2.5.6:
+    resolution: {integrity: sha512-KUDE23aP2JV8zbfZ4TeM1HpAXzMM/AYG/bJam7P4AalUxas8Pd/lS/6R3p4uX91qJcH1LwL4h0ED48nDe8KorQ==}
     peerDependencies:
       eslint: '>6.6.0'
       turbo: '>2.0.0'
@@ -6206,6 +6231,10 @@ packages:
     resolution: {integrity: sha512-hGfm/slu0ZabnNt4oaRZ6uREyfCj6P4fT/n6A1rGV+Z0VdGXjfOhVUpkn6qVQONHGIFwmveGXyDs75+nr6FM8w==}
     engines: {node: '>= 6'}
 
+  form-data@4.0.4:
+    resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
+    engines: {node: '>= 6'}
+
   fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
 
@@ -6483,8 +6512,8 @@ packages:
     resolution: {integrity: sha512-uPpH7OKX4H25hBmU6G1jWNaqJGpTXxey+YOUizJUAgu0AjLUeC8D73hTrhvDS5D+GJN1DN1+hhc/eF/wpxtp0w==}
     engines: {node: '>= 0.8'}
 
-  http-cache-semantics@4.1.1:
-    resolution: {integrity: sha512-er295DKPVsV82j5kw1Gjt+ADA/XYHsajl82cGNQG2eyoPkvgUhX+nDIyelzhIWbbsXP39EHcI6l5tYs2FYqYXQ==}
+  http-cache-semantics@4.2.0:
+    resolution: {integrity: sha512-dTxcvPXqPvXBQpq5dUr6mEMJX4oIEFv6bwom3FDwKRDsuIjjJGANqhBuoAn9c1RQJIdAKav33ED65E2ys+87QQ==}
 
   http-errors@1.6.3:
     resolution: {integrity: sha512-lks+lVC8dgGyh97jxvxeYTWQFvh4uw4yC12gVl63Cg30sjPX4wuGcdkICVXDAESr6OJGjqGA8Iz5mkeN6zlD7A==}
@@ -8135,6 +8164,10 @@ packages:
     resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
     engines: {node: ^10 || ^12 || >=14}
 
+  postcss@8.5.6:
+    resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
+    engines: {node: ^10 || ^12 || >=14}
+
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -8146,6 +8179,11 @@ packages:
 
   prettier@3.5.3:
     resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
+    engines: {node: '>=14'}
+    hasBin: true
+
+  prettier@3.6.2:
+    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -8191,6 +8229,9 @@ packages:
 
   pump@3.0.2:
     resolution: {integrity: sha512-tUPXtzlGM8FE3P0ZL6DVs/3P58k9nk8/jZeQCurTJylQA8qFYzHFfhBJkuqyE0FifOsQ0uKWekiZ5g8wtr28cw==}
+
+  pump@3.0.3:
+    resolution: {integrity: sha512-todwxLMY7/heScKmntwQG8CXVkWUOdYxIvY2s0VWAAMh/nd8SoYiRaKjlr7+iCs984f2P8zvrfWcDDYVb73NfA==}
 
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
@@ -8722,8 +8763,8 @@ packages:
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
 
-  rollup@4.40.2:
-    resolution: {integrity: sha512-tfUOg6DTP4rhQ3VjOO6B4wyrJnGOX85requAXvqYTHsOgb2TFJdZ3aWpT8W2kPoypSGP7dZUyzxJ9ee4buM5Fg==}
+  rollup@4.50.2:
+    resolution: {integrity: sha512-BgLRGy7tNS9H66aIMASq1qSYbAAJV6Z6WR4QYTvj5FgF15rZ/ympT1uixHXwzbZUBDbkvqUI1KR0fH1FhMaQ9w==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
 
@@ -8960,6 +9001,7 @@ packages:
   source-map@0.8.0-beta.0:
     resolution: {integrity: sha512-2ymg6oRBpebeZi9UUNsgQ89bhx01TcTkmNTGnNO88imTmbSgy4nfujrgVEFKWpMTEGA11EDkTt7mqObTPdigIA==}
     engines: {node: '>= 8'}
+    deprecated: The work that was done in this beta branch won't be included in future versions
 
   spawndamnit@3.0.1:
     resolution: {integrity: sha512-MmnduQUuHCoFckZoWnXsTg7JaiLBJrKFj9UI2MbRPGaJeVpsLcVBu6P/IGZovziM/YBsellCmsprgNA+w0CzVg==}
@@ -9215,6 +9257,10 @@ packages:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
     engines: {node: '>=6'}
 
+  tapable@2.2.3:
+    resolution: {integrity: sha512-ZL6DDuAlRlLGghwcfmSn9sK3Hr6ArtyudlSAiCqQ6IfE+b+HHbydbYDIG15IfS5do+7XQQBdBiubF/cV2dnDzg==}
+    engines: {node: '>=6'}
+
   tar-stream@3.1.7:
     resolution: {integrity: sha512-qJj60CXt7IU1Ffyc3NJMjh6EkuCFej46zUqJ4J7pqYlThyd9bO0XBTmcOIhSzZJVWfsLks0+nle/j538YAW9RQ==}
 
@@ -9244,6 +9290,11 @@ packages:
 
   terser@5.39.0:
     resolution: {integrity: sha512-LBAhFyLho16harJoWMg/nZsQYgTrg5jXOn2nCYjRUcZZEdE3qa2zb8QEDRUGVZBW4rlazf2fxkg8tztybTaqWw==}
+    engines: {node: '>=10'}
+    hasBin: true
+
+  terser@5.44.0:
+    resolution: {integrity: sha512-nIVck8DK+GM/0Frwd+nIhZ84pR/BX7rmXMfYwyg+Sri5oGVE99/E3KvXqpC2xHFxyqXyGHTKBSioxxplrO4I4w==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -9405,41 +9456,41 @@ packages:
     peerDependencies:
       typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
 
-  turbo-darwin-64@2.5.3:
-    resolution: {integrity: sha512-YSItEVBUIvAGPUDpAB9etEmSqZI3T6BHrkBkeSErvICXn3dfqXUfeLx35LfptLDEbrzFUdwYFNmt8QXOwe9yaw==}
+  turbo-darwin-64@2.5.6:
+    resolution: {integrity: sha512-3C1xEdo4aFwMJAPvtlPqz1Sw/+cddWIOmsalHFMrsqqydcptwBfu26WW2cDm3u93bUzMbBJ8k3zNKFqxJ9ei2A==}
     cpu: [x64]
     os: [darwin]
 
-  turbo-darwin-arm64@2.5.3:
-    resolution: {integrity: sha512-5PefrwHd42UiZX7YA9m1LPW6x9YJBDErXmsegCkVp+GjmWrADfEOxpFrGQNonH3ZMj77WZB2PVE5Aw3gA+IOhg==}
+  turbo-darwin-arm64@2.5.6:
+    resolution: {integrity: sha512-LyiG+rD7JhMfYwLqB6k3LZQtYn8CQQUePbpA8mF/hMLPAekXdJo1g0bUPw8RZLwQXUIU/3BU7tXENvhSGz5DPA==}
     cpu: [arm64]
     os: [darwin]
 
-  turbo-linux-64@2.5.3:
-    resolution: {integrity: sha512-M9xigFgawn5ofTmRzvjjLj3Lqc05O8VHKuOlWNUlnHPUltFquyEeSkpQNkE/vpPdOR14AzxqHbhhxtfS4qvb1w==}
+  turbo-linux-64@2.5.6:
+    resolution: {integrity: sha512-GOcUTT0xiT/pSnHL4YD6Yr3HreUhU8pUcGqcI2ksIF9b2/r/kRHwGFcsHgpG3+vtZF/kwsP0MV8FTlTObxsYIA==}
     cpu: [x64]
     os: [linux]
 
-  turbo-linux-arm64@2.5.3:
-    resolution: {integrity: sha512-auJRbYZ8SGJVqvzTikpg1bsRAsiI9Tk0/SDkA5Xgg0GdiHDH/BOzv1ZjDE2mjmlrO/obr19Dw+39OlMhwLffrw==}
+  turbo-linux-arm64@2.5.6:
+    resolution: {integrity: sha512-10Tm15bruJEA3m0V7iZcnQBpObGBcOgUcO+sY7/2vk1bweW34LMhkWi8svjV9iDF68+KJDThnYDlYE/bc7/zzQ==}
     cpu: [arm64]
     os: [linux]
 
   turbo-stream@2.4.0:
     resolution: {integrity: sha512-FHncC10WpBd2eOmGwpmQsWLDoK4cqsA/UT/GqNoaKOQnT8uzhtCbg3EoUDMvqpOSAI0S26mr0rkjzbOO6S3v1g==}
 
-  turbo-windows-64@2.5.3:
-    resolution: {integrity: sha512-arLQYohuHtIEKkmQSCU9vtrKUg+/1TTstWB9VYRSsz+khvg81eX6LYHtXJfH/dK7Ho6ck+JaEh5G+QrE1jEmCQ==}
+  turbo-windows-64@2.5.6:
+    resolution: {integrity: sha512-FyRsVpgaj76It0ludwZsNN40ytHN+17E4PFJyeliBEbxrGTc5BexlXVpufB7XlAaoaZVxbS6KT8RofLfDRyEPg==}
     cpu: [x64]
     os: [win32]
 
-  turbo-windows-arm64@2.5.3:
-    resolution: {integrity: sha512-3JPn66HAynJ0gtr6H+hjY4VHpu1RPKcEwGATvGUTmLmYSYBQieVlnGDRMMoYN066YfyPqnNGCfhYbXfH92Cm0g==}
+  turbo-windows-arm64@2.5.6:
+    resolution: {integrity: sha512-j/tWu8cMeQ7HPpKri6jvKtyXg9K1gRyhdK4tKrrchH8GNHscPX/F71zax58yYtLRWTiK04zNzPcUJuoS0+v/+Q==}
     cpu: [arm64]
     os: [win32]
 
-  turbo@2.5.3:
-    resolution: {integrity: sha512-iHuaNcq5GZZnr3XDZNuu2LSyCzAOPwDuo5Qt+q64DfsTP1i3T2bKfxJhni2ZQxsvAoxRbuUK5QetJki4qc5aYA==}
+  turbo@2.5.6:
+    resolution: {integrity: sha512-gxToHmi9oTBNB05UjUsrWf0OyN5ZXtD0apOarC1KIx232Vp3WimRNy3810QzeNSgyD5rsaIDXlxlbnOzlouo+w==}
     hasBin: true
 
   tweetnacl-util@0.15.1:
@@ -9541,6 +9592,9 @@ packages:
 
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+
+  undici-types@7.12.0:
+    resolution: {integrity: sha512-goOacqME2GYyOZZfb5Lgtu+1IDmAlAEu5xnD3+xTzS10hT0vzpf0SPjkXwAw9Jm+4n/mQGDP3LO8CPbYROeBfQ==}
 
   unenv@2.0.0-rc.15:
     resolution: {integrity: sha512-J/rEIZU8w6FOfLNz/hNKsnY+fFHWnu9MH4yRbSZF3xbbGHovcetXPs7sD+9p8L6CeNC//I9bhRYAOsBt2u7/OA==}
@@ -9826,8 +9880,8 @@ packages:
       vite: ^6.0.0
       vue: ^3.5.0
 
-  vite@5.4.19:
-    resolution: {integrity: sha512-qO3aKv3HoQC8QKiNSTuUM1l9o/XX3+c+VTgLHbJWHZGeTPVAg2XwazI9UWzoxjIJCGCV2zU60uqMzjeLZuULqA==}
+  vite@5.4.20:
+    resolution: {integrity: sha512-j3lYzGC3P+B5Yfy/pfKNgVEg4+UtcIJcVRt2cDjIOmhLourAqPqf8P7acgxeiSgUB7E3p2P8/3gNIgDLpwzs4g==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -9857,8 +9911,8 @@ packages:
       terser:
         optional: true
 
-  vite@6.3.5:
-    resolution: {integrity: sha512-cZn6NDFE7wdTpINgs++ZJ4N49W2vRp8LCKrn3Ob1kYNtOo21vfDoaV5GzBfLU4MovSAB8uNRm4jgzVQZ+mBzPQ==}
+  vite@6.3.6:
+    resolution: {integrity: sha512-0msEVHJEScQbhkbVTb/4iHZdJ6SXp/AvxL2sjwYQFfBqleHtnCqv1J3sa9zbWz/6kW1m9Tfzn92vW+kZ1WV6QA==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
@@ -9957,8 +10011,8 @@ packages:
   walker@1.0.8:
     resolution: {integrity: sha512-ts/8E8l5b7kY0vlWLewOkDXMmPdLcVV4GmOQLyxuSswIJsweeFZtAsMF7k1Nszz+TYBQrlYRmzOnr398y1JemQ==}
 
-  watchpack@2.4.2:
-    resolution: {integrity: sha512-TnbFSbcOCcDgjZ4piURLCbJ3nJhznVh9kw6F6iokjiFPl8ONxe9A6nMDVXDiNbrSfLILs6vB07F7wLBrwPYzJw==}
+  watchpack@2.4.4:
+    resolution: {integrity: sha512-c5EGNOiyxxV5qmTtAB7rbiXxi1ooX1pQKMLX/MIabJjRA0SJBQOjKF+KSVfHkr9U1cADPon0mRiVe/riyaiDUA==}
     engines: {node: '>=10.13.0'}
 
   webextension-polyfill-ts@0.25.0:
@@ -9977,8 +10031,8 @@ packages:
   webidl-conversions@4.0.2:
     resolution: {integrity: sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==}
 
-  webpack-sources@3.2.3:
-    resolution: {integrity: sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==}
+  webpack-sources@3.3.3:
+    resolution: {integrity: sha512-yd1RBzSGanHkitROoPFd6qsrxt+oFhg/129YzheDGqeustzX0vTZJZsSsQjVQC4yzBQ56K55XU8gaNCtIzOnTg==}
     engines: {node: '>=10.13.0'}
 
   webpack-virtual-modules@0.6.2:
@@ -10257,13 +10311,13 @@ snapshots:
       - aptos
       - debug
 
-  '@aptos-connect/wallet-adapter-plugin@2.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))':
+  '@aptos-connect/wallet-adapter-plugin@2.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))':
     dependencies:
-      '@aptos-connect/wallet-api': 0.3.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
-      '@aptos-labs/ts-sdk': 3.1.3(axios@1.10.0)(got@11.8.6)
-      '@aptos-labs/wallet-standard': 0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
-      '@identity-connect/crypto': 0.2.8(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
-      '@identity-connect/dapp-sdk': 0.11.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@aptos-labs/wallet-standard@0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
+      '@aptos-connect/wallet-api': 0.3.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
+      '@aptos-labs/ts-sdk': 5.0.0(axios@1.10.0)(got@11.8.6)
+      '@aptos-labs/wallet-standard': 0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+      '@identity-connect/crypto': 0.2.9(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
+      '@identity-connect/dapp-sdk': 0.11.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@aptos-labs/wallet-standard@0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
     transitivePeerDependencies:
       - '@telegram-apps/bridge'
       - '@wallet-standard/core'
@@ -10279,10 +10333,10 @@ snapshots:
     transitivePeerDependencies:
       - '@wallet-standard/core'
 
-  '@aptos-connect/wallet-api@0.3.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))':
+  '@aptos-connect/wallet-api@0.3.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))':
     dependencies:
-      '@aptos-labs/ts-sdk': 3.1.3(axios@1.10.0)(got@11.8.6)
-      '@aptos-labs/wallet-standard': 0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+      '@aptos-labs/ts-sdk': 5.0.0(axios@1.10.0)(got@11.8.6)
+      '@aptos-labs/wallet-standard': 0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@identity-connect/api': 0.7.0
       aptos: 1.21.0(axios@1.10.0)(got@11.8.6)
     transitivePeerDependencies:
@@ -10299,11 +10353,11 @@ snapshots:
     transitivePeerDependencies:
       - '@wallet-standard/core'
 
-  '@aptos-connect/web-transport@0.3.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@aptos-labs/wallet-standard@0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))':
+  '@aptos-connect/web-transport@0.3.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@aptos-labs/wallet-standard@0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))':
     dependencies:
-      '@aptos-connect/wallet-api': 0.3.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
-      '@aptos-labs/ts-sdk': 3.1.3(axios@1.10.0)(got@11.8.6)
-      '@aptos-labs/wallet-standard': 0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+      '@aptos-connect/wallet-api': 0.3.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
+      '@aptos-labs/ts-sdk': 5.0.0(axios@1.10.0)(got@11.8.6)
+      '@aptos-labs/wallet-standard': 0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@telegram-apps/bridge': 1.9.2
       aptos: 1.21.0(axios@1.10.0)(got@11.8.6)
       uuid: 9.0.1
@@ -10321,14 +10375,21 @@ snapshots:
 
   '@aptos-labs/aptos-dynamic-transaction-composer@0.1.3': {}
 
+  '@aptos-labs/gas-station-client@2.0.3(axios@1.10.0)(got@11.8.6)':
+    dependencies:
+      '@aptos-labs/ts-sdk': 5.0.0(axios@1.10.0)(got@11.8.6)
+    transitivePeerDependencies:
+      - axios
+      - got
+
   '@aptos-labs/script-composer-pack@0.0.9':
     dependencies:
       '@aptos-labs/aptos-dynamic-transaction-composer': 0.1.3
 
-  '@aptos-labs/siwa@0.3.0(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)':
+  '@aptos-labs/siwa@0.4.0(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)':
     dependencies:
-      '@aptos-labs/ts-sdk': 3.1.3(axios@1.10.0)(got@11.8.6)
-      '@aptos-labs/wallet-standard': 0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+      '@aptos-labs/ts-sdk': 5.0.0(axios@1.10.0)(got@11.8.6)
+      '@aptos-labs/wallet-standard': 0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@noble/hashes': 1.7.1
     transitivePeerDependencies:
       - '@wallet-standard/core'
@@ -10351,7 +10412,7 @@ snapshots:
       - axios
       - got
 
-  '@aptos-labs/ts-sdk@3.1.2(axios@1.10.0)(got@11.8.6)':
+  '@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6)':
     dependencies:
       '@aptos-labs/aptos-cli': 1.0.2
       '@aptos-labs/aptos-client': 1.2.0(axios@1.10.0)(got@11.8.6)
@@ -10360,24 +10421,7 @@ snapshots:
       '@scure/bip32': 1.6.2
       '@scure/bip39': 1.5.4
       eventemitter3: 5.0.1
-      form-data: 4.0.2
-      js-base64: 3.7.7
-      jwt-decode: 4.0.0
-      poseidon-lite: 0.2.1
-    transitivePeerDependencies:
-      - axios
-      - got
-
-  '@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6)':
-    dependencies:
-      '@aptos-labs/aptos-cli': 1.0.2
-      '@aptos-labs/aptos-client': 1.2.0(axios@1.10.0)(got@11.8.6)
-      '@noble/curves': 1.8.1
-      '@noble/hashes': 1.7.1
-      '@scure/bip32': 1.6.2
-      '@scure/bip39': 1.5.4
-      eventemitter3: 5.0.1
-      form-data: 4.0.2
+      form-data: 4.0.4
       js-base64: 3.7.7
       jwt-decode: 4.0.0
       poseidon-lite: 0.2.1
@@ -10428,14 +10472,9 @@ snapshots:
       '@aptos-labs/ts-sdk': 1.38.0(axios@1.10.0)(got@11.8.6)
       '@wallet-standard/core': 1.1.0
 
-  '@aptos-labs/wallet-standard@0.5.0(@aptos-labs/ts-sdk@3.1.2(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)':
+  '@aptos-labs/wallet-standard@0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)':
     dependencies:
-      '@aptos-labs/ts-sdk': 3.1.2(axios@1.10.0)(got@11.8.6)
-      '@wallet-standard/core': 1.1.0
-
-  '@aptos-labs/wallet-standard@0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)':
-    dependencies:
-      '@aptos-labs/ts-sdk': 3.1.3(axios@1.10.0)(got@11.8.6)
+      '@aptos-labs/ts-sdk': 5.0.0(axios@1.10.0)(got@11.8.6)
       '@wallet-standard/core': 1.1.0
 
   '@atomrigslab/aptos-wallet-adapter@0.1.21(@aptos-labs/ts-sdk@1.38.0(axios@1.10.0)(got@11.8.6))(axios@1.10.0)(got@11.8.6)':
@@ -11476,10 +11515,10 @@ snapshots:
       - '@wallet-standard/core'
       - aptos
 
-  '@identity-connect/crypto@0.2.8(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))':
+  '@identity-connect/crypto@0.2.9(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))':
     dependencies:
-      '@aptos-connect/wallet-api': 0.3.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
-      '@aptos-labs/ts-sdk': 3.1.3(axios@1.10.0)(got@11.8.6)
+      '@aptos-connect/wallet-api': 0.3.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
+      '@aptos-labs/ts-sdk': 5.0.0(axios@1.10.0)(got@11.8.6)
       '@noble/hashes': 1.7.1
       ed2curve: 0.3.0
       tweetnacl: 1.0.3
@@ -11504,15 +11543,15 @@ snapshots:
       - aptos
       - debug
 
-  '@identity-connect/dapp-sdk@0.11.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@aptos-labs/wallet-standard@0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))':
+  '@identity-connect/dapp-sdk@0.11.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@aptos-labs/wallet-standard@0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))':
     dependencies:
-      '@aptos-connect/wallet-api': 0.3.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
-      '@aptos-connect/web-transport': 0.3.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@aptos-labs/wallet-standard@0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
-      '@aptos-labs/ts-sdk': 3.1.3(axios@1.10.0)(got@11.8.6)
-      '@aptos-labs/wallet-standard': 0.5.1(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
+      '@aptos-connect/wallet-api': 0.3.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
+      '@aptos-connect/web-transport': 0.3.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@aptos-labs/wallet-standard@0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
+      '@aptos-labs/ts-sdk': 5.0.0(axios@1.10.0)(got@11.8.6)
+      '@aptos-labs/wallet-standard': 0.5.2(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@identity-connect/api': 0.7.0
-      '@identity-connect/crypto': 0.2.8(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
-      '@identity-connect/wallet-api': 0.1.3(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
+      '@identity-connect/crypto': 0.2.9(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(@wallet-standard/core@1.1.0)(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
+      '@identity-connect/wallet-api': 0.1.4(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(aptos@1.21.0(axios@1.10.0)(got@11.8.6))
       axios: 1.10.0
       uuid: 9.0.1
     transitivePeerDependencies:
@@ -11526,9 +11565,9 @@ snapshots:
       '@aptos-labs/ts-sdk': 1.38.0(axios@1.10.0)(got@11.8.6)
       aptos: 1.21.0(axios@1.10.0)(got@11.8.6)
 
-  '@identity-connect/wallet-api@0.1.3(@aptos-labs/ts-sdk@3.1.3(axios@1.10.0)(got@11.8.6))(aptos@1.21.0(axios@1.10.0)(got@11.8.6))':
+  '@identity-connect/wallet-api@0.1.4(@aptos-labs/ts-sdk@5.0.0(axios@1.10.0)(got@11.8.6))(aptos@1.21.0(axios@1.10.0)(got@11.8.6))':
     dependencies:
-      '@aptos-labs/ts-sdk': 3.1.3(axios@1.10.0)(got@11.8.6)
+      '@aptos-labs/ts-sdk': 5.0.0(axios@1.10.0)(got@11.8.6)
       aptos: 1.21.0(axios@1.10.0)(got@11.8.6)
 
   '@injectivelabs/abacus-proto-ts@1.14.0':
@@ -11842,6 +11881,11 @@ snapshots:
       '@types/yargs': 17.0.33
       chalk: 4.1.2
 
+  '@jridgewell/gen-mapping@0.3.13':
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/trace-mapping': 0.3.31
+
   '@jridgewell/gen-mapping@0.3.8':
     dependencies:
       '@jridgewell/set-array': 1.2.1
@@ -11852,6 +11896,11 @@ snapshots:
 
   '@jridgewell/set-array@1.2.1': {}
 
+  '@jridgewell/source-map@0.3.11':
+    dependencies:
+      '@jridgewell/gen-mapping': 0.3.13
+      '@jridgewell/trace-mapping': 0.3.31
+
   '@jridgewell/source-map@0.3.6':
     dependencies:
       '@jridgewell/gen-mapping': 0.3.8
@@ -11859,10 +11908,17 @@ snapshots:
 
   '@jridgewell/sourcemap-codec@1.5.0': {}
 
+  '@jridgewell/sourcemap-codec@1.5.5': {}
+
   '@jridgewell/trace-mapping@0.3.25':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@jridgewell/trace-mapping@0.3.31':
+    dependencies:
+      '@jridgewell/resolve-uri': 3.1.2
+      '@jridgewell/sourcemap-codec': 1.5.5
 
   '@koa/router@12.0.2':
     dependencies:
@@ -11936,11 +11992,11 @@ snapshots:
       - '@types/node'
     optional: true
 
-  '@microsoft/api-extractor-model@7.28.13(@types/node@22.15.15)':
+  '@microsoft/api-extractor-model@7.28.13(@types/node@24.5.0)':
     dependencies:
       '@microsoft/tsdoc': 0.14.2
       '@microsoft/tsdoc-config': 0.16.2
-      '@rushstack/node-core-library': 4.0.2(@types/node@22.15.15)
+      '@rushstack/node-core-library': 4.0.2(@types/node@24.5.0)
     transitivePeerDependencies:
       - '@types/node'
 
@@ -11963,15 +12019,15 @@ snapshots:
       - '@types/node'
     optional: true
 
-  '@microsoft/api-extractor@7.43.0(@types/node@22.15.15)':
+  '@microsoft/api-extractor@7.43.0(@types/node@24.5.0)':
     dependencies:
-      '@microsoft/api-extractor-model': 7.28.13(@types/node@22.15.15)
+      '@microsoft/api-extractor-model': 7.28.13(@types/node@24.5.0)
       '@microsoft/tsdoc': 0.14.2
       '@microsoft/tsdoc-config': 0.16.2
-      '@rushstack/node-core-library': 4.0.2(@types/node@22.15.15)
+      '@rushstack/node-core-library': 4.0.2(@types/node@24.5.0)
       '@rushstack/rig-package': 0.5.2
-      '@rushstack/terminal': 0.10.0(@types/node@22.15.15)
-      '@rushstack/ts-command-line': 4.19.1(@types/node@22.15.15)
+      '@rushstack/terminal': 0.10.0(@types/node@24.5.0)
+      '@rushstack/ts-command-line': 4.19.1(@types/node@24.5.0)
       lodash: 4.17.21
       minimatch: 3.0.8
       resolve: 1.22.10
@@ -12281,12 +12337,12 @@ snapshots:
 
   '@nuxt/devalue@2.0.2': {}
 
-  '@nuxt/devtools-kit@2.3.2(magicast@0.3.5)(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))':
+  '@nuxt/devtools-kit@2.3.2(magicast@0.3.5)(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))':
     dependencies:
       '@nuxt/kit': 3.16.1(magicast@0.3.5)
       '@nuxt/schema': 3.16.1
       execa: 8.0.1
-      vite: 6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
+      vite: 6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)
     transitivePeerDependencies:
       - magicast
 
@@ -12301,12 +12357,12 @@ snapshots:
       prompts: 2.4.2
       semver: 7.7.1
 
-  '@nuxt/devtools@2.3.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))':
+  '@nuxt/devtools@2.3.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))':
     dependencies:
-      '@nuxt/devtools-kit': 2.3.2(magicast@0.3.5)(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
+      '@nuxt/devtools-kit': 2.3.2(magicast@0.3.5)(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))
       '@nuxt/devtools-wizard': 2.3.2
       '@nuxt/kit': 3.16.1(magicast@0.3.5)
-      '@vue/devtools-core': 7.7.2(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))
+      '@vue/devtools-core': 7.7.2(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))
       '@vue/devtools-kit': 7.7.2
       birpc: 2.3.0
       consola: 3.4.2
@@ -12331,9 +12387,9 @@ snapshots:
       sirv: 3.0.1
       structured-clone-es: 1.0.0
       tinyglobby: 0.2.12
-      vite: 6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
-      vite-plugin-inspect: 11.0.0(@nuxt/kit@3.16.1(magicast@0.3.5))(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
-      vite-plugin-vue-tracer: 0.1.3(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))
+      vite: 6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)
+      vite-plugin-inspect: 11.0.0(@nuxt/kit@3.16.1(magicast@0.3.5))(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))
+      vite-plugin-vue-tracer: 0.1.3(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))
       which: 5.0.0
       ws: 8.18.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
@@ -12393,12 +12449,12 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/vite-builder@3.16.1(@types/node@22.15.15)(eslint@8.57.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.37.0)(terser@5.39.0)(typescript@5.8.3)(vue-tsc@2.2.10(typescript@5.8.3))(vue@3.5.13(typescript@5.8.3))(yaml@2.7.0)':
+  '@nuxt/vite-builder@3.16.1(@types/node@24.5.0)(eslint@8.57.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.37.0)(terser@5.44.0)(typescript@5.8.3)(vue-tsc@2.2.10(typescript@5.8.3))(vue@3.5.13(typescript@5.8.3))(yaml@2.7.0)':
     dependencies:
       '@nuxt/kit': 3.16.1(magicast@0.3.5)
       '@rollup/plugin-replace': 6.0.2(rollup@4.37.0)
-      '@vitejs/plugin-vue': 5.2.3(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))
-      '@vitejs/plugin-vue-jsx': 4.1.2(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))
+      '@vitejs/plugin-vue': 5.2.3(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))
+      '@vitejs/plugin-vue-jsx': 4.1.2(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))
       autoprefixer: 10.4.21(postcss@8.5.3)
       consola: 3.4.2
       cssnano: 7.0.6(postcss@8.5.3)
@@ -12424,9 +12480,9 @@ snapshots:
       ufo: 1.6.1
       unenv: 2.0.0-rc.15
       unplugin: 2.2.2
-      vite: 6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
-      vite-node: 3.0.9(@types/node@22.15.15)(terser@5.39.0)
-      vite-plugin-checker: 0.9.1(eslint@8.57.1)(optionator@0.9.4)(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue-tsc@2.2.10(typescript@5.8.3))
+      vite: 6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)
+      vite-node: 3.0.9(@types/node@24.5.0)(terser@5.44.0)
+      vite-plugin-checker: 0.9.1(eslint@8.57.1)(optionator@0.9.4)(typescript@5.8.3)(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(vue-tsc@2.2.10(typescript@5.8.3))
       vue: 3.5.13(typescript@5.8.3)
       vue-bundle-renderer: 2.1.1
     transitivePeerDependencies:
@@ -12495,14 +12551,14 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  '@nuxtjs/eslint-module@4.1.0(eslint@8.57.1)(magicast@0.3.5)(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(webpack@5.98.0)':
+  '@nuxtjs/eslint-module@4.1.0(eslint@8.57.1)(magicast@0.3.5)(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(webpack@5.98.0)':
     dependencies:
       '@nuxt/kit': 3.16.1(magicast@0.3.5)
       chokidar: 3.6.0
       eslint: 8.57.1
       eslint-webpack-plugin: 4.2.0(eslint@8.57.1)(webpack@5.98.0)
       pathe: 1.1.2
-      vite-plugin-eslint: 1.8.1(eslint@8.57.1)(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
+      vite-plugin-eslint: 1.8.1(eslint@8.57.1)(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))
     transitivePeerDependencies:
       - magicast
       - vite
@@ -13294,13 +13350,13 @@ snapshots:
     optionalDependencies:
       rollup: 4.37.0
 
-  '@rollup/pluginutils@5.1.4(rollup@4.40.2)':
+  '@rollup/pluginutils@5.1.4(rollup@4.50.2)':
     dependencies:
       '@types/estree': 1.0.7
       estree-walker: 2.0.2
       picomatch: 4.0.2
     optionalDependencies:
-      rollup: 4.40.2
+      rollup: 4.50.2
 
   '@rollup/rollup-android-arm-eabi@4.37.0':
     optional: true
@@ -13308,7 +13364,7 @@ snapshots:
   '@rollup/rollup-android-arm-eabi@4.38.0':
     optional: true
 
-  '@rollup/rollup-android-arm-eabi@4.40.2':
+  '@rollup/rollup-android-arm-eabi@4.50.2':
     optional: true
 
   '@rollup/rollup-android-arm64@4.37.0':
@@ -13317,7 +13373,7 @@ snapshots:
   '@rollup/rollup-android-arm64@4.38.0':
     optional: true
 
-  '@rollup/rollup-android-arm64@4.40.2':
+  '@rollup/rollup-android-arm64@4.50.2':
     optional: true
 
   '@rollup/rollup-darwin-arm64@4.37.0':
@@ -13326,7 +13382,7 @@ snapshots:
   '@rollup/rollup-darwin-arm64@4.38.0':
     optional: true
 
-  '@rollup/rollup-darwin-arm64@4.40.2':
+  '@rollup/rollup-darwin-arm64@4.50.2':
     optional: true
 
   '@rollup/rollup-darwin-x64@4.37.0':
@@ -13335,7 +13391,7 @@ snapshots:
   '@rollup/rollup-darwin-x64@4.38.0':
     optional: true
 
-  '@rollup/rollup-darwin-x64@4.40.2':
+  '@rollup/rollup-darwin-x64@4.50.2':
     optional: true
 
   '@rollup/rollup-freebsd-arm64@4.37.0':
@@ -13344,7 +13400,7 @@ snapshots:
   '@rollup/rollup-freebsd-arm64@4.38.0':
     optional: true
 
-  '@rollup/rollup-freebsd-arm64@4.40.2':
+  '@rollup/rollup-freebsd-arm64@4.50.2':
     optional: true
 
   '@rollup/rollup-freebsd-x64@4.37.0':
@@ -13353,7 +13409,7 @@ snapshots:
   '@rollup/rollup-freebsd-x64@4.38.0':
     optional: true
 
-  '@rollup/rollup-freebsd-x64@4.40.2':
+  '@rollup/rollup-freebsd-x64@4.50.2':
     optional: true
 
   '@rollup/rollup-linux-arm-gnueabihf@4.37.0':
@@ -13362,7 +13418,7 @@ snapshots:
   '@rollup/rollup-linux-arm-gnueabihf@4.38.0':
     optional: true
 
-  '@rollup/rollup-linux-arm-gnueabihf@4.40.2':
+  '@rollup/rollup-linux-arm-gnueabihf@4.50.2':
     optional: true
 
   '@rollup/rollup-linux-arm-musleabihf@4.37.0':
@@ -13371,7 +13427,7 @@ snapshots:
   '@rollup/rollup-linux-arm-musleabihf@4.38.0':
     optional: true
 
-  '@rollup/rollup-linux-arm-musleabihf@4.40.2':
+  '@rollup/rollup-linux-arm-musleabihf@4.50.2':
     optional: true
 
   '@rollup/rollup-linux-arm64-gnu@4.37.0':
@@ -13380,7 +13436,7 @@ snapshots:
   '@rollup/rollup-linux-arm64-gnu@4.38.0':
     optional: true
 
-  '@rollup/rollup-linux-arm64-gnu@4.40.2':
+  '@rollup/rollup-linux-arm64-gnu@4.50.2':
     optional: true
 
   '@rollup/rollup-linux-arm64-musl@4.37.0':
@@ -13389,7 +13445,10 @@ snapshots:
   '@rollup/rollup-linux-arm64-musl@4.38.0':
     optional: true
 
-  '@rollup/rollup-linux-arm64-musl@4.40.2':
+  '@rollup/rollup-linux-arm64-musl@4.50.2':
+    optional: true
+
+  '@rollup/rollup-linux-loong64-gnu@4.50.2':
     optional: true
 
   '@rollup/rollup-linux-loongarch64-gnu@4.37.0':
@@ -13398,16 +13457,13 @@ snapshots:
   '@rollup/rollup-linux-loongarch64-gnu@4.38.0':
     optional: true
 
-  '@rollup/rollup-linux-loongarch64-gnu@4.40.2':
-    optional: true
-
   '@rollup/rollup-linux-powerpc64le-gnu@4.37.0':
     optional: true
 
   '@rollup/rollup-linux-powerpc64le-gnu@4.38.0':
     optional: true
 
-  '@rollup/rollup-linux-powerpc64le-gnu@4.40.2':
+  '@rollup/rollup-linux-ppc64-gnu@4.50.2':
     optional: true
 
   '@rollup/rollup-linux-riscv64-gnu@4.37.0':
@@ -13416,7 +13472,7 @@ snapshots:
   '@rollup/rollup-linux-riscv64-gnu@4.38.0':
     optional: true
 
-  '@rollup/rollup-linux-riscv64-gnu@4.40.2':
+  '@rollup/rollup-linux-riscv64-gnu@4.50.2':
     optional: true
 
   '@rollup/rollup-linux-riscv64-musl@4.37.0':
@@ -13425,7 +13481,7 @@ snapshots:
   '@rollup/rollup-linux-riscv64-musl@4.38.0':
     optional: true
 
-  '@rollup/rollup-linux-riscv64-musl@4.40.2':
+  '@rollup/rollup-linux-riscv64-musl@4.50.2':
     optional: true
 
   '@rollup/rollup-linux-s390x-gnu@4.37.0':
@@ -13434,7 +13490,7 @@ snapshots:
   '@rollup/rollup-linux-s390x-gnu@4.38.0':
     optional: true
 
-  '@rollup/rollup-linux-s390x-gnu@4.40.2':
+  '@rollup/rollup-linux-s390x-gnu@4.50.2':
     optional: true
 
   '@rollup/rollup-linux-x64-gnu@4.37.0':
@@ -13443,7 +13499,7 @@ snapshots:
   '@rollup/rollup-linux-x64-gnu@4.38.0':
     optional: true
 
-  '@rollup/rollup-linux-x64-gnu@4.40.2':
+  '@rollup/rollup-linux-x64-gnu@4.50.2':
     optional: true
 
   '@rollup/rollup-linux-x64-musl@4.37.0':
@@ -13452,7 +13508,10 @@ snapshots:
   '@rollup/rollup-linux-x64-musl@4.38.0':
     optional: true
 
-  '@rollup/rollup-linux-x64-musl@4.40.2':
+  '@rollup/rollup-linux-x64-musl@4.50.2':
+    optional: true
+
+  '@rollup/rollup-openharmony-arm64@4.50.2':
     optional: true
 
   '@rollup/rollup-win32-arm64-msvc@4.37.0':
@@ -13461,7 +13520,7 @@ snapshots:
   '@rollup/rollup-win32-arm64-msvc@4.38.0':
     optional: true
 
-  '@rollup/rollup-win32-arm64-msvc@4.40.2':
+  '@rollup/rollup-win32-arm64-msvc@4.50.2':
     optional: true
 
   '@rollup/rollup-win32-ia32-msvc@4.37.0':
@@ -13470,7 +13529,7 @@ snapshots:
   '@rollup/rollup-win32-ia32-msvc@4.38.0':
     optional: true
 
-  '@rollup/rollup-win32-ia32-msvc@4.40.2':
+  '@rollup/rollup-win32-ia32-msvc@4.50.2':
     optional: true
 
   '@rollup/rollup-win32-x64-msvc@4.37.0':
@@ -13479,7 +13538,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.38.0':
     optional: true
 
-  '@rollup/rollup-win32-x64-msvc@4.40.2':
+  '@rollup/rollup-win32-x64-msvc@4.50.2':
     optional: true
 
   '@rtsao/scc@1.1.0': {}
@@ -13498,7 +13557,7 @@ snapshots:
       '@types/node': 20.17.27
     optional: true
 
-  '@rushstack/node-core-library@4.0.2(@types/node@22.15.15)':
+  '@rushstack/node-core-library@4.0.2(@types/node@24.5.0)':
     dependencies:
       fs-extra: 7.0.1
       import-lazy: 4.0.0
@@ -13507,7 +13566,7 @@ snapshots:
       semver: 7.5.4
       z-schema: 5.0.5
     optionalDependencies:
-      '@types/node': 22.15.15
+      '@types/node': 24.5.0
 
   '@rushstack/rig-package@0.5.2':
     dependencies:
@@ -13522,12 +13581,12 @@ snapshots:
       '@types/node': 20.17.27
     optional: true
 
-  '@rushstack/terminal@0.10.0(@types/node@22.15.15)':
+  '@rushstack/terminal@0.10.0(@types/node@24.5.0)':
     dependencies:
-      '@rushstack/node-core-library': 4.0.2(@types/node@22.15.15)
+      '@rushstack/node-core-library': 4.0.2(@types/node@24.5.0)
       supports-color: 8.1.1
     optionalDependencies:
-      '@types/node': 22.15.15
+      '@types/node': 24.5.0
 
   '@rushstack/ts-command-line@4.19.1(@types/node@20.17.27)':
     dependencies:
@@ -13539,9 +13598,9 @@ snapshots:
       - '@types/node'
     optional: true
 
-  '@rushstack/ts-command-line@4.19.1(@types/node@22.15.15)':
+  '@rushstack/ts-command-line@4.19.1(@types/node@24.5.0)':
     dependencies:
-      '@rushstack/terminal': 0.10.0(@types/node@22.15.15)
+      '@rushstack/terminal': 0.10.0(@types/node@24.5.0)
       '@types/argparse': 1.0.38
       argparse: 1.0.10
       string-argv: 0.3.2
@@ -13911,7 +13970,7 @@ snapshots:
     dependencies:
       '@types/http-cache-semantics': 4.0.4
       '@types/keyv': 3.1.4
-      '@types/node': 20.17.44
+      '@types/node': 20.19.15
       '@types/responselike': 1.0.3
 
   '@types/chrome@0.0.136':
@@ -13926,7 +13985,7 @@ snapshots:
   '@types/eslint-scope@3.7.7':
     dependencies:
       '@types/eslint': 9.6.1
-      '@types/estree': 1.0.7
+      '@types/estree': 1.0.8
 
   '@types/eslint@8.56.12':
     dependencies:
@@ -13935,12 +13994,14 @@ snapshots:
 
   '@types/eslint@9.6.1':
     dependencies:
-      '@types/estree': 1.0.7
+      '@types/estree': 1.0.8
       '@types/json-schema': 7.0.15
 
   '@types/estree@1.0.6': {}
 
   '@types/estree@1.0.7': {}
+
+  '@types/estree@1.0.8': {}
 
   '@types/filesystem@0.0.36':
     dependencies:
@@ -13977,7 +14038,7 @@ snapshots:
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 20.17.44
+      '@types/node': 20.19.15
 
   '@types/long@4.0.2': {}
 
@@ -13987,18 +14048,18 @@ snapshots:
     dependencies:
       undici-types: 6.19.8
 
-  '@types/node@20.17.44':
-    dependencies:
-      undici-types: 6.19.8
-
-  '@types/node@22.15.15':
+  '@types/node@20.19.15':
     dependencies:
       undici-types: 6.21.0
-    optional: true
 
   '@types/node@22.7.5':
     dependencies:
       undici-types: 6.19.8
+
+  '@types/node@24.5.0':
+    dependencies:
+      undici-types: 7.12.0
+    optional: true
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -14029,7 +14090,7 @@ snapshots:
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 20.17.44
+      '@types/node': 20.19.15
 
   '@types/secp256k1@4.0.6':
     dependencies:
@@ -14295,24 +14356,24 @@ snapshots:
       - rollup
       - supports-color
 
-  '@vitejs/plugin-vue-jsx@4.1.2(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))':
+  '@vitejs/plugin-vue-jsx@4.1.2(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))':
     dependencies:
       '@babel/core': 7.26.10
       '@babel/plugin-transform-typescript': 7.27.0(@babel/core@7.26.10)
       '@vue/babel-plugin-jsx': 1.4.0(@babel/core@7.26.10)
-      vite: 6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
+      vite: 6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)
       vue: 3.5.13(typescript@5.8.3)
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-vue@5.2.3(vite@5.4.19(@types/node@22.15.15)(terser@5.39.0))(vue@3.5.13(typescript@5.8.3))':
+  '@vitejs/plugin-vue@5.2.3(vite@5.4.20(@types/node@24.5.0)(terser@5.44.0))(vue@3.5.13(typescript@5.8.3))':
     dependencies:
-      vite: 5.4.19(@types/node@22.15.15)(terser@5.39.0)
+      vite: 5.4.20(@types/node@24.5.0)(terser@5.44.0)
       vue: 3.5.13(typescript@5.8.3)
 
-  '@vitejs/plugin-vue@5.2.3(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))':
+  '@vitejs/plugin-vue@5.2.3(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))':
     dependencies:
-      vite: 6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
+      vite: 6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)
       vue: 3.5.13(typescript@5.8.3)
 
   '@volar/language-core@1.11.1':
@@ -14417,14 +14478,14 @@ snapshots:
 
   '@vue/devtools-api@6.6.4': {}
 
-  '@vue/devtools-core@7.7.2(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))':
+  '@vue/devtools-core@7.7.2(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))':
     dependencies:
       '@vue/devtools-kit': 7.7.2
       '@vue/devtools-shared': 7.7.2
       mitt: 3.0.1
       nanoid: 5.1.5
       pathe: 2.0.3
-      vite-hot-client: 0.2.4(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
+      vite-hot-client: 0.2.4(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))
       vue: 3.5.13(typescript@5.8.3)
     transitivePeerDependencies:
       - vite
@@ -15051,6 +15112,8 @@ snapshots:
 
   acorn@8.14.1: {}
 
+  acorn@8.15.0: {}
+
   aes-js@4.0.0-beta.5: {}
 
   agent-base@7.1.3: {}
@@ -15349,7 +15412,7 @@ snapshots:
   axios@1.10.0:
     dependencies:
       follow-redirects: 1.15.9
-      form-data: 4.0.2
+      form-data: 4.0.4
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
@@ -15612,7 +15675,7 @@ snapshots:
     dependencies:
       clone-response: 1.0.3
       get-stream: 5.2.0
-      http-cache-semantics: 4.1.1
+      http-cache-semantics: 4.2.0
       keyv: 4.5.4
       lowercase-keys: 2.0.0
       normalize-url: 6.1.0
@@ -16184,10 +16247,19 @@ snapshots:
     dependencies:
       once: 1.4.0
 
+  end-of-stream@1.4.5:
+    dependencies:
+      once: 1.4.0
+
   enhanced-resolve@5.18.1:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.2.1
+
+  enhanced-resolve@5.18.3:
+    dependencies:
+      graceful-fs: 4.2.11
+      tapable: 2.2.3
 
   enquirer@2.4.1:
     dependencies:
@@ -16426,11 +16498,11 @@ snapshots:
       eslint-plugin-n: 15.7.0(eslint@8.57.1)
       eslint-plugin-promise: 6.6.0(eslint@8.57.1)
 
-  eslint-config-turbo@2.5.3(eslint@7.32.0)(turbo@2.5.3):
+  eslint-config-turbo@2.5.6(eslint@7.32.0)(turbo@2.5.6):
     dependencies:
       eslint: 7.32.0
-      eslint-plugin-turbo: 2.5.3(eslint@7.32.0)(turbo@2.5.3)
-      turbo: 2.5.3
+      eslint-plugin-turbo: 2.5.6(eslint@7.32.0)(turbo@2.5.6)
+      turbo: 2.5.6
 
   eslint-import-resolver-node@0.3.9:
     dependencies:
@@ -16726,11 +16798,11 @@ snapshots:
       string.prototype.matchall: 4.0.12
       string.prototype.repeat: 1.0.0
 
-  eslint-plugin-turbo@2.5.3(eslint@7.32.0)(turbo@2.5.3):
+  eslint-plugin-turbo@2.5.6(eslint@7.32.0)(turbo@2.5.6):
     dependencies:
       dotenv: 16.0.3
       eslint: 7.32.0
-      turbo: 2.5.3
+      turbo: 2.5.6
 
   eslint-plugin-unicorn@44.0.2(eslint@8.57.1):
     dependencies:
@@ -17172,6 +17244,14 @@ snapshots:
       es-set-tostringtag: 2.1.0
       mime-types: 2.1.35
 
+  form-data@4.0.4:
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      es-set-tostringtag: 2.1.0
+      hasown: 2.0.2
+      mime-types: 2.1.35
+
   fraction.js@4.3.7: {}
 
   fresh@0.5.2: {}
@@ -17253,7 +17333,7 @@ snapshots:
 
   get-stream@5.2.0:
     dependencies:
-      pump: 3.0.2
+      pump: 3.0.3
 
   get-stream@6.0.1: {}
 
@@ -17512,7 +17592,7 @@ snapshots:
       deep-equal: 1.0.1
       http-errors: 1.8.1
 
-  http-cache-semantics@4.1.1: {}
+  http-cache-semantics@4.2.0: {}
 
   http-errors@1.6.3:
     dependencies:
@@ -17747,7 +17827,7 @@ snapshots:
 
   is-reference@1.2.1:
     dependencies:
-      '@types/estree': 1.0.7
+      '@types/estree': 1.0.8
 
   is-regex@1.2.1:
     dependencies:
@@ -18210,7 +18290,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 20.17.44
+      '@types/node': 20.19.15
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -18876,15 +18956,15 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuxt@3.16.1(@parcel/watcher@2.5.1)(@types/node@22.15.15)(bufferutil@4.0.9)(db0@0.3.1)(eslint@8.57.1)(ioredis@5.6.0)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.37.0)(terser@5.39.0)(typescript@5.8.3)(utf-8-validate@5.0.10)(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue-tsc@2.2.10(typescript@5.8.3))(yaml@2.7.0):
+  nuxt@3.16.1(@parcel/watcher@2.5.1)(@types/node@24.5.0)(bufferutil@4.0.9)(db0@0.3.1)(eslint@8.57.1)(ioredis@5.6.0)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.37.0)(terser@5.44.0)(typescript@5.8.3)(utf-8-validate@5.0.10)(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(vue-tsc@2.2.10(typescript@5.8.3))(yaml@2.7.0):
     dependencies:
       '@nuxt/cli': 3.23.1(magicast@0.3.5)
       '@nuxt/devalue': 2.0.2
-      '@nuxt/devtools': 2.3.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))
+      '@nuxt/devtools': 2.3.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))
       '@nuxt/kit': 3.16.1(magicast@0.3.5)
       '@nuxt/schema': 3.16.1
       '@nuxt/telemetry': 2.6.6(magicast@0.3.5)
-      '@nuxt/vite-builder': 3.16.1(@types/node@22.15.15)(eslint@8.57.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.37.0)(terser@5.39.0)(typescript@5.8.3)(vue-tsc@2.2.10(typescript@5.8.3))(vue@3.5.13(typescript@5.8.3))(yaml@2.7.0)
+      '@nuxt/vite-builder': 3.16.1(@types/node@24.5.0)(eslint@8.57.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.37.0)(terser@5.44.0)(typescript@5.8.3)(vue-tsc@2.2.10(typescript@5.8.3))(vue@3.5.13(typescript@5.8.3))(yaml@2.7.0)
       '@oxc-parser/wasm': 0.60.0
       '@unhead/vue': 2.0.2(vue@3.5.13(typescript@5.8.3))
       '@vue/shared': 3.5.13
@@ -18943,7 +19023,7 @@ snapshots:
       vue-router: 4.5.0(vue@3.5.13(typescript@5.8.3))
     optionalDependencies:
       '@parcel/watcher': 2.5.1
-      '@types/node': 22.15.15
+      '@types/node': 24.5.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -19354,12 +19434,12 @@ snapshots:
     optionalDependencies:
       postcss: 8.5.3
 
-  postcss-load-config@6.0.1(jiti@2.4.2)(postcss@8.5.3)(yaml@2.7.0):
+  postcss-load-config@6.0.1(jiti@2.4.2)(postcss@8.5.6)(yaml@2.7.0):
     dependencies:
       lilconfig: 3.1.3
     optionalDependencies:
       jiti: 2.4.2
-      postcss: 8.5.3
+      postcss: 8.5.6
       yaml: 2.7.0
 
   postcss-merge-longhand@7.0.4(postcss@8.5.3):
@@ -19510,11 +19590,19 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
+  postcss@8.5.6:
+    dependencies:
+      nanoid: 3.3.11
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+
   prelude-ls@1.2.1: {}
 
   prettier@2.8.8: {}
 
   prettier@3.5.3: {}
+
+  prettier@3.6.2: {}
 
   pretty-bytes@6.1.1: {}
 
@@ -19579,6 +19667,11 @@ snapshots:
   pump@3.0.2:
     dependencies:
       end-of-stream: 1.4.4
+      once: 1.4.0
+
+  pump@3.0.3:
+    dependencies:
+      end-of-stream: 1.4.5
       once: 1.4.0
 
   punycode@2.3.1: {}
@@ -20181,12 +20274,12 @@ snapshots:
     dependencies:
       bn.js: 5.2.1
 
-  rollup-plugin-typescript2@0.36.0(rollup@4.40.2)(typescript@5.8.3):
+  rollup-plugin-typescript2@0.36.0(rollup@4.50.2)(typescript@5.8.3):
     dependencies:
       '@rollup/pluginutils': 4.2.1
       find-cache-dir: 3.3.2
       fs-extra: 10.1.0
-      rollup: 4.40.2
+      rollup: 4.50.2
       semver: 7.7.1
       tslib: 2.8.1
       typescript: 5.8.3
@@ -20256,30 +20349,31 @@ snapshots:
       '@rollup/rollup-win32-x64-msvc': 4.38.0
       fsevents: 2.3.3
 
-  rollup@4.40.2:
+  rollup@4.50.2:
     dependencies:
-      '@types/estree': 1.0.7
+      '@types/estree': 1.0.8
     optionalDependencies:
-      '@rollup/rollup-android-arm-eabi': 4.40.2
-      '@rollup/rollup-android-arm64': 4.40.2
-      '@rollup/rollup-darwin-arm64': 4.40.2
-      '@rollup/rollup-darwin-x64': 4.40.2
-      '@rollup/rollup-freebsd-arm64': 4.40.2
-      '@rollup/rollup-freebsd-x64': 4.40.2
-      '@rollup/rollup-linux-arm-gnueabihf': 4.40.2
-      '@rollup/rollup-linux-arm-musleabihf': 4.40.2
-      '@rollup/rollup-linux-arm64-gnu': 4.40.2
-      '@rollup/rollup-linux-arm64-musl': 4.40.2
-      '@rollup/rollup-linux-loongarch64-gnu': 4.40.2
-      '@rollup/rollup-linux-powerpc64le-gnu': 4.40.2
-      '@rollup/rollup-linux-riscv64-gnu': 4.40.2
-      '@rollup/rollup-linux-riscv64-musl': 4.40.2
-      '@rollup/rollup-linux-s390x-gnu': 4.40.2
-      '@rollup/rollup-linux-x64-gnu': 4.40.2
-      '@rollup/rollup-linux-x64-musl': 4.40.2
-      '@rollup/rollup-win32-arm64-msvc': 4.40.2
-      '@rollup/rollup-win32-ia32-msvc': 4.40.2
-      '@rollup/rollup-win32-x64-msvc': 4.40.2
+      '@rollup/rollup-android-arm-eabi': 4.50.2
+      '@rollup/rollup-android-arm64': 4.50.2
+      '@rollup/rollup-darwin-arm64': 4.50.2
+      '@rollup/rollup-darwin-x64': 4.50.2
+      '@rollup/rollup-freebsd-arm64': 4.50.2
+      '@rollup/rollup-freebsd-x64': 4.50.2
+      '@rollup/rollup-linux-arm-gnueabihf': 4.50.2
+      '@rollup/rollup-linux-arm-musleabihf': 4.50.2
+      '@rollup/rollup-linux-arm64-gnu': 4.50.2
+      '@rollup/rollup-linux-arm64-musl': 4.50.2
+      '@rollup/rollup-linux-loong64-gnu': 4.50.2
+      '@rollup/rollup-linux-ppc64-gnu': 4.50.2
+      '@rollup/rollup-linux-riscv64-gnu': 4.50.2
+      '@rollup/rollup-linux-riscv64-musl': 4.50.2
+      '@rollup/rollup-linux-s390x-gnu': 4.50.2
+      '@rollup/rollup-linux-x64-gnu': 4.50.2
+      '@rollup/rollup-linux-x64-musl': 4.50.2
+      '@rollup/rollup-openharmony-arm64': 4.50.2
+      '@rollup/rollup-win32-arm64-msvc': 4.50.2
+      '@rollup/rollup-win32-ia32-msvc': 4.50.2
+      '@rollup/rollup-win32-x64-msvc': 4.50.2
       fsevents: 2.3.3
 
   rpc-websockets@7.11.2:
@@ -20877,6 +20971,8 @@ snapshots:
 
   tapable@2.2.1: {}
 
+  tapable@2.2.3: {}
+
   tar-stream@3.1.7:
     dependencies:
       b4a: 1.6.7
@@ -20896,17 +20992,24 @@ snapshots:
 
   terser-webpack-plugin@5.3.14(webpack@5.98.0):
     dependencies:
-      '@jridgewell/trace-mapping': 0.3.25
+      '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.3.2
       serialize-javascript: 6.0.2
-      terser: 5.39.0
+      terser: 5.44.0
       webpack: 5.98.0
 
   terser@5.39.0:
     dependencies:
       '@jridgewell/source-map': 0.3.6
       acorn: 8.14.1
+      commander: 2.20.3
+      source-map-support: 0.5.21
+
+  terser@5.44.0:
+    dependencies:
+      '@jridgewell/source-map': 0.3.11
+      acorn: 8.15.0
       commander: 2.20.3
       source-map-support: 0.5.21
 
@@ -21050,7 +21153,7 @@ snapshots:
 
   tsscmp@1.0.6: {}
 
-  tsup@8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.3)(typescript@4.9.5)(yaml@2.7.0):
+  tsup@8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.6)(typescript@4.9.5)(yaml@2.7.0):
     dependencies:
       bundle-require: 5.1.0(esbuild@0.25.1)
       cac: 6.7.14
@@ -21060,7 +21163,7 @@ snapshots:
       esbuild: 0.25.1
       joycon: 3.1.1
       picocolors: 1.1.1
-      postcss-load-config: 6.0.1(jiti@2.4.2)(postcss@8.5.3)(yaml@2.7.0)
+      postcss-load-config: 6.0.1(jiti@2.4.2)(postcss@8.5.6)(yaml@2.7.0)
       resolve-from: 5.0.0
       rollup: 4.38.0
       source-map: 0.8.0-beta.0
@@ -21071,7 +21174,7 @@ snapshots:
     optionalDependencies:
       '@microsoft/api-extractor': 7.43.0(@types/node@20.17.27)
       '@swc/core': 1.11.16(@swc/helpers@0.5.15)
-      postcss: 8.5.3
+      postcss: 8.5.6
       typescript: 4.9.5
     transitivePeerDependencies:
       - jiti
@@ -21079,7 +21182,7 @@ snapshots:
       - tsx
       - yaml
 
-  tsup@8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.3)(typescript@5.8.2)(yaml@2.7.0):
+  tsup@8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.6)(typescript@5.8.2)(yaml@2.7.0):
     dependencies:
       bundle-require: 5.1.0(esbuild@0.25.1)
       cac: 6.7.14
@@ -21089,7 +21192,7 @@ snapshots:
       esbuild: 0.25.1
       joycon: 3.1.1
       picocolors: 1.1.1
-      postcss-load-config: 6.0.1(jiti@2.4.2)(postcss@8.5.3)(yaml@2.7.0)
+      postcss-load-config: 6.0.1(jiti@2.4.2)(postcss@8.5.6)(yaml@2.7.0)
       resolve-from: 5.0.0
       rollup: 4.38.0
       source-map: 0.8.0-beta.0
@@ -21100,7 +21203,7 @@ snapshots:
     optionalDependencies:
       '@microsoft/api-extractor': 7.43.0(@types/node@20.17.27)
       '@swc/core': 1.11.16(@swc/helpers@0.5.15)
-      postcss: 8.5.3
+      postcss: 8.5.6
       typescript: 5.8.2
     transitivePeerDependencies:
       - jiti
@@ -21108,7 +21211,7 @@ snapshots:
       - tsx
       - yaml
 
-  tsup@8.4.0(@microsoft/api-extractor@7.43.0(@types/node@22.15.15))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.3)(typescript@4.9.5)(yaml@2.7.0):
+  tsup@8.4.0(@microsoft/api-extractor@7.43.0(@types/node@24.5.0))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.6)(typescript@4.9.5)(yaml@2.7.0):
     dependencies:
       bundle-require: 5.1.0(esbuild@0.25.1)
       cac: 6.7.14
@@ -21118,7 +21221,7 @@ snapshots:
       esbuild: 0.25.1
       joycon: 3.1.1
       picocolors: 1.1.1
-      postcss-load-config: 6.0.1(jiti@2.4.2)(postcss@8.5.3)(yaml@2.7.0)
+      postcss-load-config: 6.0.1(jiti@2.4.2)(postcss@8.5.6)(yaml@2.7.0)
       resolve-from: 5.0.0
       rollup: 4.38.0
       source-map: 0.8.0-beta.0
@@ -21127,9 +21230,9 @@ snapshots:
       tinyglobby: 0.2.12
       tree-kill: 1.2.2
     optionalDependencies:
-      '@microsoft/api-extractor': 7.43.0(@types/node@22.15.15)
+      '@microsoft/api-extractor': 7.43.0(@types/node@24.5.0)
       '@swc/core': 1.11.16(@swc/helpers@0.5.15)
-      postcss: 8.5.3
+      postcss: 8.5.6
       typescript: 4.9.5
     transitivePeerDependencies:
       - jiti
@@ -21137,7 +21240,7 @@ snapshots:
       - tsx
       - yaml
 
-  tsup@8.4.0(@microsoft/api-extractor@7.43.0(@types/node@22.15.15))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.3)(typescript@5.8.2)(yaml@2.7.0):
+  tsup@8.4.0(@microsoft/api-extractor@7.43.0(@types/node@24.5.0))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.6)(typescript@5.8.2)(yaml@2.7.0):
     dependencies:
       bundle-require: 5.1.0(esbuild@0.25.1)
       cac: 6.7.14
@@ -21147,7 +21250,7 @@ snapshots:
       esbuild: 0.25.1
       joycon: 3.1.1
       picocolors: 1.1.1
-      postcss-load-config: 6.0.1(jiti@2.4.2)(postcss@8.5.3)(yaml@2.7.0)
+      postcss-load-config: 6.0.1(jiti@2.4.2)(postcss@8.5.6)(yaml@2.7.0)
       resolve-from: 5.0.0
       rollup: 4.38.0
       source-map: 0.8.0-beta.0
@@ -21156,9 +21259,9 @@ snapshots:
       tinyglobby: 0.2.12
       tree-kill: 1.2.2
     optionalDependencies:
-      '@microsoft/api-extractor': 7.43.0(@types/node@22.15.15)
+      '@microsoft/api-extractor': 7.43.0(@types/node@24.5.0)
       '@swc/core': 1.11.16(@swc/helpers@0.5.15)
-      postcss: 8.5.3
+      postcss: 8.5.6
       typescript: 5.8.2
     transitivePeerDependencies:
       - jiti
@@ -21171,34 +21274,34 @@ snapshots:
       tslib: 1.14.1
       typescript: 4.9.5
 
-  turbo-darwin-64@2.5.3:
+  turbo-darwin-64@2.5.6:
     optional: true
 
-  turbo-darwin-arm64@2.5.3:
+  turbo-darwin-arm64@2.5.6:
     optional: true
 
-  turbo-linux-64@2.5.3:
+  turbo-linux-64@2.5.6:
     optional: true
 
-  turbo-linux-arm64@2.5.3:
+  turbo-linux-arm64@2.5.6:
     optional: true
 
   turbo-stream@2.4.0: {}
 
-  turbo-windows-64@2.5.3:
+  turbo-windows-64@2.5.6:
     optional: true
 
-  turbo-windows-arm64@2.5.3:
+  turbo-windows-arm64@2.5.6:
     optional: true
 
-  turbo@2.5.3:
+  turbo@2.5.6:
     optionalDependencies:
-      turbo-darwin-64: 2.5.3
-      turbo-darwin-arm64: 2.5.3
-      turbo-linux-64: 2.5.3
-      turbo-linux-arm64: 2.5.3
-      turbo-windows-64: 2.5.3
-      turbo-windows-arm64: 2.5.3
+      turbo-darwin-64: 2.5.6
+      turbo-darwin-arm64: 2.5.6
+      turbo-linux-64: 2.5.6
+      turbo-linux-arm64: 2.5.6
+      turbo-windows-64: 2.5.6
+      turbo-windows-arm64: 2.5.6
 
   tweetnacl-util@0.15.1: {}
 
@@ -21290,7 +21393,9 @@ snapshots:
 
   undici-types@6.19.8: {}
 
-  undici-types@6.21.0:
+  undici-types@6.21.0: {}
+
+  undici-types@7.12.0:
     optional: true
 
   unenv@2.0.0-rc.15:
@@ -21476,27 +21581,27 @@ snapshots:
       - utf-8-validate
       - zod
 
-  vite-dev-rpc@1.0.7(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)):
+  vite-dev-rpc@1.0.7(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)):
     dependencies:
       birpc: 2.3.0
-      vite: 6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
-      vite-hot-client: 2.0.4(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
+      vite: 6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)
+      vite-hot-client: 2.0.4(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))
 
-  vite-hot-client@0.2.4(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)):
+  vite-hot-client@0.2.4(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)):
     dependencies:
-      vite: 6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
+      vite: 6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)
 
-  vite-hot-client@2.0.4(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)):
+  vite-hot-client@2.0.4(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)):
     dependencies:
-      vite: 6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
+      vite: 6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)
 
-  vite-node@3.0.9(@types/node@22.15.15)(terser@5.39.0):
+  vite-node@3.0.9(@types/node@24.5.0)(terser@5.44.0):
     dependencies:
       cac: 6.7.14
       debug: 4.4.0
       es-module-lexer: 1.6.0
       pathe: 2.0.3
-      vite: 5.4.19(@types/node@22.15.15)(terser@5.39.0)
+      vite: 5.4.20(@types/node@24.5.0)(terser@5.44.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -21508,7 +21613,7 @@ snapshots:
       - supports-color
       - terser
 
-  vite-plugin-checker@0.9.1(eslint@8.57.1)(optionator@0.9.4)(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue-tsc@2.2.10(typescript@5.8.3)):
+  vite-plugin-checker@0.9.1(eslint@8.57.1)(optionator@0.9.4)(typescript@5.8.3)(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(vue-tsc@2.2.10(typescript@5.8.3)):
     dependencies:
       '@babel/code-frame': 7.26.2
       chokidar: 4.0.3
@@ -21518,7 +21623,7 @@ snapshots:
       strip-ansi: 7.1.0
       tiny-invariant: 1.3.3
       tinyglobby: 0.2.12
-      vite: 6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
+      vite: 6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)
       vscode-uri: 3.1.0
     optionalDependencies:
       eslint: 8.57.1
@@ -21526,23 +21631,23 @@ snapshots:
       typescript: 5.8.3
       vue-tsc: 2.2.10(typescript@5.8.3)
 
-  vite-plugin-compression@0.5.1(vite@5.4.19(@types/node@22.15.15)(terser@5.39.0)):
+  vite-plugin-compression@0.5.1(vite@5.4.20(@types/node@24.5.0)(terser@5.44.0)):
     dependencies:
       chalk: 4.1.2
       debug: 4.4.0
       fs-extra: 10.1.0
-      vite: 5.4.19(@types/node@22.15.15)(terser@5.39.0)
+      vite: 5.4.20(@types/node@24.5.0)(terser@5.44.0)
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-css-injected-by-js@3.5.2(vite@5.4.19(@types/node@22.15.15)(terser@5.39.0)):
+  vite-plugin-css-injected-by-js@3.5.2(vite@5.4.20(@types/node@24.5.0)(terser@5.44.0)):
     dependencies:
-      vite: 5.4.19(@types/node@22.15.15)(terser@5.39.0)
+      vite: 5.4.20(@types/node@24.5.0)(terser@5.44.0)
 
-  vite-plugin-dts@3.9.1(@types/node@22.15.15)(rollup@4.40.2)(typescript@5.8.3)(vite@5.4.19(@types/node@22.15.15)(terser@5.39.0)):
+  vite-plugin-dts@3.9.1(@types/node@24.5.0)(rollup@4.50.2)(typescript@5.8.3)(vite@5.4.20(@types/node@24.5.0)(terser@5.44.0)):
     dependencies:
-      '@microsoft/api-extractor': 7.43.0(@types/node@22.15.15)
-      '@rollup/pluginutils': 5.1.4(rollup@4.40.2)
+      '@microsoft/api-extractor': 7.43.0(@types/node@24.5.0)
+      '@rollup/pluginutils': 5.1.4(rollup@4.50.2)
       '@vue/language-core': 1.8.27(typescript@5.8.3)
       debug: 4.4.0
       kolorist: 1.8.0
@@ -21550,21 +21655,21 @@ snapshots:
       typescript: 5.8.3
       vue-tsc: 1.8.27(typescript@5.8.3)
     optionalDependencies:
-      vite: 5.4.19(@types/node@22.15.15)(terser@5.39.0)
+      vite: 5.4.20(@types/node@24.5.0)(terser@5.44.0)
     transitivePeerDependencies:
       - '@types/node'
       - rollup
       - supports-color
 
-  vite-plugin-eslint@1.8.1(eslint@8.57.1)(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)):
+  vite-plugin-eslint@1.8.1(eslint@8.57.1)(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)):
     dependencies:
       '@rollup/pluginutils': 4.2.1
       '@types/eslint': 8.56.12
       eslint: 8.57.1
       rollup: 2.79.2
-      vite: 6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
+      vite: 6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)
 
-  vite-plugin-inspect@11.0.0(@nuxt/kit@3.16.1(magicast@0.3.5))(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)):
+  vite-plugin-inspect@11.0.0(@nuxt/kit@3.16.1(magicast@0.3.5))(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)):
     dependencies:
       ansis: 3.17.0
       debug: 4.4.0
@@ -21574,46 +21679,46 @@ snapshots:
       perfect-debounce: 1.0.0
       sirv: 3.0.1
       unplugin-utils: 0.2.4
-      vite: 6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
-      vite-dev-rpc: 1.0.7(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
+      vite: 6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)
+      vite-dev-rpc: 1.0.7(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))
     optionalDependencies:
       '@nuxt/kit': 3.16.1(magicast@0.3.5)
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-vue-tracer@0.1.3(vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3)):
+  vite-plugin-vue-tracer@0.1.3(vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3)):
     dependencies:
       estree-walker: 3.0.3
       exsolve: 1.0.4
       magic-string: 0.30.17
       pathe: 2.0.3
       source-map-js: 1.2.1
-      vite: 6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
+      vite: 6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0)
       vue: 3.5.13(typescript@5.8.3)
 
-  vite@5.4.19(@types/node@22.15.15)(terser@5.39.0):
+  vite@5.4.20(@types/node@24.5.0)(terser@5.44.0):
     dependencies:
       esbuild: 0.21.5
-      postcss: 8.5.3
-      rollup: 4.40.2
+      postcss: 8.5.6
+      rollup: 4.50.2
     optionalDependencies:
-      '@types/node': 22.15.15
+      '@types/node': 24.5.0
       fsevents: 2.3.3
-      terser: 5.39.0
+      terser: 5.44.0
 
-  vite@6.3.5(@types/node@22.15.15)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0):
+  vite@6.3.6(@types/node@24.5.0)(jiti@2.4.2)(terser@5.44.0)(yaml@2.7.0):
     dependencies:
       esbuild: 0.25.1
       fdir: 6.4.4(picomatch@4.0.2)
       picomatch: 4.0.2
-      postcss: 8.5.3
-      rollup: 4.40.2
+      postcss: 8.5.6
+      rollup: 4.50.2
       tinyglobby: 0.2.13
     optionalDependencies:
-      '@types/node': 22.15.15
+      '@types/node': 24.5.0
       fsevents: 2.3.3
       jiti: 2.4.2
-      terser: 5.39.0
+      terser: 5.44.0
       yaml: 2.7.0
 
   vlq@2.0.4: {}
@@ -21680,7 +21785,7 @@ snapshots:
     dependencies:
       makeerror: 1.0.12
 
-  watchpack@2.4.2:
+  watchpack@2.4.4:
     dependencies:
       glob-to-regexp: 0.4.1
       graceful-fs: 4.2.11
@@ -21697,21 +21802,21 @@ snapshots:
 
   webidl-conversions@4.0.2: {}
 
-  webpack-sources@3.2.3: {}
+  webpack-sources@3.3.3: {}
 
   webpack-virtual-modules@0.6.2: {}
 
   webpack@5.98.0:
     dependencies:
       '@types/eslint-scope': 3.7.7
-      '@types/estree': 1.0.7
+      '@types/estree': 1.0.8
       '@webassemblyjs/ast': 1.14.1
       '@webassemblyjs/wasm-edit': 1.14.1
       '@webassemblyjs/wasm-parser': 1.14.1
-      acorn: 8.14.1
+      acorn: 8.15.0
       browserslist: 4.24.4
       chrome-trace-event: 1.0.4
-      enhanced-resolve: 5.18.1
+      enhanced-resolve: 5.18.3
       es-module-lexer: 1.7.0
       eslint-scope: 5.1.1
       events: 3.3.0
@@ -21722,10 +21827,10 @@ snapshots:
       mime-types: 2.1.35
       neo-async: 2.6.2
       schema-utils: 4.3.2
-      tapable: 2.2.1
+      tapable: 2.2.3
       terser-webpack-plugin: 5.3.14(webpack@5.98.0)
-      watchpack: 2.4.2
-      webpack-sources: 3.2.3
+      watchpack: 2.4.4
+      webpack-sources: 3.3.3
     transitivePeerDependencies:
       - '@swc/core'
       - esbuild

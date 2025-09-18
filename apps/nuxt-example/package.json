@@ -10,10 +10,10 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@aptos-labs/ts-sdk": "^3.1.2",
+    "@aptos-labs/ts-sdk": "^5.0.0",
     "@aptos-labs/wallet-adapter-core": "workspace:*",
     "@aptos-labs/wallet-adapter-vue": "workspace:*",
-    "@aptos-labs/wallet-standard": "^0.5.0",
+    "@aptos-labs/wallet-standard": "^0.5.2",
     "@nuxtjs/google-fonts": "^3.2.0",
     "buffer": "^6.0.3",
     "class-variance-authority": "^0.7.0",

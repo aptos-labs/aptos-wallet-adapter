@@ -136,7 +136,7 @@ export default function Home() {
                 </AlertDescription>
               </Alert>
               {/* Transaction actions are disabled on mainnet */}
-              <SingleSigner dappNetwork={Network.MAINNET} />
+              <SingleSigner dappNetwork={Network.MAINNET} wallet={wallet} />
             </>
           )}
           {network?.name === Network.TESTNET && (
@@ -160,7 +160,7 @@ export default function Home() {
                   provider={provider}
                 />
               </>
-              <SingleSigner dappNetwork={Network.TESTNET} />
+              <SingleSigner dappNetwork={Network.TESTNET} wallet={wallet} />
             </>
           )}
           {network?.name === Network.DEVNET && (
@@ -173,7 +173,20 @@ export default function Home() {
                   wallet={wallet}
                 />
               )}
-              <SingleSigner dappNetwork={Network.DEVNET} />
+              <SingleSigner dappNetwork={Network.DEVNET} wallet={wallet} />
+            </>
+          )}
+          {network?.name === Network.LOCAL && (
+            <>
+              {/* Fund + balance account is enabled for non-Aptos wallets */}
+              {!wallet.isAptosNativeWallet && (
+                <AccountBalance
+                  account={account}
+                  network={network}
+                  wallet={wallet}
+                />
+              )}
+              <SingleSigner dappNetwork={Network.LOCAL} wallet={wallet} />
             </>
           )}
         </>

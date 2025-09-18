@@ -11,6 +11,7 @@ import {
 import {
   InputTransactionData,
   useWallet,
+  AdapterWallet,
 } from "@aptos-labs/wallet-adapter-react";
 
 import { isSendableNetwork, aptosClient } from "@/utils";
@@ -20,6 +21,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { useToast } from "../ui/use-toast";
 import { TransactionHash } from "../TransactionHash";
 import { useUSDCBalance } from "@/contexts/USDCBalanceContext";
+import { getTransactionSubmitter } from "@/utils/transactionSubmitter";
 
 /**
  * Generate a nonce with alphanumeric characters only.
@@ -31,9 +33,10 @@ function generateNonce() {
 
 export type SingleSignerProps = {
   dappNetwork: Network;
+  wallet: AdapterWallet;
 };
 
-export function SingleSigner({ dappNetwork }: SingleSignerProps) {
+export function SingleSigner({ dappNetwork, wallet }: SingleSignerProps) {
   const { toast } = useToast();
   const {
     connected,
@@ -42,6 +45,7 @@ export function SingleSigner({ dappNetwork }: SingleSignerProps) {
     signMessageAndVerify,
     signMessage,
     signTransaction,
+    signAndSubmitTransaction,
   } = useWallet();
   const { globalTransactionInProgress, setGlobalTransactionInProgress } =
     useUSDCBalance();
@@ -151,56 +155,28 @@ export function SingleSigner({ dappNetwork }: SingleSignerProps) {
 
     setGlobalTransactionInProgress(true);
     try {
-      const rawTransaction = await aptosClient(
-        network
-      ).transaction.build.simple({
+      const transactionInput: InputTransactionData = {
         data: transactionData,
         options: {
           maxGasAmount: 2000,
         },
         sender: account.address,
-        withFeePayer: dappNetwork === Network.TESTNET ? true : false,
-      });
+      };
 
-      const response = await signTransaction({
-        transactionOrPayload: rawTransaction,
-      });
-
-      let sponsorAuthenticator: AccountAuthenticator | undefined;
-      if (dappNetwork === Network.TESTNET) {
-        const sponsorPrivateKey = new Ed25519PrivateKey(
-          PrivateKey.formatPrivateKey(
-            process.env
-              .NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY as string,
-            PrivateKeyVariants.Ed25519
-          )
-        );
-        const sponsor = Account.fromPrivateKey({
-          privateKey: sponsorPrivateKey,
-        });
-        sponsorAuthenticator = aptosClient(network).transaction.signAsFeePayer({
-          signer: sponsor,
-          transaction: rawTransaction,
-        });
+      // If is testnet, and is not a native aptos wallet,we use gas station to sponsor the transaction
+      if (!wallet.isAptosNativeWallet && dappNetwork === Network.TESTNET) {
+        transactionInput.transactionSubmitter = getTransactionSubmitter();
       }
 
-      const txnSubmitted = await aptosClient(network).transaction.submit.simple(
-        {
-          transaction: rawTransaction,
-          senderAuthenticator: response.authenticator,
-          feePayerAuthenticator: sponsorAuthenticator,
-        }
-      );
+      const txn = await signAndSubmitTransaction(transactionInput);
 
       await aptosClient(network).waitForTransaction({
-        transactionHash: txnSubmitted.hash,
+        transactionHash: txn.hash,
       });
 
       toast({
         title: "Success",
-        description: (
-          <TransactionHash hash={txnSubmitted.hash} network={network} />
-        ),
+        description: <TransactionHash hash={txn.hash} network={network} />,
       });
 
       void aptBalance.refetch();

@@ -729,9 +729,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       this.recordEvent("sign_and_submit_transaction");
 
       // We'll submit ourselves if a custom transaction submitter has been provided.
-      const shouldUseTxnSubmitter =
-        this._dappConfig?.transactionSubmitter !== undefined ||
-        transactionInput.transactionSubmitter !== undefined;
+      const shouldUseTxnSubmitter = !!(
+        this._dappConfig?.transactionSubmitter ||
+        transactionInput.transactionSubmitter
+      );
 
       if (
         this._wallet.features["aptos:signAndSubmitTransaction"] &&
@@ -870,7 +871,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         };
       } // dapp sends a transaction data input (i.e InputTransactionData), which is supported by the wallet standard at signTransaction version 1.1.0
       else if (
-        this._wallet.features["aptos:signTransaction"]?.version === "1.1"
+        this._wallet.features["aptos:signTransaction"]?.version === "1.1.0"
       ) {
         // convert input to standard expected input
         const signTransactionV1_1StandardInput: AptosSignTransactionInputV1_1 =

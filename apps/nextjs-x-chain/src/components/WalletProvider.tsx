@@ -9,8 +9,8 @@ import { useClaimSecretKey } from "@/hooks/useClaimSecretKey";
 import { useAutoConnect } from "./AutoConnectProvider";
 import { useToast } from "./ui/use-toast";
 
-setupAutomaticEthereumWalletDerivation({ defaultNetwork: Network.TESTNET });
-setupAutomaticSolanaWalletDerivation({ defaultNetwork: Network.TESTNET });
+setupAutomaticEthereumWalletDerivation({ defaultNetwork: Network.DEVNET });
+setupAutomaticSolanaWalletDerivation({ defaultNetwork: Network.DEVNET });
 
 let dappImageURI: string | undefined;
 if (typeof window !== "undefined") {
@@ -28,7 +28,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     <AptosWalletAdapterProvider
       autoConnect={autoConnect}
       dappConfig={{
-        network: Network.TESTNET,
+        network: Network.DEVNET,
         aptosApiKeys: {
           testnet: process.env.NEXT_PUBLIC_APTOS_API_KEY_TESNET,
           devnet: process.env.NEXT_PUBLIC_APTOS_API_KEY_DEVNET,

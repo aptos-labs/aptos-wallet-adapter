@@ -1,5 +1,39 @@
 # @aptos-labs/cross-chain-core
 
+## 5.3.0
+
+### Minor Changes
+
+- c066004: Bump wallet-standard and siwa packages
+
+### Patch Changes
+
+- Updated dependencies [c066004]
+  - @aptos-labs/derived-wallet-ethereum@0.7.0
+  - @aptos-labs/derived-wallet-solana@0.7.0
+  - @aptos-labs/wallet-adapter-core@7.3.0
+
+## 5.2.0
+
+### Minor Changes
+
+- b6b9fc8: Fix DAA signing message and bump aptos ts-sdk version to 5.0.0
+
+### Patch Changes
+
+- Updated dependencies [b6b9fc8]
+  - @aptos-labs/derived-wallet-ethereum@0.6.0
+  - @aptos-labs/derived-wallet-solana@0.6.0
+  - @aptos-labs/wallet-adapter-core@7.2.0
+
+## 5.1.2
+
+### Patch Changes
+
+- 14a9cd1: Remove unneeded dependencies from cross chain core package
+- Updated dependencies [545b26d]
+  - @aptos-labs/wallet-adapter-core@7.1.2
+
 ## 5.1.1
 
 ### Patch Changes
