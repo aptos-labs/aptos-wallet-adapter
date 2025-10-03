@@ -89,6 +89,7 @@ import {
   removeLocalStorage,
   setLocalStorage,
 } from "./utils";
+import { isAptosConnectWallet } from "./utils/walletSelector";
 import {
   aptosStandardSupportedWalletList,
   crossChainStandardSupportedWalletList,
@@ -734,9 +735,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         transactionInput.transactionSubmitter
       );
 
+      // if Aptos Connect wallet, use one-click signing
+      const isAptosConnect = isAptosConnectWallet(this._wallet);
+
       if (
         this._wallet.features["aptos:signAndSubmitTransaction"] &&
-        !shouldUseTxnSubmitter
+        !shouldUseTxnSubmitter &&
+        !isAptosConnect
       ) {
         // check for backward compatibility. before version 1.1.0 the standard expected
         // AnyRawTransaction input so the adapter built the transaction before sending it to the wallet
