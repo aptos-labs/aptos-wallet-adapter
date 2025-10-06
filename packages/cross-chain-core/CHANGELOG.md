@@ -1,5 +1,12 @@
 # @aptos-labs/cross-chain-core
 
+## 5.4.1
+
+### Patch Changes
+
+- Updated dependencies [3d5d42b]
+  - @aptos-labs/wallet-adapter-core@7.5.0
+
 ## 5.4.0
 
 ### Minor Changes
