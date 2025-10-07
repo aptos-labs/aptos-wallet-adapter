@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-ant-design",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "Aptos Wallet Adapter ant-design",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
