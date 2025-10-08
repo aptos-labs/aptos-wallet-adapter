@@ -115,7 +115,7 @@ export type AdapterNotDetectedWallet = Omit<
 };
 
 export interface DappConfig {
-  network: Network | 'shelbydevnet';
+  network: Network | 'shelbynet';
   /**
    * If provided, the wallet adapter will submit transactions using the provided
    * transaction submitter rather than via the wallet.
