@@ -38,10 +38,6 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
           dappId: "57fa42a9-29c6-4f1e-939c-4eefa36d9ff5",
           dappImageURI,
         },
-        mizuwallet: {
-          manifestURL:
-            "https://assets.mz.xyz/static/config/mizuwallet-connect-manifest.json",
-        },
         crossChainWallets: true,
       }}
       onError={(error) => {
