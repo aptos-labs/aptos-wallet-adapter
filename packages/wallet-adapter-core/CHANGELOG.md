@@ -1,5 +1,17 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.5.1
+
+### Patch Changes
+
+- 8c935c8: Renamed shelbydevnet to shelbynet
+
+## 7.5.0
+
+### Minor Changes
+
+- 3d5d42b: Added support for shelbydevnet
+
 ## 7.4.0
 
 ### Minor Changes

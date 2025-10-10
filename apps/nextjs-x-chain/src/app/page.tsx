@@ -104,7 +104,7 @@ export default function Home() {
             {network?.name ? ` — ${network.name}` : ""}
           </h1>
           <a
-            href="https://github.com/aptos-labs/aptos-wallet-adapter/tree/main/apps/nextjs-x-chain-example"
+            href="https://github.com/aptos-labs/aptos-wallet-adapter/tree/main/apps/nextjs-x-chain"
             target="_blank"
             rel="noreferrer"
             className="text-sm text-muted-foreground underline underline-offset-2 font-medium leading-none"
