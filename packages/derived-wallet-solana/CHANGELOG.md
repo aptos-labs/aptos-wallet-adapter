@@ -1,5 +1,13 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.8.1
+
+### Patch Changes
+
+- 7407a71: Upgrade aptos ts-sdk package
+- Updated dependencies [7407a71]
+  - @aptos-labs/derived-wallet-base@0.8.1
+
 ## 0.8.0
 
 ### Minor Changes
