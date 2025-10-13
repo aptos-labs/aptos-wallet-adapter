@@ -1,5 +1,15 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.6.0
+
+### Minor Changes
+
+- 1c631ee: add Gate Wallet support
+
+### Patch Changes
+
+- 7407a71: Upgrade aptos ts-sdk package
+
 ## 7.5.1
 
 ### Patch Changes

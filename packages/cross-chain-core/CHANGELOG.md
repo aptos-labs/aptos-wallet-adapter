@@ -1,5 +1,16 @@
 # @aptos-labs/cross-chain-core
 
+## 5.4.3
+
+### Patch Changes
+
+- 7407a71: Upgrade aptos ts-sdk package
+- Updated dependencies [1c631ee]
+- Updated dependencies [7407a71]
+  - @aptos-labs/wallet-adapter-core@7.6.0
+  - @aptos-labs/derived-wallet-ethereum@0.8.1
+  - @aptos-labs/derived-wallet-solana@0.8.1
+
 ## 5.4.2
 
 ### Patch Changes
