@@ -135,7 +135,7 @@ function ConnectWalletDialog({
             {hasAptosConnectWallets ? (
               <>
                 <span>Log in or sign up</span>
-                <span>with Social + Aptos Connect</span>
+                <span>with Social + Petra Web</span>
               </>
             ) : (
               "Connect Wallet"
@@ -155,7 +155,7 @@ function ConnectWalletDialog({
             <p className="flex gap-1 justify-center items-center text-muted-foreground text-sm">
               Learn more about{" "}
               <AboutAptosConnect.Trigger className="flex gap-1 py-3 items-center text-foreground">
-                Aptos Connect <ArrowRight size={16} />
+                Petra Web <ArrowRight size={16} />
               </AboutAptosConnect.Trigger>
             </p>
             <AptosPrivacyPolicy className="flex flex-col items-center py-1">
@@ -252,7 +252,7 @@ function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
           <ArrowLeft />
         </Button>
         <DialogTitle className="leading-snug text-base text-center">
-          About Aptos Connect
+          About Petra Web
         </DialogTitle>
       </DialogHeader>
 

@@ -160,7 +160,7 @@ const WalletSelector = () => (
   <AboutAptosConnect renderEducationScreen={renderEducationScreen}>
     <p>
       Learn more about{" "}
-      <AboutAptosConnect.Trigger>Aptos Connect</AboutAptosConnect.Trigger>
+      <AboutAptosConnect.Trigger>Petra Web</AboutAptosConnect.Trigger>
     </p>
   </AboutAptosConnect>
 );
@@ -170,7 +170,7 @@ const renderEducationScreen = (screen: AboutAptosConnectEducationScreen) => {
     <>
       <div>
         <button onClick={screen.cancel}>Cancel</button>
-        <h2>About Aptos Connect</h2>
+        <h2>About Petra Web</h2>
       </div>
       <screen.Graphic />
       <screen.Title />

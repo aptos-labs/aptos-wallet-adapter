@@ -35,7 +35,7 @@ PoweredBy.displayName = "AptosPrivacyPolicy.PoweredBy";
 
 /**
  * A headless component for rendering the Aptos Labs privacy policy disclaimer
- * that should be placed under the Aptos Connect login options.
+ * that should be placed under the Petra Web login options.
  */
 export const AptosPrivacyPolicy = Object.assign(Root, {
   Disclaimer,

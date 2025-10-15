@@ -224,7 +224,7 @@ export default function WalletsModal({
             {hasAptosConnectWallets ? (
               <>
                 <span>Log in or sign up</span>
-                <span>with Social + Aptos Connect</span>
+                <span>with Social + Petra Web</span>
               </>
             ) : (
               "Connect Wallet"
@@ -297,7 +297,7 @@ export default function WalletsModal({
                     appearance: "none",
                   }}
                 >
-                  Aptos Connect <ArrowForward sx={{ height: 16, width: 16 }} />
+                  Petra Web <ArrowForward sx={{ height: 16, width: 16 }} />
                 </Box>
               </Typography>
 
@@ -465,7 +465,7 @@ function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
           <ArrowBack />
         </IconButton>
         <Typography variant="body1" component="h2" width="100%" align="center">
-          About Aptos Connect
+          About Petra Web
         </Typography>
       </Box>
 

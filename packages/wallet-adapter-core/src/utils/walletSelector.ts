@@ -51,15 +51,15 @@ export function truncateAddress(address: string | undefined) {
   return `${address.slice(0, 6)}...${address.slice(-5)}`;
 }
 
-/** Returns `true` if the provided wallet is an Aptos Connect wallet. */
+/** Returns `true` if the provided wallet is an Petra Web wallet. */
 export function isAptosConnectWallet(wallet: WalletInfo | AdapterWallet) {
   if (!wallet.url) return false;
   return wallet.url.startsWith(APTOS_CONNECT_BASE_URL);
 }
 
 /**
- * Partitions the `wallets` array so that Aptos Connect wallets are grouped separately from the rest.
- * Aptos Connect is a web wallet that uses social login to create accounts on the blockchain.
+ * Partitions the `wallets` array so that Petra Web wallets are grouped separately from the rest.
+ * Petra Web is a web wallet that uses social login to create accounts on the blockchain.
  */
 export function getAptosConnectWallets(
   wallets: ReadonlyArray<AdapterWallet | AdapterNotDetectedWallet>,
@@ -72,7 +72,7 @@ export function getAptosConnectWallets(
 }
 
 export interface WalletSortingOptions {
-  /** An optional function for sorting Aptos Connect wallets. */
+  /** An optional function for sorting Petra Web wallets. */
   sortAptosConnectWallets?: (a: AdapterWallet, b: AdapterWallet) => number;
   /** An optional function for sorting wallets that are currently installed or loadable. */
   sortAvailableWallets?: (
@@ -90,7 +90,7 @@ export interface WalletSortingOptions {
  * Partitions the `wallets` array into three distinct groups:
  *
  * `aptosConnectWallets` - Wallets that use social login to create accounts on
- * the blockchain via Aptos Connect.
+ * the blockchain via Petra Web.
  *
  * `availableWallets` - Wallets that are currently installed or loadable by the client.
  *
