@@ -1,20 +1,13 @@
-import { WalletSortingOptions } from "@aptos-labs/wallet-adapter-react";
-import { Breakpoint } from "@mui/material";
 import { useState } from "react";
 import WalletButton from "./WalletButton";
 import WalletsModal from "./WalletModel";
-
-export interface WalletConnectorProps extends WalletSortingOptions {
-  networkSupport?: string;
-  handleNavigate?: () => void;
-  /** The max width of the wallet selector modal. Defaults to `xs`. */
-  modalMaxWidth?: Breakpoint;
-}
+import { WalletConnectorProps } from "./types";
 
 export function WalletConnector({
   networkSupport,
   handleNavigate,
   modalMaxWidth,
+  crossChainWallets,
   ...walletSortingOptions
 }: WalletConnectorProps) {
   const [modalOpen, setModalOpen] = useState(false);
@@ -32,6 +25,7 @@ export function WalletConnector({
         modalOpen={modalOpen}
         networkSupport={networkSupport}
         modalMaxWidth={modalMaxWidth}
+        crossChainWallets={crossChainWallets}
         {...walletSortingOptions}
       />
     </>
