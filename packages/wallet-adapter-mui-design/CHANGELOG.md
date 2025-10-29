@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 5.2.0
+
+### Minor Changes
+
+- 7cfd347: Add cross chain wallet support to MUI wallet selector
+
 ## 5.1.3
 
 ### Patch Changes
