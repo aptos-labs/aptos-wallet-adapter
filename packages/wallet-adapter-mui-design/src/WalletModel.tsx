@@ -20,6 +20,8 @@ import {
   ListItem,
   ListItemText,
   Stack,
+  Tab,
+  Tabs,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -32,14 +34,19 @@ import {
   ExpandMore,
   LanOutlined as LanOutlinedIcon,
 } from "@mui/icons-material";
-import { useState } from "react";
-import { WalletConnectorProps } from "./WalletConnector";
+import { SyntheticEvent, useState } from "react";
+import { WalletConnectorProps } from "./types";
 
 interface WalletsModalProps
   extends Pick<WalletConnectorProps, "networkSupport" | "modalMaxWidth">,
     WalletSortingOptions {
   handleClose: () => void;
   modalOpen: boolean;
+  // Make crossChainWallets optional - if not provided, shows single list
+  crossChainWallets?: {
+    evm: boolean;
+    solana: boolean;
+  };
 }
 
 export default function WalletsModal({
@@ -47,20 +54,130 @@ export default function WalletsModal({
   modalOpen,
   networkSupport,
   modalMaxWidth,
+  crossChainWallets,
   ...walletSortingOptions
 }: WalletsModalProps): JSX.Element {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
+  const [tabValue, setTabValue] = useState<number>(0);
+
+  const handleTabChange = (event: SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
 
   const { wallets = [], notDetectedWallets = [] } = useWallet();
 
   const { aptosConnectWallets, availableWallets, installableWallets } =
     groupAndSortWallets(
       [...wallets, ...notDetectedWallets],
-      walletSortingOptions,
+      walletSortingOptions
     );
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
+
+  // Determine if we should show tabs (cross-chain mode)
+  const crossChainMode =
+    crossChainWallets && (crossChainWallets.evm || crossChainWallets.solana);
+
+  // Group wallets by chain if in cross-chain mode
+  const { evmWallets, solanaWallets, aptosWallets } = crossChainMode
+    ? availableWallets.reduce<{
+        evmWallets: AdapterWallet[];
+        solanaWallets: AdapterWallet[];
+        aptosWallets: AdapterWallet[];
+      }>(
+        (acc, wallet) => {
+          if (wallet.name.includes("Ethereum")) {
+            acc.evmWallets.push(wallet);
+          } else if (wallet.name.includes("Solana")) {
+            acc.solanaWallets.push(wallet);
+          } else {
+            acc.aptosWallets.push(wallet);
+          }
+          return acc;
+        },
+        { evmWallets: [], solanaWallets: [], aptosWallets: [] }
+      )
+    : { evmWallets: [], solanaWallets: [], aptosWallets: availableWallets };
+
+  const {
+    evmInstallableWallets,
+    solanaInstallableWallets,
+    aptosInstallableWallets,
+  } = crossChainMode
+    ? installableWallets.reduce<{
+        evmInstallableWallets: AdapterNotDetectedWallet[];
+        solanaInstallableWallets: AdapterNotDetectedWallet[];
+        aptosInstallableWallets: AdapterNotDetectedWallet[];
+      }>(
+        (acc, wallet) => {
+          if (wallet.name.includes("Ethereum")) {
+            acc.evmInstallableWallets.push(wallet);
+          } else if (wallet.name.includes("Solana")) {
+            acc.solanaInstallableWallets.push(wallet);
+          } else {
+            acc.aptosInstallableWallets.push(wallet);
+          }
+          return acc;
+        },
+        {
+          evmInstallableWallets: [],
+          solanaInstallableWallets: [],
+          aptosInstallableWallets: [],
+        }
+      )
+    : {
+        evmInstallableWallets: [],
+        solanaInstallableWallets: [],
+        aptosInstallableWallets: installableWallets,
+      };
+
+  // Calculate dynamic indices for tabs
+  const tabsConfig = crossChainMode
+    ? [
+        { key: "aptos", label: "Aptos", enabled: true },
+        { key: "solana", label: "Solana", enabled: crossChainWallets!.solana },
+        { key: "evm", label: "Ethereum", enabled: crossChainWallets!.evm },
+      ].filter((tab) => tab.enabled)
+    : [];
+
+  const getTabIndex = (key: string) =>
+    tabsConfig.findIndex((tab) => tab.key === key);
+
+  // Render wallet list for a specific chain
+  const renderWalletList = (
+    wallets: AdapterWallet[],
+    installableWallets: AdapterNotDetectedWallet[]
+  ) => (
+    <>
+      {wallets.map((wallet) => (
+        <WalletRow key={wallet.name} wallet={wallet} onConnect={handleClose} />
+      ))}
+      {!!installableWallets.length && (
+        <>
+          <Button
+            variant="text"
+            size="small"
+            onClick={() => setExpanded((prev) => !prev)}
+            endIcon={<ExpandMore sx={{ height: "20px", width: "20px" }} />}
+          >
+            More Wallets
+          </Button>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <Stack sx={{ gap: 1 }}>
+              {installableWallets.map((wallet) => (
+                <WalletRow
+                  key={wallet.name}
+                  wallet={wallet}
+                  onConnect={handleClose}
+                />
+              ))}
+            </Stack>
+          </Collapse>
+        </>
+      )}
+    </>
+  );
 
   return (
     <Dialog
@@ -92,6 +209,7 @@ export default function WalletsModal({
         >
           <CloseIcon />
         </IconButton>
+
         <AboutAptosConnect renderEducationScreen={renderEducationScreen}>
           <Typography
             align="center"
@@ -112,6 +230,7 @@ export default function WalletsModal({
               "Connect Wallet"
             )}
           </Typography>
+
           {networkSupport && (
             <Box
               sx={{
@@ -139,6 +258,7 @@ export default function WalletsModal({
               </Typography>
             </Box>
           )}
+
           {hasAptosConnectWallets && (
             <Stack gap={1}>
               {aptosConnectWallets.map((wallet) => (
@@ -213,40 +333,45 @@ export default function WalletsModal({
               <Divider sx={{ color: grey[400], pt: 2 }}>Or</Divider>
             </Stack>
           )}
-          <Stack sx={{ gap: 1 }}>
-            {availableWallets.map((wallet) => (
-              <WalletRow
-                key={wallet.name}
-                wallet={wallet}
-                onConnect={handleClose}
-              />
-            ))}
-            {!!installableWallets.length && (
-              <>
-                <Button
-                  variant="text"
-                  size="small"
-                  onClick={() => setExpanded((prev) => !prev)}
-                  endIcon={
-                    <ExpandMore sx={{ height: "20px", width: "20px" }} />
-                  }
-                >
-                  More Wallets
-                </Button>
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                  <Stack sx={{ gap: 1 }}>
-                    {installableWallets.map((wallet) => (
-                      <WalletRow
-                        key={wallet.name}
-                        wallet={wallet}
-                        onConnect={handleClose}
-                      />
-                    ))}
-                  </Stack>
-                </Collapse>
-              </>
-            )}
-          </Stack>
+
+          {/* Conditional rendering: Tabs for cross-chain, simple list for single-chain */}
+          {crossChainMode ? (
+            <>
+              <Tabs
+                value={tabValue}
+                onChange={handleTabChange}
+                textColor="secondary"
+                indicatorColor="secondary"
+                variant="fullWidth"
+                aria-label="cross chain wallets tabs"
+              >
+                {tabsConfig.map((tab, index) => (
+                  <Tab key={tab.key} label={tab.label} {...a11yProps(index)} />
+                ))}
+              </Tabs>
+
+              <TabPanel value={tabValue} index={getTabIndex("aptos")}>
+                {renderWalletList(aptosWallets, aptosInstallableWallets)}
+              </TabPanel>
+
+              {crossChainWallets!.solana && (
+                <TabPanel value={tabValue} index={getTabIndex("solana")}>
+                  {renderWalletList(solanaWallets, solanaInstallableWallets)}
+                </TabPanel>
+              )}
+
+              {crossChainWallets!.evm && (
+                <TabPanel value={tabValue} index={getTabIndex("evm")}>
+                  {renderWalletList(evmWallets, evmInstallableWallets)}
+                </TabPanel>
+              )}
+            </>
+          ) : (
+            // Simple list mode (original WalletModel behavior)
+            <Stack sx={{ gap: 1 }}>
+              {renderWalletList(availableWallets, installableWallets)}
+            </Stack>
+          )}
         </AboutAptosConnect>
       </Stack>
     </Dialog>
@@ -431,4 +556,33 @@ function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
       </Box>
     </>
   );
+}
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Stack sx={{ gap: 1 }}>{children}</Stack>}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
 }

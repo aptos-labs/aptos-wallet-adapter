@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { WalletSelector as ShadcnWalletSelector } from "@/components/WalletSelector";
+import { WalletConnector as MuiWalletSelector } from "@aptos-labs/wallet-adapter-mui-design";
 
 export function WalletSelection() {
   const { autoConnect, setAutoConnect } = useAutoConnect();
@@ -13,6 +14,11 @@ export function WalletSelection() {
         <div className="flex flex-wrap gap-6 pt-6 pb-12 justify-between items-center">
           <div className="flex flex-col gap-4 items-center">
             <ShadcnWalletSelector />
+          </div>
+          <div className="flex flex-col gap-4 items-center">
+            <MuiWalletSelector
+              crossChainWallets={{ solana: true, evm: true }}
+            />
           </div>
         </div>
         <label className="flex items-center gap-4 cursor-pointer">
