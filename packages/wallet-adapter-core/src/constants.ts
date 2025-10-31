@@ -20,8 +20,8 @@ export const ChainIdToAnsSupportedNetworkMap: Record<string, string> = {
 };
 
 /** The base URL for all Petra Web wallets. */
-export const APTOS_CONNECT_BASE_URL = "https://aptosconnect.app";
+export const APTOS_CONNECT_BASE_URL = "https://web.petra.app";
 
 /** The URL to the Petra Web account page if the user is signed in to Petra Web. */
 export const APTOS_CONNECT_ACCOUNT_URL =
-  "https://aptosconnect.app/dashboard/main-account";
+  "https://web.petra.app/dashboard/main-account";
