@@ -16,7 +16,7 @@ import { Web3Graphic } from "../graphics/Web3Graphic";
 import { HeadlessComponentProps, createHeadlessComponent } from "./utils";
 
 export const EXPLORE_ECOSYSTEM_URL =
-  "https://aptosfoundation.org/ecosystem/projects/all";
+  "https://aptosnetwork.com/ecosystem/directory/category/defi";
 
 const AboutAptosConnectContext = createContext<{
   screenIndex: number;
@@ -43,7 +43,7 @@ const educationScreens = [
     }),
     Description: createHeadlessComponent("EducationScreen.Description", "p", {
       children:
-        "Aptos Connect is a web3 wallet that uses a Social Login to create accounts on the Aptos blockchain.",
+        "Petra Web is a web3 wallet that uses a Social Login to create accounts on the Aptos blockchain.",
     }),
   },
   {
@@ -64,7 +64,7 @@ const educationScreens = [
     Description: createHeadlessComponent("EducationScreen.Description", "p", {
       children: (
         <>
-          Aptos Connect lets you take one account across any application built
+          Petra Web lets you take one account across any application built
           on Aptos.{" "}
           <a
             href={EXPLORE_ECOSYSTEM_URL}
@@ -207,7 +207,7 @@ const Trigger = createHeadlessComponent(
 
 /**
  * A headless component for rendering education screens that explain the basics
- * of Aptos Connect and web3 wallets.
+ * of Petra Web and web3 wallets.
  */
 export const AboutAptosConnect = Object.assign(Root, {
   Trigger,

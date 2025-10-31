@@ -136,7 +136,7 @@ export function WalletSelector({
             icon={<ArrowLeftOutlined />}
             onClick={screen.cancel}
           />
-          <div className="wallet-modal-title">About Aptos Connect</div>
+          <div className="wallet-modal-title">About Petra Web</div>
         </div>
       }
     >
@@ -197,7 +197,7 @@ export function WalletSelector({
               {hasAptosConnectWallets ? (
                 <>
                   <span>Log in or sign up</span>
-                  <span>with Social + Aptos Connect</span>
+                  <span>with Social + Petra Web</span>
                 </>
               ) : (
                 "Connect Wallet"
@@ -219,7 +219,7 @@ export function WalletSelector({
                   <p className="about-aptos-connect-trigger-wrapper">
                     Learn more about{" "}
                     <AboutAptosConnect.Trigger className="about-aptos-connect-trigger">
-                      Aptos Connect
+                      Petra Web
                       <ArrowRightOutlined />
                     </AboutAptosConnect.Trigger>
                   </p>
