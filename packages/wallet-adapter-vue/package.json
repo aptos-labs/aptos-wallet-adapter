@@ -46,7 +46,7 @@
     "@aptos-labs/wallet-adapter-core": "5.0.0"
   },
   "devDependencies": {
-    "vite": "5.4.20",
+    "vite": "5.4.21",
     "vite-plugin-dts": "3.9.1",
     "@vitejs/plugin-vue": "5.2.4",
     "eslint": "^8.57.1",
