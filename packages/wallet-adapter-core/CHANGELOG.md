@@ -1,5 +1,13 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.7.0
+
+### Minor Changes
+
+- d2d308c: Bump @aptos-connect/wallet-adapter-plugin to 2.7.0
+- b3474b3: Update AC dns to web.petra.app
+- 499e03e: Rename aptos connect to petra web
+
 ## 7.6.0
 
 ### Minor Changes
