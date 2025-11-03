@@ -81,7 +81,7 @@ const WalletRow = ({ wallet, onConnect }: WalletItemProps) => (
 ```tsx
 import { WalletItem, WalletItemProps } from "@aptos-labs/wallet-adapter-react";
 
-const AptosConnectWalletRow = ({ wallet, onConnect }: WalletItemProps) => {
+const PetraWebWalletRow = ({ wallet, onConnect }: WalletItemProps) => {
   return (
     <WalletItem wallet={wallet} onConnect={onConnect}>
       <WalletItem.ConnectButton>
@@ -148,24 +148,23 @@ This is a headless component that renders an anchor element that links to the Ap
 
 This is a headless component that renders the "Powered by Aptos Labs" text with an SVG graphic between "Powered by" and "Aptos Labs". While the wrapper element does accept a `className` prop, it does NOT accept an `asChild` or `children` prop like the other headless components.
 
-### `AboutAptosConnect`
+### `AboutPetraWeb`
 
 ```tsx
 import {
-  AboutAptosConnect,
-  AboutAptosConnectEducationScreen,
+  AboutPetraWeb,
+  AboutPetraWebEducationScreen,
 } from "@aptos-labs/wallet-adapter-react";
 
 const WalletSelector = () => (
-  <AboutAptosConnect renderEducationScreen={renderEducationScreen}>
+  <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
     <p>
-      Learn more about{" "}
-      <AboutAptosConnect.Trigger>Petra Web</AboutAptosConnect.Trigger>
+      Learn more about <AboutPetraWeb.Trigger>Petra Web</AboutPetraWeb.Trigger>
     </p>
-  </AboutAptosConnect>
+  </AboutPetraWeb>
 );
 
-const renderEducationScreen = (screen: AboutAptosConnectEducationScreen) => {
+const renderEducationScreen = (screen: AboutPetraWebEducationScreen) => {
   return (
     <>
       <div>
@@ -191,22 +190,22 @@ const renderEducationScreen = (screen: AboutAptosConnectEducationScreen) => {
 };
 ```
 
-![shadcn/ui AboutAptosConnect.Trigger](./images/edu-trigger.png)
+![shadcn/ui AboutPetraWeb.Trigger](./images/edu-trigger.png)
 ![shadcn/ui Education Screen 1](./images/edu-screen-1.png)
 ![shadcn/ui Education Screen 2](./images/edu-screen-2.png)
 ![shadcn/ui Education Screen 3](./images/edu-screen-3.png)
 
-#### `AboutAptosConnect`
+#### `AboutPetraWeb`
 
 This component sets up a React context for managing the education screen flow, but does not render a wrapper element. Each of the education screens follow the same structure so the `renderEducationScreen` prop is a function that provides a `screen` object that you can map to a `ReactNode`. Each education screen will be rendered via your provided mapping function.
 
-#### `AboutAptosConnect.Trigger`
+#### `AboutPetraWeb.Trigger`
 
-This is a headless component that renders a button element that when clicked will trigger the education screen flow. When triggered, the children of the `AboutAptosConnect` component will be replaced with the current education screen so `AboutAptosConnect` should wrap the entire body of your wallet selector UI.
+This is a headless component that renders a button element that when clicked will trigger the education screen flow. When triggered, the children of the `AboutPetraWeb` component will be replaced with the current education screen so `AboutPetraWeb` should wrap the entire body of your wallet selector UI.
 
-#### `AboutAptosConnectEducationScreen`
+#### `AboutPetraWebEducationScreen`
 
-This is the type of the `screen` object that is provided by `AboutAptosConnect`'s `renderEducationScreen` prop. You can map this object to a `ReactNode` to render each education screen. Each `screen` object has the following properties:
+This is the type of the `screen` object that is provided by `AboutPetraWeb`'s `renderEducationScreen` prop. You can map this object to a `ReactNode` to render each education screen. Each `screen` object has the following properties:
 
 - `Graphic` - A component that renders an SVG to illustrate the idea of the current screen.
 - `Title` - A headless component that renders the title of the current screen.
@@ -252,39 +251,39 @@ A function that truncates the provided wallet address at the middle with an elli
 const truncatedAddress = truncateAddress(account?.address);
 ```
 
-### `isAptosConnectWallet`
+### `isPetraWebWallet`
 
-A function that returns `true` if the provided wallet is an Aptos Connect wallet.
+A function that returns `true` if the provided wallet is an Petra Web wallet.
 
 ```ts
-const isWalletAptosConnect = isAptosConnectWallet(wallet);
+const isWalletPetraWeb = isPetraWebWallet(wallet);
 ```
 
-### `getAptosConnectWallets`
+### `getPetraWebWallets`
 
-A function that partitions the `wallets` array so that Aptos Connect wallets are grouped separately from the rest. This is a specific implementation of the `partitionWallets` function mentioned above.
+A function that partitions the `wallets` array so that Petra Web wallets are grouped separately from the rest. This is a specific implementation of the `partitionWallets` function mentioned above.
 
 ```ts
-const { aptosConnectWallets, otherWallets } = getAptosConnectWallets(wallets);
+const { petraWebWallets, otherWallets } = getPetraWebWallets(wallets);
 ```
 
 ### `groupAndSortWallets`
 
 A function that partitions the `wallets` array into three distinct groups:
 
-- `aptosConnectWallets` - Wallets that use social login to create accounts on
-  the blockchain via Aptos Connect.
+- `petraWebWallets` - Wallets that use social login to create accounts on
+  the blockchain via Petra Web.
 - `availableWallets` - Wallets that are currently installed or loadable by the client.
 - `installableWallets` - Wallets that are NOT current installed or loadable and
   require the client to install a browser extension first.
 
 Additionally, these wallet groups can be sorted by passing the following sort functions via the `options` argument:
 
-- `sortAptosConnectWallets`
+- `sortPetraWebWallets`
 - `sortAvailableWallets`
 - `sortInstallableWallets`
 
 ```ts
-const { aptosConnectWallets, availableWallets, installableWallets } =
+const { petraWebWallets, availableWallets, installableWallets } =
   groupAndSortWallets(wallets, walletSortingOptions);
 ```

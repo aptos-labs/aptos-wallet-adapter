@@ -1,6 +1,10 @@
 import { WalletInfo } from "./types";
 import { AdapterNotDetectedWallet, AdapterWallet } from "../WalletCore";
-import { APTOS_CONNECT_BASE_URL, WalletReadyState } from "../constants";
+import {
+  APTOS_CONNECT_BASE_URL,
+  PETRA_WEB_BASE_URL,
+  WalletReadyState,
+} from "../constants";
 import { isRedirectable } from "./helpers";
 
 /**
@@ -51,15 +55,29 @@ export function truncateAddress(address: string | undefined) {
   return `${address.slice(0, 6)}...${address.slice(-5)}`;
 }
 
-/** Returns `true` if the provided wallet is an Petra Web wallet. */
+/**
+ * Returns `true` if the provided wallet is an Aptos Connect wallet.
+ *
+ * @deprecated Use {@link isPetraWebWallet} instead.
+ */
 export function isAptosConnectWallet(wallet: WalletInfo | AdapterWallet) {
+  return isPetraWebWallet(wallet);
+}
+
+/** Returns `true` if the provided wallet is a Petra Web wallet. */
+export function isPetraWebWallet(wallet: WalletInfo | AdapterWallet) {
   if (!wallet.url) return false;
-  return wallet.url.startsWith(APTOS_CONNECT_BASE_URL);
+  return (
+    wallet.url.startsWith(APTOS_CONNECT_BASE_URL) ||
+    wallet.url.startsWith(PETRA_WEB_BASE_URL)
+  );
 }
 
 /**
- * Partitions the `wallets` array so that Petra Web wallets are grouped separately from the rest.
+ * Partitions the `wallets` array so that Aptos Connect wallets are grouped separately from the rest.
  * Petra Web is a web wallet that uses social login to create accounts on the blockchain.
+ *
+ * @deprecated Use {@link getPetraWebWallets} instead.
  */
 export function getAptosConnectWallets(
   wallets: ReadonlyArray<AdapterWallet | AdapterNotDetectedWallet>,
@@ -71,9 +89,29 @@ export function getAptosConnectWallets(
   return { aptosConnectWallets: defaultWallets, otherWallets: moreWallets };
 }
 
+/**
+ * Partitions the `wallets` array so that Petra Web wallets are grouped separately from the rest.
+ * Petra Web is a web wallet that uses social login to create accounts on the blockchain.
+ */
+export function getPetraWebWallets(
+  wallets: ReadonlyArray<AdapterWallet | AdapterNotDetectedWallet>,
+) {
+  const { defaultWallets, moreWallets } = partitionWallets(
+    wallets,
+    isPetraWebWallet,
+  );
+  return { petraWebWallets: defaultWallets, otherWallets: moreWallets };
+}
+
 export interface WalletSortingOptions {
-  /** An optional function for sorting Petra Web wallets. */
+  /**
+   * An optional function for sorting Aptos Connect wallets.
+   *
+   * @deprecated Use {@link sortPetraWebWallets} instead.
+   */
   sortAptosConnectWallets?: (a: AdapterWallet, b: AdapterWallet) => number;
+  /** An optional function for sorting Petra Web wallets. */
+  sortPetraWebWallets?: (a: AdapterWallet, b: AdapterWallet) => number;
   /** An optional function for sorting wallets that are currently installed or loadable. */
   sortAvailableWallets?: (
     a: AdapterWallet | AdapterNotDetectedWallet,
@@ -89,7 +127,9 @@ export interface WalletSortingOptions {
 /**
  * Partitions the `wallets` array into three distinct groups:
  *
- * `aptosConnectWallets` - Wallets that use social login to create accounts on
+ * `aptosConnectWallets` - Use {@link petraWebWallets} instead.
+ *
+ * `petraWebWallets` - Wallets that use social login to create accounts on
  * the blockchain via Petra Web.
  *
  * `availableWallets` - Wallets that are currently installed or loadable by the client.
@@ -103,11 +143,15 @@ export function groupAndSortWallets(
   wallets: ReadonlyArray<AdapterWallet | AdapterNotDetectedWallet>,
   options?: WalletSortingOptions,
 ) {
-  const { aptosConnectWallets, otherWallets } = getAptosConnectWallets(wallets);
+  const { aptosConnectWallets } = getAptosConnectWallets(wallets);
+  const { otherWallets, petraWebWallets } = getPetraWebWallets(wallets);
   const { defaultWallets, moreWallets } = partitionWallets(otherWallets);
 
   if (options?.sortAptosConnectWallets) {
     aptosConnectWallets.sort(options.sortAptosConnectWallets);
+  }
+  if (options?.sortPetraWebWallets) {
+    petraWebWallets.sort(options.sortPetraWebWallets);
   }
   if (options?.sortAvailableWallets) {
     defaultWallets.sort(options.sortAvailableWallets);
@@ -117,8 +161,10 @@ export function groupAndSortWallets(
   }
 
   return {
-    /** Wallets that use social login to create an account on the blockchain */
+    /** @deprecated Use {@link petraWebWallets} instead. */
     aptosConnectWallets,
+    /** Wallets that use social login to create an account on the blockchain */
+    petraWebWallets,
     /** Wallets that are currently installed or loadable. */
     availableWallets: defaultWallets,
     /** Wallets that are NOT currently installed or loadable. */

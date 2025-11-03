@@ -70,7 +70,7 @@ export default function WalletsModal({
   const { aptosConnectWallets, availableWallets, installableWallets } =
     groupAndSortWallets(
       [...wallets, ...notDetectedWallets],
-      walletSortingOptions
+      walletSortingOptions,
     );
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
@@ -96,7 +96,7 @@ export default function WalletsModal({
           }
           return acc;
         },
-        { evmWallets: [], solanaWallets: [], aptosWallets: [] }
+        { evmWallets: [], solanaWallets: [], aptosWallets: [] },
       )
     : { evmWallets: [], solanaWallets: [], aptosWallets: availableWallets };
 
@@ -124,7 +124,7 @@ export default function WalletsModal({
           evmInstallableWallets: [],
           solanaInstallableWallets: [],
           aptosInstallableWallets: [],
-        }
+        },
       )
     : {
         evmInstallableWallets: [],
@@ -147,7 +147,7 @@ export default function WalletsModal({
   // Render wallet list for a specific chain
   const renderWalletList = (
     wallets: AdapterWallet[],
-    installableWallets: AdapterNotDetectedWallet[]
+    installableWallets: AdapterNotDetectedWallet[],
   ) => (
     <>
       {wallets.map((wallet) => (
