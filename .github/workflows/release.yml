@@ -56,6 +56,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY: ${{ secrets.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY }}
           NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY: ${{ secrets.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY }}
+          NEXT_PUBLIC_GAS_STATION_API_KEY: ${{ secrets.NEXT_PUBLIC_GAS_STATION_API_KEY }}
       - name: Deploy example dapps on Publish to npm
         if: steps.changesets.outputs.published == 'true' # Runs only if publishing happened
         run: |
