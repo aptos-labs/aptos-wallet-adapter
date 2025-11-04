@@ -1,5 +1,20 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 5.3.0
+
+### Minor Changes
+
+- d2d308c: Bump @aptos-connect/wallet-adapter-plugin to 2.7.0
+- b3474b3: Update AC dns to web.petra.app
+- 499e03e: Rename aptos connect to petra web
+
+### Patch Changes
+
+- Updated dependencies [d2d308c]
+- Updated dependencies [b3474b3]
+- Updated dependencies [499e03e]
+  - @aptos-labs/wallet-adapter-react@7.2.0
+
 ## 5.2.0
 
 ### Minor Changes

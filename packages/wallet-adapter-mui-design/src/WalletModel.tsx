@@ -70,7 +70,7 @@ export default function WalletsModal({
   const { aptosConnectWallets, availableWallets, installableWallets } =
     groupAndSortWallets(
       [...wallets, ...notDetectedWallets],
-      walletSortingOptions
+      walletSortingOptions,
     );
 
   const hasAptosConnectWallets = !!aptosConnectWallets.length;
@@ -96,7 +96,7 @@ export default function WalletsModal({
           }
           return acc;
         },
-        { evmWallets: [], solanaWallets: [], aptosWallets: [] }
+        { evmWallets: [], solanaWallets: [], aptosWallets: [] },
       )
     : { evmWallets: [], solanaWallets: [], aptosWallets: availableWallets };
 
@@ -124,7 +124,7 @@ export default function WalletsModal({
           evmInstallableWallets: [],
           solanaInstallableWallets: [],
           aptosInstallableWallets: [],
-        }
+        },
       )
     : {
         evmInstallableWallets: [],
@@ -147,7 +147,7 @@ export default function WalletsModal({
   // Render wallet list for a specific chain
   const renderWalletList = (
     wallets: AdapterWallet[],
-    installableWallets: AdapterNotDetectedWallet[]
+    installableWallets: AdapterNotDetectedWallet[],
   ) => (
     <>
       {wallets.map((wallet) => (
@@ -224,7 +224,7 @@ export default function WalletsModal({
             {hasAptosConnectWallets ? (
               <>
                 <span>Log in or sign up</span>
-                <span>with Social + Aptos Connect</span>
+                <span>with Social + Petra Web</span>
               </>
             ) : (
               "Connect Wallet"
@@ -297,7 +297,7 @@ export default function WalletsModal({
                     appearance: "none",
                   }}
                 >
-                  Aptos Connect <ArrowForward sx={{ height: 16, width: 16 }} />
+                  Petra Web <ArrowForward sx={{ height: 16, width: 16 }} />
                 </Box>
               </Typography>
 
@@ -465,7 +465,7 @@ function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
           <ArrowBack />
         </IconButton>
         <Typography variant="body1" component="h2" width="100%" align="center">
-          About Aptos Connect
+          About Petra Web
         </Typography>
       </Box>
 
