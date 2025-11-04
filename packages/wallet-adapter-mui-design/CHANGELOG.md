@@ -1,5 +1,13 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 5.3.1
+
+### Patch Changes
+
+- 19e7e2a: Deprecate aptos connect functions and constants in favor of petra web
+- Updated dependencies [19e7e2a]
+  - @aptos-labs/wallet-adapter-react@7.2.1
+
 ## 5.3.0
 
 ### Minor Changes
