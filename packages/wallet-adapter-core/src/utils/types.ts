@@ -37,7 +37,9 @@ export type AvailableWallets =
   | "Backpack"
   | "MSafe"
   | "Bitget Wallet"
-  | "Gate Wallet";
+  | "Gate Wallet"
+  | "Cosmostation Wallet"
+  ;
 
 type InputTransactionDataInner = {
   sender?: AccountAddressInput;
