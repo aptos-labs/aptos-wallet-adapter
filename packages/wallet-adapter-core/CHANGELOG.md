@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.7.1
+
+### Patch Changes
+
+- 19e7e2a: Deprecate aptos connect functions and constants in favor of petra web
+
 ## 7.7.0
 
 ### Minor Changes
