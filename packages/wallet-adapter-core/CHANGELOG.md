@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.8.0
+
+### Minor Changes
+
+- 2695a5d: Add Cosmostation wallet to registry
+
 ## 7.7.1
 
 ### Patch Changes
