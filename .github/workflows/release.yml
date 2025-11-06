@@ -63,3 +63,4 @@ jobs:
           pnpm run deploy:example
         env:
           GITHUB_TOKEN: ${{ steps.authenticate.outputs.token }}
+          NEXT_PUBLIC_GAS_STATION_API_KEY: ${{ secrets.NEXT_PUBLIC_GAS_STATION_API_KEY }}
