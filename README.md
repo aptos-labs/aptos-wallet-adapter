@@ -24,6 +24,7 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 - [MSafe](https://www.npmjs.com/package/@msafe/aptos-wallet-adapter)
 - [Bitget Wallet](https://web3.bitget.com)
 - [Backpack Wallet](https://backpack.app/)
+- [Cosmostation Wallet](https://chromewebstore.google.com/detail/cosmostation-wallet/fpkhgmpbidmiogeglndfbkegfdlnajnf)
 
 #### Develop Locally
 
