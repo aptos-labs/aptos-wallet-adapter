@@ -60,7 +60,7 @@ const mainSignerPrivateKey =
   process.env.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY ||
   "0x0000000000000000000000000000000000000000000000000000000000000000";
 const privateKey = new Ed25519PrivateKey(
-  PrivateKey.formatPrivateKey(mainSignerPrivateKey, PrivateKeyVariants.Ed25519),
+  PrivateKey.formatPrivateKey(mainSignerPrivateKey, PrivateKeyVariants.Ed25519)
 );
 const mainSigner = Account.fromPrivateKey({ privateKey });
 
@@ -69,7 +69,7 @@ const sponsorPrivateKey =
   process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY ||
   "0x0000000000000000000000000000000000000000000000000000000000000000";
 const feePayerPrivateKey = new Ed25519PrivateKey(
-  PrivateKey.formatPrivateKey(sponsorPrivateKey, PrivateKeyVariants.Ed25519),
+  PrivateKey.formatPrivateKey(sponsorPrivateKey, PrivateKeyVariants.Ed25519)
 );
 const sponsorAccount = Account.fromPrivateKey({
   privateKey: feePayerPrivateKey,
@@ -96,7 +96,7 @@ export default function Home() {
   }, [wallet]);
 
   return (
-    <main className="flex flex-col w-1/2 p-6 pb-12 md:px-8 gap-6">
+    <main className="flex flex-col w-full md:w-1/2 p-6 pb-12 md:px-8 gap-6">
       <div className="flex justify-between gap-6 pb-10">
         <div className="flex flex-col gap-2 md:gap-3">
           <h1 className="text-xl sm:text-3xl font-semibold tracking-tight">
