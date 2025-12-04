@@ -19,7 +19,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-vue-next": "0.396.0",
-    "nuxt": "^3.19.0",
+    "nuxt": "^3.20.1",
     "radix-vue": "^1.9.17",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
