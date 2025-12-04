@@ -1,5 +1,12 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.8.2
+
+### Patch Changes
+
+- 511427e: Add isInstance function to derived public keys
+- 511427e: Remove unused @aptos-labs/siwa
+
 ## 0.8.1
 
 ### Patch Changes
