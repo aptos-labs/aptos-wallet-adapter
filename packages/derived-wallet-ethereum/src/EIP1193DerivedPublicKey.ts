@@ -13,6 +13,7 @@ import {
   HexInput,
   Serializer,
   Signature,
+  PublicKey,
   VerifySignatureArgs,
 } from "@aptos-labs/ts-sdk";
 import { verifyMessage as verifyEthereumMessage } from "ethers";
@@ -135,4 +136,8 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
   }
 
   // endregion
+
+  public static isInstance(value: PublicKey): value is EIP1193DerivedPublicKey {
+    return "domain" in value && "ethereumAddress" in value && "authenticationFunction" in value;
+  }
 }
