@@ -15,6 +15,7 @@ import {
   Serializer,
   Signature,
   VerifySignatureArgs,
+  PublicKey,
 } from "@aptos-labs/ts-sdk";
 import { createSignInMessage as createSolanaSignInMessage } from "@solana/wallet-standard-util";
 import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
@@ -122,5 +123,9 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
       solanaPublicKey,
       authenticationFunction,
     });
+  }
+
+  public static isInstance(value: PublicKey): value is SolanaDerivedPublicKey {
+    return "domain" in value && "solanaPublicKey" in value && "authenticationFunction" in value;
   }
 }
