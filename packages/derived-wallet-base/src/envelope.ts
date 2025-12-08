@@ -9,7 +9,7 @@ import { StructuredMessage } from "./StructuredMessage";
 /**
  * Attempt to convert the specified chainId into a human-readable identifier.
  */
-function getChainName(chainId: number) {
+export function getChainName(chainId: number) {
   // Obtain the network name if available
   for (const [network, otherChainId] of Object.entries(NetworkToChainId)) {
     if (otherChainId === chainId) {
@@ -56,7 +56,7 @@ export function createStructuredMessageStatement({
  */
 export function createTransactionStatement(rawTransaction: AnyRawTransaction) {
   const entryFunctionName = getEntryFunctionName(
-    rawTransaction.rawTransaction.payload,
+    rawTransaction.rawTransaction.payload
   );
   const humanReadableEntryFunction = entryFunctionName
     ? ` ${entryFunctionName}`
