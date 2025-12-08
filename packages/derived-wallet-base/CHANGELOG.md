@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-base
 
+## 0.8.2
+
+### Patch Changes
+
+- e6e3f2e: Export getChainName() method
+
 ## 0.8.1
 
 ### Patch Changes
