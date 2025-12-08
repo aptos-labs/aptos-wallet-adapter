@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.9.0
+
+### Minor Changes
+
+- e6e3f2e: Add mobile support for Metamask wallet
+
 ## 7.8.0
 
 ### Minor Changes
