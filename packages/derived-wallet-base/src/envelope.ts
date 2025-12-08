@@ -56,7 +56,7 @@ export function createStructuredMessageStatement({
  */
 export function createTransactionStatement(rawTransaction: AnyRawTransaction) {
   const entryFunctionName = getEntryFunctionName(
-    rawTransaction.rawTransaction.payload
+    rawTransaction.rawTransaction.payload,
   );
   const humanReadableEntryFunction = entryFunctionName
     ? ` ${entryFunctionName}`

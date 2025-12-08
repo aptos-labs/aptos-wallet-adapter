@@ -138,6 +138,10 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
   // endregion
 
   public static isInstance(value: PublicKey): value is EIP1193DerivedPublicKey {
-    return "domain" in value && "ethereumAddress" in value && "authenticationFunction" in value;
+    return (
+      "domain" in value &&
+      "ethereumAddress" in value &&
+      "authenticationFunction" in value
+    );
   }
 }
