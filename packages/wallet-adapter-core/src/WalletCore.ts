@@ -554,7 +554,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           } else if (uninstalledWallet.name.includes("Metamask")) {
             // Metamask expects the raw URL as a path parameter
             // Format: https://link.metamask.io/dapp/aptos-labs.github.io
-            parameter = window.location.host;
+            parameter = window.location.href;
           } else {
             parameter = encodeURIComponent(window.location.href);
           }
