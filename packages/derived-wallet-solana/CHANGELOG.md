@@ -1,5 +1,16 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.9.0
+
+### Minor Changes
+
+- 518b72d: Export functions, support custom domain in create txn statement
+
+### Patch Changes
+
+- Updated dependencies [518b72d]
+  - @aptos-labs/derived-wallet-base@0.9.0
+
 ## 0.8.2
 
 ### Patch Changes

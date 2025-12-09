@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-base
 
+## 0.9.0
+
+### Minor Changes
+
+- 518b72d: Export functions, support custom domain in create txn statement
+
 ## 0.8.2
 
 ### Patch Changes

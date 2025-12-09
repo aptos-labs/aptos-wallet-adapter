@@ -1,5 +1,12 @@
 # @aptos-labs/derived-wallet-ethereum
 
+## 0.8.3
+
+### Patch Changes
+
+- Updated dependencies [518b72d]
+  - @aptos-labs/derived-wallet-base@0.9.0
+
 ## 0.8.2
 
 ### Patch Changes
