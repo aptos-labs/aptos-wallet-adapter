@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.9.2
+
+### Patch Changes
+
+- c0220f0: Fix Metamask deeplink parameter to use href instead of host
+
 ## 7.9.1
 
 ### Patch Changes
