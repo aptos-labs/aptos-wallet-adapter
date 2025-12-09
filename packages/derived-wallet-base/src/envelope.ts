@@ -59,7 +59,7 @@ export function createTransactionStatement(
   domain?: string
 ) {
   const entryFunctionName = getEntryFunctionName(
-    rawTransaction.rawTransaction.payload
+    rawTransaction.rawTransaction.payload,
   );
   const humanReadableEntryFunction = entryFunctionName
     ? ` ${entryFunctionName}`

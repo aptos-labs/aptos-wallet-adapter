@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.9.1
+
+### Patch Changes
+
+- 962b02f: Fix Metamask deeplink
+
 ## 7.9.0
 
 ### Minor Changes
