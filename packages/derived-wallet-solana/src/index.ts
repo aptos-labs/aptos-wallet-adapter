@@ -3,3 +3,4 @@ export * from "./signAptosMessage";
 export * from "./signAptosTransaction";
 export * from "./SolanaDerivedPublicKey";
 export * from "./SolanaDerivedWallet";
+export * from "./createSiwsEnvelope";

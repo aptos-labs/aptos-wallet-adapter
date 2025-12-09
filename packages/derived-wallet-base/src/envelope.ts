@@ -54,7 +54,10 @@ export function createStructuredMessageStatement({
  * Create a human-readable statement for the specified Aptos transaction,
  * suitable to be included into a "Sign in with ..." envelope.
  */
-export function createTransactionStatement(rawTransaction: AnyRawTransaction) {
+export function createTransactionStatement(
+  rawTransaction: AnyRawTransaction,
+  domain?: string
+) {
   const entryFunctionName = getEntryFunctionName(
     rawTransaction.rawTransaction.payload,
   );
@@ -66,5 +69,5 @@ export function createTransactionStatement(rawTransaction: AnyRawTransaction) {
   const chainName = getChainName(chainId);
   const onAptosChain = ` on Aptos blockchain (${chainName})`;
 
-  return `Please confirm you explicitly initiated this request from ${window.location.host}. You are approving to execute transaction${humanReadableEntryFunction}${onAptosChain}.`;
+  return `Please confirm you explicitly initiated this request from ${domain || window.location.host}. You are approving to execute transaction${humanReadableEntryFunction}${onAptosChain}.`;
 }

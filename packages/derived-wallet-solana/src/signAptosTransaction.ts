@@ -32,7 +32,7 @@ export interface SignAptosTransactionWithSolanaInput {
 }
 
 export async function signAptosTransactionWithSolana(
-  input: SignAptosTransactionWithSolanaInput,
+  input: SignAptosTransactionWithSolanaInput
 ) {
   const { solanaWallet, authenticationFunction, rawTransaction, domain } =
     input;
@@ -42,25 +42,19 @@ export async function signAptosTransactionWithSolana(
     throw new Error("Account not connected");
   }
 
-  const signingMessage = generateSigningMessageForTransaction(rawTransaction);
-  const message = AbstractedAccount.generateAccountAbstractionMessage(
-    signingMessage,
-    authenticationFunction,
+  const { siwsInput, signingMessageDigest } = createMessageForSolanaTransaction(
+    {
+      rawTransaction,
+      authenticationFunction,
+      solanaPublicKey,
+      domain,
+    }
   );
-
-  const signingMessageDigest = hashValues([message]);
-
-  const siwsInput = createSiwsEnvelopeForAptosTransaction({
-    solanaPublicKey,
-    rawTransaction,
-    signingMessageDigest,
-    domain,
-  });
 
   // Prioritize SIWS if available
   if (solanaWallet.signIn) {
     const response = await wrapSolanaUserResponse(
-      solanaWallet.signIn!(siwsInput),
+      solanaWallet.signIn!(siwsInput)
     );
     return mapUserResponse(response, (output): AccountAuthenticator => {
       if (output.signatureType && output.signatureType !== "ed25519") {
@@ -77,13 +71,13 @@ export async function signAptosTransactionWithSolana(
         solanaPublicKey,
         domain,
         authenticationFunction,
-        signingMessageDigest,
+        signingMessageDigest
       );
     });
   } else if (solanaWallet.signMessage) {
     // Fallback to signMessage if SIWS is not available
     const response = await wrapSolanaUserResponse(
-      solanaWallet.signMessage(createSignInMessage(siwsInput)),
+      solanaWallet.signMessage(createSignInMessage(siwsInput))
     );
     return mapUserResponse(response, (output): AccountAuthenticator => {
       // Solana signMessage standard always returns a Ed25519 signature type
@@ -94,23 +88,23 @@ export async function signAptosTransactionWithSolana(
         solanaPublicKey,
         domain,
         authenticationFunction,
-        signingMessageDigest,
+        signingMessageDigest
       );
     });
   } else {
     throw new Error(
-      `${solanaWallet.name} does not support SIWS or signMessage`,
+      `${solanaWallet.name} does not support SIWS or signMessage`
     );
   }
 }
 
 // A helper function to create an AccountAuthenticator from a Solana signature
-function createAccountAuthenticatorForSolanaTransaction(
+export function createAccountAuthenticatorForSolanaTransaction(
   signature: Ed25519Signature,
   solanaPublicKey: SolanaPublicKey,
   domain: string,
   authenticationFunction: string,
-  signingMessageDigest: Uint8Array,
+  signingMessageDigest: Uint8Array
 ): AccountAuthenticator {
   // Serialize the signature with the signature type as the first byte.
   const serializer = new Serializer();
@@ -121,13 +115,43 @@ function createAccountAuthenticatorForSolanaTransaction(
   // Serialize the abstract public key.
   const abstractPublicKey = new DerivableAbstractPublicKey(
     solanaPublicKey.toBase58(),
-    domain,
+    domain
   );
 
   return new AccountAuthenticatorAbstraction(
     authenticationFunction,
     signingMessageDigest,
     abstractSignature,
-    abstractPublicKey.bcsToBytes(),
+    abstractPublicKey.bcsToBytes()
   );
+}
+
+export interface CreateMessageForSolanaTransactionInput {
+  rawTransaction: AnyRawTransaction;
+  authenticationFunction: string;
+  solanaPublicKey: SolanaPublicKey;
+  domain: string;
+}
+// A helper function to create a message for a Solana transaction
+export function createMessageForSolanaTransaction(
+  input: CreateMessageForSolanaTransactionInput
+) {
+  const { rawTransaction, authenticationFunction, solanaPublicKey, domain } =
+    input;
+  const signingMessage = generateSigningMessageForTransaction(rawTransaction);
+  const message = AbstractedAccount.generateAccountAbstractionMessage(
+    signingMessage,
+    authenticationFunction
+  );
+
+  const signingMessageDigest = hashValues([message]);
+
+  const siwsInput = createSiwsEnvelopeForAptosTransaction({
+    solanaPublicKey,
+    rawTransaction,
+    signingMessageDigest,
+    domain,
+  });
+
+  return { siwsInput, signingMessageDigest };
 }

@@ -13,10 +13,10 @@ export interface CreateSiwsEnvelopeInput {
   domain: string;
 }
 
-function createSiwsEnvelope(
+export function createSiwsEnvelope(
   input: CreateSiwsEnvelopeInput & {
     statement: string;
-  },
+  }
 ): SolanaSignInInputWithRequiredFields {
   const { solanaPublicKey, signingMessageDigest, statement, domain } = input;
   const digestHex = Hex.fromHexInput(signingMessageDigest).toString();
@@ -34,7 +34,7 @@ function createSiwsEnvelope(
  * considered as valid signature on the Aptos blockchain for the provided message.
  */
 export function createSiwsEnvelopeForAptosStructuredMessage(
-  input: CreateSiwsEnvelopeInput & { structuredMessage: StructuredMessage },
+  input: CreateSiwsEnvelopeInput & { structuredMessage: StructuredMessage }
 ): SolanaSignInInputWithRequiredFields {
   const { structuredMessage, ...rest } = input;
   const statement = createStructuredMessageStatement(structuredMessage);
@@ -47,7 +47,7 @@ export function createSiwsEnvelopeForAptosStructuredMessage(
  * considered as valid signature on the Aptos blockchain for the provided transaction.
  */
 export function createSiwsEnvelopeForAptosTransaction(
-  input: CreateSiwsEnvelopeInput & { rawTransaction: AnyRawTransaction },
+  input: CreateSiwsEnvelopeInput & { rawTransaction: AnyRawTransaction }
 ): SolanaSignInInputWithRequiredFields {
   const { rawTransaction, ...rest } = input;
   const statement = createTransactionStatement(rawTransaction);
