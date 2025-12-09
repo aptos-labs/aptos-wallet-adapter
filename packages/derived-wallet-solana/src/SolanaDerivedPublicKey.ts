@@ -126,6 +126,10 @@ export class SolanaDerivedPublicKey extends AccountPublicKey {
   }
 
   public static isInstance(value: PublicKey): value is SolanaDerivedPublicKey {
-    return "domain" in value && "solanaPublicKey" in value && "authenticationFunction" in value;
+    return (
+      "domain" in value &&
+      "solanaPublicKey" in value &&
+      "authenticationFunction" in value
+    );
   }
 }
