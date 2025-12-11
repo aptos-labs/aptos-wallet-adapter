@@ -1,5 +1,13 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.9.1
+
+### Patch Changes
+
+- 1817e27: Support domain when creating transaction statement, export functions
+- Updated dependencies [1817e27]
+  - @aptos-labs/derived-wallet-base@0.10.0
+
 ## 0.9.0
 
 ### Minor Changes

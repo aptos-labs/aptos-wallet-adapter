@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-base
 
+## 0.10.0
+
+### Minor Changes
+
+- 1817e27: Support domain when creating transaction statement, export functions
+
 ## 0.9.0
 
 ### Minor Changes
