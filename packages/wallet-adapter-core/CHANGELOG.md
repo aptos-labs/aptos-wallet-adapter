@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.10.0
+
+### Minor Changes
+
+- 1817e27: Add shelbynet to known Aptos networks
+
 ## 7.9.2
 
 ### Patch Changes
