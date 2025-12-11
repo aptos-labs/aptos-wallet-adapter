@@ -183,6 +183,8 @@ export function convertNetwork(networkInfo: NetworkInfo | null): Network {
       return Network.DEVNET;
     case "local" as Network:
       return Network.LOCAL;
+    case "shelbynet" as Network:
+      return Network.SHELBYNET;
     default:
       throw new Error("Invalid Aptos network name");
   }
