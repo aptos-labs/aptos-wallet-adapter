@@ -56,7 +56,7 @@ export function createStructuredMessageStatement({
  */
 export function createTransactionStatement(
   rawTransaction: AnyRawTransaction,
-  domain?: string
+  domain?: string,
 ) {
   const entryFunctionName = getEntryFunctionName(
     rawTransaction.rawTransaction.payload,

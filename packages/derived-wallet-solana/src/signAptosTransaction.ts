@@ -32,7 +32,7 @@ export interface SignAptosTransactionWithSolanaInput {
 }
 
 export async function signAptosTransactionWithSolana(
-  input: SignAptosTransactionWithSolanaInput
+  input: SignAptosTransactionWithSolanaInput,
 ) {
   const { solanaWallet, authenticationFunction, rawTransaction, domain } =
     input;
@@ -48,13 +48,13 @@ export async function signAptosTransactionWithSolana(
       authenticationFunction,
       solanaPublicKey,
       domain,
-    }
+    },
   );
 
   // Prioritize SIWS if available
   if (solanaWallet.signIn) {
     const response = await wrapSolanaUserResponse(
-      solanaWallet.signIn!(siwsInput)
+      solanaWallet.signIn!(siwsInput),
     );
     return mapUserResponse(response, (output): AccountAuthenticator => {
       if (output.signatureType && output.signatureType !== "ed25519") {
@@ -64,48 +64,45 @@ export async function signAptosTransactionWithSolana(
       // The wallet might change some of the fields in the SIWS input, so we
       // might need to include the finalized input in the signature.
       // For now, we can assume the input is unchanged.
-      const signature = new Ed25519Signature(output.signature);
-
       return createAccountAuthenticatorForSolanaTransaction(
-        signature,
+        output.signature,
         solanaPublicKey,
         domain,
         authenticationFunction,
-        signingMessageDigest
+        signingMessageDigest,
       );
     });
   } else if (solanaWallet.signMessage) {
     // Fallback to signMessage if SIWS is not available
     const response = await wrapSolanaUserResponse(
-      solanaWallet.signMessage(createSignInMessage(siwsInput))
+      solanaWallet.signMessage(createSignInMessage(siwsInput)),
     );
     return mapUserResponse(response, (output): AccountAuthenticator => {
-      // Solana signMessage standard always returns a Ed25519 signature type
-      const signature = new Ed25519Signature(output);
-
       return createAccountAuthenticatorForSolanaTransaction(
-        signature,
+        output,
         solanaPublicKey,
         domain,
         authenticationFunction,
-        signingMessageDigest
+        signingMessageDigest,
       );
     });
   } else {
     throw new Error(
-      `${solanaWallet.name} does not support SIWS or signMessage`
+      `${solanaWallet.name} does not support SIWS or signMessage`,
     );
   }
 }
 
 // A helper function to create an AccountAuthenticator from a Solana signature
 export function createAccountAuthenticatorForSolanaTransaction(
-  signature: Ed25519Signature,
+  signatureBytes: Uint8Array<ArrayBufferLike>,
   solanaPublicKey: SolanaPublicKey,
   domain: string,
   authenticationFunction: string,
-  signingMessageDigest: Uint8Array
-): AccountAuthenticator {
+  signingMessageDigest: Uint8Array,
+): AccountAuthenticatorAbstraction {
+  // Solana signMessage standard always returns a Ed25519 signature type
+  const signature = new Ed25519Signature(signatureBytes);
   // Serialize the signature with the signature type as the first byte.
   const serializer = new Serializer();
   serializer.serializeU8(SIGNATURE_TYPE);
@@ -115,14 +112,14 @@ export function createAccountAuthenticatorForSolanaTransaction(
   // Serialize the abstract public key.
   const abstractPublicKey = new DerivableAbstractPublicKey(
     solanaPublicKey.toBase58(),
-    domain
+    domain,
   );
 
   return new AccountAuthenticatorAbstraction(
     authenticationFunction,
     signingMessageDigest,
     abstractSignature,
-    abstractPublicKey.bcsToBytes()
+    abstractPublicKey.bcsToBytes(),
   );
 }
 
@@ -134,14 +131,14 @@ export interface CreateMessageForSolanaTransactionInput {
 }
 // A helper function to create a message for a Solana transaction
 export function createMessageForSolanaTransaction(
-  input: CreateMessageForSolanaTransactionInput
+  input: CreateMessageForSolanaTransactionInput,
 ) {
   const { rawTransaction, authenticationFunction, solanaPublicKey, domain } =
     input;
   const signingMessage = generateSigningMessageForTransaction(rawTransaction);
   const message = AbstractedAccount.generateAccountAbstractionMessage(
     signingMessage,
-    authenticationFunction
+    authenticationFunction,
   );
 
   const signingMessageDigest = hashValues([message]);
