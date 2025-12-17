@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 7.10.1
+
+### Patch Changes
+
+- 0fdeec3: chore: bump @aptos-connect/wallet-adapter-plugin to 2.8.0
+
 ## 7.10.0
 
 ### Minor Changes
