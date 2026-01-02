@@ -6,34 +6,35 @@ import {
 } from "@wormhole-foundation/sdk-sui";
 import { SuiDerivedWallet } from "@aptos-labs/derived-wallet-sui";
 import {
-  SuiSignAndExecuteTransactionBlockInput,
-  SuiSignAndExecuteTransactionBlockOutput,
+  SuiSignAndExecuteTransactionInput,
+  SuiSignAndExecuteTransactionOutput,
 } from "@mysten/wallet-standard";
 
 export async function signAndSendTransaction(
   request: SuiUnsignedTransaction<Network, SuiChains>,
-  wallet: AdapterWallet
+  wallet: AdapterWallet,
 ): Promise<string> {
   if (!wallet) {
     throw new Error("wallet is undefined").message;
   }
   const suiDerivedWallet = wallet as SuiDerivedWallet;
 
-  const signAndExecuteTransactionBlockFeature = suiDerivedWallet.suiWallet
-    .features["sui:signAndExecuteTransactionBlock"] as {
-    signAndExecuteTransactionBlock: (
-      input: SuiSignAndExecuteTransactionBlockInput
-    ) => Promise<SuiSignAndExecuteTransactionBlockOutput>;
+  const signAndExecuteTransactionFeature = suiDerivedWallet.suiWallet.features[
+    "sui:signAndExecuteTransaction"
+  ] as {
+    signAndExecuteTransaction: (
+      input: SuiSignAndExecuteTransactionInput,
+    ) => Promise<SuiSignAndExecuteTransactionOutput>;
   };
 
-  if (!signAndExecuteTransactionBlockFeature) {
-    throw new Error("wallet does not support signAndExecuteTransactionBlock")
+  if (!signAndExecuteTransactionFeature) {
+    throw new Error("wallet does not support signAndExecuteTransaction")
       .message;
   }
 
   const { digest } =
-    await signAndExecuteTransactionBlockFeature.signAndExecuteTransactionBlock({
-      transactionBlock: request.transaction,
+    await signAndExecuteTransactionFeature.signAndExecuteTransaction({
+      transaction: request.transaction,
       account: suiDerivedWallet.suiWallet.accounts[0],
       chain: `sui:${request.network.toLocaleLowerCase()}`,
     });

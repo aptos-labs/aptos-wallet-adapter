@@ -27,9 +27,10 @@ import { AptosChains } from "@wormhole-foundation/sdk-aptos/dist/cjs/types";
 import { AptosUnsignedTransaction } from "@wormhole-foundation/sdk-aptos/dist/cjs/unsignedTransaction";
 import { GasStationApiKey } from "../types";
 import { Account } from "@aptos-labs/ts-sdk";
-export class Signer<N extends Network, C extends Chain>
-  implements SignAndSendSigner<N, C>
-{
+export class Signer<
+  N extends Network,
+  C extends Chain,
+> implements SignAndSendSigner<N, C> {
   _chain: ChainConfig;
   _address: string;
   _options: any;
@@ -44,7 +45,7 @@ export class Signer<N extends Network, C extends Chain>
     options: any,
     wallet: AdapterWallet,
     crossChainCore?: CrossChainCore,
-    sponsorAccount?: Account | GasStationApiKey | undefined
+    sponsorAccount?: Account | GasStationApiKey | undefined,
   ) {
     this._chain = chain;
     this._address = address;
@@ -76,7 +77,7 @@ export class Signer<N extends Network, C extends Chain>
         this._wallet,
         this._options,
         this._crossChainCore,
-        this._sponsorAccount
+        this._sponsorAccount,
       );
       txHashes.push(txId);
       this._claimedTransactionHashes = txId;
@@ -91,7 +92,7 @@ export const signAndSendTransaction = async (
   wallet: AdapterWallet,
   options: any = {},
   crossChainCore?: CrossChainCore,
-  sponsorAccount?: Account | GasStationApiKey | undefined
+  sponsorAccount?: Account | GasStationApiKey | undefined,
 ): Promise<string> => {
   if (!wallet) {
     throw new Error("wallet is undefined");
@@ -102,7 +103,7 @@ export const signAndSendTransaction = async (
       request as SolanaUnsignedTransaction<Network>,
       wallet,
       options,
-      crossChainCore
+      crossChainCore,
     );
     return signature;
   } else if (chain.context === "Ethereum") {
@@ -110,20 +111,20 @@ export const signAndSendTransaction = async (
       request as EvmUnsignedTransaction<Network, EvmChains>,
       wallet,
       chain.displayName,
-      options
+      options,
     );
     return tx;
   } else if (chain.context === "Sui") {
     const tx = await suiSigner.signAndSendTransaction(
       request as SuiUnsignedTransaction<Network, SuiChains>,
-      wallet
+      wallet,
     );
     return tx;
   } else if (chain.context === "Aptos") {
     const tx = await aptosSigner.signAndSendTransaction(
       request as AptosUnsignedTransaction<Network, AptosChains>,
       wallet,
-      sponsorAccount
+      sponsorAccount,
     );
     return tx;
   } else {

@@ -39,17 +39,14 @@ import { SolanaDerivedWallet } from "@aptos-labs/derived-wallet-solana";
 import { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
 import { SuiDerivedWallet } from "@aptos-labs/derived-wallet-sui";
 
-export class WormholeProvider
-  implements
-    CrossChainProvider<
-      WormholeQuoteRequest,
-      WormholeQuoteResponse,
-      WormholeTransferRequest,
-      WormholeTransferResponse,
-      WormholeWithdrawRequest,
-      WormholeWithdrawResponse
-    >
-{
+export class WormholeProvider implements CrossChainProvider<
+  WormholeQuoteRequest,
+  WormholeQuoteResponse,
+  WormholeTransferRequest,
+  WormholeTransferResponse,
+  WormholeWithdrawRequest,
+  WormholeWithdrawResponse
+> {
   private crossChainCore: CrossChainCore;
 
   private _wormholeContext: Wormhole<"Mainnet" | "Testnet"> | undefined;
@@ -82,7 +79,7 @@ export class WormholeProvider
 
   private async getRoute(
     sourceChain: Chain,
-    destinationChain: Chain
+    destinationChain: Chain,
   ): Promise<{
     route: WormholeRouteResponse;
     request: WormholeRequest;
@@ -93,7 +90,7 @@ export class WormholeProvider
 
     const { sourceToken, destToken } = this.getTokenInfo(
       sourceChain,
-      destinationChain
+      destinationChain,
     );
 
     const destContext = this._wormholeContext
@@ -116,7 +113,7 @@ export class WormholeProvider
         destination: destToken,
       },
       sourceContext,
-      destContext
+      destContext,
     );
 
     const resolver = this._wormholeContext.resolver([
@@ -147,7 +144,7 @@ export class WormholeProvider
 
     const { route, request } = await this.getRoute(
       sourceChain,
-      destinationChain
+      destinationChain,
     );
 
     // TODO what is nativeGas for?
@@ -172,7 +169,7 @@ export class WormholeProvider
   }
 
   async submitCCTPTransfer(
-    input: WormholeSubmitTransferRequest
+    input: WormholeSubmitTransferRequest,
   ): Promise<WormholeStartTransferResponse> {
     const { sourceChain, wallet, destinationAddress } = input;
 
@@ -213,7 +210,7 @@ export class WormholeProvider
       this.getChainConfig(sourceChain),
       signerAddress,
       {},
-      wallet
+      wallet,
     );
 
     logger.log("signer", signer);
@@ -224,7 +221,7 @@ export class WormholeProvider
       this.wormholeRequest,
       signer,
       this.wormholeQuote,
-      Wormhole.chainAddress("Aptos", destinationAddress.toString())
+      Wormhole.chainAddress("Aptos", destinationAddress.toString()),
     );
 
     const originChainTxnId =
@@ -236,7 +233,7 @@ export class WormholeProvider
   }
 
   async claimCCTPTransfer(
-    input: WormholeClaimTransferRequest
+    input: WormholeClaimTransferRequest,
   ): Promise<{ destinationChainTxnId: string }> {
     let { receipt, mainSigner, sponsorAccount } = input;
     if (!this.wormholeRoute) {
@@ -260,7 +257,7 @@ export class WormholeProvider
                 "Aptos",
                 {},
                 mainSigner, // the account that signs the "claim" transaction
-                sponsorAccount ? sponsorAccount : undefined // the fee payer account
+                sponsorAccount ? sponsorAccount : undefined, // the fee payer account
               );
 
               if (routes.isManual(this.wormholeRoute)) {
@@ -282,7 +279,7 @@ export class WormholeProvider
       } catch (e) {
         console.error(
           `Error tracking transfer (attempt ${retries + 1} / ${maxRetries}):`,
-          e
+          e,
         );
         const delay = baseDelay * Math.pow(2, retries); // Exponential backoff
         await sleep(delay);
@@ -299,7 +296,7 @@ export class WormholeProvider
    * @returns
    */
   async transfer(
-    input: WormholeTransferRequest
+    input: WormholeTransferRequest,
   ): Promise<WormholeTransferResponse> {
     if (this.crossChainCore._dappConfig?.aptosNetwork === Network.DEVNET) {
       throw new Error("Devnet is not supported on Wormhole");
@@ -325,7 +322,7 @@ export class WormholeProvider
   }
 
   async withdraw(
-    input: WormholeWithdrawRequest
+    input: WormholeWithdrawRequest,
   ): Promise<WormholeWithdrawResponse> {
     const { sourceChain, wallet, destinationAddress, sponsorAccount } = input;
     logger.log("sourceChain", sourceChain);
@@ -351,7 +348,7 @@ export class WormholeProvider
       {},
       input.wallet,
       undefined,
-      sponsorAccount
+      sponsorAccount,
     );
 
     logger.log("signer", signer);
@@ -359,14 +356,14 @@ export class WormholeProvider
     logger.log("wormholeQuote", this.wormholeQuote);
     logger.log(
       "Wormhole.chainAddress",
-      Wormhole.chainAddress(sourceChain, input.destinationAddress.toString())
+      Wormhole.chainAddress(sourceChain, input.destinationAddress.toString()),
     );
 
     let receipt = await this.wormholeRoute.initiate(
       this.wormholeRequest,
       signer,
       this.wormholeQuote,
-      Wormhole.chainAddress(sourceChain, input.destinationAddress.toString())
+      Wormhole.chainAddress(sourceChain, input.destinationAddress.toString()),
     );
     logger.log("receipt", receipt);
 
@@ -390,7 +387,7 @@ export class WormholeProvider
                 this.getChainConfig(sourceChain),
                 destinationAddress.toString(),
                 {},
-                wallet
+                wallet,
               );
 
               if (routes.isManual(this.wormholeRoute)) {
@@ -422,7 +419,7 @@ export class WormholeProvider
       } catch (e) {
         console.error(
           `Error tracking transfer (attempt ${retries + 1} / ${maxRetries}):`,
-          e
+          e,
         );
         const delay = baseDelay * Math.pow(2, retries); // Exponential backoff
         await sleep(delay);
@@ -449,19 +446,19 @@ export class WormholeProvider
 
   getTokenInfo(
     sourceChain: Chain,
-    destinationChain: Chain
+    destinationChain: Chain,
   ): {
     sourceToken: TokenId;
     destToken: TokenId;
   } {
     const sourceToken: TokenId = Wormhole.tokenId(
       this.crossChainCore.TOKENS[sourceChain].tokenId.chain as Chain,
-      this.crossChainCore.TOKENS[sourceChain].tokenId.address
+      this.crossChainCore.TOKENS[sourceChain].tokenId.address,
     );
 
     const destToken: TokenId = Wormhole.tokenId(
       this.crossChainCore.TOKENS[destinationChain].tokenId.chain as Chain,
-      this.crossChainCore.TOKENS[destinationChain].tokenId.address
+      this.crossChainCore.TOKENS[destinationChain].tokenId.address,
     );
 
     return { sourceToken, destToken };

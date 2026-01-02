@@ -3,7 +3,7 @@ import type { Wallet } from "@mysten/wallet-standard";
 import { SuiDerivedWallet, SuiDomainWalletOptions } from "./SuiDerivedWallet";
 
 export function setupAutomaticSuiWalletDerivation(
-  options: SuiDomainWalletOptions = {}
+  options: SuiDomainWalletOptions = {},
 ) {
   const api = getWallets();
 
@@ -19,7 +19,7 @@ export function setupAutomaticSuiWalletDerivation(
     const { features } = wallet;
 
     return Object.entries(features).some(([featureName]) =>
-      featureName.startsWith("sui:")
+      featureName.startsWith("sui:"),
     );
   };
 

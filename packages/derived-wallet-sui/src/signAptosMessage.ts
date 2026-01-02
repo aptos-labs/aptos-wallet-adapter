@@ -20,8 +20,7 @@ import { SuiDerivedPublicKey } from "./SuiDerivedPublicKey";
 import { wrapSuiUserResponse } from "./shared";
 import { SuiDerivedEd25519Signature } from "./SuiDerivedSignature";
 
-export interface StructuredMessageInputWithChainId
-  extends StructuredMessageInput {
+export interface StructuredMessageInputWithChainId extends StructuredMessageInput {
   chainId?: number;
 }
 
@@ -34,7 +33,7 @@ export interface SignAptosMessageWithSuiInput {
 }
 
 export async function signAptosMessageWithSui(
-  input: SignAptosMessageWithSuiInput
+  input: SignAptosMessageWithSuiInput,
 ): Promise<UserResponse<AptosSignMessageOutput>> {
   const {
     suiWallet,
@@ -48,7 +47,7 @@ export async function signAptosMessageWithSui(
     "sui:signPersonalMessage"
   ] as {
     signPersonalMessage: (
-      input: SuiSignPersonalMessageInput
+      input: SuiSignPersonalMessageInput,
     ) => Promise<SuiSignPersonalMessageOutput>;
   };
   if (!signPersonalMessageFeature) {
@@ -85,7 +84,7 @@ export async function signAptosMessageWithSui(
     signPersonalMessageFeature.signPersonalMessage({
       message: signingMessage,
       account: suiAccount,
-    })
+    }),
   );
 
   return mapUserResponse(response, (output): AptosSignMessageOutput => {
