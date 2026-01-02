@@ -60,7 +60,7 @@ const mainSignerPrivateKey =
   process.env.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY ||
   "0x0000000000000000000000000000000000000000000000000000000000000000";
 const privateKey = new Ed25519PrivateKey(
-  PrivateKey.formatPrivateKey(mainSignerPrivateKey, PrivateKeyVariants.Ed25519),
+  PrivateKey.formatPrivateKey(mainSignerPrivateKey, PrivateKeyVariants.Ed25519)
 );
 const mainSigner = Account.fromPrivateKey({ privateKey });
 
@@ -69,7 +69,7 @@ const sponsorPrivateKey =
   process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY ||
   "0x0000000000000000000000000000000000000000000000000000000000000000";
 const feePayerPrivateKey = new Ed25519PrivateKey(
-  PrivateKey.formatPrivateKey(sponsorPrivateKey, PrivateKeyVariants.Ed25519),
+  PrivateKey.formatPrivateKey(sponsorPrivateKey, PrivateKeyVariants.Ed25519)
 );
 const sponsorAccount = Account.fromPrivateKey({
   privateKey: feePayerPrivateKey,
@@ -175,19 +175,6 @@ export default function Home() {
                 />
               )}
               <SingleSigner dappNetwork={Network.DEVNET} wallet={wallet} />
-            </>
-          )}
-          {network?.name === Network.LOCAL && (
-            <>
-              {/* Fund + balance account is enabled for non-Aptos wallets */}
-              {!wallet.isAptosNativeWallet && (
-                <AccountBalance
-                  account={account}
-                  network={network}
-                  wallet={wallet}
-                />
-              )}
-              <SingleSigner dappNetwork={Network.LOCAL} wallet={wallet} />
             </>
           )}
         </>
