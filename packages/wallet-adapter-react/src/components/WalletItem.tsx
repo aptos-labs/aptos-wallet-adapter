@@ -3,6 +3,7 @@ import {
   AdapterWallet,
   WalletReadyState,
   isRedirectable,
+  shouldUseFallbackWallet,
 } from "@aptos-labs/wallet-adapter-core";
 import { Slot } from "@radix-ui/react-slot";
 import { createContext, forwardRef, useCallback, useContext } from "react";
@@ -29,21 +30,26 @@ function useWalletItemContext(displayName: string) {
 const WalletItemContext = createContext<{
   wallet: AdapterWallet | AdapterNotDetectedWallet;
   connectWallet: () => void;
+  fallbackWallet?: AdapterWallet | AdapterNotDetectedWallet;
 } | null>(null);
 
 const Root = forwardRef<HTMLDivElement, WalletItemProps>(
   ({ wallet, onConnect, className, asChild, children }, ref) => {
     const { connect } = useWallet();
 
-    const connectWallet = useCallback(() => {
-      connect(wallet.name);
-      onConnect?.();
-    }, [connect, wallet.name, onConnect]);
-
     const isWalletReady = wallet.readyState === WalletReadyState.Installed;
 
     const mobileSupport =
       "deeplinkProvider" in wallet && wallet.deeplinkProvider;
+
+    const connectWallet = useCallback(() => {
+      const connectionWallet = shouldUseFallbackWallet(wallet)
+        ? wallet.fallbackWallet
+        : wallet;
+      if (!connectionWallet) return;
+      connect(connectionWallet.name);
+      onConnect?.();
+    }, [wallet, connect, onConnect]);
 
     if (!isWalletReady && isRedirectable() && !mobileSupport) return null;
 

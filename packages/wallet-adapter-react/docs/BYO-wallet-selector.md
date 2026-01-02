@@ -274,6 +274,7 @@ A function that partitions the `wallets` array into three distinct groups:
 - `petraWebWallets` - Wallets that use social login to create accounts on
   the blockchain via Petra Web.
 - `availableWallets` - Wallets that are currently installed or loadable by the client.
+- `availableWalletsWithFallbacks` - Wallets that are currently uninstalled that have a fallback wallet.
 - `installableWallets` - Wallets that are NOT current installed or loadable and
   require the client to install a browser extension first.
 
@@ -282,8 +283,13 @@ Additionally, these wallet groups can be sorted by passing the following sort fu
 - `sortPetraWebWallets`
 - `sortAvailableWallets`
 - `sortInstallableWallets`
+- `fallbacks`
 
 ```ts
-const { petraWebWallets, availableWallets, installableWallets } =
-  groupAndSortWallets(wallets, walletSortingOptions);
+const {
+  petraWebWallets,
+  availableWallets,
+  availableWalletsWithFallbacks,
+  installableWallets,
+} = groupAndSortWallets(wallets, walletSortingOptions);
 ```

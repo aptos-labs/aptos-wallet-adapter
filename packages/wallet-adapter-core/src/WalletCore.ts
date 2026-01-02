@@ -100,6 +100,8 @@ import {
 export type AdapterWallet = AptosWallet & {
   readyState?: WalletReadyState;
   isAptosNativeWallet?: boolean;
+  /** A fallback wallet to use when this wallet is not installed */
+  fallbackWallet?: AdapterWallet;
 };
 
 // An adapter not detected wallet types is a wallet that is compatible with the wallet standard but not detected
