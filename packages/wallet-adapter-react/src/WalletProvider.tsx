@@ -66,12 +66,15 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const [notDetectedWallets, setNotDetectedWallets] = useState<
     ReadonlyArray<AdapterNotDetectedWallet>
   >([]);
+  // Use a ref to ensure we only setup derivation once per mount/network change
+  // or to prevent double-registration in strict mode
+  const derivationInitialized = useRef(false);
   // Initialize WalletCore on first load
   useEffect(() => {
     const walletCore = new WalletCore(
       optInWallets,
       dappConfig,
-      disableTelemetry,
+      disableTelemetry
     );
     setWalletCore(walletCore);
   }, []);
@@ -104,7 +107,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
 
     // Make sure the wallet is installed
     const selectedWallet = walletCore.wallets.find(
-      (e) => e.name === walletName,
+      (e) => e.name === walletName
     ) as AdapterWallet | undefined;
     if (
       !selectedWallet ||
@@ -141,6 +144,36 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       setIsLoading(false);
     }
   }, [autoConnect, wallets]);
+
+  useEffect(() => {
+    // Initialize cross-chain wallet support based on dappConfig flags.
+    // Dynamically imports the packages to avoid bundling them when not used.
+    if (!derivationInitialized.current) {
+      // Use a wrapper function to prevent bundlers from statically analyzing the import
+      const dynamicImport = (moduleName: string) =>
+        new Function("m", "return import(m)")(moduleName) as Promise<any>;
+
+      if (dappConfig?.crossChainWallets?.solana) {
+        import("@aptos-labs/derived-wallet-solana").then(
+          ({ setupAutomaticSolanaWalletDerivation }) => {
+            setupAutomaticSolanaWalletDerivation({
+              defaultNetwork: dappConfig?.network,
+            });
+          }
+        );
+      }
+      if (dappConfig?.crossChainWallets?.evm) {
+        dynamicImport("@aptos-labs/derived-wallet-ethereum").then(
+          ({ setupAutomaticEthereumWalletDerivation }) => {
+            setupAutomaticEthereumWalletDerivation({
+              defaultNetwork: dappConfig?.network,
+            });
+          }
+        );
+      }
+      derivationInitialized.current = true;
+    }
+  }, [network]);
 
   const connect = async (walletName: string): Promise<void> => {
     try {
@@ -183,7 +216,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signAndSubmitTransaction = async (
-    transaction: InputTransactionData,
+    transaction: InputTransactionData
   ): Promise<AptosSignAndSubmitTransactionOutput> => {
     try {
       if (!walletCore) {
@@ -223,7 +256,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const submitTransaction = async (
-    transaction: InputSubmitTransactionData,
+    transaction: InputSubmitTransactionData
   ): Promise<PendingTransactionResponse> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -237,7 +270,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signMessage = async (
-    message: AptosSignMessageInput,
+    message: AptosSignMessageInput
   ): Promise<AptosSignMessageOutput> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -251,7 +284,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const signMessageAndVerify = async (
-    message: AptosSignMessageInput,
+    message: AptosSignMessageInput
   ): Promise<boolean> => {
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
@@ -338,7 +371,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
     const existingWalletIndex = wallets.findIndex(
-      (wallet) => wallet.name == standardWallet.name,
+      (wallet) => wallet.name == standardWallet.name
     );
     if (existingWalletIndex !== -1) {
       // If wallet exists, replace it with the new wallet
@@ -354,12 +387,12 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const handleStandardNotDetectedWalletsAdded = (
-    notDetectedWallet: AdapterNotDetectedWallet,
+    notDetectedWallet: AdapterNotDetectedWallet
   ): void => {
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
     const existingWalletIndex = wallets.findIndex(
-      (wallet) => wallet.name == notDetectedWallet.name,
+      (wallet) => wallet.name == notDetectedWallet.name
     );
     if (existingWalletIndex !== -1) {
       // If wallet exists, replace it with the new wallet
@@ -382,7 +415,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     walletCore?.on("standardWalletsAdded", handleStandardWalletsAdded);
     walletCore?.on(
       "standardNotDetectedWalletAdded",
-      handleStandardNotDetectedWalletsAdded,
+      handleStandardNotDetectedWalletsAdded
     );
     return () => {
       walletCore?.off("connect", handleConnect);
@@ -392,7 +425,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       walletCore?.off("standardWalletsAdded", handleStandardWalletsAdded);
       walletCore?.off(
         "standardNotDetectedWalletAdded",
-        handleStandardNotDetectedWalletsAdded,
+        handleStandardNotDetectedWalletsAdded
       );
     };
   }, [wallets, account]);

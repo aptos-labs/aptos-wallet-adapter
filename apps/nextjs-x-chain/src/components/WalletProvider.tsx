@@ -1,16 +1,11 @@
 "use client";
 
 import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
-import { setupAutomaticEthereumWalletDerivation } from "@aptos-labs/derived-wallet-ethereum";
-import { setupAutomaticSolanaWalletDerivation } from "@aptos-labs/derived-wallet-solana";
 import { PropsWithChildren } from "react";
 import { Network } from "@aptos-labs/ts-sdk";
 import { useClaimSecretKey } from "@/hooks/useClaimSecretKey";
 import { useAutoConnect } from "./AutoConnectProvider";
 import { useToast } from "./ui/use-toast";
-
-setupAutomaticEthereumWalletDerivation({ defaultNetwork: Network.TESTNET });
-setupAutomaticSolanaWalletDerivation({ defaultNetwork: Network.TESTNET });
 
 let dappImageURI: string | undefined;
 if (typeof window !== "undefined") {
@@ -38,7 +33,10 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
           dappId: "57fa42a9-29c6-4f1e-939c-4eefa36d9ff5",
           dappImageURI,
         },
-        crossChainWallets: true,
+        crossChainWallets: {
+          solana: true,
+          evm: true,
+        },
       }}
       onError={(error) => {
         toast({

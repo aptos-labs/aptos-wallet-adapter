@@ -14,23 +14,16 @@ import {
   EthereumChainIdToMainnetChain,
   EthereumChainIdToTestnetChain,
 } from "@aptos-labs/cross-chain-core";
-import {
-  Account,
-  Ed25519PrivateKey,
-  Network,
-  PrivateKey,
-  PrivateKeyVariants,
-} from "@aptos-labs/ts-sdk";
+import { Account, Network } from "@aptos-labs/ts-sdk";
 import {
   Chain,
   WormholeTransferResponse,
   WormholeQuoteResponse,
 } from "@aptos-labs/cross-chain-core";
-import { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
+import { AdapterWallet, useWallet } from "@aptos-labs/wallet-adapter-react";
 import { Loader2, MoveDown } from "lucide-react";
 import USDC from "@/app/icons/USDC";
 import { chainToIcon } from "@/app/icons";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import {
   isEIP1193DerivedWallet,
   OriginWalletDetails,

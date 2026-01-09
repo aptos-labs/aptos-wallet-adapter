@@ -160,10 +160,10 @@ importers:
         specifier: workspace:*
         version: link:../../packages/cross-chain-core
       '@aptos-labs/derived-wallet-ethereum':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/derived-wallet-ethereum
       '@aptos-labs/derived-wallet-solana':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/derived-wallet-solana
       '@aptos-labs/gas-station-client':
         specifier: ^2.0.3
@@ -769,6 +769,12 @@ importers:
         specifier: ^18.0.0 || ^19.0.0
         version: 18.3.1
     devDependencies:
+      '@aptos-labs/derived-wallet-ethereum':
+        specifier: workspace:^
+        version: link:../derived-wallet-ethereum
+      '@aptos-labs/derived-wallet-solana':
+        specifier: workspace:^
+        version: link:../derived-wallet-solana
       '@aptos-labs/wallet-adapter-tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
