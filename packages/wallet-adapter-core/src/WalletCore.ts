@@ -151,6 +151,7 @@ export declare interface WalletCoreEvents {
   connect(account: AccountInfo | null): void;
   disconnect(): void;
   standardWalletsAdded(wallets: AdapterWallet): void;
+  standardWalletsHiddenAdded(wallets: AdapterWallet): void;
   standardNotDetectedWalletAdded(wallets: AdapterNotDetectedWallet): void;
   networkChange(network: NetworkInfo | null): void;
   accountChange(account: AccountInfo | null): void;
@@ -174,6 +175,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   // Local array that holds all the wallets that are AIP-62 standard compatible but are not installed on the user machine
   private _standard_not_detected_wallets: AdapterNotDetectedWallet[] = [];
 
+  // Local array that holds all the wallets that are AIP-62 standard compatible but are hidden from normal display and that are installed on the user machine
+  private _standard_wallets_hidden: AdapterWallet[] = [];
+
   // Local private variable to hold the network that is currently connected
   private _network: NetworkInfo | null = null;
 
@@ -192,6 +196,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   // Private array that holds all the Wallets a dapp decided to opt-in to
   private _optInWallets: ReadonlyArray<AvailableWallets> = [];
 
+  // Private array that holds all the Wallets a dapp decided to hide from normal display
+  private _hideWallets: ReadonlyArray<AvailableWallets> = [];
+
   // Local flag to disable the adapter telemetry tool
   private _disableTelemetry: boolean = false;
 
@@ -202,9 +209,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     optInWallets?: ReadonlyArray<AvailableWallets>,
     dappConfig?: DappConfig,
     disableTelemetry?: boolean,
+    hideWallets: ReadonlyArray<AvailableWallets> = ['Petra Web'],
   ) {
     super();
     this._optInWallets = optInWallets || [];
+    this._hideWallets = hideWallets ;
     this._dappConfig = dappConfig;
     this._disableTelemetry = disableTelemetry ?? false;
     this._sdkWallets = getSDKWallets(this._dappConfig);
@@ -272,15 +281,20 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           this._standard_not_detected_wallets.splice(index, 1);
         }
 
-        // ✅ Check if wallet already exists in _standard_wallets
-        const alreadyExists = this._standard_wallets.some(
-          (w) => w.name === wallet.name,
-        );
+        // ✅ Check if wallet already exists in _standard_wallets or _standard_wallets_hidden
+        const alreadyExists =
+          this._standard_wallets.some((w) => w.name === wallet.name) ||
+          this._standard_wallets_hidden.some((w) => w.name === wallet.name);
         if (!alreadyExists) {
           wallet.readyState = WalletReadyState.Installed;
           wallet.isAptosNativeWallet = this.isAptosNativeWallet(wallet);
-          this._standard_wallets.push(wallet);
-          this.emit("standardWalletsAdded", wallet);
+          if (!this.hideWallet(wallet)) {
+            this._standard_wallets.push(wallet);
+            this.emit("standardWalletsAdded", wallet);
+          } else {
+            this._standard_wallets_hidden.push(wallet);
+            this.emit("standardWalletsHiddenAdded", wallet);
+          }
         }
       }
     });
@@ -299,7 +313,11 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       if (isValid) {
         wallet.readyState = WalletReadyState.Installed;
         wallet.isAptosNativeWallet = this.isAptosNativeWallet(wallet);
-        this._standard_wallets.push(wallet);
+        if (!this.hideWallet(wallet)) {
+          this._standard_wallets.push(wallet);
+        } else {
+          this._standard_wallets_hidden.push(wallet);
+        }
       }
     });
   }
@@ -324,9 +342,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     // Loop over the registry map
     walletRegistry.map((supportedWallet: AptosStandardSupportedWallet) => {
       // Check if we already have this wallet as a detected AIP-62 wallet standard
-      const existingStandardWallet = this._standard_wallets.find(
-        (wallet) => wallet.name == supportedWallet.name,
-      );
+      const existingStandardWallet =
+        this._standard_wallets.find(
+          (wallet) => wallet.name == supportedWallet.name,
+        ) ||
+        this._standard_wallets_hidden.find(
+          (wallet) => wallet.name == supportedWallet.name,
+        );
       // If it is detected, it means the user has the wallet installed, so dont add it to the wallets array
       if (existingStandardWallet) {
         return;
@@ -364,6 +386,19 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       return true;
     }
     return false;
+  }
+
+  /**
+   * A function that hides an AIP-62 compatible wallet from normal display.
+   *
+   * @param wallet AdapterWallet | AdapterNotDetectedWallet
+   * @returns boolean
+   */
+  hideWallet(wallet: AdapterWallet | AdapterNotDetectedWallet): boolean {
+    return (
+      this._hideWallets.length > 0 &&
+      this._hideWallets.includes(wallet.name as AvailableWallets)
+    );
   }
 
   private recordEvent(eventName: string, additionalInfo?: object): void {
@@ -490,6 +525,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    */
   get wallets(): ReadonlyArray<AptosWallet> {
     return this._standard_wallets;
+  }
+
+  /**
+   * Getter to fetch all hidden wallets
+   */
+  get hiddenWallets(): ReadonlyArray<AdapterWallet> {
+    return this._standard_wallets_hidden;
   }
 
   get notDetectedWallets(): ReadonlyArray<AdapterNotDetectedWallet> {
