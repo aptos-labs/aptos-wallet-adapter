@@ -16,8 +16,8 @@ import { isRedirectable } from "./helpers";
 export function partitionWallets(
   wallets: ReadonlyArray<AdapterWallet | AdapterNotDetectedWallet>,
   partitionFunction: (
-    wallet: AdapterWallet | AdapterNotDetectedWallet,
-  ) => boolean = isInstalledOrLoadable,
+    wallet: AdapterWallet | AdapterNotDetectedWallet
+  ) => boolean = isInstalledOrLoadable
 ) {
   const defaultWallets: Array<AdapterWallet> = [];
   const moreWallets: Array<AdapterNotDetectedWallet> = [];
@@ -35,7 +35,7 @@ export function partitionWallets(
 
 /** Returns true if the wallet is installed or loadable. */
 export function isInstalledOrLoadable(
-  wallet: AdapterWallet | AdapterNotDetectedWallet,
+  wallet: AdapterWallet | AdapterNotDetectedWallet
 ): wallet is AdapterWallet {
   return wallet.readyState === WalletReadyState.Installed;
 }
@@ -45,7 +45,7 @@ export function isInstalledOrLoadable(
  * This can be used to decide whether to show a "Connect" button or "Install" link in the UI.
  */
 export function isInstallRequired(
-  wallet: AdapterWallet | AdapterNotDetectedWallet,
+  wallet: AdapterWallet | AdapterNotDetectedWallet
 ) {
   const isWalletReady = isInstalledOrLoadable(wallet);
   const isMobile = !isWalletReady && isRedirectable();
@@ -54,7 +54,7 @@ export function isInstallRequired(
 }
 
 export function shouldUseFallbackWallet(
-  wallet: AdapterWallet | AdapterNotDetectedWallet,
+  wallet: AdapterWallet | AdapterNotDetectedWallet
 ): boolean {
   return (
     !!wallet.fallbackWallet &&
@@ -81,7 +81,7 @@ export function isAptosConnectWallet(wallet: WalletInfo | AdapterWallet) {
 /** Returns `true` if the provided wallet is a Petra Web wallet. This will automatically exclude the generic wallet. */
 export function isPetraWebWallet(
   wallet: WalletInfo | AdapterWallet,
-  ignoreGenericWallet: boolean = true,
+  ignoreGenericWallet: boolean = true
 ) {
   if (!wallet.url) return false;
   if (ignoreGenericWallet && isPetraWebGenericWallet(wallet)) {
@@ -95,7 +95,7 @@ export function isPetraWebWallet(
 
 /** Returns true if the wallet is a generic wallet. */
 export function isPetraWebGenericWallet(
-  wallet: AdapterWallet | AdapterNotDetectedWallet | WalletInfo,
+  wallet: AdapterWallet | AdapterNotDetectedWallet | WalletInfo
 ) {
   return wallet.name === PETRA_WEB_GENERIC_WALLET_NAME;
 }
@@ -107,11 +107,11 @@ export function isPetraWebGenericWallet(
  * @deprecated Use {@link getPetraWebWallets} instead.
  */
 export function getAptosConnectWallets(
-  wallets: ReadonlyArray<AdapterWallet | AdapterNotDetectedWallet>,
+  wallets: ReadonlyArray<AdapterWallet | AdapterNotDetectedWallet>
 ) {
   const { defaultWallets, moreWallets } = partitionWallets(
     wallets,
-    isAptosConnectWallet,
+    isAptosConnectWallet
   );
   return {
     aptosConnectWallets: defaultWallets,
@@ -124,11 +124,11 @@ export function getAptosConnectWallets(
  * Petra Web is a web wallet that uses social login to create accounts on the blockchain.
  */
 export function getPetraWebWallets(
-  wallets: ReadonlyArray<AdapterWallet | AdapterNotDetectedWallet>,
+  wallets: ReadonlyArray<AdapterWallet | AdapterNotDetectedWallet>
 ) {
   const { defaultWallets, moreWallets } = partitionWallets(
     wallets,
-    isPetraWebWallet,
+    isPetraWebWallet
   );
   return {
     petraWebWallets: defaultWallets,
@@ -148,15 +148,13 @@ export interface WalletSortingOptions {
   /** An optional function for sorting wallets that are currently installed or loadable. */
   sortAvailableWallets?: (
     a: AdapterWallet | AdapterNotDetectedWallet,
-    b: AdapterWallet | AdapterNotDetectedWallet,
+    b: AdapterWallet | AdapterNotDetectedWallet
   ) => number;
   /** An optional function for sorting wallets that are NOT currently installed or loadable. */
   sortInstallableWallets?: (
     a: AdapterWallet | AdapterNotDetectedWallet,
-    b: AdapterWallet | AdapterNotDetectedWallet,
+    b: AdapterWallet | AdapterNotDetectedWallet
   ) => number;
-  /** An optional array of wallets that are available but not intended for display. These wallets will only be shown if there is logic to explictly show them (e.g. `fallbacks`) */
-  hiddenWallets?: ReadonlyArray<AdapterWallet>;
   /**
    * A map of wallet names to fallback wallet names.
    * If a wallet is not installed and has a fallback wallet that IS installed,
@@ -172,7 +170,7 @@ export interface WalletSortingOptions {
   fallbacks?: {
     /** A map of wallet names to fallback wallet names. */
     connections: Record<string | AvailableWallets, string | AvailableWallets>;
-    /** An optional array of wallets that are available but not intended for display. These wallets will only be shown if there is logic to explictly show them (e.g. `fallbacks`) */
+    /** An optional array of wallets that are available but not intended for display. These wallets will only be shown if there is logic to explicitly show them (e.g. `fallbacks`) */
     additionalFallbackWallets?: ReadonlyArray<AdapterWallet>;
   };
 }
@@ -196,7 +194,7 @@ export interface WalletSortingOptions {
  */
 export function groupAndSortWallets(
   wallets: ReadonlyArray<AdapterWallet | AdapterNotDetectedWallet>,
-  options?: WalletSortingOptions,
+  options?: WalletSortingOptions
 ) {
   const {
     fallbacks: {

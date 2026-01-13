@@ -344,10 +344,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       // Check if we already have this wallet as a detected AIP-62 wallet standard
       const existingStandardWallet =
         this._standard_wallets.find(
-          (wallet) => wallet.name == supportedWallet.name,
+          (wallet) => wallet.name === supportedWallet.name,
         ) ||
         this._standard_wallets_hidden.find(
-          (wallet) => wallet.name == supportedWallet.name,
+          (wallet) => wallet.name === supportedWallet.name,
         );
       // If it is detected, it means the user has the wallet installed, so dont add it to the wallets array
       if (existingStandardWallet) {

@@ -399,7 +399,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     // Manage hidden wallet state by removing optional duplications
     // as new wallets are coming
     const existingWalletIndex = hiddenWallets.findIndex(
-      (wallet) => wallet.name == standardWallet.name,
+      (wallet) => wallet.name === standardWallet.name,
     );
     if (existingWalletIndex !== -1) {
       // If wallet exists, replace it with the new wallet

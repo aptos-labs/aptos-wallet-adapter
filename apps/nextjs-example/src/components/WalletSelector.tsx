@@ -191,7 +191,7 @@ function ConnectWalletDialog({
           {[...availableWallets, ...availableWalletsWithFallbacks].map(
             (wallet) => (
               <WalletRow key={wallet.name} wallet={wallet} onConnect={close} />
-            ),
+            )
           )}
           {!!installableWallets.length && (
             <Collapsible className="flex flex-col gap-3">
@@ -226,7 +226,6 @@ function WalletRow({ wallet, onConnect }: WalletRowProps) {
   return (
     <WalletItem
       wallet={wallet}
-      fallbackWallet={wallet.fallbackWallet}
       onConnect={onConnect}
       className="flex items-center justify-between px-4 py-3 gap-4 border rounded-md"
     >

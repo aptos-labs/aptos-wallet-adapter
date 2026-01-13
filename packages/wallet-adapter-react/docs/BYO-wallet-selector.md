@@ -269,7 +269,7 @@ const { petraWebWallets, otherWallets } = getPetraWebWallets(wallets);
 
 ### `groupAndSortWallets`
 
-A function that partitions the `wallets` array into three distinct groups:
+A function that partitions the `wallets` array into four distinct groups:
 
 - `petraWebWallets` - Wallets that use social login to create accounts on
   the blockchain via Petra Web.
@@ -283,7 +283,6 @@ Additionally, these wallet groups can be sorted by passing the following sort fu
 - `sortPetraWebWallets`
 - `sortAvailableWallets`
 - `sortInstallableWallets`
-- `fallbacks`
 
 ```ts
 const {
@@ -292,4 +291,19 @@ const {
   availableWalletsWithFallbacks,
   installableWallets,
 } = groupAndSortWallets(wallets, walletSortingOptions);
+```
+
+Additionally, you can specify fallback wallets for wallets that are not installed by passing the following `fallbacks` property via the `options` argument:
+
+```ts
+const {
+  petraWebWallets,
+  availableWallets,
+  availableWalletsWithFallbacks,
+  installableWallets,
+} = groupAndSortWallets(wallets, {
+  fallbacks: {
+    connections: { Petra: "Petra Web", OtherWallet: "OtherFallback" },
+  },
+});
 ```
