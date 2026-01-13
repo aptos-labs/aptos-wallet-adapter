@@ -80,7 +80,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       optInWallets,
       dappConfig,
       disableTelemetry,
-      hideWallets,
+      hideWallets ? hideWallets : ["Petra Web"],
     );
     setWalletCore(walletCore);
   }, []);

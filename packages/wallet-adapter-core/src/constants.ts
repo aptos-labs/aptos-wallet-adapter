@@ -35,8 +35,8 @@ export const PETRA_WEB_GENERIC_WALLET_NAME = "Petra Web";
 /** The name of the Petra wallet. */
 export const PETRA_WALLET_NAME = "Petra";
 
-/** The default fallbacks for wallets that are not installed. */
-export const DEFAULT_WALLET_FALLBACKS = {
+/** The default connection fallbacks for wallets that are not installed. */
+export const DEFAULT_WALLET_CONNECTION_FALLBACKS = {
   [PETRA_WALLET_NAME]: PETRA_WEB_GENERIC_WALLET_NAME,
 };
 

@@ -6,7 +6,7 @@ import {
   AdapterNotDetectedWallet,
   AdapterWallet,
   AptosPrivacyPolicy,
-  DEFAULT_WALLET_FALLBACKS,
+  DEFAULT_WALLET_CONNECTION_FALLBACKS,
   groupAndSortWallets,
   shouldUseFallbackWallet,
   isInstallRequired,
@@ -119,7 +119,11 @@ function ConnectWalletDialog({
   close,
   ...walletSortingOptions
 }: ConnectWalletDialogProps) {
-  const { wallets = [], notDetectedWallets = [] } = useWallet();
+  const {
+    wallets = [],
+    notDetectedWallets = [],
+    hiddenWallets = [],
+  } = useWallet();
 
   const {
     petraWebWallets,
@@ -127,7 +131,10 @@ function ConnectWalletDialog({
     availableWalletsWithFallbacks,
     installableWallets,
   } = groupAndSortWallets([...wallets, ...notDetectedWallets], {
-    fallbacks: DEFAULT_WALLET_FALLBACKS,
+    fallbacks: {
+      connections: DEFAULT_WALLET_CONNECTION_FALLBACKS,
+      additionalFallbackWallets: hiddenWallets,
+    },
     ...walletSortingOptions,
   });
 
@@ -184,7 +191,7 @@ function ConnectWalletDialog({
           {[...availableWallets, ...availableWalletsWithFallbacks].map(
             (wallet) => (
               <WalletRow key={wallet.name} wallet={wallet} onConnect={close} />
-            ),
+            )
           )}
           {!!installableWallets.length && (
             <Collapsible className="flex flex-col gap-3">
