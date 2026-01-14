@@ -34,7 +34,7 @@ export interface SignAptosMessageWithSuiInput {
 }
 
 export async function signAptosMessageWithSui(
-  input: SignAptosMessageWithSuiInput
+  input: SignAptosMessageWithSuiInput,
 ): Promise<UserResponse<AptosSignMessageOutput>> {
   const {
     suiWallet,
@@ -48,7 +48,7 @@ export async function signAptosMessageWithSui(
     "sui:signPersonalMessage"
   ] as {
     signPersonalMessage: (
-      input: SuiSignPersonalMessageInput
+      input: SuiSignPersonalMessageInput,
     ) => Promise<SuiSignPersonalMessageOutput>;
   };
   if (!signPersonalMessageFeature) {
@@ -85,7 +85,7 @@ export async function signAptosMessageWithSui(
     signPersonalMessageFeature.signPersonalMessage({
       message: signingMessage,
       account: suiAccount,
-    })
+    }),
   );
 
   return mapUserResponse(response, (output): AptosSignMessageOutput => {

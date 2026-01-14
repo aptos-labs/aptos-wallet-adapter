@@ -183,7 +183,7 @@ export class SuiDerivedWallet implements AptosWallet {
   }
 
   async changeNetwork(
-    newNetwork: NetworkInfo
+    newNetwork: NetworkInfo,
   ): Promise<UserResponse<AptosChangeNetworkOutput>> {
     const { name, chainId, url } = newNetwork;
     if (name === Network.CUSTOM) {
@@ -216,7 +216,7 @@ export class SuiDerivedWallet implements AptosWallet {
   // region Signatures
 
   async signMessage(
-    input: AptosSignMessageInput
+    input: AptosSignMessageInput,
   ): Promise<UserResponse<AptosSignMessageOutput>> {
     const chainId = input.chainId
       ? this.defaultNetwork === Network.DEVNET
@@ -237,7 +237,7 @@ export class SuiDerivedWallet implements AptosWallet {
 
   async signTransaction(
     rawTransaction: AnyRawTransaction,
-    _asFeePayer?: boolean
+    _asFeePayer?: boolean,
   ): Promise<UserResponse<AccountAuthenticator>> {
     return signAptosTransactionWithSui({
       suiWallet: this.suiWallet,
