@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-react
 
+## 8.0.1
+
+### Patch Changes
+
+- 0e6ae15: Cross chain initialization fix
+
 ## 8.0.0
 
 ### Major Changes
