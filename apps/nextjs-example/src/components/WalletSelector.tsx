@@ -191,7 +191,7 @@ function ConnectWalletDialog({
           {[...availableWallets, ...availableWalletsWithFallbacks].map(
             (wallet) => (
               <WalletRow key={wallet.name} wallet={wallet} onConnect={close} />
-            )
+            ),
           )}
           {!!installableWallets.length && (
             <Collapsible className="flex flex-col gap-3">

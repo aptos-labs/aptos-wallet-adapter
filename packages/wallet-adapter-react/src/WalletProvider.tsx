@@ -156,10 +156,6 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     // Initialize cross-chain wallet support based on dappConfig flags.
     // Dynamically imports the packages to avoid bundling them when not used.
     if (!derivationInitialized.current) {
-      // Use a wrapper function to prevent bundlers from statically analyzing the import
-      const dynamicImport = (moduleName: string) =>
-        new Function("m", "return import(m)")(moduleName) as Promise<any>;
-
       if (dappConfig?.crossChainWallets?.solana) {
         import("@aptos-labs/derived-wallet-solana").then(
           ({ setupAutomaticSolanaWalletDerivation }) => {
@@ -170,7 +166,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         );
       }
       if (dappConfig?.crossChainWallets?.evm) {
-        dynamicImport("@aptos-labs/derived-wallet-ethereum").then(
+        import("@aptos-labs/derived-wallet-ethereum").then(
           ({ setupAutomaticEthereumWalletDerivation }) => {
             setupAutomaticEthereumWalletDerivation({
               defaultNetwork: dappConfig?.network,
