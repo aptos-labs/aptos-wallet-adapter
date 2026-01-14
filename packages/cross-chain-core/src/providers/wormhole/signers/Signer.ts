@@ -27,10 +27,9 @@ import { AptosChains } from "@wormhole-foundation/sdk-aptos/dist/cjs/types";
 import { AptosUnsignedTransaction } from "@wormhole-foundation/sdk-aptos/dist/cjs/unsignedTransaction";
 import { GasStationApiKey } from "../types";
 import { Account } from "@aptos-labs/ts-sdk";
-export class Signer<
-  N extends Network,
-  C extends Chain,
-> implements SignAndSendSigner<N, C> {
+export class Signer<N extends Network, C extends Chain>
+  implements SignAndSendSigner<N, C>
+{
   _chain: ChainConfig;
   _address: string;
   _options: any;

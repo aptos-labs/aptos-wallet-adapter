@@ -38,8 +38,7 @@ import { SyntheticEvent, useState } from "react";
 import { WalletConnectorProps } from "./types";
 
 interface WalletsModalProps
-  extends
-    Pick<WalletConnectorProps, "networkSupport" | "modalMaxWidth">,
+  extends Pick<WalletConnectorProps, "networkSupport" | "modalMaxWidth">,
     WalletSortingOptions {
   handleClose: () => void;
   modalOpen: boolean;
