@@ -1,5 +1,18 @@
 # @aptos-labs/wallet-adapter-react
 
+## 8.0.0
+
+### Major Changes
+
+- 378146b: Moved cross-chain wallet initialization into the AptosWalletAdapterProvider
+
+### Patch Changes
+
+- 69c5d26: Add support for fallback wallets in `WalletItem`
+- Updated dependencies [69c5d26]
+- Updated dependencies [378146b]
+  - @aptos-labs/wallet-adapter-core@8.0.0
+
 ## 7.2.8
 
 ### Patch Changes
