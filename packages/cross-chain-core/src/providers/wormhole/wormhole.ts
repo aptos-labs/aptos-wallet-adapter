@@ -37,14 +37,17 @@ import {
 import { SolanaDerivedWallet } from "@aptos-labs/derived-wallet-solana";
 import { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
 
-export class WormholeProvider implements CrossChainProvider<
-  WormholeQuoteRequest,
-  WormholeQuoteResponse,
-  WormholeTransferRequest,
-  WormholeTransferResponse,
-  WormholeWithdrawRequest,
-  WormholeWithdrawResponse
-> {
+export class WormholeProvider
+  implements
+    CrossChainProvider<
+      WormholeQuoteRequest,
+      WormholeQuoteResponse,
+      WormholeTransferRequest,
+      WormholeTransferResponse,
+      WormholeWithdrawRequest,
+      WormholeWithdrawResponse
+    >
+{
   private crossChainCore: CrossChainCore;
 
   private _wormholeContext: Wormhole<"Mainnet" | "Testnet"> | undefined;

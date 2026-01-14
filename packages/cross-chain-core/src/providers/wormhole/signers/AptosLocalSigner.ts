@@ -20,10 +20,9 @@ import {
 } from "@wormhole-foundation/sdk-aptos";
 import { GasStationApiKey } from "../types";
 
-export class AptosLocalSigner<
-  N extends Network,
-  C extends Chain,
-> implements SignAndSendSigner<N, C> {
+export class AptosLocalSigner<N extends Network, C extends Chain>
+  implements SignAndSendSigner<N, C>
+{
   _chain: C;
   _options: any;
   _wallet: Account;

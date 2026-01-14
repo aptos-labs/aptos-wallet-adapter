@@ -38,8 +38,6 @@
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@aptos-labs/derived-wallet-solana": "workspace:^",
-    "@aptos-labs/derived-wallet-ethereum": "workspace:^",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "eslint": "^8.57.1",
@@ -51,17 +49,7 @@
     "@radix-ui/react-slot": "^1.0.2"
   },
   "peerDependencies": {
-    "react": "^18.0.0 || ^19.0.0",
-    "@aptos-labs/derived-wallet-solana": "workspace:^",
-    "@aptos-labs/derived-wallet-ethereum": "workspace:^"
-  },
-  "peerDependenciesMeta": {
-    "@aptos-labs/derived-wallet-solana": {
-      "optional": true
-    },
-    "@aptos-labs/derived-wallet-ethereum": {
-      "optional": true
-    }
+    "react": "^18.0.0 || ^19.0.0"
   },
   "files": [
     "dist",

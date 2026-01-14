@@ -105,53 +105,6 @@ import { Network } from "@aptos-labs/ts-sdk";
 </AptosWalletAdapterProvider>
 ```
 
-### Cross-Chain Wallet Support
-
-The adapter supports cross-chain wallets, allowing users to connect with Solana or EVM wallets and derive an Aptos account from them. This enables users to interact with your Aptos dapp using wallets they already have.
-
-#### Install Cross-Chain Dependencies
-
-Cross-chain support requires additional packages. Install only the ones you need:
-
-**For Solana wallet support:**
-
-```bash
-pnpm add @aptos-labs/derived-wallet-solana
-```
-
-**For EVM wallet support (Ethereum, Polygon, etc.):**
-
-```bash
-pnpm add @aptos-labs/derived-wallet-ethereum
-```
-
-#### Enable Cross-Chain Wallets
-
-Enable cross-chain support by adding the `crossChainWallets` config:
-
-```tsx
-import { Network } from "@aptos-labs/ts-sdk";
-
-<AptosWalletAdapterProvider
-  autoConnect={true}
-  dappConfig={{
-    network: Network.MAINNET,
-    aptosApiKey: "my-generated-api-key",
-    crossChainWallets: {
-      solana: true, // Enable Solana wallet support
-      evm: true, // Enable EVM wallet support
-    },
-  }}
-  onError={(error) => {
-    console.log("error", error);
-  }}
->
-  <App />
-</AptosWalletAdapterProvider>;
-```
-
-When enabled, compatible wallets like Phantom (Solana), MetaMask (Ethereum), and others will appear in the wallet list. Users can connect with these wallets, and the adapter will derive an Aptos account for them.
-
 #### Use Wallet
 
 On any page you want to use the wallet props, import `useWallet` from `@aptos-labs/wallet-adapter-react`
