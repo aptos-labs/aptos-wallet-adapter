@@ -1,5 +1,6 @@
 import {
   AptosConnectAppleWallet,
+  AptosConnectGenericWallet,
   AptosConnectGoogleWallet,
 } from "@aptos-connect/wallet-adapter-plugin";
 import { DappConfig, AdapterWallet } from "./WalletCore";
@@ -16,6 +17,11 @@ export function getSDKWallets(dappConfig?: DappConfig) {
         ...dappConfig?.aptosConnect,
       }),
       new AptosConnectAppleWallet({
+        network: dappConfig?.network,
+        dappId: dappConfig?.aptosConnectDappId,
+        ...dappConfig?.aptosConnect,
+      }),
+      new AptosConnectGenericWallet({
         network: dappConfig?.network,
         dappId: dappConfig?.aptosConnectDappId,
         ...dappConfig?.aptosConnect,

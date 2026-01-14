@@ -30,6 +30,7 @@ export interface AptosStandardSupportedWallet {
 export type AvailableWallets =
   | "Continue with Apple"
   | "Continue with Google"
+  | "Petra Web"
   | "OKX Wallet"
   | "Petra"
   | "Nightly"

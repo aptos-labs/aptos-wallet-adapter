@@ -3,6 +3,7 @@ import {
   AdapterWallet,
   WalletReadyState,
   isRedirectable,
+  shouldUseFallbackWallet,
 } from "@aptos-labs/wallet-adapter-core";
 import { Slot } from "@radix-ui/react-slot";
 import { createContext, forwardRef, useCallback, useContext } from "react";
@@ -35,15 +36,19 @@ const Root = forwardRef<HTMLDivElement, WalletItemProps>(
   ({ wallet, onConnect, className, asChild, children }, ref) => {
     const { connect } = useWallet();
 
-    const connectWallet = useCallback(() => {
-      connect(wallet.name);
-      onConnect?.();
-    }, [connect, wallet.name, onConnect]);
-
     const isWalletReady = wallet.readyState === WalletReadyState.Installed;
 
     const mobileSupport =
       "deeplinkProvider" in wallet && wallet.deeplinkProvider;
+
+    const connectWallet = useCallback(() => {
+      const connectionWallet = shouldUseFallbackWallet(wallet)
+        ? wallet.fallbackWallet
+        : wallet;
+      if (!connectionWallet) return;
+      connect(connectionWallet.name);
+      onConnect?.();
+    }, [wallet, connect, onConnect]);
 
     if (!isWalletReady && isRedirectable() && !mobileSupport) return null;
 
@@ -56,7 +61,7 @@ const Root = forwardRef<HTMLDivElement, WalletItemProps>(
         </Component>
       </WalletItemContext.Provider>
     );
-  },
+  }
 );
 Root.displayName = "WalletItem";
 
@@ -70,7 +75,7 @@ const Icon = createHeadlessComponent(
       src: context.wallet.icon,
       alt: `${context.wallet.name} icon`,
     };
-  },
+  }
 );
 
 const Name = createHeadlessComponent(
@@ -82,7 +87,7 @@ const Name = createHeadlessComponent(
     return {
       children: context.wallet.name,
     };
-  },
+  }
 );
 
 const ConnectButton = createHeadlessComponent(
@@ -95,7 +100,7 @@ const ConnectButton = createHeadlessComponent(
       onClick: context.connectWallet,
       children: "Connect",
     };
-  },
+  }
 );
 
 const InstallLink = createHeadlessComponent(
@@ -110,7 +115,7 @@ const InstallLink = createHeadlessComponent(
       rel: "noopener noreferrer",
       children: "Install",
     };
-  },
+  }
 );
 
 /** A headless component for rendering a wallet option's name, icon, and either connect button or install link. */
