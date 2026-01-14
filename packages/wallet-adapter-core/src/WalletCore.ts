@@ -200,7 +200,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     optInWallets?: ReadonlyArray<AvailableWallets>,
     dappConfig?: DappConfig,
     disableTelemetry?: boolean,
-    hideWallets: ReadonlyArray<AvailableWallets> = ["Petra Web"],
+    hideWallets: ReadonlyArray<AvailableWallets> = ["Petra Web"]
   ) {
     super();
     this._optInWallets = optInWallets || [];
@@ -248,7 +248,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param extensionwWallets
    */
   private setExtensionAIP62Wallets(
-    extensionwWallets: readonly AptosWallet[],
+    extensionwWallets: readonly AptosWallet[]
   ): void {
     extensionwWallets.map((wallet: AdapterWallet) => {
       if (this.excludeWallet(wallet)) {
@@ -265,7 +265,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       if (isValid) {
         // check if we already have this wallet as a not detected wallet
         const index = this._standard_not_detected_wallets.findIndex(
-          (notDetctedWallet) => notDetctedWallet.name == wallet.name,
+          (notDetctedWallet) => notDetctedWallet.name == wallet.name
         );
         // if we do, remove it from the not detected wallets array as it is now become detected
         if (index !== -1) {
@@ -334,10 +334,10 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       // Check if we already have this wallet as a detected AIP-62 wallet standard
       const existingStandardWallet =
         this._standard_wallets.find(
-          (wallet) => wallet.name === supportedWallet.name,
+          (wallet) => wallet.name === supportedWallet.name
         ) ||
         this._standard_wallets_hidden.find(
-          (wallet) => wallet.name === supportedWallet.name,
+          (wallet) => wallet.name === supportedWallet.name
         );
       // If it is detected, it means the user has the wallet installed, so dont add it to the wallets array
       if (existingStandardWallet) {
@@ -408,7 +408,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param wallet A wallet
    */
   private ensureWalletExists(
-    wallet: AdapterWallet | null,
+    wallet: AdapterWallet | null
   ): asserts wallet is AdapterWallet {
     if (!wallet) {
       throw new WalletNotConnectedError().name;
@@ -423,7 +423,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @param account An account
    */
   private ensureAccountExists(
-    account: AccountInfo | null,
+    account: AccountInfo | null
   ): asserts account is AccountInfo {
     if (!account) {
       throw new WalletAccountError("Account is not set").name;
@@ -581,7 +581,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     // Check if we are in a redirectable view (i.e on mobile AND not in an in-app browser)
     if (isRedirectable()) {
       const selectedWallet = this._standard_not_detected_wallets.find(
-        (wallet: AdapterNotDetectedWallet) => wallet.name === walletName,
+        (wallet: AdapterNotDetectedWallet) => wallet.name === walletName
       );
 
       if (selectedWallet) {
@@ -616,7 +616,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     ];
 
     const selectedWallet = allDetectedWallets.find(
-      (wallet: AdapterWallet) => wallet.name === walletName,
+      (wallet: AdapterWallet) => wallet.name === walletName
     );
 
     if (!selectedWallet) return;
@@ -626,7 +626,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       // if the selected wallet is already connected, we don't need to connect again
       if (this._wallet?.name === walletName)
         throw new WalletConnectionError(
-          `${walletName} wallet is already connected`,
+          `${walletName} wallet is already connected`
         ).message;
     }
 
@@ -659,7 +659,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
     const allDetectedWallets = this._standard_wallets;
     const selectedWallet = allDetectedWallets.find(
-      (wallet: AdapterWallet) => wallet.name === walletName,
+      (wallet: AdapterWallet) => wallet.name === walletName
     );
 
     if (!selectedWallet) {
@@ -668,14 +668,14 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
     if (!selectedWallet.features["aptos:signIn"]) {
       throw new WalletNotSupportedMethod(
-        `aptos:signIn is not supported by ${walletName}`,
+        `aptos:signIn is not supported by ${walletName}`
       ).message;
     }
 
     return await this.connectWallet(selectedWallet, async () => {
       if (!selectedWallet.features["aptos:signIn"]) {
         throw new WalletNotSupportedMethod(
-          `aptos:signIn is not supported by ${selectedWallet.name}`,
+          `aptos:signIn is not supported by ${selectedWallet.name}`
         ).message;
       }
 
@@ -701,7 +701,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    */
   private async connectWallet<T>(
     selectedWallet: AdapterWallet,
-    onConnect: () => Promise<{ account: AccountInfo; output: T }>,
+    onConnect: () => Promise<{ account: AccountInfo; output: T }>
   ): Promise<T> {
     try {
       this._connecting = true;
@@ -752,7 +752,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @returns AptosSignAndSubmitTransactionOutput
    */
   async signAndSubmitTransaction(
-    transactionInput: InputTransactionData,
+    transactionInput: InputTransactionData
   ): Promise<AptosSignAndSubmitTransactionOutput> {
     try {
       if ("function" in transactionInput.data) {
@@ -803,7 +803,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           });
 
           type AptosSignAndSubmitTransactionV1Method = (
-            transaction: AnyRawTransaction,
+            transaction: AnyRawTransaction
           ) => Promise<UserResponse<AptosSignAndSubmitTransactionOutput>>;
 
           const signAndSubmitTransactionMethod = this._wallet.features[
@@ -812,7 +812,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
             .signAndSubmitTransaction as unknown as AptosSignAndSubmitTransactionV1Method;
 
           const response = (await signAndSubmitTransactionMethod(
-            transaction,
+            transaction
           )) as UserResponse<AptosSignAndSubmitTransactionOutput>;
 
           if (response.status === UserResponseStatus.REJECTED) {
@@ -908,7 +908,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           "aptos:signTransaction"
         ].signTransaction(
           transactionOrPayload,
-          asFeePayer,
+          asFeePayer
         )) as UserResponse<AccountAuthenticator>;
         if (response.status === UserResponseStatus.REJECTED) {
           throw new WalletConnectionError("User has rejected the request")
@@ -944,7 +944,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           AptosSignTransactionMethodV1_1;
 
         const response = (await walletSignTransactionMethod(
-          signTransactionV1_1StandardInput,
+          signTransactionV1_1StandardInput
         )) as UserResponse<AptosSignTransactionOutputV1_1>;
         if (response.status === UserResponseStatus.REJECTED) {
           throw new WalletConnectionError("User has rejected the request")
@@ -970,7 +970,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           "aptos:signTransaction"
         ].signTransaction(
           transaction,
-          asFeePayer,
+          asFeePayer
         )) as UserResponse<AccountAuthenticator>;
         if (response.status === UserResponseStatus.REJECTED) {
           throw new WalletConnectionError("User has rejected the request")
@@ -997,7 +997,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @throws WalletSignMessageError
    */
   async signMessage(
-    message: AptosSignMessageInput,
+    message: AptosSignMessageInput
   ): Promise<AptosSignMessageOutput> {
     try {
       this.ensureWalletExists(this._wallet);
@@ -1023,7 +1023,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    * @returns PendingTransactionResponse
    */
   async submitTransaction(
-    transaction: InputSubmitTransactionData,
+    transaction: InputSubmitTransactionData
   ): Promise<PendingTransactionResponse> {
     // The standard does not support submitTransaction, so we use the adapter to submit the transaction
     try {
@@ -1069,7 +1069,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           await this.setAnsName();
           this.recordEvent("account_change");
           this.emit("accountChange", this._account);
-        },
+        }
       );
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
@@ -1090,7 +1090,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           this.setNetwork(data);
           await this.setAnsName();
           this.emit("networkChange", this._network);
-        },
+        }
       );
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
@@ -1124,7 +1124,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       if (this._wallet.features["aptos:changeNetwork"]) {
         const response =
           await this._wallet.features["aptos:changeNetwork"].changeNetwork(
-            networkInfo,
+            networkInfo
           );
         if (response.status === UserResponseStatus.REJECTED) {
           throw new WalletConnectionError("User has rejected the request")
@@ -1134,7 +1134,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       }
 
       throw new WalletChangeNetworkError(
-        `${this._wallet.name} does not support changing network request`,
+        `${this._wallet.name} does not support changing network request`
       ).message;
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
@@ -1164,7 +1164,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
       const aptosConfig = getAptosConfig(this._network, this._dappConfig);
       const signingMessage = new TextEncoder().encode(
-        response.args.fullMessage,
+        response.args.fullMessage
       );
       if ("verifySignatureAsync" in (this._account.publicKey as Object)) {
         return await this._account.publicKey.verifySignatureAsync({
