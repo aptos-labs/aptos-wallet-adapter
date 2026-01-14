@@ -1,5 +1,13 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.9.2
+
+### Patch Changes
+
+- 7f28e7b: [Fix] Build packages for release
+- Updated dependencies [7f28e7b]
+  - @aptos-labs/derived-wallet-base@0.10.1
+
 ## 0.9.1
 
 ### Patch Changes

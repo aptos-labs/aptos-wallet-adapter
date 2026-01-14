@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-base
 
+## 0.10.1
+
+### Patch Changes
+
+- 7f28e7b: [Fix] Build packages for release
+
 ## 0.10.0
 
 ### Minor Changes
