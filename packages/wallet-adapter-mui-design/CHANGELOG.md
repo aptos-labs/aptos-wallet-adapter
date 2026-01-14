@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 5.4.0
+
+### Minor Changes
+
+- f70e69b: Revert cross-chain wallet initialization in AptosWalletAdapterProvider
+
+### Patch Changes
+
+- Updated dependencies [f70e69b]
+  - @aptos-labs/wallet-adapter-react@8.1.0
+
 ## 5.3.11
 
 ### Patch Changes

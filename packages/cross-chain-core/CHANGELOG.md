@@ -1,5 +1,17 @@
 # @aptos-labs/cross-chain-core
 
+## 5.5.0
+
+### Minor Changes
+
+- f70e69b: Revert cross-chain wallet initialization in AptosWalletAdapterProvider
+
+### Patch Changes
+
+- Updated dependencies [f70e69b]
+  - @aptos-labs/derived-wallet-solana@0.10.0
+  - @aptos-labs/wallet-adapter-core@8.1.0
+
 ## 5.4.16
 
 ### Patch Changes

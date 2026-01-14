@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.10.0
+
+### Minor Changes
+
+- f70e69b: Revert cross-chain wallet initialization in AptosWalletAdapterProvider
+
 ## 0.9.2
 
 ### Patch Changes
