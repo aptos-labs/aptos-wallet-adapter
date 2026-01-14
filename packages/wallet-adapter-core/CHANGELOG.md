@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 8.0.1
+
+### Patch Changes
+
+- 7f28e7b: [Fix] Build packages for release
+
 ## 8.0.0
 
 ### Major Changes

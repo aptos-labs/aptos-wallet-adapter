@@ -1,5 +1,13 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 5.3.11
+
+### Patch Changes
+
+- 7f28e7b: [Fix] Build packages for release
+- Updated dependencies [7f28e7b]
+  - @aptos-labs/wallet-adapter-react@8.0.2
+
 ## 5.3.10
 
 ### Patch Changes
