@@ -71,9 +71,6 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const [notDetectedWallets, setNotDetectedWallets] = useState<
     ReadonlyArray<AdapterNotDetectedWallet>
   >([]);
-  // Use a ref to ensure we only setup derivation once per mount/network change
-  // or to prevent double-registration in strict mode
-  const derivationInitialized = useRef(false);
   // Initialize WalletCore on first load
   useEffect(() => {
     const walletCore = new WalletCore(
@@ -151,36 +148,6 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       setIsLoading(false);
     }
   }, [autoConnect, wallets]);
-
-  useEffect(() => {
-    // Initialize cross-chain wallet support based on dappConfig flags.
-    // Dynamically imports the packages to avoid bundling them when not used.
-    if (!derivationInitialized.current) {
-      // Use a wrapper function to prevent bundlers from statically analyzing the import
-      const dynamicImport = (moduleName: string) =>
-        new Function("m", "return import(m)")(moduleName) as Promise<any>;
-
-      if (dappConfig?.crossChainWallets?.solana) {
-        import("@aptos-labs/derived-wallet-solana").then(
-          ({ setupAutomaticSolanaWalletDerivation }) => {
-            setupAutomaticSolanaWalletDerivation({
-              defaultNetwork: dappConfig?.network,
-            });
-          },
-        );
-      }
-      if (dappConfig?.crossChainWallets?.evm) {
-        dynamicImport("@aptos-labs/derived-wallet-ethereum").then(
-          ({ setupAutomaticEthereumWalletDerivation }) => {
-            setupAutomaticEthereumWalletDerivation({
-              defaultNetwork: dappConfig?.network,
-            });
-          },
-        );
-      }
-      derivationInitialized.current = true;
-    }
-  }, [network]);
 
   const connect = async (walletName: string): Promise<void> => {
     try {

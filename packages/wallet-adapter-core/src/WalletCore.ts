@@ -86,8 +86,7 @@ import {
 } from "./utils";
 import {
   aptosStandardSupportedWalletList,
-  evmStandardSupportedWalletList,
-  solanaStandardSupportedWalletList,
+  crossChainStandardSupportedWalletList,
 } from "./registry";
 import { getSDKWallets } from "./sdkWallets";
 import {
@@ -136,15 +135,7 @@ export interface DappConfig {
     appId?: string;
     appUrl?: string;
   };
-  /**
-   * A flag to indicate that the dapp supports cross-chain transactions.
-   * If enabled, the adapter will show cross-chain wallets in the wallet selector modal.
-   * @default false
-   */
-  crossChainWallets?: {
-    solana?: boolean;
-    evm?: boolean;
-  };
+  crossChainWallets?: boolean;
 }
 
 export declare interface WalletCoreEvents {
@@ -332,13 +323,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   // Append wallets from wallet standard support registry to the `_standard_not_detected_wallets` array
   // when wallet is not installed on the user machine
   private appendNotDetectedStandardSupportedWallets(): void {
-    const walletRegistry = [...aptosStandardSupportedWalletList];
-    if (this._dappConfig?.crossChainWallets?.solana) {
-      walletRegistry.push(...solanaStandardSupportedWalletList);
-    }
-    if (this._dappConfig?.crossChainWallets?.evm) {
-      walletRegistry.push(...evmStandardSupportedWalletList);
-    }
+    const walletRegistry = this._dappConfig?.crossChainWallets
+      ? [
+          ...aptosStandardSupportedWalletList,
+          ...crossChainStandardSupportedWalletList,
+        ]
+      : aptosStandardSupportedWalletList;
     // Loop over the registry map
     walletRegistry.map((supportedWallet: AptosStandardSupportedWallet) => {
       // Check if we already have this wallet as a detected AIP-62 wallet standard

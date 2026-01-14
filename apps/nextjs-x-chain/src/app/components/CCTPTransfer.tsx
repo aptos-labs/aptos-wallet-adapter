@@ -26,10 +26,10 @@ import {
   WormholeTransferResponse,
   WormholeQuoteResponse,
 } from "@aptos-labs/cross-chain-core";
-import { AdapterWallet, useWallet } from "@aptos-labs/wallet-adapter-react";
 import { Loader2, MoveDown } from "lucide-react";
 import USDC from "@/app/icons/USDC";
 import { chainToIcon } from "@/app/icons";
+import { AdapterWallet, useWallet } from "@aptos-labs/wallet-adapter-react";
 import {
   isEIP1193DerivedWallet,
   OriginWalletDetails,
