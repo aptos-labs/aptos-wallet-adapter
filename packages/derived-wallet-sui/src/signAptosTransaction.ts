@@ -38,7 +38,7 @@ export interface SignAptosTransactionWithSuiInput {
 }
 
 export async function signAptosTransactionWithSui(
-  input: SignAptosTransactionWithSuiInput
+  input: SignAptosTransactionWithSuiInput,
 ): Promise<UserResponse<AccountAuthenticator>> {
   const {
     suiWallet,
@@ -52,7 +52,7 @@ export async function signAptosTransactionWithSui(
     "sui:signPersonalMessage"
   ] as {
     signPersonalMessage: (
-      input: SuiSignPersonalMessageInput
+      input: SuiSignPersonalMessageInput,
     ) => Promise<SuiSignPersonalMessageOutput>;
   };
   if (!signPersonalMessageFeature) {
@@ -67,7 +67,7 @@ export async function signAptosTransactionWithSui(
   const signingMessage = generateSigningMessageForTransaction(rawTransaction);
   const message = AbstractedAccount.generateAccountAbstractionMessage(
     signingMessage,
-    authenticationFunction
+    authenticationFunction,
   );
   const signingMessageDigest = hashValues([message]);
 
@@ -82,7 +82,7 @@ export async function signAptosTransactionWithSui(
     signPersonalMessageFeature.signPersonalMessage({
       message: new TextEncoder().encode(suiInput),
       account: suiAccount,
-    })
+    }),
   );
   return mapUserResponse(response, (output): AccountAuthenticator => {
     // The signature is returned as a serialized base64 signature
@@ -106,14 +106,14 @@ export async function signAptosTransactionWithSui(
     // Serialize the abstract public key.
     const abstractPublicKey = new DerivableAbstractPublicKey(
       suiAccount.address,
-      domain
+      domain,
     );
 
     return new AccountAuthenticatorAbstraction(
       authenticationFunction,
       signingMessageDigest,
       abstractSignature,
-      abstractPublicKey.bcsToBytes()
+      abstractPublicKey.bcsToBytes(),
     );
   });
 }
