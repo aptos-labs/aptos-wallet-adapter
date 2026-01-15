@@ -27,7 +27,7 @@ export async function wrapSuiUserResponse<TResponse>(
         return makeUserRejection();
       }
       // Slush throwing TRPCClientError instance (extends Error)
-      // Backback throwing Error instance
+      // Backpack throwing Error instance
       if (
         "message" in err &&
         typeof (err as any).message === "string" &&

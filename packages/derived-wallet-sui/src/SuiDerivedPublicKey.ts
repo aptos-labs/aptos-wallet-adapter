@@ -19,7 +19,7 @@ import { createSuiEnvelopeForAptosTransaction } from "./createSuiEnvelope";
 import { verifyPersonalMessageSignature } from "@mysten/sui/verify";
 import { SuiDerivedEd25519Signature } from "./SuiDerivedSignature";
 
-export interface EIP1193DerivedPublicKeyParams {
+export interface SuiDerivedPublicKeyParams {
   domain: string;
   suiAccountAddress: string;
   authenticationFunction: string;
@@ -38,7 +38,7 @@ export class SuiDerivedPublicKey extends AccountPublicKey {
     domain,
     suiAccountAddress,
     authenticationFunction,
-  }: EIP1193DerivedPublicKeyParams) {
+  }: SuiDerivedPublicKeyParams) {
     super();
     this.domain = domain;
     this.suiAccountAddress = suiAccountAddress;
@@ -118,11 +118,11 @@ export class SuiDerivedPublicKey extends AccountPublicKey {
 
   static deserialize(deserializer: Deserializer) {
     const domain = deserializer.deserializeStr();
-    const suiAccountAddressyBytes = deserializer.deserializeFixedBytes(
+    const suiAccountAddressBytes = deserializer.deserializeFixedBytes(
       SuiDerivedPublicKey.SUI_PUBLIC_KEY_LENGTH,
     );
     const suiAccountAddress = Hex.fromHexInput(
-      suiAccountAddressyBytes,
+      suiAccountAddressBytes,
     ).toString();
     const authenticationFunction = deserializer.deserializeStr();
     return new SuiDerivedPublicKey({
