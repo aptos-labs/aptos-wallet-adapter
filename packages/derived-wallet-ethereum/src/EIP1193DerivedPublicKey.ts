@@ -23,6 +23,7 @@ import {
   EIP1193PersonalSignature,
 } from "./EIP1193DerivedSignature";
 import { EthereumAddress } from "./shared";
+import { checksumAddress } from "viem";
 
 export interface EIP1193DerivedPublicKeyParams {
   domain: string;
@@ -44,12 +45,12 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
   }: EIP1193DerivedPublicKeyParams) {
     super();
     this.domain = domain;
-    this.ethereumAddress = ethereumAddress;
+    this.ethereumAddress = checksumAddress(ethereumAddress);
     this.authenticationFunction = authenticationFunction;
 
     this._authKey = computeDerivableAuthenticationKey(
       authenticationFunction,
-      ethereumAddress,
+      this.ethereumAddress,
       domain,
     );
   }
