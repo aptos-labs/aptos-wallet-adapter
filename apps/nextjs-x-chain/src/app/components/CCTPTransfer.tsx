@@ -109,7 +109,6 @@ export function CCTPTransfer({
             : EthereumChainIdToTestnetChain[actualChainId];
         setSourceChain(chain.key);
       });
-      setSourceChain("Sepolia");
     } else if (isSuiDerivedWallet(wallet)) {
       setSourceChain("Sui");
     } else {

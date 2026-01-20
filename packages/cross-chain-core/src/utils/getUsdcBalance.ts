@@ -30,7 +30,7 @@ export const getSolanaWalletUSDCBalance = async (
 
   return (
     balance.value.uiAmountString ??
-    (Number(balance.value.amount) / 10 ** balance.value.decimals).toString()
+    ethers.formatUnits(BigInt(balance.value.amount), balance.value.decimals)
   );
 };
 
@@ -75,11 +75,7 @@ export const getAptosWalletUSDCBalance = async (
   if (response.length === 0) {
     return "0";
   }
-  const balance = (
-    Number(response[0].amount) /
-    10 ** token.decimals
-  ).toString();
-  return balance;
+  return ethers.formatUnits(BigInt(response[0].amount), token.decimals);
 };
 
 export const getSuiWalletUSDCBalance = async (
@@ -99,9 +95,6 @@ export const getSuiWalletUSDCBalance = async (
     owner: walletAddress,
     coinType: token.tokenId.address,
   });
-  const balanceString = (
-    Number(balance.totalBalance) /
-    10 ** token.decimals
-  ).toString();
-  return balanceString;
+  // Reuse ethers' formatter for precise decimal formatting of large integers.
+  return ethers.formatUnits(BigInt(balance.totalBalance), token.decimals);
 };

@@ -9,7 +9,7 @@ import {
   SolanaPublicKey,
 } from "@aptos-labs/derived-wallet-solana";
 import { AdapterWallet } from "@aptos-labs/wallet-adapter-react";
-import { SuiDerivedWallet } from "@aptos-labs/derived-wallet-sui";
+import { SuiDerivedWallet, toHex } from "@aptos-labs/derived-wallet-sui";
 
 // Define the type for the origin wallet details
 export type OriginWalletDetails =
@@ -34,7 +34,7 @@ export function isEIP1193DerivedWallet(
   return wallet instanceof EIP1193DerivedWallet;
 }
 
-// Define a function to check if a wallet is an EIP1193 derived wallet
+// Define a function to check if a wallet is a Sui derived wallet
 export function isSuiDerivedWallet(
   wallet: AdapterWallet,
 ): wallet is SuiDerivedWallet {
@@ -79,9 +79,7 @@ export async function getOriginWalletDetails(
   } else if (isSuiDerivedWallet(wallet)) {
     return {
       address: wallet.suiWallet.accounts[0].address,
-      publicKey: new TextDecoder()
-        .decode(wallet.suiWallet.accounts[0].publicKey)
-        .toString(),
+      publicKey: toHex(Uint8Array.from(wallet.suiWallet.accounts[0].publicKey)),
     };
   } else {
     // Assume Aptos Wallet

@@ -136,7 +136,7 @@ export class CrossChainCore {
         this._dappConfig.aptosNetwork,
       );
     }
-    console.log("sourceChain", sourceChain);
+
     if (!this.CHAINS[sourceChain]) {
       throw new Error(`Unsupported chain: ${sourceChain}`);
     }

@@ -15,7 +15,7 @@ export async function signAndSendTransaction(
   wallet: AdapterWallet,
 ): Promise<string> {
   if (!wallet) {
-    throw new Error("wallet is undefined").message;
+    throw new Error("wallet is undefined");
   }
   const suiDerivedWallet = wallet as SuiDerivedWallet;
 
@@ -28,8 +28,7 @@ export async function signAndSendTransaction(
   };
 
   if (!signAndExecuteTransactionFeature) {
-    throw new Error("wallet does not support signAndExecuteTransaction")
-      .message;
+    throw new Error("wallet does not support signAndExecuteTransaction");
   }
 
   const { digest } =
