@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-react
 
+## 8.1.0
+
+### Minor Changes
+
+- f70e69b: Revert cross-chain wallet initialization in AptosWalletAdapterProvider
+
+### Patch Changes
+
+- Updated dependencies [f70e69b]
+  - @aptos-labs/wallet-adapter-core@8.1.0
+
 ## 8.0.2
 
 ### Patch Changes

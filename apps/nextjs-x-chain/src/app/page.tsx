@@ -163,7 +163,8 @@ export default function Home() {
               <SingleSigner dappNetwork={Network.TESTNET} wallet={wallet} />
             </>
           )}
-          {network?.name === Network.DEVNET && (
+          {(network?.name === Network.DEVNET ||
+            network?.name === Network.LOCAL) && (
             <>
               {/* Fund + balance account is enabled for non-Aptos wallets */}
               {!wallet.isAptosNativeWallet && (
@@ -174,19 +175,6 @@ export default function Home() {
                 />
               )}
               <SingleSigner dappNetwork={Network.DEVNET} wallet={wallet} />
-            </>
-          )}
-          {network?.name === Network.LOCAL && (
-            <>
-              {/* Fund + balance account is enabled for non-Aptos wallets */}
-              {!wallet.isAptosNativeWallet && (
-                <AccountBalance
-                  account={account}
-                  network={network}
-                  wallet={wallet}
-                />
-              )}
-              <SingleSigner dappNetwork={Network.LOCAL} wallet={wallet} />
             </>
           )}
         </>
