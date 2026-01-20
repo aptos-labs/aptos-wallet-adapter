@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch: # Allows manual triggering from GitHub Actions UI
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
