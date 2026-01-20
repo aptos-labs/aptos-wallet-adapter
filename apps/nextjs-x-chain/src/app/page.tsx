@@ -93,7 +93,7 @@ export default function Home() {
       setOriginWalletDetails(details);
     };
     void fetchOriginWalletDetails();
-  }, [wallet]);
+  }, [wallet, account]);
 
   return (
     <main className="flex flex-col w-full md:w-1/2 p-6 pb-12 md:px-8 gap-6">

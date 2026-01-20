@@ -168,15 +168,15 @@ export class EIP1193DerivedWallet implements AptosWallet {
       }
       this.onAccountsChangedListeners = [];
     } else {
-      const listener = ([ethereumAddress]: EthereumAddress[]) => {
-        if (!ethereumAddress) {
+      // Query the active account directly to ensure we get the currently selected account
+      const listener = async () => {
+        try {
+          const account = await this.getActiveAccount();
+          callback(account);
+        } catch {
+          // No account connected (user disconnected all accounts)
           callback(undefined as any as AccountInfo);
-          return;
         }
-        const publicKey = this.derivePublicKey(ethereumAddress);
-        const aptosAddress = publicKey.authKey().derivedAddress();
-        const account = new AccountInfo({ publicKey, address: aptosAddress });
-        callback(account);
       };
       this.onAccountsChangedListeners.push(listener);
       this.eip1193Provider.on("accountsChanged", listener);
