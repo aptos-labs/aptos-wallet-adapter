@@ -3,6 +3,7 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import { mainnetTokens, testnetTokens } from "../config";
 import { ethers, JsonRpcProvider } from "ethers";
 import { Chain } from "../CrossChainCore";
+import { SuiClient } from "@mysten/sui/client";
 
 export const getSolanaWalletUSDCBalance = async (
   walletAddress: string,
@@ -29,7 +30,7 @@ export const getSolanaWalletUSDCBalance = async (
 
   return (
     balance.value.uiAmountString ??
-    (Number(balance.value.amount) / 10 ** balance.value.decimals).toString()
+    ethers.formatUnits(BigInt(balance.value.amount), balance.value.decimals)
   );
 };
 
@@ -74,9 +75,26 @@ export const getAptosWalletUSDCBalance = async (
   if (response.length === 0) {
     return "0";
   }
-  const balance = (
-    Number(response[0].amount) /
-    10 ** token.decimals
-  ).toString();
-  return balance;
+  return ethers.formatUnits(BigInt(response[0].amount), token.decimals);
+};
+
+export const getSuiWalletUSDCBalance = async (
+  walletAddress: string,
+  aptosNetwork: Network,
+  rpc: string,
+): Promise<string> => {
+  const token =
+    aptosNetwork === Network.MAINNET
+      ? mainnetTokens["Sui"]
+      : testnetTokens["Sui"];
+
+  const client = new SuiClient({
+    url: rpc,
+  });
+  const balance = await client.getBalance({
+    owner: walletAddress,
+    coinType: token.tokenId.address,
+  });
+  // Reuse ethers' formatter for precise decimal formatting of large integers.
+  return ethers.formatUnits(BigInt(balance.totalBalance), token.decimals);
 };

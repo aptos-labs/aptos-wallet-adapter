@@ -20,8 +20,7 @@ import { SuiDerivedPublicKey } from "./SuiDerivedPublicKey";
 import { wrapSuiUserResponse } from "./shared";
 import { SuiDerivedEd25519Signature } from "./SuiDerivedSignature";
 
-export interface StructuredMessageInputWithChainId
-  extends StructuredMessageInput {
+export interface StructuredMessageInputWithChainId extends StructuredMessageInput {
   chainId?: number;
 }
 
@@ -55,9 +54,9 @@ export async function signAptosMessageWithSui(
     throw new Error("sui:signPersonalMessage not available");
   }
 
-  const suiPublicKey = suiAccount.publicKey;
+  const suiAccountAddress = suiAccount.address;
 
-  if (!suiPublicKey) {
+  if (!suiAccountAddress) {
     throw new Error("Account not connected");
   }
 

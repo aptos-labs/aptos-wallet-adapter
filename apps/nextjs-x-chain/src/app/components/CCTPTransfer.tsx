@@ -32,6 +32,7 @@ import { chainToIcon } from "@/app/icons";
 import { AdapterWallet, useWallet } from "@aptos-labs/wallet-adapter-react";
 import {
   isEIP1193DerivedWallet,
+  isSuiDerivedWallet,
   OriginWalletDetails,
 } from "@/utils/derivedWallet";
 import { isSolanaDerivedWallet } from "@/utils/derivedWallet";
@@ -108,6 +109,8 @@ export function CCTPTransfer({
             : EthereumChainIdToTestnetChain[actualChainId];
         setSourceChain(chain.key);
       });
+    } else if (isSuiDerivedWallet(wallet)) {
+      setSourceChain("Sui");
     } else {
       setSourceChain("Aptos");
     }

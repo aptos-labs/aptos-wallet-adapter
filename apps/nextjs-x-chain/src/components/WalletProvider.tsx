@@ -12,7 +12,7 @@ import { useToast } from "./ui/use-toast";
 
 setupAutomaticEthereumWalletDerivation({ defaultNetwork: Network.TESTNET });
 setupAutomaticSolanaWalletDerivation({ defaultNetwork: Network.TESTNET });
-setupAutomaticSuiWalletDerivation({ defaultNetwork: Network.DEVNET });
+setupAutomaticSuiWalletDerivation({ defaultNetwork: Network.TESTNET });
 
 let dappImageURI: string | undefined;
 if (typeof window !== "undefined") {
