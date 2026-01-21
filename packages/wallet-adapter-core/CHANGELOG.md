@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 8.2.0
+
+### Minor Changes
+
+- 494adef: Add Sui cross-chain wallet support
+
 ## 8.1.0
 
 ### Minor Changes

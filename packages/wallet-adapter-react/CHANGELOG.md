@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-react
 
+## 8.2.0
+
+### Minor Changes
+
+- 494adef: Add Sui cross-chain wallet support
+
+### Patch Changes
+
+- Updated dependencies [494adef]
+  - @aptos-labs/wallet-adapter-core@8.2.0
+
 ## 8.1.0
 
 ### Minor Changes
