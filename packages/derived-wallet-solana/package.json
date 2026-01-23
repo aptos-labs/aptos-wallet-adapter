@@ -10,9 +10,16 @@
     "url": "https://github.com/aptos-labs/aptos-wallet-adapter.git"
   },
   "exports": {
-    "types": "./dist/types/index.d.ts",
-    "require": "./dist/index.js",
-    "import": "./dist/index.mjs"
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./node": {
+      "types": "./dist/types/node/index.d.ts",
+      "require": "./dist/node/index.js",
+      "import": "./dist/node/index.mjs"
+    }
   },
   "author": "aptoslabs.com",
   "scripts": {
@@ -24,9 +31,10 @@
     "lint": "TIMING=1 eslint \"src/**/*.ts*\""
   },
   "tsup": {
-    "entryPoints": [
-      "src/index.ts"
-    ],
+    "entry": {
+      "index": "src/index.ts",
+      "node/index": "src/node/index.ts"
+    },
     "format": [
       "cjs",
       "esm"
@@ -38,8 +46,9 @@
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-standard-util": "^1.1.2",
     "@solana/wallet-standard-wallet-adapter-base": "^1.1.4",
-    "@solana/web3.js": "^1.95.8",
-    "@wallet-standard/app": "^1.1.0"
+    "@wallet-standard/app": "^1.1.0",
+    "tweetnacl": "^1.0.3",
+    "@solana/web3.js": "^1.95.8"
   },
   "peerDependencies": {
     "@aptos-labs/ts-sdk": "^5.1.1"

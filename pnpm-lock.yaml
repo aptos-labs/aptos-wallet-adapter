@@ -575,6 +575,9 @@ importers:
       '@wallet-standard/app':
         specifier: ^1.1.0
         version: 1.1.0
+      tweetnacl:
+        specifier: ^1.0.3
+        version: 1.0.3
     devDependencies:
       '@aptos-labs/eslint-config-adapter':
         specifier: workspace:*
