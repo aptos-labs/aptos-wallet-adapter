@@ -23,6 +23,86 @@ import { EthereumAddress, wrapEthersUserResponse } from "./shared";
  * changes in the future if needed.
  */
 export const SIGNATURE_TYPE = 1;
+
+export interface CreateMessageForEthereumTransactionInput {
+  rawTransaction: AnyRawTransaction;
+  authenticationFunction: string;
+  ethereumAddress: EthereumAddress;
+  domain: string;
+  uri: string;
+  issuedAt: Date;
+}
+
+/**
+ * Helper function to create a SIWE message for an Ethereum transaction.
+ * This is useful for Node.js environments where window.location is not available.
+ */
+export function createMessageForEthereumTransaction(
+  input: CreateMessageForEthereumTransactionInput,
+) {
+  const {
+    rawTransaction,
+    authenticationFunction,
+    ethereumAddress,
+    domain,
+    uri,
+    issuedAt,
+  } = input;
+
+  const signingMessage = generateSigningMessageForTransaction(rawTransaction);
+  const message = AbstractedAccount.generateAccountAbstractionMessage(
+    signingMessage,
+    authenticationFunction,
+  );
+  const signingMessageDigest = hashValues([message]);
+
+  const chainId = rawTransaction.rawTransaction.chain_id.chainId;
+
+  const siweMessage = createSiweEnvelopeForAptosTransaction({
+    ethereumAddress,
+    chainId,
+    rawTransaction,
+    signingMessageDigest,
+    issuedAt,
+    domain,
+    uri,
+  });
+
+  return { siweMessage, signingMessageDigest };
+}
+
+/**
+ * Helper function to create an AccountAuthenticator from an Ethereum signature.
+ * This is useful for Node.js environments.
+ */
+export function createAccountAuthenticatorForEthereumTransaction(
+  siweSignature: string,
+  ethereumAddress: EthereumAddress,
+  domain: string,
+  scheme: string,
+  authenticationFunction: string,
+  signingMessageDigest: Uint8Array,
+  issuedAt: Date,
+): AccountAuthenticatorAbstraction {
+  const serializer = new Serializer();
+  serializer.serializeU8(SIGNATURE_TYPE);
+  const signature = new EIP1193SiweSignature(scheme, issuedAt, siweSignature);
+  signature.serialize(serializer);
+  const abstractSignature = serializer.toUint8Array();
+
+  const abstractPublicKey = new DerivableAbstractPublicKey(
+    ethereumAddress,
+    domain,
+  );
+
+  return new AccountAuthenticatorAbstraction(
+    authenticationFunction,
+    signingMessageDigest,
+    abstractSignature,
+    abstractPublicKey.bcsToBytes(),
+  );
+}
+
 export interface SignAptosTransactionWithEthereumInput {
   eip1193Provider: Eip1193Provider | BrowserProvider;
   ethereumAddress?: EthereumAddress;
@@ -48,51 +128,35 @@ export async function signAptosTransactionWithEthereum(
   }
   const ethereumAddress = ethereumAccount.address as EthereumAddress;
 
-  const signingMessage = generateSigningMessageForTransaction(rawTransaction);
-  const message = AbstractedAccount.generateAccountAbstractionMessage(
-    signingMessage,
-    authenticationFunction,
-  );
-  const signingMessageDigest = hashValues([message]);
-
-  const chainId = rawTransaction.rawTransaction.chain_id.chainId;
-
   // We need to provide `issuedAt` externally so that we can match it with the signature
   const issuedAt = new Date();
+  const domain = window.location.host;
+  const uri = window.location.origin;
+  const scheme = window.location.protocol.slice(0, -1);
 
-  const siweMessage = createSiweEnvelopeForAptosTransaction({
-    ethereumAddress,
-    chainId,
-    rawTransaction,
-    signingMessageDigest,
-    issuedAt,
-  });
+  const { siweMessage, signingMessageDigest } =
+    createMessageForEthereumTransaction({
+      rawTransaction,
+      authenticationFunction,
+      ethereumAddress,
+      domain,
+      uri,
+      issuedAt,
+    });
 
   const response = await wrapEthersUserResponse(
     ethereumAccount.signMessage(siweMessage),
   );
 
   return mapUserResponse(response, (siweSignature) => {
-    // Serialize the signature with the signature type as the first byte.
-    const serializer = new Serializer();
-    serializer.serializeU8(SIGNATURE_TYPE);
-    // Remove the trailing colon from the scheme
-    const scheme = window.location.protocol.slice(0, -1);
-    const signature = new EIP1193SiweSignature(scheme, issuedAt, siweSignature);
-    signature.serialize(serializer);
-    const abstractSignature = serializer.toUint8Array();
-
-    // Serialize the abstract public key.
-    const abstractPublicKey = new DerivableAbstractPublicKey(
+    return createAccountAuthenticatorForEthereumTransaction(
+      siweSignature,
       ethereumAddress,
-      window.location.host,
-    );
-
-    return new AccountAuthenticatorAbstraction(
+      domain,
+      scheme,
       authenticationFunction,
       signingMessageDigest,
-      abstractSignature,
-      abstractPublicKey.bcsToBytes(),
+      issuedAt,
     );
   });
 }
