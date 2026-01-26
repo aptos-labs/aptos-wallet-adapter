@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-ethereum
 
+## 0.9.0
+
+### Minor Changes
+
+- df2f715: Add EIP1193DerivedAccount for programmatic signing with EVM keypairs
+
 ## 0.8.6
 
 ### Patch Changes

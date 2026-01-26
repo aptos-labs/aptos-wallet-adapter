@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.12.0
+
+### Minor Changes
+
+- 127ce88: Add SolanaDerivedAccount for programmatic signing with Solana keypairs
+
 ## 0.11.0
 
 ### Minor Changes
