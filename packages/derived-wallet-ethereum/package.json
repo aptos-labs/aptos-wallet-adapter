@@ -10,16 +10,9 @@
     "url": "https://github.com/aptos-labs/aptos-wallet-adapter.git"
   },
   "exports": {
-    ".": {
-      "types": "./dist/types/index.d.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
-    },
-    "./node": {
-      "types": "./dist/types/node/index.d.ts",
-      "require": "./dist/node/index.js",
-      "import": "./dist/node/index.mjs"
-    }
+    "types": "./dist/types/index.d.ts",
+    "require": "./dist/index.js",
+    "import": "./dist/index.mjs"
   },
   "author": "aptoslabs.com",
   "scripts": {
@@ -32,8 +25,7 @@
   },
   "tsup": {
     "entryPoints": [
-      "src/index.ts",
-      "src/node/index.ts"
+      "src/index.ts"
     ],
     "format": [
       "cjs",

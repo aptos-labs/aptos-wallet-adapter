@@ -4,12 +4,12 @@ import {
   AnyRawTransaction,
 } from "@aptos-labs/ts-sdk";
 import { hashMessage, Signature, Wallet } from "ethers";
-import { EIP1193DerivedPublicKey } from "../EIP1193DerivedPublicKey";
-import { defaultEthereumAuthenticationFunction, EthereumAddress } from "../shared";
+import { EIP1193DerivedPublicKey } from "./EIP1193DerivedPublicKey";
+import { defaultEthereumAuthenticationFunction, EthereumAddress } from "./shared";
 import {
   createMessageForEthereumTransaction,
   createAccountAuthenticatorForEthereumTransaction,
-} from "../signAptosTransaction";
+} from "./signAptosTransaction";
 
 export interface EIP1193DerivedAccountParams {
   /** The Ethereum wallet (with private key) to sign with */
@@ -33,7 +33,7 @@ export interface EIP1193DerivedAccountParams {
  * @example
  * ```typescript
  * import { Wallet } from "ethers";
- * import { EIP1193DerivedAccount } from "@aptos-labs/derived-wallet-ethereum/node";
+ * import { EIP1193DerivedAccount } from "@aptos-labs/derived-wallet-ethereum";
  *
  * const ethereumWallet = new Wallet("0x...");
  * const account = new EIP1193DerivedAccount({

@@ -2,15 +2,6 @@
 
 A light-weight add-on package to the [@aptos-labs/wallet-adapter-react](../wallet-adapter-react/) that enables the functionality to use an EVM wallet as a Native Aptos Wallet
 
-## Package Entry Points
-
-This package provides two entry points for different use cases:
-
-| Import Path | Purpose | Environment |
-|-------------|---------|-------------|
-| `@aptos-labs/derived-wallet-ethereum` | Core classes and utilities | Browser |
-| `@aptos-labs/derived-wallet-ethereum/node` | Programmatic signing with wallets | Node.js |
-
 ### How does EVM wallet work with the wallet adapter?
 
 When a user connects to a dApp using a supported EVM wallet, the adapter computes the user's Derivable Abstracted Account (DAA) address and converts the EVM account to follow the Aptos wallet standard interface.
@@ -78,7 +69,7 @@ npm install @aptos-labs/derived-wallet-ethereum
 
 ```typescript
 import { Wallet } from "ethers";
-import { EIP1193DerivedAccount } from "@aptos-labs/derived-wallet-ethereum/node";
+import { EIP1193DerivedAccount } from "@aptos-labs/derived-wallet-ethereum";
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 
 // Create or load an Ethereum wallet
