@@ -10,8 +10,7 @@ import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-sta
 import { wrapSolanaUserResponse } from "./shared";
 import { SolanaDerivedPublicKey } from "./SolanaDerivedPublicKey";
 
-export interface StructuredMessageInputWithChainId
-  extends StructuredMessageInput {
+export interface StructuredMessageInputWithChainId extends StructuredMessageInput {
   chainId?: number;
 }
 

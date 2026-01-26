@@ -4,6 +4,7 @@ export enum Context {
   ETH = "Ethereum",
   SOLANA = "Solana",
   APTOS = "Aptos",
+  SUI = "Sui",
 }
 
 export type BaseChainConfig = {

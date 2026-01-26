@@ -5,7 +5,7 @@ import {
 import { UserResponse } from "@aptos-labs/wallet-standard";
 import { WalletError } from "@solana/wallet-adapter-base";
 
-export const defaultAuthenticationFunction =
+export const defaultSolanaAuthenticationFunction =
   "0x1::solana_derivable_account::authenticate";
 
 /**

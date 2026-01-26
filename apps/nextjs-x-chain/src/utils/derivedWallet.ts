@@ -9,12 +9,13 @@ import {
   SolanaPublicKey,
 } from "@aptos-labs/derived-wallet-solana";
 import { AdapterWallet } from "@aptos-labs/wallet-adapter-react";
+import { SuiDerivedWallet, toHex } from "@aptos-labs/derived-wallet-sui";
 
 // Define the type for the origin wallet details
 export type OriginWalletDetails =
   | {
       address: string | AccountAddress;
-      publicKey?: SolanaPublicKey | AptosAnyPublicKey | undefined;
+      publicKey?: SolanaPublicKey | AptosAnyPublicKey | string | undefined;
     }
   | AccountInfo
   | null;
@@ -33,9 +34,17 @@ export function isEIP1193DerivedWallet(
   return wallet instanceof EIP1193DerivedWallet;
 }
 
+// Define a function to check if a wallet is a Sui derived wallet
+export function isSuiDerivedWallet(
+  wallet: AdapterWallet,
+): wallet is SuiDerivedWallet {
+  return wallet instanceof SuiDerivedWallet;
+}
+
 // Define specific return types based on wallet type
 type SolanaWalletDetails = { address: string; publicKey: SolanaPublicKey };
 type EVMWalletDetails = { address: string; publicKey?: undefined };
+type SuiWalletDetails = { address: string; publicKey: string };
 
 // Define a function to get the origin wallet details based on the wallet type
 export async function getOriginWalletDetails(
@@ -44,6 +53,9 @@ export async function getOriginWalletDetails(
 export async function getOriginWalletDetails(
   wallet: EIP1193DerivedWallet,
 ): Promise<EVMWalletDetails>;
+export async function getOriginWalletDetails(
+  wallet: SuiDerivedWallet,
+): Promise<SuiWalletDetails>;
 export async function getOriginWalletDetails(
   wallet: AdapterWallet,
 ): Promise<OriginWalletDetails | undefined>;
@@ -63,6 +75,11 @@ export async function getOriginWalletDetails(
     return {
       publicKey: undefined, // No public key for EVM wallets
       address: activeAccount.address,
+    };
+  } else if (isSuiDerivedWallet(wallet)) {
+    return {
+      address: wallet.suiWallet.accounts[0].address,
+      publicKey: toHex(Uint8Array.from(wallet.suiWallet.accounts[0].publicKey)),
     };
   } else {
     // Assume Aptos Wallet

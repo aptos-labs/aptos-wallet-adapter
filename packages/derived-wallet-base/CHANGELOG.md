@@ -1,5 +1,17 @@
 # @aptos-labs/derived-wallet-base
 
+## 0.11.0
+
+### Minor Changes
+
+- 494adef: Add Sui cross-chain wallet support
+
+## 0.10.1
+
+### Patch Changes
+
+- 7f28e7b: [Fix] Build packages for release
+
 ## 0.10.0
 
 ### Minor Changes

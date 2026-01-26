@@ -47,6 +47,7 @@ export interface WalletContextState {
   ): Promise<PendingTransactionResponse>;
   wallet: AdapterWallet | null;
   wallets: ReadonlyArray<AdapterWallet>;
+  hiddenWallets: ReadonlyArray<AdapterWallet>;
   notDetectedWallets: ReadonlyArray<AdapterNotDetectedWallet>;
 }
 

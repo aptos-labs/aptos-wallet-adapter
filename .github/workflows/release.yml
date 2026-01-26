@@ -4,17 +4,15 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch: # Allows manual triggering from GitHub Actions UI
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
-
-permissions:
-  id-token: write # Required for OIDC
-  contents: read
 
 jobs:
   build:
     name: Build
     permissions:
+      id-token: write # Required for npm OIDC trusted publishers
       actions: write
       pull-requests: write
       contents: write
@@ -34,6 +32,9 @@ jobs:
         with:
           node-version-file: .node-version
           registry-url: "https://registry.npmjs.org"
+
+      - name: Upgrade npm for OIDC support
+        run: npm install -g npm@latest
 
       - uses: pnpm/action-setup@v4
         name: Install pnpm
@@ -56,6 +57,7 @@ jobs:
           publish: pnpm run publish-packages
         env:
           GITHUB_TOKEN: ${{ steps.authenticate.outputs.token }}
+          NPM_CONFIG_PROVENANCE: true
           NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY: ${{ secrets.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY }}
           NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY: ${{ secrets.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY }}
           NEXT_PUBLIC_GAS_STATION_API_KEY: ${{ secrets.NEXT_PUBLIC_GAS_STATION_API_KEY }}

@@ -1,5 +1,5 @@
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
-import { NetworkInfo } from "@aptos-labs/wallet-adapter-core";
+import { NetworkInfo } from "@aptos-labs/wallet-adapter-react";
 
 export const aptosClient = (network?: NetworkInfo | null) => {
   if (network?.name === Network.DEVNET) {

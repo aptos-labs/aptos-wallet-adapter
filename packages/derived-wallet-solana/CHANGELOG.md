@@ -1,5 +1,30 @@
 # @aptos-labs/derived-wallet-solana
 
+## 0.11.0
+
+### Minor Changes
+
+- 39def14: Add Sui cross-chain CCTP transfers
+
+### Patch Changes
+
+- Updated dependencies [494adef]
+  - @aptos-labs/derived-wallet-base@0.11.0
+
+## 0.10.0
+
+### Minor Changes
+
+- f70e69b: Revert cross-chain wallet initialization in AptosWalletAdapterProvider
+
+## 0.9.2
+
+### Patch Changes
+
+- 7f28e7b: [Fix] Build packages for release
+- Updated dependencies [7f28e7b]
+  - @aptos-labs/derived-wallet-base@0.10.1
+
 ## 0.9.1
 
 ### Patch Changes

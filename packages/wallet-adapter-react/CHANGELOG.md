@@ -1,5 +1,56 @@
 # @aptos-labs/wallet-adapter-react
 
+## 8.2.0
+
+### Minor Changes
+
+- 494adef: Add Sui cross-chain wallet support
+
+### Patch Changes
+
+- Updated dependencies [494adef]
+  - @aptos-labs/wallet-adapter-core@8.2.0
+
+## 8.1.0
+
+### Minor Changes
+
+- f70e69b: Revert cross-chain wallet initialization in AptosWalletAdapterProvider
+
+### Patch Changes
+
+- Updated dependencies [f70e69b]
+  - @aptos-labs/wallet-adapter-core@8.1.0
+
+## 8.0.2
+
+### Patch Changes
+
+- 7f28e7b: [Fix] Build packages for release
+- Updated dependencies [7f28e7b]
+  - @aptos-labs/derived-wallet-ethereum@0.8.5
+  - @aptos-labs/derived-wallet-solana@0.9.2
+  - @aptos-labs/wallet-adapter-core@8.0.1
+
+## 8.0.1
+
+### Patch Changes
+
+- 0e6ae15: Cross chain initialization fix
+
+## 8.0.0
+
+### Major Changes
+
+- 378146b: Moved cross-chain wallet initialization into the AptosWalletAdapterProvider
+
+### Patch Changes
+
+- 69c5d26: Add support for fallback wallets in `WalletItem`
+- Updated dependencies [69c5d26]
+- Updated dependencies [378146b]
+  - @aptos-labs/wallet-adapter-core@8.0.0
+
 ## 7.2.8
 
 ### Patch Changes

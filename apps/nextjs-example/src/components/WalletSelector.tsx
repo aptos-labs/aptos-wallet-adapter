@@ -6,7 +6,9 @@ import {
   AdapterNotDetectedWallet,
   AdapterWallet,
   AptosPrivacyPolicy,
+  DEFAULT_WALLET_CONNECTION_FALLBACKS,
   groupAndSortWallets,
+  shouldUseFallbackWallet,
   isInstallRequired,
   isPetraWebWallet,
   PETRA_WEB_ACCOUNT_URL,
@@ -117,13 +119,24 @@ function ConnectWalletDialog({
   close,
   ...walletSortingOptions
 }: ConnectWalletDialogProps) {
-  const { wallets = [], notDetectedWallets = [] } = useWallet();
+  const {
+    wallets = [],
+    notDetectedWallets = [],
+    hiddenWallets = [],
+  } = useWallet();
 
-  const { petraWebWallets, availableWallets, installableWallets } =
-    groupAndSortWallets(
-      [...wallets, ...notDetectedWallets],
-      walletSortingOptions,
-    );
+  const {
+    petraWebWallets,
+    availableWallets,
+    availableWalletsWithFallbacks,
+    installableWallets,
+  } = groupAndSortWallets([...wallets, ...notDetectedWallets], {
+    fallbacks: {
+      connections: DEFAULT_WALLET_CONNECTION_FALLBACKS,
+      additionalFallbackWallets: hiddenWallets,
+    },
+    ...walletSortingOptions,
+  });
 
   const hasPetraWebWallets = !!petraWebWallets.length;
 
@@ -175,9 +188,11 @@ function ConnectWalletDialog({
         )}
 
         <div className="flex flex-col gap-3 pt-3">
-          {availableWallets.map((wallet) => (
-            <WalletRow key={wallet.name} wallet={wallet} onConnect={close} />
-          ))}
+          {[...availableWallets, ...availableWalletsWithFallbacks].map(
+            (wallet) => (
+              <WalletRow key={wallet.name} wallet={wallet} onConnect={close} />
+            ),
+          )}
           {!!installableWallets.length && (
             <Collapsible className="flex flex-col gap-3">
               <CollapsibleTrigger asChild>
@@ -218,7 +233,11 @@ function WalletRow({ wallet, onConnect }: WalletRowProps) {
         <WalletItem.Icon className="h-6 w-6" />
         <WalletItem.Name className="text-base font-normal" />
       </div>
-      {isInstallRequired(wallet) ? (
+      {shouldUseFallbackWallet(wallet) ? (
+        <WalletItem.ConnectButton asChild>
+          <Button size="sm">Connect</Button>
+        </WalletItem.ConnectButton>
+      ) : isInstallRequired(wallet) ? (
         <Button size="sm" variant="ghost" asChild>
           <WalletItem.InstallLink />
         </Button>

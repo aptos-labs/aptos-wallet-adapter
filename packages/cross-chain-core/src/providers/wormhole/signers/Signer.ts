@@ -11,15 +11,15 @@ import {
   EvmUnsignedTransaction,
   EvmChains,
 } from "@wormhole-foundation/sdk-evm";
+import {
+  SuiChains,
+  SuiUnsignedTransaction,
+} from "@wormhole-foundation/sdk-sui";
 
 import * as solanaSigner from "./SolanaSigner";
 import * as ethereumSigner from "./EthereumSigner";
 import * as aptosSigner from "./AptosSigner";
-// import {
-//   SuiChains,
-//   SuiUnsignedTransaction,
-// } from "@wormhole-foundation/sdk-sui";
-// import * as suiSigner from "./SuiSigner";
+import * as suiSigner from "./SuiSigner";
 
 import { ChainConfig } from "../../../config";
 import { CrossChainCore } from "../../../CrossChainCore";
@@ -27,9 +27,10 @@ import { AptosChains } from "@wormhole-foundation/sdk-aptos/dist/cjs/types";
 import { AptosUnsignedTransaction } from "@wormhole-foundation/sdk-aptos/dist/cjs/unsignedTransaction";
 import { GasStationApiKey } from "../types";
 import { Account } from "@aptos-labs/ts-sdk";
-export class Signer<N extends Network, C extends Chain>
-  implements SignAndSendSigner<N, C>
-{
+export class Signer<
+  N extends Network,
+  C extends Chain,
+> implements SignAndSendSigner<N, C> {
   _chain: ChainConfig;
   _address: string;
   _options: any;
@@ -111,6 +112,12 @@ export const signAndSendTransaction = async (
       wallet,
       chain.displayName,
       options,
+    );
+    return tx;
+  } else if (chain.context === "Sui") {
+    const tx = await suiSigner.signAndSendTransaction(
+      request as SuiUnsignedTransaction<Network, SuiChains>,
+      wallet,
     );
     return tx;
   } else if (chain.context === "Aptos") {

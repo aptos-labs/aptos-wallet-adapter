@@ -26,13 +26,13 @@ import {
   WormholeTransferResponse,
   WormholeQuoteResponse,
 } from "@aptos-labs/cross-chain-core";
-import { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
 import { Loader2, MoveDown } from "lucide-react";
 import USDC from "@/app/icons/USDC";
 import { chainToIcon } from "@/app/icons";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { AdapterWallet, useWallet } from "@aptos-labs/wallet-adapter-react";
 import {
   isEIP1193DerivedWallet,
+  isSuiDerivedWallet,
   OriginWalletDetails,
 } from "@/utils/derivedWallet";
 import { isSolanaDerivedWallet } from "@/utils/derivedWallet";
@@ -109,6 +109,8 @@ export function CCTPTransfer({
             : EthereumChainIdToTestnetChain[actualChainId];
         setSourceChain(chain.key);
       });
+    } else if (isSuiDerivedWallet(wallet)) {
+      setSourceChain("Sui");
     } else {
       setSourceChain("Aptos");
     }

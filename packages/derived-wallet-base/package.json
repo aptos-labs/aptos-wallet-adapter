@@ -1,10 +1,14 @@
 {
   "name": "@aptos-labs/derived-wallet-base",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/types/index.d.ts",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aptos-labs/aptos-wallet-adapter.git"
+  },
   "exports": {
     "types": "./dist/types/index.d.ts",
     "require": "./dist/index.js",

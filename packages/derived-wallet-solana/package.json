@@ -1,10 +1,14 @@
 {
   "name": "@aptos-labs/derived-wallet-solana",
-  "version": "0.9.1",
+  "version": "0.11.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/types/index.d.ts",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aptos-labs/aptos-wallet-adapter.git"
+  },
   "exports": {
     "types": "./dist/types/index.d.ts",
     "require": "./dist/index.js",
@@ -34,8 +38,9 @@
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-standard-util": "^1.1.2",
     "@solana/wallet-standard-wallet-adapter-base": "^1.1.4",
-    "@solana/web3.js": "^1.95.8",
-    "@wallet-standard/app": "^1.1.0"
+    "@wallet-standard/app": "^1.1.0",
+    "tweetnacl": "^1.0.3",
+    "@solana/web3.js": "^1.95.8"
   },
   "peerDependencies": {
     "@aptos-labs/ts-sdk": "^5.1.1"

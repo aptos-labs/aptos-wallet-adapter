@@ -1,5 +1,50 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 5.5.0
+
+### Minor Changes
+
+- 39def14: Add Sui cross-chain CCTP transfers
+
+### Patch Changes
+
+- Updated dependencies [494adef]
+  - @aptos-labs/wallet-adapter-react@8.2.0
+
+## 5.4.0
+
+### Minor Changes
+
+- f70e69b: Revert cross-chain wallet initialization in AptosWalletAdapterProvider
+
+### Patch Changes
+
+- Updated dependencies [f70e69b]
+  - @aptos-labs/wallet-adapter-react@8.1.0
+
+## 5.3.11
+
+### Patch Changes
+
+- 7f28e7b: [Fix] Build packages for release
+- Updated dependencies [7f28e7b]
+  - @aptos-labs/wallet-adapter-react@8.0.2
+
+## 5.3.10
+
+### Patch Changes
+
+- Updated dependencies [0e6ae15]
+  - @aptos-labs/wallet-adapter-react@8.0.1
+
+## 5.3.9
+
+### Patch Changes
+
+- Updated dependencies [378146b]
+- Updated dependencies [69c5d26]
+  - @aptos-labs/wallet-adapter-react@8.0.0
+
 ## 5.3.8
 
 ### Patch Changes

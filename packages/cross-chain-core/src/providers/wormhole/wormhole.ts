@@ -11,6 +11,7 @@ import { Network, sleep } from "@aptos-labs/ts-sdk";
 import aptos from "@wormhole-foundation/sdk/aptos";
 import solana from "@wormhole-foundation/sdk/solana";
 import evm from "@wormhole-foundation/sdk/evm";
+import sui from "@wormhole-foundation/sdk/sui";
 
 import {
   Chain,
@@ -36,18 +37,16 @@ import {
 } from "./types";
 import { SolanaDerivedWallet } from "@aptos-labs/derived-wallet-solana";
 import { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
+import { SuiDerivedWallet } from "@aptos-labs/derived-wallet-sui";
 
-export class WormholeProvider
-  implements
-    CrossChainProvider<
-      WormholeQuoteRequest,
-      WormholeQuoteResponse,
-      WormholeTransferRequest,
-      WormholeTransferResponse,
-      WormholeWithdrawRequest,
-      WormholeWithdrawResponse
-    >
-{
+export class WormholeProvider implements CrossChainProvider<
+  WormholeQuoteRequest,
+  WormholeQuoteResponse,
+  WormholeTransferRequest,
+  WormholeTransferResponse,
+  WormholeWithdrawRequest,
+  WormholeWithdrawResponse
+> {
   private crossChainCore: CrossChainCore;
 
   private _wormholeContext: Wormhole<"Mainnet" | "Testnet"> | undefined;
@@ -73,7 +72,7 @@ export class WormholeProvider
       throw new Error("Origin chain not selected");
     }
     const isMainnet = dappNetwork === Network.MAINNET;
-    const platforms: PlatformLoader<any>[] = [aptos, solana, evm];
+    const platforms: PlatformLoader<any>[] = [aptos, solana, evm, sui];
     const wh = await wormhole(isMainnet ? "Mainnet" : "Testnet", platforms);
     this._wormholeContext = wh;
   }
@@ -190,13 +189,18 @@ export class WormholeProvider
       signerAddress =
         (wallet as SolanaDerivedWallet).solanaWallet.publicKey?.toBase58() ||
         "";
-    } else {
+    } else if (chainContext === "Ethereum") {
       // is Ethereum
       [signerAddress] = await (
         wallet as EIP1193DerivedWallet
       ).eip1193Provider.request({
         method: "eth_requestAccounts",
       });
+    } else if (chainContext === "Sui") {
+      signerAddress =
+        (wallet as SuiDerivedWallet).suiWallet.accounts[0].address || "";
+    } else {
+      throw new Error("Unsupported chain context: " + chainContext);
     }
     logger.log("signerAddress", signerAddress);
 
