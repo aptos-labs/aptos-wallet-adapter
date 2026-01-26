@@ -12,6 +12,10 @@ export interface CreateSiweEnvelopeInput {
   chainId: number;
   signingMessageDigest: HexInput;
   issuedAt: Date;
+  /** Optional domain - defaults to window.location.host in browser */
+  domain?: string;
+  /** Optional URI - defaults to window.location.origin in browser */
+  uri?: string;
 }
 
 function createSiweEnvelope(
@@ -23,12 +27,14 @@ function createSiweEnvelope(
     signingMessageDigest,
     issuedAt,
     statement,
+    domain = window.location.host,
+    uri = window.location.origin,
   } = input;
   const digestHex = Hex.fromHexInput(signingMessageDigest).toString();
   return createSiweMessage({
     address: ethereumAddress,
-    domain: window.location.host,
-    uri: window.location.origin,
+    domain,
+    uri,
     chainId,
     nonce: digestHex,
     statement,

@@ -76,13 +76,15 @@ export class EIP1193DerivedPublicKey extends AccountPublicKey {
     } else {
       // Handle transaction
       if (!(signature instanceof EIP1193SiweSignature)) return false;
-      const { issuedAt } = signature;
+      const { issuedAt, scheme } = signature;
       const signingMessageDigest = hashValues([message]);
       // Obtain SIWE envelope for the signing message
       const envelopeInput = {
         ethereumAddress: this.ethereumAddress,
         signingMessageDigest,
         issuedAt,
+        domain: this.domain,
+        uri: `${scheme}://${this.domain}`,
       };
 
       messageBytes = createSiweEnvelopeForAptosTransaction({

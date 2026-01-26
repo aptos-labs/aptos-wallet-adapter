@@ -1,5 +1,3 @@
-> **_NOTE:_** The feature is currently only available on DEVNET and TESTNET and is considered an alpha version; therefore, you can expect breaking changes.
-
 # Derived Wallet Ethereum
 
 A light-weight add-on package to the [@aptos-labs/wallet-adapter-react](../wallet-adapter-react/) that enables the functionality to use an EVM wallet as a Native Aptos Wallet
@@ -23,47 +21,89 @@ Currently, the wallets that have been tested and support cross-chain accounts ar
 
 |          | Aptos Devnet | Aptos Testnet | Aptos Mainnet |
 | -------- | ------------ | ------------- | ------------- |
-| Metamask | ✅           | ✅            |
-| Phantom  | ✅           | ✅            |
-| Coinbase | ✅           | ✅            |
-| OKX      | ✅           | ✅            |
-| Exodus   | ✅           | ✅            |
-| Backpack | ✅           | ✅            |
+| Metamask | ✅           | ✅            | ✅
+| Phantom  | ✅           | ✅            | ✅
+| Coinbase | ✅           | ✅            | ✅
+| OKX      | ✅           | ✅            | ✅
+| Exodus   | ✅           | ✅            | ✅
+| Backpack | ✅           | ✅            | ✅
 
-### Usage
+## Usage
 
-1. Install the [@aptos-labs/wallet-adapter-react](../wallet-adapter-react/) package
+### Option 1: Automatic Wallet Detection (Recommended for dApps)
+
+Use this approach when building a dApp where users connect their EVM wallets.
+
+1. Install the packages
 
 ```bash
-npm install @aptos-labs/wallet-adapter-react
+npm install @aptos-labs/wallet-adapter-react @aptos-labs/derived-wallet-ethereum
 ```
 
-2. Install the package `@aptos-labs/derived-wallet-ethereum`
+2. Set up automatic detection
+
+```tsx
+import { AptosWalletAdapterProvider, Network } from "@aptos-labs/wallet-adapter-react";
+import { setupAutomaticEthereumWalletDerivation } from "@aptos-labs/derived-wallet-ethereum";
+
+setupAutomaticEthereumWalletDerivation({ defaultNetwork: Network.TESTNET });
+
+// ...
+
+<AptosWalletAdapterProvider
+  dappConfig={{
+    network: Network.TESTNET,
+  }}
+>
+  {children}
+</AptosWalletAdapterProvider>
+```
+
+### Option 2: Programmatic Signing (For Node.js/Scripts)
+
+Use this approach for server-side signing or scripts where you have direct access to an Ethereum private key.
 
 ```bash
 npm install @aptos-labs/derived-wallet-ethereum
 ```
 
-3. Import the automatic detection function
+```typescript
+import { Wallet } from "ethers";
+import { EIP1193DerivedAccount } from "@aptos-labs/derived-wallet-ethereum";
+import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 
-```tsx
-import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
-import { setupAutomaticEthereumWalletDerivation } from "@aptos-labs/derived-wallet-ethereum";
+// Create or load an Ethereum wallet
+const ethereumWallet = Wallet.createRandom();
 
-setupAutomaticEthereumWalletDerivation({ defaultNetwork: Network.TESTNET }); // Network.TESTNET is the Aptos network your dapp is working with
+// Create the derived account
+const account = new EIP1193DerivedAccount({
+  ethereumWallet,
+  domain: "my-dapp.com",
+});
 
-.....
+// Get the derived Aptos address
+console.log("Aptos address:", account.accountAddress.toString());
 
-<AptosWalletAdapterProvider
- dappConfig={{
-    network: Network.TESTNET,
-  }}
->
-  {children}
-<AptosWalletAdapterProvider/>
+// Sign and submit a transaction
+const aptos = new Aptos(new AptosConfig({ network: Network.TESTNET }));
+
+const transaction = await aptos.transaction.build.simple({
+  sender: account.accountAddress,
+  data: {
+    function: "0x1::aptos_account::transfer",
+    functionArguments: [recipientAddress, 100],
+  },
+});
+
+const response = await aptos.signAndSubmitTransaction({
+  signer: account,
+  transaction,
+});
+
+console.log("Transaction hash:", response.hash);
 ```
 
-#### Submitting a transaction
+## Submitting a Transaction (with Fee Payer)
 
 In most cases, allowing users to submit a transaction with an EVM account to the Aptos chain requires using a sponsor transaction.
 This is because the EVM account might not have APT to pay for gas.
@@ -150,7 +190,7 @@ const SignAndSubmit = () => {
 export default SignAndSubmit;
 ```
 
-### Considerations
+## Considerations
 
 - Since the origin wallet most likely not integrated with Aptos, simulation is not available in the wallet.
 - The package retains the origin wallet, so developers should be able to use it and interact with it by:
@@ -165,7 +205,7 @@ if (isEIP1193DerivedWallet(wallet)) {
 }
 ```
 
-### Resources
+## Resources
 
 - X-Chain Accounts Adapter Demo App
   - [Live site](https://aptos-labs.github.io/aptos-wallet-adapter/nextjs-cross-chain-example/)

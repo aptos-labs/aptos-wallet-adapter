@@ -7,6 +7,9 @@ import { isError as isEthersError } from "ethers";
 
 export type EthereumAddress = `0x${string}`;
 
+export const defaultEthereumAuthenticationFunction =
+  "0x1::ethereum_derivable_account::authenticate";
+
 /**
  * Adapt EIP1193 response into a UserResponse.
  * `UserRejectedRequestError` will be converted into a rejection.
