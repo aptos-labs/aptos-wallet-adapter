@@ -1,5 +1,21 @@
 # @aptos-labs/cross-chain-core
 
+## 5.6.0
+
+### Minor Changes
+
+- 39def14: Add Sui cross-chain CCTP transfers
+
+### Patch Changes
+
+- Updated dependencies [39def14]
+- Updated dependencies [e226684]
+- Updated dependencies [494adef]
+  - @aptos-labs/derived-wallet-solana@0.11.0
+  - @aptos-labs/derived-wallet-sui@0.2.0
+  - @aptos-labs/derived-wallet-ethereum@0.8.6
+  - @aptos-labs/wallet-adapter-core@8.2.0
+
 ## 5.5.0
 
 ### Minor Changes

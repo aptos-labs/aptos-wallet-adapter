@@ -1,5 +1,13 @@
 # @aptos-labs/derived-wallet-ethereum
 
+## 0.8.6
+
+### Patch Changes
+
+- e226684: Fix account change detection for EVM wallets
+- Updated dependencies [494adef]
+  - @aptos-labs/derived-wallet-base@0.11.0
+
 ## 0.8.5
 
 ### Patch Changes

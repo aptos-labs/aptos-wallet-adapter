@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-mui-design
 
+## 5.5.0
+
+### Minor Changes
+
+- 39def14: Add Sui cross-chain CCTP transfers
+
+### Patch Changes
+
+- Updated dependencies [494adef]
+  - @aptos-labs/wallet-adapter-react@8.2.0
+
 ## 5.4.0
 
 ### Minor Changes
