@@ -26,7 +26,7 @@ import {
 } from "@aptos-labs/wallet-standard";
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
-import { defaultAuthenticationFunction } from "./shared";
+import { defaultSolanaAuthenticationFunction } from "./shared";
 import { signAptosMessageWithSolana } from "./signAptosMessage";
 import { signAptosTransactionWithSolana } from "./signAptosTransaction";
 import { SolanaDerivedPublicKey } from "./SolanaDerivedPublicKey";
@@ -55,7 +55,7 @@ export class SolanaDerivedWallet implements AptosWallet {
     options: SolanaDomainWalletOptions = {},
   ) {
     const {
-      authenticationFunction = defaultAuthenticationFunction,
+      authenticationFunction = defaultSolanaAuthenticationFunction,
       defaultNetwork = Network.MAINNET,
     } = options;
 

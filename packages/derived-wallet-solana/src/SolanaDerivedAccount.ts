@@ -6,12 +6,12 @@ import {
 import { createSignInMessage } from "@solana/wallet-standard-util";
 import type { Keypair } from "@solana/web3.js";
 import nacl from "tweetnacl";
-import { SolanaDerivedPublicKey } from "../SolanaDerivedPublicKey";
-import { defaultAuthenticationFunction } from "../shared";
+import { SolanaDerivedPublicKey } from "./SolanaDerivedPublicKey";
+import { defaultSolanaAuthenticationFunction } from "./shared";
 import {
   createMessageForSolanaTransaction,
   createAccountAuthenticatorForSolanaTransaction,
-} from "../signAptosTransaction";
+} from "./signAptosTransaction";
 
 export interface SolanaDerivedAccountParams {
   /** The Solana keypair to sign with */
@@ -34,7 +34,7 @@ export interface SolanaDerivedAccountParams {
  * @example
  * ```typescript
  * import { Keypair } from "@solana/web3.js";
- * import { SolanaDerivedAccount } from "@aptos-labs/derived-wallet-solana/node";
+ * import { SolanaDerivedAccount } from "@aptos-labs/derived-wallet-solana";
  *
  * const solanaKeypair = Keypair.generate();
  * const account = new SolanaDerivedAccount({
@@ -59,7 +59,7 @@ export class SolanaDerivedAccount extends AbstractedAccount {
     const {
       solanaKeypair,
       domain,
-      authenticationFunction = defaultAuthenticationFunction,
+      authenticationFunction = defaultSolanaAuthenticationFunction,
     } = params;
 
     const derivedPublicKey = new SolanaDerivedPublicKey({

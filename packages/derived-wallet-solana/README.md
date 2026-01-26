@@ -2,15 +2,6 @@
 
 A light-weight add-on package to the [@aptos-labs/wallet-adapter-react](../wallet-adapter-react/) that enables the functionality to use a Solana wallet as a Native Aptos Wallet
 
-## Package Entry Points
-
-This package provides two entry points for different use cases:
-
-| Import Path | Purpose | Environment |
-|-------------|---------|-------------|
-| `@aptos-labs/derived-wallet-solana` | Core classes and utilities | Browser |
-| `@aptos-labs/derived-wallet-solana/node` | Programmatic signing with keypairs | Node.js |
-
 ### How does Solana wallet work with the wallet adapter?
 
 When a user connects to a dApp using a supported Solana wallet, the adapter computes the user's Derivable Abstracted Account (DAA) address and converts the Solana account to follow the Aptos wallet standard interface.
@@ -76,7 +67,7 @@ npm install @aptos-labs/derived-wallet-solana
 
 ```typescript
 import { Keypair } from "@solana/web3.js";
-import { SolanaDerivedAccount } from "@aptos-labs/derived-wallet-solana/node";
+import { SolanaDerivedAccount } from "@aptos-labs/derived-wallet-solana";
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 
 // Create or load a Solana keypair
