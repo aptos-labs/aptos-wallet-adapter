@@ -5,7 +5,7 @@ import {
 } from "@aptos-labs/wallet-standard";
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
-import { defaultAuthenticationFunction } from "./shared";
+import { defaultSolanaAuthenticationFunction } from "./shared";
 import {
   signAptosMessageWithSolana,
   StructuredMessageInputWithChainId,
@@ -40,7 +40,7 @@ export type SolanaWalletAdapterWithAptosFeatures = SolanaWalletAdapter & {
  */
 export function extendSolanaWallet(
   solanaWallet: SolanaWalletAdapter,
-  authenticationFunction = defaultAuthenticationFunction,
+  authenticationFunction = defaultSolanaAuthenticationFunction,
 ) {
   const extended = solanaWallet as SolanaWalletAdapterWithAptosFeatures;
   extended.getAptosPublicKey = (solanaPublicKey: SolanaPublicKey) =>
