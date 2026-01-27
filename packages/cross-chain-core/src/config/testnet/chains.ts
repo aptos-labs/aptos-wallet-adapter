@@ -10,7 +10,7 @@ export const testnetChains: ChainsConfig = {
     explorerName: "Etherscan",
     icon: "Ethereum",
     symbol: "ETH",
-    defaultRpc: "https://eth-sepolia.public.blastapi.io",
+    defaultRpc: "https://ethereum-sepolia-rpc.publicnode.com",
   },
   BaseSepolia: {
     key: "BaseSepolia",
