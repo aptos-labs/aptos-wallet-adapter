@@ -17,16 +17,19 @@ export const getSolanaWalletUSDCBalance = async (
       : testnetTokens["Solana"].tokenId.address;
 
   const connection = new Connection(rpc);
-  // Check to see if we were passed wallet address or token account
+  // Find the token account for USDC
   const splToken = await connection.getTokenAccountsByOwner(address, {
     mint: new PublicKey(tokenAddress),
   });
 
-  // Use the first token account if it exists, otherwise fall back to wallet address
-  const checkAddress =
-    splToken.value.length > 0 ? splToken.value[0]!.pubkey : address;
+  // If no token account exists, the wallet has never held USDC - balance is 0
+  if (splToken.value.length === 0) {
+    return "0";
+  }
 
-  const balance = await connection.getTokenAccountBalance(checkAddress);
+  const balance = await connection.getTokenAccountBalance(
+    splToken.value[0]!.pubkey,
+  );
 
   return (
     balance.value.uiAmountString ??
