@@ -102,7 +102,6 @@ export function CCTPTransfer({
       };
       fetchWalletChainId().then((chainId: string) => {
         const actualChainId = parseInt(chainId, 16);
-        console.log("actualChainId", actualChainId);
         const chain =
           network?.name === Network.MAINNET
             ? EthereumChainIdToMainnetChain[actualChainId]
