@@ -1,7 +1,7 @@
 {
   "extends": "@aptos-labs/wallet-adapter-tsconfig/base.json",
   "include": ["."],
-  "exclude": ["dist", "build", "node_modules"],
+  "exclude": ["dist", "build", "node_modules", "tests", "vitest.config.ts"],
   "compilerOptions": {
     "target": "es5",
     "lib": ["es2020", "dom"],
