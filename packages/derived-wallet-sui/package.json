@@ -20,7 +20,7 @@
     "build:bundle": "tsup --sourcemap",
     "build:declarations": "tsc --emitDeclarationOnly --declaration --declarationMap",
     "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
-    "test": "jest",
+    "test": "vitest run",
     "lint": "TIMING=1 eslint \"src/**/*.ts*\""
   },
   "tsup": {
@@ -46,18 +46,16 @@
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@types/jest": "^29.2.4",
     "@types/node": "^20.10.4",
     "eslint": "^8.15.0",
-    "jest": "^29.3.1",
-    "ts-jest": "^29.0.3",
+    "happy-dom": "^15.11.7",
     "tsup": "^8.4.0",
-    "typescript": "^5.4.5"
+    "tweetnacl": "^1.0.3",
+    "typescript": "^5.4.5",
+    "vitest": "^2.1.8"
   },
   "files": [
     "dist",
-    "src",
-    "!src/**.test.ts",
-    "!src/**/__tests__"
+    "src"
   ]
 }
