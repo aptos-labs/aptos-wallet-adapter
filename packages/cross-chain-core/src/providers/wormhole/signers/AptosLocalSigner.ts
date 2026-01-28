@@ -53,7 +53,6 @@ export class AptosLocalSigner<
   claimedTransactionHashes(): string {
     return this._claimedTransactionHashes;
   }
-  /* other methods... */
 
   async signAndSend(txs: UnsignedTransaction<N, C>[]): Promise<TxHash[]> {
     const txHashes: TxHash[] = [];
@@ -119,7 +118,7 @@ export async function signAndSendTransaction(
 
   if (sponsorAccount) {
     if (typeof sponsorAccount === "string") {
-      // TODO: handle gas station integration here
+      // TODO: handle gas station integration
     } else {
       const feePayerSignerAuthenticator = aptos.transaction.signAsFeePayer({
         signer: sponsorAccount as Account,

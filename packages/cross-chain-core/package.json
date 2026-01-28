@@ -34,20 +34,18 @@
     "build:declarations": "tsc --emitDeclarationOnly --declaration --declarationMap",
     "build": "pnpm run update-version && pnpm run build-package",
     "dev": "export $(cat .env | xargs) && tsup src/index.ts --format esm,cjs --watch --dts --env.GAID $GAID",
-    "test": "jest",
+    "test": "vitest run",
     "lint": "TIMING=1 eslint \"src/**/*.ts*\"",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@types/jest": "^29.2.4",
     "@types/node": "^20.10.4",
     "eslint": "^8.57.1",
-    "jest": "^29.3.1",
-    "ts-jest": "^29.0.3",
     "tsup": "^8.4.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^2.1.8"
   },
   "dependencies": {
     "@aptos-labs/wallet-adapter-core": "workspace:*",
