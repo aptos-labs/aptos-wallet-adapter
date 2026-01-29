@@ -43,3 +43,4 @@ Looking how you can contribute? Take a look at our [contribution guide](./CONTRI
 #### Terms of Use and Privacy Policy
 
 By accessing or using the wallet adapter, you agree to be bound to the Aptos Labs [Terms of Use](https://aptoslabs.com/terms) and [Privacy Policy](https://aptoslabs.com/privacy).
+my wallet adreesaddress":string"0xacb105a0343fb5636ada8228dbf33e1440fb5dc073b286697e1a8a90a640be6f
