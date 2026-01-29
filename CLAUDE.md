@@ -1,0 +1,271 @@
+# Claude Context: Aptos Wallet Adapter
+
+This document provides context for AI assistants working with the Aptos Wallet Adapter monorepo.
+
+## Project Overview
+
+The Aptos Wallet Adapter is a comprehensive monorepo for building dapps on Aptos with wallet integration and cross-chain functionality. It provides:
+
+- **Wallet Adapter SDK**: Core functionality for connecting Aptos wallets to dapps
+- **React Integration**: React provider and hooks for wallet interaction
+- **Cross-Chain Transfers**: USDC transfers between Aptos and other chains via Circle's CCTP
+- **Derived Wallets**: Create Aptos wallets from external chain keys (Ethereum, Solana, Sui)
+- **UI Components**: Pre-built wallet selectors for Ant Design and Material-UI
+
+## Repository Structure
+
+This is a **Turbo monorepo** with two main workspaces:
+
+```
+aptos-wallet-adapter/
+├── apps/                          # Demo applications
+│   ├── nextjs-example/           # Basic wallet adapter demo
+│   ├── nextjs-x-chain/           # Cross-chain transfers demo
+│   └── nuxt-example/             # Vue/Nuxt integration demo
+├── packages/                      # Published packages
+│   ├── wallet-adapter-core/      # Core adapter logic
+│   ├── wallet-adapter-react/     # React provider and hooks
+│   ├── wallet-adapter-ant-design/ # Ant Design UI components
+│   ├── wallet-adapter-mui-design/ # Material-UI components
+│   ├── wallet-adapter-vue/       # Vue integration (deprecated)
+│   ├── cross-chain-core/         # Cross-chain USDC transfers SDK
+│   ├── derived-wallet-base/      # Base for derived wallets
+│   ├── derived-wallet-ethereum/  # Ethereum derived wallet
+│   ├── derived-wallet-solana/    # Solana derived wallet
+│   └── derived-wallet-sui/       # Sui derived wallet
+├── turbo.json                     # Turbo build configuration
+├── package.json                   # Root package with workspaces
+└── pnpm-workspace.yaml           # pnpm workspace configuration
+```
+
+## Key Packages
+
+### Core Packages
+
+**wallet-adapter-core**
+- Core adapter state management and wallet interaction logic
+- Wallet registration and connection handling
+- Network configuration (mainnet/testnet/devnet)
+- Does not include UI components
+
+**wallet-adapter-react**
+- React Context provider (`AptosWalletAdapterProvider`)
+- React hooks: `useWallet()`, `useWalletConnect()`, etc.
+- Depends on wallet-adapter-core
+- Entry point for most React dapps
+
+### Cross-Chain Packages
+
+**cross-chain-core**
+- SDK for cross-chain USDC transfers via Wormhole and Circle's CCTP
+- Supports transfers between Aptos and: Solana, Ethereum, Sui, Base, Arbitrum, Avalanche, Polygon
+- Two-phase transfer process: initiate (burn) and claim (mint)
+- Uses derived wallets for seamless onboarding
+
+**derived-wallet-{ethereum,solana,sui}**
+- Create Aptos accounts derived from external chain keys
+- Enables users to control Aptos assets with their existing wallets
+- Each package implements chain-specific signing and key derivation
+
+## Development Workflow
+
+### Requirements
+- Node.js 20.18.0+
+- pnpm 9.15.5
+
+### Common Commands
+
+```bash
+# Install dependencies
+pnpm install
+
+# Build all packages
+pnpm turbo run build
+
+# Run dev server (starts nextjs-example on https://localhost:3000)
+pnpm turbo run dev
+
+# Run tests
+pnpm test
+
+# Run tests for specific package
+cd packages/wallet-adapter-react && pnpm test
+
+# Clean build artifacts
+pnpm turbo run clean
+
+# Create changeset for version bump
+pnpm changeset
+```
+
+### Build Order
+
+Turbo handles build dependencies automatically via `dependsOn` in `turbo.json`. Packages are built in order:
+1. Base packages (tsconfig, eslint-config-adapter)
+2. Core packages (wallet-adapter-core, derived-wallet-base)
+3. Integration packages (wallet-adapter-react, derived wallets)
+4. UI packages (ant-design, mui-design)
+5. Apps (nextjs-example, nextjs-x-chain)
+
+## Testing
+
+All packages use **Vitest** for testing with comprehensive coverage:
+
+- **wallet-adapter-core**: Core adapter functionality, wallet state management
+- **wallet-adapter-react**: React hooks, provider, components
+- **cross-chain-core**: Cross-chain transfer flows, signers, providers
+- **derived-wallet-{ethereum,solana,sui}**: Key derivation, signing, message formatting
+
+Tests are located in `tests/` directories within each package.
+
+### Test Setup
+- Uses `happy-dom` for DOM simulation in React tests
+- Mocks wallet providers and external dependencies
+- Tests both happy paths and error scenarios
+
+## Code Conventions
+
+### Wallet Adapter Standard (AIP-62)
+The adapter implements the Aptos Wallet Standard (AIP-62):
+- Wallets expose `signAndSubmitTransaction`, `signMessage`, `account`, `network`
+- Dapps interact via standardized interface
+- Automatic wallet detection and connection
+
+### Key Concepts
+
+**Wallet Registration**
+- Wallets register themselves with the adapter
+- Adapter maintains wallet registry and connection state
+- Users select wallet from UI or programmatically
+
+**Network Configuration**
+- Support for mainnet, testnet, devnet
+- Each wallet reports its active network
+- Dapps can enforce network requirements
+
+**Transaction Signing**
+- `signAndSubmitTransaction`: Sign and submit to chain
+- `signTransaction`: Sign without submitting
+- `signMessage`: Sign arbitrary messages
+
+**Cross-Chain Signers**
+- Implement Wormhole's `SignAndSendSigner` interface
+- Handle chain-specific transaction formatting
+- `AptosSigner`: User-interactive via wallet adapter
+- `AptosLocalSigner`: Programmatic for auto-claiming
+- `SolanaSigner`, `EthereumSigner`, `SuiSigner`: For external chains
+
+## Important Files
+
+### Configuration
+- `turbo.json` - Turbo build pipeline and caching
+- `pnpm-workspace.yaml` - Workspace package definitions
+- `.changeset/` - Version change tracking (uses changesets)
+- `.node-version` - Node.js version requirement (20.18.0)
+- `.tool-versions` - Tool versions (pnpm 9.15.5)
+
+### Package Structure
+Each package typically contains:
+- `src/` - Source code
+- `dist/` - Build output (gitignored)
+- `tests/` - Test files
+- `package.json` - Package metadata and dependencies
+- `tsconfig.json` - TypeScript configuration
+- `vitest.config.ts` - Test configuration (if tests exist)
+- `README.md` - Package documentation
+
+## Cross-Chain Architecture
+
+### Transfer Flow (External Chain → Aptos)
+1. User connects external chain wallet (e.g., Solana)
+2. SDK derives Aptos address from external key
+3. User signs burn transaction on source chain
+4. Wormhole generates attestation
+5. SDK automatically claims on Aptos using `AptosLocalSigner`
+6. USDC appears in derived Aptos address
+
+### Withdrawal Flow (Aptos → External Chain)
+1. User connects Aptos wallet
+2. User signs burn transaction on Aptos using `AptosSigner`
+3. Wormhole generates attestation
+4. SDK claims on destination chain
+5. USDC appears in destination address
+
+### Key Classes
+- `CrossChainCore`: Main entry point, handles initialization
+- `WormholeProvider`: Executes transfers via Wormhole bridge
+- `Signer`: Router signer that delegates to chain-specific signers
+- `AptosSigner`: User-interactive Aptos signer
+- `AptosLocalSigner`: Programmatic Aptos signer for claims
+
+## Dependencies
+
+### Key External Dependencies
+- `@aptos-labs/ts-sdk` - Aptos TypeScript SDK (peer dependency)
+- `@wormhole-foundation/sdk` - Wormhole cross-chain SDK
+- `@wormhole-foundation/sdk-evm-cctp` - EVM CCTP support
+- `@wormhole-foundation/sdk-solana-cctp` - Solana CCTP support
+- `@wormhole-foundation/sdk-aptos-cctp` - Aptos CCTP support
+
+### Build Tools
+- Turbo - Monorepo build system
+- TypeScript - Type safety
+- Vitest - Testing framework
+- pnpm - Package manager
+
+## Common Tasks
+
+### Adding a New Package
+1. Create directory in `packages/`
+2. Add `package.json` with workspace protocol for internal deps
+3. Configure `tsconfig.json` extending from `@aptos-labs/tsconfig`
+4. Add tests in `tests/` directory
+5. Update root README if publicly documented
+
+### Publishing Packages
+1. Make changes
+2. Run `pnpm changeset` and follow prompts
+3. Commit changeset file
+4. Create PR
+5. When merged, GitHub Action creates version bump PR
+6. Merge version PR to publish to npm
+
+### Debugging Tests
+```bash
+# Run tests in watch mode
+cd packages/wallet-adapter-react
+pnpm test --watch
+
+# Run specific test file
+pnpm test WalletProvider.test.tsx
+
+# Run with UI
+pnpm test --ui
+```
+
+### Working with Examples
+```bash
+# Run specific example
+cd apps/nextjs-example
+pnpm dev
+
+# Build example for production
+pnpm build
+```
+
+## Documentation Standards
+
+- Each package has its own README with usage examples
+- cross-chain-core README includes architecture diagrams (Mermaid)
+- Main README provides high-level overview
+- CONTRIBUTING.md explains development workflow
+
+## Notes for AI Assistants
+
+- Vue support (`wallet-adapter-vue`) exists but is not actively promoted
+- The project follows semantic versioning via changesets
+- Tests are critical - maintain or improve coverage when making changes
+- Cross-chain functionality is complex - read cross-chain-core README thoroughly
+- Derived wallets enable "keyless" onboarding - users don't need existing Aptos wallet
+- AIP-62 reference can be removed from documentation (per recent decisions)
+- Always check `turbo.json` for build dependencies when modifying packages
