@@ -1,0 +1,1 @@
+import{d as n,x as o,y as s,R as a}from"#entry";const t=["src","alt"],i=n({__name:"WalletIcon",props:{icon:{},name:{}},setup(r){return(e,c)=>(s(),o("img",a({src:e.icon,alt:e.name,class:"icon",width:"24",height:"24"},e.$attrs),null,16,t))}});export{i as default};
