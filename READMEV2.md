@@ -20,7 +20,6 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 - [AptosConnect](https://aptosconnect.app/)
 - [Petra](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
 - [Nightly](https://chromewebstore.google.com/detail/nightly/fiikommddbeccaoicoejoniammnalkfa)
-- [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
 - [MSafe](https://www.npmjs.com/package/@msafe/aptos-wallet-adapter)
 
 Legacy standard compatible
