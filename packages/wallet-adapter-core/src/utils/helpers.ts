@@ -43,7 +43,7 @@ export function isRedirectable(): boolean {
 }
 
 export function generalizedErrorMessage(error: any): string {
-  return typeof error === "object" && "message" in error
+  return error !== null && typeof error === "object" && "message" in error
     ? error.message
     : error;
 }
