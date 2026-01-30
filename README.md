@@ -19,7 +19,6 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 - [AptosConnect](https://aptosconnect.app/)
 - [Petra](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
 - [Nightly](https://chromewebstore.google.com/detail/nightly/fiikommddbeccaoicoejoniammnalkfa)
-- [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
 - [RimoSafe](https://chromewebstore.google.com/detail/rimo-safe-wallet/kiicddjcakdmobjkcpppkgcjbpakcagp)
 - [MSafe](https://www.npmjs.com/package/@msafe/aptos-wallet-adapter)
 - [Bitget Wallet](https://web3.bitget.com)
