@@ -34,7 +34,6 @@ export type AvailableWallets =
   | "OKX Wallet"
   | "Petra"
   | "Nightly"
-  | "Pontem Wallet"
   | "Backpack"
   | "MSafe"
   | "Bitget Wallet"
