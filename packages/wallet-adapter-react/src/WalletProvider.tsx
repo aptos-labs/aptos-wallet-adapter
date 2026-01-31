@@ -57,6 +57,8 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   onError,
 }: AptosWalletProviderProps) => {
   const didAttemptAutoConnectRef = useRef(false);
+  // Track whether initial loading phase is complete to avoid interfering with user-initiated connections
+  const initialLoadCompletedRef = useRef(false);
 
   const [{ account, network, connected, wallet }, setState] =
     useState(initialState);
@@ -94,18 +96,28 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     if (didAttemptAutoConnectRef.current || !walletCore?.wallets.length) {
       return;
     }
-    didAttemptAutoConnectRef.current = true;
 
-    // If auto connect is not set or is false, ignore the attempt
+    // If auto connect is not set or is false, don't mark as attempted yet
+    // This allows retry when autoConnect becomes true asynchronously
     if (!autoConnect) {
-      setIsLoading(false);
+      // Only set isLoading to false during initial load, not on subsequent effect runs
+      // to avoid interfering with user-initiated connect() calls
+      if (!initialLoadCompletedRef.current) {
+        initialLoadCompletedRef.current = true;
+        setIsLoading(false);
+      }
       return;
     }
 
     // Make sure the user has a previously connected wallet
     const walletName = localStorage.getItem("AptosWalletName");
     if (!walletName) {
-      setIsLoading(false);
+      // No stored wallet name - mark as attempted since there's nothing to connect to
+      didAttemptAutoConnectRef.current = true;
+      if (!initialLoadCompletedRef.current) {
+        initialLoadCompletedRef.current = true;
+        setIsLoading(false);
+      }
       return;
     }
 
@@ -117,9 +129,17 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       !selectedWallet ||
       selectedWallet.readyState !== WalletReadyState.Installed
     ) {
-      setIsLoading(false);
+      // Wallet not found yet - DON'T mark as attempted
+      // This allows retry when the wallet registers later
+      if (!initialLoadCompletedRef.current) {
+        initialLoadCompletedRef.current = true;
+        setIsLoading(false);
+      }
       return;
     }
+
+    // Found the wallet and it's installed - mark as attempted to prevent duplicate connections
+    didAttemptAutoConnectRef.current = true;
 
     if (!connected) {
       (async () => {
@@ -141,10 +161,12 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
           if (onError) onError(error);
           return Promise.reject(error);
         } finally {
+          initialLoadCompletedRef.current = true;
           setIsLoading(false);
         }
       })();
     } else {
+      initialLoadCompletedRef.current = true;
       setIsLoading(false);
     }
   }, [autoConnect, wallets]);

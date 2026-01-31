@@ -1,3 +1,5 @@
+/// <reference types="@testing-library/jest-dom" />
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import React from "react";
@@ -30,7 +32,7 @@ function TestConsumer() {
     <div>
       <span data-testid="connected">{String(wallet.connected)}</span>
       <span data-testid="isLoading">{String(wallet.isLoading)}</span>
-      <span data-testid="account">{wallet.account?.address ?? "null"}</span>
+      <span data-testid="account">{wallet.account?.address?.toString() ?? "null"}</span>
       <span data-testid="network">{wallet.network?.name ?? "null"}</span>
       <button data-testid="connect-btn" onClick={() => wallet.connect("TestWallet")}>
         Connect
@@ -177,6 +179,185 @@ describe("AptosWalletAdapterProvider", () => {
       );
 
       expect(mockWalletCore.connect).not.toHaveBeenCalled();
+    });
+
+    it("should auto-connect when autoConnect changes from false to true asynchronously", async () => {
+      // Store a wallet name to enable auto-connect
+      localStorage.setItem("AptosWalletName", "TestWallet");
+
+      // Component that simulates async autoConnect prop
+      function AsyncAutoConnectWrapper() {
+        const [autoConnect, setAutoConnect] = React.useState(false);
+
+        React.useEffect(() => {
+          // Simulate async operation (e.g., fetching user preferences)
+          const timer = setTimeout(() => {
+            setAutoConnect(true);
+          }, 50);
+          return () => clearTimeout(timer);
+        }, []);
+
+        return (
+          <AptosWalletAdapterProvider autoConnect={autoConnect} disableTelemetry>
+            <TestConsumer />
+          </AptosWalletAdapterProvider>
+        );
+      }
+
+      render(<AsyncAutoConnectWrapper />);
+
+      // Initially, connect should not have been called
+      expect(mockWalletCore.connect).not.toHaveBeenCalled();
+
+      // Wait for autoConnect to become true and trigger connect
+      await waitFor(
+        () => {
+          expect(mockWalletCore.connect).toHaveBeenCalledWith("TestWallet");
+        },
+        { timeout: 3000 }
+      );
+    });
+
+    it("should only attempt auto-connect once when autoConnect becomes true", async () => {
+      localStorage.setItem("AptosWalletName", "TestWallet");
+
+      function MultipleUpdateWrapper() {
+        const [autoConnect, setAutoConnect] = React.useState(false);
+        const [, forceUpdate] = React.useState(0);
+
+        React.useEffect(() => {
+          // Set autoConnect to true
+          const timer1 = setTimeout(() => setAutoConnect(true), 30);
+          // Trigger additional re-renders after autoConnect is true
+          const timer2 = setTimeout(() => forceUpdate((n) => n + 1), 80);
+          const timer3 = setTimeout(() => forceUpdate((n) => n + 1), 130);
+          return () => {
+            clearTimeout(timer1);
+            clearTimeout(timer2);
+            clearTimeout(timer3);
+          };
+        }, []);
+
+        return (
+          <AptosWalletAdapterProvider autoConnect={autoConnect} disableTelemetry>
+            <TestConsumer />
+          </AptosWalletAdapterProvider>
+        );
+      }
+
+      render(<MultipleUpdateWrapper />);
+
+      // Wait for auto-connect to be called
+      await waitFor(
+        () => {
+          expect(mockWalletCore.connect).toHaveBeenCalled();
+        },
+        { timeout: 3000 }
+      );
+
+      // Wait for additional re-renders to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 200));
+      });
+
+      // Should only be called once
+      expect(mockWalletCore.connect).toHaveBeenCalledTimes(1);
+    });
+
+    it("should auto-connect when wallet registers late after initial render", async () => {
+      // Store a wallet name for a wallet that doesn't exist yet
+      localStorage.setItem("AptosWalletName", "LateWallet");
+
+      render(
+        <AptosWalletAdapterProvider autoConnect={true} disableTelemetry>
+          <TestConsumer />
+        </AptosWalletAdapterProvider>
+      );
+
+      // Wait for initial render to complete
+      await waitFor(
+        () => {
+          expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
+        },
+        { timeout: 3000 }
+      );
+
+      // Connect should NOT have been called yet (wallet doesn't exist)
+      expect(mockWalletCore.connect).not.toHaveBeenCalled();
+
+      // Simulate wallet extension injecting late by:
+      // 1. Adding the wallet to the wallets array
+      // 2. Triggering the standardWalletsAdded event
+      const lateWallet = createMockWallet("LateWallet");
+      mockWalletCore.wallets = [...mockWalletCore.wallets, lateWallet];
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("standardWalletsAdded", lateWallet);
+      });
+
+      // Now connect should be called with the late wallet
+      await waitFor(
+        () => {
+          expect(mockWalletCore.connect).toHaveBeenCalledWith("LateWallet");
+        },
+        { timeout: 3000 }
+      );
+    });
+
+    it("should not reset isLoading when wallet injects during user-initiated connect", async () => {
+      // This test verifies that when a user initiates a connect() call,
+      // and a wallet extension injects (causing wallets state to update),
+      // the auto-connect effect doesn't reset isLoading to false
+
+      render(
+        <AptosWalletAdapterProvider autoConnect={false} disableTelemetry>
+          <TestConsumer />
+        </AptosWalletAdapterProvider>
+      );
+
+      // Wait for initial load to complete
+      await waitFor(
+        () => {
+          expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
+        },
+        { timeout: 3000 }
+      );
+
+      // Now modify the mock to make connect() take some time
+      // so we can inject a wallet while it's in progress
+      // Must be done AFTER render since mockWalletCore is created during render
+      mockWalletCore.connect.mockImplementation(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 150));
+      });
+
+      // User initiates a connect - this should set isLoading to true
+      await act(async () => {
+        screen.getByTestId("connect-btn").click();
+      });
+
+      // isLoading should now be true
+      expect(screen.getByTestId("isLoading")).toHaveTextContent("true");
+
+      // Simulate a wallet extension injecting while connect is in progress
+      // This triggers the wallets state to update, which re-runs the auto-connect effect
+      const newWallet = createMockWallet("NewlyInjectedWallet");
+      mockWalletCore.wallets = [...mockWalletCore.wallets, newWallet];
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("standardWalletsAdded", newWallet);
+      });
+
+      // isLoading should STILL be true - the auto-connect effect should not have reset it
+      // This is the key assertion - before the fix, this would be "false"
+      expect(screen.getByTestId("isLoading")).toHaveTextContent("true");
+
+      // Wait for the connect to complete
+      await waitFor(
+        () => {
+          expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
+        },
+        { timeout: 3000 }
+      );
     });
   });
 

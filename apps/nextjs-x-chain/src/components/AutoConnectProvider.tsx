@@ -6,6 +6,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -28,6 +29,8 @@ export const AutoConnectProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [autoConnect, setAutoConnect] = useState(false);
+  // Track if we've read from localStorage to avoid deleting it on initial mount
+  const hasInitializedRef = useRef(false);
 
   useEffect(() => {
     // Wait until the app hydrates before populating `autoConnect` from local storage
@@ -35,8 +38,10 @@ export const AutoConnectProvider: FC<{ children: ReactNode }> = ({
       const isAutoConnect = localStorage.getItem(
         AUTO_CONNECT_LOCAL_STORAGE_KEY,
       );
+      hasInitializedRef.current = true;
       if (isAutoConnect) return setAutoConnect(JSON.parse(isAutoConnect));
     } catch (e) {
+      hasInitializedRef.current = true;
       if (typeof window !== "undefined") {
         console.error(e);
       }
@@ -44,6 +49,9 @@ export const AutoConnectProvider: FC<{ children: ReactNode }> = ({
   }, []);
 
   useEffect(() => {
+    // Don't write to localStorage until we've read the initial value
+    if (!hasInitializedRef.current) return;
+
     try {
       if (!autoConnect) {
         localStorage.removeItem(AUTO_CONNECT_LOCAL_STORAGE_KEY);
