@@ -7,6 +7,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "privatePackages": false,
-  "ignore": ["@aptos-labs/wallet-adapter-vue", "nuxt-app"]
+  "privatePackages": false
 }
