@@ -69,11 +69,15 @@ export async function signAndSendTransaction(
     functionArguments,
   };
 
+  const accountFeature = wallet.features["aptos:account"];
+  if (!accountFeature) {
+    throw new Error("Wallet does not support aptos:account feature");
+  }
+  const account = await accountFeature.account();
+
   const txnToSign = await aptos.transaction.build.simple({
     data: transactionData,
-    sender: (
-      await wallet.features["aptos:account"]?.account()
-    ).address.toString(),
+    sender: account.address.toString(),
     withFeePayer: sponsorAccount ? true : false,
   });
 

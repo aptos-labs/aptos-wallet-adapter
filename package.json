@@ -17,6 +17,8 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "publish-packages": "changeset version && changeset publish",
+    "audit": "pnpm audit --audit-level moderate",
+    "audit:fix": "pnpm audit --fix",
     "deploy:example": "(pnpm run deploy:adapter-example) && (pnpm run deploy:cross-chain-example)",
     "deploy:adapter-example": "pnpm run adapter-example:build && pnpm run adapter-example:export && touch ./apps/nextjs-example/out/.nojekyll && gh-pages --dist apps/nextjs-example/out --dotfiles",
     "adapter-example:export": "pnpm run --filter {apps/nextjs-example} export",
@@ -48,10 +50,17 @@
       "form-data": "^4.0.4",
       "sha.js": "^2.4.12",
       "axios": "^1.12.0",
-      "devalue": "^5.3.2",
+      "devalue": ">=5.6.2",
       "esbuild": ">=0.25.0",
       "koa": "^2.16.1",
-      "vite": "^6.3.6"
+      "vite": "^6.3.6",
+      "@koa/router": ">=15.0.0",
+      "glob": ">=10.5.0",
+      "rimraf": ">=4.0.0",
+      "valibot": ">=1.2.0",
+      "happy-dom": ">=20.0.0",
+      "node-forge": ">=1.3.2",
+      "react-router": ">=7.12.0"
     }
   }
 }

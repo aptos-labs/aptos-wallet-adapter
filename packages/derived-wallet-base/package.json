@@ -36,13 +36,13 @@
     "@aptos-labs/wallet-standard": "^0.5.2"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^5.1.1"
+    "@aptos-labs/ts-sdk": "^5.2.0 || ^6.0.0"
   },
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
     "@types/node": "^20.10.4",
-    "eslint": "^8.57.1",
+    "eslint": "^9.18.0",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
     "vitest": "^2.1.8"
