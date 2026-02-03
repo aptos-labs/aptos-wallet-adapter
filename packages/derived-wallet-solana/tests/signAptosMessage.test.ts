@@ -149,7 +149,7 @@ describe("signAptosMessage", () => {
             nonce: "test",
           },
           domain: testDomain,
-        })
+        }),
       ).rejects.toThrow("solana:signMessage not available");
     });
 
@@ -168,9 +168,8 @@ describe("signAptosMessage", () => {
             nonce: "test",
           },
           domain: testDomain,
-        })
+        }),
       ).rejects.toThrow("Account not connected");
     });
   });
 });
-

@@ -4,7 +4,10 @@ import { AbstractedAccount } from "@aptos-labs/ts-sdk";
 import { EIP1193DerivedAccount } from "../src/EIP1193DerivedAccount";
 import { EIP1193DerivedPublicKey } from "../src/EIP1193DerivedPublicKey";
 import { defaultEthereumAuthenticationFunction } from "../src/shared";
-import { TEST_PRIVATE_KEY, TEST_ETHEREUM_ADDRESS } from "./mocks/eip1193Provider";
+import {
+  TEST_PRIVATE_KEY,
+  TEST_ETHEREUM_ADDRESS,
+} from "./mocks/eip1193Provider";
 
 describe("EIP1193DerivedAccount", () => {
   const testDomain = "test.example.com";
@@ -76,7 +79,7 @@ describe("EIP1193DerivedAccount", () => {
       });
 
       expect(account.authenticationFunction).toBe(
-        defaultEthereumAuthenticationFunction
+        defaultEthereumAuthenticationFunction,
       );
     });
 
@@ -104,7 +107,7 @@ describe("EIP1193DerivedAccount", () => {
       expect(account.derivedPublicKey).toBeInstanceOf(EIP1193DerivedPublicKey);
       expect(account.derivedPublicKey.domain).toBe(testDomain);
       expect(account.derivedPublicKey.ethereumAddress.toLowerCase()).toBe(
-        TEST_ETHEREUM_ADDRESS.toLowerCase()
+        TEST_ETHEREUM_ADDRESS.toLowerCase(),
       );
     });
   });
@@ -136,7 +139,7 @@ describe("EIP1193DerivedAccount", () => {
       });
 
       expect(account1.accountAddress.toString()).toBe(
-        account2.accountAddress.toString()
+        account2.accountAddress.toString(),
       );
     });
 
@@ -154,14 +157,14 @@ describe("EIP1193DerivedAccount", () => {
       });
 
       expect(account1.accountAddress.toString()).not.toBe(
-        account2.accountAddress.toString()
+        account2.accountAddress.toString(),
       );
     });
 
     it("should produce different addresses for different ethereum wallets", () => {
       const wallet1 = new Wallet(TEST_PRIVATE_KEY);
       const wallet2 = new Wallet(
-        "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"
+        "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d",
       );
 
       const account1 = new EIP1193DerivedAccount({
@@ -175,7 +178,7 @@ describe("EIP1193DerivedAccount", () => {
       });
 
       expect(account1.accountAddress.toString()).not.toBe(
-        account2.accountAddress.toString()
+        account2.accountAddress.toString(),
       );
     });
 
@@ -189,7 +192,7 @@ describe("EIP1193DerivedAccount", () => {
 
       // This is the expected derived address for the test private key and domain
       expect(account.accountAddress.toString()).toBe(
-        "0xb5de999e1865abd8503ffa88f58159f7540d1fd8427786a8df14c9d60577c9b5"
+        "0xb5de999e1865abd8503ffa88f58159f7540d1fd8427786a8df14c9d60577c9b5",
       );
     });
   });
@@ -197,4 +200,3 @@ describe("EIP1193DerivedAccount", () => {
   // Note: signTransactionWithAuthenticator tests require network access
   // to build transactions. These are tested via integration tests.
 });
-

@@ -32,7 +32,10 @@ function TestConsumer() {
       <span data-testid="isLoading">{String(wallet.isLoading)}</span>
       <span data-testid="account">{wallet.account?.address ?? "null"}</span>
       <span data-testid="network">{wallet.network?.name ?? "null"}</span>
-      <button data-testid="connect-btn" onClick={() => wallet.connect("TestWallet")}>
+      <button
+        data-testid="connect-btn"
+        onClick={() => wallet.connect("TestWallet")}
+      >
         Connect
       </button>
       <button data-testid="disconnect-btn" onClick={() => wallet.disconnect()}>
@@ -53,7 +56,7 @@ describe("AptosWalletAdapterProvider", () => {
       render(
         <AptosWalletAdapterProvider>
           <div data-testid="child">Child Content</div>
-        </AptosWalletAdapterProvider>
+        </AptosWalletAdapterProvider>,
       );
 
       expect(screen.getByTestId("child")).toHaveTextContent("Child Content");
@@ -65,7 +68,7 @@ describe("AptosWalletAdapterProvider", () => {
       render(
         <AptosWalletAdapterProvider disableTelemetry>
           <TestConsumer />
-        </AptosWalletAdapterProvider>
+        </AptosWalletAdapterProvider>,
       );
 
       // Wait for initial render to complete
@@ -80,7 +83,7 @@ describe("AptosWalletAdapterProvider", () => {
       render(
         <AptosWalletAdapterProvider disableTelemetry autoConnect={false}>
           <TestConsumer />
-        </AptosWalletAdapterProvider>
+        </AptosWalletAdapterProvider>,
       );
 
       // With autoConnect=false and wallets available, isLoading should become false
@@ -88,7 +91,7 @@ describe("AptosWalletAdapterProvider", () => {
         () => {
           expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
         },
-        { timeout: 3000 }
+        { timeout: 3000 },
       );
     });
   });
@@ -98,14 +101,14 @@ describe("AptosWalletAdapterProvider", () => {
       render(
         <AptosWalletAdapterProvider disableTelemetry autoConnect={false}>
           <TestConsumer />
-        </AptosWalletAdapterProvider>
+        </AptosWalletAdapterProvider>,
       );
 
       await waitFor(
         () => {
           expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
         },
-        { timeout: 3000 }
+        { timeout: 3000 },
       );
 
       await act(async () => {
@@ -126,14 +129,14 @@ describe("AptosWalletAdapterProvider", () => {
       render(
         <AptosWalletAdapterProvider disableTelemetry autoConnect={false}>
           <TestConsumer />
-        </AptosWalletAdapterProvider>
+        </AptosWalletAdapterProvider>,
       );
 
       await waitFor(
         () => {
           expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
         },
-        { timeout: 3000 }
+        { timeout: 3000 },
       );
 
       await act(async () => {
@@ -149,14 +152,14 @@ describe("AptosWalletAdapterProvider", () => {
       render(
         <AptosWalletAdapterProvider autoConnect={false} disableTelemetry>
           <TestConsumer />
-        </AptosWalletAdapterProvider>
+        </AptosWalletAdapterProvider>,
       );
 
       await waitFor(
         () => {
           expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
         },
-        { timeout: 3000 }
+        { timeout: 3000 },
       );
 
       expect(mockWalletCore.connect).not.toHaveBeenCalled();
@@ -166,14 +169,14 @@ describe("AptosWalletAdapterProvider", () => {
       render(
         <AptosWalletAdapterProvider autoConnect={true} disableTelemetry>
           <TestConsumer />
-        </AptosWalletAdapterProvider>
+        </AptosWalletAdapterProvider>,
       );
 
       await waitFor(
         () => {
           expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
         },
-        { timeout: 3000 }
+        { timeout: 3000 },
       );
 
       expect(mockWalletCore.connect).not.toHaveBeenCalled();
@@ -185,14 +188,26 @@ describe("AptosWalletAdapterProvider", () => {
       render(
         <AptosWalletAdapterProvider disableTelemetry autoConnect={false}>
           <TestConsumer />
-        </AptosWalletAdapterProvider>
+        </AptosWalletAdapterProvider>,
       );
 
       await waitFor(() => {
-        expect(mockWalletCore.on).toHaveBeenCalledWith("connect", expect.any(Function));
-        expect(mockWalletCore.on).toHaveBeenCalledWith("disconnect", expect.any(Function));
-        expect(mockWalletCore.on).toHaveBeenCalledWith("accountChange", expect.any(Function));
-        expect(mockWalletCore.on).toHaveBeenCalledWith("networkChange", expect.any(Function));
+        expect(mockWalletCore.on).toHaveBeenCalledWith(
+          "connect",
+          expect.any(Function),
+        );
+        expect(mockWalletCore.on).toHaveBeenCalledWith(
+          "disconnect",
+          expect.any(Function),
+        );
+        expect(mockWalletCore.on).toHaveBeenCalledWith(
+          "accountChange",
+          expect.any(Function),
+        );
+        expect(mockWalletCore.on).toHaveBeenCalledWith(
+          "networkChange",
+          expect.any(Function),
+        );
       });
     });
   });
@@ -203,18 +218,21 @@ describe("AptosWalletAdapterProvider", () => {
         render(
           <AptosWalletAdapterProvider optInWallets={["Petra"]} disableTelemetry>
             <div>Test</div>
-          </AptosWalletAdapterProvider>
-        )
+          </AptosWalletAdapterProvider>,
+        ),
       ).not.toThrow();
     });
 
     it("should accept hideWallets prop", () => {
       expect(() =>
         render(
-          <AptosWalletAdapterProvider hideWallets={["Petra Web"]} disableTelemetry>
+          <AptosWalletAdapterProvider
+            hideWallets={["Petra Web"]}
+            disableTelemetry
+          >
             <div>Test</div>
-          </AptosWalletAdapterProvider>
-        )
+          </AptosWalletAdapterProvider>,
+        ),
       ).not.toThrow();
     });
 
@@ -226,8 +244,8 @@ describe("AptosWalletAdapterProvider", () => {
             disableTelemetry
           >
             <div>Test</div>
-          </AptosWalletAdapterProvider>
-        )
+          </AptosWalletAdapterProvider>,
+        ),
       ).not.toThrow();
     });
   });

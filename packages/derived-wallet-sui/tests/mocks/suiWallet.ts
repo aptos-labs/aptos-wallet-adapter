@@ -17,7 +17,7 @@ export interface MockSuiWalletOptions {
  * Generated deterministically for testing purposes only
  */
 export const TEST_SUI_KEYPAIR = nacl.sign.keyPair.fromSeed(
-  new Uint8Array(32).fill(1) // Deterministic seed for reproducible tests
+  new Uint8Array(32).fill(1), // Deterministic seed for reproducible tests
 );
 
 /**
@@ -44,8 +44,11 @@ export const TEST_SUI_ADDRESS = deriveSuiAddress(TEST_SUI_KEYPAIR.publicKey);
  * Creates a mock Sui wallet that simulates wallet behavior
  */
 export function createMockSuiWallet(options: MockSuiWalletOptions): Wallet {
-  const { keypair, name = "Mock Sui Wallet", initiallyConnected = false } =
-    options;
+  const {
+    keypair,
+    name = "Mock Sui Wallet",
+    initiallyConnected = false,
+  } = options;
 
   const suiAddress = deriveSuiAddress(keypair.publicKey);
 
@@ -95,7 +98,10 @@ export function createMockSuiWallet(options: MockSuiWalletOptions): Wallet {
           account: WalletAccount;
         }) => {
           // Sign the message using Ed25519
-          const signature = nacl.sign.detached(input.message, keypair.secretKey);
+          const signature = nacl.sign.detached(
+            input.message,
+            keypair.secretKey,
+          );
 
           // Sui signatures are: scheme flag (1 byte) + signature (64 bytes) + public key (32 bytes)
           // For Ed25519, scheme flag is 0x00
@@ -120,7 +126,7 @@ export function createMockSuiWallet(options: MockSuiWalletOptions): Wallet {
  * Creates a pre-connected mock Sui wallet
  */
 export function createConnectedMockSuiWallet(
-  options: MockSuiWalletOptions
+  options: MockSuiWalletOptions,
 ): Wallet {
   return createMockSuiWallet({ ...options, initiallyConnected: true });
 }
@@ -130,7 +136,7 @@ export function createConnectedMockSuiWallet(
  * Useful for testing missing feature handling
  */
 export function createWalletWithoutSignFeature(
-  options: MockSuiWalletOptions
+  options: MockSuiWalletOptions,
 ): Wallet {
   const wallet = createConnectedMockSuiWallet(options);
   delete (wallet.features as any)["sui:signPersonalMessage"];

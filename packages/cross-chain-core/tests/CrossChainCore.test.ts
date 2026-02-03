@@ -5,7 +5,12 @@ import {
   EthereumChainIdToTestnetChain,
   EthereumChainIdToMainnetChain,
 } from "../src/CrossChainCore";
-import { testnetChains, testnetTokens, mainnetChains, mainnetTokens } from "../src/config";
+import {
+  testnetChains,
+  testnetTokens,
+  mainnetChains,
+  mainnetTokens,
+} from "../src/config";
 import { WormholeProvider } from "../src/providers/wormhole";
 
 describe("CrossChainCore", () => {
@@ -181,7 +186,7 @@ describe("CrossChainCore", () => {
       });
 
       await expect(
-        core.getWalletUSDCBalance("0x123", "UnsupportedChain" as any)
+        core.getWalletUSDCBalance("0x123", "UnsupportedChain" as any),
       ).rejects.toThrow("Unsupported chain");
     });
 
@@ -189,4 +194,3 @@ describe("CrossChainCore", () => {
     // These are covered in integration tests
   });
 });
-

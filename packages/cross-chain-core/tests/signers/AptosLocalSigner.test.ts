@@ -12,8 +12,8 @@ describe("AptosLocalSigner", () => {
   const testPrivateKey = new Ed25519PrivateKey(
     PrivateKey.formatPrivateKey(
       "0x0000000000000000000000000000000000000000000000000000000000000001",
-      PrivateKeyVariants.Ed25519
-    )
+      PrivateKeyVariants.Ed25519,
+    ),
   );
   const testAccount = Account.fromPrivateKey({ privateKey: testPrivateKey });
   const mockOptions = {};
@@ -24,7 +24,7 @@ describe("AptosLocalSigner", () => {
         "Aptos",
         mockOptions,
         testAccount,
-        undefined
+        undefined,
       );
 
       expect(signer).toBeDefined();
@@ -38,7 +38,7 @@ describe("AptosLocalSigner", () => {
         "Aptos",
         mockOptions,
         testAccount,
-        undefined
+        undefined,
       );
 
       expect(signer._claimedTransactionHashes).toBe("");
@@ -48,8 +48,8 @@ describe("AptosLocalSigner", () => {
       const sponsorPrivateKey = new Ed25519PrivateKey(
         PrivateKey.formatPrivateKey(
           "0x0000000000000000000000000000000000000000000000000000000000000002",
-          PrivateKeyVariants.Ed25519
-        )
+          PrivateKeyVariants.Ed25519,
+        ),
       );
       const sponsorAccount = Account.fromPrivateKey({
         privateKey: sponsorPrivateKey,
@@ -59,7 +59,7 @@ describe("AptosLocalSigner", () => {
         "Aptos",
         mockOptions,
         testAccount,
-        sponsorAccount
+        sponsorAccount,
       );
 
       expect(signer._sponsorAccount).toBe(sponsorAccount);
@@ -72,7 +72,7 @@ describe("AptosLocalSigner", () => {
         "Aptos",
         mockOptions,
         testAccount,
-        gasStationKey
+        gasStationKey,
       );
 
       expect(signer._sponsorAccount).toBe(gasStationKey);
@@ -85,7 +85,7 @@ describe("AptosLocalSigner", () => {
         "Aptos",
         mockOptions,
         testAccount,
-        undefined
+        undefined,
       );
 
       expect(signer.chain()).toBe("Aptos");
@@ -98,7 +98,7 @@ describe("AptosLocalSigner", () => {
         "Aptos",
         mockOptions,
         testAccount,
-        undefined
+        undefined,
       );
 
       expect(signer.address()).toBe(testAccount.accountAddress.toString());
@@ -109,7 +109,7 @@ describe("AptosLocalSigner", () => {
         "Aptos",
         mockOptions,
         testAccount,
-        undefined
+        undefined,
       );
 
       // Aptos addresses are 64 hex characters prefixed with 0x
@@ -123,7 +123,7 @@ describe("AptosLocalSigner", () => {
         "Aptos",
         mockOptions,
         testAccount,
-        undefined
+        undefined,
       );
 
       expect(signer.claimedTransactionHashes()).toBe("");
@@ -134,7 +134,7 @@ describe("AptosLocalSigner", () => {
         "Aptos",
         mockOptions,
         testAccount,
-        undefined
+        undefined,
       );
 
       // Directly modify internal state for testing
@@ -150,7 +150,7 @@ describe("AptosLocalSigner", () => {
         "Aptos",
         mockOptions,
         testAccount,
-        undefined
+        undefined,
       );
 
       expect(signer._wallet).toBe(testAccount);
@@ -163,7 +163,7 @@ describe("AptosLocalSigner", () => {
         "Aptos",
         customOptions,
         testAccount,
-        undefined
+        undefined,
       );
 
       expect(signer._options).toBe(customOptions);
@@ -173,4 +173,3 @@ describe("AptosLocalSigner", () => {
   // Note: signAndSend tests require mocking Aptos SDK network calls
   // These are covered in integration tests
 });
-

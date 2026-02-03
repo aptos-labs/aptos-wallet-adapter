@@ -13,4 +13,7 @@ export * from "./createSiweEnvelope";
 export * from "./setupAutomaticDerivation";
 
 // Shared utilities and constants
-export { defaultEthereumAuthenticationFunction, type EthereumAddress } from "./shared";
+export {
+  defaultEthereumAuthenticationFunction,
+  type EthereumAddress,
+} from "./shared";

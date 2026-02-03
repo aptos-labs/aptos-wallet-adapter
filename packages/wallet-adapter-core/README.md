@@ -42,7 +42,7 @@ const walletCore = new WalletCore(
   [], // Optional: array of wallet names to opt-in (empty = all wallets)
   { network: Network.MAINNET }, // Optional: dapp configuration
   false, // Optional: disable telemetry (default: false)
-  ["Petra Web"] // Optional: wallets to hide from display
+  ["Petra Web"], // Optional: wallets to hide from display
 );
 
 // Get available wallets
@@ -133,36 +133,36 @@ new WalletCore(
 
 #### Properties
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `wallet` | `AptosWallet \| null` | Currently connected wallet |
-| `account` | `AccountInfo \| null` | Currently connected account |
-| `network` | `NetworkInfo \| null` | Currently connected network |
-| `wallets` | `ReadonlyArray<AptosWallet>` | List of detected wallets |
-| `hiddenWallets` | `ReadonlyArray<AdapterWallet>` | List of hidden wallets |
+| Property             | Type                                      | Description                  |
+| -------------------- | ----------------------------------------- | ---------------------------- |
+| `wallet`             | `AptosWallet \| null`                     | Currently connected wallet   |
+| `account`            | `AccountInfo \| null`                     | Currently connected account  |
+| `network`            | `NetworkInfo \| null`                     | Currently connected network  |
+| `wallets`            | `ReadonlyArray<AptosWallet>`              | List of detected wallets     |
+| `hiddenWallets`      | `ReadonlyArray<AdapterWallet>`            | List of hidden wallets       |
 | `notDetectedWallets` | `ReadonlyArray<AdapterNotDetectedWallet>` | List of not-detected wallets |
 
 #### Methods
 
-| Method | Description |
-|--------|-------------|
-| `connect(walletName)` | Connect to a wallet |
-| `disconnect()` | Disconnect from current wallet |
-| `signMessage(input)` | Sign a message |
-| `signTransaction(args)` | Sign a transaction |
-| `signAndSubmitTransaction(input)` | Sign and submit a transaction |
-| `changeNetwork(network)` | Request network change |
-| `signIn(args)` | Sign in with SIWA (Sign In With Aptos) |
-| `isConnected()` | Check if wallet is connected |
+| Method                            | Description                            |
+| --------------------------------- | -------------------------------------- |
+| `connect(walletName)`             | Connect to a wallet                    |
+| `disconnect()`                    | Disconnect from current wallet         |
+| `signMessage(input)`              | Sign a message                         |
+| `signTransaction(args)`           | Sign a transaction                     |
+| `signAndSubmitTransaction(input)` | Sign and submit a transaction          |
+| `changeNetwork(network)`          | Request network change                 |
+| `signIn(args)`                    | Sign in with SIWA (Sign In With Aptos) |
+| `isConnected()`                   | Check if wallet is connected           |
 
 #### Events
 
-| Event | Payload | Description |
-|-------|---------|-------------|
-| `connect` | `AccountInfo` | Emitted when wallet connects |
-| `disconnect` | - | Emitted when wallet disconnects |
-| `accountChange` | `AccountInfo` | Emitted when account changes |
-| `networkChange` | `NetworkInfo` | Emitted when network changes |
+| Event           | Payload       | Description                     |
+| --------------- | ------------- | ------------------------------- |
+| `connect`       | `AccountInfo` | Emitted when wallet connects    |
+| `disconnect`    | -             | Emitted when wallet disconnects |
+| `accountChange` | `AccountInfo` | Emitted when account changes    |
+| `networkChange` | `NetworkInfo` | Emitted when network changes    |
 
 ## DappConfig
 

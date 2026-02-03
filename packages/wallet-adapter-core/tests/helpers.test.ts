@@ -25,35 +25,35 @@ describe("Helper Functions", () => {
   describe("isMobile", () => {
     it("should return true for iPhone user agent", () => {
       mockUserAgent(
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15"
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15",
       );
       expect(isMobile()).toBe(true);
     });
 
     it("should return true for Android user agent", () => {
       mockUserAgent(
-        "Mozilla/5.0 (Linux; Android 10; SM-G960U) AppleWebKit/537.36 Mobile Safari/537.36"
+        "Mozilla/5.0 (Linux; Android 10; SM-G960U) AppleWebKit/537.36 Mobile Safari/537.36",
       );
       expect(isMobile()).toBe(true);
     });
 
     it("should return true for iPad user agent", () => {
       mockUserAgent(
-        "Mozilla/5.0 (iPad; CPU OS 14_0 like Mac OS X) AppleWebKit/605.1.15"
+        "Mozilla/5.0 (iPad; CPU OS 14_0 like Mac OS X) AppleWebKit/605.1.15",
       );
       expect(isMobile()).toBe(true);
     });
 
     it("should return false for desktop user agent", () => {
       mockUserAgent(
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
       );
       expect(isMobile()).toBe(false);
     });
 
     it("should return false for Windows desktop", () => {
       mockUserAgent(
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
       );
       expect(isMobile()).toBe(false);
     });
@@ -62,21 +62,21 @@ describe("Helper Functions", () => {
   describe("isInAppBrowser", () => {
     it("should return true for iPhone in-app browser", () => {
       mockUserAgent(
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko)"
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko)",
       );
       expect(isInAppBrowser()).toBe(true);
     });
 
     it("should return false for regular Safari on iPhone", () => {
       mockUserAgent(
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1"
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1",
       );
       expect(isInAppBrowser()).toBe(false);
     });
 
     it("should return false for desktop browser", () => {
       mockUserAgent(
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
       );
       expect(isInAppBrowser()).toBe(false);
     });
@@ -85,21 +85,21 @@ describe("Helper Functions", () => {
   describe("isRedirectable", () => {
     it("should return false for desktop browsers", () => {
       mockUserAgent(
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
       );
       expect(isRedirectable()).toBe(false);
     });
 
     it("should return true for mobile Safari (not in-app)", () => {
       mockUserAgent(
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1"
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1",
       );
       expect(isRedirectable()).toBe(true);
     });
 
     it("should return false for mobile in-app browser", () => {
       mockUserAgent(
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko)"
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko)",
       );
       expect(isRedirectable()).toBe(false);
     });
@@ -192,7 +192,9 @@ describe("Helper Functions", () => {
 
     it("should throw for invalid network name", () => {
       const networkInfo: NetworkInfo = { name: "invalid" as any, chainId: 999 };
-      expect(() => convertNetwork(networkInfo)).toThrow("Invalid Aptos network name");
+      expect(() => convertNetwork(networkInfo)).toThrow(
+        "Invalid Aptos network name",
+      );
     });
 
     it("should throw for null network", () => {
@@ -202,7 +204,9 @@ describe("Helper Functions", () => {
 
   describe("getAptosConfig", () => {
     it("should throw for null network", () => {
-      expect(() => getAptosConfig(null, undefined)).toThrow("Undefined network");
+      expect(() => getAptosConfig(null, undefined)).toThrow(
+        "Undefined network",
+      );
     });
 
     it("should return AptosConfig for mainnet", () => {
@@ -247,9 +251,8 @@ describe("Helper Functions", () => {
         url: "https://unknown.network.com",
       };
       expect(() => getAptosConfig(networkInfo, undefined)).toThrow(
-        /Invalid network/
+        /Invalid network/,
       );
     });
   });
 });
-

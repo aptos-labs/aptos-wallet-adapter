@@ -45,7 +45,7 @@ describe("SolanaDerivedAccount", () => {
       });
 
       expect(account.authenticationFunction).toBe(
-        defaultSolanaAuthenticationFunction
+        defaultSolanaAuthenticationFunction,
       );
     });
 
@@ -71,8 +71,8 @@ describe("SolanaDerivedAccount", () => {
       expect(account.derivedPublicKey.domain).toBe(testDomain);
       expect(
         account.derivedPublicKey.solanaPublicKey.equals(
-          TEST_SOLANA_KEYPAIR.publicKey
-        )
+          TEST_SOLANA_KEYPAIR.publicKey,
+        ),
       ).toBe(true);
     });
   });
@@ -100,7 +100,7 @@ describe("SolanaDerivedAccount", () => {
       });
 
       expect(account1.accountAddress.toString()).toBe(
-        account2.accountAddress.toString()
+        account2.accountAddress.toString(),
       );
     });
 
@@ -116,7 +116,7 @@ describe("SolanaDerivedAccount", () => {
       });
 
       expect(account1.accountAddress.toString()).not.toBe(
-        account2.accountAddress.toString()
+        account2.accountAddress.toString(),
       );
     });
 
@@ -134,7 +134,7 @@ describe("SolanaDerivedAccount", () => {
       });
 
       expect(account1.accountAddress.toString()).not.toBe(
-        account2.accountAddress.toString()
+        account2.accountAddress.toString(),
       );
     });
 
@@ -152,4 +152,3 @@ describe("SolanaDerivedAccount", () => {
   // Note: signTransactionWithAuthenticator tests require network access
   // to build transactions. These are tested via integration tests.
 });
-

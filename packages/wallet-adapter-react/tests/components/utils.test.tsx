@@ -74,14 +74,14 @@ describe("createHeadlessComponent", () => {
         (displayName) => ({
           "aria-label": `Button created by ${displayName}`,
           children: "Dynamic Button",
-        })
+        }),
       );
       render(<TestComponent />);
 
       const button = screen.getByRole("button");
       expect(button).toHaveAttribute(
         "aria-label",
-        "Button created by TestComponent"
+        "Button created by TestComponent",
       );
     });
   });
@@ -122,7 +122,7 @@ describe("createHeadlessComponent", () => {
       render(
         <TestComponent asChild>
           <button>Click me</button>
-        </TestComponent>
+        </TestComponent>,
       );
 
       // The Slot component merges props onto the child
@@ -135,7 +135,7 @@ describe("createHeadlessComponent", () => {
       render(
         <TestComponent asChild className="parent-class">
           <button className="child-class">Click me</button>
-        </TestComponent>
+        </TestComponent>,
       );
 
       const button = screen.getByRole("button");

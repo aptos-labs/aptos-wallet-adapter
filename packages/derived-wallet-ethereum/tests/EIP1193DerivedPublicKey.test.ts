@@ -123,14 +123,13 @@ describe("EIP1193DerivedPublicKey", () => {
       const pubKey = new EIP1193DerivedPublicKey({
         domain: "test.example.com",
         ethereumAddress: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-        authenticationFunction:
-          "0x1::ethereum_derivable_account::authenticate",
+        authenticationFunction: "0x1::ethereum_derivable_account::authenticate",
       });
 
       const address = pubKey.authKey().derivedAddress();
       // This is deterministic based on the inputs
       expect(address.toString()).toBe(
-        "0xb5de999e1865abd8503ffa88f58159f7540d1fd8427786a8df14c9d60577c9b5"
+        "0xb5de999e1865abd8503ffa88f58159f7540d1fd8427786a8df14c9d60577c9b5",
       );
     });
   });
@@ -168,17 +167,18 @@ describe("EIP1193DerivedPublicKey", () => {
 
       expect(deserialized.domain).toBe(original.domain);
       expect(deserialized.ethereumAddress.toLowerCase()).toBe(
-        original.ethereumAddress.toLowerCase()
+        original.ethereumAddress.toLowerCase(),
       );
       expect(deserialized.authenticationFunction).toBe(
-        original.authenticationFunction
+        original.authenticationFunction,
       );
     });
 
     it("should preserve auth key through serialization", () => {
       // Use lowercase address to ensure consistency after deserialization
       // (deserialization returns lowercase address from Hex)
-      const lowercaseAddress = testEthereumAddress.toLowerCase() as EthereumAddress;
+      const lowercaseAddress =
+        testEthereumAddress.toLowerCase() as EthereumAddress;
       const original = new EIP1193DerivedPublicKey({
         domain: testDomain,
         ethereumAddress: lowercaseAddress,
@@ -194,7 +194,7 @@ describe("EIP1193DerivedPublicKey", () => {
 
       // Compare derived addresses (which are deterministic)
       expect(deserialized.authKey().derivedAddress().toString()).toBe(
-        original.authKey().derivedAddress().toString()
+        original.authKey().derivedAddress().toString(),
       );
     });
   });
@@ -216,9 +216,7 @@ describe("EIP1193DerivedPublicKey", () => {
         // Missing ethereumAddress and authenticationFunction
       };
 
-      expect(
-        EIP1193DerivedPublicKey.isInstance(fakePubKey as any)
-      ).toBe(false);
+      expect(EIP1193DerivedPublicKey.isInstance(fakePubKey as any)).toBe(false);
     });
 
     it("should return false for objects with only some properties", () => {
@@ -228,10 +226,9 @@ describe("EIP1193DerivedPublicKey", () => {
         // Missing authenticationFunction
       };
 
-      expect(
-        EIP1193DerivedPublicKey.isInstance(partialPubKey as any)
-      ).toBe(false);
+      expect(EIP1193DerivedPublicKey.isInstance(partialPubKey as any)).toBe(
+        false,
+      );
     });
   });
 });
-
