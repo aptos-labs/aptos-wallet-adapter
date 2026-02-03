@@ -1,5 +1,11 @@
 # @aptos-labs/cross-chain-core
 
+## 5.6.2
+
+### Patch Changes
+
+- 7d936dc: fix: handle missing Solana USDC balance, add devnet warning, and fix Sepolia CORS
+
 ## 5.6.1
 
 ### Patch Changes
