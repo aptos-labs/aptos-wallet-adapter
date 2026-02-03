@@ -1,6 +1,6 @@
-# Aptos Wallet Adapter Croos Chain Demo App
+# Aptos Wallet Adapter Cross-Chain Demo App
 
-This project is a demo of the Aptos Croos Chain Wallet Selector using [Next.js](https://nextjs.org/) and [shadcn/ui](https://ui.shadcn.com/).
+This project is a demo of the Aptos Cross-Chain Wallet Selector using [Next.js](https://nextjs.org/) and [shadcn/ui](https://ui.shadcn.com/).
 
 A live version is hosted at:
 https://aptos-labs.github.io/aptos-wallet-adapter/nextjs-cross-chain-example/
