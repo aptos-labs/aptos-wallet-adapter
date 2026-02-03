@@ -4,6 +4,8 @@
 
 A monorepo modular wallet adapter developed and maintained by Aptos for wallet and dapp builders.
 
+> **_NOTE:_** Vue and Nuxt integration has been moved to a separate community-maintained repository: [aptos-wallet-adapter-vue](https://github.com/aptos-labs/aptos-wallet-adapter-vue)
+
 #### Getting Started
 
 - [Wallet Adapter Docs](https://aptos.dev/en/build/sdks/wallet-adapter)
