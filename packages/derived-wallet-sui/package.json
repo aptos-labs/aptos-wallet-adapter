@@ -41,7 +41,7 @@
     "@mysten/wallet-standard": "^0.13.29"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^5.2.0 || ^6.0.0"
+    "@aptos-labs/ts-sdk": "^6.0.0"
   },
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
@@ -52,7 +52,7 @@
     "tsup": "^8.4.0",
     "tweetnacl": "^1.0.3",
     "typescript": "^5.4.5",
-    "vitest": "^2.1.8"
+    "vitest": "^3.0.0"
   },
   "files": [
     "dist",

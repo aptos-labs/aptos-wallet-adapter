@@ -4,9 +4,17 @@ const isProd = process.env.NODE_ENV === "production";
 const nextConfig = {
   output: "export",
   reactStrictMode: true,
-  transpilePackages: ["wallet-adapter-react", "wallet-adapter-plugin"],
+  transpilePackages: [
+    "wallet-adapter-react",
+    "wallet-adapter-plugin",
+    "@aptos-labs/wallet-adapter-ant-design",
+  ],
   assetPrefix: isProd ? "/aptos-wallet-adapter/nextjs-cross-chain-example" : "",
   basePath: isProd ? "/aptos-wallet-adapter/nextjs-cross-chain-example" : "",
+  // Turbopack configuration (Next.js 16+)
+  turbopack: {
+    resolveExtensions: [".css", ".mjs", ".js", ".jsx", ".ts", ".tsx", ".json"],
+  },
   webpack: (config) => {
     config.resolve.fallback = { "@solana/web3.js": false };
     return config;

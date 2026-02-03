@@ -15,7 +15,7 @@ export function setupAutomaticSolanaWalletDerivation(
   const api = getWallets();
 
   type UnsubscribeCallback = () => void;
-  let registrations: { [name: string]: UnsubscribeCallback } = {};
+  const registrations: { [name: string]: UnsubscribeCallback } = {};
 
   const isWhitelisted = (wallet: WalletAdapterCompatibleStandardWallet) => {
     // For now, we whitelist all wallets

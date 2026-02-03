@@ -1,25 +1,11 @@
-import { FlatCompat } from "@eslint/eslintrc";
 import js from "@eslint/js";
 import globals from "globals";
-import path from "path";
-import { fileURLToPath } from "url";
+import tseslint from "typescript-eslint";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-});
-
-export default [
-  // Base JS config
+// Base config for all packages (non-Next.js)
+const baseConfig = [
   js.configs.recommended,
-  // Next.js and other configs via compat
-  ...compat.extends("next/core-web-vitals"),
-  ...compat.extends("turbo"),
-  ...compat.extends("prettier"),
-  // TypeScript and React file patterns
+  ...tseslint.configs.recommended,
   {
     files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.mjs"],
     languageOptions: {
@@ -28,18 +14,26 @@ export default [
         ...globals.node,
       },
     },
-    rules: {
-      "@next/next/no-html-link-for-pages": "off",
-      "react/jsx-key": "off",
-    },
   },
-  // TypeScript-specific: disable rules handled by TS compiler
   {
     files: ["**/*.ts", "**/*.tsx"],
     rules: {
-      "no-undef": "off", // TypeScript handles this
-      "no-unused-vars": "off", // TypeScript handles this
-      "no-redeclare": "off", // TypeScript handles this
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-unsafe-function-type": "off",
+      "@typescript-eslint/no-this-alias": "off",
+      "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/no-unused-expressions": "off",
+      "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
+      "@typescript-eslint/no-require-imports": "off",
+      "prefer-rest-params": "off",
+      "prefer-const": "warn",
     },
   },
 ];
+
+// Export base config as default for non-Next.js packages
+export default baseConfig;
+
+// Export for Next.js apps (to be used with eslint-config-next directly in apps)
+export { baseConfig };

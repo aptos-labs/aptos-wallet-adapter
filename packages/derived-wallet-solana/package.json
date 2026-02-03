@@ -43,7 +43,7 @@
     "@solana/web3.js": "^1.95.8"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^5.2.0 || ^6.0.0"
+    "@aptos-labs/ts-sdk": "^6.0.0"
   },
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
@@ -53,7 +53,7 @@
     "happy-dom": "^20.0.0",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
-    "vitest": "^2.1.8"
+    "vitest": "^3.0.0"
   },
   "files": [
     "dist",

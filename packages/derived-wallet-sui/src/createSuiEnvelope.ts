@@ -17,7 +17,7 @@ function createSuiEnvelope(
 
   const prefix = `${domain} wants you to sign in with your Sui account:\n${suiAddress}\n\n${statement}`;
 
-  let suffix = `Nonce: ${digestHex}`;
+  const suffix = `Nonce: ${digestHex}`;
 
   return `${prefix}\n\n${suffix}`;
 }

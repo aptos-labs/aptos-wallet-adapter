@@ -47,7 +47,7 @@
     "happy-dom": "^20.0.0",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
-    "vitest": "^2.1.8"
+    "vitest": "^3.0.0"
   },
   "dependencies": {
     "@aptos-connect/wallet-adapter-plugin": "^3.0.2",
@@ -57,7 +57,7 @@
     "tweetnacl": "^1.0.3"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^5.2.0 || ^6.0.0"
+    "@aptos-labs/ts-sdk": "^6.0.0"
   },
   "files": [
     "dist",

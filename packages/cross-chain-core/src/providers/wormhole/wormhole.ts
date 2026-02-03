@@ -217,7 +217,7 @@ export class WormholeProvider implements CrossChainProvider<
     logger.log("wormholeRequest", this.wormholeRequest);
     logger.log("wormholeQuote", this.wormholeQuote);
 
-    let receipt = await this.wormholeRoute.initiate(
+    const receipt = await this.wormholeRoute.initiate(
       this.wormholeRequest,
       signer,
       this.wormholeQuote,
@@ -311,7 +311,7 @@ export class WormholeProvider implements CrossChainProvider<
       });
     }
     // Submit transfer transaction from origin chain
-    let { originChainTxnId, receipt } = await this.submitCCTPTransfer(input);
+    const { originChainTxnId, receipt } = await this.submitCCTPTransfer(input);
     // Claim transfer transaction on destination chain
     const { destinationChainTxnId } = await this.claimCCTPTransfer({
       receipt,

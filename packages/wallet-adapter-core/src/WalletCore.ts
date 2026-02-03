@@ -224,7 +224,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   private fetchExtensionAIP62AptosWallets(): void {
-    let { aptosWallets, on } = getAptosWallets();
+    const { aptosWallets, on } = getAptosWallets();
     this.setExtensionAIP62Wallets(aptosWallets);
 
     if (typeof window === "undefined") return;
@@ -232,12 +232,12 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     // receiving an unsubscribe function, which it can later use to remove the listener
     const that = this;
     const removeRegisterListener = on("register", function () {
-      let { aptosWallets } = getAptosWallets();
+      const { aptosWallets } = getAptosWallets();
       that.setExtensionAIP62Wallets(aptosWallets);
     });
 
     const removeUnregisterListener = on("unregister", function () {
-      let { aptosWallets } = getAptosWallets();
+      const { aptosWallets } = getAptosWallets();
       that.setExtensionAIP62Wallets(aptosWallets);
     });
   }
@@ -592,8 +592,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           let parameter = "";
           if (uninstalledWallet.name.includes("Phantom")) {
             // Phantom required parameters https://docs.phantom.com/phantom-deeplinks/other-methods/browse#parameters
-            let url = encodeURIComponent(window.location.href);
-            let ref = encodeURIComponent(window.location.origin);
+            const url = encodeURIComponent(window.location.href);
+            const ref = encodeURIComponent(window.location.origin);
             parameter = `${url}?ref=${ref}`;
           } else if (uninstalledWallet.name.includes("Metamask")) {
             // Metamask expects the raw URL as a path parameter
@@ -765,12 +765,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         }
 
         if (
-          transactionInput.data.function === "0x1::code::publish_package_txn"
+          transactionInput.data.function === "0x1::code::publish_package_txn" &&
+          transactionInput.data.functionArguments
         ) {
-          ({
-            metadataBytes: transactionInput.data.functionArguments[0],
-            byteCode: transactionInput.data.functionArguments[1],
-          } = handlePublishPackageTransaction(transactionInput));
+          const { metadataBytes, byteCode } =
+            handlePublishPackageTransaction(transactionInput);
+          transactionInput.data.functionArguments[0] = metadataBytes;
+          transactionInput.data.functionArguments[1] = byteCode;
         }
       }
       this.ensureWalletExists(this._wallet);
@@ -1166,7 +1167,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       const signingMessage = new TextEncoder().encode(
         response.args.fullMessage,
       );
-      if ("verifySignatureAsync" in (this._account.publicKey as Object)) {
+      if ("verifySignatureAsync" in (this._account.publicKey as object)) {
         return await this._account.publicKey.verifySignatureAsync({
           aptosConfig,
           message: signingMessage,

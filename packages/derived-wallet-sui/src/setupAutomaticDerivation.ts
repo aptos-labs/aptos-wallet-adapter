@@ -8,7 +8,7 @@ export function setupAutomaticSuiWalletDerivation(
   const api = getWallets();
 
   type UnsubscribeCallback = () => void;
-  let registrations: { [name: string]: UnsubscribeCallback } = {};
+  const registrations: { [name: string]: UnsubscribeCallback } = {};
 
   const deriveAndRegisterWallet = (wallet: Wallet) => {
     const derivedWallet = new SuiDerivedWallet(wallet, options);
