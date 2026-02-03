@@ -46,15 +46,15 @@ A comprehensive monorepo developed and maintained by Aptos for wallet and dapp b
 
 ## Supported Wallets
 
-- [OKX](https://www.npmjs.com/package/@okwallet/aptos-wallet-adapter)
 - [AptosConnect](https://aptosconnect.app/)
-- [Petra](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
-- [Nightly](https://chromewebstore.google.com/detail/nightly/fiikommddbeccaoicoejoniammnalkfa)
-- [RimoSafe](https://chromewebstore.google.com/detail/rimo-safe-wallet/kiicddjcakdmobjkcpppkgcjbpakcagp)
-- [MSafe](https://www.npmjs.com/package/@msafe/aptos-wallet-adapter)
-- [Bitget Wallet](https://web3.bitget.com)
 - [Backpack Wallet](https://backpack.app/)
+- [Bitget Wallet](https://web3.bitget.com)
 - [Cosmostation Wallet](https://chromewebstore.google.com/detail/cosmostation-wallet/fpkhgmpbidmiogeglndfbkegfdlnajnf)
+- [MSafe](https://www.npmjs.com/package/@msafe/aptos-wallet-adapter)
+- [Nightly](https://chromewebstore.google.com/detail/nightly/fiikommddbeccaoicoejoniammnalkfa)
+- [OKX](https://www.npmjs.com/package/@okwallet/aptos-wallet-adapter)
+- [Petra](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
+- [RimoSafe](https://chromewebstore.google.com/detail/rimo-safe-wallet/kiicddjcakdmobjkcpppkgcjbpakcagp)
 
 ## Develop Locally
 

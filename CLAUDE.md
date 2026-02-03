@@ -21,13 +21,11 @@ aptos-wallet-adapter/
 ├── apps/                          # Demo applications
 │   ├── nextjs-example/           # Basic wallet adapter demo
 │   ├── nextjs-x-chain/           # Cross-chain transfers demo
-│   └── nuxt-example/             # Vue/Nuxt integration demo
 ├── packages/                      # Published packages
 │   ├── wallet-adapter-core/      # Core adapter logic
 │   ├── wallet-adapter-react/     # React provider and hooks
 │   ├── wallet-adapter-ant-design/ # Ant Design UI components
 │   ├── wallet-adapter-mui-design/ # Material-UI components
-│   ├── wallet-adapter-vue/       # Vue integration (deprecated)
 │   ├── cross-chain-core/         # Cross-chain USDC transfers SDK
 │   ├── derived-wallet-base/      # Base for derived wallets
 │   ├── derived-wallet-ethereum/  # Ethereum derived wallet
@@ -262,7 +260,6 @@ pnpm build
 
 ## Notes for AI Assistants
 
-- Vue support (`wallet-adapter-vue`) exists but is not actively promoted
 - The project follows semantic versioning via changesets
 - Tests are critical - maintain or improve coverage when making changes
 - Cross-chain functionality is complex - read cross-chain-core README thoroughly

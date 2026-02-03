@@ -182,7 +182,6 @@ interface DappConfig {
 ## Related Packages
 
 - [`@aptos-labs/wallet-adapter-react`](../wallet-adapter-react) - React hooks and context provider
-- [`@aptos-labs/wallet-adapter-vue`](../wallet-adapter-vue) - Vue composables and plugin
 - [`@aptos-labs/ts-sdk`](https://github.com/aptos-labs/aptos-ts-sdk) - Aptos TypeScript SDK
 
 ## License
