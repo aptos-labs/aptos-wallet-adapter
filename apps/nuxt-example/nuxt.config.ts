@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     cdnURL: isProd ? "/aptos-wallet-adapter/nuxt-example" : "", // Ensures assets load from correct path
   },
 
-  modules: ["@nuxtjs/color-mode", "@nuxtjs/google-fonts"],
+  modules: ["@nuxt/eslint", "@nuxtjs/color-mode", "@nuxtjs/google-fonts"],
   plugins: ["~/plugins/buffer"],
   components: [
     {

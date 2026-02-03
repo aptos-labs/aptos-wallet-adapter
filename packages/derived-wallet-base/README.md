@@ -3,6 +3,7 @@
 Shared utilities and abstractions for Derivable Abstracted Account (DAA) integrations with the Aptos blockchain.
 
 > **Note:** This is an internal package. If you're building a dApp, use one of the chain-specific packages instead:
+>
 > - [@aptos-labs/derived-wallet-ethereum](../derived-wallet-ethereum/)
 > - [@aptos-labs/derived-wallet-solana](../derived-wallet-solana/)
 > - [@aptos-labs/derived-wallet-sui](../derived-wallet-sui/)

@@ -60,7 +60,7 @@ describe("WalletItem", () => {
           <WalletItem.Icon />
           <WalletItem.Name />
         </WalletItem>,
-        { wrapper }
+        { wrapper },
       );
 
       expect(screen.getByText("Test Wallet")).toBeInTheDocument();
@@ -74,12 +74,12 @@ describe("WalletItem", () => {
         <WalletItem wallet={wallet}>
           <WalletItem.Icon />
         </WalletItem>,
-        { wrapper }
+        { wrapper },
       );
 
       expect(screen.getByAltText("Mock Wallet icon")).toHaveAttribute(
         "src",
-        "data:image/svg+xml,<svg></svg>"
+        "data:image/svg+xml,<svg></svg>",
       );
     });
   });
@@ -92,10 +92,12 @@ describe("WalletItem", () => {
         <WalletItem wallet={wallet}>
           <WalletItem.ConnectButton />
         </WalletItem>,
-        { wrapper }
+        { wrapper },
       );
 
-      expect(screen.getByRole("button", { name: "Connect" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Connect" }),
+      ).toBeInTheDocument();
     });
 
     it("should call connect with wallet name when clicked", () => {
@@ -105,7 +107,7 @@ describe("WalletItem", () => {
         <WalletItem wallet={wallet}>
           <WalletItem.ConnectButton />
         </WalletItem>,
-        { wrapper }
+        { wrapper },
       );
 
       fireEvent.click(screen.getByRole("button", { name: "Connect" }));
@@ -121,7 +123,7 @@ describe("WalletItem", () => {
         <WalletItem wallet={wallet} onConnect={onConnect}>
           <WalletItem.ConnectButton />
         </WalletItem>,
-        { wrapper }
+        { wrapper },
       );
 
       fireEvent.click(screen.getByRole("button", { name: "Connect" }));
@@ -138,12 +140,12 @@ describe("WalletItem", () => {
         <WalletItem wallet={wallet}>
           <WalletItem.InstallLink />
         </WalletItem>,
-        { wrapper }
+        { wrapper },
       );
 
       expect(screen.getByRole("link", { name: "Install" })).toHaveAttribute(
         "href",
-        "https://not-detected-wallet.example.com"
+        "https://not-detected-wallet.example.com",
       );
     });
 
@@ -154,7 +156,7 @@ describe("WalletItem", () => {
         <WalletItem wallet={wallet}>
           <WalletItem.InstallLink />
         </WalletItem>,
-        { wrapper }
+        { wrapper },
       );
 
       const link = screen.getByRole("link", { name: "Install" });
@@ -169,7 +171,7 @@ describe("WalletItem", () => {
         <WalletItem wallet={wallet}>
           <WalletItem.InstallLink />
         </WalletItem>,
-        { wrapper }
+        { wrapper },
       );
 
       expect(screen.getByRole("link")).toHaveTextContent("Install");
@@ -186,7 +188,7 @@ describe("WalletItem", () => {
             <WalletItem.Name />
           </li>
         </WalletItem>,
-        { wrapper }
+        { wrapper },
       );
 
       expect(screen.getByRole("listitem")).toBeInTheDocument();
@@ -195,7 +197,9 @@ describe("WalletItem", () => {
 
   describe("context errors", () => {
     it("should throw when WalletItem.Icon is used outside WalletItem", () => {
-      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+      const consoleSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
 
       expect(() => {
         render(<WalletItem.Icon />, { wrapper });
@@ -205,7 +209,9 @@ describe("WalletItem", () => {
     });
 
     it("should throw when WalletItem.Name is used outside WalletItem", () => {
-      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+      const consoleSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
 
       expect(() => {
         render(<WalletItem.Name />, { wrapper });
@@ -215,7 +221,9 @@ describe("WalletItem", () => {
     });
 
     it("should throw when WalletItem.ConnectButton is used outside WalletItem", () => {
-      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+      const consoleSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
 
       expect(() => {
         render(<WalletItem.ConnectButton />, { wrapper });
@@ -225,7 +233,9 @@ describe("WalletItem", () => {
     });
 
     it("should throw when WalletItem.InstallLink is used outside WalletItem", () => {
-      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+      const consoleSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
 
       expect(() => {
         render(<WalletItem.InstallLink />, { wrapper });
@@ -243,7 +253,7 @@ describe("WalletItem", () => {
         <WalletItem wallet={wallet} className="custom-class">
           <WalletItem.Name />
         </WalletItem>,
-        { wrapper }
+        { wrapper },
       );
 
       // The root element is the first div inside the container

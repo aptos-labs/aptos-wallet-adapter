@@ -41,17 +41,17 @@
     "viem": "^2.23.12"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^5.1.1"
+    "@aptos-labs/ts-sdk": "^6.0.0"
   },
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
     "@types/node": "^20.10.4",
-    "eslint": "^8.57.1",
-    "happy-dom": "^15.11.7",
+    "eslint": "^9.18.0",
+    "happy-dom": "^20.0.0",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
-    "vitest": "^2.1.8"
+    "vitest": "^3.0.0"
   },
   "files": [
     "dist",

@@ -13,7 +13,7 @@ export function setupAutomaticEthereumWalletDerivation(
   const eip6963Store = createStore();
 
   type UnsubscribeCallback = () => void;
-  let registrations: { [name: string]: UnsubscribeCallback } = {};
+  const registrations: { [name: string]: UnsubscribeCallback } = {};
 
   const deriveAndRegisterWallet = (detail: EIP6963ProviderDetail) => {
     const derivedWallet = new EIP1193DerivedWallet(detail, options);

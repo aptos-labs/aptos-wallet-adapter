@@ -70,7 +70,7 @@ describe("EIP1193DerivedWallet", () => {
 
     it("should use default authentication function", () => {
       expect(wallet.authenticationFunction).toBe(
-        defaultEthereumAuthenticationFunction
+        defaultEthereumAuthenticationFunction,
       );
     });
 
@@ -92,7 +92,7 @@ describe("EIP1193DerivedWallet", () => {
         icon: "  \n  data:image/svg+xml,<svg></svg>  \n  ",
       });
       const walletWithTrimmedIcon = new EIP1193DerivedWallet(
-        detailWithWhitespaceIcon
+        detailWithWhitespaceIcon,
       );
       expect(walletWithTrimmedIcon.icon).toBe("data:image/svg+xml,<svg></svg>");
     });
@@ -207,7 +207,7 @@ describe("EIP1193DerivedWallet", () => {
         wallet.changeNetwork({
           name: Network.CUSTOM,
           url: "https://custom.node.com",
-        })
+        }),
       ).rejects.toThrow("Custom network not currently supported");
     });
 
@@ -317,4 +317,3 @@ describe("EIP1193DerivedWallet", () => {
   // Note: signTransaction tests require network access to build transactions.
   // These are tested via integration tests.
 });
-

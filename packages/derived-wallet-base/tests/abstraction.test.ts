@@ -17,7 +17,7 @@ describe("abstraction", () => {
     it("should store identity and domain", () => {
       const pubKey = new DerivableAbstractPublicKey(
         "0x1234567890abcdef",
-        "my-dapp.com"
+        "my-dapp.com",
       );
 
       expect(pubKey.identity).toBe("0x1234567890abcdef");
@@ -25,7 +25,10 @@ describe("abstraction", () => {
     });
 
     it("should serialize correctly", () => {
-      const pubKey = new DerivableAbstractPublicKey("identity123", "domain.com");
+      const pubKey = new DerivableAbstractPublicKey(
+        "identity123",
+        "domain.com",
+      );
       const serializer = new Serializer();
       pubKey.serialize(serializer);
 
@@ -36,7 +39,7 @@ describe("abstraction", () => {
     it("should serialize and deserialize roundtrip", () => {
       const original = new DerivableAbstractPublicKey(
         "0xdeadbeef1234",
-        "test-app.example.com"
+        "test-app.example.com",
       );
 
       // Serialize
@@ -83,7 +86,7 @@ describe("abstraction", () => {
     it("should handle special characters in identity and domain", () => {
       const pubKey = new DerivableAbstractPublicKey(
         "id-with-special!@#$%",
-        "sub.domain-name.com:8080"
+        "sub.domain-name.com:8080",
       );
 
       const serializer = new Serializer();
@@ -99,20 +102,19 @@ describe("abstraction", () => {
   });
 
   describe("computeDerivableAuthenticationKey", () => {
-    const validFunctionInfo =
-      "0x1::ethereum_derivable_account::authenticate";
+    const validFunctionInfo = "0x1::ethereum_derivable_account::authenticate";
 
     it("should compute authentication key for valid inputs", () => {
       const authKey = computeDerivableAuthenticationKey(
         validFunctionInfo,
         "0x1234567890abcdef",
-        "my-dapp.com"
+        "my-dapp.com",
       );
 
       expect(authKey).toBeDefined();
       const address = authKey.derivedAddress();
       expect(address.toString()).toBe(
-        "0x096a4657c816a456e00d99e4f6e34e61fad376ae77d216586b92a1503d32f15d"
+        "0x096a4657c816a456e00d99e4f6e34e61fad376ae77d216586b92a1503d32f15d",
       );
     });
 
@@ -120,13 +122,13 @@ describe("abstraction", () => {
       const authKey1 = computeDerivableAuthenticationKey(
         validFunctionInfo,
         "identity123",
-        "domain.com"
+        "domain.com",
       );
 
       const authKey2 = computeDerivableAuthenticationKey(
         validFunctionInfo,
         "identity123",
-        "domain.com"
+        "domain.com",
       );
 
       expect(authKey1.data).toEqual(authKey2.data);
@@ -136,13 +138,13 @@ describe("abstraction", () => {
       const authKey1 = computeDerivableAuthenticationKey(
         validFunctionInfo,
         "identity1",
-        "domain.com"
+        "domain.com",
       );
 
       const authKey2 = computeDerivableAuthenticationKey(
         validFunctionInfo,
         "identity2",
-        "domain.com"
+        "domain.com",
       );
 
       expect(authKey1.data).not.toEqual(authKey2.data);
@@ -152,13 +154,13 @@ describe("abstraction", () => {
       const authKey1 = computeDerivableAuthenticationKey(
         validFunctionInfo,
         "identity",
-        "domain1.com"
+        "domain1.com",
       );
 
       const authKey2 = computeDerivableAuthenticationKey(
         validFunctionInfo,
         "identity",
-        "domain2.com"
+        "domain2.com",
       );
 
       expect(authKey1.data).not.toEqual(authKey2.data);
@@ -168,13 +170,13 @@ describe("abstraction", () => {
       const authKey1 = computeDerivableAuthenticationKey(
         "0x1::ethereum_derivable_account::authenticate",
         "identity",
-        "domain.com"
+        "domain.com",
       );
 
       const authKey2 = computeDerivableAuthenticationKey(
         "0x1::solana_derivable_account::authenticate",
         "identity",
-        "domain.com"
+        "domain.com",
       );
 
       expect(authKey1.data).not.toEqual(authKey2.data);
@@ -185,8 +187,8 @@ describe("abstraction", () => {
         computeDerivableAuthenticationKey(
           "invalid-function-format",
           "identity",
-          "domain.com"
-        )
+          "domain.com",
+        ),
       ).toThrow();
     });
 
@@ -195,8 +197,8 @@ describe("abstraction", () => {
         computeDerivableAuthenticationKey(
           "not-an-address::module::function",
           "identity",
-          "domain.com"
-        )
+          "domain.com",
+        ),
       ).toThrow();
     });
 
@@ -204,14 +206,13 @@ describe("abstraction", () => {
       const authKey = computeDerivableAuthenticationKey(
         validFunctionInfo,
         "0xdeadbeef",
-        "test.com"
+        "test.com",
       );
 
       const address = authKey.derivedAddress();
       expect(address.toString()).toBe(
-        "0x1234489429e47e6269c5890e81f33b7f130b528027a776bea1b7d024b47f153a"
+        "0x1234489429e47e6269c5890e81f33b7f130b528027a776bea1b7d024b47f153a",
       );
     });
   });
 });
-

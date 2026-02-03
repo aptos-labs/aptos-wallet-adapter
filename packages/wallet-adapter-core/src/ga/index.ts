@@ -7,7 +7,7 @@ export class GA4 {
   }
 
   gtag(a: string, b: string | object, c?: object) {
-    let dataLayer = (window as any).dataLayer || [];
+    const dataLayer = (window as any).dataLayer || [];
     dataLayer.push(arguments);
   }
 
@@ -17,7 +17,7 @@ export class GA4 {
 
     const head = document.getElementsByTagName("head")[0];
 
-    var myScript = document.createElement("script");
+    const myScript = document.createElement("script");
 
     myScript.setAttribute(
       "src",

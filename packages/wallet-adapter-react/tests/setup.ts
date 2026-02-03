@@ -37,4 +37,3 @@ beforeEach(() => {
   localStorageMock.clear();
   vi.clearAllMocks();
 });
-

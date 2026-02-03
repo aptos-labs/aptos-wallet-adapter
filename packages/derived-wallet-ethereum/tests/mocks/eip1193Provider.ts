@@ -15,7 +15,7 @@ export interface MockEIP1193ProviderOptions {
  * Creates a mock EIP1193 provider that simulates an Ethereum wallet
  */
 export function createMockEIP1193Provider(
-  options: MockEIP1193ProviderOptions
+  options: MockEIP1193ProviderOptions,
 ): EIP1193Provider {
   const { privateKey, chainId = 1 } = options;
   const wallet = new Wallet(privateKey);
@@ -23,7 +23,13 @@ export function createMockEIP1193Provider(
   const eventListeners: Map<string, Set<EventCallback>> = new Map();
 
   const provider: EIP1193Provider = {
-    request: async ({ method, params }: { method: string; params?: unknown[] }) => {
+    request: async ({
+      method,
+      params,
+    }: {
+      method: string;
+      params?: unknown[];
+    }) => {
       switch (method) {
         case "eth_requestAccounts":
         case "eth_accounts":
@@ -39,7 +45,7 @@ export function createMockEIP1193Provider(
           const signature = await wallet.signMessage(
             typeof message === "string" && message.startsWith("0x")
               ? Buffer.from(message.slice(2), "hex")
-              : message
+              : message,
           );
           return signature;
         }
@@ -89,7 +95,7 @@ export function createMockEIP6963ProviderDetail(
     name?: string;
     rdns?: string;
     icon?: string;
-  }
+  },
 ): EIP6963ProviderDetail {
   const provider = createMockEIP1193Provider(options);
 
@@ -98,7 +104,8 @@ export function createMockEIP6963ProviderDetail(
       uuid: "mock-wallet-uuid",
       name: options.name ?? "Mock Wallet",
       rdns: options.rdns ?? "com.mock.wallet",
-      icon: (options.icon ?? "data:image/svg+xml,<svg></svg>") as `data:image/${string}`,
+      icon: (options.icon ??
+        "data:image/svg+xml,<svg></svg>") as `data:image/${string}`,
     },
     provider,
   };
@@ -114,5 +121,5 @@ export const TEST_PRIVATE_KEY =
 /**
  * Derived from TEST_PRIVATE_KEY
  */
-export const TEST_ETHEREUM_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
-
+export const TEST_ETHEREUM_ADDRESS =
+  "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";

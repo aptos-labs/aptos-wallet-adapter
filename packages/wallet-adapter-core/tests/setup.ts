@@ -52,7 +52,8 @@ Object.defineProperty(window, "localStorage", {
 
 // Mock document.getElementsByTagName for GA4 script injection
 if (typeof document !== "undefined") {
-  const originalGetElementsByTagName = document.getElementsByTagName.bind(document);
+  const originalGetElementsByTagName =
+    document.getElementsByTagName.bind(document);
   document.getElementsByTagName = vi.fn((tagName: string) => {
     if (tagName === "head") {
       return [
@@ -71,4 +72,3 @@ beforeEach(() => {
   localStorageMock.clear();
   vi.clearAllMocks();
 });
-

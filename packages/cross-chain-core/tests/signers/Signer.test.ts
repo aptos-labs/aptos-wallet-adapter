@@ -15,7 +15,7 @@ describe("Signer", () => {
         mockChainConfig,
         mockAddress,
         mockOptions,
-        mockWallet
+        mockWallet,
       );
 
       expect(signer).toBeDefined();
@@ -30,7 +30,7 @@ describe("Signer", () => {
         mockChainConfig,
         mockAddress,
         mockOptions,
-        mockWallet
+        mockWallet,
       );
 
       expect(signer._claimedTransactionHashes).toBe("");
@@ -43,7 +43,7 @@ describe("Signer", () => {
         mockAddress,
         mockOptions,
         mockWallet,
-        mockCrossChainCore
+        mockCrossChainCore,
       );
 
       expect(signer._crossChainCore).toBe(mockCrossChainCore);
@@ -57,7 +57,7 @@ describe("Signer", () => {
         mockOptions,
         mockWallet,
         undefined,
-        mockSponsorAccount
+        mockSponsorAccount,
       );
 
       expect(signer._sponsorAccount).toBe(mockSponsorAccount);
@@ -70,7 +70,7 @@ describe("Signer", () => {
         mockChainConfig,
         mockAddress,
         mockOptions,
-        mockWallet
+        mockWallet,
       );
 
       expect(signer.chain()).toBe("Solana");
@@ -78,7 +78,12 @@ describe("Signer", () => {
 
     it("should return correct key for Ethereum chain", () => {
       const ethConfig = testnetChains.Sepolia!;
-      const signer = new Signer(ethConfig, mockAddress, mockOptions, mockWallet);
+      const signer = new Signer(
+        ethConfig,
+        mockAddress,
+        mockOptions,
+        mockWallet,
+      );
 
       expect(signer.chain()).toBe("Sepolia");
     });
@@ -89,7 +94,7 @@ describe("Signer", () => {
         aptosConfig,
         mockAddress,
         mockOptions,
-        mockWallet
+        mockWallet,
       );
 
       expect(signer.chain()).toBe("Aptos");
@@ -102,7 +107,7 @@ describe("Signer", () => {
         mockChainConfig,
         mockAddress,
         mockOptions,
-        mockWallet
+        mockWallet,
       );
 
       expect(signer.address()).toBe(mockAddress);
@@ -114,7 +119,7 @@ describe("Signer", () => {
         mockChainConfig,
         differentAddress,
         mockOptions,
-        mockWallet
+        mockWallet,
       );
 
       expect(signer.address()).toBe(differentAddress);
@@ -127,7 +132,7 @@ describe("Signer", () => {
         mockChainConfig,
         mockAddress,
         mockOptions,
-        mockWallet
+        mockWallet,
       );
 
       expect(signer.claimedTransactionHashes()).toBe("");
@@ -138,7 +143,7 @@ describe("Signer", () => {
         mockChainConfig,
         mockAddress,
         mockOptions,
-        mockWallet
+        mockWallet,
       );
 
       // Directly modify internal state for testing
@@ -155,7 +160,7 @@ describe("Signer", () => {
         solanaConfig,
         "SolanaAddr",
         mockOptions,
-        mockWallet
+        mockWallet,
       );
 
       expect(signer._chain.context).toBe(Context.SOLANA);
@@ -163,7 +168,12 @@ describe("Signer", () => {
 
     it("should create signer for Ethereum context", () => {
       const ethConfig = testnetChains.Sepolia!;
-      const signer = new Signer(ethConfig, "0xEthAddr", mockOptions, mockWallet);
+      const signer = new Signer(
+        ethConfig,
+        "0xEthAddr",
+        mockOptions,
+        mockWallet,
+      );
 
       expect(signer._chain.context).toBe(Context.ETH);
     });
@@ -174,7 +184,7 @@ describe("Signer", () => {
         aptosConfig,
         "0xAptosAddr",
         mockOptions,
-        mockWallet
+        mockWallet,
       );
 
       expect(signer._chain.context).toBe(Context.APTOS);
@@ -182,7 +192,12 @@ describe("Signer", () => {
 
     it("should create signer for Sui context", () => {
       const suiConfig = testnetChains.Sui!;
-      const signer = new Signer(suiConfig, "0xSuiAddr", mockOptions, mockWallet);
+      const signer = new Signer(
+        suiConfig,
+        "0xSuiAddr",
+        mockOptions,
+        mockWallet,
+      );
 
       expect(signer._chain.context).toBe(Context.SUI);
     });
@@ -191,4 +206,3 @@ describe("Signer", () => {
   // Note: signAndSend tests require mocking chain-specific implementations
   // and are covered in integration tests
 });
-

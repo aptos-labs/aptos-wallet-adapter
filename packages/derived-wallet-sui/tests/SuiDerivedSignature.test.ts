@@ -143,4 +143,3 @@ describe("SuiDerivedEd25519Signature", () => {
     });
   });
 });
-

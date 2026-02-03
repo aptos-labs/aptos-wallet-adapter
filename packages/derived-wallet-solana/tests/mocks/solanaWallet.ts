@@ -21,8 +21,10 @@ export interface MockSolanaWalletOptions {
  * Creates a mock Solana wallet adapter that simulates wallet behavior
  */
 export function createMockSolanaWallet(
-  options: MockSolanaWalletOptions
-): StandardWalletAdapter & { emit: (event: string, ...args: unknown[]) => void } {
+  options: MockSolanaWalletOptions,
+): StandardWalletAdapter & {
+  emit: (event: string, ...args: unknown[]) => void;
+} {
   const {
     keypair,
     name = "Mock Solana Wallet",
@@ -125,7 +127,7 @@ export function createMockSolanaWallet(
  * Creates a pre-connected mock Solana wallet
  */
 export function createConnectedMockSolanaWallet(
-  options: MockSolanaWalletOptions
+  options: MockSolanaWalletOptions,
 ): StandardWalletAdapter {
   return createMockSolanaWallet({ ...options, initiallyConnected: true });
 }
@@ -135,7 +137,7 @@ export function createConnectedMockSolanaWallet(
  * Generated deterministically for testing purposes only
  */
 export const TEST_SOLANA_KEYPAIR = Keypair.fromSeed(
-  new Uint8Array(32).fill(1) // Deterministic seed for reproducible tests
+  new Uint8Array(32).fill(1), // Deterministic seed for reproducible tests
 );
 
 /**

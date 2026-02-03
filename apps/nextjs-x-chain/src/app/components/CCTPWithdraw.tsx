@@ -104,7 +104,7 @@ export function CCTPWithdraw({
             : EthereumChainIdToTestnetChain[actualChainId];
         setSourceChain(chain.key);
       });
-    }else if (isSuiDerivedWallet(wallet)) {
+    } else if (isSuiDerivedWallet(wallet)) {
       setSourceChain("Sui");
     } else {
       setSourceChain("Aptos");

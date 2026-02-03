@@ -69,7 +69,7 @@ describe("SuiDerivedPublicKey", () => {
       });
 
       expect(pubKey1.authKey().derivedAddress().toString()).toBe(
-        pubKey2.authKey().derivedAddress().toString()
+        pubKey2.authKey().derivedAddress().toString(),
       );
     });
 
@@ -91,7 +91,7 @@ describe("SuiDerivedPublicKey", () => {
       });
 
       expect(pubKey1.authKey().derivedAddress().toString()).not.toBe(
-        pubKey2.authKey().derivedAddress().toString()
+        pubKey2.authKey().derivedAddress().toString(),
       );
     });
 
@@ -109,7 +109,7 @@ describe("SuiDerivedPublicKey", () => {
       });
 
       expect(pubKey1.authKey().derivedAddress().toString()).not.toBe(
-        pubKey2.authKey().derivedAddress().toString()
+        pubKey2.authKey().derivedAddress().toString(),
       );
     });
 
@@ -189,10 +189,10 @@ describe("SuiDerivedPublicKey", () => {
 
       expect(deserialized.domain).toBe(original.domain);
       expect(deserialized.suiAccountAddress.toLowerCase()).toBe(
-        original.suiAccountAddress.toLowerCase()
+        original.suiAccountAddress.toLowerCase(),
       );
       expect(deserialized.authenticationFunction).toBe(
-        original.authenticationFunction
+        original.authenticationFunction,
       );
     });
 
@@ -212,9 +212,8 @@ describe("SuiDerivedPublicKey", () => {
 
       // Compare derived addresses (which are deterministic)
       expect(deserialized.authKey().derivedAddress().toString()).toBe(
-        original.authKey().derivedAddress().toString()
+        original.authKey().derivedAddress().toString(),
       );
     });
   });
 });
-

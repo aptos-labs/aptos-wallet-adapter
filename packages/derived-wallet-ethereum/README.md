@@ -21,12 +21,12 @@ Currently, the wallets that have been tested and support cross-chain accounts ar
 
 |          | Aptos Devnet | Aptos Testnet | Aptos Mainnet |
 | -------- | ------------ | ------------- | ------------- |
-| Metamask | ✅           | ✅            | ✅
-| Phantom  | ✅           | ✅            | ✅
-| Coinbase | ✅           | ✅            | ✅
-| OKX      | ✅           | ✅            | ✅
-| Exodus   | ✅           | ✅            | ✅
-| Backpack | ✅           | ✅            | ✅
+| Metamask | ✅           | ✅            | ✅            |
+| Phantom  | ✅           | ✅            | ✅            |
+| Coinbase | ✅           | ✅            | ✅            |
+| OKX      | ✅           | ✅            | ✅            |
+| Exodus   | ✅           | ✅            | ✅            |
+| Backpack | ✅           | ✅            | ✅            |
 
 ## Usage
 
@@ -43,7 +43,10 @@ npm install @aptos-labs/wallet-adapter-react @aptos-labs/derived-wallet-ethereum
 2. Set up automatic detection
 
 ```tsx
-import { AptosWalletAdapterProvider, Network } from "@aptos-labs/wallet-adapter-react";
+import {
+  AptosWalletAdapterProvider,
+  Network,
+} from "@aptos-labs/wallet-adapter-react";
 import { setupAutomaticEthereumWalletDerivation } from "@aptos-labs/derived-wallet-ethereum";
 
 setupAutomaticEthereumWalletDerivation({ defaultNetwork: Network.TESTNET });
@@ -56,7 +59,7 @@ setupAutomaticEthereumWalletDerivation({ defaultNetwork: Network.TESTNET });
   }}
 >
   {children}
-</AptosWalletAdapterProvider>
+</AptosWalletAdapterProvider>;
 ```
 
 ### Option 2: Programmatic Signing (For Node.js/Scripts)

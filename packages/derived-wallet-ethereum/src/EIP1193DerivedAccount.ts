@@ -5,7 +5,10 @@ import {
 } from "@aptos-labs/ts-sdk";
 import { hashMessage, Signature, Wallet } from "ethers";
 import { EIP1193DerivedPublicKey } from "./EIP1193DerivedPublicKey";
-import { defaultEthereumAuthenticationFunction, EthereumAddress } from "./shared";
+import {
+  defaultEthereumAuthenticationFunction,
+  EthereumAddress,
+} from "./shared";
 import {
   createMessageForEthereumTransaction,
   createAccountAuthenticatorForEthereumTransaction,

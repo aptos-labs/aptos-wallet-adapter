@@ -20,14 +20,14 @@ flowchart TB
         Config[Config - chains/tokens]
         Utils[Utils - logger, balance]
     end
-    
+
     subgraph provider [WormholeProvider]
         WH[WormholeProvider]
         Quote[getQuote]
         Transfer[transfer]
         Withdraw[withdraw]
     end
-    
+
     subgraph signers [Signers]
         MainSigner[Signer - Router]
         SolanaSig[SolanaSigner]
@@ -36,7 +36,7 @@ flowchart TB
         SuiSig[SuiSigner]
         AptosLocal[AptosLocalSigner]
     end
-    
+
     CCCore --> WH
     WH --> MainSigner
     MainSigner --> SolanaSig
@@ -47,16 +47,16 @@ flowchart TB
 
 ## Supported Chains
 
-| Network | Mainnet Chain ID | Testnet Chain ID | Context |
-|---------|------------------|------------------|---------|
-| Aptos | 1 | 2 | Destination/Source |
-| Solana | mainnet-beta | devnet | Source/Destination |
-| Ethereum | 1 | 11155111 (Sepolia) | Source/Destination |
-| Base | 8453 | 84532 (Sepolia) | Source/Destination |
-| Arbitrum | 42161 | 421614 (Sepolia) | Source/Destination |
-| Avalanche | 43114 | 43113 (Fuji) | Source/Destination |
-| Polygon | 137 | 80002 (Amoy) | Source/Destination |
-| Sui | mainnet | testnet | Source/Destination |
+| Network   | Mainnet Chain ID | Testnet Chain ID   | Context            |
+| --------- | ---------------- | ------------------ | ------------------ |
+| Aptos     | 1                | 2                  | Destination/Source |
+| Solana    | mainnet-beta     | devnet             | Source/Destination |
+| Ethereum  | 1                | 11155111 (Sepolia) | Source/Destination |
+| Base      | 8453             | 84532 (Sepolia)    | Source/Destination |
+| Arbitrum  | 42161            | 421614 (Sepolia)   | Source/Destination |
+| Avalanche | 43114            | 43113 (Fuji)       | Source/Destination |
+| Polygon   | 137              | 80002 (Amoy)       | Source/Destination |
+| Sui       | mainnet          | testnet            | Source/Destination |
 
 ## Supported Tokens
 
@@ -88,14 +88,14 @@ A **Signer** is a component that handles transaction signing and submission for 
 
 ### Available Signers
 
-| Signer | Chain | Description |
-|--------|-------|-------------|
-| `Signer` | All | Router signer that delegates to chain-specific signers based on context |
-| `SolanaSigner` | Solana | Signs transactions via `SolanaDerivedWallet` |
-| `EthereumSigner` | EVM chains | Signs transactions via `EIP1193DerivedWallet` |
-| `AptosSigner` | Aptos | Signs transactions via wallet adapter (user interaction) |
-| `AptosLocalSigner` | Aptos | Signs transactions with a local `Account` (programmatic) |
-| `SuiSigner` | Sui | Signs transactions via `SuiDerivedWallet` |
+| Signer             | Chain      | Description                                                             |
+| ------------------ | ---------- | ----------------------------------------------------------------------- |
+| `Signer`           | All        | Router signer that delegates to chain-specific signers based on context |
+| `SolanaSigner`     | Solana     | Signs transactions via `SolanaDerivedWallet`                            |
+| `EthereumSigner`   | EVM chains | Signs transactions via `EIP1193DerivedWallet`                           |
+| `AptosSigner`      | Aptos      | Signs transactions via wallet adapter (user interaction)                |
+| `AptosLocalSigner` | Aptos      | Signs transactions with a local `Account` (programmatic)                |
+| `SuiSigner`        | Sui        | Signs transactions via `SuiDerivedWallet`                               |
 
 ### Why Two Aptos Signers?
 
@@ -108,10 +108,10 @@ Cross-chain transfers involve two distinct phases, each with different signing r
 
 These phases require different types of signing:
 
-| Phase | Signer | User Interaction | Use Case |
-|-------|--------|------------------|----------|
-| Initiate (Withdraw) | `AptosSigner` | ✅ Required | User burns USDC from their Aptos wallet |
-| Claim (Transfer) | `AptosLocalSigner` | ❌ Automatic | System claims USDC on behalf of user |
+| Phase               | Signer             | User Interaction | Use Case                                |
+| ------------------- | ------------------ | ---------------- | --------------------------------------- |
+| Initiate (Withdraw) | `AptosSigner`      | ✅ Required      | User burns USDC from their Aptos wallet |
+| Claim (Transfer)    | `AptosLocalSigner` | ❌ Automatic     | System claims USDC on behalf of user    |
 
 #### AptosSigner
 
@@ -164,12 +164,12 @@ import { CrossChainCore, Network } from "@aptos-labs/cross-chain-core";
 
 // Initialize the core with network configuration
 const crossChainCore = new CrossChainCore({
-  dappConfig: { 
+  dappConfig: {
     aptosNetwork: Network.TESTNET,
     // Optional: Custom Solana RPC
     solanaConfig: {
-      rpc: "https://api.devnet.solana.com"
-    }
+      rpc: "https://api.devnet.solana.com",
+    },
   },
 });
 
@@ -215,8 +215,8 @@ Get the USDC balance for a wallet on any supported chain.
 
 ```typescript
 const balance = await core.getWalletUSDCBalance(
-  "0x1234...",  // wallet address
-  "Solana"      // chain name
+  "0x1234...", // wallet address
+  "Solana", // chain name
 );
 console.log(`Balance: ${balance} USDC`);
 ```
@@ -236,7 +236,7 @@ const quote = await provider.getQuote({
   // Transaction type:
   // - "transfer": External chain → Aptos
   // - "withdraw": Aptos → External chain
-  type: "transfer"
+  type: "transfer",
 });
 ```
 
@@ -267,6 +267,7 @@ console.log(`Destination TX: ${destinationChainTxnId}`);
 ```
 
 **Returns**:
+
 - `originChainTxnId`: Transaction hash on the source chain
 - `destinationChainTxnId`: Transaction hash on the Aptos destination chain
 
@@ -291,6 +292,7 @@ console.log(`Destination TX: ${destinationChainTxnId}`);
 ```
 
 **Returns**:
+
 - `originChainTxnId`: Transaction hash on Aptos
 - `destinationChainTxnId`: Transaction hash on the destination chain
 
@@ -299,9 +301,9 @@ console.log(`Destination TX: ${destinationChainTxnId}`);
 The SDK provides mappings from Ethereum chain IDs to chain configurations:
 
 ```typescript
-import { 
-  EthereumChainIdToTestnetChain, 
-  EthereumChainIdToMainnetChain 
+import {
+  EthereumChainIdToTestnetChain,
+  EthereumChainIdToMainnetChain,
 } from "@aptos-labs/cross-chain-core";
 
 // Get chain config from chain ID

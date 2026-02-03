@@ -43,13 +43,13 @@
     "build": "pnpm build:bundle"
   },
   "dependencies": {
-    "@aptos-labs/wallet-adapter-core": "5.0.0"
+    "@aptos-labs/wallet-adapter-core": "workspace:*"
   },
   "devDependencies": {
     "vite": "5.4.20",
     "vite-plugin-dts": "3.9.1",
     "@vitejs/plugin-vue": "5.2.4",
-    "eslint": "^8.57.1",
+    "eslint": "^9.18.0",
     "typescript": "^5.8.3",
     "vue-tsc": "^2.2.12",
     "vite-plugin-css-injected-by-js": "^3.5.2",

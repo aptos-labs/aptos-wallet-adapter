@@ -68,8 +68,9 @@ describe("UserResponse", () => {
 
       it("should handle type transformations", () => {
         const original = makeUserApproval({ count: 5 });
-        const mapped = mapUserResponse(original, (args) =>
-          `count-${args.count}`
+        const mapped = mapUserResponse(
+          original,
+          (args) => `count-${args.count}`,
         );
 
         expect(mapped.status).toBe(UserResponseStatus.APPROVED);
@@ -122,4 +123,3 @@ describe("UserResponse", () => {
     });
   });
 });
-
