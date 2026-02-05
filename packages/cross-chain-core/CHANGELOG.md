@@ -1,5 +1,11 @@
 # @aptos-labs/cross-chain-core
 
+## 5.7.0
+
+### Minor Changes
+
+- 9f119d7: Improve cross-chain config and Solana RPC handling
+
 ## 5.6.2
 
 ### Patch Changes
