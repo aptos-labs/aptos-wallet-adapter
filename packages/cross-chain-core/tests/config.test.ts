@@ -229,10 +229,10 @@ describe("Config", () => {
     it("mainnet token addresses should differ from testnet", () => {
       // Verify mainnet and testnet have different addresses for common chains
       expect(mainnetTokens.Solana.tokenId.address).not.toBe(
-        testnetTokens.Solana.tokenId.address
+        testnetTokens.Solana.tokenId.address,
       );
       expect(mainnetTokens.Aptos.tokenId.address).not.toBe(
-        testnetTokens.Aptos.tokenId.address
+        testnetTokens.Aptos.tokenId.address,
       );
     });
   });
@@ -259,4 +259,3 @@ describe("Config", () => {
     });
   });
 });
-

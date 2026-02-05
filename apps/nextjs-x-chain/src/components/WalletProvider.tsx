@@ -5,14 +5,14 @@ import { setupAutomaticEthereumWalletDerivation } from "@aptos-labs/derived-wall
 import { setupAutomaticSolanaWalletDerivation } from "@aptos-labs/derived-wallet-solana";
 import { setupAutomaticSuiWalletDerivation } from "@aptos-labs/derived-wallet-sui";
 import { PropsWithChildren } from "react";
-import { Network } from "@aptos-labs/ts-sdk";
 import { useClaimSecretKey } from "@/hooks/useClaimSecretKey";
 import { useAutoConnect } from "./AutoConnectProvider";
 import { useToast } from "./ui/use-toast";
+import { DAPP_NETWORK } from "@/config";
 
-setupAutomaticEthereumWalletDerivation({ defaultNetwork: Network.TESTNET });
-setupAutomaticSolanaWalletDerivation({ defaultNetwork: Network.TESTNET });
-setupAutomaticSuiWalletDerivation({ defaultNetwork: Network.TESTNET });
+setupAutomaticEthereumWalletDerivation({ defaultNetwork: DAPP_NETWORK });
+setupAutomaticSolanaWalletDerivation({ defaultNetwork: DAPP_NETWORK });
+setupAutomaticSuiWalletDerivation({ defaultNetwork: DAPP_NETWORK });
 
 let dappImageURI: string | undefined;
 if (typeof window !== "undefined") {
@@ -30,7 +30,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     <AptosWalletAdapterProvider
       autoConnect={autoConnect}
       dappConfig={{
-        network: Network.TESTNET,
+        network: DAPP_NETWORK,
         aptosApiKeys: {
           testnet: process.env.NEXT_PUBLIC_APTOS_API_KEY_TESNET,
           devnet: process.env.NEXT_PUBLIC_APTOS_API_KEY_DEVNET,

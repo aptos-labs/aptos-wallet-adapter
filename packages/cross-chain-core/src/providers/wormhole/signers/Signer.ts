@@ -35,7 +35,7 @@ export class Signer<
   _address: string;
   _options: any;
   _wallet: AdapterWallet;
-  _crossChainCore?: CrossChainCore;
+  _crossChainCore: CrossChainCore;
   _sponsorAccount: Account | GasStationApiKey | undefined;
   _claimedTransactionHashes: string;
 
@@ -44,7 +44,7 @@ export class Signer<
     address: string,
     options: any,
     wallet: AdapterWallet,
-    crossChainCore?: CrossChainCore,
+    crossChainCore: CrossChainCore,
     sponsorAccount?: Account | GasStationApiKey | undefined,
   ) {
     this._chain = chain;
@@ -91,12 +91,14 @@ export const signAndSendTransaction = async (
   request: UnsignedTransaction<Network, Chain>,
   wallet: AdapterWallet,
   options: any = {},
-  crossChainCore?: CrossChainCore,
+  crossChainCore: CrossChainCore,
   sponsorAccount?: Account | GasStationApiKey | undefined,
 ): Promise<string> => {
   if (!wallet) {
     throw new Error("wallet is undefined");
   }
+
+  const dappNetwork = crossChainCore._dappConfig.aptosNetwork;
 
   if (chain.context === "Solana") {
     const signature = await solanaSigner.signAndSendTransaction(
@@ -125,6 +127,7 @@ export const signAndSendTransaction = async (
       request as AptosUnsignedTransaction<Network, AptosChains>,
       wallet,
       sponsorAccount,
+      dappNetwork,
     );
     return tx;
   } else {

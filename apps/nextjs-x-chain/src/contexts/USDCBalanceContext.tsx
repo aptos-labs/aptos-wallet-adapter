@@ -1,8 +1,6 @@
 "use client";
 
-import { CrossChainCore } from "@aptos-labs/cross-chain-core";
 import { Chain } from "@aptos-labs/cross-chain-core";
-import { Network } from "@aptos-labs/ts-sdk";
 import {
   createContext,
   useContext,
@@ -10,6 +8,7 @@ import {
   useCallback,
   ReactNode,
 } from "react";
+import { crossChainCore } from "@/config";
 
 interface USDCBalanceContextType {
   aptosBalance: string | undefined;
@@ -31,18 +30,9 @@ const USDCBalanceContext = createContext<USDCBalanceContextType | undefined>(
 
 interface USDCBalanceProviderProps {
   children: ReactNode;
-  dappNetwork: Network.MAINNET | Network.TESTNET;
 }
 
-export function USDCBalanceProvider({
-  children,
-  dappNetwork,
-}: USDCBalanceProviderProps) {
-  // Initialize crossChainCore with the prop
-  const crossChainCore = new CrossChainCore({
-    dappConfig: { aptosNetwork: dappNetwork },
-  });
-
+export function USDCBalanceProvider({ children }: USDCBalanceProviderProps) {
   const [aptosBalance, setAptosBalance] = useState<string | undefined>(
     undefined,
   );

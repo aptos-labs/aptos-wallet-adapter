@@ -21,7 +21,7 @@ export const mainnetChains: ChainsConfig = {
     chainId: 0,
     icon: "Solana",
     symbol: "SOL",
-    defaultRpc: "https://solana-mainnet.rpc.extrnode.com",
+    defaultRpc: "https://solana-rpc.publicnode.com",
   },
   Aptos: {
     key: "Aptos",

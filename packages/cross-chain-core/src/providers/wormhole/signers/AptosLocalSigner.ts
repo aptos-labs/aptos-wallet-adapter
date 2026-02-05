@@ -29,18 +29,20 @@ export class AptosLocalSigner<
   _wallet: Account;
   _sponsorAccount: Account | GasStationApiKey | undefined;
   _claimedTransactionHashes: string;
-
+  _dappNetwork: AptosNetwork;
   constructor(
     chain: C,
     options: any,
     wallet: Account,
     feePayerAccount: Account | GasStationApiKey | undefined,
+    dappNetwork: AptosNetwork,
   ) {
     this._chain = chain;
     this._options = options;
     this._wallet = wallet;
     this._sponsorAccount = feePayerAccount;
     this._claimedTransactionHashes = "";
+    this._dappNetwork = dappNetwork;
   }
 
   chain(): C {
@@ -62,6 +64,7 @@ export class AptosLocalSigner<
         tx as AptosUnsignedTransaction<Network, AptosChains>,
         this._wallet,
         this._sponsorAccount,
+        this._dappNetwork,
       );
       txHashes.push(txId);
       this._claimedTransactionHashes = txId;
@@ -74,6 +77,7 @@ export async function signAndSendTransaction(
   request: UnsignedTransaction<Network, AptosChains>,
   wallet: Account,
   sponsorAccount: Account | GasStationApiKey | undefined,
+  dappNetwork: AptosNetwork,
 ) {
   if (!wallet) {
     throw new Error("Wallet is undefined");
@@ -92,7 +96,7 @@ export async function signAndSendTransaction(
   });
 
   const aptosConfig = new AptosConfig({
-    network: AptosNetwork.TESTNET,
+    network: dappNetwork,
   });
   const aptos = new Aptos(aptosConfig);
 

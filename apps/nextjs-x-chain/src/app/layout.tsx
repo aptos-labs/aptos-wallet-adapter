@@ -11,15 +11,11 @@ import { PropsWithChildren } from "react";
 import { AutoConnectProvider } from "@/components/AutoConnectProvider";
 import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
 import { USDCBalanceProvider } from "@/contexts/USDCBalanceContext";
-import { Network } from "@aptos-labs/ts-sdk";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
-
-// Constant network configuration
-const dappNetwork: Network.MAINNET | Network.TESTNET = Network.TESTNET;
 
 export const metadata: Metadata = {
   title: "Aptos Cross Chain Wallet Adapter Example",
@@ -45,7 +41,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           <AutoConnectProvider>
             <ReactQueryClientProvider>
               <WalletProvider>
-                <USDCBalanceProvider dappNetwork={dappNetwork}>
+                <USDCBalanceProvider>
                   {children}
                   <Toaster />
                 </USDCBalanceProvider>

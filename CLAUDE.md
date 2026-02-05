@@ -41,12 +41,14 @@ aptos-wallet-adapter/
 ### Core Packages
 
 **wallet-adapter-core**
+
 - Core adapter state management and wallet interaction logic
 - Wallet registration and connection handling
 - Network configuration (mainnet/testnet/devnet)
 - Does not include UI components
 
 **wallet-adapter-react**
+
 - React Context provider (`AptosWalletAdapterProvider`)
 - React hooks: `useWallet()`, `useWalletConnect()`, etc.
 - Depends on wallet-adapter-core
@@ -55,12 +57,14 @@ aptos-wallet-adapter/
 ### Cross-Chain Packages
 
 **cross-chain-core**
+
 - SDK for cross-chain USDC transfers via Wormhole and Circle's CCTP
 - Supports transfers between Aptos and: Solana, Ethereum, Sui, Base, Arbitrum, Avalanche, Polygon
 - Two-phase transfer process: initiate (burn) and claim (mint)
 - Uses derived wallets for seamless onboarding
 
 **derived-wallet-{ethereum,solana,sui}**
+
 - Create Aptos accounts derived from external chain keys
 - Enables users to control Aptos assets with their existing wallets
 - Each package implements chain-specific signing and key derivation
@@ -68,6 +72,7 @@ aptos-wallet-adapter/
 ## Development Workflow
 
 ### Requirements
+
 - Node.js 20.18.0+
 - pnpm 9.15.5
 
@@ -99,6 +104,7 @@ pnpm changeset
 ### Build Order
 
 Turbo handles build dependencies automatically via `dependsOn` in `turbo.json`. Packages are built in order:
+
 1. Base packages (tsconfig, eslint-config-adapter)
 2. Core packages (wallet-adapter-core, derived-wallet-base)
 3. Integration packages (wallet-adapter-react, derived wallets)
@@ -117,6 +123,7 @@ All packages use **Vitest** for testing with comprehensive coverage:
 Tests are located in `tests/` directories within each package.
 
 ### Test Setup
+
 - Uses `happy-dom` for DOM simulation in React tests
 - Mocks wallet providers and external dependencies
 - Tests both happy paths and error scenarios
@@ -124,7 +131,9 @@ Tests are located in `tests/` directories within each package.
 ## Code Conventions
 
 ### Wallet Adapter Standard (AIP-62)
+
 The adapter implements the Aptos Wallet Standard (AIP-62):
+
 - Wallets expose `signAndSubmitTransaction`, `signMessage`, `account`, `network`
 - Dapps interact via standardized interface
 - Automatic wallet detection and connection
@@ -132,21 +141,25 @@ The adapter implements the Aptos Wallet Standard (AIP-62):
 ### Key Concepts
 
 **Wallet Registration**
+
 - Wallets register themselves with the adapter
 - Adapter maintains wallet registry and connection state
 - Users select wallet from UI or programmatically
 
 **Network Configuration**
+
 - Support for mainnet, testnet, devnet
 - Each wallet reports its active network
 - Dapps can enforce network requirements
 
 **Transaction Signing**
+
 - `signAndSubmitTransaction`: Sign and submit to chain
 - `signTransaction`: Sign without submitting
 - `signMessage`: Sign arbitrary messages
 
 **Cross-Chain Signers**
+
 - Implement Wormhole's `SignAndSendSigner` interface
 - Handle chain-specific transaction formatting
 - `AptosSigner`: User-interactive via wallet adapter
@@ -156,6 +169,7 @@ The adapter implements the Aptos Wallet Standard (AIP-62):
 ## Important Files
 
 ### Configuration
+
 - `turbo.json` - Turbo build pipeline and caching
 - `pnpm-workspace.yaml` - Workspace package definitions
 - `.changeset/` - Version change tracking (uses changesets)
@@ -163,7 +177,9 @@ The adapter implements the Aptos Wallet Standard (AIP-62):
 - `.tool-versions` - Tool versions (pnpm 9.15.5)
 
 ### Package Structure
+
 Each package typically contains:
+
 - `src/` - Source code
 - `dist/` - Build output (gitignored)
 - `tests/` - Test files
@@ -175,6 +191,7 @@ Each package typically contains:
 ## Cross-Chain Architecture
 
 ### Transfer Flow (External Chain → Aptos)
+
 1. User connects external chain wallet (e.g., Solana)
 2. SDK derives Aptos address from external key
 3. User signs burn transaction on source chain
@@ -183,6 +200,7 @@ Each package typically contains:
 6. USDC appears in derived Aptos address
 
 ### Withdrawal Flow (Aptos → External Chain)
+
 1. User connects Aptos wallet
 2. User signs burn transaction on Aptos using `AptosSigner`
 3. Wormhole generates attestation
@@ -190,6 +208,7 @@ Each package typically contains:
 5. USDC appears in destination address
 
 ### Key Classes
+
 - `CrossChainCore`: Main entry point, handles initialization
 - `WormholeProvider`: Executes transfers via Wormhole bridge
 - `Signer`: Router signer that delegates to chain-specific signers
@@ -199,6 +218,7 @@ Each package typically contains:
 ## Dependencies
 
 ### Key External Dependencies
+
 - `@aptos-labs/ts-sdk` - Aptos TypeScript SDK (peer dependency)
 - `@wormhole-foundation/sdk` - Wormhole cross-chain SDK
 - `@wormhole-foundation/sdk-evm-cctp` - EVM CCTP support
@@ -206,6 +226,7 @@ Each package typically contains:
 - `@wormhole-foundation/sdk-aptos-cctp` - Aptos CCTP support
 
 ### Build Tools
+
 - Turbo - Monorepo build system
 - TypeScript - Type safety
 - Vitest - Testing framework
@@ -214,6 +235,7 @@ Each package typically contains:
 ## Common Tasks
 
 ### Adding a New Package
+
 1. Create directory in `packages/`
 2. Add `package.json` with workspace protocol for internal deps
 3. Configure `tsconfig.json` extending from `@aptos-labs/tsconfig`
@@ -221,6 +243,7 @@ Each package typically contains:
 5. Update root README if publicly documented
 
 ### Publishing Packages
+
 1. Make changes
 2. Run `pnpm changeset` and follow prompts
 3. Commit changeset file
@@ -229,6 +252,7 @@ Each package typically contains:
 6. Merge version PR to publish to npm
 
 ### Debugging Tests
+
 ```bash
 # Run tests in watch mode
 cd packages/wallet-adapter-react
@@ -242,6 +266,7 @@ pnpm test --ui
 ```
 
 ### Working with Examples
+
 ```bash
 # Run specific example
 cd apps/nextjs-example

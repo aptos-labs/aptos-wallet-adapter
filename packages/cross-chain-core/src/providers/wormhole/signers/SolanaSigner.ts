@@ -2,14 +2,11 @@
 // and resending the transaction if it hasn't been confirmed after the specified interval
 
 import {
-  AddressLookupTableAccount,
-  Commitment,
   ComputeBudgetProgram,
   ConfirmOptions,
   LAMPORTS_PER_SOL,
   SimulatedTransactionResponse,
   TransactionInstruction,
-  TransactionMessage,
   VersionedTransaction,
 } from "@solana/web3.js";
 
@@ -44,7 +41,8 @@ export async function signAndSendTransaction(
   // Solana rpc should come from dapp config
   const connection = new Connection(
     crossChainCore?._dappConfig?.solanaConfig?.rpc ??
-      "https://api.devnet.solana.com",
+      crossChainCore?.CHAINS["Solana"]?.defaultRpc ??
+      "https://api.devnet.solana.com", // Last resort fallback
   );
   const { blockhash, lastValidBlockHeight } =
     await connection.getLatestBlockhash(commitment);

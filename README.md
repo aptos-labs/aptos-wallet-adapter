@@ -72,6 +72,7 @@ A comprehensive monorepo developed and maintained by Aptos for wallet and dapp b
 ### Testing
 
 Run tests across all packages:
+
 ```bash
 pnpm test
 ```

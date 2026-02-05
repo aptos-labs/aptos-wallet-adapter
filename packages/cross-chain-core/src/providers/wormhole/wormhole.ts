@@ -73,7 +73,19 @@ export class WormholeProvider implements CrossChainProvider<
     }
     const isMainnet = dappNetwork === Network.MAINNET;
     const platforms: PlatformLoader<any>[] = [aptos, solana, evm, sui];
-    const wh = await wormhole(isMainnet ? "Mainnet" : "Testnet", platforms);
+
+    // Get custom RPC endpoints from config
+    const solanaRpc =
+      this.crossChainCore._dappConfig?.solanaConfig?.rpc ??
+      this.crossChainCore.CHAINS["Solana"]?.defaultRpc;
+
+    const wh = await wormhole(isMainnet ? "Mainnet" : "Testnet", platforms, {
+      chains: {
+        Solana: {
+          rpc: solanaRpc,
+        },
+      },
+    });
     this._wormholeContext = wh;
   }
 
@@ -204,13 +216,12 @@ export class WormholeProvider implements CrossChainProvider<
     }
     logger.log("signerAddress", signerAddress);
 
-    //const chainContext =
-
     const signer = new Signer(
       this.getChainConfig(sourceChain),
       signerAddress,
       {},
       wallet,
+      this.crossChainCore,
     );
 
     logger.log("signer", signer);
@@ -258,6 +269,7 @@ export class WormholeProvider implements CrossChainProvider<
                 {},
                 mainSigner, // the account that signs the "claim" transaction
                 sponsorAccount ? sponsorAccount : undefined, // the fee payer account
+                this.crossChainCore._dappConfig?.aptosNetwork,
               );
 
               if (routes.isManual(this.wormholeRoute)) {
@@ -347,7 +359,7 @@ export class WormholeProvider implements CrossChainProvider<
       ).address.toString(),
       {},
       input.wallet,
-      undefined,
+      this.crossChainCore,
       sponsorAccount,
     );
 
@@ -388,6 +400,7 @@ export class WormholeProvider implements CrossChainProvider<
                 destinationAddress.toString(),
                 {},
                 wallet,
+                this.crossChainCore,
               );
 
               if (routes.isManual(this.wormholeRoute)) {
