@@ -7,12 +7,8 @@ import {
   AptosConfig,
   Network as AptosNetwork,
   Deserializer,
-  EntryFunctionArgumentTypes,
   InputGenerateTransactionPayloadData,
   ScriptFunctionArgumentTypes,
-  Serializer,
-  SimpleEntryFunctionArgumentTypes,
-  U64,
 } from "@aptos-labs/ts-sdk";
 import { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
 import { Network } from "@wormhole-foundation/sdk";
@@ -27,6 +23,7 @@ export async function signAndSendTransaction(
   request: AptosUnsignedTransaction<Network, AptosChains>,
   wallet: AdapterWallet,
   sponsorAccount: Account | GasStationApiKey | undefined,
+  dappNetwork: AptosNetwork,
 ) {
   if (!wallet) {
     throw new Error("wallet.sendTransaction is undefined").message;
@@ -45,14 +42,9 @@ export async function signAndSendTransaction(
   });
 
   const aptosConfig = new AptosConfig({
-    network: AptosNetwork.TESTNET,
+    network: dappNetwork,
   });
   const aptos = new Aptos(aptosConfig);
-
-  // TODO: handle mainnet
-  const contractAddress = AptosNetwork.TESTNET
-    ? "0x5e2d961f06cd27aa07554a39d55f5ce1e58dff35d803c3529b1cd5c4fa3ab584"
-    : "0x1";
 
   // Wormhole resturns a script function transaction payload, but due to a ts-sdk version mismatch,
   // linter complains on different types - so need to first convert to unknown and then to ScriptFunctionArgumentTypes.
@@ -62,10 +54,15 @@ export async function signAndSendTransaction(
     payload.functionArguments as unknown as ScriptFunctionArgumentTypes[],
   );
 
+  // a custom function to withdraw tokens from the aptos chain,
+  // published testnet:
+  // https://explorer.aptoslabs.com/account/0x5e2d961f06cd27aa07554a39d55f5ce1e58dff35d803c3529b1cd5c4fa3ab584/modules/code/withdraw?network=testnet
+  // published mainnet:
+  // https://explorer.aptoslabs.com/account/0x5e2d961f06cd27aa07554a39d55f5ce1e58dff35d803c3529b1cd5c4fa3ab584/modules/code/withdraw?network=mainnet
+  const withdrawFunction =
+    "0x5e2d961f06cd27aa07554a39d55f5ce1e58dff35d803c3529b1cd5c4fa3ab584::withdraw::deposit_for_burn";
   const transactionData: InputGenerateTransactionPayloadData = {
-    // a custom function to withdraw tokens from the aptos chain, published here on testnet:
-    // https://explorer.aptoslabs.com/account/0x5e2d961f06cd27aa07554a39d55f5ce1e58dff35d803c3529b1cd5c4fa3ab584/modules/code/withdraw?network=testnet
-    function: `${contractAddress}::withdraw::deposit_for_burn`,
+    function: withdrawFunction,
     functionArguments,
   };
 

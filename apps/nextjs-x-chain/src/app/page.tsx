@@ -2,20 +2,12 @@
 
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SingleSigner } from "@/components/transactionFlows/SingleSigner";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 // Imports for registering a browser extension wallet plugin on page load
 import { MyWallet } from "@/utils/standardWallet";
-import {
-  Account,
-  Ed25519PrivateKey,
-  Network,
-  PrivateKey,
-  PrivateKeyVariants,
-} from "@aptos-labs/ts-sdk";
+import { Network } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { registerWallet } from "@aptos-labs/wallet-standard";
 import { init as initTelegram } from "@telegram-apps/sdk";
-import { AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import {
@@ -29,7 +21,15 @@ import {
   OriginWalletDetails,
 } from "@/utils/derivedWallet";
 import { CCTPWithdraw } from "./components/CCTPWithdraw";
-import { CrossChainCore } from "@aptos-labs/cross-chain-core";
+import {
+  DAPP_NETWORK,
+  crossChainCore,
+  crossChainProvider,
+  mainSigner,
+  sponsorAccount,
+} from "@/config";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 // Example of how to register a browser extension wallet plugin.
 // Browser extension wallets should call registerWallet once on page load.
@@ -46,34 +46,6 @@ const isTelegramMiniApp =
 if (isTelegramMiniApp) {
   initTelegram();
 }
-
-// Set up constants - these never change
-const dappNetwork: Network.MAINNET | Network.TESTNET = Network.TESTNET;
-
-// Initialize cross-chain core and provider
-const crossChainCore = new CrossChainCore({
-  dappConfig: { aptosNetwork: dappNetwork },
-});
-const provider = crossChainCore.getProvider("Wormhole");
-
-const mainSignerPrivateKey =
-  process.env.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY ||
-  "0x0000000000000000000000000000000000000000000000000000000000000000";
-const privateKey = new Ed25519PrivateKey(
-  PrivateKey.formatPrivateKey(mainSignerPrivateKey, PrivateKeyVariants.Ed25519),
-);
-const mainSigner = Account.fromPrivateKey({ privateKey });
-
-// Set the sponsor account
-const sponsorPrivateKey =
-  process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY ||
-  "0x0000000000000000000000000000000000000000000000000000000000000000";
-const feePayerPrivateKey = new Ed25519PrivateKey(
-  PrivateKey.formatPrivateKey(sponsorPrivateKey, PrivateKeyVariants.Ed25519),
-);
-const sponsorAccount = Account.fromPrivateKey({
-  privateKey: feePayerPrivateKey,
-});
 
 export default function Home() {
   const { account, connected, network, wallet, changeNetwork } = useWallet();
@@ -125,6 +97,7 @@ export default function Home() {
             changeNetwork={changeNetwork}
             originWalletDetails={originWalletDetails}
           />
+
           {network?.name === Network.MAINNET && (
             <>
               <Alert variant="warning">
@@ -139,30 +112,31 @@ export default function Home() {
               <SingleSigner dappNetwork={Network.MAINNET} wallet={wallet} />
             </>
           )}
+
           {network?.name === Network.TESTNET && (
-            <>
               <>
-                <CCTPTransfer
-                  wallet={wallet}
-                  originWalletDetails={originWalletDetails}
-                  mainSigner={mainSigner}
-                  sponsorAccount={sponsorAccount}
-                  dappNetwork={dappNetwork}
-                  crossChainCore={crossChainCore}
-                  provider={provider}
-                />
-                <CCTPWithdraw
-                  wallet={wallet}
-                  originWalletDetails={originWalletDetails}
-                  sponsorAccount={sponsorAccount}
-                  dappNetwork={dappNetwork}
-                  crossChainCore={crossChainCore}
-                  provider={provider}
-                />
+                <>
+                  <CCTPTransfer
+                    wallet={wallet}
+                    originWalletDetails={originWalletDetails}
+                    mainSigner={mainSigner}
+                    sponsorAccount={sponsorAccount}
+                    dappNetwork={DAPP_NETWORK}
+                    crossChainCore={crossChainCore}
+                    provider={crossChainProvider}
+                  />
+                  <CCTPWithdraw
+                    wallet={wallet}
+                    originWalletDetails={originWalletDetails}
+                    sponsorAccount={sponsorAccount}
+                    dappNetwork={DAPP_NETWORK}
+                    crossChainCore={crossChainCore}
+                    provider={crossChainProvider}
+                  />
+                </>
+                <SingleSigner dappNetwork={DAPP_NETWORK} wallet={wallet} />
               </>
-              <SingleSigner dappNetwork={Network.TESTNET} wallet={wallet} />
-            </>
-          )}
+            )}
           {(network?.name === Network.DEVNET ||
             network?.name === Network.LOCAL) && (
             <>

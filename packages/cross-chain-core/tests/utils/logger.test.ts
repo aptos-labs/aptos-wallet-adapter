@@ -30,7 +30,7 @@ describe("logger", () => {
       expect(console.log).toHaveBeenCalledWith(
         "message",
         { data: "value" },
-        123
+        123,
       );
     });
 
@@ -87,4 +87,3 @@ describe("logger", () => {
     });
   });
 });
-

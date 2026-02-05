@@ -121,21 +121,30 @@ describe("WormholeProvider", () => {
     });
 
     it("should return token info for Solana to Aptos transfer", () => {
-      const { sourceToken, destToken } = testnetProvider.getTokenInfo("Solana", "Aptos");
+      const { sourceToken, destToken } = testnetProvider.getTokenInfo(
+        "Solana",
+        "Aptos",
+      );
 
       expect(sourceToken).toBeDefined();
       expect(destToken).toBeDefined();
     });
 
     it("should return token info for Aptos to Solana transfer", () => {
-      const { sourceToken, destToken } = testnetProvider.getTokenInfo("Aptos", "Solana");
+      const { sourceToken, destToken } = testnetProvider.getTokenInfo(
+        "Aptos",
+        "Solana",
+      );
 
       expect(sourceToken).toBeDefined();
       expect(destToken).toBeDefined();
     });
 
     it("should return different tokens for source and destination", () => {
-      const { sourceToken, destToken } = testnetProvider.getTokenInfo("Solana", "Aptos");
+      const { sourceToken, destToken } = testnetProvider.getTokenInfo(
+        "Solana",
+        "Aptos",
+      );
 
       // Tokens should have different chain references
       expect(sourceToken).not.toEqual(destToken);
@@ -147,7 +156,10 @@ describe("WormholeProvider", () => {
       });
       const mainnetProvider = new WormholeProvider(mainnetCore);
 
-      const { sourceToken, destToken } = mainnetProvider.getTokenInfo("Solana", "Aptos");
+      const { sourceToken, destToken } = mainnetProvider.getTokenInfo(
+        "Solana",
+        "Aptos",
+      );
 
       expect(sourceToken).toBeDefined();
       expect(destToken).toBeDefined();
