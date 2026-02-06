@@ -44,7 +44,7 @@
     "@swc/core": "^1.11.16",
     "@types/node": "^20.10.4",
     "eslint": "^8.57.1",
-    "happy-dom": "^15.11.7",
+    "happy-dom": "^20.0.2",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
     "vitest": "^2.1.8"
