@@ -19,6 +19,7 @@ import {
   AptosChains,
 } from "@wormhole-foundation/sdk-aptos";
 import { GasStationApiKey } from "../types";
+import { isAccount } from "./AptosSigner";
 
 export class AptosLocalSigner<
   N extends Network,
@@ -121,15 +122,13 @@ export async function signAndSendTransaction(
   };
 
   if (sponsorAccount) {
-    if (typeof sponsorAccount === "string") {
-      // TODO: handle gas station integration
-    } else {
-      const feePayerSignerAuthenticator = aptos.transaction.signAsFeePayer({
-        signer: sponsorAccount as Account,
-        transaction: txnToSign,
-      });
-      txnToSubmit.feePayerAuthenticator = feePayerSignerAuthenticator;
-    }
+    // Gas station is currently impossible to use, since the transactino we get from 
+    // Wormhole is a script transaction and gas station only supports entry function transactions
+    const feePayerSignerAuthenticator = aptos.transaction.signAsFeePayer({
+      signer: sponsorAccount as Account,
+      transaction: txnToSign,
+    });
+    txnToSubmit.feePayerAuthenticator = feePayerSignerAuthenticator;
   }
   const response = await aptos.transaction.submit.simple(txnToSubmit);
 

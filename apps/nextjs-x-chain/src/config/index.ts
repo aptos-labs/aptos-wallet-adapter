@@ -5,7 +5,7 @@ import {
   PrivateKey,
   PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk";
-import { CrossChainCore } from "@aptos-labs/cross-chain-core";
+import { CrossChainCore, GasStationApiKey } from "@aptos-labs/cross-chain-core";
 
 /**
  * Shared configuration for the x-chain demo app.
@@ -42,6 +42,10 @@ const sponsorPrivateKey =
 const sponsorKey = new Ed25519PrivateKey(
   PrivateKey.formatPrivateKey(sponsorPrivateKey, PrivateKeyVariants.Ed25519),
 );
-export const sponsorAccount = Account.fromPrivateKey({
+export const claimSponsorAccount = Account.fromPrivateKey({
   privateKey: sponsorKey,
 });
+
+export const sponsorAccount: GasStationApiKey = {
+  [Network.TESTNET]: process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_GAS_STATION_API_KEY_TESTNET || "",
+};

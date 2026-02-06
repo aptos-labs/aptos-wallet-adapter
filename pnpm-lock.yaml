@@ -292,6 +292,9 @@ importers:
       '@aptos-labs/derived-wallet-sui':
         specifier: workspace:*
         version: link:../derived-wallet-sui
+      '@aptos-labs/gas-station-client':
+        specifier: ^2.0.3
+        version: 2.0.3(got@11.8.6)
       '@aptos-labs/ts-sdk':
         specifier: ^5.1.1
         version: 5.1.1(got@11.8.6)
