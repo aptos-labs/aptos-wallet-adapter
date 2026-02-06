@@ -13,13 +13,11 @@ import {
   CrossChainCore,
   EthereumChainIdToMainnetChain,
   EthereumChainIdToTestnetChain,
+  GasStationApiKey,
 } from "@aptos-labs/cross-chain-core";
 import {
   Account,
-  Ed25519PrivateKey,
   Network,
-  PrivateKey,
-  PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk";
 import {
   Chain,
@@ -49,7 +47,7 @@ export function CCTPWithdraw({
 }: {
   wallet: AdapterWallet | null;
   originWalletDetails: OriginWalletDetails | undefined;
-  sponsorAccount: Account;
+  sponsorAccount: Account | GasStationApiKey;
   dappNetwork: Network.MAINNET | Network.TESTNET;
   crossChainCore: CrossChainCore;
   provider: any; // We'll type this properly later

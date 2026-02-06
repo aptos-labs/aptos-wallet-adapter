@@ -23,6 +23,7 @@ import {
 import { CCTPWithdraw } from "./components/CCTPWithdraw";
 import {
   DAPP_NETWORK,
+  claimSponsorAccount,
   crossChainCore,
   crossChainProvider,
   mainSigner,
@@ -120,7 +121,7 @@ export default function Home() {
                     wallet={wallet}
                     originWalletDetails={originWalletDetails}
                     mainSigner={mainSigner}
-                    sponsorAccount={sponsorAccount}
+                    sponsorAccount={claimSponsorAccount}
                     dappNetwork={DAPP_NETWORK}
                     crossChainCore={crossChainCore}
                     provider={crossChainProvider}

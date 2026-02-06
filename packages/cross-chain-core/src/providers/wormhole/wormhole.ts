@@ -268,7 +268,7 @@ export class WormholeProvider implements CrossChainProvider<
                 "Aptos",
                 {},
                 mainSigner, // the account that signs the "claim" transaction
-                sponsorAccount ? sponsorAccount : undefined, // the fee payer account
+                sponsorAccount, // the fee payer account
                 this.crossChainCore._dappConfig?.aptosNetwork,
               );
 

@@ -48,10 +48,11 @@
     "vitest": "^2.1.8"
   },
   "dependencies": {
-    "@aptos-labs/wallet-adapter-core": "workspace:*",
     "@aptos-labs/derived-wallet-ethereum": "workspace:*",
     "@aptos-labs/derived-wallet-solana": "workspace:*",
     "@aptos-labs/derived-wallet-sui": "workspace:*",
+    "@aptos-labs/gas-station-client": "^2.0.3",
+    "@aptos-labs/wallet-adapter-core": "workspace:*",
     "@aptos-labs/wallet-standard": "^0.5.2",
     "@mysten/sui": "1.24.0",
     "@mysten/wallet-standard": "^0.13.29",
@@ -65,8 +66,8 @@
     "@wormhole-foundation/sdk-evm": "4.7.1",
     "@wormhole-foundation/sdk-solana": "4.7.1",
     "@wormhole-foundation/sdk-sui": "4.7.1",
-    "buffer": "^6.0.3",
     "bs58": "^6.0.0",
+    "buffer": "^6.0.3",
     "ethers": "^6.13.5",
     "eventemitter3": "^4.0.7",
     "tweetnacl": "^1.0.3"

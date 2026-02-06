@@ -1,4 +1,4 @@
-import { AccountAddressInput, Account } from "@aptos-labs/ts-sdk";
+import { AccountAddressInput, Account, Network } from "@aptos-labs/ts-sdk";
 import { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
 import { routes, AttestationReceipt } from "@wormhole-foundation/sdk/dist/cjs";
 import { Chain, AptosAccount } from "../..";
@@ -26,7 +26,7 @@ export interface WormholeQuoteRequest {
   type: "transfer" | "withdraw";
 }
 
-export type GasStationApiKey = string;
+export type GasStationApiKey = Partial<Record<Network.TESTNET | Network.MAINNET, string>>;
 
 export interface WormholeTransferRequest {
   sourceChain: Chain;
@@ -34,7 +34,7 @@ export interface WormholeTransferRequest {
   destinationAddress: AccountAddressInput;
   mainSigner: Account;
   amount?: string;
-  sponsorAccount?: Account | GasStationApiKey;
+  sponsorAccount?: Account;
 }
 
 export interface WormholeWithdrawRequest {
