@@ -1,5 +1,11 @@
 # @aptos-labs/cross-chain-core
 
+## 5.8.0
+
+### Minor Changes
+
+- ae37654: Support gas station for cctp withdraw transactions
+
 ## 5.7.0
 
 ### Minor Changes
