@@ -1,5 +1,11 @@
 # @aptos-labs/cross-chain-core
 
+## 5.8.1
+
+### Patch Changes
+
+- 01e2df0: Fix Solana multi-signer transaction order
+
 ## 5.8.0
 
 ### Minor Changes
