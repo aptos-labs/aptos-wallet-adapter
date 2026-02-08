@@ -47,10 +47,6 @@ export async function signAndSendTransaction(
   const { blockhash, lastValidBlockHeight } =
     await connection.getLatestBlockhash(commitment);
 
-  // Circle Manual CCTP on Wormhole is always of a Trnasaction type
-  // https://github.com/wormhole-foundation/wormhole-sdk-ts/blob/f7d992e04f844edcc4128659f12f75ade3553717/platforms/solana/protocols/cctp/src/circleBridge.ts#L173
-  const transaction = request.transaction.transaction as Transaction;
-
   /**
    * TODO: Priority Fee is supported, but needs to come from dapp config
    */
@@ -69,11 +65,6 @@ export async function signAndSendTransaction(
   let txSendAttempts = 1;
   let signature = "";
 
-  // transaction.recentBlockhash = blockhash;
-  // if (request.transaction.signers) {
-  //   transaction.partialSign(...request.transaction.signers);
-  // }
-
   if (!wallet.solanaWallet.signTransaction) {
     throw new Error("Wallet does not support signing transactions").message;
   }
@@ -81,6 +72,13 @@ export async function signAndSendTransaction(
   const tx = await wallet.solanaWallet.signTransaction(unsignedTx);
 
   if (!tx) throw new Error("Failed to sign transaction").message;
+
+  // Order matters. Phantom's Lighthouse security requires wallet to sign first,
+  // then additional signers sign afterward
+  if (request.transaction.signers && tx instanceof Transaction) {
+    tx.partialSign(...request.transaction.signers);
+  }
+
   const serializedTx = tx.serialize();
   const sendOptions = {
     skipPreflight: true,
@@ -173,9 +171,6 @@ export async function setPriorityFeeInstructions(
       crossChainCore,
     )),
   );
-  if (request.transaction.signers) {
-    unsignedTx.partialSign(...request.transaction.signers);
-  }
 
   return unsignedTx;
 }
