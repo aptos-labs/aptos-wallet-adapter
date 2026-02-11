@@ -12,8 +12,9 @@ import { CrossChainCore, GasStationApiKey } from "@aptos-labs/cross-chain-core";
  * All components should import from here to ensure consistency.
  */
 
-// The network the dapp operates on
-export const DAPP_NETWORK: Network.MAINNET | Network.TESTNET = Network.TESTNET;
+// The network the dapp operates on (defaults to testnet if not set)
+export const DAPP_NETWORK: Network.MAINNET | Network.TESTNET =
+  (process.env.NEXT_PUBLIC_DAPP_NETWORK as Network.MAINNET | Network.TESTNET) || Network.TESTNET;
 
 // Initialize cross-chain core (singleton)
 // For mainnet, use custom Solana RPC from env; for testnet, use CrossChainCore defaults
