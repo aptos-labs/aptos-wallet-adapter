@@ -1,4 +1,3 @@
-import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 import "./globals.css";
 
 import { ThemeProvider } from "@/components/ThemeProvider";
