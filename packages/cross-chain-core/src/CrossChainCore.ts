@@ -37,6 +37,15 @@ export interface CrossChainDappConfig {
       min?: number;
       max?: number;
     };
+    /**
+     * URL of a server-side API endpoint that claims withdraw transactions on Solana.
+     * When set, the SDK will POST the attested receipt to this URL instead of
+     * asking the user's wallet to sign the claim transaction.
+     *
+     * Expected request body: { serializedReceipt: string, destinationAddress: string, sourceChain: string }
+     * Expected response: { destinationChainTxnId: string }
+     */
+    serverClaimUrl?: string;
   };
 }
 export type { AccountAddressInput } from "@aptos-labs/ts-sdk";

@@ -21,6 +21,13 @@ export const DAPP_NETWORK: Network.MAINNET | Network.TESTNET =
 export const crossChainCore = new CrossChainCore({
   dappConfig: {
     aptosNetwork: DAPP_NETWORK,
+    solanaConfig: {
+      //rpc: process.env.NEXT_PUBLIC_SOLANA_RPC_MAINNET || undefined,
+      // Server-side API route that claims Solana withdraw transactions.
+      // The route uses a funded Solana keypair to sign + submit the claim,
+      // avoiding Phantom's Lighthouse security warning.
+      serverClaimUrl: "/api/claim-withdraw",
+    },
   },
 });
 

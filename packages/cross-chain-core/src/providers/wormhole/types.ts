@@ -37,11 +37,18 @@ export interface WormholeTransferRequest {
   sponsorAccount?: Account;
 }
 
+export type WithdrawPhase =
+  | "initiating"  // User signing Aptos burn transaction
+  | "tracking"    // Waiting for Wormhole attestation (~60s)
+  | "claiming";   // Claiming on destination chain
+
 export interface WormholeWithdrawRequest {
   sourceChain: Chain;
   wallet: AdapterWallet;
   destinationAddress: AccountAddressInput;
   sponsorAccount?: Account | GasStationApiKey;
+  /** Optional callback fired when the withdraw progresses to a new phase. */
+  onPhaseChange?: (phase: WithdrawPhase) => void;
 }
 
 export interface WormholeSubmitTransferRequest {
@@ -69,4 +76,30 @@ export interface WormholeWithdrawResponse {
 export interface WormholeStartTransferResponse {
   originChainTxnId: string;
   receipt: routes.Receipt<AttestationReceipt>;
+}
+
+// --- Split withdraw flow types ---
+
+export interface WormholeInitiateWithdrawRequest {
+  wallet: AdapterWallet;
+  destinationAddress: AccountAddressInput;
+  sponsorAccount?: Account | GasStationApiKey;
+}
+
+export interface WormholeInitiateWithdrawResponse {
+  originChainTxnId: string;
+  receipt: routes.Receipt<AttestationReceipt>;
+}
+
+export interface WormholeClaimWithdrawRequest {
+  sourceChain: Chain;
+  destinationAddress: string;
+  receipt: routes.Receipt<AttestationReceipt>;
+  // Required for wallet-based claim (non-Solana chains, or Solana without serverClaimUrl).
+  // Not needed when the SDK uses the configured serverClaimUrl for Solana claims.
+  wallet?: AdapterWallet;
+}
+
+export interface WormholeClaimWithdrawResponse {
+  destinationChainTxnId: string;
 }
