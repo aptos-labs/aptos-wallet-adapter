@@ -44,6 +44,17 @@ export interface CrossChainDappConfig {
      *
      * Expected request body: { serializedReceipt: string, destinationAddress: string, sourceChain: string }
      * Expected response: { destinationChainTxnId: string }
+     * Check out the SERVERSIDE_SOLANA_SIGNER.md file for more details.
+     * 
+     * @example
+     * const crossChainCore = new CrossChainCore({
+     *   dappConfig: {
+     *     aptosNetwork: Network.TESTNET,
+     *     solanaConfig: {
+     *       serverClaimUrl: "/api/claim-withdraw",
+     *     },
+     *   },
+     * });
      */
     serverClaimUrl?: string;
   };

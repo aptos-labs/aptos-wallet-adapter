@@ -20,7 +20,7 @@ import solana from "@wormhole-foundation/sdk/solana";
 
 // Server-only env var — never sent to the browser
 const SOLANA_CLAIM_SIGNER_KEY =
-  process.env.SWAP_CCTP_SOLANA_CLAIM_SIGNER_PRIVATE_KEY;
+  process.env.SOLANA_CLAIM_SIGNER_KEY;
 
 const DAPP_NETWORK: Network.MAINNET | Network.TESTNET =
   (process.env.NEXT_PUBLIC_DAPP_NETWORK as string) === "mainnet"
@@ -30,7 +30,7 @@ const DAPP_NETWORK: Network.MAINNET | Network.TESTNET =
 function getSolanaKeypair(): Keypair {
   if (!SOLANA_CLAIM_SIGNER_KEY) {
     throw new Error(
-      "SWAP_CCTP_SOLANA_CLAIM_SIGNER_PRIVATE_KEY env var is not set",
+      "SOLANA_CLAIM_SIGNER_KEY env var is not set",
     );
   }
   
@@ -38,7 +38,7 @@ function getSolanaKeypair(): Keypair {
     return Keypair.fromSecretKey(bs58.decode(SOLANA_CLAIM_SIGNER_KEY));
   } catch (error) {
     throw new Error(
-      "Invalid SWAP_CCTP_SOLANA_CLAIM_SIGNER_PRIVATE_KEY format. Expected base58-encoded private key.",
+      "Invalid SOLANA_CLAIM_SIGNER_KEY format. Expected base58-encoded private key.",
     );
   }
 }
