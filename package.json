@@ -17,13 +17,10 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "publish-packages": "changeset version && changeset publish",
-    "deploy:example": "(pnpm run deploy:adapter-example) && (pnpm run deploy:cross-chain-example)",
+    "deploy:example": "pnpm run deploy:adapter-example",
     "deploy:adapter-example": "pnpm run adapter-example:build && pnpm run adapter-example:export && touch ./apps/nextjs-example/out/.nojekyll && gh-pages --dist apps/nextjs-example/out --dotfiles",
     "adapter-example:export": "pnpm run --filter {apps/nextjs-example} export",
     "adapter-example:build": "pnpm run --filter {apps/nextjs-example} build",
-    "deploy:cross-chain-example": "pnpm run cross-chain-example:build && pnpm run cross-chain-example:export && touch ./apps/nextjs-x-chain/out/.nojekyll && gh-pages --dist apps/nextjs-x-chain/out --dest nextjs-cross-chain-example --dotfiles",
-    "cross-chain-example:export": "pnpm run --filter {apps/nextjs-x-chain} export",
-    "cross-chain-example:build": "pnpm run --filter {apps/nextjs-x-chain} build",
     "deploy:example-testing": "pnpm run example:build && pnpm run example:export && touch ./apps/nextjs-example/out/.nojekyll && gh-pages --dist apps/nextjs-example/out --dest nextjs-example-testing --dotfiles"
   },
   "devDependencies": {
