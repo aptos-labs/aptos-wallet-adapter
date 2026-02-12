@@ -28,6 +28,8 @@ Currently, the wallets that have been tested and support cross-chain accounts ar
 
 ## Usage
 
+> **Note:** Ledger hardware wallets do not currently support off-chain message signing required for Solana-derived Aptos accounts. This is a known limitation of the Ledger Solana app. Users should use software wallets (Phantom, Solflare, etc.) without a hardware device connected.
+
 ### Option 1: Automatic Wallet Detection (Recommended for dApps)
 
 Use this approach when building a dApp where users connect their Solana wallets.
