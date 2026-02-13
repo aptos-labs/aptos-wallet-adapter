@@ -21,6 +21,9 @@ export const DAPP_NETWORK: Network.MAINNET | Network.TESTNET =
 export const crossChainCore = new CrossChainCore({
   dappConfig: {
     aptosNetwork: DAPP_NETWORK,
+    solanaConfig: {
+      rpc: process.env.NEXT_PUBLIC_SOLANA_RPC_MAINNET || undefined,
+    },
   },
 });
 
@@ -49,4 +52,5 @@ export const claimSponsorAccount = Account.fromPrivateKey({
 
 export const sponsorAccount: GasStationApiKey = {
   [Network.TESTNET]: process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_GAS_STATION_API_KEY_TESTNET || "",
+  [Network.MAINNET]: process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_GAS_STATION_API_KEY_MAINNET || "",
 };

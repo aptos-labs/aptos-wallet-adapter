@@ -99,22 +99,7 @@ export default function Home() {
             originWalletDetails={originWalletDetails}
           />
 
-          {network?.name === Network.MAINNET && (
-            <>
-              <Alert variant="warning">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Warning</AlertTitle>
-                <AlertDescription>
-                  The transactions flows below will not work on the Mainnet
-                  network.
-                </AlertDescription>
-              </Alert>
-              {/* Transaction actions are disabled on mainnet */}
-              <SingleSigner dappNetwork={Network.MAINNET} wallet={wallet} />
-            </>
-          )}
-
-          {network?.name === Network.TESTNET && (
+          {(network?.name === Network.TESTNET || network?.name === Network.MAINNET) && (
               <>
                 <>
                   <CCTPTransfer
