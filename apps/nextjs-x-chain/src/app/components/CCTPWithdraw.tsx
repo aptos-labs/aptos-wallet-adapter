@@ -37,6 +37,8 @@ import { isSolanaDerivedWallet } from "@/utils/derivedWallet";
 import { useUSDCBalance } from "@/contexts/USDCBalanceContext";
 import { useToast } from "@/components/ui/use-toast";
 
+type UIPhase = "idle" | "in_progress" | "completed" | "error";
+
 export function CCTPWithdraw({
   wallet,
   originWalletDetails,
@@ -62,7 +64,7 @@ export function CCTPWithdraw({
     setGlobalTransactionInProgress,
   } = useUSDCBalance();
 
-  const [withdrawInProgress, setWithdrawInProgress] = useState(false);
+  const [phase, setPhase] = useState<UIPhase>("idle");
 
   const [amount, setAmount] = useState<string>("");
 
@@ -75,8 +77,6 @@ export function CCTPWithdraw({
     null,
   );
 
-  const [transactionCompleted, setTransactionCompleted] =
-    useState<boolean>(false);
   const [transferResponse, setTransferResponse] = useState<
     WormholeTransferResponse | undefined
   >(undefined);
@@ -178,39 +178,37 @@ export function CCTPWithdraw({
   };
 
   const onWithdrawClick = async () => {
+    if (!sourceChain || !wallet || !originWalletDetails) return;
+
     setGlobalTransactionInProgress(true);
-    setWithdrawInProgress(true);
-    const transfer = async () => {
+    setPhase("in_progress");
+
+    try {
       const { originChainTxnId, destinationChainTxnId } =
         await provider.withdraw({
           sourceChain,
           wallet,
-          destinationAddress: originWalletDetails?.address.toString(),
+          destinationAddress: originWalletDetails.address.toString(),
           sponsorAccount,
         });
-      return { originChainTxnId, destinationChainTxnId };
-    };
-    transfer()
-      .then((response) => {
-        console.log("response", response);
-        setTransferResponse(response);
-        setTransactionCompleted(true);
-        // refetch all balances after the process
-        refetchBalances();
-      })
-      .catch((error) => {
-        console.error("Error transferring", error);
-        toast({
-          title: "Error transferring",
-          description: error.message,
-          variant: "destructive",
-        });
-      })
-      .finally(() => {
-        setGlobalTransactionInProgress(false);
-        setWithdrawInProgress(false);
+
+      setTransferResponse({ originChainTxnId, destinationChainTxnId });
+      setPhase("completed");
+      refetchBalances();
+    } catch (error: any) {
+      console.error("Error in withdraw flow:", error);
+      setPhase("error");
+      toast({
+        title: "Error withdrawing",
+        description: error.message || "An unexpected error occurred",
+        variant: "destructive",
       });
+    } finally {
+      setGlobalTransactionInProgress(false);
+    }
   };
+
+  const isInProgress = phase === "in_progress";
 
   return (
     <Card>
@@ -314,7 +312,8 @@ export function CCTPWithdraw({
           </Card>
         )}
 
-        {!withdrawInProgress && !transactionCompleted && (
+        {/* Withdraw button */}
+        {phase === "idle" && (
           <Button
             onClick={onWithdrawClick}
             disabled={
@@ -325,23 +324,26 @@ export function CCTPWithdraw({
           </Button>
         )}
 
-        {withdrawInProgress && !transactionCompleted && (
+        {/* In-progress state */}
+        {isInProgress && (
           <Button disabled>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Withdraw
+            Withdrawing...
           </Button>
         )}
 
-        {withdrawInProgress && transactionCompleted && (
-          <div className="flex flex-col gap-4">
-            <p className="text-lg text-center">Submitting transaction</p>
-            <Button disabled>
-              <Loader2 className="animate-spin" />
-            </Button>
-          </div>
+        {/* Error state — allow retry */}
+        {phase === "error" && (
+          <Button
+            onClick={() => setPhase("idle")}
+            variant="outline"
+          >
+            Try Again
+          </Button>
         )}
 
-        {!withdrawInProgress && transactionCompleted && (
+        {/* Completed state */}
+        {phase === "completed" && (
           <div className="flex flex-col gap-4">
             <Button onClick={() => window.location.reload()}>
               Start a new Transaction

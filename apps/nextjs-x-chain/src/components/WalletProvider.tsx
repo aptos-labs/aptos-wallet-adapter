@@ -34,6 +34,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
         aptosApiKeys: {
           testnet: process.env.NEXT_PUBLIC_APTOS_API_KEY_TESNET,
           devnet: process.env.NEXT_PUBLIC_APTOS_API_KEY_DEVNET,
+          mainnet: process.env.NEXT_PUBLIC_APTOS_API_KEY_MAINNET,
         },
         aptosConnect: {
           claimSecretKey,
