@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 5.3.15
+
+### Patch Changes
+
+- @aptos-labs/wallet-adapter-react@8.2.2
+
 ## 5.3.14
 
 ### Patch Changes
