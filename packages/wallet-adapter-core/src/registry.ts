@@ -121,4 +121,20 @@ export const crossChainStandardSupportedWalletList: Array<AptosStandardSupported
       isAIP62Standard: true,
       deeplinkProvider: "https://link.metamask.io/dapp/",
     },
+    {
+      name: "Coinbase (Ethereum)",
+      url: "https://wallet.coinbase.com/",
+      icon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAyNCIgaGVpZ2h0PSIxMDI0IiB2aWV3Qm94PSIwIDAgMTAyNCAxMDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8Y2lyY2xlIGN4PSI1MTIiIGN5PSI1MTIiIHI9IjUxMiIgZmlsbD0iIzAwNTJGRiIvPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTUxMiAyOTZDMzkyLjQ3MSAyOTYgMjk2IDM5Mi40NzEgMjk2IDUxMkMyOTYgNjMxLjUyOSAzOTIuNDcxIDcyOCA1MTIgNzI4QzYzMS41MjkgNzI4IDcyOCA2MzEuNTI5IDcyOCA1MTJDNzI4IDM5Mi40NzEgNjMxLjUyOSAyOTYgNTEyIDI5NlpNNDIwLjggNDY0LjhDNDIwLjggNDUyLjU5NiA0MzAuNTk2IDQ0Mi44IDQ0Mi44IDQ0Mi44SDU4MS4yQzU5My40MDQgNDQyLjggNjAzLjIgNDUyLjU5NiA2MDMuMiA0NjQuOFY1NTkuMkM2MDMuMiA1NzEuNDA0IDU5My40MDQgNTgxLjIgNTgxLjIgNTgxLjJINDQyLjhDNDMwLjU5NiA1ODEuMiA0MjAuOCA1NzEuNDA0IDQyMC44IDU1OS4yVjQ2NC44WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==",
+      readyState: WalletReadyState.NotDetected,
+      isAIP62Standard: true,
+      deeplinkProvider: "https://wallet.coinbase.com/wsegue?cb_url=",
+    },
+    {
+      name: "Coinbase (Solana)",
+      url: "https://wallet.coinbase.com/",
+      icon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAyNCIgaGVpZ2h0PSIxMDI0IiB2aWV3Qm94PSIwIDAgMTAyNCAxMDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8Y2lyY2xlIGN4PSI1MTIiIGN5PSI1MTIiIHI9IjUxMiIgZmlsbD0iIzAwNTJGRiIvPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTUxMiAyOTZDMzkyLjQ3MSAyOTYgMjk2IDM5Mi40NzEgMjk2IDUxMkMyOTYgNjMxLjUyOSAzOTIuNDcxIDcyOCA1MTIgNzI4QzYzMS41MjkgNzI4IDcyOCA2MzEuNTI5IDcyOCA1MTJDNzI4IDM5Mi40NzEgNjMxLjUyOSAyOTYgNTEyIDI5NlpNNDIwLjggNDY0LjhDNDIwLjggNDUyLjU5NiA0MzAuNTk2IDQ0Mi44IDQ0Mi44IDQ0Mi44SDU4MS4yQzU5My40MDQgNDQyLjggNjAzLjIgNDUyLjU5NiA2MDMuMiA0NjQuOFY1NTkuMkM2MDMuMiA1NzEuNDA0IDU5My40MDQgNTgxLjIgNTgxLjIgNTgxLjJINDQyLjhDNDMwLjU5NiA1ODEuMiA0MjAuOCA1NzEuNDA0IDQyMC44IDU1OS4yVjQ2NC44WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==",
+      readyState: WalletReadyState.NotDetected,
+      isAIP62Standard: true,
+      deeplinkProvider: "https://wallet.coinbase.com/wsegue?cb_url=",
+    },
   ];
