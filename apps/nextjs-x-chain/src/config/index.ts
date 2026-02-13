@@ -17,12 +17,17 @@ export const DAPP_NETWORK: Network.MAINNET | Network.TESTNET =
   (process.env.NEXT_PUBLIC_DAPP_NETWORK as Network.MAINNET | Network.TESTNET) || Network.TESTNET;
 
 // Initialize cross-chain core (singleton)
-// For mainnet, use custom Solana RPC from env; for testnet, use CrossChainCore defaults
+// Use the appropriate Solana RPC based on the network
+const solanaRpc =
+  DAPP_NETWORK === Network.MAINNET
+    ? process.env.NEXT_PUBLIC_SOLANA_RPC_MAINNET
+    : process.env.NEXT_PUBLIC_SOLANA_RPC_DEVNET;
+
 export const crossChainCore = new CrossChainCore({
   dappConfig: {
     aptosNetwork: DAPP_NETWORK,
     solanaConfig: {
-      rpc: process.env.NEXT_PUBLIC_SOLANA_RPC_DEVNET || undefined,
+      rpc: solanaRpc || undefined,
     },
   },
 });
