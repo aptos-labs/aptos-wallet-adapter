@@ -28,6 +28,7 @@ export const crossChainCore = new CrossChainCore({
     aptosNetwork: DAPP_NETWORK,
     solanaConfig: {
       rpc: solanaRpc || undefined,
+      serverClaimUrl: "/api/claim-withdraw",
     },
   },
 });

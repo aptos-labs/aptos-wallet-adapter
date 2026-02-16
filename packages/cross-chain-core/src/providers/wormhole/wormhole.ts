@@ -1,12 +1,10 @@
 import {
-  chainToPlatform,
   routes,
   TokenId,
   Wormhole,
   wormhole,
   PlatformLoader,
   TransferState,
-  AttestationReceipt,
 } from "@wormhole-foundation/sdk";
 import { Network, sleep } from "@aptos-labs/ts-sdk";
 import aptos from "@wormhole-foundation/sdk/aptos";
@@ -20,9 +18,11 @@ import {
   CrossChainCore,
 } from "../../CrossChainCore";
 import { logger } from "../../utils/logger";
+import { serializeReceipt } from "../../utils/receiptSerialization";
 import { AptosLocalSigner } from "./signers/AptosLocalSigner";
 import { Signer } from "./signers/Signer";
 import { ChainConfig } from "../../config";
+import { createCCTPRoute } from "./utils";
 import {
   WormholeQuoteRequest,
   WormholeQuoteResponse,
@@ -106,40 +106,12 @@ export class WormholeProvider implements CrossChainProvider<
       throw new Error("Wormhole context not initialized");
     }
 
-    const { sourceToken, destToken } = this.getTokenInfo(
+    const { route: cctpRoute, request } = await createCCTPRoute(
+      this._wormholeContext,
       sourceChain,
       destinationChain,
+      this.crossChainCore.TOKENS,
     );
-
-    const destContext = this._wormholeContext
-      .getPlatform(chainToPlatform(destinationChain))
-      .getChain(destinationChain);
-    const sourceContext = this._wormholeContext
-      .getPlatform(chainToPlatform(sourceChain))
-      .getChain(sourceChain);
-
-    logger.log("sourceContext", sourceContext);
-    logger.log("sourceToken", sourceToken);
-
-    logger.log("destContext", destContext);
-    logger.log("destToken", destToken);
-
-    const request = await routes.RouteTransferRequest.create(
-      this._wormholeContext,
-      {
-        source: sourceToken,
-        destination: destToken,
-      },
-      sourceContext,
-      destContext,
-    );
-
-    const resolver = this._wormholeContext.resolver([
-      routes.CCTPRoute, // manual CCTP
-    ]);
-
-    const route = await resolver.findRoutes(request);
-    const cctpRoute = route[0];
 
     this.wormholeRoute = cctpRoute;
     this.wormholeRequest = request;
@@ -457,27 +429,11 @@ export class WormholeProvider implements CrossChainProvider<
       const response = await fetch(serverClaimUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(
-          {
-            receipt,
-            destinationAddress,
-            sourceChain,
-          },
-          (_key, value) => {
-            // Handle BigInt serialization
-            if (typeof value === "bigint") {
-              return { __type: "bigint", value: value.toString() };
-            }
-            // Handle Uint8Array serialization
-            if (value instanceof Uint8Array) {
-              return {
-                __type: "Uint8Array",
-                value: Buffer.from(value).toString("base64"),
-              };
-            }
-            return value;
-          },
-        ),
+        body: JSON.stringify({
+          receipt: serializeReceipt(receipt),
+          destinationAddress,
+          sourceChain,
+        }),
       });
 
       if (!response.ok) {
