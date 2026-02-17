@@ -15,6 +15,14 @@ export interface WalletItemProps extends HeadlessComponentProps {
   wallet: AdapterWallet | AdapterNotDetectedWallet;
   /** A callback to be invoked when the wallet is connected. */
   onConnect?: () => void;
+  /**
+   * When `true`, wallets will be shown on mobile even if they don't have
+   * a `deeplinkProvider`. By default mobile wallets without a deeplink
+   * provider are hidden.
+   *
+   * @default false
+   */
+  showAllOnMobile?: boolean;
 }
 
 function useWalletItemContext(displayName: string) {
@@ -33,7 +41,10 @@ const WalletItemContext = createContext<{
 } | null>(null);
 
 const Root = forwardRef<HTMLDivElement, WalletItemProps>(
-  ({ wallet, onConnect, className, asChild, children }, ref) => {
+  (
+    { wallet, onConnect, showAllOnMobile = false, className, asChild, children },
+    ref,
+  ) => {
     const { connect } = useWallet();
 
     const isWalletReady = wallet.readyState === WalletReadyState.Installed;
@@ -50,7 +61,13 @@ const Root = forwardRef<HTMLDivElement, WalletItemProps>(
       onConnect?.();
     }, [wallet, connect, onConnect]);
 
-    if (!isWalletReady && isRedirectable() && !mobileSupport) return null;
+    if (
+      !isWalletReady &&
+      isRedirectable() &&
+      !mobileSupport &&
+      !showAllOnMobile
+    )
+      return null;
 
     const Component = asChild ? Slot : "div";
 

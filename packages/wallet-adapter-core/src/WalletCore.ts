@@ -86,7 +86,9 @@ import {
 } from "./utils";
 import {
   aptosStandardSupportedWalletList,
-  crossChainStandardSupportedWalletList,
+  ethereumStandardSupportedWalletList,
+  solanaStandardSupportedWalletList,
+  suiStandardSupportedWalletList,
 } from "./registry";
 import { getSDKWallets } from "./sdkWallets";
 import {
@@ -326,7 +328,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
     const walletRegistry = this._dappConfig?.crossChainWallets
       ? [
           ...aptosStandardSupportedWalletList,
-          ...crossChainStandardSupportedWalletList,
+          ...solanaStandardSupportedWalletList,
+          ...ethereumStandardSupportedWalletList,
+          ...suiStandardSupportedWalletList,
         ]
       : aptosStandardSupportedWalletList;
     // Loop over the registry map
@@ -595,8 +599,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
             let url = encodeURIComponent(window.location.href);
             let ref = encodeURIComponent(window.location.origin);
             parameter = `${url}?ref=${ref}`;
-          } else if (uninstalledWallet.name.includes("Metamask")) {
-            // Metamask expects the raw URL as a path parameter
+          } else if (uninstalledWallet.name.includes("MetaMask")) {
+            // MetaMask expects the raw URL as a path parameter
             // Format: https://link.metamask.io/dapp/aptos-labs.github.io
             parameter = window.location.href;
           } else {

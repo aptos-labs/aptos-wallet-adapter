@@ -154,10 +154,12 @@ function ConnectWalletDialog({
   const {
     evmInstallableWallets,
     solanaInstallableWallets,
+    suiInstallableWallets,
     aptosInstallableWallets,
   } = installableWallets.reduce<{
     evmInstallableWallets: AdapterNotDetectedWallet[];
     solanaInstallableWallets: AdapterNotDetectedWallet[];
+    suiInstallableWallets: AdapterNotDetectedWallet[];
     aptosInstallableWallets: AdapterNotDetectedWallet[];
   }>(
     (acc, wallet) => {
@@ -165,7 +167,9 @@ function ConnectWalletDialog({
         acc.evmInstallableWallets.push(wallet);
       } else if (wallet.name.includes("Solana")) {
         acc.solanaInstallableWallets.push(wallet);
-      } else {
+      } else if(wallet.name.includes("Sui")) {
+        acc.suiInstallableWallets.push(wallet);
+      }else {
         acc.aptosInstallableWallets.push(wallet);
       }
       return acc;
@@ -173,6 +177,7 @@ function ConnectWalletDialog({
     {
       evmInstallableWallets: [],
       solanaInstallableWallets: [],
+      suiInstallableWallets: [],
       aptosInstallableWallets: [],
     },
   );
@@ -323,8 +328,26 @@ function ConnectWalletDialog({
                   key={wallet.name}
                   wallet={wallet}
                   onConnect={close}
-                />
+                />  
               ))}
+              {!!suiInstallableWallets.length && (
+                <Collapsible className="flex flex-col gap-3 pt-3">
+                  <CollapsibleTrigger asChild>
+                    <Button size="sm" variant="ghost" className="gap-2">
+                      More wallets <ChevronDown />
+                    </Button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="flex flex-col gap-3">
+                    {suiInstallableWallets.map((wallet) => (
+                      <WalletRow
+                        key={wallet.name}
+                        wallet={wallet}
+                        onConnect={close}
+                      />
+                    ))}
+                  </CollapsibleContent>
+                </Collapsible>
+              )}
             </TabsContent>
           </Tabs>
         </div>
@@ -343,6 +366,7 @@ function WalletRow({ wallet, onConnect }: WalletRowProps) {
     <WalletItem
       wallet={wallet}
       onConnect={onConnect}
+      showAllOnMobile={true}
       className="flex items-center justify-between px-4 py-3 gap-4 border rounded-md"
     >
       <div className="flex items-center gap-4">
