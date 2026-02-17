@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 8.3.0
+
+### Minor Changes
+
+- 935eb4c: Add coinbase wallet to the wallet registry
+
 ## 8.2.0
 
 ### Minor Changes

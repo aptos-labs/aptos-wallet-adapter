@@ -62,10 +62,3 @@ jobs:
           NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY: ${{ secrets.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY }}
           NEXT_PUBLIC_GAS_STATION_API_KEY: ${{ secrets.NEXT_PUBLIC_GAS_STATION_API_KEY }}
           NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_GAS_STATION_API_KEY_TESTNET: ${{ secrets.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_GAS_STATION_API_KEY_TESTNET }}
-      - name: Deploy example dapps on Publish to npm
-        if: steps.changesets.outputs.published == 'true' # Runs only if publishing happened
-        run: |
-          pnpm run deploy:example
-        env:
-          GITHUB_TOKEN: ${{ steps.authenticate.outputs.token }}
-          NEXT_PUBLIC_GAS_STATION_API_KEY: ${{ secrets.NEXT_PUBLIC_GAS_STATION_API_KEY }}

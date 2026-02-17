@@ -3,7 +3,7 @@
 This project is a demo of the Aptos Cross-Chain Wallet Selector using [Next.js](https://nextjs.org/) and [shadcn/ui](https://ui.shadcn.com/).
 
 A live version is hosted at:
-https://aptos-labs.github.io/aptos-wallet-adapter/nextjs-cross-chain-example/
+https://x-chain-accounts.vercel.app/
 
 ## Use shadcn/ui wallet selector for your own app
 

@@ -3,7 +3,7 @@
 This project is a demo of the Aptos Wallet Selector using [Next.js](https://nextjs.org/) and [shadcn/ui](https://ui.shadcn.com/).
 
 A live version is hosted at:
-https://aptos-labs.github.io/aptos-wallet-adapter
+https://aptos-wallet-adapter-example.vercel.app/
 
 ## Use shadcn/ui wallet selector for your own app
 
