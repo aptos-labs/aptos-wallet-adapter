@@ -16,12 +16,7 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "publish-packages": "changeset version && changeset publish",
-    "deploy:example": "pnpm run deploy:adapter-example",
-    "deploy:adapter-example": "pnpm run adapter-example:build && pnpm run adapter-example:export && touch ./apps/nextjs-example/out/.nojekyll && gh-pages --dist apps/nextjs-example/out --dotfiles",
-    "adapter-example:export": "pnpm run --filter {apps/nextjs-example} export",
-    "adapter-example:build": "pnpm run --filter {apps/nextjs-example} build",
-    "deploy:example-testing": "pnpm run example:build && pnpm run example:export && touch ./apps/nextjs-example/out/.nojekyll && gh-pages --dist apps/nextjs-example/out --dest nextjs-example-testing --dotfiles"
+    "publish-packages": "changeset version && changeset publish"
   },
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
@@ -32,9 +27,7 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "dependencies": {
-    "gh-pages": "^6.3.0"
-  },
+  "dependencies": {},
   "packageManager": "pnpm@9.15.5",
   "pnpm": {
     "overrides": {
