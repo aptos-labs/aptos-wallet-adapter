@@ -161,7 +161,7 @@ if (isSuiDerivedWallet(wallet)) {
 ## Resources
 
 - X-Chain Accounts Adapter Demo App
-  - [Live site](https://aptos-labs.github.io/aptos-wallet-adapter/nextjs-cross-chain-example/)
+  - [Live site](https://x-chain-accounts.vercel.app/)
   - [Source code](../../apps/nextjs-x-chain/)
 - [AIP-113 Derivable Account Abstraction](https://github.com/aptos-foundation/AIPs/blob/main/aips/aip-113.md)
 
