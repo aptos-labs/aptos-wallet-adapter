@@ -27,7 +27,7 @@ export async function signAndSendTransaction(
   dappNetwork: AptosNetwork,
 ) {
   if (!wallet) {
-    throw new Error("wallet.sendTransaction is undefined").message;
+    throw new Error("wallet.sendTransaction is undefined");
   }
 
   const payload = request.transaction;

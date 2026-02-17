@@ -1,6 +1,5 @@
 import {
   routes,
-  TokenId,
   Wormhole,
   wormhole,
   PlatformLoader,
@@ -39,6 +38,7 @@ import {
   WormholeInitiateWithdrawResponse,
   WormholeClaimWithdrawRequest,
   WormholeClaimWithdrawResponse,
+  WithdrawError,
 } from "./types";
 import { SolanaDerivedWallet } from "@aptos-labs/derived-wallet-solana";
 import { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
@@ -147,12 +147,12 @@ export class WormholeProvider implements CrossChainProvider<
     const validated = await route.validate(request, transferParams);
     if (!validated.valid) {
       logger.log("invalid", validated.valid);
-      throw new Error(`Invalid quote: ${validated.error}`).message;
+      throw new Error(`Invalid quote: ${validated.error}`);
     }
     const quote = await route.quote(request, validated.params);
     if (!quote.success) {
       logger.log("quote failed", quote.success);
-      throw new Error(`Invalid quote: ${quote.error}`).message;
+      throw new Error(`Invalid quote: ${quote.error}`);
     }
     this.wormholeQuote = quote;
     logger.log("quote", quote);
@@ -342,16 +342,11 @@ export class WormholeProvider implements CrossChainProvider<
       sponsorAccount,
     );
 
-    logger.log("initiateWithdraw - destinationChain:", this.destinationChain);
-    logger.log("initiateWithdraw - destinationAddress:", destinationAddress.toString());
-    
     const wormholeDestAddress = Wormhole.chainAddress(
       this.destinationChain!,
       destinationAddress.toString(),
     );
-    logger.log("initiateWithdraw - wormholeDestAddress:", wormholeDestAddress);
-    logger.log("initiateWithdraw - wormholeDestAddress.address.toString():", wormholeDestAddress.address.toString());
-    
+
     const receipt = await this.wormholeRoute.initiate(
       this.wormholeRequest,
       signer,
@@ -504,20 +499,33 @@ export class WormholeProvider implements CrossChainProvider<
       sponsorAccount,
     });
 
-    // Phase 2: Track — wait for attestation
-    onPhaseChange?.("tracking");
-    const attestedReceipt = await this.trackWithdraw(receipt);
+    // Phases 2 & 3 are wrapped so that, if they fail, the caller still
+    // receives the originChainTxnId (the irreversible Aptos burn).
+    let currentPhase: "tracking" | "claiming" = "tracking";
+    try {
+      // Phase 2: Track — wait for attestation
+      onPhaseChange?.("tracking");
+      const attestedReceipt = await this.trackWithdraw(receipt);
 
-    // Phase 3: Claim — server-side or wallet-based
-    onPhaseChange?.("claiming");
-    const { destinationChainTxnId } = await this.claimWithdraw({
-      sourceChain,
-      destinationAddress: destinationAddress.toString(),
-      receipt: attestedReceipt,
-      wallet,
-    });
+      // Phase 3: Claim — server-side or wallet-based
+      currentPhase = "claiming";
+      onPhaseChange?.("claiming");
+      const { destinationChainTxnId } = await this.claimWithdraw({
+        sourceChain,
+        destinationAddress: destinationAddress.toString(),
+        receipt: attestedReceipt,
+        wallet,
+      });
 
-    return { originChainTxnId, destinationChainTxnId };
+      return { originChainTxnId, destinationChainTxnId };
+    } catch (error: any) {
+      throw new WithdrawError(
+        error?.message ?? "Withdraw failed after Aptos burn",
+        originChainTxnId,
+        currentPhase,
+        error,
+      );
+    }
   }
 
   getChainConfig(chain: Chain): ChainConfig {
@@ -529,25 +537,5 @@ export class WormholeProvider implements CrossChainProvider<
       throw new Error(`Chain config not found for chain: ${chain}`);
     }
     return chainConfig;
-  }
-
-  getTokenInfo(
-    sourceChain: Chain,
-    destinationChain: Chain,
-  ): {
-    sourceToken: TokenId;
-    destToken: TokenId;
-  } {
-    const sourceToken: TokenId = Wormhole.tokenId(
-      this.crossChainCore.TOKENS[sourceChain].tokenId.chain as Chain,
-      this.crossChainCore.TOKENS[sourceChain].tokenId.address,
-    );
-
-    const destToken: TokenId = Wormhole.tokenId(
-      this.crossChainCore.TOKENS[destinationChain].tokenId.chain as Chain,
-      this.crossChainCore.TOKENS[destinationChain].tokenId.address,
-    );
-
-    return { sourceToken, destToken };
   }
 }

@@ -14,6 +14,8 @@ import {
   EthereumChainIdToMainnetChain,
   EthereumChainIdToTestnetChain,
   GasStationApiKey,
+  WithdrawError,
+  WithdrawPhase,
 } from "@aptos-labs/cross-chain-core";
 import {
   Account,
@@ -65,6 +67,9 @@ export function CCTPWithdraw({
   } = useUSDCBalance();
 
   const [phase, setPhase] = useState<UIPhase>("idle");
+  // Track whether the irreversible Aptos burn has been submitted,
+  // independently of error type, to prevent accidental double-burns.
+  const [burnInitiated, setBurnInitiated] = useState(false);
 
   const [amount, setAmount] = useState<string>("");
 
@@ -182,6 +187,7 @@ export function CCTPWithdraw({
 
     setGlobalTransactionInProgress(true);
     setPhase("in_progress");
+    setBurnInitiated(false);
 
     try {
       const { originChainTxnId, destinationChainTxnId } =
@@ -190,6 +196,12 @@ export function CCTPWithdraw({
           wallet,
           destinationAddress: originWalletDetails.address.toString(),
           sponsorAccount,
+          onPhaseChange: (withdrawPhase: WithdrawPhase) => {
+            // Once we move past "initiating", the burn tx is on-chain.
+            if (withdrawPhase === "tracking" || withdrawPhase === "claiming") {
+              setBurnInitiated(true);
+            }
+          },
         });
 
       setTransferResponse({ originChainTxnId, destinationChainTxnId });
@@ -198,6 +210,16 @@ export function CCTPWithdraw({
     } catch (error: any) {
       console.error("Error in withdraw flow:", error);
       setPhase("error");
+
+      // If the Aptos burn succeeded but a later phase failed, preserve the
+      // origin transaction ID so the user can verify the burn on-chain.
+      if (error instanceof WithdrawError) {
+        setTransferResponse({
+          originChainTxnId: error.originChainTxnId,
+          destinationChainTxnId: "",
+        });
+      }
+
       toast({
         title: "Error withdrawing",
         description: error.message || "An unexpected error occurred",
@@ -332,13 +354,20 @@ export function CCTPWithdraw({
           </Button>
         )}
 
-        {/* Error state — allow retry */}
-        {phase === "error" && (
+        {/* Error state — only allow retry if the burn hasn't happened yet */}
+        {phase === "error" && !burnInitiated && (
           <Button
             onClick={() => setPhase("idle")}
             variant="outline"
           >
             Try Again
+          </Button>
+        )}
+
+        {/* Error state after burn — reload to start fresh, don't allow a second burn */}
+        {phase === "error" && burnInitiated && (
+          <Button onClick={() => window.location.reload()} variant="outline">
+            Start a new Transaction
           </Button>
         )}
 
@@ -367,8 +396,8 @@ export function CCTPWithdraw({
             )}
             {transferResponse.destinationChainTxnId && (
               <a
-                href={`${getChainInfo(sourceChain!).explorerUrl}/tx/${transferResponse.destinationChainTxnId}?cluster=${
-                  dappNetwork === Network.MAINNET ? "mainnet" : "devnet"
+                href={`${getChainInfo(sourceChain!).explorerUrl}/tx/${transferResponse.destinationChainTxnId}${
+                  dappNetwork === Network.MAINNET ? "" : "?cluster=devnet"
                 }`}
                 target="_blank"
                 rel="noopener noreferrer"

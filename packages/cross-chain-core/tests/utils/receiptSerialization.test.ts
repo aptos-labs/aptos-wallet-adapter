@@ -85,6 +85,19 @@ describe("receiptSerialization", () => {
       });
     });
 
+    it("should serialize UniversalAddress values", () => {
+      const addressBytes = new Uint8Array(32).fill(0xab);
+      const receipt = {
+        from: "Aptos",
+        sender: new UniversalAddress(addressBytes),
+      } as any;
+
+      const serialized = serializeReceipt(receipt) as any;
+
+      expect(serialized.sender.__type).toBe("UniversalAddress");
+      expect(typeof serialized.sender.value).toBe("string");
+    });
+
     it("should preserve primitive values", () => {
       const receipt = {
         from: "Aptos",
@@ -107,6 +120,15 @@ describe("receiptSerialization", () => {
   });
 
   describe("deserializeReceipt", () => {
+    // Cross-platform base64 helper (matches implementation, avoids Node.js Buffer)
+    function toBase64(bytes: Uint8Array): string {
+      let binary = "";
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary);
+    }
+
     it("should deserialize BigInt values", () => {
       const serialized = {
         from: "Aptos",
@@ -145,15 +167,35 @@ describe("receiptSerialization", () => {
       });
     });
 
-    it("should reconstruct UniversalAddress for address fields", () => {
+    it("should deserialize __type UniversalAddress markers", () => {
       const addressBytes = new Uint8Array(32).fill(0xab);
+      const base64Address = toBase64(addressBytes);
+      const serialized = {
+        from: "Aptos",
+        sender: { __type: "UniversalAddress", value: base64Address },
+        customField: { __type: "UniversalAddress", value: base64Address },
+      };
+
+      const deserialized = deserializeReceipt(serialized) as any;
+
+      expect(deserialized.sender).toBeInstanceOf(UniversalAddress);
+      expect(deserialized.sender.toUint8Array()).toEqual(addressBytes);
+      // Works for any field name, not just known address fields
+      expect(deserialized.customField).toBeInstanceOf(UniversalAddress);
+      expect(deserialized.customField.toUint8Array()).toEqual(addressBytes);
+    });
+
+    it("should reconstruct UniversalAddress for address fields (backwards compat)", () => {
+      const addressBytes = new Uint8Array(32).fill(0xab);
+      const base64Address = toBase64(addressBytes);
+      // Old format: no __type marker, relies on field-name heuristic
       const serialized = {
         from: "Aptos",
         sender: {
-          address: { __type: "Uint8Array", value: Buffer.from(addressBytes).toString("base64") },
+          address: { __type: "Uint8Array", value: base64Address },
         },
         recipient: {
-          address: { __type: "Uint8Array", value: Buffer.from(addressBytes).toString("base64") },
+          address: { __type: "Uint8Array", value: base64Address },
         },
       };
 
@@ -165,6 +207,7 @@ describe("receiptSerialization", () => {
 
     it("should handle all CCTP address fields", () => {
       const addressBytes = new Uint8Array(32).fill(0xcd);
+      const base64Address = toBase64(addressBytes);
       const addressFields = [
         "sender",
         "recipient",
@@ -177,7 +220,7 @@ describe("receiptSerialization", () => {
       const serialized: Record<string, any> = { from: "Aptos" };
       for (const field of addressFields) {
         serialized[field] = {
-          address: { __type: "Uint8Array", value: Buffer.from(addressBytes).toString("base64") },
+          address: { __type: "Uint8Array", value: base64Address },
         };
       }
 
@@ -270,6 +313,73 @@ describe("receiptSerialization", () => {
       const deserialized = deserializeReceipt(serialized);
 
       expect(deserialized).toEqual(original);
+    });
+
+    it("should serialize and deserialize UniversalAddress correctly", () => {
+      const addressBytes = new Uint8Array(32);
+      addressBytes.fill(0xab);
+      const original = {
+        from: "Aptos",
+        to: "Solana",
+        sender: new UniversalAddress(addressBytes),
+      } as any;
+
+      const serialized = serializeReceipt(original);
+      const deserialized = deserializeReceipt(serialized) as any;
+
+      expect(deserialized.sender).toBeInstanceOf(UniversalAddress);
+      expect(deserialized.sender.toUint8Array()).toEqual(addressBytes);
+    });
+
+    it("should roundtrip UniversalAddress at non-standard field names", () => {
+      const addressBytes = new Uint8Array(32);
+      addressBytes.fill(0xef);
+      const original = {
+        from: "Aptos",
+        customAddress: new UniversalAddress(addressBytes),
+      } as any;
+
+      const serialized = serializeReceipt(original);
+      const deserialized = deserializeReceipt(serialized) as any;
+
+      // UniversalAddress at a non-standard key should still survive roundtrip
+      // thanks to the explicit __type marker
+      expect(deserialized.customAddress).toBeInstanceOf(UniversalAddress);
+      expect(deserialized.customAddress.toUint8Array()).toEqual(addressBytes);
+    });
+
+    it("should roundtrip multiple UniversalAddress fields in CCTP-like structure", () => {
+      const senderBytes = new Uint8Array(32).fill(0x01);
+      const recipientBytes = new Uint8Array(32).fill(0x02);
+      const burnTokenBytes = new Uint8Array(32).fill(0x03);
+
+      const original = {
+        from: "Aptos",
+        to: "Solana",
+        state: "Attested",
+        attestation: {
+          message: {
+            sender: new UniversalAddress(senderBytes),
+            recipient: new UniversalAddress(recipientBytes),
+            burnToken: new UniversalAddress(burnTokenBytes),
+            amount: BigInt("1000000"),
+            nonce: BigInt("42"),
+          },
+        },
+      } as any;
+
+      const serialized = serializeReceipt(original);
+      const deserialized = deserializeReceipt(serialized) as any;
+
+      const msg = deserialized.attestation.message;
+      expect(msg.sender).toBeInstanceOf(UniversalAddress);
+      expect(msg.sender.toUint8Array()).toEqual(senderBytes);
+      expect(msg.recipient).toBeInstanceOf(UniversalAddress);
+      expect(msg.recipient.toUint8Array()).toEqual(recipientBytes);
+      expect(msg.burnToken).toBeInstanceOf(UniversalAddress);
+      expect(msg.burnToken.toUint8Array()).toEqual(burnTokenBytes);
+      expect(msg.amount).toBe(BigInt("1000000"));
+      expect(msg.nonce).toBe(BigInt("42"));
     });
 
     it("should handle complex nested structures", () => {

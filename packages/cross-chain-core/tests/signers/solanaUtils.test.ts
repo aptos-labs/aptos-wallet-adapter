@@ -1,26 +1,21 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
-// Import only the pure utility functions that don't have heavy dependencies
-// The priority fee and transaction functions require @wormhole-foundation/sdk-solana
-// which causes import issues in the test environment
+// Mock the heavy Wormhole SDK dependency so we can import the real utility functions
+vi.mock("@wormhole-foundation/sdk-solana", () => ({
+  determinePriorityFee: vi.fn(),
+  determinePriorityFeeTritonOne: vi.fn(),
+}));
+
+import {
+  formatTransactionError,
+  determineRpcProvider,
+  sleep,
+  isEmptyObject,
+  PriorityFeeConfig,
+} from "../../src/providers/wormhole/signers/solanaUtils";
 
 describe("solanaUtils", () => {
   describe("formatTransactionError", () => {
-    // Inline implementation for testing since the module has heavy dependencies
-    const formatTransactionError = (err: unknown): string => {
-      if (typeof err === "object" && err !== null) {
-        try {
-          return `Transaction failed: ${JSON.stringify(
-            err,
-            (_key, value) => (typeof value === "bigint" ? value.toString() : value),
-          )}`;
-        } catch {
-          return "Transaction failed: Unknown error";
-        }
-      }
-      return `Transaction failed: ${err}`;
-    };
-
     it("should format string errors", () => {
       const result = formatTransactionError("Some error");
       expect(result).toBe("Transaction failed: Some error");
@@ -59,27 +54,6 @@ describe("solanaUtils", () => {
   });
 
   describe("determineRpcProvider", () => {
-    // Inline implementation for testing
-    type SolanaRpcProvider = "triton" | "helius" | "ankr" | "unknown";
-
-    const determineRpcProvider = (endpoint: string): SolanaRpcProvider => {
-      try {
-        const url = new URL(endpoint);
-        const hostname = url.hostname;
-        if (hostname.includes("rpcpool.com") || hostname.includes("triton")) {
-          return "triton";
-        } else if (hostname.includes("helius-rpc.com") || hostname.includes("helius")) {
-          return "helius";
-        } else if (hostname.includes("ankr.com")) {
-          return "ankr";
-        } else {
-          return "unknown";
-        }
-      } catch {
-        return "unknown";
-      }
-    };
-
     it("should detect Triton RPC", () => {
       expect(determineRpcProvider("https://solana-mainnet.rpcpool.com")).toBe(
         "triton",
@@ -119,11 +93,6 @@ describe("solanaUtils", () => {
   });
 
   describe("sleep", () => {
-    // Inline implementation for testing
-    const sleep = (timeout: number): Promise<void> => {
-      return new Promise((resolve) => setTimeout(resolve, timeout));
-    };
-
     it("should resolve after specified timeout", async () => {
       vi.useFakeTimers();
 
@@ -142,11 +111,10 @@ describe("solanaUtils", () => {
         resolved = true;
       });
 
-      vi.advanceTimersByTime(500);
+      await vi.advanceTimersByTimeAsync(500);
       expect(resolved).toBe(false);
 
-      vi.advanceTimersByTime(500);
-      await Promise.resolve();
+      await vi.advanceTimersByTimeAsync(500);
       expect(resolved).toBe(true);
 
       vi.useRealTimers();
@@ -154,19 +122,6 @@ describe("solanaUtils", () => {
   });
 
   describe("isEmptyObject", () => {
-    // Inline implementation for testing
-    const isEmptyObject = (value: object | null | undefined): boolean => {
-      if (value === null || value === undefined) {
-        return true;
-      }
-      for (const key in value) {
-        if (Object.prototype.hasOwnProperty.call(value, key)) {
-          return false;
-        }
-      }
-      return true;
-    };
-
     it("should return true for null", () => {
       expect(isEmptyObject(null)).toBe(true);
     });
@@ -195,13 +150,6 @@ describe("solanaUtils", () => {
   });
 
   describe("PriorityFeeConfig type", () => {
-    interface PriorityFeeConfig {
-      percentile?: number;
-      percentileMultiple?: number;
-      min?: number;
-      max?: number;
-    }
-
     it("should accept valid configuration", () => {
       const config: PriorityFeeConfig = {
         percentile: 0.9,

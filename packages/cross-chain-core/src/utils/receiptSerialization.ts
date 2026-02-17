@@ -4,6 +4,24 @@ import {
   UniversalAddress,
 } from "@wormhole-foundation/sdk";
 
+// Cross-platform base64 helpers (no Node.js Buffer dependency)
+function uint8ArrayToBase64(bytes: Uint8Array): string {
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
+function base64ToUint8Array(base64: string): Uint8Array {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
+}
+
 /**
  * Serializes a Wormhole receipt for JSON transport.
  *
@@ -31,10 +49,18 @@ export function serializeReceipt(
       if (typeof value === "bigint") {
         return { __type: "bigint", value: value.toString() };
       }
+      // Check UniversalAddress before Uint8Array — if the SDK ever makes
+      // UniversalAddress extend Uint8Array the order matters.
+      if (value instanceof UniversalAddress) {
+        return {
+          __type: "UniversalAddress",
+          value: uint8ArrayToBase64(value.toUint8Array()),
+        };
+      }
       if (value instanceof Uint8Array) {
         return {
           __type: "Uint8Array",
-          value: Buffer.from(value).toString("base64"),
+          value: uint8ArrayToBase64(value),
         };
       }
       return value;
@@ -64,19 +90,24 @@ export function deserializeReceipt(
     if (value && typeof value === "object") {
       const objValue = value as Record<string, unknown>;
 
-      // Handle serialized BigInt and Uint8Array
+      // Handle serialized BigInt, Uint8Array, and UniversalAddress
       if ("__type" in objValue) {
         if (objValue.__type === "bigint") {
           return BigInt(objValue.value as string);
         }
-        if (objValue.__type === "Uint8Array") {
-          return new Uint8Array(
-            Buffer.from(objValue.value as string, "base64"),
+        if (objValue.__type === "UniversalAddress") {
+          return new UniversalAddress(
+            base64ToUint8Array(objValue.value as string),
           );
+        }
+        if (objValue.__type === "Uint8Array") {
+          return base64ToUint8Array(objValue.value as string);
         }
       }
 
-      // Reconstruct UniversalAddress objects for CCTP message address fields
+      // Backwards-compatible fallback: reconstruct UniversalAddress for known
+      // CCTP message address fields that were serialized without __type markers
+      // (i.e. data produced before UniversalAddress-aware serialization).
       const addressFields = [
         "sender",
         "recipient",

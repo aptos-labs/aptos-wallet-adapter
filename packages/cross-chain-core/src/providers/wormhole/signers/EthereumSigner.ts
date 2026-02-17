@@ -13,7 +13,7 @@ export async function signAndSendTransaction(
   options: any,
 ): Promise<string> {
   if (!wallet) {
-    throw new Error("wallet.sendTransaction is undefined").message;
+    throw new Error("wallet.sendTransaction is undefined");
   }
   // Ensure the signer is connected to the correct chain
   const chainId = await (
@@ -24,7 +24,7 @@ export async function signAndSendTransaction(
   const actualChainId = parseInt(chainId, 16);
 
   if (!actualChainId)
-    throw new Error("No signer found for chain" + chainName).message;
+    throw new Error("No signer found for chain" + chainName);
   const expectedChainId = request.transaction.chainId
     ? getBigInt(request.transaction.chainId)
     : undefined;
@@ -35,7 +35,7 @@ export async function signAndSendTransaction(
   ) {
     throw new Error(
       `Signer is not connected to the right chain. Expected ${expectedChainId}, got ${actualChainId}`,
-    ).message;
+    );
   }
 
   const provider = new ethers.BrowserProvider(

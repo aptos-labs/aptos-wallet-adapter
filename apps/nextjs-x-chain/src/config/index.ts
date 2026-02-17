@@ -17,7 +17,9 @@ export const DAPP_NETWORK: Network.MAINNET | Network.TESTNET =
   (process.env.NEXT_PUBLIC_DAPP_NETWORK as Network.MAINNET | Network.TESTNET) || Network.TESTNET;
 
 // Initialize cross-chain core (singleton)
-// Use the appropriate Solana RPC based on the network
+// Use the appropriate Solana RPC based on the network.
+// NOTE: NEXT_PUBLIC_ env vars are bundled into client JS. If your RPC URL contains
+// an API key, consider using a proxy or a public endpoint here to avoid exposing it.
 const solanaRpc =
   DAPP_NETWORK === Network.MAINNET
     ? process.env.NEXT_PUBLIC_SOLANA_RPC_MAINNET
@@ -28,7 +30,6 @@ export const crossChainCore = new CrossChainCore({
     aptosNetwork: DAPP_NETWORK,
     solanaConfig: {
       rpc: solanaRpc || undefined,
-      serverClaimUrl: "/api/claim-withdraw",
     },
   },
 });

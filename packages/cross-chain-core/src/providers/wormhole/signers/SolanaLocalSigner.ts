@@ -68,7 +68,7 @@ export class SolanaLocalSigner<N extends Network, C extends Chain>
   private retryIntervalMs: number;
   private priorityFeeConfig?: PriorityFeeConfig;
   private verbose: boolean;
-  private _claimedTransactionHashes: string = "";
+  private _claimedTransactionHashes: string[] = [];
 
   constructor(config: SolanaLocalSignerConfig) {
     this.keypair = config.keypair;
@@ -87,17 +87,22 @@ export class SolanaLocalSigner<N extends Network, C extends Chain>
     return this.keypair.publicKey.toBase58();
   }
 
+  /**
+   * Returns all transaction hashes from the most recent signAndSend call,
+   * joined by comma. If only one transaction was signed, returns a single hash string.
+   */
   claimedTransactionHashes(): string {
-    return this._claimedTransactionHashes;
+    return this._claimedTransactionHashes.join(",");
   }
 
   async signAndSend(txs: UnsignedTransaction<N, C>[]): Promise<TxHash[]> {
     const txHashes: TxHash[] = [];
+    this._claimedTransactionHashes = [];
 
     for (const tx of txs) {
       const txId = await this.signAndSendTransaction(tx);
       txHashes.push(txId);
-      this._claimedTransactionHashes = txId;
+      this._claimedTransactionHashes.push(txId);
     }
     return txHashes;
   }
@@ -111,7 +116,14 @@ export class SolanaLocalSigner<N extends Network, C extends Chain>
     // Sometimes it's nested: request.transaction.transaction
     let unsignedTx = request.transaction ?? request;
 
+    // Capture additional signers before unwrapping.
+    // SolanaUnsignedTransaction nests them at request.transaction.signers
+    // (see SolanaSigner.ts for the client-side equivalent).
+    const additionalSigners = request.transaction?.signers;
+
     // Unwrap nested transaction wrappers (Wormhole SDK's SolanaUnsignedTransaction)
+    const MAX_UNWRAP_DEPTH = 10;
+    let unwrapDepth = 0;
     while (
       unsignedTx &&
       typeof unsignedTx === "object" &&
@@ -119,6 +131,11 @@ export class SolanaLocalSigner<N extends Network, C extends Chain>
       !(unsignedTx instanceof Transaction) &&
       !("signatures" in unsignedTx && "message" in unsignedTx)
     ) {
+      if (++unwrapDepth > MAX_UNWRAP_DEPTH) {
+        throw new Error(
+          "Transaction unwrapping exceeded maximum depth — possible circular nesting",
+        );
+      }
       unsignedTx = unsignedTx.transaction;
     }
 
@@ -135,11 +152,17 @@ export class SolanaLocalSigner<N extends Network, C extends Chain>
 
       // Note: Priority fees for versioned transactions would require rebuilding
       // the message, which is more complex. For now, we skip priority fees for versioned txs.
+      if (this.verbose || this.priorityFeeConfig) {
+        console.warn(
+          "SolanaLocalSigner: Versioned transaction detected — priority fees are not applied. " +
+          "Consider using legacy transactions if priority fees are required.",
+        );
+      }
       unsignedTx.sign([this.keypair]);
 
       // Also sign with any additional signers from Wormhole SDK
-      if (request.signers && request.signers.length > 0) {
-        unsignedTx.sign(request.signers);
+      if (additionalSigners && additionalSigners.length > 0) {
+        unsignedTx.sign(additionalSigners);
       }
     } else if (unsignedTx instanceof Transaction) {
       // Legacy transaction handling
@@ -156,12 +179,14 @@ export class SolanaLocalSigner<N extends Network, C extends Chain>
         );
       }
 
-      // Sign with the local keypair
-      unsignedTx.sign(this.keypair);
-
-      // Also sign with any additional signers from Wormhole SDK
-      if (request.signers) {
-        unsignedTx.partialSign(...request.signers);
+      // Sign with the local keypair (and any additional signers in a single call).
+      // Transaction.sign() resets the signatures array to only the provided
+      // signers, so calling partialSign() afterwards for extra signers would
+      // throw "unknown signer". Passing everyone to sign() at once avoids this.
+      if (additionalSigners && additionalSigners.length > 0) {
+        unsignedTx.sign(this.keypair, ...additionalSigners);
+      } else {
+        unsignedTx.sign(this.keypair);
       }
     } else if (
       unsignedTx.recentBlockhash !== undefined ||
@@ -182,10 +207,12 @@ export class SolanaLocalSigner<N extends Network, C extends Chain>
         );
       }
 
-      unsignedTx.sign(this.keypair);
-
-      if (request.signers) {
-        unsignedTx.partialSign(...request.signers);
+      // Same rationale as the instanceof Transaction branch above:
+      // include all signers in a single sign() call to avoid "unknown signer".
+      if (additionalSigners && additionalSigners.length > 0) {
+        unsignedTx.sign(this.keypair, ...additionalSigners);
+      } else {
+        unsignedTx.sign(this.keypair);
       }
     } else {
       throw new Error(

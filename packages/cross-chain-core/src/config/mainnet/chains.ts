@@ -16,7 +16,7 @@ export const mainnetChains: ChainsConfig = {
     key: "Solana",
     context: Context.SOLANA,
     displayName: "Solana",
-    explorerUrl: "https://solscan.io/",
+    explorerUrl: "https://solscan.io",
     explorerName: "Solscan",
     chainId: 0,
     icon: "Solana",

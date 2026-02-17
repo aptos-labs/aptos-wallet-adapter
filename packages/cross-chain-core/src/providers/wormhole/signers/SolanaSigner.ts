@@ -38,7 +38,7 @@ export async function signAndSendTransaction(
   crossChainCore?: CrossChainCore,
 ) {
   if (!wallet || !(wallet instanceof SolanaDerivedWallet)) {
-    throw new Error("Invalid wallet type or missing Solana wallet").message;
+    throw new Error("Invalid wallet type or missing Solana wallet");
   }
 
   const commitment = options?.commitment ?? "finalized";
@@ -61,12 +61,12 @@ export async function signAndSendTransaction(
   );
 
   if (!wallet.solanaWallet.signTransaction) {
-    throw new Error("Wallet does not support signing transactions").message;
+    throw new Error("Wallet does not support signing transactions");
   }
 
   const tx = await wallet.solanaWallet.signTransaction(unsignedTx);
 
-  if (!tx) throw new Error("Failed to sign transaction").message;
+  if (!tx) throw new Error("Failed to sign transaction");
 
   // Order matters. Phantom's Lighthouse security requires wallet to sign first,
   // then additional signers sign afterward
@@ -85,7 +85,7 @@ export async function signAndSendTransaction(
       connection,
       commitment,
       retryIntervalMs: 5000,
-      verbose: true, // Client-side transactions should log progress
+      verbose: false,
     },
   );
 
@@ -112,7 +112,7 @@ export async function setPriorityFeeInstructions(
     connection,
     unsignedTx,
     priorityFeeConfig,
-    true, // verbose logging for client-side
+    false,
   );
 
   return unsignedTx;

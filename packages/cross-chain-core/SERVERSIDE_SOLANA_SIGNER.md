@@ -43,6 +43,15 @@ interface SolanaLocalSignerConfig {
   commitment?: Commitment;
   /** Retry interval in ms when transaction is not confirmed (default: 5000) */
   retryIntervalMs?: number;
+  /** Priority fee configuration for faster transaction landing */
+  priorityFeeConfig?: {
+    percentile?: number;       // Percentile of recent fees (default: 0.9)
+    percentileMultiple?: number; // Multiplier for the fee (default: 1)
+    min?: number;              // Minimum fee in microlamports (default: 100_000)
+    max?: number;              // Maximum fee in microlamports (default: 100_000_000)
+  };
+  /** Enable verbose logging (default: false) */
+  verbose?: boolean;
 }
 ```
 
@@ -74,9 +83,15 @@ await cctpRoute.complete(signer, receipt);
 {
   receipt: routes.Receipt,        // Wormhole receipt (contains BigInt/Uint8Array)
   destinationAddress: string,     // Solana address to receive USDC
-  sourceChain: string             // "Solana"
+  sourceChain: string             // The chain that initiated the withdraw (e.g. "Solana")
 }
 ```
+
+> **Note on `sourceChain`**: In the withdraw flow, `sourceChain` refers to the chain
+> that initiated the original cross-chain transfer request (the non-Aptos chain).
+> For a withdrawal from Aptos to Solana, `sourceChain` is `"Solana"` because the
+> user started the flow from the Solana context. Don't confuse this with the chain
+> that burns the USDC (which is Aptos).
 
 ### Response
 ```typescript
@@ -106,28 +121,17 @@ export const crossChainCore = new CrossChainCore({
 
 ### 2. Implement the API Route (Server-Side)
 
-Here's a complete Next.js API route implementation:
+📖 **See [`apps/nextjs-x-chain/src/app/api/claim-withdraw/route.ts`](../../apps/nextjs-x-chain/src/app/api/claim-withdraw/route.ts) for a complete working Next.js API route implementation.**
+
+The reference implementation includes:
+- Origin/referrer validation to prevent cross-origin abuse
+- Lazy-cached Wormhole SDK initialization (avoids re-creating on every request)
+- Server-only environment variables for RPC URLs and signer keys
+- Receipt deserialization and CCTP claim completion via `SolanaLocalSigner`
+
+Key imports for your own implementation:
 
 ```typescript
-/**
- * Server-side API route for claiming CCTP withdrawals on Solana.
- *
- * This endpoint receives an attested Wormhole receipt from the client SDK
- * and completes the claim transaction on Solana using a server-managed keypair.
- * This eliminates the need for users to sign a second transaction after attestation.
- *
- * Steps:
- * 1. Parse and validate request body (receipt, destinationAddress, sourceChain)
- * 2. Initialize Wormhole SDK and create CCTP route
- * 3. Create the local signer with appropriate RPC endpoint
- * 4. Deserialize the receipt and complete the claim (USDC minted to address in receipt)
- */
-
-// app/api/claim-withdraw/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import { Connection, Keypair } from "@solana/web3.js";
-import bs58 from "bs58";
-import { Network } from "@aptos-labs/ts-sdk";
 import {
   SolanaLocalSigner,
   mainnetTokens,
@@ -138,90 +142,6 @@ import {
 import { wormhole } from "@wormhole-foundation/sdk";
 import aptos from "@wormhole-foundation/sdk/aptos";
 import solana from "@wormhole-foundation/sdk/solana";
-
-/** Server-only env var for the Solana claim signer private key (base58 encoded) */
-const SOLANA_CLAIM_SIGNER_KEY = process.env.SOLANA_CLAIM_SIGNER_KEY;
-
-/** Determines network (mainnet/testnet) from environment */
-const DAPP_NETWORK: Network.MAINNET | Network.TESTNET =
-  (process.env.NEXT_PUBLIC_DAPP_NETWORK as string) === "mainnet"
-    ? Network.MAINNET
-    : Network.TESTNET;
-
-/**
- * Loads the Solana keypair from environment variable.
- * @throws Error if env var is missing or invalid
- */
-function getSolanaKeypair(): Keypair {
-  if (!SOLANA_CLAIM_SIGNER_KEY) {
-    throw new Error("SOLANA_CLAIM_SIGNER_KEY env var is not set");
-  }
-
-  try {
-    return Keypair.fromSecretKey(bs58.decode(SOLANA_CLAIM_SIGNER_KEY));
-  } catch (error) {
-    throw new Error(
-      "Invalid SOLANA_CLAIM_SIGNER_KEY format. Expected base58-encoded private key.",
-    );
-  }
-}
-
-/**
- * Handles POST requests to claim CCTP withdrawals on Solana.
- *
- * Expected body: { receipt, destinationAddress, sourceChain }
- * Returns: { destinationChainTxnId }
- */
-export async function POST(request: NextRequest) {
-  try {
-    // Step 1: Parse and validate request body
-    const body = await request.json();
-    const { receipt: serializedReceipt, destinationAddress, sourceChain } = body;
-
-    if (!serializedReceipt || !destinationAddress || !sourceChain) {
-      return NextResponse.json(
-        { error: "Missing required fields: receipt, destinationAddress, sourceChain" },
-        { status: 400 },
-      );
-    }
-
-    if (sourceChain !== "Solana") {
-      return NextResponse.json(
-        { error: "Server-side claim is currently only supported for Solana" },
-        { status: 400 },
-      );
-    }
-
-    // Step 2: Initialize Wormhole SDK and create CCTP route
-    const isMainnet = DAPP_NETWORK === Network.MAINNET;
-    const wh = await wormhole(isMainnet ? "Mainnet" : "Testnet", [aptos, solana]);
-    const tokens = isMainnet ? mainnetTokens : testnetTokens;
-
-    const { route: cctpRoute } = await createCCTPRoute(wh, "Aptos", "Solana", tokens);
-
-    // Step 3: Create the local signer with appropriate RPC endpoint
-    const solanaRpcUrl = isMainnet
-      ? process.env.NEXT_PUBLIC_SOLANA_RPC_MAINNET ?? "https://api.mainnet-beta.solana.com"
-      : process.env.NEXT_PUBLIC_SOLANA_RPC_DEVNET ?? "https://api.devnet.solana.com";
-
-    const connection = new Connection(solanaRpcUrl);
-    const keypair = getSolanaKeypair();
-    const localSigner = new SolanaLocalSigner({ keypair, connection });
-
-    // Step 4: Deserialize receipt and complete the claim — USDC is minted to the address in the receipt
-    const receipt = deserializeReceipt(serializedReceipt);
-    await cctpRoute.complete(localSigner, receipt);
-    const destinationChainTxnId = localSigner.claimedTransactionHashes();
-
-    return NextResponse.json({ destinationChainTxnId });
-  } catch (error: any) {
-    console.error("Error in claim-withdraw API:", error);
-    return NextResponse.json(
-      { error: error.message || "Internal server error" },
-      { status: 500 },
-    );
-  }
-}
 ```
 
 ### 3. Set Environment Variable
@@ -240,11 +160,13 @@ SOLANA_CLAIM_SIGNER_KEY=5J3mBbAH58CpQ3Y2S4VNFGyvW2...
 
 ## Security Considerations
 
-1. **Never expose the private key to the client** - Use server-only environment variables
-2. **Fund the keypair** - It needs SOL for transaction fees (rent is reclaimed)
-3. **Rotate keys regularly** - Follow security best practices
-4. **Use rate limiting** - Protect your API endpoint from abuse
-5. **Validate inputs** - Ensure the receipt is valid before processing
+1. **Never expose the private key to the client** - Use server-only environment variables (no `NEXT_PUBLIC_` prefix)
+2. **Validate request origin** - Check Origin/Referer headers to prevent cross-origin abuse (see reference implementation)
+3. **Use server-only RPC URLs** - Don't use `NEXT_PUBLIC_` prefixed env vars for RPC URLs containing API keys in server routes
+4. **Fund the keypair** - It needs SOL for transaction fees (rent is reclaimed)
+5. **Rotate keys regularly** - Follow security best practices
+6. **Use rate limiting** - Protect your API endpoint from abuse (consider per-IP or per-address limits). Note: the reference implementation uses an in-memory rate limiter which resets on each serverless cold start. For production, consider using a persistent store (e.g., Redis, Upstash) for rate limiting.
+7. **Validate inputs** - Ensure the receipt is valid before processing
 
 ## How It Works
 

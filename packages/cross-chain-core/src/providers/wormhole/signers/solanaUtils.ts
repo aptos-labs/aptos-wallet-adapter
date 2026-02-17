@@ -367,17 +367,26 @@ function checkKnownSimulationError(response: SimulatedTransactionResponse): bool
 }
 
 /**
+ * Checks whether a hostname is exactly the given domain or a subdomain of it.
+ * e.g. isHostOrSubdomainOf("api.triton.one", "triton.one") => true
+ *      isHostOrSubdomainOf("not-triton.com", "triton.one") => false
+ */
+function isHostOrSubdomainOf(hostname: string, base: string): boolean {
+  return hostname === base || hostname.endsWith(`.${base}`);
+}
+
+/**
  * Determines the RPC provider from the endpoint URL.
  */
 export function determineRpcProvider(endpoint: string): SolanaRpcProvider {
   try {
     const url = new URL(endpoint);
     const hostname = url.hostname;
-    if (hostname.includes("rpcpool.com") || hostname.includes("triton")) {
+    if (isHostOrSubdomainOf(hostname, "rpcpool.com") || isHostOrSubdomainOf(hostname, "triton.one")) {
       return "triton";
-    } else if (hostname.includes("helius-rpc.com") || hostname.includes("helius")) {
+    } else if (isHostOrSubdomainOf(hostname, "helius-rpc.com") || isHostOrSubdomainOf(hostname, "helius.xyz")) {
       return "helius";
-    } else if (hostname.includes("ankr.com")) {
+    } else if (isHostOrSubdomainOf(hostname, "ankr.com")) {
       return "ankr";
     } else {
       return "unknown";

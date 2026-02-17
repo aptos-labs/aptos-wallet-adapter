@@ -103,3 +103,38 @@ export interface WormholeClaimWithdrawRequest {
 export interface WormholeClaimWithdrawResponse {
   destinationChainTxnId: string;
 }
+
+/**
+ * Error thrown when the withdraw flow fails *after* the Aptos burn
+ * transaction has already been submitted (i.e. during attestation tracking
+ * or destination-chain claiming).
+ *
+ * Consumers should check `instanceof WithdrawError` in their catch block
+ * to recover the `originChainTxnId` and display an explorer link so the
+ * user can verify their burn on-chain.
+ */
+export class WithdrawError extends Error {
+  /** Aptos burn transaction hash — always available when this error is thrown. */
+  readonly originChainTxnId: string;
+  /** The withdraw phase that failed ("tracking" or "claiming"). */
+  readonly phase: WithdrawPhase;
+  /**
+   * The underlying error that caused this failure.
+   * Mirrors ES2022 Error.cause — declared explicitly because the project's
+   * TypeScript lib target does not include ES2022 ErrorOptions.
+   */
+  readonly cause?: unknown;
+
+  constructor(
+    message: string,
+    originChainTxnId: string,
+    phase: WithdrawPhase,
+    cause?: unknown,
+  ) {
+    super(message);
+    this.name = "WithdrawError";
+    this.originChainTxnId = originChainTxnId;
+    this.phase = phase;
+    this.cause = cause;
+  }
+}
