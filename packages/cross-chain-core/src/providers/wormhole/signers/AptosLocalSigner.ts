@@ -29,7 +29,7 @@ export class AptosLocalSigner<
   _options: any;
   _wallet: Account;
   _sponsorAccount: Account | GasStationApiKey | undefined;
-  _claimedTransactionHashes: string;
+  _claimedTransactionHashes: string[] = [];
   _dappNetwork: AptosNetwork;
   constructor(
     chain: C,
@@ -42,7 +42,6 @@ export class AptosLocalSigner<
     this._options = options;
     this._wallet = wallet;
     this._sponsorAccount = feePayerAccount;
-    this._claimedTransactionHashes = "";
     this._dappNetwork = dappNetwork;
   }
 
@@ -54,11 +53,12 @@ export class AptosLocalSigner<
   }
 
   claimedTransactionHashes(): string {
-    return this._claimedTransactionHashes;
+    return this._claimedTransactionHashes.join(",");
   }
 
   async signAndSend(txs: UnsignedTransaction<N, C>[]): Promise<TxHash[]> {
     const txHashes: TxHash[] = [];
+    this._claimedTransactionHashes = [];
 
     for (const tx of txs) {
       const txId = await signAndSendTransaction(
@@ -68,7 +68,7 @@ export class AptosLocalSigner<
         this._dappNetwork,
       );
       txHashes.push(txId);
-      this._claimedTransactionHashes = txId;
+      this._claimedTransactionHashes.push(txId);
     }
     return txHashes;
   }

@@ -1,7 +1,5 @@
 import {
-  chainToPlatform,
   routes,
-  TokenId,
   Wormhole,
   wormhole,
   PlatformLoader,
@@ -19,9 +17,11 @@ import {
   CrossChainCore,
 } from "../../CrossChainCore";
 import { logger } from "../../utils/logger";
+import { serializeReceipt } from "../../utils/receiptSerialization";
 import { AptosLocalSigner } from "./signers/AptosLocalSigner";
 import { Signer } from "./signers/Signer";
 import { ChainConfig } from "../../config";
+import { createCCTPRoute } from "./utils";
 import {
   WormholeQuoteRequest,
   WormholeQuoteResponse,
@@ -34,6 +34,11 @@ import {
   WormholeClaimTransferRequest,
   WormholeWithdrawRequest,
   WormholeWithdrawResponse,
+  WormholeInitiateWithdrawRequest,
+  WormholeInitiateWithdrawResponse,
+  WormholeClaimWithdrawRequest,
+  WormholeClaimWithdrawResponse,
+  WithdrawError,
 } from "./types";
 import { SolanaDerivedWallet } from "@aptos-labs/derived-wallet-solana";
 import { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
@@ -54,6 +59,7 @@ export class WormholeProvider implements CrossChainProvider<
   private wormholeRoute: WormholeRouteResponse | undefined;
   private wormholeRequest: WormholeRequest | undefined;
   private wormholeQuote: WormholeQuoteResponse | undefined;
+  private destinationChain?: Chain;
 
   constructor(core: CrossChainCore) {
     this.crossChainCore = core;
@@ -100,43 +106,16 @@ export class WormholeProvider implements CrossChainProvider<
       throw new Error("Wormhole context not initialized");
     }
 
-    const { sourceToken, destToken } = this.getTokenInfo(
+    const { route: cctpRoute, request } = await createCCTPRoute(
+      this._wormholeContext,
       sourceChain,
       destinationChain,
+      this.crossChainCore.TOKENS,
     );
-
-    const destContext = this._wormholeContext
-      .getPlatform(chainToPlatform(destinationChain))
-      .getChain(destinationChain);
-    const sourceContext = this._wormholeContext
-      .getPlatform(chainToPlatform(sourceChain))
-      .getChain(sourceChain);
-
-    logger.log("sourceContext", sourceContext);
-    logger.log("sourceToken", sourceToken);
-
-    logger.log("destContext", destContext);
-    logger.log("destToken", destToken);
-
-    const request = await routes.RouteTransferRequest.create(
-      this._wormholeContext,
-      {
-        source: sourceToken,
-        destination: destToken,
-      },
-      sourceContext,
-      destContext,
-    );
-
-    const resolver = this._wormholeContext.resolver([
-      routes.CCTPRoute, // manual CCTP
-    ]);
-
-    const route = await resolver.findRoutes(request);
-    const cctpRoute = route[0];
 
     this.wormholeRoute = cctpRoute;
     this.wormholeRequest = request;
+    this.destinationChain = destinationChain;
 
     return { route: cctpRoute, request };
   }
@@ -168,12 +147,12 @@ export class WormholeProvider implements CrossChainProvider<
     const validated = await route.validate(request, transferParams);
     if (!validated.valid) {
       logger.log("invalid", validated.valid);
-      throw new Error(`Invalid quote: ${validated.error}`).message;
+      throw new Error(`Invalid quote: ${validated.error}`);
     }
     const quote = await route.quote(request, validated.params);
     if (!quote.success) {
       logger.log("quote failed", quote.success);
-      throw new Error(`Invalid quote: ${quote.error}`).message;
+      throw new Error(`Invalid quote: ${quote.error}`);
     }
     this.wormholeQuote = quote;
     logger.log("quote", quote);
@@ -333,18 +312,18 @@ export class WormholeProvider implements CrossChainProvider<
     return { originChainTxnId, destinationChainTxnId };
   }
 
-  async withdraw(
-    input: WormholeWithdrawRequest,
-  ): Promise<WormholeWithdrawResponse> {
-    const { sourceChain, wallet, destinationAddress, sponsorAccount } = input;
-    logger.log("sourceChain", sourceChain);
-    logger.log("wallet", wallet);
-    logger.log("destinationAddress", destinationAddress);
-    logger.log("sponsorAccount", sponsorAccount);
+  // --- Split withdraw flow: initiateWithdraw + trackWithdraw + claimWithdraw ---
 
-    if (!this._wormholeContext) {
-      await this.setWormholeContext(sourceChain);
-    }
+  /**
+   * Phase 1: Initiates a withdraw by burning USDC on Aptos.
+   * The user signs the Aptos burn transaction via their wallet.
+   * Returns a receipt that can be tracked and later claimed.
+   */
+  async initiateWithdraw(
+    input: WormholeInitiateWithdrawRequest,
+  ): Promise<WormholeInitiateWithdrawResponse> {
+    const { wallet, destinationAddress, sponsorAccount } = input;
+
     if (!this._wormholeContext) {
       throw new Error("Wormhole context not initialized");
     }
@@ -355,95 +334,198 @@ export class WormholeProvider implements CrossChainProvider<
     const signer = new Signer(
       this.getChainConfig("Aptos"),
       (
-        await input.wallet.features["aptos:account"].account()
+        await wallet.features["aptos:account"].account()
       ).address.toString(),
       {},
-      input.wallet,
+      wallet,
       this.crossChainCore,
       sponsorAccount,
     );
 
-    logger.log("signer", signer);
-    logger.log("wormholeRequest", this.wormholeRequest);
-    logger.log("wormholeQuote", this.wormholeQuote);
-    logger.log(
-      "Wormhole.chainAddress",
-      Wormhole.chainAddress(sourceChain, input.destinationAddress.toString()),
+    const wormholeDestAddress = Wormhole.chainAddress(
+      this.destinationChain!,
+      destinationAddress.toString(),
     );
 
-    let receipt = await this.wormholeRoute.initiate(
+    const receipt = await this.wormholeRoute.initiate(
       this.wormholeRequest,
       signer,
       this.wormholeQuote,
-      Wormhole.chainAddress(sourceChain, input.destinationAddress.toString()),
+      wormholeDestAddress,
     );
-    logger.log("receipt", receipt);
+    logger.log("initiateWithdraw receipt", receipt);
 
     const originChainTxnId =
       "originTxs" in receipt
         ? receipt.originTxs[receipt.originTxs.length - 1].txid
         : undefined;
 
+    return { originChainTxnId: originChainTxnId || "", receipt };
+  }
+
+  /**
+   * Phase 2: Tracks a withdraw receipt until attestation is ready.
+   * This polls Wormhole and returns once the receipt reaches the Attested state.
+   */
+  async trackWithdraw(
+    receipt: routes.Receipt,
+  ): Promise<routes.Receipt> {
+    if (!this.wormholeRoute) {
+      throw new Error("Wormhole route not initialized");
+    }
+
     let retries = 0;
     const maxRetries = 5;
-    const baseDelay = 1000; // Initial delay of 1 second
+    const baseDelay = 1000;
 
     while (retries < maxRetries) {
       try {
         for await (receipt of this.wormholeRoute.track(receipt, 120 * 1000)) {
-          if (receipt.state >= TransferState.SourceInitiated) {
-            logger.log("Receipt is on track ", receipt);
-
-            try {
-              const signer = new Signer(
-                this.getChainConfig(sourceChain),
-                destinationAddress.toString(),
-                {},
-                wallet,
-                this.crossChainCore,
-              );
-
-              if (routes.isManual(this.wormholeRoute)) {
-                const circleAttestationReceipt =
-                  await this.wormholeRoute.complete(signer, receipt);
-                logger.log("Claim receipt: ", circleAttestationReceipt);
-
-                const destinationChainTxnId = signer.claimedTransactionHashes();
-                return {
-                  originChainTxnId: originChainTxnId || "",
-                  destinationChainTxnId,
-                };
-              } else {
-                // Should be unreachable
-                return {
-                  originChainTxnId: originChainTxnId || "",
-                  destinationChainTxnId: "",
-                };
-              }
-            } catch (e) {
-              console.error("Failed to claim", e);
-              return {
-                originChainTxnId: originChainTxnId || "",
-                destinationChainTxnId: "",
-              };
-            }
+          if (receipt.state >= TransferState.Attested) {
+            logger.log("trackWithdraw: receipt attested", receipt);
+            return receipt;
           }
         }
       } catch (e) {
         console.error(
-          `Error tracking transfer (attempt ${retries + 1} / ${maxRetries}):`,
+          `Error tracking withdraw (attempt ${retries + 1} / ${maxRetries}):`,
           e,
         );
-        const delay = baseDelay * Math.pow(2, retries); // Exponential backoff
+        const delay = baseDelay * Math.pow(2, retries);
         await sleep(delay);
         retries++;
       }
     }
+    throw new Error("Failed to track withdraw to attested state");
+  }
 
-    return {
-      originChainTxnId: originChainTxnId || "",
-      destinationChainTxnId: "",
-    };
+  /**
+   * Phase 3: Claims the withdraw on the destination chain.
+   *
+   * If the destination is Solana and `solanaConfig.serverClaimUrl` is configured
+   * in the dapp config, the SDK automatically POSTs the attested receipt to that
+   * URL — no wallet popup required. The dapp's server endpoint handles signing
+   * and submitting the claim transaction.
+   *
+   * Otherwise falls back to the wallet-based Signer (triggers wallet popup).
+   */
+  async claimWithdraw(
+    input: WormholeClaimWithdrawRequest,
+  ): Promise<WormholeClaimWithdrawResponse> {
+    const { sourceChain, destinationAddress, receipt } = input;
+
+    // Server-side claim path: Solana destination with configured serverClaimUrl
+    const serverClaimUrl =
+      this.crossChainCore._dappConfig?.solanaConfig?.serverClaimUrl;
+
+    if (sourceChain === "Solana" && serverClaimUrl) {
+      logger.log("claimWithdraw: using server-side claim via", serverClaimUrl);
+
+      const response = await fetch(serverClaimUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          receipt: serializeReceipt(receipt),
+          destinationAddress,
+          sourceChain,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error ||
+            `Server-side claim failed with status ${response.status}`,
+        );
+      }
+
+      const result = await response.json();
+      return { destinationChainTxnId: result.destinationChainTxnId };
+    }
+
+    // Wallet-based claim path
+    if (!this.wormholeRoute) {
+      throw new Error("Wormhole route not initialized");
+    }
+
+    if (!input.wallet) {
+      throw new Error(
+        "Wallet is required for claim when serverClaimUrl is not configured",
+      );
+    }
+
+    const claimSigner = new Signer(
+      this.getChainConfig(sourceChain),
+      destinationAddress,
+      {},
+      input.wallet,
+      this.crossChainCore,
+    );
+
+    if (routes.isManual(this.wormholeRoute)) {
+      const circleAttestationReceipt = await this.wormholeRoute.complete(
+        claimSigner,
+        receipt,
+      );
+      logger.log("claimWithdraw receipt:", circleAttestationReceipt);
+      const destinationChainTxnId = claimSigner.claimedTransactionHashes();
+      return { destinationChainTxnId };
+    } else {
+      throw new Error("Automatic route not supported for manual claim");
+    }
+  }
+
+  /**
+   * Withdraws USDC from Aptos to a destination chain.
+   * Orchestrates all three phases internally:
+   *   1. Initiate — user signs the Aptos burn transaction
+   *   2. Track — wait for Wormhole attestation
+   *   3. Claim — if serverClaimUrl is configured for Solana, delegates to
+   *      the server; otherwise uses the wallet-based signer.
+   *
+   * The optional `onPhaseChange` callback lets the dapp update its UI
+   * as the flow progresses.
+   */
+  async withdraw(
+    input: WormholeWithdrawRequest,
+  ): Promise<WormholeWithdrawResponse> {
+    const { sourceChain, wallet, destinationAddress, sponsorAccount, onPhaseChange } = input;
+
+    // Phase 1: Initiate — user signs Aptos burn
+    onPhaseChange?.("initiating");
+    const { originChainTxnId, receipt } = await this.initiateWithdraw({
+      wallet,
+      destinationAddress,
+      sponsorAccount,
+    });
+
+    // Phases 2 & 3 are wrapped so that, if they fail, the caller still
+    // receives the originChainTxnId (the irreversible Aptos burn).
+    let currentPhase: "tracking" | "claiming" = "tracking";
+    try {
+      // Phase 2: Track — wait for attestation
+      onPhaseChange?.("tracking");
+      const attestedReceipt = await this.trackWithdraw(receipt);
+
+      // Phase 3: Claim — server-side or wallet-based
+      currentPhase = "claiming";
+      onPhaseChange?.("claiming");
+      const { destinationChainTxnId } = await this.claimWithdraw({
+        sourceChain,
+        destinationAddress: destinationAddress.toString(),
+        receipt: attestedReceipt,
+        wallet,
+      });
+
+      return { originChainTxnId, destinationChainTxnId };
+    } catch (error: any) {
+      throw new WithdrawError(
+        error?.message ?? "Withdraw failed after Aptos burn",
+        originChainTxnId,
+        currentPhase,
+        error,
+      );
+    }
   }
 
   getChainConfig(chain: Chain): ChainConfig {
@@ -455,25 +537,5 @@ export class WormholeProvider implements CrossChainProvider<
       throw new Error(`Chain config not found for chain: ${chain}`);
     }
     return chainConfig;
-  }
-
-  getTokenInfo(
-    sourceChain: Chain,
-    destinationChain: Chain,
-  ): {
-    sourceToken: TokenId;
-    destToken: TokenId;
-  } {
-    const sourceToken: TokenId = Wormhole.tokenId(
-      this.crossChainCore.TOKENS[sourceChain].tokenId.chain as Chain,
-      this.crossChainCore.TOKENS[sourceChain].tokenId.address,
-    );
-
-    const destToken: TokenId = Wormhole.tokenId(
-      this.crossChainCore.TOKENS[destinationChain].tokenId.chain as Chain,
-      this.crossChainCore.TOKENS[destinationChain].tokenId.address,
-    );
-
-    return { sourceToken, destToken };
   }
 }

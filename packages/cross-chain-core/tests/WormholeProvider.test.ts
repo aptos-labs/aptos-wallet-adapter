@@ -109,63 +109,6 @@ describe("WormholeProvider", () => {
     });
   });
 
-  describe("getTokenInfo", () => {
-    let testnetCore: CrossChainCore;
-    let testnetProvider: WormholeProvider;
-
-    beforeEach(() => {
-      testnetCore = new CrossChainCore({
-        dappConfig: { aptosNetwork: Network.TESTNET },
-      });
-      testnetProvider = new WormholeProvider(testnetCore);
-    });
-
-    it("should return token info for Solana to Aptos transfer", () => {
-      const { sourceToken, destToken } = testnetProvider.getTokenInfo(
-        "Solana",
-        "Aptos",
-      );
-
-      expect(sourceToken).toBeDefined();
-      expect(destToken).toBeDefined();
-    });
-
-    it("should return token info for Aptos to Solana transfer", () => {
-      const { sourceToken, destToken } = testnetProvider.getTokenInfo(
-        "Aptos",
-        "Solana",
-      );
-
-      expect(sourceToken).toBeDefined();
-      expect(destToken).toBeDefined();
-    });
-
-    it("should return different tokens for source and destination", () => {
-      const { sourceToken, destToken } = testnetProvider.getTokenInfo(
-        "Solana",
-        "Aptos",
-      );
-
-      // Tokens should have different chain references
-      expect(sourceToken).not.toEqual(destToken);
-    });
-
-    it("should return mainnet tokens when core is mainnet", () => {
-      const mainnetCore = new CrossChainCore({
-        dappConfig: { aptosNetwork: Network.MAINNET },
-      });
-      const mainnetProvider = new WormholeProvider(mainnetCore);
-
-      const { sourceToken, destToken } = mainnetProvider.getTokenInfo(
-        "Solana",
-        "Aptos",
-      );
-
-      expect(sourceToken).toBeDefined();
-      expect(destToken).toBeDefined();
-    });
-  });
-
   // Note: getQuote, transfer, and withdraw tests require initializing
   // the Wormhole SDK context which needs network access.
   // These are covered in integration tests.
