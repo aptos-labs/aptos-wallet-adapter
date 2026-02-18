@@ -1,5 +1,16 @@
 # @aptos-labs/wallet-adapter-react
 
+## 8.3.0
+
+### Minor Changes
+
+- f2e7a4e: Add cross chain wallets to wallet registry
+
+### Patch Changes
+
+- Updated dependencies [f2e7a4e]
+  - @aptos-labs/wallet-adapter-core@8.4.0
+
 ## 8.2.2
 
 ### Patch Changes

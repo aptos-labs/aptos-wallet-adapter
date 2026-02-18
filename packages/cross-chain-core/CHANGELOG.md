@@ -1,5 +1,16 @@
 # @aptos-labs/cross-chain-core
 
+## 5.9.0
+
+### Minor Changes
+
+- a01321e: feat(cross-chain-core): add server-side Solana claim support for CCTP withdrawals
+
+### Patch Changes
+
+- Updated dependencies [f2e7a4e]
+  - @aptos-labs/wallet-adapter-core@8.4.0
+
 ## 5.8.2
 
 ### Patch Changes
