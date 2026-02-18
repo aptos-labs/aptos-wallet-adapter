@@ -33,7 +33,7 @@ describe("AptosLocalSigner", () => {
       expect(signer._wallet).toBe(testAccount);
     });
 
-    it("should initialize claimedTransactionHashes as empty string", () => {
+    it("should initialize claimedTransactionHashes as empty array", () => {
       const signer = new AptosLocalSigner(
         "Aptos",
         mockOptions,
@@ -41,7 +41,7 @@ describe("AptosLocalSigner", () => {
         undefined,
       );
 
-      expect(signer._claimedTransactionHashes).toBe("");
+      expect(signer._claimedTransactionHashes).toEqual([]);
     });
 
     it("should accept sponsor account (Account type)", () => {
@@ -138,9 +138,22 @@ describe("AptosLocalSigner", () => {
       );
 
       // Directly modify internal state for testing
-      signer._claimedTransactionHashes = "0xabc123def456";
+      signer._claimedTransactionHashes = ["0xabc123def456"];
 
       expect(signer.claimedTransactionHashes()).toBe("0xabc123def456");
+    });
+
+    it("should join multiple hashes with comma", () => {
+      const signer = new AptosLocalSigner(
+        "Aptos",
+        mockOptions,
+        testAccount,
+        undefined,
+      );
+
+      signer._claimedTransactionHashes = ["0xhash1", "0xhash2"];
+
+      expect(signer.claimedTransactionHashes()).toBe("0xhash1,0xhash2");
     });
   });
 

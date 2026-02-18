@@ -296,6 +296,32 @@ console.log(`Destination TX: ${destinationChainTxnId}`);
 - `originChainTxnId`: Transaction hash on Aptos
 - `destinationChainTxnId`: Transaction hash on the destination chain
 
+### Server-Side Solana Claim (Optional)
+
+When withdrawing USDC from Aptos to Solana, the claim transaction on Solana requires a signature. By default, the user's wallet signs this transaction. However, for a smoother user experience, you can configure a **server-side claim** where your backend signs the Solana claim transaction instead.
+
+**Benefits:**
+- Users only sign once (the Aptos burn transaction)
+- No second wallet popup after the ~60 second attestation wait
+- Seamless one-click withdrawal flow
+
+To enable server-side claiming, configure `serverClaimUrl` in your `solanaConfig`:
+
+```typescript
+const crossChainCore = new CrossChainCore({
+  dappConfig: {
+    aptosNetwork: Network.MAINNET,
+    solanaConfig: {
+      serverClaimUrl: "/api/claim-withdraw", // Your API endpoint
+    },
+  },
+});
+```
+
+When configured, the SDK will automatically POST the attestation receipt to your server endpoint after the Aptos burn transaction is confirmed and attested. Your server then signs and submits the Solana claim transaction using a funded keypair.
+
+📖 **See [SERVERSIDE_SOLANA_SIGNER.md](./SERVERSIDE_SOLANA_SIGNER.md) for complete implementation guide.**
+
 ## Chain ID Mappings
 
 The SDK provides mappings from Ethereum chain IDs to chain configurations:

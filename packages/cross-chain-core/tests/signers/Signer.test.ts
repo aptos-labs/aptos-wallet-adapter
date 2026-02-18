@@ -25,7 +25,7 @@ describe("Signer", () => {
       expect(signer._wallet).toBe(mockWallet);
     });
 
-    it("should initialize claimedTransactionHashes as empty string", () => {
+    it("should initialize claimedTransactionHashes as empty array", () => {
       const signer = new Signer(
         mockChainConfig,
         mockAddress,
@@ -33,7 +33,7 @@ describe("Signer", () => {
         mockWallet,
       );
 
-      expect(signer._claimedTransactionHashes).toBe("");
+      expect(signer._claimedTransactionHashes).toEqual([]);
     });
 
     it("should accept optional crossChainCore", () => {
@@ -147,9 +147,22 @@ describe("Signer", () => {
       );
 
       // Directly modify internal state for testing
-      signer._claimedTransactionHashes = "txHash123";
+      signer._claimedTransactionHashes = ["txHash123"];
 
       expect(signer.claimedTransactionHashes()).toBe("txHash123");
+    });
+
+    it("should join multiple hashes with comma", () => {
+      const signer = new Signer(
+        mockChainConfig,
+        mockAddress,
+        mockOptions,
+        mockWallet,
+      );
+
+      signer._claimedTransactionHashes = ["txHash1", "txHash2", "txHash3"];
+
+      expect(signer.claimedTransactionHashes()).toBe("txHash1,txHash2,txHash3");
     });
   });
 

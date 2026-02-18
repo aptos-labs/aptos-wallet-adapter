@@ -218,6 +218,18 @@ importers:
       '@telegram-apps/sdk':
         specifier: ^2.0.0
         version: 2.11.3
+      '@wormhole-foundation/sdk':
+        specifier: 4.7.1
+        version: 4.7.1(@types/react@18.3.20)(bufferutil@4.0.9)(got@11.8.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)(utf-8-validate@5.0.10)
+      '@wormhole-foundation/sdk-aptos':
+        specifier: 4.7.1
+        version: 4.7.1(got@11.8.6)
+      '@wormhole-foundation/sdk-solana':
+        specifier: 4.7.1
+        version: 4.7.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      bs58:
+        specifier: ^6.0.0
+        version: 6.0.0
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -6648,14 +6660,14 @@ snapshots:
       resize-observer-polyfill: 1.5.1
       throttle-debounce: 5.0.2
 
-  '@apollo/client@3.13.5(@types/react@18.3.20)(graphql@16.10.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@apollo/client@3.13.5(@types/react@18.3.20)(graphql@16.12.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@graphql-typed-document-node/core': 3.2.0(graphql@16.10.0)
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.12.0)
       '@wry/caches': 1.0.1
       '@wry/equality': 0.5.7
       '@wry/trie': 0.5.0
-      graphql: 16.10.0
-      graphql-tag: 2.12.6(graphql@16.10.0)
+      graphql: 16.12.0
+      graphql-tag: 2.12.6(graphql@16.12.0)
       hoist-non-react-statics: 3.3.2
       optimism: 0.18.1
       prop-types: 15.8.1
@@ -6728,8 +6740,8 @@ snapshots:
       '@aptos-labs/aptos-client': 2.0.0(got@11.8.6)
       '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
-      '@scure/bip32': 1.6.2
-      '@scure/bip39': 1.5.4
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
       eventemitter3: 5.0.1
       form-data: 4.0.4
       js-base64: 3.7.7
@@ -7559,7 +7571,7 @@ snapshots:
 
   '@injectivelabs/sdk-ts@1.14.45(@types/react@18.3.20)(bufferutil@4.0.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(utf-8-validate@5.0.10)':
     dependencies:
-      '@apollo/client': 3.13.5(@types/react@18.3.20)(graphql@16.10.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@apollo/client': 3.13.5(@types/react@18.3.20)(graphql@16.12.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@cosmjs/amino': 0.33.1
       '@cosmjs/proto-signing': 0.33.1
       '@cosmjs/stargate': 0.33.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
@@ -7577,7 +7589,7 @@ snapshots:
       '@injectivelabs/ts-types': 1.14.43
       '@injectivelabs/utils': 1.14.43
       '@metamask/eth-sig-util': 4.0.1
-      '@noble/curves': 1.8.1
+      '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
       axios: 1.12.2
       bech32: 2.0.0
@@ -7587,7 +7599,7 @@ snapshots:
       ethereumjs-util: 7.1.5
       ethers: 6.13.5(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       google-protobuf: 3.21.4
-      graphql: 16.10.0
+      graphql: 16.12.0
       http-status-codes: 2.3.0
       keccak256: 1.0.6
       secp256k1: 4.0.4
@@ -9549,7 +9561,7 @@ snapshots:
 
   '@wormhole-foundation/sdk-base@4.7.1':
     dependencies:
-      '@scure/base': 1.2.4
+      '@scure/base': 1.2.6
       binary-layout: 1.2.0
 
   '@wormhole-foundation/sdk-connect@4.7.1':
@@ -9632,7 +9644,7 @@ snapshots:
 
   '@wormhole-foundation/sdk-definitions@4.7.1':
     dependencies:
-      '@noble/curves': 1.8.1
+      '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
       '@wormhole-foundation/sdk-base': 4.7.1
 
@@ -11403,9 +11415,9 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  graphql-tag@2.12.6(graphql@16.10.0):
+  graphql-tag@2.12.6(graphql@16.12.0):
     dependencies:
-      graphql: 16.10.0
+      graphql: 16.12.0
       tslib: 2.8.1
 
   graphql@16.10.0: {}
@@ -12718,7 +12730,7 @@ snapshots:
 
   rechoir@0.6.2:
     dependencies:
-      resolve: 1.22.10
+      resolve: 1.22.11
 
   redent@3.0.0:
     dependencies:
@@ -12779,7 +12791,6 @@ snapshots:
       is-core-module: 2.16.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
-    optional: true
 
   resolve@2.0.0-next.5:
     dependencies:

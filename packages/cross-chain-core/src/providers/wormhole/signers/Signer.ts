@@ -37,7 +37,7 @@ export class Signer<
   _wallet: AdapterWallet;
   _crossChainCore: CrossChainCore;
   _sponsorAccount: Account | GasStationApiKey | undefined;
-  _claimedTransactionHashes: string;
+  _claimedTransactionHashes: string[] = [];
 
   constructor(
     chain: ChainConfig,
@@ -53,7 +53,6 @@ export class Signer<
     this._wallet = wallet;
     this._crossChainCore = crossChainCore;
     this._sponsorAccount = sponsorAccount;
-    this._claimedTransactionHashes = "";
   }
 
   chain(): C {
@@ -64,11 +63,12 @@ export class Signer<
   }
 
   claimedTransactionHashes(): string {
-    return this._claimedTransactionHashes;
+    return this._claimedTransactionHashes.join(",");
   }
 
   async signAndSend(txs: UnsignedTransaction<N, C>[]): Promise<TxHash[]> {
     const txHashes: TxHash[] = [];
+    this._claimedTransactionHashes = [];
 
     for (const tx of txs) {
       const txId = await signAndSendTransaction(
@@ -80,7 +80,7 @@ export class Signer<
         this._sponsorAccount,
       );
       txHashes.push(txId);
-      this._claimedTransactionHashes = txId;
+      this._claimedTransactionHashes.push(txId);
     }
     return txHashes;
   }

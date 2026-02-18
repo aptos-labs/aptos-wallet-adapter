@@ -17,10 +17,20 @@ export const DAPP_NETWORK: Network.MAINNET | Network.TESTNET =
   (process.env.NEXT_PUBLIC_DAPP_NETWORK as Network.MAINNET | Network.TESTNET) || Network.TESTNET;
 
 // Initialize cross-chain core (singleton)
-// For mainnet, use custom Solana RPC from env; for testnet, use CrossChainCore defaults
+// Use the appropriate Solana RPC based on the network.
+// NOTE: NEXT_PUBLIC_ env vars are bundled into client JS. If your RPC URL contains
+// an API key, consider using a proxy or a public endpoint here to avoid exposing it.
+const solanaRpc =
+  DAPP_NETWORK === Network.MAINNET
+    ? process.env.NEXT_PUBLIC_SOLANA_RPC_MAINNET
+    : process.env.NEXT_PUBLIC_SOLANA_RPC_DEVNET;
+
 export const crossChainCore = new CrossChainCore({
   dappConfig: {
     aptosNetwork: DAPP_NETWORK,
+    solanaConfig: {
+      rpc: solanaRpc || undefined,
+    },
   },
 });
 
@@ -49,4 +59,5 @@ export const claimSponsorAccount = Account.fromPrivateKey({
 
 export const sponsorAccount: GasStationApiKey = {
   [Network.TESTNET]: process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_GAS_STATION_API_KEY_TESTNET || "",
+  [Network.MAINNET]: process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_GAS_STATION_API_KEY_MAINNET || "",
 };
