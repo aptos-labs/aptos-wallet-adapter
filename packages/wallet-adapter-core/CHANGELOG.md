@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 8.4.0
+
+### Minor Changes
+
+- f2e7a4e: Add cross chain wallets to wallet registry
+
 ## 8.3.0
 
 ### Minor Changes
