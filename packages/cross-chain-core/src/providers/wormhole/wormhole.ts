@@ -13,7 +13,6 @@ import sui from "@wormhole-foundation/sdk/sui";
 
 import {
   Chain,
-  EvmChainName,
   CrossChainProvider,
   CrossChainCore,
 } from "../../CrossChainCore";
@@ -81,39 +80,21 @@ export class WormholeProvider implements CrossChainProvider<
     const isMainnet = dappNetwork === Network.MAINNET;
     const platforms: PlatformLoader<any>[] = [aptos, solana, evm, sui];
 
-    // Get custom RPC endpoints from config
+    // RPC resolution order:
+    //  1. User-provided config (solanaConfig / suiConfig / evmConfig)
+    //  2. Wormhole SDK built-in defaults (if we don't pass anything)
+    // We only forward chains the user explicitly configured so the
+    // Wormhole SDK can fall back to its own defaults for the rest.
     const dappConfig = this.crossChainCore._dappConfig;
-    const defaultChains = this.crossChainCore.CHAINS;
-
-    const solanaRpc =
-      dappConfig?.solanaConfig?.rpc ??
-      defaultChains["Solana"]?.defaultRpc;
-
-    const suiRpc =
-      dappConfig?.suiConfig?.rpc ??
-      defaultChains["Sui"]?.defaultRpc;
-
-    // Build EVM chain RPC overrides
-    const evmChainConfig: Record<string, { rpc: string }> = {};
-    const evmChainNames: EvmChainName[] = [
-      "Ethereum", "Sepolia", "Base", "BaseSepolia",
-      "Arbitrum", "ArbitrumSepolia", "Avalanche",
-      "Polygon", "PolygonSepolia",
-    ];
-    for (const name of evmChainNames) {
-      const rpc =
-        dappConfig?.evmConfig?.[name]?.rpc ??
-        defaultChains[name]?.defaultRpc;
-      if (rpc) {
-        evmChainConfig[name] = { rpc };
-      }
-    }
+    const solanaRpc = dappConfig?.solanaConfig?.rpc;
 
     const wh = await wormhole(isMainnet ? "Mainnet" : "Testnet", platforms, {
       chains: {
-        Solana: { rpc: solanaRpc },
-        ...(suiRpc ? { Sui: { rpc: suiRpc } } : {}),
-        ...evmChainConfig,
+        ...(solanaRpc ? { Solana: { rpc: solanaRpc } } : {}),
+        ...(dappConfig?.suiConfig?.rpc
+          ? { Sui: { rpc: dappConfig.suiConfig.rpc } }
+          : {}),
+        ...dappConfig?.evmConfig,
       },
     });
     this._wormholeContext = wh;
