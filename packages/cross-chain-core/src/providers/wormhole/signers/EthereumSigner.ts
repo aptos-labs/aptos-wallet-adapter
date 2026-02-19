@@ -62,7 +62,30 @@ export async function signAndSendTransaction(
   try {
     const receipt = await response.wait();
     return receipt?.hash || response.hash || "";
-  } catch (e) {
+  } catch (e: any) {
+    // When a user speeds up or cancels a transaction in their wallet, ethers
+    // throws a TRANSACTION_REPLACED error. We must handle this specifically
+    // to avoid returning the old (now-invalid) hash.
+    if (e?.code === "TRANSACTION_REPLACED") {
+      // "repriced" means the same transaction data was re-sent with higher
+      // gas — the bridge burn still went through with the replacement tx.
+      if (e.reason === "repriced") {
+        const replacementHash = e.receipt?.hash || e.replacement?.hash;
+        if (replacementHash) {
+          console.warn(
+            "EVM transaction was repriced. Using replacement hash:",
+            replacementHash,
+          );
+          return replacementHash;
+        }
+      }
+      // "cancelled" or "replaced" means the original burn was superseded by
+      // a different transaction (e.g. a 0-value self-transfer or an entirely
+      // different call). The bridge burn did not happen, so we must not
+      // return a hash that implies success.
+      throw e;
+    }
+
     // wait() can fail due to network timeouts or RPC instability, but the
     // transaction was already submitted (sendTransaction returned successfully).
     // Return the hash so the caller can track confirmation asynchronously.
