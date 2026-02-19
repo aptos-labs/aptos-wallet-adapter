@@ -427,8 +427,9 @@ export class WormholeProvider implements CrossChainProvider<
         body: JSON.stringify({
           receipt: serializeReceipt(receipt),
           destinationAddress,
-          // Wire format kept as "sourceChain" for backward compatibility
-          // with existing server-side claim implementations.
+          claimChain,
+          // Kept for backward compatibility with existing server-side
+          // claim implementations that read "sourceChain".
           sourceChain: claimChain,
         }),
       });
