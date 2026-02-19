@@ -26,6 +26,21 @@ import {
   getSuiWalletUSDCBalance,
 } from "./utils/getUsdcBalance";
 
+/**
+ * EVM chain names supported by the SDK. Covers both mainnet and testnet
+ * variants so consumers can provide custom RPC URLs for any environment.
+ */
+export type EvmChainName =
+  | "Ethereum"
+  | "Sepolia"
+  | "Base"
+  | "BaseSepolia"
+  | "Arbitrum"
+  | "ArbitrumSepolia"
+  | "Avalanche"
+  | "Polygon"
+  | "PolygonSepolia";
+
 export interface CrossChainDappConfig {
   aptosNetwork: Network;
   disableTelemetry?: boolean;
@@ -45,7 +60,7 @@ export interface CrossChainDappConfig {
      * Expected request body: { serializedReceipt: string, destinationAddress: string, sourceChain: string }
      * Expected response: { destinationChainTxnId: string }
      * Check out the SERVERSIDE_SOLANA_SIGNER.md file for more details.
-     * 
+     *
      * @example
      * const crossChainCore = new CrossChainCore({
      *   dappConfig: {
@@ -58,6 +73,30 @@ export interface CrossChainDappConfig {
      */
     serverClaimUrl?: string;
   };
+  /**
+   * Custom RPC endpoints for EVM chains. When provided, these override the
+   * built-in `defaultRpc` values for balance lookups and Wormhole SDK
+   * initialization.
+   *
+   * @example
+   * ```ts
+   * evmConfig: {
+   *   Ethereum: { rpc: "https://rpc.ankr.com/eth/MY_KEY" },
+   *   Base: { rpc: "https://rpc.ankr.com/base/MY_KEY" },
+   * }
+   * ```
+   */
+  evmConfig?: Partial<Record<EvmChainName, { rpc: string }>>;
+  /**
+   * Custom RPC endpoint for the Sui chain. When provided, overrides the
+   * built-in `defaultRpc` for balance lookups and Wormhole SDK initialization.
+   *
+   * @example
+   * ```ts
+   * suiConfig: { rpc: "https://fullnode.mainnet.sui.io" }
+   * ```
+   */
+  suiConfig?: { rpc?: string };
 }
 export type { AccountAddressInput } from "@aptos-labs/ts-sdk";
 export { NetworkToChainId, NetworkToNodeAPI } from "@aptos-labs/ts-sdk";
@@ -181,14 +220,15 @@ export class CrossChainCore {
           walletAddress,
           this._dappConfig.aptosNetwork,
           sourceChain,
-          // TODO: maybe let the user config it
-          this.CHAINS[sourceChain].defaultRpc,
+          this._dappConfig?.evmConfig?.[sourceChain]?.rpc ??
+            this.CHAINS[sourceChain].defaultRpc,
         );
       case "Sui":
         return await getSuiWalletUSDCBalance(
           walletAddress,
           this._dappConfig.aptosNetwork,
-          this.CHAINS[sourceChain].defaultRpc,
+          this._dappConfig?.suiConfig?.rpc ??
+            this.CHAINS[sourceChain].defaultRpc,
         );
       default:
         throw new Error(`Unsupported chain: ${sourceChain}`);

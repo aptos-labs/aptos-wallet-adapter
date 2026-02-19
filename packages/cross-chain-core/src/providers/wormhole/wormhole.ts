@@ -81,15 +81,38 @@ export class WormholeProvider implements CrossChainProvider<
     const platforms: PlatformLoader<any>[] = [aptos, solana, evm, sui];
 
     // Get custom RPC endpoints from config
+    const dappConfig = this.crossChainCore._dappConfig;
+    const defaultChains = this.crossChainCore.CHAINS;
+
     const solanaRpc =
-      this.crossChainCore._dappConfig?.solanaConfig?.rpc ??
-      this.crossChainCore.CHAINS["Solana"]?.defaultRpc;
+      dappConfig?.solanaConfig?.rpc ??
+      defaultChains["Solana"]?.defaultRpc;
+
+    const suiRpc =
+      dappConfig?.suiConfig?.rpc ??
+      defaultChains["Sui"]?.defaultRpc;
+
+    // Build EVM chain RPC overrides
+    const evmChainConfig: Record<string, { rpc: string }> = {};
+    const evmChainNames = [
+      "Ethereum", "Sepolia", "Base", "BaseSepolia",
+      "Arbitrum", "ArbitrumSepolia", "Avalanche",
+      "Polygon", "PolygonSepolia",
+    ] as const;
+    for (const name of evmChainNames) {
+      const rpc =
+        dappConfig?.evmConfig?.[name]?.rpc ??
+        defaultChains[name]?.defaultRpc;
+      if (rpc) {
+        evmChainConfig[name] = { rpc };
+      }
+    }
 
     const wh = await wormhole(isMainnet ? "Mainnet" : "Testnet", platforms, {
       chains: {
-        Solana: {
-          rpc: solanaRpc,
-        },
+        Solana: { rpc: solanaRpc },
+        ...(suiRpc ? { Sui: { rpc: suiRpc } } : {}),
+        ...evmChainConfig,
       },
     });
     this._wormholeContext = wh;
