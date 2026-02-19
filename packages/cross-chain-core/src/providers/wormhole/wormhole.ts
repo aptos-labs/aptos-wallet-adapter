@@ -249,6 +249,7 @@ export class WormholeProvider implements CrossChainProvider<
                 mainSigner, // the account that signs the "claim" transaction
                 sponsorAccount, // the fee payer account
                 this.crossChainCore._dappConfig?.aptosNetwork,
+                this.crossChainCore._dappConfig?.getExpireTimestamp,
               );
 
               if (routes.isManual(this.wormholeRoute)) {
