@@ -412,13 +412,13 @@ export class WormholeProvider implements CrossChainProvider<
   async claimWithdraw(
     input: WormholeClaimWithdrawRequest,
   ): Promise<WormholeClaimWithdrawResponse> {
-    const { sourceChain, destinationAddress, receipt } = input;
+    const { claimChain, destinationAddress, receipt } = input;
 
     // Server-side claim path: Solana destination with configured serverClaimUrl
     const serverClaimUrl =
       this.crossChainCore._dappConfig?.solanaConfig?.serverClaimUrl;
 
-    if (sourceChain === "Solana" && serverClaimUrl) {
+    if (claimChain === "Solana" && serverClaimUrl) {
       logger.log("claimWithdraw: using server-side claim via", serverClaimUrl);
 
       const response = await fetch(serverClaimUrl, {
@@ -427,7 +427,9 @@ export class WormholeProvider implements CrossChainProvider<
         body: JSON.stringify({
           receipt: serializeReceipt(receipt),
           destinationAddress,
-          sourceChain,
+          // Wire format kept as "sourceChain" for backward compatibility
+          // with existing server-side claim implementations.
+          sourceChain: claimChain,
         }),
       });
 
@@ -455,7 +457,7 @@ export class WormholeProvider implements CrossChainProvider<
     }
 
     const claimSigner = new Signer(
-      this.getChainConfig(sourceChain),
+      this.getChainConfig(claimChain),
       destinationAddress,
       {},
       input.wallet,
@@ -511,7 +513,7 @@ export class WormholeProvider implements CrossChainProvider<
       currentPhase = "claiming";
       onPhaseChange?.("claiming");
       const { destinationChainTxnId } = await this.claimWithdraw({
-        sourceChain,
+        claimChain: sourceChain,
         destinationAddress: destinationAddress.toString(),
         receipt: attestedReceipt,
         wallet,
