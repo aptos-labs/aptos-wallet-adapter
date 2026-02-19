@@ -104,6 +104,20 @@ export interface WormholeClaimWithdrawResponse {
   destinationChainTxnId: string;
 }
 
+export interface RetryWithdrawClaimRequest extends WormholeClaimWithdrawRequest {
+  /** Maximum number of retry attempts (default: 5). */
+  maxRetries?: number;
+  /** Initial delay in ms before the first retry (default: 2000). */
+  initialDelayMs?: number;
+  /** Multiplier applied to the delay after each failed attempt (default: 2). */
+  backoffMultiplier?: number;
+}
+
+export interface RetryWithdrawClaimResponse extends WormholeClaimWithdrawResponse {
+  /** Number of retry attempts that were needed (0 means first attempt succeeded). */
+  retriesUsed: number;
+}
+
 /**
  * Error thrown when the withdraw flow fails *after* the Aptos burn
  * transaction has already been submitted (i.e. during attestation tracking

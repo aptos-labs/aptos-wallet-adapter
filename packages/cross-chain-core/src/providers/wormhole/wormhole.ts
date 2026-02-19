@@ -38,6 +38,8 @@ import {
   WormholeInitiateWithdrawResponse,
   WormholeClaimWithdrawRequest,
   WormholeClaimWithdrawResponse,
+  RetryWithdrawClaimRequest,
+  RetryWithdrawClaimResponse,
   WithdrawError,
 } from "./types";
 import { SolanaDerivedWallet } from "@aptos-labs/derived-wallet-solana";
@@ -526,6 +528,65 @@ export class WormholeProvider implements CrossChainProvider<
         error,
       );
     }
+  }
+
+  /**
+   * Retries a failed `claimWithdraw` call with configurable exponential backoff.
+   *
+   * Use this when the claim phase of a withdrawal fails (e.g., RPC instability,
+   * network congestion) but the Aptos burn transaction has already been submitted.
+   * The attested receipt can be recovered from the `WithdrawError` thrown by
+   * `withdraw()` and passed directly to this method.
+   *
+   * @example
+   * ```ts
+   * try {
+   *   await provider.withdraw({ ... });
+   * } catch (error) {
+   *   if (error instanceof WithdrawError && error.phase === "claiming") {
+   *     const result = await provider.retryWithdrawClaim({
+   *       sourceChain,
+   *       destinationAddress,
+   *       receipt: attestedReceipt,
+   *       wallet,
+   *       maxRetries: 5,
+   *     });
+   *   }
+   * }
+   * ```
+   */
+  async retryWithdrawClaim(
+    input: RetryWithdrawClaimRequest,
+  ): Promise<RetryWithdrawClaimResponse> {
+    const {
+      maxRetries = 5,
+      initialDelayMs = 2000,
+      backoffMultiplier = 2,
+      ...claimInput
+    } = input;
+
+    let lastError: Error | undefined;
+    let delay = initialDelayMs;
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const result = await this.claimWithdraw(claimInput);
+        return { ...result, retriesUsed: attempt };
+      } catch (error) {
+        lastError = error as Error;
+        logger.log(
+          `retryWithdrawClaim: attempt ${attempt + 1}/${maxRetries + 1} failed: ${lastError.message}`,
+        );
+        if (attempt < maxRetries) {
+          await sleep(delay);
+          delay *= backoffMultiplier;
+        }
+      }
+    }
+
+    throw new Error(
+      `Claim failed after ${maxRetries + 1} attempts: ${lastError?.message}`,
+    );
   }
 
   getChainConfig(chain: Chain): ChainConfig {
