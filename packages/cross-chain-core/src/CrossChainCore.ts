@@ -26,21 +26,6 @@ import {
   getSuiWalletUSDCBalance,
 } from "./utils/getUsdcBalance";
 
-/**
- * EVM chain names supported by the SDK. Covers both mainnet and testnet
- * variants so consumers can provide custom RPC URLs for any environment.
- */
-export type EvmChainName =
-  | "Ethereum"
-  | "Sepolia"
-  | "Base"
-  | "BaseSepolia"
-  | "Arbitrum"
-  | "ArbitrumSepolia"
-  | "Avalanche"
-  | "Polygon"
-  | "PolygonSepolia";
-
 export interface CrossChainDappConfig {
   aptosNetwork: Network;
   disableTelemetry?: boolean;
@@ -116,6 +101,13 @@ export type Chain =
   | "PolygonSepolia"
   | "Polygon"
   | "Sui";
+
+/**
+ * EVM chain names supported by the SDK — derived from {@link Chain} by
+ * excluding the non-EVM ecosystems. Adding a new EVM chain to `Chain`
+ * automatically makes it a valid key in `evmConfig`.
+ */
+export type EvmChainName = Exclude<Chain, "Solana" | "Aptos" | "Sui">;
 
 // Map of Ethereum chain id to testnet chain config
 export const EthereumChainIdToTestnetChain: Record<string, ChainConfig> = {

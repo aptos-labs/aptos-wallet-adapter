@@ -13,6 +13,7 @@ import sui from "@wormhole-foundation/sdk/sui";
 
 import {
   Chain,
+  EvmChainName,
   CrossChainProvider,
   CrossChainCore,
 } from "../../CrossChainCore";
@@ -94,11 +95,11 @@ export class WormholeProvider implements CrossChainProvider<
 
     // Build EVM chain RPC overrides
     const evmChainConfig: Record<string, { rpc: string }> = {};
-    const evmChainNames = [
+    const evmChainNames: EvmChainName[] = [
       "Ethereum", "Sepolia", "Base", "BaseSepolia",
       "Arbitrum", "ArbitrumSepolia", "Avalanche",
       "Polygon", "PolygonSepolia",
-    ] as const;
+    ];
     for (const name of evmChainNames) {
       const rpc =
         dappConfig?.evmConfig?.[name]?.rpc ??
