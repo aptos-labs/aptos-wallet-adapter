@@ -57,6 +57,28 @@ export interface CrossChainDappConfig {
      * });
      */
     serverClaimUrl?: string;
+    /**
+     * Solana transaction confirmation commitment level.
+     *
+     * - `"finalized"` (default) — waits for supermajority finalization (~30 s).
+     * - `"confirmed"` — waits for supermajority confirmation (~0.5 s).
+     *
+     * For bridge flows `"confirmed"` is usually sufficient because Wormhole
+     * guardians independently verify finality before issuing attestations.
+     *
+     * @default "finalized"
+     *
+     * @example
+     * const crossChainCore = new CrossChainCore({
+     *   dappConfig: {
+     *     aptosNetwork: Network.MAINNET,
+     *     solanaConfig: {
+     *       commitment: "confirmed", // ~0.5 s vs ~30 s
+     *     },
+     *   },
+     * });
+     */
+    commitment?: "confirmed" | "finalized";
   };
 }
 export type { AccountAddressInput } from "@aptos-labs/ts-sdk";
