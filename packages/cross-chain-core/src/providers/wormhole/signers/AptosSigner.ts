@@ -19,12 +19,14 @@ import {
 import { GasStationApiKey } from "..";
 import { UserResponseStatus } from "@aptos-labs/wallet-standard";
 import { GasStationClient, GasStationTransactionSubmitter } from "@aptos-labs/gas-station-client";
+import { CrossChainCore } from "../../../CrossChainCore";
 
 export async function signAndSendTransaction(
   request: AptosUnsignedTransaction<Network, AptosChains>,
   wallet: AdapterWallet,
   sponsorAccount: Account | GasStationApiKey | undefined,
   dappNetwork: AptosNetwork,
+  crossChainCore?: CrossChainCore,
 ) {
   if (!wallet) {
     throw new Error("wallet.sendTransaction is undefined");
@@ -90,12 +92,14 @@ export async function signAndSendTransaction(
     functionArguments,
   };
 
+  const expireTimestamp = crossChainCore?._dappConfig?.getExpireTimestamp?.();
   const txnToSign = await aptos.transaction.build.simple({
     data: transactionData,
     sender: (
       await wallet.features["aptos:account"]?.account()
     ).address.toString(),
     withFeePayer: sponsorAccount ? true : false,
+    ...(expireTimestamp ? { options: { expireTimestamp } } : {}),
   });
 
   const response =

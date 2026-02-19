@@ -164,7 +164,8 @@ export class WormholeProvider implements CrossChainProvider<
   async submitCCTPTransfer(
     input: WormholeSubmitTransferRequest,
   ): Promise<WormholeStartTransferResponse> {
-    const { sourceChain, wallet, destinationAddress, onTransactionSigned } = input;
+    const { sourceChain, wallet, destinationAddress, onTransactionSigned } =
+      input;
 
     if (!this._wormholeContext) {
       await this.setWormholeContext(sourceChain);
@@ -254,6 +255,7 @@ export class WormholeProvider implements CrossChainProvider<
                 sponsorAccount, // the fee payer account
                 this.crossChainCore._dappConfig?.aptosNetwork,
                 onTransactionSigned,
+                this.crossChainCore._dappConfig?.getExpireTimestamp,
               );
 
               if (routes.isManual(this.wormholeRoute)) {
@@ -328,7 +330,8 @@ export class WormholeProvider implements CrossChainProvider<
   async initiateWithdraw(
     input: WormholeInitiateWithdrawRequest,
   ): Promise<WormholeInitiateWithdrawResponse> {
-    const { wallet, destinationAddress, sponsorAccount, onTransactionSigned } = input;
+    const { wallet, destinationAddress, sponsorAccount, onTransactionSigned } =
+      input;
 
     if (!this._wormholeContext) {
       throw new Error("Wormhole context not initialized");
@@ -339,9 +342,7 @@ export class WormholeProvider implements CrossChainProvider<
 
     const signer = new Signer(
       this.getChainConfig("Aptos"),
-      (
-        await wallet.features["aptos:account"].account()
-      ).address.toString(),
+      (await wallet.features["aptos:account"].account()).address.toString(),
       {},
       wallet,
       this.crossChainCore,
@@ -374,9 +375,7 @@ export class WormholeProvider implements CrossChainProvider<
    * Phase 2: Tracks a withdraw receipt until attestation is ready.
    * This polls Wormhole and returns once the receipt reaches the Attested state.
    */
-  async trackWithdraw(
-    receipt: routes.Receipt,
-  ): Promise<routes.Receipt> {
+  async trackWithdraw(receipt: routes.Receipt): Promise<routes.Receipt> {
     if (!this.wormholeRoute) {
       throw new Error("Wormhole route not initialized");
     }
@@ -498,7 +497,14 @@ export class WormholeProvider implements CrossChainProvider<
   async withdraw(
     input: WormholeWithdrawRequest,
   ): Promise<WormholeWithdrawResponse> {
-    const { sourceChain, wallet, destinationAddress, sponsorAccount, onPhaseChange, onTransactionSigned } = input;
+    const {
+      sourceChain,
+      wallet,
+      destinationAddress,
+      sponsorAccount,
+      onPhaseChange,
+      onTransactionSigned,
+    } = input;
 
     // Phase 1: Initiate — user signs Aptos burn
     onPhaseChange?.("initiating");
