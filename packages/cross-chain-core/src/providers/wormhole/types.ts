@@ -35,12 +35,26 @@ export interface WormholeTransferRequest {
   mainSigner: Account;
   amount?: string;
   sponsorAccount?: Account;
+  /** Optional callback fired before and after each individual transaction is signed. */
+  onTransactionSigned?: OnTransactionSigned;
 }
 
 export type WithdrawPhase =
   | "initiating"  // User signing Aptos burn transaction
   | "tracking"    // Waiting for Wormhole attestation (~60s)
   | "claiming";   // Claiming on destination chain
+
+/**
+ * Callback fired before and after each individual transaction is signed
+ * and submitted during a bridge flow.
+ *
+ * @param description - A human-readable description of the transaction
+ *   (e.g. "Approving USDC transfer"). Comes from the Wormhole SDK's
+ *   `UnsignedTransaction.description`.
+ * @param txId - `null` when called *before* signing; the on-chain
+ *   transaction hash when called *after* signing.
+ */
+export type OnTransactionSigned = (description: string, txId: string | null) => void;
 
 export interface WormholeWithdrawRequest {
   sourceChain: Chain;
@@ -49,18 +63,24 @@ export interface WormholeWithdrawRequest {
   sponsorAccount?: Account | GasStationApiKey;
   /** Optional callback fired when the withdraw progresses to a new phase. */
   onPhaseChange?: (phase: WithdrawPhase) => void;
+  /** Optional callback fired before and after each individual transaction is signed. */
+  onTransactionSigned?: OnTransactionSigned;
 }
 
 export interface WormholeSubmitTransferRequest {
   sourceChain: Chain;
   wallet: AdapterWallet;
   destinationAddress: AccountAddressInput;
+  /** Optional callback fired before and after each individual transaction is signed. */
+  onTransactionSigned?: OnTransactionSigned;
 }
 
 export interface WormholeClaimTransferRequest {
   receipt: routes.Receipt<AttestationReceipt>;
   mainSigner: AptosAccount;
   sponsorAccount?: AptosAccount | GasStationApiKey;
+  /** Optional callback fired before and after each individual transaction is signed. */
+  onTransactionSigned?: OnTransactionSigned;
 }
 
 export interface WormholeTransferResponse {
@@ -84,6 +104,8 @@ export interface WormholeInitiateWithdrawRequest {
   wallet: AdapterWallet;
   destinationAddress: AccountAddressInput;
   sponsorAccount?: Account | GasStationApiKey;
+  /** Optional callback fired before and after each individual transaction is signed. */
+  onTransactionSigned?: OnTransactionSigned;
 }
 
 export interface WormholeInitiateWithdrawResponse {
@@ -98,6 +120,8 @@ export interface WormholeClaimWithdrawRequest {
   // Required for wallet-based claim (non-Solana chains, or Solana without serverClaimUrl).
   // Not needed when the SDK uses the configured serverClaimUrl for Solana claims.
   wallet?: AdapterWallet;
+  /** Optional callback fired before and after each individual transaction is signed. */
+  onTransactionSigned?: OnTransactionSigned;
 }
 
 export interface WormholeClaimWithdrawResponse {

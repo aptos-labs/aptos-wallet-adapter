@@ -18,7 +18,7 @@ import {
   AptosUnsignedTransaction,
   AptosChains,
 } from "@wormhole-foundation/sdk-aptos";
-import { GasStationApiKey } from "../types";
+import { GasStationApiKey, OnTransactionSigned } from "../types";
 import { isAccount } from "./AptosSigner";
 
 export class AptosLocalSigner<
@@ -29,6 +29,7 @@ export class AptosLocalSigner<
   _options: any;
   _wallet: Account;
   _sponsorAccount: Account | GasStationApiKey | undefined;
+  _onTransactionSigned: OnTransactionSigned | undefined;
   _claimedTransactionHashes: string[] = [];
   _dappNetwork: AptosNetwork;
   constructor(
@@ -37,12 +38,14 @@ export class AptosLocalSigner<
     wallet: Account,
     feePayerAccount: Account | GasStationApiKey | undefined,
     dappNetwork: AptosNetwork,
+    onTransactionSigned?: OnTransactionSigned,
   ) {
     this._chain = chain;
     this._options = options;
     this._wallet = wallet;
     this._sponsorAccount = feePayerAccount;
     this._dappNetwork = dappNetwork;
+    this._onTransactionSigned = onTransactionSigned;
   }
 
   chain(): C {
@@ -61,12 +64,14 @@ export class AptosLocalSigner<
     this._claimedTransactionHashes = [];
 
     for (const tx of txs) {
+      this._onTransactionSigned?.(tx.description, null);
       const txId = await signAndSendTransaction(
         tx as AptosUnsignedTransaction<Network, AptosChains>,
         this._wallet,
         this._sponsorAccount,
         this._dappNetwork,
       );
+      this._onTransactionSigned?.(tx.description, txId);
       txHashes.push(txId);
       this._claimedTransactionHashes.push(txId);
     }

@@ -30,6 +30,8 @@ export interface SolanaLocalSignerConfig {
   priorityFeeConfig?: PriorityFeeConfig;
   /** Enable verbose logging (default: false) */
   verbose?: boolean;
+  /** Optional callback fired before and after each individual transaction is signed. */
+  onTransactionSigned?: (description: string, txId: string | null) => void;
 }
 
 /**
@@ -68,6 +70,7 @@ export class SolanaLocalSigner<N extends Network, C extends Chain>
   private retryIntervalMs: number;
   private priorityFeeConfig?: PriorityFeeConfig;
   private verbose: boolean;
+  private _onTransactionSigned?: (description: string, txId: string | null) => void;
   private _claimedTransactionHashes: string[] = [];
 
   constructor(config: SolanaLocalSignerConfig) {
@@ -77,6 +80,7 @@ export class SolanaLocalSigner<N extends Network, C extends Chain>
     this.retryIntervalMs = config.retryIntervalMs ?? 5000;
     this.priorityFeeConfig = config.priorityFeeConfig;
     this.verbose = config.verbose ?? false;
+    this._onTransactionSigned = config.onTransactionSigned;
   }
 
   chain(): C {
@@ -100,7 +104,9 @@ export class SolanaLocalSigner<N extends Network, C extends Chain>
     this._claimedTransactionHashes = [];
 
     for (const tx of txs) {
+      this._onTransactionSigned?.(tx.description, null);
       const txId = await this.signAndSendTransaction(tx);
+      this._onTransactionSigned?.(tx.description, txId);
       txHashes.push(txId);
       this._claimedTransactionHashes.push(txId);
     }
