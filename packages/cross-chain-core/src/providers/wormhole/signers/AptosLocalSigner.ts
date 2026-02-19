@@ -29,6 +29,7 @@ export class AptosLocalSigner<
   _options: any;
   _wallet: Account;
   _sponsorAccount: Account | GasStationApiKey | undefined;
+  _getExpireTimestamp: (() => number) | undefined;
   _claimedTransactionHashes: string[] = [];
   _dappNetwork: AptosNetwork;
   constructor(
@@ -37,12 +38,14 @@ export class AptosLocalSigner<
     wallet: Account,
     feePayerAccount: Account | GasStationApiKey | undefined,
     dappNetwork: AptosNetwork,
+    getExpireTimestamp?: () => number,
   ) {
     this._chain = chain;
     this._options = options;
     this._wallet = wallet;
     this._sponsorAccount = feePayerAccount;
     this._dappNetwork = dappNetwork;
+    this._getExpireTimestamp = getExpireTimestamp;
   }
 
   chain(): C {
@@ -66,6 +69,7 @@ export class AptosLocalSigner<
         this._wallet,
         this._sponsorAccount,
         this._dappNetwork,
+        this._getExpireTimestamp,
       );
       txHashes.push(txId);
       this._claimedTransactionHashes.push(txId);
@@ -79,6 +83,7 @@ export async function signAndSendTransaction(
   wallet: Account,
   sponsorAccount: Account | GasStationApiKey | undefined,
   dappNetwork: AptosNetwork,
+  getExpireTimestamp?: () => number,
 ) {
   if (!wallet) {
     throw new Error("Wallet is undefined");
@@ -101,10 +106,12 @@ export async function signAndSendTransaction(
   });
   const aptos = new Aptos(aptosConfig);
 
+  const expireTimestamp = getExpireTimestamp?.();
   const txnToSign = await aptos.transaction.build.simple({
     data: payload,
     sender: wallet.accountAddress.toString(),
     withFeePayer: sponsorAccount ? true : false,
+    ...(expireTimestamp ? { options: { expireTimestamp } } : {}),
   });
 
   const senderAuthenticator = await aptos.transaction.sign({
