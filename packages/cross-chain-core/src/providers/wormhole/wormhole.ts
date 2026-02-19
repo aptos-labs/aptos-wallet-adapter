@@ -428,9 +428,6 @@ export class WormholeProvider implements CrossChainProvider<
           receipt: serializeReceipt(receipt),
           destinationAddress,
           claimChain,
-          // Kept for backward compatibility with existing server-side
-          // claim implementations that read "sourceChain".
-          sourceChain: claimChain,
         }),
       });
 

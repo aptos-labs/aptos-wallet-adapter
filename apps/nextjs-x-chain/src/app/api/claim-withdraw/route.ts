@@ -165,7 +165,6 @@ function validateOrigin(request: NextRequest): boolean {
  * Handles POST requests to claim CCTP withdrawals on Solana.
  *
  * Expected body: { receipt, destinationAddress, claimChain }
- *   (also accepts "sourceChain" for backward compatibility)
  * Returns: { destinationChainTxnId }
  */
 export async function POST(request: NextRequest) {
@@ -190,9 +189,7 @@ export async function POST(request: NextRequest) {
 
     // Step 3: Parse and validate request body
     const body = await request.json();
-    const { receipt: serializedReceipt, destinationAddress } = body;
-    // Prefer "claimChain" but fall back to "sourceChain" for backward compatibility
-    const claimChain = body.claimChain ?? body.sourceChain;
+    const { receipt: serializedReceipt, destinationAddress, claimChain } = body;
 
     if (!serializedReceipt || !destinationAddress || !claimChain) {
       return NextResponse.json(
