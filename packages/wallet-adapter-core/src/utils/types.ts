@@ -36,7 +36,8 @@ export type AvailableWallets =
   | "Petra"
   | "Pontem Wallet"
   | "Rimosafe"
-  | "T wallet";
+  | "T wallet"
+  | "Watchee";
 
 export type InputTransactionData = {
   sender?: AccountAddressInput;

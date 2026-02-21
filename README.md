@@ -26,6 +26,7 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 - [Pontem](https://www.npmjs.com/package/@pontem/wallet-adapter-plugin)
 - [RimoSafe](https://chromewebstore.google.com/detail/rimo-safe-wallet/kiicddjcakdmobjkcpppkgcjbpakcagp)
 - T wallet
+- [Watchee](https://watcheetv.com)
 
 #### Develop Locally
 

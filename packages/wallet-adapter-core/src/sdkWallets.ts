@@ -3,6 +3,7 @@ import {
   AptosConnectGoogleWallet,
 } from "@aptos-connect/wallet-adapter-plugin";
 import { Network } from "@aptos-labs/ts-sdk";
+import { WatcheeWallet } from "@watchee/wallet-adapter-plugin";
 import { DevTWallet, TWallet } from "@atomrigslab/aptos-wallet-adapter";
 import { inMSafeWallet, MSafeWallet } from "@msafe/aptos-aip62-wallet";
 import { DappConfig, AdapterWallet } from "./WalletCore";
@@ -46,8 +47,12 @@ export function getSDKWallets(dappConfig?: DappConfig) {
     );
   }
 
-  // Add new SDK wallet plugins (ones that should be installed as packages) here:
-  // Ex. sdkWallets.push(new YourSDKWallet(dappConfig))
+  // Watchee — SDK wallet for the Watchee mini-app ecosystem
+  sdkWallets.push(
+    new WatcheeWallet({
+      network: dappConfig?.network,
+    })
+  );
 
   return sdkWallets;
 }
