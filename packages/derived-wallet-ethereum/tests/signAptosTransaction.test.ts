@@ -1,7 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  AccountAuthenticatorAbstraction,
-} from "@aptos-labs/ts-sdk";
+import { AccountAuthenticatorAbstraction } from "@aptos-labs/ts-sdk";
 import {
   SIGNATURE_TYPE,
   createAccountAuthenticatorForEthereumTransaction,
@@ -37,7 +35,7 @@ describe("signAptosTransaction", () => {
         testScheme,
         defaultEthereumAuthenticationFunction,
         signingMessageDigest,
-        testIssuedAt
+        testIssuedAt,
       );
 
       expect(authenticator).toBeInstanceOf(AccountAuthenticatorAbstraction);
@@ -53,7 +51,7 @@ describe("signAptosTransaction", () => {
         testScheme,
         defaultEthereumAuthenticationFunction,
         signingMessageDigest,
-        testIssuedAt
+        testIssuedAt,
       );
 
       // AccountAuthenticatorAbstraction should be serializable
@@ -74,7 +72,7 @@ describe("signAptosTransaction", () => {
         testScheme,
         defaultEthereumAuthenticationFunction,
         signingMessageDigest,
-        testIssuedAt
+        testIssuedAt,
       );
 
       // Should be serializable to bytes
@@ -86,35 +84,38 @@ describe("signAptosTransaction", () => {
     it("should work with different schemes", () => {
       const signingMessageDigest = new Uint8Array(32).fill(0xab);
 
-      const httpAuthenticator = createAccountAuthenticatorForEthereumTransaction(
-        testSiweSignature,
-        testEthereumAddress,
-        testDomain,
-        "http",
-        defaultEthereumAuthenticationFunction,
-        signingMessageDigest,
-        testIssuedAt
-      );
+      const httpAuthenticator =
+        createAccountAuthenticatorForEthereumTransaction(
+          testSiweSignature,
+          testEthereumAddress,
+          testDomain,
+          "http",
+          defaultEthereumAuthenticationFunction,
+          signingMessageDigest,
+          testIssuedAt,
+        );
 
-      const httpsAuthenticator = createAccountAuthenticatorForEthereumTransaction(
-        testSiweSignature,
-        testEthereumAddress,
-        testDomain,
-        "https",
-        defaultEthereumAuthenticationFunction,
-        signingMessageDigest,
-        testIssuedAt
-      );
+      const httpsAuthenticator =
+        createAccountAuthenticatorForEthereumTransaction(
+          testSiweSignature,
+          testEthereumAddress,
+          testDomain,
+          "https",
+          defaultEthereumAuthenticationFunction,
+          signingMessageDigest,
+          testIssuedAt,
+        );
 
       // Both should be valid authenticators
       expect(httpAuthenticator).toBeInstanceOf(AccountAuthenticatorAbstraction);
-      expect(httpsAuthenticator).toBeInstanceOf(AccountAuthenticatorAbstraction);
+      expect(httpsAuthenticator).toBeInstanceOf(
+        AccountAuthenticatorAbstraction,
+      );
 
       // But they should produce different bytes due to scheme difference
       expect(httpAuthenticator.bcsToBytes()).not.toEqual(
-        httpsAuthenticator.bcsToBytes()
+        httpsAuthenticator.bcsToBytes(),
       );
     });
   });
 });
-

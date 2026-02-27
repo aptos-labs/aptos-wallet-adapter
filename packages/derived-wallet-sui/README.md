@@ -25,7 +25,7 @@ Currently, the wallets that have been tested and support cross-chain accounts ar
 | Nightly  | ✅           | ✅            |               |
 | OKX      | ✅           | ✅            |               |
 | Phantom  | ✅           | ✅            |               |
-| Slush    | ✅           | ✅            |               | 
+| Slush    | ✅           | ✅            |               |
 
 ## Usage
 
@@ -42,7 +42,10 @@ npm install @aptos-labs/wallet-adapter-react @aptos-labs/derived-wallet-sui
 2. Set up automatic detection
 
 ```tsx
-import { AptosWalletAdapterProvider, Network } from "@aptos-labs/wallet-adapter-react";
+import {
+  AptosWalletAdapterProvider,
+  Network,
+} from "@aptos-labs/wallet-adapter-react";
 import { setupAutomaticSuiWalletDerivation } from "@aptos-labs/derived-wallet-sui";
 
 setupAutomaticSuiWalletDerivation({ defaultNetwork: Network.TESTNET });
@@ -55,7 +58,7 @@ setupAutomaticSuiWalletDerivation({ defaultNetwork: Network.TESTNET });
   }}
 >
   {children}
-</AptosWalletAdapterProvider>
+</AptosWalletAdapterProvider>;
 ```
 
 ## Submitting a Transaction (with Fee Payer)
@@ -164,4 +167,3 @@ if (isSuiDerivedWallet(wallet)) {
   - [Live site](https://x-chain-accounts.vercel.app/)
   - [Source code](../../apps/nextjs-x-chain/)
 - [AIP-113 Derivable Account Abstraction](https://github.com/aptos-foundation/AIPs/blob/main/aips/aip-113.md)
-

@@ -17,10 +17,7 @@ import {
   WithdrawError,
   WithdrawPhase,
 } from "@aptos-labs/cross-chain-core";
-import {
-  Account,
-  Network,
-} from "@aptos-labs/ts-sdk";
+import { Account, Network } from "@aptos-labs/ts-sdk";
 import {
   Chain,
   WormholeTransferResponse,
@@ -356,10 +353,7 @@ export function CCTPWithdraw({
 
         {/* Error state — only allow retry if the burn hasn't happened yet */}
         {phase === "error" && !burnInitiated && (
-          <Button
-            onClick={() => setPhase("idle")}
-            variant="outline"
-          >
+          <Button onClick={() => setPhase("idle")} variant="outline">
             Try Again
           </Button>
         )}

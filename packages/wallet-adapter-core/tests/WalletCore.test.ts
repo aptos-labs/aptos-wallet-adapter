@@ -1,11 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { Network } from "@aptos-labs/ts-sdk";
 import { WalletCore } from "../src/WalletCore";
-import {
-  createMockWallet,
-  TEST_ACCOUNT,
-  TEST_NETWORK,
-} from "./mocks/wallet";
+import { createMockWallet, TEST_ACCOUNT, TEST_NETWORK } from "./mocks/wallet";
 
 // Mock getAptosWallets to return our mock wallets
 vi.mock("@aptos-labs/wallet-standard", async () => {
@@ -288,7 +284,7 @@ describe("WalletCore", () => {
 
     it("should throw when no wallet is connected", async () => {
       await expect(
-        walletCore.signMessage({ message: "test", nonce: "123" })
+        walletCore.signMessage({ message: "test", nonce: "123" }),
       ).rejects.toThrow();
     });
   });
@@ -300,7 +296,7 @@ describe("WalletCore", () => {
 
     it("should throw when no wallet is connected", async () => {
       await expect(
-        walletCore.signTransaction({ transactionOrPayload: {} as any })
+        walletCore.signTransaction({ transactionOrPayload: {} as any }),
       ).rejects.toThrow();
     });
   });
@@ -318,7 +314,7 @@ describe("WalletCore", () => {
             typeArguments: [],
             functionArguments: [],
           },
-        })
+        }),
       ).rejects.toThrow();
     });
 
@@ -335,7 +331,7 @@ describe("WalletCore", () => {
             typeArguments: [],
             functionArguments: [],
           },
-        })
+        }),
       ).rejects.toThrow("SCAM SITE DETECTED");
     });
   });
@@ -377,7 +373,7 @@ describe("WalletCore", () => {
 
     it("should throw when no wallet is connected", async () => {
       await expect(
-        walletCore.signMessageAndVerify({ message: "test", nonce: "123" })
+        walletCore.signMessageAndVerify({ message: "test", nonce: "123" }),
       ).rejects.toThrow();
     });
   });
@@ -392,7 +388,7 @@ describe("WalletCore", () => {
         walletCore.submitTransaction({
           transaction: {} as any,
           senderAuthenticator: {} as any,
-        })
+        }),
       ).rejects.toThrow();
     });
   });
@@ -410,9 +406,8 @@ describe("WalletCore", () => {
             domain: "test.example.com",
             nonce: "test-nonce-123",
           },
-        })
+        }),
       ).rejects.toThrow(/not found/i);
     });
   });
 });
-

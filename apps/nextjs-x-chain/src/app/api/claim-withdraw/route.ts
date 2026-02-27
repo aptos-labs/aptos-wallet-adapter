@@ -38,7 +38,8 @@ const SOLANA_RPC_URL = process.env.SOLANA_RPC_URL;
 
 /** Determines network (mainnet/testnet) from environment — consistent with config/index.ts */
 const DAPP_NETWORK: Network.MAINNET | Network.TESTNET =
-  (process.env.NEXT_PUBLIC_DAPP_NETWORK as Network.MAINNET | Network.TESTNET) || Network.TESTNET;
+  (process.env.NEXT_PUBLIC_DAPP_NETWORK as Network.MAINNET | Network.TESTNET) ||
+  Network.TESTNET;
 
 const IS_MAINNET = DAPP_NETWORK === Network.MAINNET;
 
@@ -47,9 +48,12 @@ const IS_MAINNET = DAPP_NETWORK === Network.MAINNET;
 // ============================================================================
 
 function getSolanaRpcUrl(): string {
-  return SOLANA_RPC_URL ?? (IS_MAINNET
-    ? "https://api.mainnet-beta.solana.com"
-    : "https://api.devnet.solana.com");
+  return (
+    SOLANA_RPC_URL ??
+    (IS_MAINNET
+      ? "https://api.mainnet-beta.solana.com"
+      : "https://api.devnet.solana.com")
+  );
 }
 
 // ============================================================================
@@ -74,7 +78,10 @@ function isRateLimited(identifier: string): boolean {
 
   const entry = rateLimitMap.get(identifier);
   if (!entry || now > entry.resetTime) {
-    rateLimitMap.set(identifier, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    rateLimitMap.set(identifier, {
+      count: 1,
+      resetTime: now + RATE_LIMIT_WINDOW_MS,
+    });
     return false;
   }
 
@@ -94,13 +101,17 @@ async function getOrCreateCCTPRoute(): Promise<CCTPRouteResult> {
     return cachedCCTPRoute;
   }
 
-  const wh = await wormhole(IS_MAINNET ? "Mainnet" : "Testnet", [aptos, solana], {
-    chains: {
-      Solana: {
-        rpc: getSolanaRpcUrl(),
+  const wh = await wormhole(
+    IS_MAINNET ? "Mainnet" : "Testnet",
+    [aptos, solana],
+    {
+      chains: {
+        Solana: {
+          rpc: getSolanaRpcUrl(),
+        },
       },
     },
-  });
+  );
   cachedWormholeContext = wh;
 
   const tokens = IS_MAINNET ? mainnetTokens : testnetTokens;
@@ -189,11 +200,18 @@ export async function POST(request: NextRequest) {
 
     // Step 3: Parse and validate request body
     const body = await request.json();
-    const { receipt: serializedReceipt, destinationAddress, sourceChain } = body;
+    const {
+      receipt: serializedReceipt,
+      destinationAddress,
+      sourceChain,
+    } = body;
 
     if (!serializedReceipt || !destinationAddress || !sourceChain) {
       return NextResponse.json(
-        { error: "Missing required fields: receipt, destinationAddress, sourceChain" },
+        {
+          error:
+            "Missing required fields: receipt, destinationAddress, sourceChain",
+        },
         { status: 400 },
       );
     }

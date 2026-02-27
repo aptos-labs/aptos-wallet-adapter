@@ -26,7 +26,9 @@ export interface WormholeQuoteRequest {
   type: "transfer" | "withdraw";
 }
 
-export type GasStationApiKey = Partial<Record<Network.TESTNET | Network.MAINNET, string>>;
+export type GasStationApiKey = Partial<
+  Record<Network.TESTNET | Network.MAINNET, string>
+>;
 
 export interface WormholeTransferRequest {
   sourceChain: Chain;
@@ -38,9 +40,9 @@ export interface WormholeTransferRequest {
 }
 
 export type WithdrawPhase =
-  | "initiating"  // User signing Aptos burn transaction
-  | "tracking"    // Waiting for Wormhole attestation (~60s)
-  | "claiming";   // Claiming on destination chain
+  | "initiating" // User signing Aptos burn transaction
+  | "tracking" // Waiting for Wormhole attestation (~60s)
+  | "claiming"; // Claiming on destination chain
 
 export interface WormholeWithdrawRequest {
   sourceChain: Chain;

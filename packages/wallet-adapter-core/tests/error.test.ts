@@ -172,14 +172,18 @@ describe("Error Classes", () => {
 
   describe("WalletSignMessageAndVerifyError", () => {
     it("should have correct name", () => {
-      const error = new WalletSignMessageAndVerifyError("Sign and verify failed");
+      const error = new WalletSignMessageAndVerifyError(
+        "Sign and verify failed",
+      );
       expect(error.name).toBe("WalletSignMessageAndVerifyError");
     });
   });
 
   describe("WalletSignAndSubmitMessageError", () => {
     it("should have correct name", () => {
-      const error = new WalletSignAndSubmitMessageError("Sign and submit failed");
+      const error = new WalletSignAndSubmitMessageError(
+        "Sign and submit failed",
+      );
       expect(error.name).toBe("WalletSignAndSubmitMessageError");
     });
   });
@@ -235,7 +239,9 @@ describe("Error Classes", () => {
 
   describe("WalletSubmitTransactionError", () => {
     it("should have correct name", () => {
-      const error = new WalletSubmitTransactionError("Submit transaction failed");
+      const error = new WalletSubmitTransactionError(
+        "Submit transaction failed",
+      );
       expect(error.name).toBe("WalletSubmitTransactionError");
     });
   });
@@ -286,4 +292,3 @@ describe("Error Classes", () => {
     });
   });
 });
-

@@ -169,4 +169,3 @@ describe("createSiwsEnvelope", () => {
   // Note: createSiwsEnvelopeForAptosTransaction tests require network access
   // to build transactions. These are tested via integration tests.
 });
-

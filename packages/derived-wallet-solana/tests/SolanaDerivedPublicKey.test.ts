@@ -70,7 +70,7 @@ describe("SolanaDerivedPublicKey", () => {
       });
 
       expect(pubKey1.authKey().derivedAddress().toString()).toBe(
-        pubKey2.authKey().derivedAddress().toString()
+        pubKey2.authKey().derivedAddress().toString(),
       );
     });
 
@@ -91,7 +91,7 @@ describe("SolanaDerivedPublicKey", () => {
       });
 
       expect(pubKey1.authKey().derivedAddress().toString()).not.toBe(
-        pubKey2.authKey().derivedAddress().toString()
+        pubKey2.authKey().derivedAddress().toString(),
       );
     });
 
@@ -109,7 +109,7 @@ describe("SolanaDerivedPublicKey", () => {
       });
 
       expect(pubKey1.authKey().derivedAddress().toString()).not.toBe(
-        pubKey2.authKey().derivedAddress().toString()
+        pubKey2.authKey().derivedAddress().toString(),
       );
     });
 
@@ -172,10 +172,10 @@ describe("SolanaDerivedPublicKey", () => {
 
       expect(deserialized.domain).toBe(original.domain);
       expect(deserialized.solanaPublicKey.toBase58()).toBe(
-        original.solanaPublicKey.toBase58()
+        original.solanaPublicKey.toBase58(),
       );
       expect(deserialized.authenticationFunction).toBe(
-        original.authenticationFunction
+        original.authenticationFunction,
       );
     });
 
@@ -195,7 +195,7 @@ describe("SolanaDerivedPublicKey", () => {
 
       // Compare derived addresses (which are deterministic)
       expect(deserialized.authKey().derivedAddress().toString()).toBe(
-        original.authKey().derivedAddress().toString()
+        original.authKey().derivedAddress().toString(),
       );
     });
   });
@@ -227,8 +227,9 @@ describe("SolanaDerivedPublicKey", () => {
         // Missing authenticationFunction
       };
 
-      expect(SolanaDerivedPublicKey.isInstance(partialPubKey as any)).toBe(false);
+      expect(SolanaDerivedPublicKey.isInstance(partialPubKey as any)).toBe(
+        false,
+      );
     });
   });
 });
-

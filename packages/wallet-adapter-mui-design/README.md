@@ -54,7 +54,7 @@ The main component that provides the wallet connection button and modal.
 ```tsx
 import { WalletConnector } from "@aptos-labs/wallet-adapter-mui-design";
 
-<WalletConnector />
+<WalletConnector />;
 ```
 
 ### Customization
@@ -90,4 +90,3 @@ function App() {
 ## License
 
 Apache-2.0
-

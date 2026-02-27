@@ -24,11 +24,7 @@ import {
 
 // Re-export types for backwards compatibility
 export type { SolanaRpcProvider, PriorityFeeConfig } from "./solanaUtils";
-export {
-  sleep,
-  isEmptyObject,
-  determineRpcProvider,
-} from "./solanaUtils";
+export { sleep, isEmptyObject, determineRpcProvider } from "./solanaUtils";
 
 // See https://docs.triton.one/chains/solana/sending-txs for more information
 export async function signAndSendTransaction(

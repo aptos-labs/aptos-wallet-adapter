@@ -35,12 +35,13 @@
     "lint": "TIMING=1 eslint \"src/**/*.ts*\""
   },
   "devDependencies": {
+    "@aptos-labs/eslint-config-adapter": "workspace:*",
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "eslint": "^8.57.1",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3"
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "eslint": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
   },
   "dependencies": {
     "@aptos-labs/wallet-adapter-react": "workspace:*",
@@ -52,6 +53,6 @@
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0",
-    "react-router-dom": "^7.5.2"
+    "react-router-dom": "^7.12.0"
   }
 }

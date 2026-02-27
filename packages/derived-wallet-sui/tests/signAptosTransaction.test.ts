@@ -1,6 +1,9 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import type { Wallet } from "@mysten/wallet-standard";
-import { signAptosTransactionWithSui, SIGNATURE_TYPE } from "../src/signAptosTransaction";
+import {
+  signAptosTransactionWithSui,
+  SIGNATURE_TYPE,
+} from "../src/signAptosTransaction";
 import { defaultAuthenticationFunction } from "../src/shared";
 import {
   createConnectedMockSuiWallet,
@@ -44,7 +47,7 @@ describe("signAptosTransaction", () => {
           authenticationFunction: defaultAuthenticationFunction,
           rawTransaction: mockRawTransaction,
           domain: testDomain,
-        })
+        }),
       ).rejects.toThrow("sui:signPersonalMessage not available");
     });
 
@@ -63,7 +66,7 @@ describe("signAptosTransaction", () => {
           authenticationFunction: defaultAuthenticationFunction,
           rawTransaction: mockRawTransaction,
           domain: testDomain,
-        })
+        }),
       ).rejects.toThrow("Account not connected");
     });
 
@@ -86,7 +89,9 @@ describe("signAptosTransaction", () => {
         });
       } catch (e) {
         // Expected to throw, we're just testing the input is accepted
-        expect((e as Error).message).toBe("sui:signPersonalMessage not available");
+        expect((e as Error).message).toBe(
+          "sui:signPersonalMessage not available",
+        );
       }
     });
 
@@ -108,9 +113,10 @@ describe("signAptosTransaction", () => {
         });
       } catch (e) {
         // Expected to throw, we're just testing the input is accepted
-        expect((e as Error).message).toBe("sui:signPersonalMessage not available");
+        expect((e as Error).message).toBe(
+          "sui:signPersonalMessage not available",
+        );
       }
     });
   });
 });
-

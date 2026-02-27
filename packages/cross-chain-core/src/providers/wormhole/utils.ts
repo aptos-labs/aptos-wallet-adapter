@@ -69,4 +69,3 @@ export async function createCCTPRoute(
 
   return { route: cctpRoute, request };
 }
-

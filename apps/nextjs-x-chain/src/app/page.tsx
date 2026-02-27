@@ -115,29 +115,29 @@ export default function Home() {
           )}
 
           {network?.name === Network.TESTNET && (
+            <>
               <>
-                <>
-                  <CCTPTransfer
-                    wallet={wallet}
-                    originWalletDetails={originWalletDetails}
-                    mainSigner={mainSigner}
-                    sponsorAccount={claimSponsorAccount}
-                    dappNetwork={DAPP_NETWORK}
-                    crossChainCore={crossChainCore}
-                    provider={crossChainProvider}
-                  />
-                  <CCTPWithdraw
-                    wallet={wallet}
-                    originWalletDetails={originWalletDetails}
-                    sponsorAccount={sponsorAccount}
-                    dappNetwork={DAPP_NETWORK}
-                    crossChainCore={crossChainCore}
-                    provider={crossChainProvider}
-                  />
-                </>
-                <SingleSigner dappNetwork={DAPP_NETWORK} wallet={wallet} />
+                <CCTPTransfer
+                  wallet={wallet}
+                  originWalletDetails={originWalletDetails}
+                  mainSigner={mainSigner}
+                  sponsorAccount={claimSponsorAccount}
+                  dappNetwork={DAPP_NETWORK}
+                  crossChainCore={crossChainCore}
+                  provider={crossChainProvider}
+                />
+                <CCTPWithdraw
+                  wallet={wallet}
+                  originWalletDetails={originWalletDetails}
+                  sponsorAccount={sponsorAccount}
+                  dappNetwork={DAPP_NETWORK}
+                  crossChainCore={crossChainCore}
+                  provider={crossChainProvider}
+                />
               </>
-            )}
+              <SingleSigner dappNetwork={DAPP_NETWORK} wallet={wallet} />
+            </>
+          )}
           {(network?.name === Network.DEVNET ||
             network?.name === Network.LOCAL) && (
             <>

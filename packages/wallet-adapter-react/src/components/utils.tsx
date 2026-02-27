@@ -1,5 +1,11 @@
 import { Slot } from "@radix-ui/react-slot";
-import { ReactNode, cloneElement, forwardRef, isValidElement } from "react";
+import {
+  type JSX,
+  type ReactNode,
+  cloneElement,
+  forwardRef,
+  isValidElement,
+} from "react";
 
 export interface HeadlessComponentProps {
   /** A class name for styling the element. */
@@ -43,7 +49,9 @@ export function createHeadlessComponent<
       /**
        * Use props' default children if no children are set in the component element's children and when asChild is true.
        */
-      asChild && isValidElement(children) && !children.props.children
+      asChild &&
+      isValidElement<{ children?: ReactNode }>(children) &&
+      !children.props.children
         ? cloneElement(children, {}, defaultChildren)
         : (children ?? defaultChildren);
 

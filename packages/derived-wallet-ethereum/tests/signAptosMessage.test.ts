@@ -50,7 +50,9 @@ describe("signAptosMessage", () => {
 
       expect(response.status).toBe(UserResponseStatus.APPROVED);
       if (response.status === UserResponseStatus.APPROVED) {
-        expect(response.args.signature).toBeInstanceOf(EIP1193PersonalSignature);
+        expect(response.args.signature).toBeInstanceOf(
+          EIP1193PersonalSignature,
+        );
       }
     });
 
@@ -176,7 +178,7 @@ describe("signAptosMessage", () => {
             message: "Test",
             nonce: "test",
           },
-        })
+        }),
       ).rejects.toThrow("Account not connected");
     });
 
@@ -190,9 +192,8 @@ describe("signAptosMessage", () => {
             message: "Test",
             nonce: "test",
           },
-        })
+        }),
       ).rejects.toThrow("Account not connected");
     });
   });
 });
-

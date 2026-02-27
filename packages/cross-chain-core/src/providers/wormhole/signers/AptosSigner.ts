@@ -18,7 +18,10 @@ import {
 } from "@wormhole-foundation/sdk-aptos";
 import { GasStationApiKey } from "..";
 import { UserResponseStatus } from "@aptos-labs/wallet-standard";
-import { GasStationClient, GasStationTransactionSubmitter } from "@aptos-labs/gas-station-client";
+import {
+  GasStationClient,
+  GasStationTransactionSubmitter,
+} from "@aptos-labs/gas-station-client";
 
 export async function signAndSendTransaction(
   request: AptosUnsignedTransaction<Network, AptosChains>,
@@ -42,23 +45,28 @@ export async function signAndSendTransaction(
     }
   });
 
-
   // Configure Aptos client based on sponsor type
   let aptosConfig: AptosConfig;
   const useGasStation = sponsorAccount && !isAccount(sponsorAccount);
 
   if (useGasStation) {
     // Gas station flow - configure with plugin upfront
+    // Type casts needed: gas-station-client@2 was built against ts-sdk@5 types
     const gasStationClient = new GasStationClient({
-      network: dappNetwork,
-      apiKey: sponsorAccount[dappNetwork as AptosNetwork.TESTNET | AptosNetwork.MAINNET],
+      network: dappNetwork as never,
+      apiKey:
+        sponsorAccount[
+          dappNetwork as AptosNetwork.TESTNET | AptosNetwork.MAINNET
+        ],
     });
-    const transactionSubmitter = new GasStationTransactionSubmitter(gasStationClient);
-    
+    const transactionSubmitter = new GasStationTransactionSubmitter(
+      gasStationClient,
+    );
+
     aptosConfig = new AptosConfig({
       network: dappNetwork,
       pluginSettings: {
-        TRANSACTION_SUBMITTER: transactionSubmitter,
+        TRANSACTION_SUBMITTER: transactionSubmitter as never,
       },
     });
   } else {
@@ -114,8 +122,8 @@ export async function signAndSendTransaction(
     senderAuthenticator: response.args,
   };
 
-   // Only sign as fee payer if it's an Account (not gas station)
-   if (sponsorAccount && isAccount(sponsorAccount)) {
+  // Only sign as fee payer if it's an Account (not gas station)
+  if (sponsorAccount && isAccount(sponsorAccount)) {
     const feePayerSignerAuthenticator = aptos.transaction.signAsFeePayer({
       signer: sponsorAccount,
       transaction: txnToSign,
@@ -157,5 +165,5 @@ function extractFunctionArguments(
 }
 
 export function isAccount(obj: Account | GasStationApiKey): obj is Account {
-  return 'accountAddress' in obj;
+  return "accountAddress" in obj;
 }

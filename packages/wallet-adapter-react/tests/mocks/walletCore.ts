@@ -11,8 +11,7 @@ import type {
 
 // Test fixtures
 export const TEST_ACCOUNT: AccountInfo = {
-  address:
-    "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+  address: "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
   publicKey: new Uint8Array(32).fill(1),
 } as unknown as AccountInfo;
 
@@ -35,7 +34,7 @@ export const createMockWallet = (name = "Mock Wallet"): AdapterWallet => ({
 });
 
 export const createMockNotDetectedWallet = (
-  name = "Not Detected Wallet"
+  name = "Not Detected Wallet",
 ): AdapterNotDetectedWallet => ({
   name,
   icon: "data:image/svg+xml,<svg></svg>" as any,
@@ -78,7 +77,9 @@ export const createMockWalletCore = () => {
     }),
     off: vi.fn((event: string, handler: Function) => {
       if (eventHandlers[event]) {
-        eventHandlers[event] = eventHandlers[event].filter((h) => h !== handler);
+        eventHandlers[event] = eventHandlers[event].filter(
+          (h) => h !== handler,
+        );
       }
     }),
     emit: vi.fn((event: string, ...args: any[]) => {
@@ -97,4 +98,3 @@ export const createMockWalletCore = () => {
 };
 
 export type MockWalletCore = ReturnType<typeof createMockWalletCore>;
-

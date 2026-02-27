@@ -23,8 +23,7 @@ export async function signAndSendTransaction(
   });
   const actualChainId = parseInt(chainId, 16);
 
-  if (!actualChainId)
-    throw new Error("No signer found for chain" + chainName);
+  if (!actualChainId) throw new Error("No signer found for chain" + chainName);
   const expectedChainId = request.transaction.chainId
     ? getBigInt(request.transaction.chainId)
     : undefined;

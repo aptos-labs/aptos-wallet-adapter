@@ -23,7 +23,7 @@ describe("AboutPetraWeb", () => {
           <Indicator key={index}>{`Indicator ${index}`}</Indicator>
         ))}
       </div>
-    )
+    ),
   );
 
   beforeEach(() => {
@@ -35,7 +35,7 @@ describe("AboutPetraWeb", () => {
       render(
         <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
           <div data-testid="wallet-selection">Wallet Selection</div>
-        </AboutPetraWeb>
+        </AboutPetraWeb>,
       );
 
       expect(screen.getByTestId("wallet-selection")).toBeInTheDocument();
@@ -48,7 +48,7 @@ describe("AboutPetraWeb", () => {
       render(
         <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
           <AboutPetraWeb.Trigger>Learn More</AboutPetraWeb.Trigger>
-        </AboutPetraWeb>
+        </AboutPetraWeb>,
       );
 
       fireEvent.click(screen.getByRole("button", { name: "Learn More" }));
@@ -58,7 +58,9 @@ describe("AboutPetraWeb", () => {
     });
 
     it("should throw when used outside AboutPetraWeb context", () => {
-      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+      const consoleSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
 
       expect(() => {
         render(<AboutPetraWeb.Trigger>Learn More</AboutPetraWeb.Trigger>);
@@ -73,7 +75,7 @@ describe("AboutPetraWeb", () => {
       render(
         <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
           <AboutPetraWeb.Trigger>Learn More</AboutPetraWeb.Trigger>
-        </AboutPetraWeb>
+        </AboutPetraWeb>,
       );
 
       fireEvent.click(screen.getByRole("button", { name: "Learn More" }));
@@ -86,7 +88,7 @@ describe("AboutPetraWeb", () => {
       render(
         <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
           <AboutPetraWeb.Trigger>Learn More</AboutPetraWeb.Trigger>
-        </AboutPetraWeb>
+        </AboutPetraWeb>,
       );
 
       fireEvent.click(screen.getByRole("button", { name: "Learn More" }));
@@ -99,7 +101,7 @@ describe("AboutPetraWeb", () => {
       render(
         <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
           <AboutPetraWeb.Trigger>Learn More</AboutPetraWeb.Trigger>
-        </AboutPetraWeb>
+        </AboutPetraWeb>,
       );
 
       // Navigate to screen 1, then screen 2, then back
@@ -115,7 +117,7 @@ describe("AboutPetraWeb", () => {
         <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
           <div data-testid="wallet-selection">Wallet Selection</div>
           <AboutPetraWeb.Trigger>Learn More</AboutPetraWeb.Trigger>
-        </AboutPetraWeb>
+        </AboutPetraWeb>,
       );
 
       fireEvent.click(screen.getByRole("button", { name: "Learn More" }));
@@ -130,7 +132,7 @@ describe("AboutPetraWeb", () => {
         <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
           <div data-testid="wallet-selection">Wallet Selection</div>
           <AboutPetraWeb.Trigger>Learn More</AboutPetraWeb.Trigger>
-        </AboutPetraWeb>
+        </AboutPetraWeb>,
       );
 
       fireEvent.click(screen.getByRole("button", { name: "Learn More" }));
@@ -148,22 +150,28 @@ describe("AboutPetraWeb", () => {
       render(
         <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
           <AboutPetraWeb.Trigger>Learn More</AboutPetraWeb.Trigger>
-        </AboutPetraWeb>
+        </AboutPetraWeb>,
       );
 
       fireEvent.click(screen.getByRole("button", { name: "Learn More" }));
 
       // Should have 3 indicators for 3 education screens (aria-label is "Go to screen N")
-      expect(screen.getByRole("button", { name: "Go to screen 1" })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: "Go to screen 2" })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: "Go to screen 3" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Go to screen 1" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Go to screen 2" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Go to screen 3" }),
+      ).toBeInTheDocument();
     });
 
     it("should navigate to specific screen when indicator is clicked", () => {
       render(
         <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
           <AboutPetraWeb.Trigger>Learn More</AboutPetraWeb.Trigger>
-        </AboutPetraWeb>
+        </AboutPetraWeb>,
       );
 
       fireEvent.click(screen.getByRole("button", { name: "Learn More" }));
@@ -179,7 +187,7 @@ describe("AboutPetraWeb", () => {
       render(
         <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
           <AboutPetraWeb.Trigger>Learn More</AboutPetraWeb.Trigger>
-        </AboutPetraWeb>
+        </AboutPetraWeb>,
       );
 
       fireEvent.click(screen.getByRole("button", { name: "Learn More" }));
@@ -191,27 +199,29 @@ describe("AboutPetraWeb", () => {
       render(
         <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
           <AboutPetraWeb.Trigger>Learn More</AboutPetraWeb.Trigger>
-        </AboutPetraWeb>
+        </AboutPetraWeb>,
       );
 
       fireEvent.click(screen.getByRole("button", { name: "Learn More" }));
 
       // First screen title
-      expect(screen.getByRole("heading", { name: "A better way to login." })).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: "A better way to login." }),
+      ).toBeInTheDocument();
     });
 
     it("should render Description component", () => {
       render(
         <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
           <AboutPetraWeb.Trigger>Learn More</AboutPetraWeb.Trigger>
-        </AboutPetraWeb>
+        </AboutPetraWeb>,
       );
 
       fireEvent.click(screen.getByRole("button", { name: "Learn More" }));
 
       // First screen description contains this text
       expect(
-        screen.getByText(/Petra Web is a web3 wallet/)
+        screen.getByText(/Petra Web is a web3 wallet/),
       ).toBeInTheDocument();
     });
   });
@@ -219,7 +229,7 @@ describe("AboutPetraWeb", () => {
   describe("constants", () => {
     it("should export EXPLORE_ECOSYSTEM_URL", () => {
       expect(EXPLORE_ECOSYSTEM_URL).toBe(
-        "https://aptosnetwork.com/ecosystem/directory/category/defi"
+        "https://aptosnetwork.com/ecosystem/directory/category/defi",
       );
     });
   });

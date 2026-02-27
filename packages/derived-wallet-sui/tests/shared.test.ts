@@ -9,14 +9,12 @@ describe("shared", () => {
   describe("defaultAuthenticationFunction", () => {
     it("should be the correct authentication function", () => {
       expect(defaultAuthenticationFunction).toBe(
-        "0x1::sui_derivable_account::authenticate"
+        "0x1::sui_derivable_account::authenticate",
       );
     });
 
     it("should be a valid Move function identifier format", () => {
-      expect(defaultAuthenticationFunction).toMatch(
-        /^0x[a-f0-9]+::\w+::\w+$/i
-      );
+      expect(defaultAuthenticationFunction).toMatch(/^0x[a-f0-9]+::\w+::\w+$/i);
     });
   });
 
@@ -77,7 +75,7 @@ describe("shared", () => {
       const promise = Promise.reject(error);
 
       await expect(wrapSuiUserResponse(promise)).rejects.toThrow(
-        "Connection failed"
+        "Connection failed",
       );
     });
 
@@ -118,9 +116,15 @@ describe("shared", () => {
       const upperCaseError = new Error("USER REJECTED THE REQUEST");
       const mixedCaseError = new Error("User REJECTED The Request");
 
-      const response1 = await wrapSuiUserResponse(Promise.reject(lowerCaseError));
-      const response2 = await wrapSuiUserResponse(Promise.reject(upperCaseError));
-      const response3 = await wrapSuiUserResponse(Promise.reject(mixedCaseError));
+      const response1 = await wrapSuiUserResponse(
+        Promise.reject(lowerCaseError),
+      );
+      const response2 = await wrapSuiUserResponse(
+        Promise.reject(upperCaseError),
+      );
+      const response3 = await wrapSuiUserResponse(
+        Promise.reject(mixedCaseError),
+      );
 
       expect(response1.status).toBe(UserResponseStatus.REJECTED);
       expect(response2.status).toBe(UserResponseStatus.REJECTED);
@@ -128,4 +132,3 @@ describe("shared", () => {
     });
   });
 });
-

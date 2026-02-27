@@ -9,13 +9,13 @@ describe("shared", () => {
   describe("defaultEthereumAuthenticationFunction", () => {
     it("should be the correct authentication function", () => {
       expect(defaultEthereumAuthenticationFunction).toBe(
-        "0x1::ethereum_derivable_account::authenticate"
+        "0x1::ethereum_derivable_account::authenticate",
       );
     });
 
     it("should be a valid Move function identifier format", () => {
       expect(defaultEthereumAuthenticationFunction).toMatch(
-        /^0x[a-f0-9]+::\w+::\w+$/i
+        /^0x[a-f0-9]+::\w+::\w+$/i,
       );
     });
   });
@@ -61,7 +61,7 @@ describe("shared", () => {
       const promise = Promise.reject(error);
 
       await expect(wrapEthersUserResponse(promise)).rejects.toThrow(
-        "Network error"
+        "Network error",
       );
     });
 
@@ -72,7 +72,7 @@ describe("shared", () => {
       const promise = Promise.reject(error);
 
       await expect(wrapEthersUserResponse(promise)).rejects.toThrow(
-        "Invalid params"
+        "Invalid params",
       );
     });
 
@@ -100,4 +100,3 @@ describe("shared", () => {
     });
   });
 });
-

@@ -57,7 +57,7 @@ describe("signAptosMessage", () => {
       expect(response.status).toBe(UserResponseStatus.APPROVED);
       if (response.status === UserResponseStatus.APPROVED) {
         expect(response.args.signature).toBeInstanceOf(
-          SuiDerivedEd25519Signature
+          SuiDerivedEd25519Signature,
         );
       }
     });
@@ -158,7 +158,7 @@ describe("signAptosMessage", () => {
             nonce: "test",
           },
           domain: testDomain,
-        })
+        }),
       ).rejects.toThrow("sui:signPersonalMessage not available");
     });
 
@@ -178,7 +178,7 @@ describe("signAptosMessage", () => {
             nonce: "test",
           },
           domain: testDomain,
-        })
+        }),
       ).rejects.toThrow("Account not connected");
     });
 
@@ -218,4 +218,3 @@ describe("signAptosMessage", () => {
     });
   });
 });
-

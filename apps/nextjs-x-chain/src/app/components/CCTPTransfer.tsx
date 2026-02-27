@@ -15,10 +15,7 @@ import {
   EthereumChainIdToMainnetChain,
   GasStationApiKey,
 } from "@aptos-labs/cross-chain-core";
-import {
-  Account,
-  Network,
-} from "@aptos-labs/ts-sdk";
+import { Account, Network } from "@aptos-labs/ts-sdk";
 import {
   Chain,
   WormholeTransferResponse,

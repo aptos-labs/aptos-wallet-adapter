@@ -38,21 +38,24 @@
     "lint": "TIMING=1 eslint \"src/**/*.ts*\""
   },
   "devDependencies": {
+    "@aptos-labs/eslint-config-adapter": "workspace:*",
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@testing-library/jest-dom": "^6.0.0",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.0.0",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "eslint": "^8.57.1",
-    "happy-dom": "^20.0.2",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3",
-    "vitest": "^2.1.8"
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "eslint": "catalog:",
+    "happy-dom": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "dependencies": {
     "@aptos-labs/wallet-adapter-core": "workspace:*",
-    "@radix-ui/react-slot": "^1.0.2"
+    "@radix-ui/react-slot": "catalog:"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0"
