@@ -12,6 +12,8 @@ The Aptos Wallet Adapter is a comprehensive monorepo for building dapps on Aptos
 - **Derived Wallets**: Create Aptos wallets from external chain keys (Ethereum, Solana, Sui)
 - **UI Components**: Pre-built wallet selectors for Ant Design and Material-UI
 
+The Aptos Wallet Adapter monorepo lives in https://github.com/aptos-labs/aptos-wallet-adapter
+
 ## Repository Structure
 
 This is a **Turbo monorepo** with two main workspaces:
