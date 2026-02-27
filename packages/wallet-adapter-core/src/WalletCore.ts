@@ -771,10 +771,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         if (
           transactionInput.data.function === "0x1::code::publish_package_txn"
         ) {
-          ({
-            metadataBytes: transactionInput.data.functionArguments[0],
-            byteCode: transactionInput.data.functionArguments[1],
-          } = handlePublishPackageTransaction(transactionInput));
+          const args = transactionInput.data.functionArguments;
+          if (args) {
+            ({
+              metadataBytes: args[0],
+              byteCode: args[1],
+            } = handlePublishPackageTransaction(transactionInput));
+          }
         }
       }
       this.ensureWalletExists(this._wallet);

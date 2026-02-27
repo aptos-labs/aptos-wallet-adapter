@@ -51,8 +51,9 @@ export async function signAndSendTransaction(
 
   if (useGasStation) {
     // Gas station flow - configure with plugin upfront
+    // Type casts needed: gas-station-client@2 was built against ts-sdk@5 types
     const gasStationClient = new GasStationClient({
-      network: dappNetwork,
+      network: dappNetwork as never,
       apiKey:
         sponsorAccount[
           dappNetwork as AptosNetwork.TESTNET | AptosNetwork.MAINNET
@@ -65,7 +66,7 @@ export async function signAndSendTransaction(
     aptosConfig = new AptosConfig({
       network: dappNetwork,
       pluginSettings: {
-        TRANSACTION_SUBMITTER: transactionSubmitter,
+        TRANSACTION_SUBMITTER: transactionSubmitter as never,
       },
     });
   } else {

@@ -148,14 +148,21 @@ export const fetchDevnetChainId = async (): Promise<number> => {
 export const handlePublishPackageTransaction = (
   transactionInput: InputTransactionData,
 ) => {
+  const { functionArguments } = transactionInput.data;
+  if (!functionArguments) {
+    throw new WalletSignAndSubmitMessageError(
+      "functionArguments is required for publish_package_txn.",
+    ).message;
+  }
+
   // convert the first argument, metadataBytes, to uint8array if is a string
-  let metadataBytes = transactionInput.data.functionArguments[0];
+  let metadataBytes = functionArguments[0];
   if (typeof metadataBytes === "string") {
     metadataBytes = Hex.fromHexInput(metadataBytes).toUint8Array();
   }
 
   // convert the second argument, byteCode, to uint8array if is a string
-  let byteCode = transactionInput.data.functionArguments[1];
+  let byteCode = functionArguments[1];
   if (Array.isArray(byteCode)) {
     byteCode = byteCode.map((byte) => {
       if (typeof byte === "string") {

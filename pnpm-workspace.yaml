@@ -19,7 +19,7 @@ catalog:
   vitest: ^2.1.8
   happy-dom: ^20.0.2
   "@testing-library/jest-dom": ^6.0.0
-  "@testing-library/react": ^15
+  "@testing-library/react": ^16.3.2
   "@testing-library/user-event": ^14.0.0
 
   # Type definitions
