@@ -21,10 +21,10 @@ Currently, the wallets that have been tested and support cross-chain accounts ar
 
 |          | Aptos Devnet | Aptos Testnet | Aptos Mainnet |
 | -------- | ------------ | ------------- | ------------- |
-| Phantom  | ✅           | ✅            | ✅
-| Solflare | ✅           | ✅            | ✅
-| Backpack | ✅           | ✅            | ✅
-| OKX      | ✅           | ✅            | ✅
+| Phantom  | ✅           | ✅            | ✅            |
+| Solflare | ✅           | ✅            | ✅            |
+| Backpack | ✅           | ✅            | ✅            |
+| OKX      | ✅           | ✅            | ✅            |
 
 ## Usage
 
@@ -43,7 +43,10 @@ npm install @aptos-labs/wallet-adapter-react @aptos-labs/derived-wallet-solana
 2. Set up automatic detection
 
 ```tsx
-import { AptosWalletAdapterProvider, Network } from "@aptos-labs/wallet-adapter-react";
+import {
+  AptosWalletAdapterProvider,
+  Network,
+} from "@aptos-labs/wallet-adapter-react";
 import { setupAutomaticSolanaWalletDerivation } from "@aptos-labs/derived-wallet-solana";
 
 setupAutomaticSolanaWalletDerivation({ defaultNetwork: Network.TESTNET });
@@ -56,7 +59,7 @@ setupAutomaticSolanaWalletDerivation({ defaultNetwork: Network.TESTNET });
   }}
 >
   {children}
-</AptosWalletAdapterProvider>
+</AptosWalletAdapterProvider>;
 ```
 
 ### Option 2: Programmatic Signing (For Node.js/Scripts)
@@ -93,11 +96,11 @@ const transaction = await aptos.transaction.build.simple({
     function: "0x1::aptos_account::transfer",
     functionArguments: [recipientAddress, 100],
   },
-}),
+});
 
 const response = await aptos.signAndSubmitTransaction({
   signer: account,
-  transaction
+  transaction,
 });
 
 console.log("Transaction hash:", response.hash);

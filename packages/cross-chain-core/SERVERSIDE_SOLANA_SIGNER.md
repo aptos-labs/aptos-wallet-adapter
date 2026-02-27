@@ -1,6 +1,6 @@
 # Server-Side Solana Claim Implementation
 
-When withdrawing USDC from Aptos to Solana via CCTP, the claim transaction needs to be signed on Solana. By default, this requires the user's wallet to sign a second transaction after waiting for attestation (~60 seconds). 
+When withdrawing USDC from Aptos to Solana via CCTP, the claim transaction needs to be signed on Solana. By default, this requires the user's wallet to sign a second transaction after waiting for attestation (~60 seconds).
 
 For a smoother user experience, you can implement a **server-side claim** where your backend signs the claim transaction instead of the user's wallet. This eliminates the second wallet popup and provides a seamless one-click withdrawal flow.
 
@@ -24,7 +24,9 @@ import { SolanaLocalSigner } from "@aptos-labs/cross-chain-core";
 import { Connection, Keypair } from "@solana/web3.js";
 import bs58 from "bs58";
 
-const keypair = Keypair.fromSecretKey(bs58.decode(process.env.SOLANA_CLAIM_SIGNER_KEY));
+const keypair = Keypair.fromSecretKey(
+  bs58.decode(process.env.SOLANA_CLAIM_SIGNER_KEY),
+);
 const connection = new Connection("https://api.mainnet-beta.solana.com");
 
 const signer = new SolanaLocalSigner({ keypair, connection });
@@ -45,10 +47,10 @@ interface SolanaLocalSignerConfig {
   retryIntervalMs?: number;
   /** Priority fee configuration for faster transaction landing */
   priorityFeeConfig?: {
-    percentile?: number;       // Percentile of recent fees (default: 0.9)
+    percentile?: number; // Percentile of recent fees (default: 0.9)
     percentileMultiple?: number; // Multiplier for the fee (default: 1)
-    min?: number;              // Minimum fee in microlamports (default: 100_000)
-    max?: number;              // Maximum fee in microlamports (default: 100_000_000)
+    min?: number; // Minimum fee in microlamports (default: 100_000)
+    max?: number; // Maximum fee in microlamports (default: 100_000_000)
   };
   /** Enable verbose logging (default: false) */
   verbose?: boolean;
@@ -60,7 +62,10 @@ interface SolanaLocalSignerConfig {
 The SDK also provides `serializeReceipt` and `deserializeReceipt` utilities for handling Wormhole receipts over HTTP. JSON doesn't natively support `BigInt`, `Uint8Array`, or class instances like `UniversalAddress`, so these utilities handle the conversion:
 
 ```typescript
-import { serializeReceipt, deserializeReceipt } from "@aptos-labs/cross-chain-core";
+import {
+  serializeReceipt,
+  deserializeReceipt,
+} from "@aptos-labs/cross-chain-core";
 
 // Client-side: serialize before sending to server
 const serialized = serializeReceipt(receipt);
@@ -77,6 +82,7 @@ await cctpRoute.complete(signer, receipt);
 ## API Contract
 
 ### Request
+
 **POST** to your configured `serverClaimUrl`
 
 ```typescript
@@ -94,9 +100,10 @@ await cctpRoute.complete(signer, receipt);
 > that burns the USDC (which is Aptos).
 
 ### Response
+
 ```typescript
 {
-  destinationChainTxnId: string  // Solana transaction signature
+  destinationChainTxnId: string; // Solana transaction signature
 }
 ```
 
@@ -124,6 +131,7 @@ export const crossChainCore = new CrossChainCore({
 📖 **See [`apps/nextjs-x-chain/src/app/api/claim-withdraw/route.ts`](../../apps/nextjs-x-chain/src/app/api/claim-withdraw/route.ts) for a complete working Next.js API route implementation.**
 
 The reference implementation includes:
+
 - Origin/referrer validation to prevent cross-origin abuse
 - Lazy-cached Wormhole SDK initialization (avoids re-creating on every request)
 - Server-only environment variables for RPC URLs and signer keys
@@ -154,6 +162,7 @@ SOLANA_CLAIM_SIGNER_KEY=<base58-encoded-private-key>
 ```
 
 **Example:**
+
 ```bash
 SOLANA_CLAIM_SIGNER_KEY=5J3mBbAH58CpQ3Y2S4VNFGyvW2...
 ```

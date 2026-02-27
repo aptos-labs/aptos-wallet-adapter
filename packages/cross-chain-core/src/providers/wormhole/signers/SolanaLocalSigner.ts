@@ -59,9 +59,10 @@ export interface SolanaLocalSignerConfig {
  * await cctpRoute.complete(signer, receipt);
  * ```
  */
-export class SolanaLocalSigner<N extends Network, C extends Chain>
-  implements SignAndSendSigner<N, C>
-{
+export class SolanaLocalSigner<
+  N extends Network,
+  C extends Chain,
+> implements SignAndSendSigner<N, C> {
   private keypair: Keypair;
   private connection: Connection;
   private commitment: Commitment;
@@ -155,7 +156,7 @@ export class SolanaLocalSigner<N extends Network, C extends Chain>
       if (this.verbose || this.priorityFeeConfig) {
         console.warn(
           "SolanaLocalSigner: Versioned transaction detected — priority fees are not applied. " +
-          "Consider using legacy transactions if priority fees are required.",
+            "Consider using legacy transactions if priority fees are required.",
         );
       }
       unsignedTx.sign([this.keypair]);

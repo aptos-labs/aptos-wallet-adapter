@@ -122,7 +122,7 @@ export async function signAndSendTransaction(
   };
 
   if (sponsorAccount) {
-    // Gas station is currently impossible to use, since the transactino we get from 
+    // Gas station is currently impossible to use, since the transactino we get from
     // Wormhole is a script transaction and gas station only supports entry function transactions
     const feePayerSignerAuthenticator = aptos.transaction.signAsFeePayer({
       signer: sponsorAccount as Account,

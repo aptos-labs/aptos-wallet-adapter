@@ -301,6 +301,7 @@ console.log(`Destination TX: ${destinationChainTxnId}`);
 When withdrawing USDC from Aptos to Solana, the claim transaction on Solana requires a signature. By default, the user's wallet signs this transaction. However, for a smoother user experience, you can configure a **server-side claim** where your backend signs the Solana claim transaction instead.
 
 **Benefits:**
+
 - Users only sign once (the Aptos burn transaction)
 - No second wallet popup after the ~60 second attestation wait
 - Seamless one-click withdrawal flow

@@ -14,7 +14,8 @@ import { CrossChainCore, GasStationApiKey } from "@aptos-labs/cross-chain-core";
 
 // The network the dapp operates on (defaults to testnet if not set)
 export const DAPP_NETWORK: Network.MAINNET | Network.TESTNET =
-  (process.env.NEXT_PUBLIC_DAPP_NETWORK as Network.MAINNET | Network.TESTNET) || Network.TESTNET;
+  (process.env.NEXT_PUBLIC_DAPP_NETWORK as Network.MAINNET | Network.TESTNET) ||
+  Network.TESTNET;
 
 // Initialize cross-chain core (singleton)
 // Use the appropriate Solana RPC based on the network.
@@ -58,6 +59,10 @@ export const claimSponsorAccount = Account.fromPrivateKey({
 });
 
 export const sponsorAccount: GasStationApiKey = {
-  [Network.TESTNET]: process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_GAS_STATION_API_KEY_TESTNET || "",
-  [Network.MAINNET]: process.env.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_GAS_STATION_API_KEY_MAINNET || "",
+  [Network.TESTNET]:
+    process.env
+      .NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_GAS_STATION_API_KEY_TESTNET || "",
+  [Network.MAINNET]:
+    process.env
+      .NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_GAS_STATION_API_KEY_MAINNET || "",
 };

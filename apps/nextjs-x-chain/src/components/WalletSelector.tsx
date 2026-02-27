@@ -167,9 +167,9 @@ function ConnectWalletDialog({
         acc.evmInstallableWallets.push(wallet);
       } else if (wallet.name.includes("Solana")) {
         acc.solanaInstallableWallets.push(wallet);
-      } else if(wallet.name.includes("Sui")) {
+      } else if (wallet.name.includes("Sui")) {
         acc.suiInstallableWallets.push(wallet);
-      }else {
+      } else {
         acc.aptosInstallableWallets.push(wallet);
       }
       return acc;
@@ -328,7 +328,7 @@ function ConnectWalletDialog({
                   key={wallet.name}
                   wallet={wallet}
                   onConnect={close}
-                />  
+                />
               ))}
               {!!suiInstallableWallets.length && (
                 <Collapsible className="flex flex-col gap-3 pt-3">

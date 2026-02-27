@@ -70,7 +70,7 @@ describe("EIP1193DerivedSignature", () => {
       const signature = new EIP1193SiweSignature(
         testScheme,
         testIssuedAt,
-        testSignatureHex
+        testSignatureHex,
       );
 
       expect(signature.scheme).toBe(testScheme);
@@ -82,7 +82,7 @@ describe("EIP1193DerivedSignature", () => {
       const signature = new EIP1193SiweSignature(
         testScheme,
         testIssuedAt,
-        testSignatureHex
+        testSignatureHex,
       );
 
       const serializer = new Serializer();
@@ -96,7 +96,7 @@ describe("EIP1193DerivedSignature", () => {
       const original = new EIP1193SiweSignature(
         testScheme,
         testIssuedAt,
-        testSignatureHex
+        testSignatureHex,
       );
 
       // Serialize
@@ -110,7 +110,7 @@ describe("EIP1193DerivedSignature", () => {
 
       expect(deserialized.scheme).toBe(original.scheme);
       expect(deserialized.issuedAt.toISOString()).toBe(
-        original.issuedAt.toISOString()
+        original.issuedAt.toISOString(),
       );
       expect(deserialized.siweSignature).toBe(original.siweSignature);
     });
@@ -119,12 +119,12 @@ describe("EIP1193DerivedSignature", () => {
       const httpSig = new EIP1193SiweSignature(
         "http",
         testIssuedAt,
-        testSignatureHex
+        testSignatureHex,
       );
       const httpsSig = new EIP1193SiweSignature(
         "https",
         testIssuedAt,
-        testSignatureHex
+        testSignatureHex,
       );
 
       expect(httpSig.scheme).toBe("http");
@@ -136,7 +136,7 @@ describe("EIP1193DerivedSignature", () => {
       const signature = new EIP1193SiweSignature(
         testScheme,
         preciseDate,
-        testSignatureHex
+        testSignatureHex,
       );
 
       const serializer = new Serializer();
@@ -147,7 +147,7 @@ describe("EIP1193DerivedSignature", () => {
       const deserialized = EIP1193SiweSignature.deserialize(deserializer);
 
       expect(deserialized.issuedAt.toISOString()).toBe(
-        preciseDate.toISOString()
+        preciseDate.toISOString(),
       );
     });
 
@@ -155,11 +155,10 @@ describe("EIP1193DerivedSignature", () => {
       const signature = new EIP1193SiweSignature(
         testScheme,
         testIssuedAt,
-        testSignatureHex
+        testSignatureHex,
       );
 
       expect(signature).toBeInstanceOf(EIP1193PersonalSignature);
     });
   });
 });
-

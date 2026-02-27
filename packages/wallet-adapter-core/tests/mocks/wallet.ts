@@ -27,7 +27,9 @@ export const TEST_NETWORK: NetworkInfo = {
  * Creates a mock AIP-62 compatible wallet for testing.
  * This is a minimal mock that provides the structure needed for WalletCore tests.
  */
-export function createMockWallet(options: { name?: string } = {}): AdapterWallet {
+export function createMockWallet(
+  options: { name?: string } = {},
+): AdapterWallet {
   const { name = "Mock Wallet" } = options;
 
   return {

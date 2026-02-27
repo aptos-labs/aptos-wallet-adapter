@@ -1,9 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { Hex } from "@aptos-labs/ts-sdk";
 import { StructuredMessage } from "@aptos-labs/derived-wallet-base";
-import {
-  createSiweEnvelopeForAptosStructuredMessage,
-} from "../src/createSiweEnvelope";
+import { createSiweEnvelopeForAptosStructuredMessage } from "../src/createSiweEnvelope";
 import type { EthereumAddress } from "../src/shared";
 
 describe("createSiweEnvelope", () => {
@@ -163,4 +161,3 @@ describe("createSiweEnvelope", () => {
   // Note: createSiweEnvelopeForAptosTransaction tests require network access
   // to build transactions. These are tested via integration tests.
 });
-

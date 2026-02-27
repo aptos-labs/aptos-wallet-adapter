@@ -1,8 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import {
-  APTOS_CHAINS,
-  UserResponseStatus,
-} from "@aptos-labs/wallet-standard";
+import { APTOS_CHAINS, UserResponseStatus } from "@aptos-labs/wallet-standard";
 import {
   Network,
   NetworkToChainId,
@@ -68,7 +65,7 @@ describe("SolanaDerivedWallet", () => {
 
     it("should use default authentication function", () => {
       expect(wallet.authenticationFunction).toBe(
-        defaultSolanaAuthenticationFunction
+        defaultSolanaAuthenticationFunction,
       );
     });
 
@@ -195,7 +192,7 @@ describe("SolanaDerivedWallet", () => {
         wallet.changeNetwork({
           name: Network.CUSTOM,
           url: "https://custom.node.com",
-        })
+        }),
       ).rejects.toThrow("Custom network not currently supported");
     });
 
@@ -300,4 +297,3 @@ describe("SolanaDerivedWallet", () => {
   // Note: signTransaction tests require network access to build transactions.
   // These are tested via integration tests.
 });
-

@@ -42,7 +42,14 @@ const WalletItemContext = createContext<{
 
 const Root = forwardRef<HTMLDivElement, WalletItemProps>(
   (
-    { wallet, onConnect, showAllOnMobile = false, className, asChild, children },
+    {
+      wallet,
+      onConnect,
+      showAllOnMobile = false,
+      className,
+      asChild,
+      children,
+    },
     ref,
   ) => {
     const { connect } = useWallet();

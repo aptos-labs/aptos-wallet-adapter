@@ -23,7 +23,9 @@ describe("StructuredMessage", () => {
       const encoded = encodeStructuredMessage(message);
       const decoded = new TextDecoder().decode(encoded);
 
-      expect(decoded).toBe("APTOS\nmessage: Hello, Aptos!\nnonce: unique-nonce-123");
+      expect(decoded).toBe(
+        "APTOS\nmessage: Hello, Aptos!\nnonce: unique-nonce-123",
+      );
     });
 
     it("should encode a message with all optional fields", () => {
@@ -94,7 +96,9 @@ describe("StructuredMessage", () => {
       const input = "INVALID\nmessage: Hello!\nnonce: nonce-123";
       const encoded = new TextEncoder().encode(input);
 
-      expect(() => decodeStructuredMessage(encoded)).toThrow("Invalid message prefix");
+      expect(() => decodeStructuredMessage(encoded)).toThrow(
+        "Invalid message prefix",
+      );
     });
 
     it("should throw error for missing nonce", () => {
@@ -108,7 +112,9 @@ describe("StructuredMessage", () => {
       const input = "APTOS\nnonce: nonce-123";
       const encoded = new TextEncoder().encode(input);
 
-      expect(() => decodeStructuredMessage(encoded)).toThrow("Expected message");
+      expect(() => decodeStructuredMessage(encoded)).toThrow(
+        "Expected message",
+      );
     });
   });
 
@@ -144,4 +150,3 @@ describe("StructuredMessage", () => {
     });
   });
 });
-

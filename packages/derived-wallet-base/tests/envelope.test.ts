@@ -31,7 +31,7 @@ describe("envelope", () => {
       });
 
       expect(statement).toBe(
-        "To sign the following message on Aptos blockchain: Hello, Aptos!"
+        "To sign the following message on Aptos blockchain: Hello, Aptos!",
       );
     });
 
@@ -44,7 +44,7 @@ describe("envelope", () => {
       });
 
       expect(statement).toBe(
-        "To sign the following message on Aptos blockchain (testnet): Hello, Aptos!"
+        "To sign the following message on Aptos blockchain (testnet): Hello, Aptos!",
       );
     });
 
@@ -55,7 +55,7 @@ describe("envelope", () => {
       });
 
       expect(statement).toBe(
-        "To sign the following message on Aptos blockchain: Line 1\\nLine 2\\nLine 3"
+        "To sign the following message on Aptos blockchain: Line 1\\nLine 2\\nLine 3",
       );
     });
 
@@ -66,7 +66,7 @@ describe("envelope", () => {
       });
 
       expect(statement).toBe(
-        "To sign the following message on Aptos blockchain: "
+        "To sign the following message on Aptos blockchain: ",
       );
     });
 
@@ -78,9 +78,8 @@ describe("envelope", () => {
       });
 
       expect(statement).toBe(
-        "To sign the following message on Aptos blockchain (custom network: 12345): Test"
+        "To sign the following message on Aptos blockchain (custom network: 12345): Test",
       );
     });
   });
 });
-

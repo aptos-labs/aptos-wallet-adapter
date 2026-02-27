@@ -21,7 +21,7 @@
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
     "@changesets/cli": "^2.29.7",
-    "prettier": "latest",
+    "prettier": "catalog:",
     "turbo": "latest"
   },
   "engines": {

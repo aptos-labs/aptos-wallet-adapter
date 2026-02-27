@@ -4,6 +4,168 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@aptos-labs/gas-station-client':
+      specifier: ^2.0.3
+      version: 2.0.3
+    '@aptos-labs/ts-sdk':
+      specifier: ^5.1.1
+      version: 5.1.1
+    '@aptos-labs/wallet-standard':
+      specifier: ^0.5.2
+      version: 0.5.2
+    '@mysten/sui':
+      specifier: 1.24.0
+      version: 1.24.0
+    '@mysten/wallet-standard':
+      specifier: ^0.13.29
+      version: 0.13.29
+    '@radix-ui/react-collapsible':
+      specifier: ^1.0.3
+      version: 1.1.3
+    '@radix-ui/react-dialog':
+      specifier: ^1.0.5
+      version: 1.1.6
+    '@radix-ui/react-dropdown-menu':
+      specifier: ^2.0.6
+      version: 2.1.6
+    '@radix-ui/react-label':
+      specifier: ^2.0.2
+      version: 2.1.2
+    '@radix-ui/react-radio-group':
+      specifier: ^1.1.3
+      version: 1.2.3
+    '@radix-ui/react-slot':
+      specifier: ^1.0.2
+      version: 1.2.2
+    '@radix-ui/react-switch':
+      specifier: ^1.0.3
+      version: 1.1.3
+    '@radix-ui/react-toast':
+      specifier: ^1.1.5
+      version: 1.2.6
+    '@solana/wallet-adapter-base':
+      specifier: ^0.9.23
+      version: 0.9.24
+    '@solana/wallet-standard-wallet-adapter-base':
+      specifier: ^1.1.4
+      version: 1.1.4
+    '@solana/web3.js':
+      specifier: ^1.95.8
+      version: 1.98.0
+    '@tanstack/react-query':
+      specifier: ^5.59.16
+      version: 5.69.0
+    '@telegram-apps/sdk':
+      specifier: ^2.0.0
+      version: 2.11.3
+    '@testing-library/jest-dom':
+      specifier: ^6.0.0
+      version: 6.9.1
+    '@testing-library/react':
+      specifier: ^14.0.0
+      version: 14.3.1
+    '@testing-library/user-event':
+      specifier: ^14.0.0
+      version: 14.6.1
+    '@types/node':
+      specifier: ^20.10.4
+      version: 20.19.32
+    '@types/react':
+      specifier: ^18.3.3
+      version: 18.3.20
+    '@types/react-dom':
+      specifier: ^18.3.0
+      version: 18.3.5
+    '@wallet-standard/app':
+      specifier: ^1.1.0
+      version: 1.1.0
+    '@wormhole-foundation/sdk':
+      specifier: 4.7.1
+      version: 4.7.1
+    '@wormhole-foundation/sdk-aptos':
+      specifier: 4.7.1
+      version: 4.7.1
+    '@wormhole-foundation/sdk-solana':
+      specifier: 4.7.1
+      version: 4.7.1
+    antd:
+      specifier: ^5.18.3
+      version: 5.24.5
+    autoprefixer:
+      specifier: ^10.4.19
+      version: 10.4.21
+    bs58:
+      specifier: ^6.0.0
+      version: 6.0.0
+    buffer:
+      specifier: ^6.0.3
+      version: 6.0.3
+    class-variance-authority:
+      specifier: ^0.7.0
+      version: 0.7.1
+    clsx:
+      specifier: ^2.1.1
+      version: 2.1.1
+    eslint:
+      specifier: ^8.57.1
+      version: 8.57.1
+    eslint-config-next:
+      specifier: 14.2.3
+      version: 14.2.3
+    ethers:
+      specifier: ^6.13.5
+      version: 6.13.5
+    eventemitter3:
+      specifier: ^4.0.7
+      version: 4.0.7
+    happy-dom:
+      specifier: ^20.0.2
+      version: 20.0.2
+    lucide-react:
+      specifier: ^0.383.0
+      version: 0.383.0
+    next:
+      specifier: 14.2.32
+      version: 14.2.32
+    next-themes:
+      specifier: ^0.3.0
+      version: 0.3.0
+    postcss:
+      specifier: ^8.4.38
+      version: 8.5.6
+    prettier:
+      specifier: ^3.6.2
+      version: 3.8.1
+    react:
+      specifier: ^18.3.1
+      version: 18.3.1
+    react-dom:
+      specifier: ^18.3.1
+      version: 18.3.1
+    tailwind-merge:
+      specifier: ^2.3.0
+      version: 2.6.0
+    tailwindcss:
+      specifier: ^3.4.1
+      version: 3.4.17
+    tailwindcss-animate:
+      specifier: ^1.0.7
+      version: 1.0.7
+    tsup:
+      specifier: ^8.4.0
+      version: 8.4.0
+    tweetnacl:
+      specifier: ^1.0.3
+      version: 1.0.3
+    typescript:
+      specifier: ^5.8.3
+      version: 5.8.3
+    vitest:
+      specifier: ^2.1.8
+      version: 2.1.9
+
 overrides:
   '@aptos-labs/aptos-client': ^2.0.0
   pbkdf2: ^3.1.3
@@ -26,7 +188,7 @@ importers:
         specifier: ^2.29.7
         version: 2.29.7(@types/node@24.5.2)
       prettier:
-        specifier: latest
+        specifier: 'catalog:'
         version: 3.8.1
       turbo:
         specifier: latest
@@ -41,7 +203,7 @@ importers:
         specifier: workspace:^
         version: link:../../packages/derived-wallet-solana
       '@aptos-labs/ts-sdk':
-        specifier: ^5.1.1
+        specifier: 'catalog:'
         version: 5.1.1(got@11.8.6)
       '@aptos-labs/wallet-adapter-ant-design':
         specifier: workspace:*
@@ -56,98 +218,98 @@ importers:
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-react
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.2
+        specifier: 'catalog:'
         version: 0.5.2(@aptos-labs/ts-sdk@5.1.1(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@radix-ui/react-collapsible':
-        specifier: ^1.0.3
+        specifier: 'catalog:'
         version: 1.1.3(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-dialog':
-        specifier: ^1.0.5
+        specifier: 'catalog:'
         version: 1.1.6(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-dropdown-menu':
-        specifier: ^2.0.6
+        specifier: 'catalog:'
         version: 2.1.6(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-label':
-        specifier: ^2.0.2
+        specifier: 'catalog:'
         version: 2.1.2(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-radio-group':
-        specifier: ^1.1.3
+        specifier: 'catalog:'
         version: 1.2.3(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-slot':
-        specifier: ^1.0.2
-        version: 1.1.2(@types/react@18.3.20)(react@18.3.1)
+        specifier: 'catalog:'
+        version: 1.2.2(@types/react@18.3.20)(react@18.3.1)
       '@radix-ui/react-switch':
-        specifier: ^1.0.3
+        specifier: 'catalog:'
         version: 1.1.3(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-toast':
-        specifier: ^1.1.5
+        specifier: 'catalog:'
         version: 1.2.6(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/react-query':
-        specifier: ^5.59.16
+        specifier: 'catalog:'
         version: 5.69.0(react@18.3.1)
       '@telegram-apps/sdk':
-        specifier: ^2.0.0
+        specifier: 'catalog:'
         version: 2.11.3
       antd:
-        specifier: ^5.1.2
+        specifier: 'catalog:'
         version: 5.24.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       class-variance-authority:
-        specifier: ^0.7.0
+        specifier: 'catalog:'
         version: 0.7.1
       clsx:
-        specifier: ^2.1.1
+        specifier: 'catalog:'
         version: 2.1.1
       lucide-react:
-        specifier: ^0.383.0
+        specifier: 'catalog:'
         version: 0.383.0(react@18.3.1)
       next:
-        specifier: 14.2.32
+        specifier: 'catalog:'
         version: 14.2.32(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-themes:
-        specifier: ^0.3.0
+        specifier: 'catalog:'
         version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
-        specifier: ^18.3.1
+        specifier: 'catalog:'
         version: 18.3.1
       react-dom:
-        specifier: ^18.3.1
+        specifier: 'catalog:'
         version: 18.3.1(react@18.3.1)
       tailwind-merge:
-        specifier: ^2.3.0
+        specifier: 'catalog:'
         version: 2.6.0
       tailwindcss-animate:
-        specifier: ^1.0.7
+        specifier: 'catalog:'
         version: 1.0.7(tailwindcss@3.4.17)
     devDependencies:
       '@types/node':
-        specifier: ^20
-        version: 20.17.27
+        specifier: 'catalog:'
+        version: 20.19.32
       '@types/react':
-        specifier: ^18.3.3
+        specifier: 'catalog:'
         version: 18.3.20
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: 'catalog:'
         version: 18.3.5(@types/react@18.3.20)
       autoprefixer:
-        specifier: ^10.4.19
-        version: 10.4.21(postcss@8.5.3)
+        specifier: 'catalog:'
+        version: 10.4.21(postcss@8.5.6)
       eslint:
-        specifier: ^8.57.1
+        specifier: 'catalog:'
         version: 8.57.1
       eslint-config-next:
-        specifier: 14.2.3
+        specifier: 'catalog:'
         version: 14.2.3(eslint@8.57.1)(typescript@5.8.3)
       postcss:
-        specifier: ^8.4.38
-        version: 8.5.3
+        specifier: 'catalog:'
+        version: 8.5.6
       prettier:
-        specifier: ^3.6.2
-        version: 3.6.2
+        specifier: 'catalog:'
+        version: 3.8.1
       tailwindcss:
-        specifier: ^3.4.1
+        specifier: 'catalog:'
         version: 3.4.17
       typescript:
-        specifier: ^5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
 
   apps/nextjs-x-chain:
@@ -165,10 +327,10 @@ importers:
         specifier: workspace:^
         version: link:../../packages/derived-wallet-sui
       '@aptos-labs/gas-station-client':
-        specifier: ^2.0.3
+        specifier: 'catalog:'
         version: 2.0.3(got@11.8.6)
       '@aptos-labs/ts-sdk':
-        specifier: ^5.1.1
+        specifier: 'catalog:'
         version: 5.1.1(got@11.8.6)
       '@aptos-labs/wallet-adapter-core':
         specifier: workspace:*
@@ -180,113 +342,113 @@ importers:
         specifier: workspace:*
         version: link:../../packages/wallet-adapter-react
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.2
+        specifier: 'catalog:'
         version: 0.5.2(@aptos-labs/ts-sdk@5.1.1(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@radix-ui/react-collapsible':
-        specifier: ^1.0.3
+        specifier: 'catalog:'
         version: 1.1.3(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-dialog':
-        specifier: ^1.0.5
+        specifier: 'catalog:'
         version: 1.1.6(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-dropdown-menu':
-        specifier: ^2.0.6
+        specifier: 'catalog:'
         version: 2.1.6(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-label':
-        specifier: ^2.0.2
+        specifier: 'catalog:'
         version: 2.1.2(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-radio-group':
-        specifier: ^1.1.3
+        specifier: 'catalog:'
         version: 1.2.3(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-slot':
-        specifier: ^1.0.2
-        version: 1.1.2(@types/react@18.3.20)(react@18.3.1)
+        specifier: 'catalog:'
+        version: 1.2.2(@types/react@18.3.20)(react@18.3.1)
       '@radix-ui/react-switch':
-        specifier: ^1.0.3
+        specifier: 'catalog:'
         version: 1.1.3(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-tabs':
         specifier: ^1.1.11
         version: 1.1.11(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-toast':
-        specifier: ^1.1.5
+        specifier: 'catalog:'
         version: 1.2.6(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@solana/web3.js':
-        specifier: ^1.95.8
+        specifier: 'catalog:'
         version: 1.98.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@tanstack/react-query':
-        specifier: ^5.59.16
+        specifier: 'catalog:'
         version: 5.69.0(react@18.3.1)
       '@telegram-apps/sdk':
-        specifier: ^2.0.0
+        specifier: 'catalog:'
         version: 2.11.3
       '@wormhole-foundation/sdk':
-        specifier: 4.7.1
+        specifier: 'catalog:'
         version: 4.7.1(@types/react@18.3.20)(bufferutil@4.0.9)(got@11.8.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)(utf-8-validate@5.0.10)
       '@wormhole-foundation/sdk-aptos':
-        specifier: 4.7.1
+        specifier: 'catalog:'
         version: 4.7.1(got@11.8.6)
       '@wormhole-foundation/sdk-solana':
-        specifier: 4.7.1
+        specifier: 'catalog:'
         version: 4.7.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       bs58:
-        specifier: ^6.0.0
+        specifier: 'catalog:'
         version: 6.0.0
       class-variance-authority:
-        specifier: ^0.7.0
+        specifier: 'catalog:'
         version: 0.7.1
       clsx:
-        specifier: ^2.1.1
+        specifier: 'catalog:'
         version: 2.1.1
       lucide-react:
-        specifier: ^0.383.0
+        specifier: 'catalog:'
         version: 0.383.0(react@18.3.1)
       next:
-        specifier: 14.2.32
+        specifier: 'catalog:'
         version: 14.2.32(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-themes:
-        specifier: ^0.3.0
+        specifier: 'catalog:'
         version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
-        specifier: ^18.3.1
+        specifier: 'catalog:'
         version: 18.3.1
       react-dom:
-        specifier: ^18.3.1
+        specifier: 'catalog:'
         version: 18.3.1(react@18.3.1)
       tailwind-merge:
-        specifier: ^2.3.0
+        specifier: 'catalog:'
         version: 2.6.0
       tailwindcss-animate:
-        specifier: ^1.0.7
+        specifier: 'catalog:'
         version: 1.0.7(tailwindcss@3.4.17)
     devDependencies:
       '@types/node':
-        specifier: ^20
-        version: 20.17.27
+        specifier: 'catalog:'
+        version: 20.19.32
       '@types/react':
-        specifier: ^18.3.3
+        specifier: 'catalog:'
         version: 18.3.20
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: 'catalog:'
         version: 18.3.5(@types/react@18.3.20)
       autoprefixer:
-        specifier: ^10.4.19
-        version: 10.4.21(postcss@8.5.3)
+        specifier: 'catalog:'
+        version: 10.4.21(postcss@8.5.6)
       eslint:
-        specifier: ^8.57.1
+        specifier: 'catalog:'
         version: 8.57.1
       eslint-config-next:
-        specifier: 14.2.3
+        specifier: 'catalog:'
         version: 14.2.3(eslint@8.57.1)(typescript@5.8.3)
       postcss:
-        specifier: ^8.4.38
-        version: 8.5.3
+        specifier: 'catalog:'
+        version: 8.5.6
       prettier:
-        specifier: ^3.6.2
-        version: 3.6.2
+        specifier: 'catalog:'
+        version: 3.8.1
       tailwindcss:
-        specifier: ^3.4.1
+        specifier: 'catalog:'
         version: 3.4.17
       typescript:
-        specifier: ^5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
 
   packages/cross-chain-core:
@@ -301,67 +463,67 @@ importers:
         specifier: workspace:*
         version: link:../derived-wallet-sui
       '@aptos-labs/gas-station-client':
-        specifier: ^2.0.3
+        specifier: 'catalog:'
         version: 2.0.3(got@11.8.6)
       '@aptos-labs/ts-sdk':
-        specifier: ^5.1.1
+        specifier: 'catalog:'
         version: 5.1.1(got@11.8.6)
       '@aptos-labs/wallet-adapter-core':
         specifier: workspace:*
         version: link:../wallet-adapter-core
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.2
+        specifier: 'catalog:'
         version: 0.5.2(@aptos-labs/ts-sdk@5.1.1(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@mysten/sui':
-        specifier: 1.24.0
+        specifier: 'catalog:'
         version: 1.24.0(typescript@5.8.3)
       '@mysten/wallet-standard':
-        specifier: ^0.13.29
+        specifier: 'catalog:'
         version: 0.13.29(typescript@5.8.3)
       '@solana/spl-token':
         specifier: ^0.4.12
         version: 0.4.13(@solana/web3.js@1.98.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.8.3)(utf-8-validate@5.0.10)
       '@solana/wallet-adapter-base':
-        specifier: ^0.9.23
+        specifier: 'catalog:'
         version: 0.9.24(@solana/web3.js@1.98.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@solana/wallet-standard-wallet-adapter-base':
-        specifier: ^1.1.4
+        specifier: 'catalog:'
         version: 1.1.4(@solana/web3.js@1.98.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(bs58@6.0.0)
       '@solana/web3.js':
-        specifier: ^1.95.8
+        specifier: 'catalog:'
         version: 1.98.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@wallet-standard/app':
-        specifier: ^1.1.0
+        specifier: 'catalog:'
         version: 1.1.0
       '@wormhole-foundation/sdk':
-        specifier: 4.7.1
+        specifier: 'catalog:'
         version: 4.7.1(@types/react@18.3.20)(bufferutil@4.0.9)(got@11.8.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)(utf-8-validate@5.0.10)
       '@wormhole-foundation/sdk-aptos':
-        specifier: 4.7.1
+        specifier: 'catalog:'
         version: 4.7.1(got@11.8.6)
       '@wormhole-foundation/sdk-evm':
         specifier: 4.7.1
         version: 4.7.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@wormhole-foundation/sdk-solana':
-        specifier: 4.7.1
+        specifier: 'catalog:'
         version: 4.7.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@wormhole-foundation/sdk-sui':
         specifier: 4.7.1
         version: 4.7.1(typescript@5.8.3)
       bs58:
-        specifier: ^6.0.0
+        specifier: 'catalog:'
         version: 6.0.0
       buffer:
-        specifier: ^6.0.3
+        specifier: 'catalog:'
         version: 6.0.3
       ethers:
-        specifier: ^6.13.5
+        specifier: 'catalog:'
         version: 6.13.5(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       eventemitter3:
-        specifier: ^4.0.7
+        specifier: 'catalog:'
         version: 4.0.7
       tweetnacl:
-        specifier: ^1.0.3
+        specifier: 'catalog:'
         version: 1.0.3
     devDependencies:
       '@aptos-labs/eslint-config-adapter':
@@ -371,28 +533,28 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/node':
-        specifier: ^20.10.4
-        version: 20.17.27
+        specifier: 'catalog:'
+        version: 20.19.32
       eslint:
-        specifier: ^8.57.1
+        specifier: 'catalog:'
         version: 8.57.1
       tsup:
-        specifier: ^8.4.0
-        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
+        specifier: 'catalog:'
+        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.19.32))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
       typescript:
-        specifier: ^5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
       vitest:
-        specifier: ^2.1.8
-        version: 2.1.9(@types/node@20.17.27)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
+        specifier: 'catalog:'
+        version: 2.1.9(@types/node@20.19.32)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
 
   packages/derived-wallet-base:
     dependencies:
       '@aptos-labs/ts-sdk':
-        specifier: ^5.1.1
+        specifier: 'catalog:'
         version: 5.1.1(got@11.8.6)
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.2
+        specifier: 'catalog:'
         version: 0.5.2(@aptos-labs/ts-sdk@5.1.1(got@11.8.6))(@wallet-standard/core@1.1.0)
     devDependencies:
       '@aptos-labs/eslint-config-adapter':
@@ -402,20 +564,20 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/node':
-        specifier: ^20.10.4
-        version: 20.17.27
+        specifier: 'catalog:'
+        version: 20.19.32
       eslint:
-        specifier: ^8.57.1
+        specifier: 'catalog:'
         version: 8.57.1
       tsup:
-        specifier: ^8.4.0
-        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
+        specifier: 'catalog:'
+        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.19.32))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
       typescript:
-        specifier: ^5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
       vitest:
-        specifier: ^2.1.8
-        version: 2.1.9(@types/node@20.17.27)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
+        specifier: 'catalog:'
+        version: 2.1.9(@types/node@20.19.32)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
 
   packages/derived-wallet-ethereum:
     dependencies:
@@ -423,16 +585,16 @@ importers:
         specifier: workspace:^
         version: link:../derived-wallet-base
       '@aptos-labs/ts-sdk':
-        specifier: ^5.1.1
+        specifier: 'catalog:'
         version: 5.1.1(got@11.8.6)
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.2
+        specifier: 'catalog:'
         version: 0.5.2(@aptos-labs/ts-sdk@5.1.1(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@wallet-standard/app':
-        specifier: ^1.1.0
+        specifier: 'catalog:'
         version: 1.1.0
       ethers:
-        specifier: ^6.13.5
+        specifier: 'catalog:'
         version: 6.13.5(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       mipd:
         specifier: ^0.0.7
@@ -448,23 +610,23 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/node':
-        specifier: ^20.10.4
-        version: 20.17.27
+        specifier: 'catalog:'
+        version: 20.19.32
       eslint:
-        specifier: ^8.57.1
+        specifier: 'catalog:'
         version: 8.57.1
       happy-dom:
-        specifier: ^20.0.2
+        specifier: 'catalog:'
         version: 20.0.2
       tsup:
-        specifier: ^8.4.0
-        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
+        specifier: 'catalog:'
+        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.19.32))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
       typescript:
-        specifier: ^5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
       vitest:
-        specifier: ^2.1.8
-        version: 2.1.9(@types/node@20.17.27)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
+        specifier: 'catalog:'
+        version: 2.1.9(@types/node@20.19.32)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
 
   packages/derived-wallet-solana:
     dependencies:
@@ -472,28 +634,28 @@ importers:
         specifier: workspace:^
         version: link:../derived-wallet-base
       '@aptos-labs/ts-sdk':
-        specifier: ^5.1.1
+        specifier: 'catalog:'
         version: 5.1.1(got@11.8.6)
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.2
+        specifier: 'catalog:'
         version: 0.5.2(@aptos-labs/ts-sdk@5.1.1(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@solana/wallet-adapter-base':
-        specifier: ^0.9.23
+        specifier: 'catalog:'
         version: 0.9.24(@solana/web3.js@1.98.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@solana/wallet-standard-util':
         specifier: ^1.1.2
         version: 1.1.2
       '@solana/wallet-standard-wallet-adapter-base':
-        specifier: ^1.1.4
+        specifier: 'catalog:'
         version: 1.1.4(@solana/web3.js@1.98.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(bs58@6.0.0)
       '@solana/web3.js':
-        specifier: ^1.95.8
+        specifier: 'catalog:'
         version: 1.98.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@wallet-standard/app':
-        specifier: ^1.1.0
+        specifier: 'catalog:'
         version: 1.1.0
       tweetnacl:
-        specifier: ^1.0.3
+        specifier: 'catalog:'
         version: 1.0.3
     devDependencies:
       '@aptos-labs/eslint-config-adapter':
@@ -503,23 +665,23 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/node':
-        specifier: ^20.10.4
-        version: 20.17.27
+        specifier: 'catalog:'
+        version: 20.19.32
       eslint:
-        specifier: ^8.57.1
+        specifier: 'catalog:'
         version: 8.57.1
       happy-dom:
-        specifier: ^20.0.2
+        specifier: 'catalog:'
         version: 20.0.2
       tsup:
-        specifier: ^8.4.0
-        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
+        specifier: 'catalog:'
+        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.19.32))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
       typescript:
-        specifier: ^5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
       vitest:
-        specifier: ^2.1.8
-        version: 2.1.9(@types/node@20.17.27)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
+        specifier: 'catalog:'
+        version: 2.1.9(@types/node@20.19.32)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
 
   packages/derived-wallet-sui:
     dependencies:
@@ -530,19 +692,19 @@ importers:
         specifier: ^0.4.0
         version: 0.4.0(@aptos-labs/ts-sdk@5.1.1(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@aptos-labs/ts-sdk':
-        specifier: ^5.1.1
+        specifier: 'catalog:'
         version: 5.1.1(got@11.8.6)
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.2
+        specifier: 'catalog:'
         version: 0.5.2(@aptos-labs/ts-sdk@5.1.1(got@11.8.6))(@wallet-standard/core@1.1.0)
       '@mysten/bcs':
         specifier: ^1.6.1
         version: 1.9.2
       '@mysten/sui':
-        specifier: 1.24.0
+        specifier: 'catalog:'
         version: 1.24.0(typescript@5.8.3)
       '@mysten/wallet-standard':
-        specifier: ^0.13.29
+        specifier: 'catalog:'
         version: 0.13.29(typescript@5.8.3)
     devDependencies:
       '@aptos-labs/eslint-config-adapter':
@@ -552,31 +714,31 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/node':
-        specifier: ^20.10.4
-        version: 20.19.17
+        specifier: 'catalog:'
+        version: 20.19.32
       eslint:
-        specifier: ^8.15.0
+        specifier: 'catalog:'
         version: 8.57.1
       happy-dom:
-        specifier: ^20.0.2
+        specifier: 'catalog:'
         version: 20.0.2
       tsup:
-        specifier: ^8.4.0
-        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.19.17))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
+        specifier: 'catalog:'
+        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.19.32))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
       tweetnacl:
-        specifier: ^1.0.3
+        specifier: 'catalog:'
         version: 1.0.3
       typescript:
-        specifier: ^5.4.5
+        specifier: 'catalog:'
         version: 5.8.3
       vitest:
-        specifier: ^2.1.8
-        version: 2.1.9(@types/node@20.19.17)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
+        specifier: 'catalog:'
+        version: 2.1.9(@types/node@20.19.32)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
 
   packages/eslint-config-adapter:
     dependencies:
       eslint:
-        specifier: ^8.57.1
+        specifier: 'catalog:'
         version: 8.57.1
       eslint-config-next:
         specifier: 13.0.0
@@ -592,7 +754,7 @@ importers:
         version: 7.31.8(eslint@8.57.1)
     devDependencies:
       typescript:
-        specifier: ^5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
 
   packages/tsconfig: {}
@@ -606,7 +768,7 @@ importers:
         specifier: workspace:*
         version: link:../wallet-adapter-react
       antd:
-        specifier: ^5.18.3
+        specifier: 'catalog:'
         version: 5.24.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.0.0 || ^19.0.0
@@ -615,23 +777,26 @@ importers:
         specifier: ^18.0.0 || ^19.0.0
         version: 18.3.1(react@18.3.1)
     devDependencies:
+      '@aptos-labs/eslint-config-adapter':
+        specifier: workspace:*
+        version: link:../eslint-config-adapter
       '@aptos-labs/wallet-adapter-tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       '@types/react':
-        specifier: ^18.3.3
+        specifier: 'catalog:'
         version: 18.3.20
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: 'catalog:'
         version: 18.3.5(@types/react@18.3.20)
       eslint:
-        specifier: ^8.57.1
+        specifier: 'catalog:'
         version: 8.57.1
       tsup:
-        specifier: ^8.4.0
+        specifier: 'catalog:'
         version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@24.5.2))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
       typescript:
-        specifier: ^5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
 
   packages/wallet-adapter-core:
@@ -640,19 +805,19 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2(@aptos-labs/ts-sdk@5.1.1(got@11.8.6))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)
       '@aptos-labs/ts-sdk':
-        specifier: ^5.1.1
+        specifier: 'catalog:'
         version: 5.1.1(got@11.8.6)
       '@aptos-labs/wallet-standard':
-        specifier: ^0.5.2
+        specifier: 'catalog:'
         version: 0.5.2(@aptos-labs/ts-sdk@5.1.1(got@11.8.6))(@wallet-standard/core@1.1.0)
       buffer:
-        specifier: ^6.0.3
+        specifier: 'catalog:'
         version: 6.0.3
       eventemitter3:
-        specifier: ^4.0.7
+        specifier: 'catalog:'
         version: 4.0.7
       tweetnacl:
-        specifier: ^1.0.3
+        specifier: 'catalog:'
         version: 1.0.3
     devDependencies:
       '@aptos-labs/eslint-config-adapter':
@@ -665,23 +830,23 @@ importers:
         specifier: ^1.11.16
         version: 1.11.16(@swc/helpers@0.5.15)
       '@types/node':
-        specifier: ^20.10.4
-        version: 20.17.27
+        specifier: 'catalog:'
+        version: 20.19.32
       eslint:
-        specifier: ^8.57.1
+        specifier: 'catalog:'
         version: 8.57.1
       happy-dom:
-        specifier: ^20.0.2
+        specifier: 'catalog:'
         version: 20.0.2
       tsup:
-        specifier: ^8.4.0
-        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
+        specifier: 'catalog:'
+        version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.19.32))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
       typescript:
-        specifier: ^5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
       vitest:
-        specifier: ^2.1.8
-        version: 2.1.9(@types/node@20.17.27)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
+        specifier: 'catalog:'
+        version: 2.1.9(@types/node@20.19.32)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
 
   packages/wallet-adapter-mui-design:
     dependencies:
@@ -710,23 +875,26 @@ importers:
         specifier: ^7.5.2
         version: 7.5.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     devDependencies:
+      '@aptos-labs/eslint-config-adapter':
+        specifier: workspace:*
+        version: link:../eslint-config-adapter
       '@aptos-labs/wallet-adapter-tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       '@types/react':
-        specifier: ^18.3.3
+        specifier: 'catalog:'
         version: 18.3.20
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: 'catalog:'
         version: 18.3.5(@types/react@18.3.20)
       eslint:
-        specifier: ^8.57.1
+        specifier: 'catalog:'
         version: 8.57.1
       tsup:
-        specifier: ^8.4.0
+        specifier: 'catalog:'
         version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@24.5.2))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
       typescript:
-        specifier: ^5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
 
   packages/wallet-adapter-react:
@@ -735,44 +903,47 @@ importers:
         specifier: workspace:*
         version: link:../wallet-adapter-core
       '@radix-ui/react-slot':
-        specifier: ^1.0.2
-        version: 1.1.2(@types/react@18.3.20)(react@18.3.1)
+        specifier: 'catalog:'
+        version: 1.2.2(@types/react@18.3.20)(react@18.3.1)
       react:
         specifier: ^18.0.0 || ^19.0.0
         version: 18.3.1
     devDependencies:
+      '@aptos-labs/eslint-config-adapter':
+        specifier: workspace:*
+        version: link:../eslint-config-adapter
       '@aptos-labs/wallet-adapter-tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       '@testing-library/jest-dom':
-        specifier: ^6.0.0
+        specifier: 'catalog:'
         version: 6.9.1
       '@testing-library/react':
-        specifier: ^14.0.0
+        specifier: 'catalog:'
         version: 14.3.1(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@testing-library/user-event':
-        specifier: ^14.0.0
+        specifier: 'catalog:'
         version: 14.6.1(@testing-library/dom@9.3.4)
       '@types/react':
-        specifier: ^18.3.3
+        specifier: 'catalog:'
         version: 18.3.20
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: 'catalog:'
         version: 18.3.5(@types/react@18.3.20)
       eslint:
-        specifier: ^8.57.1
+        specifier: 'catalog:'
         version: 8.57.1
       happy-dom:
-        specifier: ^20.0.2
+        specifier: 'catalog:'
         version: 20.0.2
       tsup:
-        specifier: ^8.4.0
+        specifier: 'catalog:'
         version: 8.4.0(@microsoft/api-extractor@7.43.0(@types/node@24.5.2))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1)
       typescript:
-        specifier: ^5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
       vitest:
-        specifier: ^2.1.8
+        specifier: 'catalog:'
         version: 2.1.9(@types/node@24.5.2)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
 
 packages:
@@ -1359,20 +1530,6 @@ packages:
   '@floating-ui/utils@0.2.9':
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
 
-  '@gql.tada/cli-utils@1.6.3':
-    resolution: {integrity: sha512-jFFSY8OxYeBxdKi58UzeMXG1tdm4FVjXa8WHIi66Gzu9JWtCE6mqom3a8xkmSw+mVaybFW5EN2WXf1WztJVNyQ==}
-    peerDependencies:
-      '@0no-co/graphqlsp': ^1.12.13
-      '@gql.tada/svelte-support': 1.0.1
-      '@gql.tada/vue-support': 1.0.1
-      graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
-      typescript: ^5.0.0
-    peerDependenciesMeta:
-      '@gql.tada/svelte-support':
-        optional: true
-      '@gql.tada/vue-support':
-        optional: true
-
   '@gql.tada/cli-utils@1.7.2':
     resolution: {integrity: sha512-Qbc7hbLvCz6IliIJpJuKJa9p05b2Jona7ov7+qofCsMRxHRZE1kpAmZMvL8JCI4c0IagpIlWNaMizXEQUe8XjQ==}
     peerDependencies:
@@ -1491,29 +1648,15 @@ packages:
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
 
-  '@jridgewell/gen-mapping@0.3.8':
-    resolution: {integrity: sha512-imAbBGkb+ebQyxKgzv5Hu2nmROxoDOXHh80evxdoXNOrvAnVx7zimzc1Oo5h9RlfV4vPXaE2iM5pOFbvOCClWA==}
-    engines: {node: '>=6.0.0'}
-
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
-    engines: {node: '>=6.0.0'}
-
-  '@jridgewell/set-array@1.2.1':
-    resolution: {integrity: sha512-R8gLRTZeyp03ymzP/6Lil/28tGeGEzhx1q2k703KGWRAI1VdvPIXdG70VJc2pAMw3NA6JKL5hhFu1sJX0Mnn/A==}
     engines: {node: '>=6.0.0'}
 
   '@jridgewell/source-map@0.3.11':
     resolution: {integrity: sha512-ZMp1V8ZFcPG5dIWnQLr3NSI1MiCU7UETdS/A0G8V/XWHvJv3ZsFqutJn1Y5RPmAPX6F3BiE397OqveU/9NCuIA==}
 
-  '@jridgewell/sourcemap-codec@1.5.0':
-    resolution: {integrity: sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==}
-
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
-
-  '@jridgewell/trace-mapping@0.3.25':
-    resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
@@ -2371,19 +2514,9 @@ packages:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
 
-  '@rollup/rollup-android-arm-eabi@4.38.0':
-    resolution: {integrity: sha512-ldomqc4/jDZu/xpYU+aRxo3V4mGCV9HeTgUBANI3oIQMOL+SsxB+S2lxMpkFp5UamSS3XuTMQVbsS24R4J4Qjg==}
-    cpu: [arm]
-    os: [android]
-
   '@rollup/rollup-android-arm-eabi@4.50.2':
     resolution: {integrity: sha512-uLN8NAiFVIRKX9ZQha8wy6UUs06UNSZ32xj6giK/rmMXAgKahwExvK6SsmgU5/brh4w/nSgj8e0k3c1HBQpa0A==}
     cpu: [arm]
-    os: [android]
-
-  '@rollup/rollup-android-arm64@4.38.0':
-    resolution: {integrity: sha512-VUsgcy4GhhT7rokwzYQP+aV9XnSLkkhlEJ0St8pbasuWO/vwphhZQxYEKUP3ayeCYLhk6gEtacRpYP/cj3GjyQ==}
-    cpu: [arm64]
     os: [android]
 
   '@rollup/rollup-android-arm64@4.50.2':
@@ -2391,19 +2524,9 @@ packages:
     cpu: [arm64]
     os: [android]
 
-  '@rollup/rollup-darwin-arm64@4.38.0':
-    resolution: {integrity: sha512-buA17AYXlW9Rn091sWMq1xGUvWQFOH4N1rqUxGJtEQzhChxWjldGCCup7r/wUnaI6Au8sKXpoh0xg58a7cgcpg==}
-    cpu: [arm64]
-    os: [darwin]
-
   '@rollup/rollup-darwin-arm64@4.50.2':
     resolution: {integrity: sha512-OZuTVTpj3CDSIxmPgGH8en/XtirV5nfljHZ3wrNwvgkT5DQLhIKAeuFSiwtbMto6oVexV0k1F1zqURPKf5rI1Q==}
     cpu: [arm64]
-    os: [darwin]
-
-  '@rollup/rollup-darwin-x64@4.38.0':
-    resolution: {integrity: sha512-Mgcmc78AjunP1SKXl624vVBOF2bzwNWFPMP4fpOu05vS0amnLcX8gHIge7q/lDAHy3T2HeR0TqrriZDQS2Woeg==}
-    cpu: [x64]
     os: [darwin]
 
   '@rollup/rollup-darwin-x64@4.50.2':
@@ -2411,19 +2534,9 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@rollup/rollup-freebsd-arm64@4.38.0':
-    resolution: {integrity: sha512-zzJACgjLbQTsscxWqvrEQAEh28hqhebpRz5q/uUd1T7VTwUNZ4VIXQt5hE7ncs0GrF+s7d3S4on4TiXUY8KoQA==}
-    cpu: [arm64]
-    os: [freebsd]
-
   '@rollup/rollup-freebsd-arm64@4.50.2':
     resolution: {integrity: sha512-QkzxvH3kYN9J1w7D1A+yIMdI1pPekD+pWx7G5rXgnIlQ1TVYVC6hLl7SOV9pi5q9uIDF9AuIGkuzcbF7+fAhow==}
     cpu: [arm64]
-    os: [freebsd]
-
-  '@rollup/rollup-freebsd-x64@4.38.0':
-    resolution: {integrity: sha512-hCY/KAeYMCyDpEE4pTETam0XZS4/5GXzlLgpi5f0IaPExw9kuB+PDTOTLuPtM10TlRG0U9OSmXJ+Wq9J39LvAg==}
-    cpu: [x64]
     os: [freebsd]
 
   '@rollup/rollup-freebsd-x64@4.50.2':
@@ -2431,18 +2544,8 @@ packages:
     cpu: [x64]
     os: [freebsd]
 
-  '@rollup/rollup-linux-arm-gnueabihf@4.38.0':
-    resolution: {integrity: sha512-mimPH43mHl4JdOTD7bUMFhBdrg6f9HzMTOEnzRmXbOZqjijCw8LA5z8uL6LCjxSa67H2xiLFvvO67PT05PRKGg==}
-    cpu: [arm]
-    os: [linux]
-
   '@rollup/rollup-linux-arm-gnueabihf@4.50.2':
     resolution: {integrity: sha512-9VlPY/BN3AgbukfVHAB8zNFWB/lKEuvzRo1NKev0Po8sYFKx0i+AQlCYftgEjcL43F2h9Ui1ZSdVBc4En/sP2w==}
-    cpu: [arm]
-    os: [linux]
-
-  '@rollup/rollup-linux-arm-musleabihf@4.38.0':
-    resolution: {integrity: sha512-tPiJtiOoNuIH8XGG8sWoMMkAMm98PUwlriOFCCbZGc9WCax+GLeVRhmaxjJtz6WxrPKACgrwoZ5ia/uapq3ZVg==}
     cpu: [arm]
     os: [linux]
 
@@ -2451,18 +2554,8 @@ packages:
     cpu: [arm]
     os: [linux]
 
-  '@rollup/rollup-linux-arm64-gnu@4.38.0':
-    resolution: {integrity: sha512-wZco59rIVuB0tjQS0CSHTTUcEde+pXQWugZVxWaQFdQQ1VYub/sTrNdY76D1MKdN2NB48JDuGABP6o6fqos8mA==}
-    cpu: [arm64]
-    os: [linux]
-
   '@rollup/rollup-linux-arm64-gnu@4.50.2':
     resolution: {integrity: sha512-df0Eou14ojtUdLQdPFnymEQteENwSJAdLf5KCDrmZNsy1c3YaCNaJvYsEUHnrg+/DLBH612/R0xd3dD03uz2dg==}
-    cpu: [arm64]
-    os: [linux]
-
-  '@rollup/rollup-linux-arm64-musl@4.38.0':
-    resolution: {integrity: sha512-fQgqwKmW0REM4LomQ+87PP8w8xvU9LZfeLBKybeli+0yHT7VKILINzFEuggvnV9M3x1Ed4gUBmGUzCo/ikmFbQ==}
     cpu: [arm64]
     os: [linux]
 
@@ -2476,33 +2569,13 @@ packages:
     cpu: [loong64]
     os: [linux]
 
-  '@rollup/rollup-linux-loongarch64-gnu@4.38.0':
-    resolution: {integrity: sha512-hz5oqQLXTB3SbXpfkKHKXLdIp02/w3M+ajp8p4yWOWwQRtHWiEOCKtc9U+YXahrwdk+3qHdFMDWR5k+4dIlddg==}
-    cpu: [loong64]
-    os: [linux]
-
-  '@rollup/rollup-linux-powerpc64le-gnu@4.38.0':
-    resolution: {integrity: sha512-NXqygK/dTSibQ+0pzxsL3r4Xl8oPqVoWbZV9niqOnIHV/J92fe65pOir0xjkUZDRSPyFRvu+4YOpJF9BZHQImw==}
-    cpu: [ppc64]
-    os: [linux]
-
   '@rollup/rollup-linux-ppc64-gnu@4.50.2':
     resolution: {integrity: sha512-I21VJl1w6z/K5OTRl6aS9DDsqezEZ/yKpbqlvfHbW0CEF5IL8ATBMuUx6/mp683rKTK8thjs/0BaNrZLXetLag==}
     cpu: [ppc64]
     os: [linux]
 
-  '@rollup/rollup-linux-riscv64-gnu@4.38.0':
-    resolution: {integrity: sha512-GEAIabR1uFyvf/jW/5jfu8gjM06/4kZ1W+j1nWTSSB3w6moZEBm7iBtzwQ3a1Pxos2F7Gz+58aVEnZHU295QTg==}
-    cpu: [riscv64]
-    os: [linux]
-
   '@rollup/rollup-linux-riscv64-gnu@4.50.2':
     resolution: {integrity: sha512-Hq6aQJT/qFFHrYMjS20nV+9SKrXL2lvFBENZoKfoTH2kKDOJqff5OSJr4x72ZaG/uUn+XmBnGhfr4lwMRrmqCQ==}
-    cpu: [riscv64]
-    os: [linux]
-
-  '@rollup/rollup-linux-riscv64-musl@4.38.0':
-    resolution: {integrity: sha512-9EYTX+Gus2EGPbfs+fh7l95wVADtSQyYw4DfSBcYdUEAmP2lqSZY0Y17yX/3m5VKGGJ4UmIH5LHLkMJft3bYoA==}
     cpu: [riscv64]
     os: [linux]
 
@@ -2511,28 +2584,13 @@ packages:
     cpu: [riscv64]
     os: [linux]
 
-  '@rollup/rollup-linux-s390x-gnu@4.38.0':
-    resolution: {integrity: sha512-Mpp6+Z5VhB9VDk7RwZXoG2qMdERm3Jw07RNlXHE0bOnEeX+l7Fy4bg+NxfyN15ruuY3/7Vrbpm75J9QHFqj5+Q==}
-    cpu: [s390x]
-    os: [linux]
-
   '@rollup/rollup-linux-s390x-gnu@4.50.2':
     resolution: {integrity: sha512-4Q3S3Hy7pC6uaRo9gtXUTJ+EKo9AKs3BXKc2jYypEcMQ49gDPFU2P1ariX9SEtBzE5egIX6fSUmbmGazwBVF9w==}
     cpu: [s390x]
     os: [linux]
 
-  '@rollup/rollup-linux-x64-gnu@4.38.0':
-    resolution: {integrity: sha512-vPvNgFlZRAgO7rwncMeE0+8c4Hmc+qixnp00/Uv3ht2x7KYrJ6ERVd3/R0nUtlE6/hu7/HiiNHJ/rP6knRFt1w==}
-    cpu: [x64]
-    os: [linux]
-
   '@rollup/rollup-linux-x64-gnu@4.50.2':
     resolution: {integrity: sha512-9Jie/At6qk70dNIcopcL4p+1UirusEtznpNtcq/u/C5cC4HBX7qSGsYIcG6bdxj15EYWhHiu02YvmdPzylIZlA==}
-    cpu: [x64]
-    os: [linux]
-
-  '@rollup/rollup-linux-x64-musl@4.38.0':
-    resolution: {integrity: sha512-q5Zv+goWvQUGCaL7fU8NuTw8aydIL/C9abAVGCzRReuj5h30TPx4LumBtAidrVOtXnlB+RZkBtExMsfqkMfb8g==}
     cpu: [x64]
     os: [linux]
 
@@ -2546,29 +2604,14 @@ packages:
     cpu: [arm64]
     os: [openharmony]
 
-  '@rollup/rollup-win32-arm64-msvc@4.38.0':
-    resolution: {integrity: sha512-u/Jbm1BU89Vftqyqbmxdq14nBaQjQX1HhmsdBWqSdGClNaKwhjsg5TpW+5Ibs1mb8Es9wJiMdl86BcmtUVXNZg==}
-    cpu: [arm64]
-    os: [win32]
-
   '@rollup/rollup-win32-arm64-msvc@4.50.2':
     resolution: {integrity: sha512-eFUvvnTYEKeTyHEijQKz81bLrUQOXKZqECeiWH6tb8eXXbZk+CXSG2aFrig2BQ/pjiVRj36zysjgILkqarS2YA==}
     cpu: [arm64]
     os: [win32]
 
-  '@rollup/rollup-win32-ia32-msvc@4.38.0':
-    resolution: {integrity: sha512-mqu4PzTrlpNHHbu5qleGvXJoGgHpChBlrBx/mEhTPpnAL1ZAYFlvHD7rLK839LLKQzqEQMFJfGrrOHItN4ZQqA==}
-    cpu: [ia32]
-    os: [win32]
-
   '@rollup/rollup-win32-ia32-msvc@4.50.2':
     resolution: {integrity: sha512-cBaWmXqyfRhH8zmUxK3d3sAhEWLrtMjWBRwdMMHJIXSjvjLKvv49adxiEz+FJ8AP90apSDDBx2Tyd/WylV6ikA==}
     cpu: [ia32]
-    os: [win32]
-
-  '@rollup/rollup-win32-x64-msvc@4.38.0':
-    resolution: {integrity: sha512-jjqy3uWlecfB98Psxb5cD6Fny9Fupv9LrDSPTQZUROqjvZmcCqNu4UMl7qqhlUUGpwiAkotj6GYu4SZdcr/nLw==}
-    cpu: [x64]
     os: [win32]
 
   '@rollup/rollup-win32-x64-msvc@4.50.2':
@@ -2891,9 +2934,6 @@ packages:
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
 
-  '@types/estree@1.0.7':
-    resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
-
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
@@ -2911,12 +2951,6 @@ packages:
 
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
-
-  '@types/node@20.17.27':
-    resolution: {integrity: sha512-U58sbKhDrthHlxHRJw7ZLiLDZGmAUOZUbpw0S6nL27sYUdhvgBLCRu/keSd6qcTsfArd1sRFCCBxzWATGr/0UA==}
-
-  '@types/node@20.19.17':
-    resolution: {integrity: sha512-gfehUI8N1z92kygssiuWvLiwcbOB3IRktR6hTDgJlXMYh5OvkPSRmgfoBUmfZt+vhwJtX7v1Yw4KvvAf7c5QKQ==}
 
   '@types/node@20.19.32':
     resolution: {integrity: sha512-Ez8QE4DMfhjjTsES9K2dwfV258qBui7qxUsoaixZDiTzbde4U12e1pXGNu/ECsUIOi5/zoCxAQxIhQnaUQ2VvA==}
@@ -4215,14 +4249,6 @@ packages:
   fastq@1.19.1:
     resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
 
-  fdir@6.4.3:
-    resolution: {integrity: sha512-PMXmW2y1hDDfTSRc9gaXIuCCRpuoz3Kaz8cUelp3smouvfT632ozg2vrT6lJsHKKOF59YLbOGfAWGUcKEfRMQw==}
-    peerDependencies:
-      picomatch: ^3 || ^4
-    peerDependenciesMeta:
-      picomatch:
-        optional: true
-
   fdir@6.4.4:
     resolution: {integrity: sha512-1NZP+GK4GfuAv3PqKvxQRDMjdSRZjnkq7KfhlNrCNNlZ0ygQFpebfrnfnq/W7fpUnAv9aGWmY1zKx7FYL3gwhg==}
     peerDependencies:
@@ -4387,12 +4413,6 @@ packages:
     resolution: {integrity: sha512-6tfZ91bOr7bOXnK7PRDCGBLa1H4U080YHNaAQ2KsMGlLEzRbk44nsZF2E1IeRc3vtJHPVbKCYgdFbaGO2ljd8g==}
     engines: {node: '>=10.19.0'}
 
-  gql.tada@1.8.10:
-    resolution: {integrity: sha512-FrvSxgz838FYVPgZHGOSgbpOjhR+yq44rCzww3oOPJYi0OvBJjAgCiP6LEokZIYND2fUTXzQAyLgcvgw1yNP5A==}
-    hasBin: true
-    peerDependencies:
-      typescript: ^5.0.0
-
   gql.tada@1.9.0:
     resolution: {integrity: sha512-1LMiA46dRs5oF7Qev6vMU32gmiNvM3+3nHoQZA9K9j2xQzH8xOAWnnJrLSbZOFHTSdFxqn86TL6beo1/7ja/aA==}
     hasBin: true
@@ -4410,10 +4430,6 @@ packages:
     engines: {node: '>=10'}
     peerDependencies:
       graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-
-  graphql@16.10.0:
-    resolution: {integrity: sha512-AjqGKbDGUFRKIRCP9tCKiIGHyriz2oHEbPIbEtcSLSs4YjReZOIPQQWek4+6hjw62H9QShXHyaGivGiYVLeYFQ==}
-    engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
 
   graphql@16.12.0:
     resolution: {integrity: sha512-DKKrynuQRne0PNpEbzuEdHlYOMksHSUI8Zc9Unei5gTsMNA2/vMpoMz/yKba50pejK56qj98qM0SjYxAKi13gQ==}
@@ -5276,10 +5292,6 @@ packages:
     resolution: {integrity: sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==}
     engines: {node: ^10 || ^12 || >=14}
 
-  postcss@8.5.3:
-    resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
-    engines: {node: ^10 || ^12 || >=14}
-
   postcss@8.5.6:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
@@ -5291,11 +5303,6 @@ packages:
   prettier@2.8.8:
     resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
-    hasBin: true
-
-  prettier@3.6.2:
-    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
-    engines: {node: '>=14'}
     hasBin: true
 
   prettier@3.8.1:
@@ -5751,11 +5758,6 @@ packages:
     resolution: {integrity: sha512-d5gdPmgQ0Z+AklL2NVXr/IoSjNZFfTVvQWzL/AM2AOcSzYP2xjlb0AC8YyCLc41MSNf6P6QVtjgPdmVtzb+4lQ==}
     hasBin: true
 
-  rollup@4.38.0:
-    resolution: {integrity: sha512-5SsIRtJy9bf1ErAOiFMFzl64Ex9X5V7bnJ+WlFMb+zmP459OSWCEG7b0ERZ+PEU7xPt4OG3RHbrp1LJlXxYTrw==}
-    engines: {node: '>=18.0.0', npm: '>=8.0.0'}
-    hasBin: true
-
   rollup@4.50.2:
     resolution: {integrity: sha512-BgLRGy7tNS9H66aIMASq1qSYbAAJV6Z6WR4QYTvj5FgF15rZ/ympT1uixHXwzbZUBDbkvqUI1KR0fH1FhMaQ9w==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
@@ -6108,10 +6110,6 @@ packages:
 
   tinyexec@0.3.2:
     resolution: {integrity: sha512-KQQR9yN7R5+OSwaK0XQoj22pwHoTlgYqmUscPYoknOoWCWfj/5/ABTMRi69FrKU5ffPVh5QcFikpWJI/P1ocHA==}
-
-  tinyglobby@0.2.12:
-    resolution: {integrity: sha512-qkf4trmKSIiMTs/E63cxH+ojC2unam7rJ0WrauAzpT3ECNTxGRMlaXxVbfxMUC/w0LaYk6jQ4y/nGR9uBO3tww==}
-    engines: {node: '>=12.0.0'}
 
   tinyglobby@0.2.13:
     resolution: {integrity: sha512-mEwzpUgrLySlveBwEVDMKk5B57bhLPYovRfPAXD5gA/98Opn0rCDj3GtLwFvCvH5RK9uPCExUROW5NjDwvqkxw==}
@@ -6556,11 +6554,6 @@ packages:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
 
-  yaml@2.7.0:
-    resolution: {integrity: sha512-+hSoy/QHluxmC9kCIJyL/uyFmLmc+e5CFR5Wa+bpIhIj85LVb9ZH2nVnqrHoSvKogwODv0ClqZkmiSSaIH5LTA==}
-    engines: {node: '>= 14'}
-    hasBin: true
-
   yaml@2.8.1:
     resolution: {integrity: sha512-lcYcMxX2PO9XMGvAJkJ3OsNMw+/7FKes7/hgerGUYWIoWu5j/+YQqcZr5JnPZWzOsEBgMbSbiSTn/dv/69Mkpw==}
     engines: {node: '>= 14.6'}
@@ -6583,19 +6576,9 @@ packages:
 
 snapshots:
 
-  '@0no-co/graphql.web@1.1.2(graphql@16.10.0)':
-    optionalDependencies:
-      graphql: 16.10.0
-
   '@0no-co/graphql.web@1.1.2(graphql@16.12.0)':
     optionalDependencies:
       graphql: 16.12.0
-
-  '@0no-co/graphqlsp@1.12.16(graphql@16.10.0)(typescript@5.8.3)':
-    dependencies:
-      '@gql.tada/internal': 1.0.8(graphql@16.10.0)(typescript@5.8.3)
-      graphql: 16.10.0
-      typescript: 5.8.3
 
   '@0no-co/graphqlsp@1.12.16(graphql@16.12.0)(typescript@5.8.3)':
     dependencies:
@@ -6755,9 +6738,9 @@ snapshots:
       '@aptos-labs/aptos-cli': 1.0.2
       '@aptos-labs/aptos-client': 2.0.0(got@11.8.6)
       '@noble/curves': 1.9.7
-      '@noble/hashes': 1.7.1
-      '@scure/bip32': 1.6.2
-      '@scure/bip39': 1.5.4
+      '@noble/hashes': 1.8.0
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
       eventemitter3: 5.0.1
       form-data: 4.0.4
       js-base64: 3.7.7
@@ -7399,7 +7382,7 @@ snapshots:
   '@eslint/eslintrc@2.1.4':
     dependencies:
       ajv: 6.12.6
-      debug: 4.4.0
+      debug: 4.4.3
       espree: 9.6.1
       globals: 13.24.0
       ignore: 5.3.2
@@ -7435,24 +7418,11 @@ snapshots:
 
   '@floating-ui/utils@0.2.9': {}
 
-  '@gql.tada/cli-utils@1.6.3(@0no-co/graphqlsp@1.12.16(graphql@16.12.0)(typescript@5.8.3))(graphql@16.10.0)(typescript@5.8.3)':
-    dependencies:
-      '@0no-co/graphqlsp': 1.12.16(graphql@16.12.0)(typescript@5.8.3)
-      '@gql.tada/internal': 1.0.8(graphql@16.10.0)(typescript@5.8.3)
-      graphql: 16.10.0
-      typescript: 5.8.3
-
   '@gql.tada/cli-utils@1.7.2(@0no-co/graphqlsp@1.12.16(graphql@16.12.0)(typescript@5.8.3))(graphql@16.12.0)(typescript@5.8.3)':
     dependencies:
       '@0no-co/graphqlsp': 1.12.16(graphql@16.12.0)(typescript@5.8.3)
       '@gql.tada/internal': 1.0.8(graphql@16.12.0)(typescript@5.8.3)
       graphql: 16.12.0
-      typescript: 5.8.3
-
-  '@gql.tada/internal@1.0.8(graphql@16.10.0)(typescript@5.8.3)':
-    dependencies:
-      '@0no-co/graphql.web': 1.1.2(graphql@16.10.0)
-      graphql: 16.10.0
       typescript: 5.8.3
 
   '@gql.tada/internal@1.0.8(graphql@16.12.0)(typescript@5.8.3)':
@@ -7461,10 +7431,6 @@ snapshots:
       graphql: 16.12.0
       typescript: 5.8.3
 
-  '@graphql-typed-document-node/core@3.2.0(graphql@16.10.0)':
-    dependencies:
-      graphql: 16.10.0
-
   '@graphql-typed-document-node/core@3.2.0(graphql@16.12.0)':
     dependencies:
       graphql: 16.12.0
@@ -7472,7 +7438,7 @@ snapshots:
   '@humanwhocodes/config-array@0.13.0':
     dependencies:
       '@humanwhocodes/object-schema': 2.0.3
-      debug: 4.4.0
+      debug: 4.4.3
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -7650,15 +7616,7 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.5
       '@jridgewell/trace-mapping': 0.3.31
 
-  '@jridgewell/gen-mapping@0.3.8':
-    dependencies:
-      '@jridgewell/set-array': 1.2.1
-      '@jridgewell/sourcemap-codec': 1.5.0
-      '@jridgewell/trace-mapping': 0.3.25
-
   '@jridgewell/resolve-uri@3.1.2': {}
-
-  '@jridgewell/set-array@1.2.1': {}
 
   '@jridgewell/source-map@0.3.11':
     dependencies:
@@ -7666,14 +7624,7 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
     optional: true
 
-  '@jridgewell/sourcemap-codec@1.5.0': {}
-
   '@jridgewell/sourcemap-codec@1.5.5': {}
-
-  '@jridgewell/trace-mapping@0.3.25':
-    dependencies:
-      '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.5.5
 
   '@jridgewell/trace-mapping@0.3.31':
     dependencies:
@@ -7704,20 +7655,11 @@ snapshots:
       tweetnacl: 1.0.3
       tweetnacl-util: 0.15.1
 
-  '@microsoft/api-extractor-model@7.28.13(@types/node@20.17.27)':
+  '@microsoft/api-extractor-model@7.28.13(@types/node@20.19.32)':
     dependencies:
       '@microsoft/tsdoc': 0.14.2
       '@microsoft/tsdoc-config': 0.16.2
-      '@rushstack/node-core-library': 4.0.2(@types/node@20.17.27)
-    transitivePeerDependencies:
-      - '@types/node'
-    optional: true
-
-  '@microsoft/api-extractor-model@7.28.13(@types/node@20.19.17)':
-    dependencies:
-      '@microsoft/tsdoc': 0.14.2
-      '@microsoft/tsdoc-config': 0.16.2
-      '@rushstack/node-core-library': 4.0.2(@types/node@20.19.17)
+      '@rushstack/node-core-library': 4.0.2(@types/node@20.19.32)
     transitivePeerDependencies:
       - '@types/node'
     optional: true
@@ -7731,34 +7673,15 @@ snapshots:
       - '@types/node'
     optional: true
 
-  '@microsoft/api-extractor@7.43.0(@types/node@20.17.27)':
+  '@microsoft/api-extractor@7.43.0(@types/node@20.19.32)':
     dependencies:
-      '@microsoft/api-extractor-model': 7.28.13(@types/node@20.17.27)
+      '@microsoft/api-extractor-model': 7.28.13(@types/node@20.19.32)
       '@microsoft/tsdoc': 0.14.2
       '@microsoft/tsdoc-config': 0.16.2
-      '@rushstack/node-core-library': 4.0.2(@types/node@20.17.27)
+      '@rushstack/node-core-library': 4.0.2(@types/node@20.19.32)
       '@rushstack/rig-package': 0.5.2
-      '@rushstack/terminal': 0.10.0(@types/node@20.17.27)
-      '@rushstack/ts-command-line': 4.19.1(@types/node@20.17.27)
-      lodash: 4.17.23
-      minimatch: 3.0.8
-      resolve: 1.22.11
-      semver: 7.5.4
-      source-map: 0.6.1
-      typescript: 5.4.2
-    transitivePeerDependencies:
-      - '@types/node'
-    optional: true
-
-  '@microsoft/api-extractor@7.43.0(@types/node@20.19.17)':
-    dependencies:
-      '@microsoft/api-extractor-model': 7.28.13(@types/node@20.19.17)
-      '@microsoft/tsdoc': 0.14.2
-      '@microsoft/tsdoc-config': 0.16.2
-      '@rushstack/node-core-library': 4.0.2(@types/node@20.19.17)
-      '@rushstack/rig-package': 0.5.2
-      '@rushstack/terminal': 0.10.0(@types/node@20.19.17)
-      '@rushstack/ts-command-line': 4.19.1(@types/node@20.19.17)
+      '@rushstack/terminal': 0.10.0(@types/node@20.19.32)
+      '@rushstack/ts-command-line': 4.19.1(@types/node@20.19.32)
       lodash: 4.17.23
       minimatch: 3.0.8
       resolve: 1.22.11
@@ -7893,15 +7816,15 @@ snapshots:
 
   '@mysten/sui@1.24.0(typescript@5.8.3)':
     dependencies:
-      '@graphql-typed-document-node/core': 3.2.0(graphql@16.10.0)
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.12.0)
       '@mysten/bcs': 1.5.0
       '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
-      '@scure/bip32': 1.6.2
-      '@scure/bip39': 1.5.4
-      gql.tada: 1.8.10(graphql@16.10.0)(typescript@5.8.3)
-      graphql: 16.10.0
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
+      gql.tada: 1.9.0(graphql@16.12.0)(typescript@5.8.3)
+      graphql: 16.12.0
       poseidon-lite: 0.2.1
       valibot: 0.36.0
     transitivePeerDependencies:
@@ -8608,61 +8531,31 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@rollup/rollup-android-arm-eabi@4.38.0':
-    optional: true
-
   '@rollup/rollup-android-arm-eabi@4.50.2':
-    optional: true
-
-  '@rollup/rollup-android-arm64@4.38.0':
     optional: true
 
   '@rollup/rollup-android-arm64@4.50.2':
     optional: true
 
-  '@rollup/rollup-darwin-arm64@4.38.0':
-    optional: true
-
   '@rollup/rollup-darwin-arm64@4.50.2':
-    optional: true
-
-  '@rollup/rollup-darwin-x64@4.38.0':
     optional: true
 
   '@rollup/rollup-darwin-x64@4.50.2':
     optional: true
 
-  '@rollup/rollup-freebsd-arm64@4.38.0':
-    optional: true
-
   '@rollup/rollup-freebsd-arm64@4.50.2':
-    optional: true
-
-  '@rollup/rollup-freebsd-x64@4.38.0':
     optional: true
 
   '@rollup/rollup-freebsd-x64@4.50.2':
     optional: true
 
-  '@rollup/rollup-linux-arm-gnueabihf@4.38.0':
-    optional: true
-
   '@rollup/rollup-linux-arm-gnueabihf@4.50.2':
-    optional: true
-
-  '@rollup/rollup-linux-arm-musleabihf@4.38.0':
     optional: true
 
   '@rollup/rollup-linux-arm-musleabihf@4.50.2':
     optional: true
 
-  '@rollup/rollup-linux-arm64-gnu@4.38.0':
-    optional: true
-
   '@rollup/rollup-linux-arm64-gnu@4.50.2':
-    optional: true
-
-  '@rollup/rollup-linux-arm64-musl@4.38.0':
     optional: true
 
   '@rollup/rollup-linux-arm64-musl@4.50.2':
@@ -8671,40 +8564,19 @@ snapshots:
   '@rollup/rollup-linux-loong64-gnu@4.50.2':
     optional: true
 
-  '@rollup/rollup-linux-loongarch64-gnu@4.38.0':
-    optional: true
-
-  '@rollup/rollup-linux-powerpc64le-gnu@4.38.0':
-    optional: true
-
   '@rollup/rollup-linux-ppc64-gnu@4.50.2':
-    optional: true
-
-  '@rollup/rollup-linux-riscv64-gnu@4.38.0':
     optional: true
 
   '@rollup/rollup-linux-riscv64-gnu@4.50.2':
     optional: true
 
-  '@rollup/rollup-linux-riscv64-musl@4.38.0':
-    optional: true
-
   '@rollup/rollup-linux-riscv64-musl@4.50.2':
-    optional: true
-
-  '@rollup/rollup-linux-s390x-gnu@4.38.0':
     optional: true
 
   '@rollup/rollup-linux-s390x-gnu@4.50.2':
     optional: true
 
-  '@rollup/rollup-linux-x64-gnu@4.38.0':
-    optional: true
-
   '@rollup/rollup-linux-x64-gnu@4.50.2':
-    optional: true
-
-  '@rollup/rollup-linux-x64-musl@4.38.0':
     optional: true
 
   '@rollup/rollup-linux-x64-musl@4.50.2':
@@ -8713,19 +8585,10 @@ snapshots:
   '@rollup/rollup-openharmony-arm64@4.50.2':
     optional: true
 
-  '@rollup/rollup-win32-arm64-msvc@4.38.0':
-    optional: true
-
   '@rollup/rollup-win32-arm64-msvc@4.50.2':
     optional: true
 
-  '@rollup/rollup-win32-ia32-msvc@4.38.0':
-    optional: true
-
   '@rollup/rollup-win32-ia32-msvc@4.50.2':
-    optional: true
-
-  '@rollup/rollup-win32-x64-msvc@4.38.0':
     optional: true
 
   '@rollup/rollup-win32-x64-msvc@4.50.2':
@@ -8735,7 +8598,7 @@ snapshots:
 
   '@rushstack/eslint-patch@1.11.0': {}
 
-  '@rushstack/node-core-library@4.0.2(@types/node@20.17.27)':
+  '@rushstack/node-core-library@4.0.2(@types/node@20.19.32)':
     dependencies:
       fs-extra: 7.0.1
       import-lazy: 4.0.0
@@ -8744,19 +8607,7 @@ snapshots:
       semver: 7.5.4
       z-schema: 5.0.5
     optionalDependencies:
-      '@types/node': 20.17.27
-    optional: true
-
-  '@rushstack/node-core-library@4.0.2(@types/node@20.19.17)':
-    dependencies:
-      fs-extra: 7.0.1
-      import-lazy: 4.0.0
-      jju: 1.4.0
-      resolve: 1.22.11
-      semver: 7.5.4
-      z-schema: 5.0.5
-    optionalDependencies:
-      '@types/node': 20.19.17
+      '@types/node': 20.19.32
     optional: true
 
   '@rushstack/node-core-library@4.0.2(@types/node@24.5.2)':
@@ -8777,20 +8628,12 @@ snapshots:
       strip-json-comments: 3.1.1
     optional: true
 
-  '@rushstack/terminal@0.10.0(@types/node@20.17.27)':
+  '@rushstack/terminal@0.10.0(@types/node@20.19.32)':
     dependencies:
-      '@rushstack/node-core-library': 4.0.2(@types/node@20.17.27)
+      '@rushstack/node-core-library': 4.0.2(@types/node@20.19.32)
       supports-color: 8.1.1
     optionalDependencies:
-      '@types/node': 20.17.27
-    optional: true
-
-  '@rushstack/terminal@0.10.0(@types/node@20.19.17)':
-    dependencies:
-      '@rushstack/node-core-library': 4.0.2(@types/node@20.19.17)
-      supports-color: 8.1.1
-    optionalDependencies:
-      '@types/node': 20.19.17
+      '@types/node': 20.19.32
     optional: true
 
   '@rushstack/terminal@0.10.0(@types/node@24.5.2)':
@@ -8801,19 +8644,9 @@ snapshots:
       '@types/node': 24.5.2
     optional: true
 
-  '@rushstack/ts-command-line@4.19.1(@types/node@20.17.27)':
+  '@rushstack/ts-command-line@4.19.1(@types/node@20.19.32)':
     dependencies:
-      '@rushstack/terminal': 0.10.0(@types/node@20.17.27)
-      '@types/argparse': 1.0.38
-      argparse: 1.0.10
-      string-argv: 0.3.2
-    transitivePeerDependencies:
-      - '@types/node'
-    optional: true
-
-  '@rushstack/ts-command-line@4.19.1(@types/node@20.19.17)':
-    dependencies:
-      '@rushstack/terminal': 0.10.0(@types/node@20.19.17)
+      '@rushstack/terminal': 0.10.0(@types/node@20.19.32)
       '@types/argparse': 1.0.38
       argparse: 1.0.10
       string-argv: 0.3.2
@@ -9009,8 +8842,8 @@ snapshots:
   '@solana/web3.js@1.98.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
     dependencies:
       '@babel/runtime': 7.27.0
-      '@noble/curves': 1.8.1
-      '@noble/hashes': 1.7.1
+      '@noble/curves': 1.9.7
+      '@noble/hashes': 1.8.0
       '@solana/buffer-layout': 4.0.1
       agentkeepalive: 4.6.0
       bigint-buffer: 1.1.5
@@ -9199,24 +9032,22 @@ snapshots:
 
   '@types/bn.js@4.11.6':
     dependencies:
-      '@types/node': 20.19.32
+      '@types/node': 24.5.2
 
   '@types/bn.js@5.1.6':
     dependencies:
-      '@types/node': 20.19.32
+      '@types/node': 24.5.2
 
   '@types/cacheable-request@6.0.3':
     dependencies:
       '@types/http-cache-semantics': 4.2.0
       '@types/keyv': 3.1.4
-      '@types/node': 20.19.32
+      '@types/node': 24.5.2
       '@types/responselike': 1.0.3
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 20.19.32
-
-  '@types/estree@1.0.7': {}
+      '@types/node': 24.5.2
 
   '@types/estree@1.0.8': {}
 
@@ -9226,19 +9057,11 @@ snapshots:
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 20.19.32
+      '@types/node': 24.5.2
 
   '@types/long@4.0.2': {}
 
   '@types/node@12.20.55': {}
-
-  '@types/node@20.17.27':
-    dependencies:
-      undici-types: 6.19.8
-
-  '@types/node@20.19.17':
-    dependencies:
-      undici-types: 6.21.0
 
   '@types/node@20.19.32':
     dependencies:
@@ -9251,13 +9074,12 @@ snapshots:
   '@types/node@24.5.2':
     dependencies:
       undici-types: 7.12.0
-    optional: true
 
   '@types/parse-json@4.0.2': {}
 
   '@types/pbkdf2@3.1.2':
     dependencies:
-      '@types/node': 20.19.32
+      '@types/node': 24.5.2
 
   '@types/prop-types@15.7.14': {}
 
@@ -9276,11 +9098,11 @@ snapshots:
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 20.19.32
+      '@types/node': 24.5.2
 
   '@types/secp256k1@4.0.6':
     dependencies:
-      '@types/node': 20.19.32
+      '@types/node': 24.5.2
 
   '@types/uuid@8.3.4': {}
 
@@ -9288,11 +9110,11 @@ snapshots:
 
   '@types/ws@7.4.7':
     dependencies:
-      '@types/node': 20.19.32
+      '@types/node': 24.5.2
 
   '@types/ws@8.18.0':
     dependencies:
-      '@types/node': 20.19.32
+      '@types/node': 24.5.2
 
   '@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3)':
     dependencies:
@@ -9312,7 +9134,7 @@ snapshots:
       '@typescript-eslint/types': 7.2.0
       '@typescript-eslint/typescript-estree': 7.2.0(typescript@5.8.3)
       '@typescript-eslint/visitor-keys': 7.2.0
-      debug: 4.4.0
+      debug: 4.4.3
       eslint: 8.57.1
     optionalDependencies:
       typescript: 5.8.3
@@ -9351,7 +9173,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 7.2.0
       '@typescript-eslint/visitor-keys': 7.2.0
-      debug: 4.4.0
+      debug: 4.4.3
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.3
@@ -9428,21 +9250,13 @@ snapshots:
       chai: 5.3.3
       tinyrainbow: 1.2.0
 
-  '@vitest/mocker@2.1.9(vite@6.3.6(@types/node@20.17.27)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1))':
+  '@vitest/mocker@2.1.9(vite@6.3.6(@types/node@20.19.32)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1))':
     dependencies:
       '@vitest/spy': 2.1.9
       estree-walker: 3.0.3
       magic-string: 0.30.19
     optionalDependencies:
-      vite: 6.3.6(@types/node@20.17.27)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
-
-  '@vitest/mocker@2.1.9(vite@6.3.6(@types/node@20.19.17)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1))':
-    dependencies:
-      '@vitest/spy': 2.1.9
-      estree-walker: 3.0.3
-      magic-string: 0.30.19
-    optionalDependencies:
-      vite: 6.3.6(@types/node@20.19.17)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
+      vite: 6.3.6(@types/node@20.19.32)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
 
   '@vitest/mocker@2.1.9(vite@6.3.6(@types/node@24.5.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1))':
     dependencies:
@@ -10120,14 +9934,14 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  autoprefixer@10.4.21(postcss@8.5.3):
+  autoprefixer@10.4.21(postcss@8.5.6):
     dependencies:
       browserslist: 4.24.4
       caniuse-lite: 1.0.30001707
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.1.1
-      postcss: 8.5.3
+      postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
   available-typed-arrays@1.0.7:
@@ -10786,7 +10600,7 @@ snapshots:
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 2.7.1(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@2.7.1)(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-react: 7.31.8(eslint@8.57.1)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.1)
@@ -10804,7 +10618,7 @@ snapshots:
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.9.1(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.9.1(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.9.1)(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-react: 7.37.4(eslint@8.57.1)
       eslint-plugin-react-hooks: 5.0.0-canary-7118f5dd7-20230705(eslint@8.57.1)
@@ -10837,7 +10651,7 @@ snapshots:
     dependencies:
       debug: 4.4.0
       eslint: 8.57.1
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@2.7.1)(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
       glob: 7.2.3
       is-glob: 4.0.3
       resolve: 1.22.10
@@ -10848,15 +10662,15 @@ snapshots:
   eslint-import-resolver-typescript@3.9.1(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
-      debug: 4.4.0
+      debug: 4.4.3
       eslint: 8.57.1
       get-tsconfig: 4.10.0
       is-bun-module: 1.3.0
       rspack-resolver: 1.3.0
       stable-hash: 0.0.5
-      tinyglobby: 0.2.12
+      tinyglobby: 0.2.13
     optionalDependencies:
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.9.1(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.9.1)(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -10882,7 +10696,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@2.7.1)(eslint@8.57.1):
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
@@ -10911,7 +10725,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.9.1(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1):
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.9.1)(eslint@8.57.1):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
@@ -11033,7 +10847,7 @@ snapshots:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.6
-      debug: 4.4.0
+      debug: 4.4.3
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.2.2
@@ -11182,10 +10996,6 @@ snapshots:
   fastq@1.19.1:
     dependencies:
       reusify: 1.1.0
-
-  fdir@6.4.3(picomatch@4.0.2):
-    optionalDependencies:
-      picomatch: 4.0.2
 
   fdir@6.4.4(picomatch@4.0.2):
     optionalDependencies:
@@ -11387,18 +11197,6 @@ snapshots:
       p-cancelable: 2.1.1
       responselike: 2.0.1
 
-  gql.tada@1.8.10(graphql@16.10.0)(typescript@5.8.3):
-    dependencies:
-      '@0no-co/graphql.web': 1.1.2(graphql@16.10.0)
-      '@0no-co/graphqlsp': 1.12.16(graphql@16.10.0)(typescript@5.8.3)
-      '@gql.tada/cli-utils': 1.6.3(@0no-co/graphqlsp@1.12.16(graphql@16.12.0)(typescript@5.8.3))(graphql@16.10.0)(typescript@5.8.3)
-      '@gql.tada/internal': 1.0.8(graphql@16.10.0)(typescript@5.8.3)
-      typescript: 5.8.3
-    transitivePeerDependencies:
-      - '@gql.tada/svelte-support'
-      - '@gql.tada/vue-support'
-      - graphql
-
   gql.tada@1.9.0(graphql@16.12.0)(typescript@5.8.3):
     dependencies:
       '@0no-co/graphql.web': 1.1.2(graphql@16.12.0)
@@ -11419,8 +11217,6 @@ snapshots:
     dependencies:
       graphql: 16.12.0
       tslib: 2.8.1
-
-  graphql@16.10.0: {}
 
   graphql@16.12.0: {}
 
@@ -12188,24 +11984,24 @@ snapshots:
 
   possible-typed-array-names@1.1.0: {}
 
-  postcss-import@15.1.0(postcss@8.5.3):
+  postcss-import@15.1.0(postcss@8.5.6):
     dependencies:
-      postcss: 8.5.3
+      postcss: 8.5.6
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
-      resolve: 1.22.10
+      resolve: 1.22.11
 
-  postcss-js@4.0.1(postcss@8.5.3):
+  postcss-js@4.0.1(postcss@8.5.6):
     dependencies:
       camelcase-css: 2.0.1
-      postcss: 8.5.3
+      postcss: 8.5.6
 
-  postcss-load-config@4.0.2(postcss@8.5.3):
+  postcss-load-config@4.0.2(postcss@8.5.6):
     dependencies:
       lilconfig: 3.1.3
-      yaml: 2.7.0
+      yaml: 2.8.1
     optionalDependencies:
-      postcss: 8.5.3
+      postcss: 8.5.6
 
   postcss-load-config@6.0.1(jiti@2.5.1)(postcss@8.5.6)(yaml@2.8.1):
     dependencies:
@@ -12215,9 +12011,9 @@ snapshots:
       postcss: 8.5.6
       yaml: 2.8.1
 
-  postcss-nested@6.2.0(postcss@8.5.3):
+  postcss-nested@6.2.0(postcss@8.5.6):
     dependencies:
-      postcss: 8.5.3
+      postcss: 8.5.6
       postcss-selector-parser: 6.1.2
 
   postcss-selector-parser@6.1.2:
@@ -12233,12 +12029,6 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  postcss@8.5.3:
-    dependencies:
-      nanoid: 3.3.11
-      picocolors: 1.1.1
-      source-map-js: 1.2.1
-
   postcss@8.5.6:
     dependencies:
       nanoid: 3.3.11
@@ -12248,8 +12038,6 @@ snapshots:
   prelude-ls@1.2.1: {}
 
   prettier@2.8.8: {}
-
-  prettier@3.6.2: {}
 
   prettier@3.8.1: {}
 
@@ -12278,7 +12066,7 @@ snapshots:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 20.19.32
+      '@types/node': 24.5.2
       long: 4.0.0
 
   protobufjs@7.4.0:
@@ -12293,7 +12081,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 20.19.32
+      '@types/node': 24.5.2
       long: 5.3.1
 
   proxy-from-env@1.1.0: {}
@@ -12822,32 +12610,6 @@ snapshots:
     dependencies:
       bn.js: 5.2.1
 
-  rollup@4.38.0:
-    dependencies:
-      '@types/estree': 1.0.7
-    optionalDependencies:
-      '@rollup/rollup-android-arm-eabi': 4.38.0
-      '@rollup/rollup-android-arm64': 4.38.0
-      '@rollup/rollup-darwin-arm64': 4.38.0
-      '@rollup/rollup-darwin-x64': 4.38.0
-      '@rollup/rollup-freebsd-arm64': 4.38.0
-      '@rollup/rollup-freebsd-x64': 4.38.0
-      '@rollup/rollup-linux-arm-gnueabihf': 4.38.0
-      '@rollup/rollup-linux-arm-musleabihf': 4.38.0
-      '@rollup/rollup-linux-arm64-gnu': 4.38.0
-      '@rollup/rollup-linux-arm64-musl': 4.38.0
-      '@rollup/rollup-linux-loongarch64-gnu': 4.38.0
-      '@rollup/rollup-linux-powerpc64le-gnu': 4.38.0
-      '@rollup/rollup-linux-riscv64-gnu': 4.38.0
-      '@rollup/rollup-linux-riscv64-musl': 4.38.0
-      '@rollup/rollup-linux-s390x-gnu': 4.38.0
-      '@rollup/rollup-linux-x64-gnu': 4.38.0
-      '@rollup/rollup-linux-x64-musl': 4.38.0
-      '@rollup/rollup-win32-arm64-msvc': 4.38.0
-      '@rollup/rollup-win32-ia32-msvc': 4.38.0
-      '@rollup/rollup-win32-x64-msvc': 4.38.0
-      fsevents: 2.3.3
-
   rollup@4.50.2:
     dependencies:
       '@types/estree': 1.0.8
@@ -12892,7 +12654,7 @@ snapshots:
       buffer: 6.0.3
       eventemitter3: 5.0.1
       uuid: 8.3.2
-      ws: 8.18.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      ws: 8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     optionalDependencies:
       bufferutil: 4.0.9
       utf-8-validate: 5.0.10
@@ -13206,7 +12968,7 @@ snapshots:
 
   sucrase@3.35.0:
     dependencies:
-      '@jridgewell/gen-mapping': 0.3.8
+      '@jridgewell/gen-mapping': 0.3.13
       commander: 4.1.1
       glob: 10.4.5
       lines-and-columns: 1.2.4
@@ -13255,13 +13017,13 @@ snapshots:
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.1.1
-      postcss: 8.5.3
-      postcss-import: 15.1.0(postcss@8.5.3)
-      postcss-js: 4.0.1(postcss@8.5.3)
-      postcss-load-config: 4.0.2(postcss@8.5.3)
-      postcss-nested: 6.2.0(postcss@8.5.3)
+      postcss: 8.5.6
+      postcss-import: 15.1.0(postcss@8.5.6)
+      postcss-js: 4.0.1(postcss@8.5.6)
+      postcss-load-config: 4.0.2(postcss@8.5.6)
+      postcss-nested: 6.2.0(postcss@8.5.6)
       postcss-selector-parser: 6.1.2
-      resolve: 1.22.10
+      resolve: 1.22.11
       sucrase: 3.35.0
     transitivePeerDependencies:
       - ts-node
@@ -13295,11 +13057,6 @@ snapshots:
   tinybench@2.9.0: {}
 
   tinyexec@0.3.2: {}
-
-  tinyglobby@0.2.12:
-    dependencies:
-      fdir: 6.4.3(picomatch@4.0.2)
-      picomatch: 4.0.2
 
   tinyglobby@0.2.13:
     dependencies:
@@ -13357,55 +13114,26 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  tsup@8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.17.27))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1):
+  tsup@8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.19.32))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1):
     dependencies:
       bundle-require: 5.1.0(esbuild@0.25.1)
       cac: 6.7.14
       chokidar: 4.0.3
       consola: 3.4.2
-      debug: 4.4.0
+      debug: 4.4.3
       esbuild: 0.25.1
       joycon: 3.1.1
       picocolors: 1.1.1
       postcss-load-config: 6.0.1(jiti@2.5.1)(postcss@8.5.6)(yaml@2.8.1)
       resolve-from: 5.0.0
-      rollup: 4.38.0
+      rollup: 4.50.2
       source-map: 0.8.0-beta.0
       sucrase: 3.35.0
       tinyexec: 0.3.2
-      tinyglobby: 0.2.12
+      tinyglobby: 0.2.13
       tree-kill: 1.2.2
     optionalDependencies:
-      '@microsoft/api-extractor': 7.43.0(@types/node@20.17.27)
-      '@swc/core': 1.11.16(@swc/helpers@0.5.15)
-      postcss: 8.5.6
-      typescript: 5.8.3
-    transitivePeerDependencies:
-      - jiti
-      - supports-color
-      - tsx
-      - yaml
-
-  tsup@8.4.0(@microsoft/api-extractor@7.43.0(@types/node@20.19.17))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.8.1):
-    dependencies:
-      bundle-require: 5.1.0(esbuild@0.25.1)
-      cac: 6.7.14
-      chokidar: 4.0.3
-      consola: 3.4.2
-      debug: 4.4.0
-      esbuild: 0.25.1
-      joycon: 3.1.1
-      picocolors: 1.1.1
-      postcss-load-config: 6.0.1(jiti@2.5.1)(postcss@8.5.6)(yaml@2.8.1)
-      resolve-from: 5.0.0
-      rollup: 4.38.0
-      source-map: 0.8.0-beta.0
-      sucrase: 3.35.0
-      tinyexec: 0.3.2
-      tinyglobby: 0.2.12
-      tree-kill: 1.2.2
-    optionalDependencies:
-      '@microsoft/api-extractor': 7.43.0(@types/node@20.19.17)
+      '@microsoft/api-extractor': 7.43.0(@types/node@20.19.32)
       '@swc/core': 1.11.16(@swc/helpers@0.5.15)
       postcss: 8.5.6
       typescript: 5.8.3
@@ -13421,17 +13149,17 @@ snapshots:
       cac: 6.7.14
       chokidar: 4.0.3
       consola: 3.4.2
-      debug: 4.4.0
+      debug: 4.4.3
       esbuild: 0.25.1
       joycon: 3.1.1
       picocolors: 1.1.1
       postcss-load-config: 6.0.1(jiti@2.5.1)(postcss@8.5.6)(yaml@2.8.1)
       resolve-from: 5.0.0
-      rollup: 4.38.0
+      rollup: 4.50.2
       source-map: 0.8.0-beta.0
       sucrase: 3.35.0
       tinyexec: 0.3.2
-      tinyglobby: 0.2.12
+      tinyglobby: 0.2.13
       tree-kill: 1.2.2
     optionalDependencies:
       '@microsoft/api-extractor': 7.43.0(@types/node@24.5.2)
@@ -13539,8 +13267,7 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici-types@7.12.0:
-    optional: true
+  undici-types@7.12.0: {}
 
   universalify@0.1.2: {}
 
@@ -13606,34 +13333,13 @@ snapshots:
       - utf-8-validate
       - zod
 
-  vite-node@2.1.9(@types/node@20.17.27)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1):
+  vite-node@2.1.9(@types/node@20.19.32)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1):
     dependencies:
       cac: 6.7.14
       debug: 4.4.3
       es-module-lexer: 1.7.0
       pathe: 1.1.2
-      vite: 6.3.6(@types/node@20.17.27)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
-    transitivePeerDependencies:
-      - '@types/node'
-      - jiti
-      - less
-      - lightningcss
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-      - tsx
-      - yaml
-
-  vite-node@2.1.9(@types/node@20.19.17)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1):
-    dependencies:
-      cac: 6.7.14
-      debug: 4.4.3
-      es-module-lexer: 1.7.0
-      pathe: 1.1.2
-      vite: 6.3.6(@types/node@20.19.17)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
+      vite: 6.3.6(@types/node@20.19.32)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -13669,7 +13375,7 @@ snapshots:
       - tsx
       - yaml
 
-  vite@6.3.6(@types/node@20.17.27)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1):
+  vite@6.3.6(@types/node@20.19.32)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1):
     dependencies:
       esbuild: 0.25.1
       fdir: 6.4.4(picomatch@4.0.2)
@@ -13678,22 +13384,7 @@ snapshots:
       rollup: 4.50.2
       tinyglobby: 0.2.13
     optionalDependencies:
-      '@types/node': 20.17.27
-      fsevents: 2.3.3
-      jiti: 2.5.1
-      terser: 5.44.0
-      yaml: 2.8.1
-
-  vite@6.3.6(@types/node@20.19.17)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1):
-    dependencies:
-      esbuild: 0.25.1
-      fdir: 6.4.4(picomatch@4.0.2)
-      picomatch: 4.0.2
-      postcss: 8.5.6
-      rollup: 4.50.2
-      tinyglobby: 0.2.13
-    optionalDependencies:
-      '@types/node': 20.19.17
+      '@types/node': 20.19.32
       fsevents: 2.3.3
       jiti: 2.5.1
       terser: 5.44.0
@@ -13714,10 +13405,10 @@ snapshots:
       terser: 5.44.0
       yaml: 2.8.1
 
-  vitest@2.1.9(@types/node@20.17.27)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1):
+  vitest@2.1.9(@types/node@20.19.32)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1):
     dependencies:
       '@vitest/expect': 2.1.9
-      '@vitest/mocker': 2.1.9(vite@6.3.6(@types/node@20.17.27)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1))
+      '@vitest/mocker': 2.1.9(vite@6.3.6(@types/node@20.19.32)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1))
       '@vitest/pretty-format': 2.1.9
       '@vitest/runner': 2.1.9
       '@vitest/snapshot': 2.1.9
@@ -13733,50 +13424,11 @@ snapshots:
       tinyexec: 0.3.2
       tinypool: 1.1.1
       tinyrainbow: 1.2.0
-      vite: 6.3.6(@types/node@20.17.27)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
-      vite-node: 2.1.9(@types/node@20.17.27)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
+      vite: 6.3.6(@types/node@20.19.32)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
+      vite-node: 2.1.9(@types/node@20.19.32)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/node': 20.17.27
-      happy-dom: 20.0.2
-    transitivePeerDependencies:
-      - jiti
-      - less
-      - lightningcss
-      - msw
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-      - tsx
-      - yaml
-
-  vitest@2.1.9(@types/node@20.19.17)(happy-dom@20.0.2)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1):
-    dependencies:
-      '@vitest/expect': 2.1.9
-      '@vitest/mocker': 2.1.9(vite@6.3.6(@types/node@20.19.17)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1))
-      '@vitest/pretty-format': 2.1.9
-      '@vitest/runner': 2.1.9
-      '@vitest/snapshot': 2.1.9
-      '@vitest/spy': 2.1.9
-      '@vitest/utils': 2.1.9
-      chai: 5.3.3
-      debug: 4.4.3
-      expect-type: 1.3.0
-      magic-string: 0.30.19
-      pathe: 1.1.2
-      std-env: 3.9.0
-      tinybench: 2.9.0
-      tinyexec: 0.3.2
-      tinypool: 1.1.1
-      tinyrainbow: 1.2.0
-      vite: 6.3.6(@types/node@20.19.17)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
-      vite-node: 2.1.9(@types/node@20.19.17)(jiti@2.5.1)(terser@5.44.0)(yaml@2.8.1)
-      why-is-node-running: 2.3.0
-    optionalDependencies:
-      '@types/node': 20.19.17
+      '@types/node': 20.19.32
       happy-dom: 20.0.2
     transitivePeerDependencies:
       - jiti
@@ -13946,10 +13598,7 @@ snapshots:
 
   yaml@1.10.2: {}
 
-  yaml@2.7.0: {}
-
-  yaml@2.8.1:
-    optional: true
+  yaml@2.8.1: {}
 
   yocto-queue@0.1.0: {}
 

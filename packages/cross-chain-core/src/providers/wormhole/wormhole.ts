@@ -333,9 +333,7 @@ export class WormholeProvider implements CrossChainProvider<
 
     const signer = new Signer(
       this.getChainConfig("Aptos"),
-      (
-        await wallet.features["aptos:account"].account()
-      ).address.toString(),
+      (await wallet.features["aptos:account"].account()).address.toString(),
       {},
       wallet,
       this.crossChainCore,
@@ -367,9 +365,7 @@ export class WormholeProvider implements CrossChainProvider<
    * Phase 2: Tracks a withdraw receipt until attestation is ready.
    * This polls Wormhole and returns once the receipt reaches the Attested state.
    */
-  async trackWithdraw(
-    receipt: routes.Receipt,
-  ): Promise<routes.Receipt> {
+  async trackWithdraw(receipt: routes.Receipt): Promise<routes.Receipt> {
     if (!this.wormholeRoute) {
       throw new Error("Wormhole route not initialized");
     }
@@ -489,7 +485,13 @@ export class WormholeProvider implements CrossChainProvider<
   async withdraw(
     input: WormholeWithdrawRequest,
   ): Promise<WormholeWithdrawResponse> {
-    const { sourceChain, wallet, destinationAddress, sponsorAccount, onPhaseChange } = input;
+    const {
+      sourceChain,
+      wallet,
+      destinationAddress,
+      sponsorAccount,
+      onPhaseChange,
+    } = input;
 
     // Phase 1: Initiate — user signs Aptos burn
     onPhaseChange?.("initiating");

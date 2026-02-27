@@ -138,4 +138,3 @@ export function deserializeReceipt(
 
   return revive(obj) as routes.Receipt<AttestationReceipt>;
 }
-

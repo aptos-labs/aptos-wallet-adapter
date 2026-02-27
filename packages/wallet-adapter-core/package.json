@@ -42,22 +42,22 @@
     "@aptos-labs/eslint-config-adapter": "workspace:*",
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
     "@swc/core": "^1.11.16",
-    "@types/node": "^20.10.4",
-    "eslint": "^8.57.1",
-    "happy-dom": "^20.0.2",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3",
-    "vitest": "^2.1.8"
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "happy-dom": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "dependencies": {
     "@aptos-connect/wallet-adapter-plugin": "^3.0.2",
-    "@aptos-labs/wallet-standard": "^0.5.2",
-    "buffer": "^6.0.3",
-    "eventemitter3": "^4.0.7",
-    "tweetnacl": "^1.0.3"
+    "@aptos-labs/wallet-standard": "catalog:",
+    "buffer": "catalog:",
+    "eventemitter3": "catalog:",
+    "tweetnacl": "catalog:"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^5.1.1"
+    "@aptos-labs/ts-sdk": "catalog:"
   },
   "files": [
     "dist",

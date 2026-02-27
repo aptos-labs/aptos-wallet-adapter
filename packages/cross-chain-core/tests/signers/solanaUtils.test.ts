@@ -32,7 +32,9 @@ describe("solanaUtils", () => {
     it("should handle BigInt in error objects", () => {
       const error = { amount: BigInt("1000000000000000000") };
       const result = formatTransactionError(error);
-      expect(result).toBe('Transaction failed: {"amount":"1000000000000000000"}');
+      expect(result).toBe(
+        'Transaction failed: {"amount":"1000000000000000000"}',
+      );
     });
 
     it("should handle null errors", () => {

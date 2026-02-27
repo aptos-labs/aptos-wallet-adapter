@@ -114,4 +114,3 @@ export class SolanaDerivedAccount extends AbstractedAccount {
     );
   }
 }
-
