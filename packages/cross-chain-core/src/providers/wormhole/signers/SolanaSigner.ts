@@ -41,7 +41,10 @@ export async function signAndSendTransaction(
     throw new Error("Invalid wallet type or missing Solana wallet");
   }
 
-  const commitment = options?.commitment ?? "finalized";
+  const commitment =
+    options?.commitment ??
+    crossChainCore?._dappConfig?.solanaConfig?.commitment ??
+    "finalized";
   // Solana rpc should come from dapp config
   const connection = new Connection(
     crossChainCore?._dappConfig?.solanaConfig?.rpc ??
