@@ -80,16 +80,21 @@ export class WormholeProvider implements CrossChainProvider<
     const isMainnet = dappNetwork === Network.MAINNET;
     const platforms: PlatformLoader<any>[] = [aptos, solana, evm, sui];
 
-    // Get custom RPC endpoints from config
-    const solanaRpc =
-      this.crossChainCore._dappConfig?.solanaConfig?.rpc ??
-      this.crossChainCore.CHAINS["Solana"]?.defaultRpc;
+    // RPC resolution order:
+    //  1. User-provided config (solanaConfig / suiConfig / evmConfig)
+    //  2. Wormhole SDK built-in defaults (if we don't pass anything)
+    // We only forward chains the user explicitly configured so the
+    // Wormhole SDK can fall back to its own defaults for the rest.
+    const dappConfig = this.crossChainCore._dappConfig;
+    const solanaRpc = dappConfig?.solanaConfig?.rpc;
 
     const wh = await wormhole(isMainnet ? "Mainnet" : "Testnet", platforms, {
       chains: {
-        Solana: {
-          rpc: solanaRpc,
-        },
+        ...(solanaRpc ? { Solana: { rpc: solanaRpc } } : {}),
+        ...(dappConfig?.suiConfig?.rpc
+          ? { Sui: { rpc: dappConfig.suiConfig.rpc } }
+          : {}),
+        ...dappConfig?.evmConfig,
       },
     });
     this._wormholeContext = wh;
