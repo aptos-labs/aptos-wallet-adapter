@@ -4,28 +4,28 @@ packages:
 
 catalog:
   # Aptos ecosystem
-  "@aptos-labs/ts-sdk": ^5.1.1
+  "@aptos-labs/ts-sdk": ^6.0.0
   "@aptos-labs/wallet-standard": ^0.5.2
   "@aptos-labs/gas-station-client": ^2.0.3
 
   # Build tools
-  typescript: ^5.8.3
+  typescript: ^5.9.3
   tsup: ^8.4.0
   eslint: ^8.57.1
-  eslint-config-next: 14.2.3
+  eslint-config-next: ^14.2.3
   prettier: ^3.6.2
 
   # Testing
   vitest: ^2.1.8
   happy-dom: ^20.0.2
   "@testing-library/jest-dom": ^6.0.0
-  "@testing-library/react": ^14.0.0
+  "@testing-library/react": ^15
   "@testing-library/user-event": ^14.0.0
 
   # Type definitions
-  "@types/node": ^20.10.4
-  "@types/react": ^18.3.3
-  "@types/react-dom": ^18.3.0
+  "@types/node": ^22
+  "@types/react": ^19
+  "@types/react-dom": ^19
 
   # CSS/styling tools
   autoprefixer: ^10.4.19
@@ -38,13 +38,13 @@ catalog:
   "@solana/web3.js": ^1.95.8
 
   # Sui
-  "@mysten/sui": 1.24.0
+  "@mysten/sui": ^1.24.0
   "@mysten/wallet-standard": ^0.13.29
 
   # Wormhole
-  "@wormhole-foundation/sdk": 4.7.1
-  "@wormhole-foundation/sdk-aptos": 4.7.1
-  "@wormhole-foundation/sdk-solana": 4.7.1
+  "@wormhole-foundation/sdk": ^4.7.1
+  "@wormhole-foundation/sdk-aptos": ^4.7.1
+  "@wormhole-foundation/sdk-solana": ^4.7.1
 
   # Wallet standard
   "@wallet-standard/app": ^1.1.0
@@ -58,10 +58,10 @@ catalog:
   antd: ^5.18.3
 
   # React/Next.js
-  next: 14.2.32
-  react: ^18.3.1
-  react-dom: ^18.3.1
-  next-themes: ^0.3.0
+  next: ^15
+  react: ^19
+  react-dom: ^19
+  next-themes: ^0.4.4
   "@tanstack/react-query": ^5.59.16
   "@telegram-apps/sdk": ^2.0.0
 
@@ -78,6 +78,6 @@ catalog:
   # UI utilities
   class-variance-authority: ^0.7.0
   clsx: ^2.1.1
-  lucide-react: ^0.383.0
+  lucide-react: ^0.474.0
   tailwind-merge: ^2.3.0
   tailwindcss-animate: ^1.0.7
