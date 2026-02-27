@@ -82,34 +82,58 @@ export async function sendAndConfirmTransaction(
     commitment,
   );
 
-  // Retry loop: resend if not confirmed after interval
+  // Retry loop: resend if not confirmed after interval.
+  // The confirmation promise can reject with "block height exceeded" when the
+  // blockhash expires before confirmation completes. Because the transaction was
+  // already sent (sendRawTransaction succeeded), it may still land on-chain.
+  // In that case we return the signature so the caller can track it, rather than
+  // throwing and losing the transaction reference.
   let confirmedTx: RpcResponseAndContext<SignatureResult> | null = null;
   let txSendAttempts = 1;
 
-  while (!confirmedTx) {
-    confirmedTx = await Promise.race([
-      confirmTransactionPromise,
-      new Promise<null>((resolve) =>
-        setTimeout(() => resolve(null), retryIntervalMs),
-      ),
-    ]);
+  try {
+    while (!confirmedTx) {
+      confirmedTx = await Promise.race([
+        confirmTransactionPromise,
+        new Promise<null>((resolve) =>
+          setTimeout(() => resolve(null), retryIntervalMs),
+        ),
+      ]);
 
-    if (confirmedTx) break;
+      if (confirmedTx) break;
 
-    if (verbose) {
-      console.log(
-        `Tx not confirmed after ${retryIntervalMs * txSendAttempts++}ms, resending`,
-      );
-    }
-
-    try {
-      await connection.sendRawTransaction(serializedTx, sendOptions);
-    } catch (e) {
       if (verbose) {
-        console.error("Failed to resend transaction:", e);
+        console.log(
+          `Tx not confirmed after ${retryIntervalMs * txSendAttempts++}ms, resending`,
+        );
       }
-      // Ignore resend errors, confirmation will handle success/failure
+
+      try {
+        await connection.sendRawTransaction(serializedTx, sendOptions);
+      } catch (e) {
+        if (verbose) {
+          console.error("Failed to resend transaction:", e);
+        }
+        // Ignore resend errors, confirmation will handle success/failure
+      }
     }
+  } catch (e) {
+    const message = e instanceof Error ? e.message.toLowerCase() : "";
+    if (
+      message.includes("block height exceeded") ||
+      message.includes("blockheightexceeded")
+    ) {
+      if (verbose) {
+        console.warn(
+          "Block height exceeded but tx was already sent, returning signature:",
+          signature,
+        );
+      }
+      // Transaction was already sent — return the signature so the caller can
+      // track confirmation asynchronously instead of losing the tx reference.
+      return signature;
+    }
+    throw e;
   }
 
   if (confirmedTx.value.err) {
