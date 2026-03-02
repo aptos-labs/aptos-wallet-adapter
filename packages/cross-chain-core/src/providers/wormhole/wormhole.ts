@@ -43,7 +43,6 @@ import {
   RetryWithdrawClaimRequest,
   RetryWithdrawClaimResponse,
   WithdrawError,
-  TransferError,
 } from "./types";
 import { SolanaDerivedWallet } from "@aptos-labs/derived-wallet-solana";
 import { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
@@ -98,7 +97,8 @@ export class WormholeProvider implements CrossChainProvider<
 
     const evmChainsConfig: Record<string, { rpc: string }> = {};
     for (const name of EVM_CHAIN_NAMES) {
-      const rpc = dappConfig?.evmConfig?.[name]?.rpc ?? chains[name]?.defaultRpc;
+      const rpc =
+        dappConfig?.evmConfig?.[name]?.rpc ?? chains[name]?.defaultRpc;
       if (rpc) {
         evmChainsConfig[name] = { rpc };
       }
@@ -334,25 +334,14 @@ export class WormholeProvider implements CrossChainProvider<
     }
     // Submit transfer transaction from origin chain
     let { originChainTxnId, receipt } = await this.submitCCTPTransfer(input);
-    // Claim is wrapped so that, if it fails, the caller still receives
-    // the originChainTxnId (the irreversible source-chain burn).
-    try {
-      const { destinationChainTxnId } = await this.claimCCTPTransfer({
-        receipt,
-        mainSigner: input.mainSigner,
-        sponsorAccount: input.sponsorAccount,
-        onTransactionSigned: input.onTransactionSigned,
-      });
-      return { originChainTxnId, destinationChainTxnId };
-    } catch (error: any) {
-      throw new TransferError(
-        error?.message ?? "Transfer claim failed after source chain burn",
-        originChainTxnId ||
-          this.crossChainCore._lastSourceChainTxId ||
-          "",
-        error,
-      );
-    }
+    // Claim transfer transaction on destination chain
+    const { destinationChainTxnId } = await this.claimCCTPTransfer({
+      receipt,
+      mainSigner: input.mainSigner,
+      sponsorAccount: input.sponsorAccount,
+      onTransactionSigned: input.onTransactionSigned,
+    });
+    return { originChainTxnId, destinationChainTxnId };
   }
 
   // --- Split withdraw flow: initiateWithdraw + trackWithdraw + claimWithdraw ---
