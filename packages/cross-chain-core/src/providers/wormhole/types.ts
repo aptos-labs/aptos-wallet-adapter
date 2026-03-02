@@ -43,6 +43,14 @@ export type WithdrawPhase =
   | "claiming";   // Claiming on destination chain
 
 export interface WormholeWithdrawRequest {
+  /**
+   * The non-Aptos chain involved in the withdrawal. For a withdrawal from
+   * Aptos → Solana, this is `"Solana"`.
+   *
+   * Note: despite the name, this is the *destination* of the bridge transfer
+   * (where USDC will be claimed), not the chain that burns USDC (which is
+   * always Aptos for withdrawals).
+   */
   sourceChain: Chain;
   wallet: AdapterWallet;
   destinationAddress: AccountAddressInput;
@@ -92,7 +100,14 @@ export interface WormholeInitiateWithdrawResponse {
 }
 
 export interface WormholeClaimWithdrawRequest {
-  sourceChain: Chain;
+  /**
+   * The chain on which the claim transaction will be executed (the destination
+   * chain of the withdrawal).
+   *
+   * For example, when withdrawing from Aptos → Solana, `claimChain` is
+   * `"Solana"` because that's where the USDC is minted/claimed.
+   */
+  claimChain: Chain;
   destinationAddress: string;
   receipt: routes.Receipt<AttestationReceipt>;
   // Required for wallet-based claim (non-Solana chains, or Solana without serverClaimUrl).

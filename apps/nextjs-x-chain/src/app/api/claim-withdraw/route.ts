@@ -8,7 +8,7 @@
  * Steps:
  * 1. Validate origin/referrer header to prevent cross-origin abuse
  * 2. Rate-limit by client IP
- * 3. Parse and validate request body (receipt, destinationAddress, sourceChain)
+ * 3. Parse and validate request body (receipt, destinationAddress, claimChain)
  * 4. Initialize Wormhole SDK and create CCTP route (cached for performance)
  * 5. Create the local signer with appropriate RPC endpoint
  * 6. Deserialize the receipt and complete the claim (USDC minted to address in receipt)
@@ -164,7 +164,7 @@ function validateOrigin(request: NextRequest): boolean {
 /**
  * Handles POST requests to claim CCTP withdrawals on Solana.
  *
- * Expected body: { receipt, destinationAddress, sourceChain }
+ * Expected body: { receipt, destinationAddress, claimChain }
  * Returns: { destinationChainTxnId }
  */
 export async function POST(request: NextRequest) {
@@ -189,16 +189,16 @@ export async function POST(request: NextRequest) {
 
     // Step 3: Parse and validate request body
     const body = await request.json();
-    const { receipt: serializedReceipt, destinationAddress, sourceChain } = body;
+    const { receipt: serializedReceipt, destinationAddress, claimChain } = body;
 
-    if (!serializedReceipt || !destinationAddress || !sourceChain) {
+    if (!serializedReceipt || !destinationAddress || !claimChain) {
       return NextResponse.json(
-        { error: "Missing required fields: receipt, destinationAddress, sourceChain" },
+        { error: "Missing required fields: receipt, destinationAddress, claimChain" },
         { status: 400 },
       );
     }
 
-    if (sourceChain !== "Solana") {
+    if (claimChain !== "Solana") {
       return NextResponse.json(
         { error: "Server-side claim is currently only supported for Solana" },
         { status: 400 },
