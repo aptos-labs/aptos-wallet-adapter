@@ -56,7 +56,7 @@ export interface CrossChainDappConfig {
      * Expected request body: { serializedReceipt: string, destinationAddress: string, sourceChain: string }
      * Expected response: { destinationChainTxnId: string }
      * Check out the SERVERSIDE_SOLANA_SIGNER.md file for more details.
-     * 
+     *
      * @example
      * const crossChainCore = new CrossChainCore({
      *   dappConfig: {
@@ -68,7 +68,53 @@ export interface CrossChainDappConfig {
      * });
      */
     serverClaimUrl?: string;
+    /**
+     * Solana transaction confirmation commitment level.
+     *
+     * - `"finalized"` (default) — waits for supermajority finalization (~30 s).
+     * - `"confirmed"` — waits for supermajority confirmation (~0.5 s).
+     *
+     * For bridge flows `"confirmed"` is usually sufficient because Wormhole
+     * guardians independently verify finality before issuing attestations.
+     *
+     * @default "finalized"
+     *
+     * @example
+     * const crossChainCore = new CrossChainCore({
+     *   dappConfig: {
+     *     aptosNetwork: Network.MAINNET,
+     *     solanaConfig: {
+     *       commitment: "confirmed", // ~0.5 s vs ~30 s
+     *     },
+     *   },
+     * });
+     */
+    commitment?: "confirmed" | "finalized";
   };
+  /**
+   * Custom RPC endpoints for EVM chains. When provided, these override the
+   * built-in `defaultRpc` values for balance lookups and Wormhole SDK
+   * initialization.
+   *
+   * @example
+   * ```ts
+   * evmConfig: {
+   *   Ethereum: { rpc: "https://rpc.ankr.com/eth/MY_KEY" },
+   *   Base: { rpc: "https://rpc.ankr.com/base/MY_KEY" },
+   * }
+   * ```
+   */
+  evmConfig?: Partial<Record<EvmChainName, { rpc: string }>>;
+  /**
+   * Custom RPC endpoint for the Sui chain. When provided, overrides the
+   * built-in `defaultRpc` for balance lookups and Wormhole SDK initialization.
+   *
+   * @example
+   * ```ts
+   * suiConfig: { rpc: "https://fullnode.mainnet.sui.io" }
+   * ```
+   */
+  suiConfig?: { rpc?: string };
 }
 export type { AccountAddressInput } from "@aptos-labs/ts-sdk";
 export { NetworkToChainId, NetworkToNodeAPI } from "@aptos-labs/ts-sdk";
@@ -88,6 +134,27 @@ export type Chain =
   | "PolygonSepolia"
   | "Polygon"
   | "Sui";
+
+/**
+ * EVM chain names supported by the SDK — derived from {@link Chain} by
+ * excluding the non-EVM ecosystems. Adding a new EVM chain to `Chain`
+ * automatically makes it a valid key in `evmConfig`.
+ */
+export type EvmChainName = Exclude<Chain, "Solana" | "Aptos" | "Sui">;
+
+// Record ensures every EvmChainName key is present at compile time.
+const _evmChainRecord: Record<EvmChainName, true> = {
+  Ethereum: true,
+  Sepolia: true,
+  BaseSepolia: true,
+  ArbitrumSepolia: true,
+  Avalanche: true,
+  Base: true,
+  Arbitrum: true,
+  PolygonSepolia: true,
+  Polygon: true,
+};
+export const EVM_CHAIN_NAMES = Object.keys(_evmChainRecord) as EvmChainName[];
 
 // Map of Ethereum chain id to testnet chain config
 export const EthereumChainIdToTestnetChain: Record<string, ChainConfig> = {
@@ -192,14 +259,15 @@ export class CrossChainCore {
           walletAddress,
           this._dappConfig.aptosNetwork,
           sourceChain,
-          // TODO: maybe let the user config it
-          this.CHAINS[sourceChain].defaultRpc,
+          this._dappConfig?.evmConfig?.[sourceChain]?.rpc ??
+            this.CHAINS[sourceChain].defaultRpc,
         );
       case "Sui":
         return await getSuiWalletUSDCBalance(
           walletAddress,
           this._dappConfig.aptosNetwork,
-          this.CHAINS[sourceChain].defaultRpc,
+          this._dappConfig?.suiConfig?.rpc ??
+            this.CHAINS[sourceChain].defaultRpc,
         );
       default:
         throw new Error(`Unsupported chain: ${sourceChain}`);
