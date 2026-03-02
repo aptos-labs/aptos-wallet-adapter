@@ -181,6 +181,37 @@ export function validateExpireTimestamp(value: number): void {
   }
 }
 
+/**
+ * Error thrown when the transfer (deposit) flow fails *after* the source-chain
+ * burn transaction has already been submitted (i.e. during attestation tracking
+ * or Aptos claiming).
+ *
+ * Consumers should check `instanceof TransferError` in their catch block
+ * to recover the `originChainTxnId` and display an explorer link so the
+ * user can verify their burn on-chain.
+ */
+export class TransferError extends Error {
+  /** Source-chain burn transaction hash — available when the burn succeeded before the failure. */
+  readonly originChainTxnId: string;
+  /**
+   * The underlying error that caused this failure.
+   * Mirrors ES2022 Error.cause — declared explicitly because the project's
+   * TypeScript lib target does not include ES2022 ErrorOptions.
+   */
+  readonly cause?: unknown;
+
+  constructor(
+    message: string,
+    originChainTxnId: string,
+    cause?: unknown,
+  ) {
+    super(message);
+    this.name = "TransferError";
+    this.originChainTxnId = originChainTxnId;
+    this.cause = cause;
+  }
+}
+
 export class WithdrawError extends Error {
   /** Aptos burn transaction hash — always available when this error is thrown. */
   readonly originChainTxnId: string;

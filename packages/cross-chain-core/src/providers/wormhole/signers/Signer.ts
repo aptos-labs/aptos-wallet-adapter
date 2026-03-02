@@ -83,6 +83,7 @@ export class Signer<
         this._crossChainCore,
         this._sponsorAccount,
       );
+      this._crossChainCore._lastSourceChainTxId = txId;
       this._onTransactionSigned?.(tx.description, txId);
       txHashes.push(txId);
       this._claimedTransactionHashes.push(txId);
