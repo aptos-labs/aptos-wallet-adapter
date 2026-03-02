@@ -109,6 +109,20 @@ export type Chain =
  */
 export type EvmChainName = Exclude<Chain, "Solana" | "Aptos" | "Sui">;
 
+// Record ensures every EvmChainName key is present at compile time.
+const _evmChainRecord: Record<EvmChainName, true> = {
+  Ethereum: true,
+  Sepolia: true,
+  BaseSepolia: true,
+  ArbitrumSepolia: true,
+  Avalanche: true,
+  Base: true,
+  Arbitrum: true,
+  PolygonSepolia: true,
+  Polygon: true,
+};
+export const EVM_CHAIN_NAMES = Object.keys(_evmChainRecord) as EvmChainName[];
+
 // Map of Ethereum chain id to testnet chain config
 export const EthereumChainIdToTestnetChain: Record<string, ChainConfig> = {
   11155111: testnetChains.Sepolia!,
