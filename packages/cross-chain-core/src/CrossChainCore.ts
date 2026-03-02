@@ -29,6 +29,17 @@ import {
 export interface CrossChainDappConfig {
   aptosNetwork: Network;
   disableTelemetry?: boolean;
+  /**
+   * Returns an epoch-second timestamp used as `expireTimestamp` when building
+   * Aptos transactions. Called at transaction-build time so that each
+   * transaction in a multi-step bridge flow gets a fresh expiration window.
+   *
+   * @example
+   * ```ts
+   * getExpireTimestamp: () => Math.floor(Date.now() / 1000) + 120 // 2 minutes
+   * ```
+   */
+  getExpireTimestamp?: () => number;
   solanaConfig?: {
     rpc?: string;
     priorityFeeConfig?: {

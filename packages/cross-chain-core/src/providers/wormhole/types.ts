@@ -166,6 +166,21 @@ export interface RetryWithdrawClaimResponse extends WormholeClaimWithdrawRespons
  * to recover the `originChainTxnId` and display an explorer link so the
  * user can verify their burn on-chain.
  */
+/**
+ * Validates that a value returned by `getExpireTimestamp` is a non-negative
+ * integer suitable for use as an epoch-second expiration timestamp.
+ * Throws immediately for NaN, Infinity, negative values, or floats so that
+ * misconfigured callbacks fail fast instead of producing silent misbehaviour.
+ */
+export function validateExpireTimestamp(value: number): void {
+  if (!Number.isInteger(value) || value < 0) {
+    throw new Error(
+      `getExpireTimestamp returned an invalid value (${value}). ` +
+        "Expected a non-negative integer (epoch seconds).",
+    );
+  }
+}
+
 export class WithdrawError extends Error {
   /** Aptos burn transaction hash — always available when this error is thrown. */
   readonly originChainTxnId: string;
