@@ -15,6 +15,7 @@ import {
   Chain,
   CrossChainProvider,
   CrossChainCore,
+  EVM_CHAIN_NAMES,
 } from "../../CrossChainCore";
 import { logger } from "../../utils/logger";
 import { serializeReceipt } from "../../utils/receiptSerialization";
@@ -82,16 +83,30 @@ export class WormholeProvider implements CrossChainProvider<
     const isMainnet = dappNetwork === Network.MAINNET;
     const platforms: PlatformLoader<any>[] = [aptos, solana, evm, sui];
 
-    // Get custom RPC endpoints from config
+    // RPC resolution order per chain:
+    //  1. User-provided config (solanaConfig / suiConfig / evmConfig)
+    //  2. Built-in defaultRpc from CHAINS config
+    const dappConfig = this.crossChainCore._dappConfig;
+    const chains = this.crossChainCore.CHAINS;
+
     const solanaRpc =
-      this.crossChainCore._dappConfig?.solanaConfig?.rpc ??
-      this.crossChainCore.CHAINS["Solana"]?.defaultRpc;
+      dappConfig?.solanaConfig?.rpc ?? chains["Solana"]?.defaultRpc;
+
+    const suiRpc = dappConfig?.suiConfig?.rpc ?? chains["Sui"]?.defaultRpc;
+
+    const evmChainsConfig: Record<string, { rpc: string }> = {};
+    for (const name of EVM_CHAIN_NAMES) {
+      const rpc = dappConfig?.evmConfig?.[name]?.rpc ?? chains[name]?.defaultRpc;
+      if (rpc) {
+        evmChainsConfig[name] = { rpc };
+      }
+    }
 
     const wh = await wormhole(isMainnet ? "Mainnet" : "Testnet", platforms, {
       chains: {
-        Solana: {
-          rpc: solanaRpc,
-        },
+        ...(solanaRpc ? { Solana: { rpc: solanaRpc } } : {}),
+        ...(suiRpc ? { Sui: { rpc: suiRpc } } : {}),
+        ...evmChainsConfig,
       },
     });
     this._wormholeContext = wh;
