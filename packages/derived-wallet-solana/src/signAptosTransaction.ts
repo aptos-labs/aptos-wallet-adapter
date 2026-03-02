@@ -51,29 +51,37 @@ export async function signAptosTransactionWithSolana(
     },
   );
 
-  // Prioritize SIWS if available
+  // Try SIWS (signIn) first, fall back to signMessage if it throws.
+  // Some wallets (e.g. Trust) declare signIn but throw "not implemented".
+  // User rejections are already converted to UserResponse by wrapSolanaUserResponse
+  // and won't reach the catch block, so only broken implementations trigger fallback.
   if (solanaWallet.signIn) {
-    const response = await wrapSolanaUserResponse(
-      solanaWallet.signIn!(siwsInput),
-    );
-    return mapUserResponse(response, (output): AccountAuthenticator => {
-      if (output.signatureType && output.signatureType !== "ed25519") {
-        throw new Error("Unsupported signature type");
-      }
-
-      // The wallet might change some of the fields in the SIWS input, so we
-      // might need to include the finalized input in the signature.
-      // For now, we can assume the input is unchanged.
-      return createAccountAuthenticatorForSolanaTransaction(
-        output.signature,
-        solanaPublicKey,
-        domain,
-        authenticationFunction,
-        signingMessageDigest,
+    try {
+      const response = await wrapSolanaUserResponse(
+        solanaWallet.signIn!(siwsInput),
       );
-    });
-  } else if (solanaWallet.signMessage) {
-    // Fallback to signMessage if SIWS is not available
+      return mapUserResponse(response, (output): AccountAuthenticator => {
+        if (output.signatureType && output.signatureType !== "ed25519") {
+          throw new Error("Unsupported signature type");
+        }
+
+        // The wallet might change some of the fields in the SIWS input, so we
+        // might need to include the finalized input in the signature.
+        // For now, we can assume the input is unchanged.
+        return createAccountAuthenticatorForSolanaTransaction(
+          output.signature,
+          solanaPublicKey,
+          domain,
+          authenticationFunction,
+          signingMessageDigest,
+        );
+      });
+    } catch (error) {
+      if (!solanaWallet.signMessage) throw error;
+    }
+  }
+
+  if (solanaWallet.signMessage) {
     const response = await wrapSolanaUserResponse(
       solanaWallet.signMessage(createSignInMessage(siwsInput)),
     );
@@ -86,11 +94,11 @@ export async function signAptosTransactionWithSolana(
         signingMessageDigest,
       );
     });
-  } else {
-    throw new Error(
-      `${solanaWallet.name} does not support SIWS or signMessage`,
-    );
   }
+
+  throw new Error(
+    `${solanaWallet.name} does not support SIWS or signMessage`,
+  );
 }
 
 // A helper function to create an AccountAuthenticator from a Solana signature
