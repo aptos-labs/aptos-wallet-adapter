@@ -118,7 +118,6 @@ export const signAndSendTransaction = async (
       request as EvmUnsignedTransaction<Network, EvmChains>,
       wallet,
       chain.displayName,
-      options,
     );
     return tx;
   } else if (chain.context === "Sui") {

@@ -10,6 +10,7 @@ import {
   AptosLocalSigner,
   signAndSendTransaction,
 } from "../../src/providers/wormhole/signers/AptosLocalSigner";
+import { CrossChainCore } from "../../src/CrossChainCore";
 
 const mockBuildSimple = vi.fn();
 const mockSign = vi.fn();
@@ -42,6 +43,9 @@ describe("AptosLocalSigner", () => {
   );
   const testAccount = Account.fromPrivateKey({ privateKey: testPrivateKey });
   const mockOptions = {};
+  const mockCrossChainCore = {
+    _dappConfig: { aptosNetwork: AptosNetwork.TESTNET },
+  } as unknown as CrossChainCore;
 
   describe("constructor", () => {
     it("should create signer with required properties", () => {
@@ -50,12 +54,14 @@ describe("AptosLocalSigner", () => {
         mockOptions,
         testAccount,
         undefined,
+        mockCrossChainCore,
       );
 
       expect(signer).toBeDefined();
       expect(signer._chain).toBe("Aptos");
       expect(signer._options).toBe(mockOptions);
       expect(signer._wallet).toBe(testAccount);
+      expect(signer._crossChainCore).toBe(mockCrossChainCore);
     });
 
     it("should initialize claimedTransactionHashes as empty array", () => {
@@ -64,6 +70,7 @@ describe("AptosLocalSigner", () => {
         mockOptions,
         testAccount,
         undefined,
+        mockCrossChainCore,
       );
 
       expect(signer._claimedTransactionHashes).toEqual([]);
@@ -85,19 +92,23 @@ describe("AptosLocalSigner", () => {
         mockOptions,
         testAccount,
         sponsorAccount,
+        mockCrossChainCore,
       );
 
       expect(signer._sponsorAccount).toBe(sponsorAccount);
     });
 
-    it("should accept sponsor account (string gas station key)", () => {
-      const gasStationKey = "gas-station-api-key";
+    it("should accept sponsor account (GasStationApiKey)", () => {
+      const gasStationKey = {
+        [AptosNetwork.TESTNET]: "gas-station-api-key",
+      };
 
       const signer = new AptosLocalSigner(
         "Aptos",
         mockOptions,
         testAccount,
         gasStationKey,
+        mockCrossChainCore,
       );
 
       expect(signer._sponsorAccount).toBe(gasStationKey);
@@ -111,6 +122,7 @@ describe("AptosLocalSigner", () => {
         mockOptions,
         testAccount,
         undefined,
+        mockCrossChainCore,
       );
 
       expect(signer.chain()).toBe("Aptos");
@@ -124,6 +136,7 @@ describe("AptosLocalSigner", () => {
         mockOptions,
         testAccount,
         undefined,
+        mockCrossChainCore,
       );
 
       expect(signer.address()).toBe(testAccount.accountAddress.toString());
@@ -135,6 +148,7 @@ describe("AptosLocalSigner", () => {
         mockOptions,
         testAccount,
         undefined,
+        mockCrossChainCore,
       );
 
       // Aptos addresses are 64 hex characters prefixed with 0x
@@ -149,6 +163,7 @@ describe("AptosLocalSigner", () => {
         mockOptions,
         testAccount,
         undefined,
+        mockCrossChainCore,
       );
 
       expect(signer.claimedTransactionHashes()).toBe("");
@@ -160,6 +175,7 @@ describe("AptosLocalSigner", () => {
         mockOptions,
         testAccount,
         undefined,
+        mockCrossChainCore,
       );
 
       // Directly modify internal state for testing
@@ -174,6 +190,7 @@ describe("AptosLocalSigner", () => {
         mockOptions,
         testAccount,
         undefined,
+        mockCrossChainCore,
       );
 
       signer._claimedTransactionHashes = ["0xhash1", "0xhash2"];
@@ -189,6 +206,7 @@ describe("AptosLocalSigner", () => {
         mockOptions,
         testAccount,
         undefined,
+        mockCrossChainCore,
       );
 
       expect(signer._wallet).toBe(testAccount);
@@ -202,6 +220,7 @@ describe("AptosLocalSigner", () => {
         customOptions,
         testAccount,
         undefined,
+        mockCrossChainCore,
       );
 
       expect(signer._options).toBe(customOptions);
@@ -230,15 +249,23 @@ describe("AptosLocalSigner", () => {
       } as any;
     }
 
+    function makeCrossChainCore(getExpireTimestamp?: () => number) {
+      return {
+        _dappConfig: {
+          aptosNetwork: AptosNetwork.TESTNET,
+          getExpireTimestamp,
+        },
+      } as unknown as CrossChainCore;
+    }
+
     it("should pass expireTimestamp option when getExpireTimestamp returns a value", async () => {
-      const getExpireTimestamp = () => 1700000000;
+      const crossChainCore = makeCrossChainCore(() => 1700000000);
 
       await signAndSendTransaction(
         makeRequest(),
         testAccount,
         undefined,
-        AptosNetwork.TESTNET,
-        getExpireTimestamp,
+        crossChainCore,
       );
 
       expect(mockBuildSimple).toHaveBeenCalledWith(
@@ -249,14 +276,13 @@ describe("AptosLocalSigner", () => {
     });
 
     it("should pass expireTimestamp option when getExpireTimestamp returns 0", async () => {
-      const getExpireTimestamp = () => 0;
+      const crossChainCore = makeCrossChainCore(() => 0);
 
       await signAndSendTransaction(
         makeRequest(),
         testAccount,
         undefined,
-        AptosNetwork.TESTNET,
-        getExpireTimestamp,
+        crossChainCore,
       );
 
       expect(mockBuildSimple).toHaveBeenCalledWith(
@@ -266,12 +292,14 @@ describe("AptosLocalSigner", () => {
       );
     });
 
-    it("should omit options when getExpireTimestamp is not provided", async () => {
+    it("should omit options when getExpireTimestamp is not set in config", async () => {
+      const crossChainCore = makeCrossChainCore(undefined);
+
       await signAndSendTransaction(
         makeRequest(),
         testAccount,
         undefined,
-        AptosNetwork.TESTNET,
+        crossChainCore,
       );
 
       const callArg = mockBuildSimple.mock.calls[0][0];
@@ -280,62 +308,66 @@ describe("AptosLocalSigner", () => {
 
     it("should call getExpireTimestamp at build time", async () => {
       const getExpireTimestamp = vi.fn().mockReturnValue(9999999999);
+      const crossChainCore = makeCrossChainCore(getExpireTimestamp);
 
       await signAndSendTransaction(
         makeRequest(),
         testAccount,
         undefined,
-        AptosNetwork.TESTNET,
-        getExpireTimestamp,
+        crossChainCore,
       );
 
       expect(getExpireTimestamp).toHaveBeenCalledOnce();
     });
 
     it("should throw for NaN expireTimestamp", async () => {
+      const crossChainCore = makeCrossChainCore(() => NaN);
+
       await expect(
         signAndSendTransaction(
           makeRequest(),
           testAccount,
           undefined,
-          AptosNetwork.TESTNET,
-          () => NaN,
+          crossChainCore,
         ),
       ).rejects.toThrow("getExpireTimestamp returned an invalid value");
     });
 
     it("should throw for negative expireTimestamp", async () => {
+      const crossChainCore = makeCrossChainCore(() => -1);
+
       await expect(
         signAndSendTransaction(
           makeRequest(),
           testAccount,
           undefined,
-          AptosNetwork.TESTNET,
-          () => -1,
+          crossChainCore,
         ),
       ).rejects.toThrow("getExpireTimestamp returned an invalid value");
     });
 
     it("should throw for non-integer expireTimestamp", async () => {
+      const crossChainCore = makeCrossChainCore(() => 1700000000.5);
+
       await expect(
         signAndSendTransaction(
           makeRequest(),
           testAccount,
           undefined,
-          AptosNetwork.TESTNET,
-          () => 1700000000.5,
+          crossChainCore,
         ),
       ).rejects.toThrow("getExpireTimestamp returned an invalid value");
     });
 
     it("should throw for Infinity expireTimestamp", async () => {
+      const crossChainCore = makeCrossChainCore(() => Infinity);
+
       await expect(
         signAndSendTransaction(
           makeRequest(),
           testAccount,
           undefined,
-          AptosNetwork.TESTNET,
-          () => Infinity,
+          crossChainCore,
         ),
       ).rejects.toThrow("getExpireTimestamp returned an invalid value");
     });
