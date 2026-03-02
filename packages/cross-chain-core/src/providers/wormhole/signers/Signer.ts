@@ -25,7 +25,7 @@ import { ChainConfig } from "../../../config";
 import { CrossChainCore } from "../../../CrossChainCore";
 import { AptosChains } from "@wormhole-foundation/sdk-aptos/dist/cjs/types";
 import { AptosUnsignedTransaction } from "@wormhole-foundation/sdk-aptos/dist/cjs/unsignedTransaction";
-import { GasStationApiKey } from "../types";
+import { GasStationApiKey, OnTransactionSigned } from "../types";
 import { Account } from "@aptos-labs/ts-sdk";
 export class Signer<
   N extends Network,
@@ -37,6 +37,7 @@ export class Signer<
   _wallet: AdapterWallet;
   _crossChainCore: CrossChainCore;
   _sponsorAccount: Account | GasStationApiKey | undefined;
+  _onTransactionSigned: OnTransactionSigned | undefined;
   _claimedTransactionHashes: string[] = [];
 
   constructor(
@@ -46,6 +47,7 @@ export class Signer<
     wallet: AdapterWallet,
     crossChainCore: CrossChainCore,
     sponsorAccount?: Account | GasStationApiKey | undefined,
+    onTransactionSigned?: OnTransactionSigned,
   ) {
     this._chain = chain;
     this._address = address;
@@ -53,6 +55,7 @@ export class Signer<
     this._wallet = wallet;
     this._crossChainCore = crossChainCore;
     this._sponsorAccount = sponsorAccount;
+    this._onTransactionSigned = onTransactionSigned;
   }
 
   chain(): C {
@@ -71,6 +74,7 @@ export class Signer<
     this._claimedTransactionHashes = [];
 
     for (const tx of txs) {
+      this._onTransactionSigned?.(tx.description, null);
       const txId = await signAndSendTransaction(
         this._chain,
         tx,
@@ -79,6 +83,7 @@ export class Signer<
         this._crossChainCore,
         this._sponsorAccount,
       );
+      this._onTransactionSigned?.(tx.description, txId);
       txHashes.push(txId);
       this._claimedTransactionHashes.push(txId);
     }
