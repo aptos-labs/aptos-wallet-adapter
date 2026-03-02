@@ -52,15 +52,18 @@ export async function signAptosTransactionWithSolana(
   );
 
   // Try SIWS (signIn) first, fall back to signMessage if it throws.
-  // Some wallets (e.g. Trust) declare signIn but throw "not implemented".
+  // Some wallets (e.g. Trust) declare signIn but throw at runtime.
   // User rejections are already converted to UserResponse by wrapSolanaUserResponse
-  // and won't reach the catch block, so only broken implementations trigger fallback.
+  // and won't reach the catch handler, so only broken implementations trigger fallback.
   if (solanaWallet.signIn) {
-    try {
-      const response = await wrapSolanaUserResponse(
-        solanaWallet.signIn!(siwsInput),
-      );
-      return mapUserResponse(response, (output): AccountAuthenticator => {
+    const signInResponse = await wrapSolanaUserResponse(
+      solanaWallet.signIn!(siwsInput),
+    ).catch((error) => {
+      if (!solanaWallet.signMessage) throw error;
+      return undefined;
+    });
+    if (signInResponse) {
+      return mapUserResponse(signInResponse, (output): AccountAuthenticator => {
         if (output.signatureType && output.signatureType !== "ed25519") {
           throw new Error("Unsupported signature type");
         }
@@ -76,8 +79,6 @@ export async function signAptosTransactionWithSolana(
           signingMessageDigest,
         );
       });
-    } catch (error) {
-      if (!solanaWallet.signMessage) throw error;
     }
   }
 
@@ -96,9 +97,7 @@ export async function signAptosTransactionWithSolana(
     });
   }
 
-  throw new Error(
-    `${solanaWallet.name} does not support SIWS or signMessage`,
-  );
+  throw new Error(`${solanaWallet.name} does not support SIWS or signMessage`);
 }
 
 // A helper function to create an AccountAuthenticator from a Solana signature
