@@ -39,6 +39,8 @@ import {
   WormholeInitiateWithdrawResponse,
   WormholeClaimWithdrawRequest,
   WormholeClaimWithdrawResponse,
+  RetryWithdrawClaimRequest,
+  RetryWithdrawClaimResponse,
   WithdrawError,
 } from "./types";
 import { SolanaDerivedWallet } from "@aptos-labs/derived-wallet-solana";
@@ -177,7 +179,7 @@ export class WormholeProvider implements CrossChainProvider<
   async submitCCTPTransfer(
     input: WormholeSubmitTransferRequest,
   ): Promise<WormholeStartTransferResponse> {
-    const { sourceChain, wallet, destinationAddress } = input;
+    const { sourceChain, wallet, destinationAddress, onTransactionSigned } = input;
 
     if (!this._wormholeContext) {
       await this.setWormholeContext(sourceChain);
@@ -216,6 +218,8 @@ export class WormholeProvider implements CrossChainProvider<
       {},
       wallet,
       this.crossChainCore,
+      undefined,
+      onTransactionSigned,
     );
 
     logger.log("signer", signer);
@@ -240,7 +244,7 @@ export class WormholeProvider implements CrossChainProvider<
   async claimCCTPTransfer(
     input: WormholeClaimTransferRequest,
   ): Promise<{ destinationChainTxnId: string }> {
-    let { receipt, mainSigner, sponsorAccount } = input;
+    let { receipt, mainSigner, sponsorAccount, onTransactionSigned } = input;
     if (!this.wormholeRoute) {
       throw new Error("Wormhole route not initialized");
     }
@@ -264,6 +268,7 @@ export class WormholeProvider implements CrossChainProvider<
                 mainSigner, // the account that signs the "claim" transaction
                 sponsorAccount, // the fee payer account
                 this.crossChainCore._dappConfig?.aptosNetwork,
+                onTransactionSigned,
               );
 
               if (routes.isManual(this.wormholeRoute)) {
@@ -323,6 +328,7 @@ export class WormholeProvider implements CrossChainProvider<
       receipt,
       mainSigner: input.mainSigner,
       sponsorAccount: input.sponsorAccount,
+      onTransactionSigned: input.onTransactionSigned,
     });
     return { originChainTxnId, destinationChainTxnId };
   }
@@ -337,7 +343,7 @@ export class WormholeProvider implements CrossChainProvider<
   async initiateWithdraw(
     input: WormholeInitiateWithdrawRequest,
   ): Promise<WormholeInitiateWithdrawResponse> {
-    const { wallet, destinationAddress, sponsorAccount } = input;
+    const { wallet, destinationAddress, sponsorAccount, onTransactionSigned } = input;
 
     if (!this._wormholeContext) {
       throw new Error("Wormhole context not initialized");
@@ -355,6 +361,7 @@ export class WormholeProvider implements CrossChainProvider<
       wallet,
       this.crossChainCore,
       sponsorAccount,
+      onTransactionSigned,
     );
 
     const wormholeDestAddress = Wormhole.chainAddress(
@@ -427,13 +434,13 @@ export class WormholeProvider implements CrossChainProvider<
   async claimWithdraw(
     input: WormholeClaimWithdrawRequest,
   ): Promise<WormholeClaimWithdrawResponse> {
-    const { sourceChain, destinationAddress, receipt } = input;
+    const { claimChain, destinationAddress, receipt } = input;
 
     // Server-side claim path: Solana destination with configured serverClaimUrl
     const serverClaimUrl =
       this.crossChainCore._dappConfig?.solanaConfig?.serverClaimUrl;
 
-    if (sourceChain === "Solana" && serverClaimUrl) {
+    if (claimChain === "Solana" && serverClaimUrl) {
       logger.log("claimWithdraw: using server-side claim via", serverClaimUrl);
 
       const response = await fetch(serverClaimUrl, {
@@ -442,7 +449,7 @@ export class WormholeProvider implements CrossChainProvider<
         body: JSON.stringify({
           receipt: serializeReceipt(receipt),
           destinationAddress,
-          sourceChain,
+          claimChain,
         }),
       });
 
@@ -470,11 +477,13 @@ export class WormholeProvider implements CrossChainProvider<
     }
 
     const claimSigner = new Signer(
-      this.getChainConfig(sourceChain),
+      this.getChainConfig(claimChain),
       destinationAddress,
       {},
       input.wallet,
       this.crossChainCore,
+      undefined,
+      input.onTransactionSigned,
     );
 
     if (routes.isManual(this.wormholeRoute)) {
@@ -504,7 +513,7 @@ export class WormholeProvider implements CrossChainProvider<
   async withdraw(
     input: WormholeWithdrawRequest,
   ): Promise<WormholeWithdrawResponse> {
-    const { sourceChain, wallet, destinationAddress, sponsorAccount, onPhaseChange } = input;
+    const { sourceChain, wallet, destinationAddress, sponsorAccount, onPhaseChange, onTransactionSigned } = input;
 
     // Phase 1: Initiate — user signs Aptos burn
     onPhaseChange?.("initiating");
@@ -512,6 +521,7 @@ export class WormholeProvider implements CrossChainProvider<
       wallet,
       destinationAddress,
       sponsorAccount,
+      onTransactionSigned,
     });
 
     // Phases 2 & 3 are wrapped so that, if they fail, the caller still
@@ -526,10 +536,11 @@ export class WormholeProvider implements CrossChainProvider<
       currentPhase = "claiming";
       onPhaseChange?.("claiming");
       const { destinationChainTxnId } = await this.claimWithdraw({
-        sourceChain,
+        claimChain: sourceChain,
         destinationAddress: destinationAddress.toString(),
         receipt: attestedReceipt,
         wallet,
+        onTransactionSigned,
       });
 
       return { originChainTxnId, destinationChainTxnId };
@@ -541,6 +552,65 @@ export class WormholeProvider implements CrossChainProvider<
         error,
       );
     }
+  }
+
+  /**
+   * Retries a failed `claimWithdraw` call with configurable exponential backoff.
+   *
+   * Use this when the claim phase of a withdrawal fails (e.g., RPC instability,
+   * network congestion) but the Aptos burn transaction has already been submitted.
+   * The attested receipt can be recovered from the `WithdrawError` thrown by
+   * `withdraw()` and passed directly to this method.
+   *
+   * @example
+   * ```ts
+   * try {
+   *   await provider.withdraw({ ... });
+   * } catch (error) {
+   *   if (error instanceof WithdrawError && error.phase === "claiming") {
+   *     const result = await provider.retryWithdrawClaim({
+   *       sourceChain,
+   *       destinationAddress,
+   *       receipt: attestedReceipt,
+   *       wallet,
+   *       maxRetries: 5,
+   *     });
+   *   }
+   * }
+   * ```
+   */
+  async retryWithdrawClaim(
+    input: RetryWithdrawClaimRequest,
+  ): Promise<RetryWithdrawClaimResponse> {
+    const {
+      maxRetries = 5,
+      initialDelayMs = 2000,
+      backoffMultiplier = 2,
+      ...claimInput
+    } = input;
+
+    let lastError: Error | undefined;
+    let delay = initialDelayMs;
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const result = await this.claimWithdraw(claimInput);
+        return { ...result, retriesUsed: attempt };
+      } catch (error) {
+        lastError = error as Error;
+        logger.log(
+          `retryWithdrawClaim: attempt ${attempt + 1}/${maxRetries + 1} failed: ${lastError.message}`,
+        );
+        if (attempt < maxRetries) {
+          await sleep(delay);
+          delay *= backoffMultiplier;
+        }
+      }
+    }
+
+    throw new Error(
+      `Claim failed after ${maxRetries + 1} attempts: ${lastError?.message}`,
+    );
   }
 
   getChainConfig(chain: Chain): ChainConfig {

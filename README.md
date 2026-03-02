@@ -55,6 +55,7 @@ A comprehensive monorepo developed and maintained by Aptos for wallet and dapp b
 - [OKX](https://www.npmjs.com/package/@okwallet/aptos-wallet-adapter)
 - [Petra](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
 - [RimoSafe](https://chromewebstore.google.com/detail/rimo-safe-wallet/kiicddjcakdmobjkcpppkgcjbpakcagp)
+- [Watchee](https://watcheetv.com)
 
 ## Develop Locally
 
