@@ -18,7 +18,11 @@ import {
   AptosUnsignedTransaction,
   AptosChains,
 } from "@wormhole-foundation/sdk-aptos";
-import { GasStationApiKey, OnTransactionSigned } from "../types";
+import {
+  GasStationApiKey,
+  OnTransactionSigned,
+  validateExpireTimestamp,
+} from "../types";
 import { isAccount } from "./AptosSigner";
 
 export class AptosLocalSigner<
@@ -112,11 +116,16 @@ export async function signAndSendTransaction(
   const aptos = new Aptos(aptosConfig);
 
   const expireTimestamp = getExpireTimestamp?.();
+  if (typeof expireTimestamp !== "undefined") {
+    validateExpireTimestamp(expireTimestamp);
+  }
   const txnToSign = await aptos.transaction.build.simple({
     data: payload,
     sender: wallet.accountAddress.toString(),
     withFeePayer: sponsorAccount ? true : false,
-    ...(expireTimestamp ? { options: { expireTimestamp } } : {}),
+    ...(typeof expireTimestamp !== "undefined"
+      ? { options: { expireTimestamp } }
+      : {}),
   });
 
   const senderAuthenticator = await aptos.transaction.sign({
@@ -134,7 +143,7 @@ export async function signAndSendTransaction(
   };
 
   if (sponsorAccount) {
-    // Gas station is currently impossible to use, since the transactino we get from
+    // Gas station is currently impossible to use, since the transaction we get from
     // Wormhole is a script transaction and gas station only supports entry function transactions
     const feePayerSignerAuthenticator = aptos.transaction.signAsFeePayer({
       signer: sponsorAccount as Account,

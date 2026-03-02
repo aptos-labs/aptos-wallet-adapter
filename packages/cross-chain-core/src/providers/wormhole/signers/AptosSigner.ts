@@ -16,7 +16,7 @@ import {
   AptosChains,
   AptosUnsignedTransaction,
 } from "@wormhole-foundation/sdk-aptos";
-import { GasStationApiKey } from "..";
+import { GasStationApiKey, validateExpireTimestamp } from "..";
 import { UserResponseStatus } from "@aptos-labs/wallet-standard";
 import { GasStationClient, GasStationTransactionSubmitter } from "@aptos-labs/gas-station-client";
 import { CrossChainCore } from "../../../CrossChainCore";
@@ -93,13 +93,18 @@ export async function signAndSendTransaction(
   };
 
   const expireTimestamp = crossChainCore?._dappConfig?.getExpireTimestamp?.();
+  if (typeof expireTimestamp !== "undefined") {
+    validateExpireTimestamp(expireTimestamp);
+  }
   const txnToSign = await aptos.transaction.build.simple({
     data: transactionData,
     sender: (
       await wallet.features["aptos:account"]?.account()
     ).address.toString(),
     withFeePayer: sponsorAccount ? true : false,
-    ...(expireTimestamp ? { options: { expireTimestamp } } : {}),
+    ...(typeof expireTimestamp !== "undefined"
+      ? { options: { expireTimestamp } }
+      : {}),
   });
 
   const response =

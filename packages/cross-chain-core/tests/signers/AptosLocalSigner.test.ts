@@ -1,11 +1,36 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import {
   Account,
   Ed25519PrivateKey,
+  Network as AptosNetwork,
   PrivateKey,
   PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk";
-import { AptosLocalSigner } from "../../src/providers/wormhole/signers/AptosLocalSigner";
+import {
+  AptosLocalSigner,
+  signAndSendTransaction,
+} from "../../src/providers/wormhole/signers/AptosLocalSigner";
+
+const mockBuildSimple = vi.fn();
+const mockSign = vi.fn();
+const mockSubmitSimple = vi.fn();
+const mockWaitForTransaction = vi.fn();
+
+vi.mock("@aptos-labs/ts-sdk", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@aptos-labs/ts-sdk")>();
+  return {
+    ...actual,
+    Aptos: vi.fn().mockImplementation(() => ({
+      transaction: {
+        build: { simple: mockBuildSimple },
+        sign: mockSign,
+        submit: { simple: mockSubmitSimple },
+        signAsFeePayer: vi.fn(),
+      },
+      waitForTransaction: mockWaitForTransaction,
+    })),
+  };
+});
 
 describe("AptosLocalSigner", () => {
   // Create a test account using a deterministic private key (AIP-80 compliant format)
@@ -183,6 +208,136 @@ describe("AptosLocalSigner", () => {
     });
   });
 
-  // Note: signAndSend tests require mocking Aptos SDK network calls
-  // These are covered in integration tests
+  describe("signAndSendTransaction – expireTimestamp forwarding", () => {
+    beforeEach(() => {
+      mockBuildSimple.mockReset().mockResolvedValue({ rawTransaction: "mock" });
+      mockSign
+        .mockReset()
+        .mockResolvedValue({ toUint8Array: () => new Uint8Array() });
+      mockSubmitSimple
+        .mockReset()
+        .mockResolvedValue({ hash: "0xmocktxhash" });
+      mockWaitForTransaction
+        .mockReset()
+        .mockResolvedValue({ hash: "0xmocktxhash" });
+    });
+
+    function makeRequest() {
+      return {
+        transaction: {
+          functionArguments: ["arg1", "arg2"],
+        },
+      } as any;
+    }
+
+    it("should pass expireTimestamp option when getExpireTimestamp returns a value", async () => {
+      const getExpireTimestamp = () => 1700000000;
+
+      await signAndSendTransaction(
+        makeRequest(),
+        testAccount,
+        undefined,
+        AptosNetwork.TESTNET,
+        getExpireTimestamp,
+      );
+
+      expect(mockBuildSimple).toHaveBeenCalledWith(
+        expect.objectContaining({
+          options: { expireTimestamp: 1700000000 },
+        }),
+      );
+    });
+
+    it("should pass expireTimestamp option when getExpireTimestamp returns 0", async () => {
+      const getExpireTimestamp = () => 0;
+
+      await signAndSendTransaction(
+        makeRequest(),
+        testAccount,
+        undefined,
+        AptosNetwork.TESTNET,
+        getExpireTimestamp,
+      );
+
+      expect(mockBuildSimple).toHaveBeenCalledWith(
+        expect.objectContaining({
+          options: { expireTimestamp: 0 },
+        }),
+      );
+    });
+
+    it("should omit options when getExpireTimestamp is not provided", async () => {
+      await signAndSendTransaction(
+        makeRequest(),
+        testAccount,
+        undefined,
+        AptosNetwork.TESTNET,
+      );
+
+      const callArg = mockBuildSimple.mock.calls[0][0];
+      expect(callArg).not.toHaveProperty("options");
+    });
+
+    it("should call getExpireTimestamp at build time", async () => {
+      const getExpireTimestamp = vi.fn().mockReturnValue(9999999999);
+
+      await signAndSendTransaction(
+        makeRequest(),
+        testAccount,
+        undefined,
+        AptosNetwork.TESTNET,
+        getExpireTimestamp,
+      );
+
+      expect(getExpireTimestamp).toHaveBeenCalledOnce();
+    });
+
+    it("should throw for NaN expireTimestamp", async () => {
+      await expect(
+        signAndSendTransaction(
+          makeRequest(),
+          testAccount,
+          undefined,
+          AptosNetwork.TESTNET,
+          () => NaN,
+        ),
+      ).rejects.toThrow("getExpireTimestamp returned an invalid value");
+    });
+
+    it("should throw for negative expireTimestamp", async () => {
+      await expect(
+        signAndSendTransaction(
+          makeRequest(),
+          testAccount,
+          undefined,
+          AptosNetwork.TESTNET,
+          () => -1,
+        ),
+      ).rejects.toThrow("getExpireTimestamp returned an invalid value");
+    });
+
+    it("should throw for non-integer expireTimestamp", async () => {
+      await expect(
+        signAndSendTransaction(
+          makeRequest(),
+          testAccount,
+          undefined,
+          AptosNetwork.TESTNET,
+          () => 1700000000.5,
+        ),
+      ).rejects.toThrow("getExpireTimestamp returned an invalid value");
+    });
+
+    it("should throw for Infinity expireTimestamp", async () => {
+      await expect(
+        signAndSendTransaction(
+          makeRequest(),
+          testAccount,
+          undefined,
+          AptosNetwork.TESTNET,
+          () => Infinity,
+        ),
+      ).rejects.toThrow("getExpireTimestamp returned an invalid value");
+    });
+  });
 });
