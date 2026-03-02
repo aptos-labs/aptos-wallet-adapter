@@ -38,7 +38,8 @@ export type AvailableWallets =
   | "MSafe"
   | "Bitget Wallet"
   | "Gate Wallet"
-  | "Cosmostation Wallet";
+  | "Cosmostation Wallet"
+  | "Watchee";
 
 type InputTransactionDataInner = {
   sender?: AccountAddressInput;
