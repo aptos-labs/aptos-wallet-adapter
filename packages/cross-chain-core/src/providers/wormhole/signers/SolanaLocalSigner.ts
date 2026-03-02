@@ -16,6 +16,7 @@ import {
   PriorityFeeConfig,
   sendAndConfirmTransaction,
 } from "./solanaUtils";
+import { OnTransactionSigned } from "../types";
 
 export interface SolanaLocalSignerConfig {
   /** The Solana keypair to sign transactions with */
@@ -31,7 +32,7 @@ export interface SolanaLocalSignerConfig {
   /** Enable verbose logging (default: false) */
   verbose?: boolean;
   /** Optional callback fired before and after each individual transaction is signed. */
-  onTransactionSigned?: (description: string, txId: string | null) => void;
+  onTransactionSigned?: OnTransactionSigned;
 }
 
 /**
@@ -70,7 +71,7 @@ export class SolanaLocalSigner<N extends Network, C extends Chain>
   private retryIntervalMs: number;
   private priorityFeeConfig?: PriorityFeeConfig;
   private verbose: boolean;
-  private _onTransactionSigned?: (description: string, txId: string | null) => void;
+  private _onTransactionSigned?: OnTransactionSigned;
   private _claimedTransactionHashes: string[] = [];
 
   constructor(config: SolanaLocalSignerConfig) {
