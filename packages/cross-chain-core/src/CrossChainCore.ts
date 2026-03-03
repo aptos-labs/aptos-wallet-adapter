@@ -29,6 +29,17 @@ import {
 export interface CrossChainDappConfig {
   aptosNetwork: Network;
   disableTelemetry?: boolean;
+  /**
+   * Returns an epoch-second timestamp used as `expireTimestamp` when building
+   * Aptos transactions. Called at transaction-build time so that each
+   * transaction in a multi-step bridge flow gets a fresh expiration window.
+   *
+   * @example
+   * ```ts
+   * getExpireTimestamp: () => Math.floor(Date.now() / 1000) + 120 // 2 minutes
+   * ```
+   */
+  getExpireTimestamp?: () => number;
   solanaConfig?: {
     rpc?: string;
     priorityFeeConfig?: {
@@ -57,6 +68,28 @@ export interface CrossChainDappConfig {
      * });
      */
     serverClaimUrl?: string;
+    /**
+     * Solana transaction confirmation commitment level.
+     *
+     * - `"finalized"` (default) — waits for supermajority finalization (~30 s).
+     * - `"confirmed"` — waits for supermajority confirmation (~0.5 s).
+     *
+     * For bridge flows `"confirmed"` is usually sufficient because Wormhole
+     * guardians independently verify finality before issuing attestations.
+     *
+     * @default "finalized"
+     *
+     * @example
+     * const crossChainCore = new CrossChainCore({
+     *   dappConfig: {
+     *     aptosNetwork: Network.MAINNET,
+     *     solanaConfig: {
+     *       commitment: "confirmed", // ~0.5 s vs ~30 s
+     *     },
+     *   },
+     * });
+     */
+    commitment?: "confirmed" | "finalized";
   };
   /**
    * Custom RPC endpoints for EVM chains. When provided, these override the

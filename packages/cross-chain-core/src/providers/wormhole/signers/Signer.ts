@@ -133,6 +133,7 @@ export const signAndSendTransaction = async (
       wallet,
       sponsorAccount,
       dappNetwork,
+      crossChainCore,
     );
     return tx;
   } else {
