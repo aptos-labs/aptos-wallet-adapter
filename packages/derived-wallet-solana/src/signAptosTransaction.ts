@@ -13,6 +13,7 @@ import {
   Serializer,
   AbstractedAccount,
 } from "@aptos-labs/ts-sdk";
+import { WalletError } from "@solana/wallet-adapter-base";
 import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 import { createSiwsEnvelopeForAptosTransaction } from "./createSiwsEnvelope";
@@ -51,29 +52,42 @@ export async function signAptosTransactionWithSolana(
     },
   );
 
-  // Prioritize SIWS if available
+  // Try SIWS (signIn) first, fall back to signMessage if it throws.
+  // Some wallets (e.g. Trust) declare signIn but throw at runtime.
+  // Re-throw WalletError instances — they represent wallet-level issues
+  // (e.g. user rejections with non-standard messages) and must not silently
+  // fall back to signMessage, which would double-prompt the user.
   if (solanaWallet.signIn) {
-    const response = await wrapSolanaUserResponse(
-      solanaWallet.signIn!(siwsInput),
-    );
-    return mapUserResponse(response, (output): AccountAuthenticator => {
-      if (output.signatureType && output.signatureType !== "ed25519") {
-        throw new Error("Unsupported signature type");
-      }
-
-      // The wallet might change some of the fields in the SIWS input, so we
-      // might need to include the finalized input in the signature.
-      // For now, we can assume the input is unchanged.
-      return createAccountAuthenticatorForSolanaTransaction(
-        output.signature,
-        solanaPublicKey,
-        domain,
-        authenticationFunction,
-        signingMessageDigest,
-      );
+    // Invoke signIn inside .then() so synchronous throws become rejections
+    // that .catch() can handle uniformly with async failures.
+    const signInResponse = await wrapSolanaUserResponse(
+      Promise.resolve().then(() => solanaWallet.signIn!(siwsInput)),
+    ).catch((error) => {
+      if (error instanceof WalletError || !solanaWallet.signMessage)
+        throw error;
+      return undefined;
     });
-  } else if (solanaWallet.signMessage) {
-    // Fallback to signMessage if SIWS is not available
+    if (signInResponse) {
+      return mapUserResponse(signInResponse, (output): AccountAuthenticator => {
+        if (output.signatureType && output.signatureType !== "ed25519") {
+          throw new Error("Unsupported signature type");
+        }
+
+        // The wallet might change some of the fields in the SIWS input, so we
+        // might need to include the finalized input in the signature.
+        // For now, we can assume the input is unchanged.
+        return createAccountAuthenticatorForSolanaTransaction(
+          output.signature,
+          solanaPublicKey,
+          domain,
+          authenticationFunction,
+          signingMessageDigest,
+        );
+      });
+    }
+  }
+
+  if (solanaWallet.signMessage) {
     const response = await wrapSolanaUserResponse(
       solanaWallet.signMessage(createSignInMessage(siwsInput)),
     );
@@ -86,11 +100,9 @@ export async function signAptosTransactionWithSolana(
         signingMessageDigest,
       );
     });
-  } else {
-    throw new Error(
-      `${solanaWallet.name} does not support SIWS or signMessage`,
-    );
   }
+
+  throw new Error(`${solanaWallet.name} does not support SIWS or signMessage`);
 }
 
 // A helper function to create an AccountAuthenticator from a Solana signature
