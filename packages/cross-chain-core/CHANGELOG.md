@@ -1,5 +1,28 @@
 # @aptos-labs/cross-chain-core
 
+## 6.0.0
+
+### Major Changes
+
+- 787ca9d: Renamed `sourceChain` to `claimChain` in `WormholeClaimWithdrawRequest` and in the server-side claim wire format to clarify that it refers to the chain where the claim transaction executes (the bridge destination), not the chain that burns USDC. Added JSDoc to `WormholeWithdrawRequest.sourceChain` explaining its meaning. Updated the example server-side claim route to match.
+
+### Minor Changes
+
+- 24136d6: Added `evmConfig` and `suiConfig` options to `CrossChainDappConfig` so consumers can provide custom RPC endpoints for EVM chains and Sui. Custom RPCs are used for balance lookups (`getWalletUSDCBalance`) and Wormhole SDK initialization, falling back to the built-in `defaultRpc` values when not specified. Also exported the `EvmChainName` type for use in consumer code.
+- 48bb1f6: Added `getExpireTimestamp` option to `CrossChainDappConfig` for configuring Aptos transaction expiration timestamps. The callback is invoked at transaction-build time so each transaction in a multi-step bridge flow gets a fresh expiration window. Threaded through both `AptosSigner` and `AptosLocalSigner`.
+- 901cd7e: Added `onTransactionSigned` callback to all transfer and withdraw request types (`WormholeWithdrawRequest`, `WormholeTransferRequest`, `WormholeSubmitTransferRequest`, `WormholeClaimTransferRequest`, `WormholeInitiateWithdrawRequest`, `WormholeClaimWithdrawRequest`). The callback fires before and after each individual transaction is signed, enabling rich per-transaction progress UIs (e.g. "Approving USDC…", "Submitting bridge transaction…"). Also added to `Signer`, `AptosLocalSigner`, and `SolanaLocalSigner`.
+- f0daf89: Added `retryWithdrawClaim` method to `WormholeProvider` with configurable exponential backoff for retrying failed claim transactions. Also added `RetryWithdrawClaimRequest` and `RetryWithdrawClaimResponse` types. This enables robust error recovery when the claim phase of a withdrawal fails after the irreversible Aptos burn has already been submitted.
+- a2d00e9: Allow configuring the default Solana commitment level via `solanaConfig.commitment` in `CrossChainDappConfig`. The client-side `SolanaSigner` now reads this value as a fallback before defaulting to `"finalized"`. Setting `commitment: "confirmed"` reduces confirmation wait from ~30 s to ~0.5 s, which is sufficient for bridge flows where Wormhole guardians independently verify finality.
+- 82a2cee: Thread `CrossChainCore` through to `AptosLocalSigner`, replacing individual `dappNetwork` and `getExpireTimestamp` constructor parameters with a single `crossChainCore` instance. Also removed unused `options` parameter from `EthereumSigner.signAndSendTransaction`.
+- d555df9: Track last source-chain transaction ID on `CrossChainCore` for error recovery. Added `TransferError` class (analogous to `WithdrawError`) that preserves the source-chain burn hash when the transfer claim phase fails. Consumers can now recover the tx hash via `error.originChainTxnId` or `crossChainCore._lastSourceChainTxId`.
+
+### Patch Changes
+
+- 1bf52d2: Recover EVM transaction hash when `response.wait()` fails in `EthereumSigner`. When the receipt wait fails (e.g., network timeout, RPC instability), the already-submitted `response.hash` is now returned instead of throwing. Also attempts to extract the transaction hash from error messages when `sendTransaction` itself throws after broadcast. This prevents bridge flows from losing the transaction reference after the on-chain transaction has been submitted.
+- 60658b4: Handle Solana "block height exceeded" errors gracefully in `sendAndConfirmTransaction`. When the blockhash expires before confirmation completes, the transaction signature is now returned instead of throwing, since the transaction was already sent and may still land on-chain. This prevents bridge flows from failing after the irreversible source-chain transaction has been submitted.
+- Updated dependencies [9a671bf]
+  - @aptos-labs/derived-wallet-solana@0.12.1
+
 ## 5.9.0
 
 ### Minor Changes
