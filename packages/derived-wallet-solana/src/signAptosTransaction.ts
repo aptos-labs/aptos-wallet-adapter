@@ -13,6 +13,7 @@ import {
   Serializer,
   AbstractedAccount,
 } from "@aptos-labs/ts-sdk";
+import { WalletError } from "@solana/wallet-adapter-base";
 import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
 import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 import { createSiwsEnvelopeForAptosTransaction } from "./createSiwsEnvelope";
@@ -53,13 +54,15 @@ export async function signAptosTransactionWithSolana(
 
   // Try SIWS (signIn) first, fall back to signMessage if it throws.
   // Some wallets (e.g. Trust) declare signIn but throw at runtime.
-  // User rejections are already converted to UserResponse by wrapSolanaUserResponse
-  // and won't reach the catch handler, so only broken implementations trigger fallback.
+  // Re-throw WalletError instances — they represent wallet-level issues
+  // (e.g. user rejections with non-standard messages) and must not silently
+  // fall back to signMessage, which would double-prompt the user.
   if (solanaWallet.signIn) {
     const signInResponse = await wrapSolanaUserResponse(
       solanaWallet.signIn!(siwsInput),
     ).catch((error) => {
-      if (!solanaWallet.signMessage) throw error;
+      if (error instanceof WalletError || !solanaWallet.signMessage)
+        throw error;
       return undefined;
     });
     if (signInResponse) {

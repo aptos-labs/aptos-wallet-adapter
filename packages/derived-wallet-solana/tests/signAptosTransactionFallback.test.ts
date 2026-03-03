@@ -4,6 +4,7 @@ import {
   AnyRawTransaction,
   AccountAuthenticatorAbstraction,
 } from "@aptos-labs/ts-sdk";
+import { WalletError } from "@solana/wallet-adapter-base";
 import type { StandardWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 import { signAptosTransactionWithSolana } from "../src/signAptosTransaction";
 import { defaultSolanaAuthenticationFunction } from "../src/shared";
@@ -92,7 +93,7 @@ describe("signAptosTransactionWithSolana fallback behavior", () => {
   });
 
   describe("when signIn throws at runtime", () => {
-    it("should fall back to signMessage", async () => {
+    it("should fall back to signMessage for non-WalletError", async () => {
       const wallet = createConnectedMockSolanaWallet({
         keypair: TEST_SOLANA_KEYPAIR,
         supportSignIn: true,
@@ -123,6 +124,38 @@ describe("signAptosTransactionWithSolana fallback behavior", () => {
       (wallet as any).signMessage = undefined;
 
       await expect(callSign(wallet)).rejects.toThrow("not implemented");
+    });
+
+    it("should NOT fall back when signIn throws a WalletError (non-standard rejection)", async () => {
+      const wallet = createConnectedMockSolanaWallet({
+        keypair: TEST_SOLANA_KEYPAIR,
+        supportSignIn: true,
+      });
+      const signMessageSpy = vi.fn(wallet.signMessage!);
+      (wallet as any).signIn = async () => {
+        throw new WalletError("Request denied by user");
+      };
+      (wallet as any).signMessage = signMessageSpy;
+
+      await expect(callSign(wallet)).rejects.toThrow("Request denied by user");
+      expect(signMessageSpy).not.toHaveBeenCalled();
+    });
+
+    it("should return rejection for WalletError with standard message", async () => {
+      const wallet = createConnectedMockSolanaWallet({
+        keypair: TEST_SOLANA_KEYPAIR,
+        supportSignIn: true,
+      });
+      const signMessageSpy = vi.fn(wallet.signMessage!);
+      (wallet as any).signIn = async () => {
+        throw new WalletError("User rejected the request.");
+      };
+      (wallet as any).signMessage = signMessageSpy;
+
+      const result = await callSign(wallet);
+
+      expect(result.status).toBe(UserResponseStatus.REJECTED);
+      expect(signMessageSpy).not.toHaveBeenCalled();
     });
   });
 
