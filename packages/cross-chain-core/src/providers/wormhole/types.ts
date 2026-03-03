@@ -158,15 +158,6 @@ export interface RetryWithdrawClaimResponse extends WormholeClaimWithdrawRespons
 }
 
 /**
- * Error thrown when the withdraw flow fails *after* the Aptos burn
- * transaction has already been submitted (i.e. during attestation tracking
- * or destination-chain claiming).
- *
- * Consumers should check `instanceof WithdrawError` in their catch block
- * to recover the `originChainTxnId` and display an explorer link so the
- * user can verify their burn on-chain.
- */
-/**
  * Validates that a value returned by `getExpireTimestamp` is a non-negative
  * integer suitable for use as an epoch-second expiration timestamp.
  * Throws immediately for NaN, Infinity, negative values, or floats so that
@@ -212,6 +203,15 @@ export class TransferError extends Error {
   }
 }
 
+/**
+ * Error thrown when the withdraw flow fails *after* the Aptos burn
+ * transaction has already been submitted (i.e. during attestation tracking
+ * or destination-chain claiming).
+ *
+ * Consumers should check `instanceof WithdrawError` in their catch block
+ * to recover the `originChainTxnId` and display an explorer link so the
+ * user can verify their burn on-chain.
+ */
 export class WithdrawError extends Error {
   /** Aptos burn transaction hash — always available when this error is thrown. */
   readonly originChainTxnId: string;
