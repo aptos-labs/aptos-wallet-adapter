@@ -39,6 +39,13 @@ export class Signer<
   _sponsorAccount: Account | GasStationApiKey | undefined;
   _onTransactionSigned: OnTransactionSigned | undefined;
   _claimedTransactionHashes: string[] = [];
+  /**
+   * When true, signed tx hashes are written to
+   * `_crossChainCore._lastSourceChainTxId` as a recovery side-channel.
+   * Set to false for destination-chain claim signers so they don't
+   * overwrite the source-chain burn hash.
+   */
+  _trackAsSourceChain: boolean;
 
   constructor(
     chain: ChainConfig,
@@ -48,6 +55,7 @@ export class Signer<
     crossChainCore: CrossChainCore,
     sponsorAccount?: Account | GasStationApiKey | undefined,
     onTransactionSigned?: OnTransactionSigned,
+    trackAsSourceChain: boolean = true,
   ) {
     this._chain = chain;
     this._address = address;
@@ -56,6 +64,7 @@ export class Signer<
     this._crossChainCore = crossChainCore;
     this._sponsorAccount = sponsorAccount;
     this._onTransactionSigned = onTransactionSigned;
+    this._trackAsSourceChain = trackAsSourceChain;
   }
 
   chain(): C {
@@ -83,6 +92,9 @@ export class Signer<
         this._crossChainCore,
         this._sponsorAccount,
       );
+      if (this._trackAsSourceChain) {
+        this._crossChainCore._lastSourceChainTxId = txId;
+      }
       this._onTransactionSigned?.(tx.description, txId);
       txHashes.push(txId);
       this._claimedTransactionHashes.push(txId);

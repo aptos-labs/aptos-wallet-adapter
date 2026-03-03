@@ -197,6 +197,14 @@ export class CrossChainCore {
   readonly CHAINS: ChainsConfig = testnetChains;
   readonly TOKENS: Record<string, TokenConfig> = testnetTokens;
 
+  /**
+   * Last known source-chain transaction ID, set by signers immediately after
+   * a transaction is submitted. Acts as a recovery side-channel so that
+   * callers can retrieve the tx hash even when the orchestration layer throws
+   * before returning it (e.g. claim failure after a successful burn).
+   */
+  _lastSourceChainTxId: string | undefined;
+
   constructor(args: { dappConfig: CrossChainDappConfig }) {
     this._dappConfig = args.dappConfig;
     if (args.dappConfig?.aptosNetwork === Network.MAINNET) {

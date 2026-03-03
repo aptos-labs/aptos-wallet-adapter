@@ -193,4 +193,35 @@ describe("CrossChainCore", () => {
     // Note: Full balance tests require mocking external RPC calls
     // These are covered in integration tests
   });
+
+  describe("_lastSourceChainTxId", () => {
+    it("should be undefined initially", () => {
+      const core = new CrossChainCore({
+        dappConfig: { aptosNetwork: Network.TESTNET },
+      });
+
+      expect(core._lastSourceChainTxId).toBeUndefined();
+    });
+
+    it("should be settable", () => {
+      const core = new CrossChainCore({
+        dappConfig: { aptosNetwork: Network.TESTNET },
+      });
+
+      core._lastSourceChainTxId = "0xabc123";
+
+      expect(core._lastSourceChainTxId).toBe("0xabc123");
+    });
+
+    it("should be overwritable with a new value", () => {
+      const core = new CrossChainCore({
+        dappConfig: { aptosNetwork: Network.TESTNET },
+      });
+
+      core._lastSourceChainTxId = "0xfirst";
+      core._lastSourceChainTxId = "0xsecond";
+
+      expect(core._lastSourceChainTxId).toBe("0xsecond");
+    });
+  });
 });
