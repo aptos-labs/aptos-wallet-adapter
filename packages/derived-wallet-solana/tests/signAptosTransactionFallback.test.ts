@@ -93,13 +93,33 @@ describe("signAptosTransactionWithSolana fallback behavior", () => {
   });
 
   describe("when signIn throws at runtime", () => {
-    it("should fall back to signMessage for non-WalletError", async () => {
+    it("should fall back to signMessage for async non-WalletError", async () => {
       const wallet = createConnectedMockSolanaWallet({
         keypair: TEST_SOLANA_KEYPAIR,
         supportSignIn: true,
       });
       const signMessageSpy = vi.fn(wallet.signMessage!);
       (wallet as any).signIn = async () => {
+        throw new Error("not implemented");
+      };
+      (wallet as any).signMessage = signMessageSpy;
+
+      const result = await callSign(wallet);
+
+      expect(signMessageSpy).toHaveBeenCalled();
+      expect(result.status).toBe(UserResponseStatus.APPROVED);
+      if (result.status === UserResponseStatus.APPROVED) {
+        expect(result.args).toBeInstanceOf(AccountAuthenticatorAbstraction);
+      }
+    });
+
+    it("should fall back to signMessage for synchronous non-WalletError", async () => {
+      const wallet = createConnectedMockSolanaWallet({
+        keypair: TEST_SOLANA_KEYPAIR,
+        supportSignIn: true,
+      });
+      const signMessageSpy = vi.fn(wallet.signMessage!);
+      (wallet as any).signIn = () => {
         throw new Error("not implemented");
       };
       (wallet as any).signMessage = signMessageSpy;
@@ -126,6 +146,19 @@ describe("signAptosTransactionWithSolana fallback behavior", () => {
       await expect(callSign(wallet)).rejects.toThrow("not implemented");
     });
 
+    it("should rethrow synchronous error if signMessage is not available", async () => {
+      const wallet = createConnectedMockSolanaWallet({
+        keypair: TEST_SOLANA_KEYPAIR,
+        supportSignIn: true,
+      });
+      (wallet as any).signIn = () => {
+        throw new Error("not implemented");
+      };
+      (wallet as any).signMessage = undefined;
+
+      await expect(callSign(wallet)).rejects.toThrow("not implemented");
+    });
+
     it("should NOT fall back when signIn throws a WalletError (non-standard rejection)", async () => {
       const wallet = createConnectedMockSolanaWallet({
         keypair: TEST_SOLANA_KEYPAIR,
@@ -133,6 +166,21 @@ describe("signAptosTransactionWithSolana fallback behavior", () => {
       });
       const signMessageSpy = vi.fn(wallet.signMessage!);
       (wallet as any).signIn = async () => {
+        throw new WalletError("Request denied by user");
+      };
+      (wallet as any).signMessage = signMessageSpy;
+
+      await expect(callSign(wallet)).rejects.toThrow("Request denied by user");
+      expect(signMessageSpy).not.toHaveBeenCalled();
+    });
+
+    it("should NOT fall back when signIn throws a synchronous WalletError", async () => {
+      const wallet = createConnectedMockSolanaWallet({
+        keypair: TEST_SOLANA_KEYPAIR,
+        supportSignIn: true,
+      });
+      const signMessageSpy = vi.fn(wallet.signMessage!);
+      (wallet as any).signIn = () => {
         throw new WalletError("Request denied by user");
       };
       (wallet as any).signMessage = signMessageSpy;

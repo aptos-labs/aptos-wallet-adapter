@@ -58,8 +58,10 @@ export async function signAptosTransactionWithSolana(
   // (e.g. user rejections with non-standard messages) and must not silently
   // fall back to signMessage, which would double-prompt the user.
   if (solanaWallet.signIn) {
+    // Invoke signIn inside .then() so synchronous throws become rejections
+    // that .catch() can handle uniformly with async failures.
     const signInResponse = await wrapSolanaUserResponse(
-      solanaWallet.signIn!(siwsInput),
+      Promise.resolve().then(() => solanaWallet.signIn!(siwsInput)),
     ).catch((error) => {
       if (error instanceof WalletError || !solanaWallet.signMessage)
         throw error;
