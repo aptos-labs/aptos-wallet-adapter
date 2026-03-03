@@ -20,6 +20,7 @@ import {
 import { logger } from "../../utils/logger";
 import { serializeReceipt } from "../../utils/receiptSerialization";
 import { AptosLocalSigner } from "./signers/AptosLocalSigner";
+import { isAccount } from "./signers/AptosSigner";
 import { Signer } from "./signers/Signer";
 import { ChainConfig } from "../../config";
 import { createCCTPRoute } from "./utils";
@@ -249,6 +250,14 @@ export class WormholeProvider implements CrossChainProvider<
     if (!this.wormholeRoute) {
       throw new Error("Wormhole route not initialized");
     }
+    if (sponsorAccount && !isAccount(sponsorAccount)) {
+      throw new Error(
+        "AptosLocalSigner does not support GasStationApiKey as a sponsor account. " +
+          "Wormhole claim transactions are script-based and cannot be submitted " +
+          "via the gas station. Please provide an Account instance as the sponsor, " +
+          "or omit the sponsor account.",
+      );
+    }
 
     logger.log("mainSigner", mainSigner.accountAddress.toString());
 
@@ -268,9 +277,8 @@ export class WormholeProvider implements CrossChainProvider<
                 {},
                 mainSigner, // the account that signs the "claim" transaction
                 sponsorAccount, // the fee payer account
-                this.crossChainCore._dappConfig?.aptosNetwork,
+                this.crossChainCore,
                 onTransactionSigned,
-                this.crossChainCore._dappConfig?.getExpireTimestamp,
               );
 
               if (routes.isManual(this.wormholeRoute)) {
