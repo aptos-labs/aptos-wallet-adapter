@@ -98,21 +98,6 @@ describe("AptosLocalSigner", () => {
       expect(signer._sponsorAccount).toBe(sponsorAccount);
     });
 
-    it("should accept sponsor account (GasStationApiKey)", () => {
-      const gasStationKey = {
-        [AptosNetwork.TESTNET]: "gas-station-api-key",
-      };
-
-      const signer = new AptosLocalSigner(
-        "Aptos",
-        mockOptions,
-        testAccount,
-        gasStationKey,
-        mockCrossChainCore,
-      );
-
-      expect(signer._sponsorAccount).toBe(gasStationKey);
-    });
   });
 
   describe("chain()", () => {
