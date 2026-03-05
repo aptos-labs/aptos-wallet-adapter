@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-core
 
+## 8.5.0
+
+### Minor Changes
+
+- 67b3d73: Update Nightly logo.
+
 ## 8.4.0
 
 ### Minor Changes
