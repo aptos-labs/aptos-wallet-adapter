@@ -25,7 +25,7 @@ import { ChainConfig } from "../../../config";
 import { CrossChainCore } from "../../../CrossChainCore";
 import { AptosChains } from "@wormhole-foundation/sdk-aptos/dist/cjs/types";
 import { AptosUnsignedTransaction } from "@wormhole-foundation/sdk-aptos/dist/cjs/unsignedTransaction";
-import { GasStationApiKey } from "../types";
+import { GasStationApiKey, OnTransactionSigned } from "../types";
 import { Account } from "@aptos-labs/ts-sdk";
 export class Signer<
   N extends Network,
@@ -37,7 +37,15 @@ export class Signer<
   _wallet: AdapterWallet;
   _crossChainCore: CrossChainCore;
   _sponsorAccount: Account | GasStationApiKey | undefined;
+  _onTransactionSigned: OnTransactionSigned | undefined;
   _claimedTransactionHashes: string[] = [];
+  /**
+   * When true, signed tx hashes are written to
+   * `_crossChainCore._lastSourceChainTxId` as a recovery side-channel.
+   * Set to false for destination-chain claim signers so they don't
+   * overwrite the source-chain burn hash.
+   */
+  _trackAsSourceChain: boolean;
 
   constructor(
     chain: ChainConfig,
@@ -46,6 +54,8 @@ export class Signer<
     wallet: AdapterWallet,
     crossChainCore: CrossChainCore,
     sponsorAccount?: Account | GasStationApiKey | undefined,
+    onTransactionSigned?: OnTransactionSigned,
+    trackAsSourceChain: boolean = true,
   ) {
     this._chain = chain;
     this._address = address;
@@ -53,6 +63,8 @@ export class Signer<
     this._wallet = wallet;
     this._crossChainCore = crossChainCore;
     this._sponsorAccount = sponsorAccount;
+    this._onTransactionSigned = onTransactionSigned;
+    this._trackAsSourceChain = trackAsSourceChain;
   }
 
   chain(): C {
@@ -71,6 +83,7 @@ export class Signer<
     this._claimedTransactionHashes = [];
 
     for (const tx of txs) {
+      this._onTransactionSigned?.(tx.description, null);
       const txId = await signAndSendTransaction(
         this._chain,
         tx,
@@ -79,6 +92,10 @@ export class Signer<
         this._crossChainCore,
         this._sponsorAccount,
       );
+      if (this._trackAsSourceChain) {
+        this._crossChainCore._lastSourceChainTxId = txId;
+      }
+      this._onTransactionSigned?.(tx.description, txId);
       txHashes.push(txId);
       this._claimedTransactionHashes.push(txId);
     }
@@ -113,7 +130,6 @@ export const signAndSendTransaction = async (
       request as EvmUnsignedTransaction<Network, EvmChains>,
       wallet,
       chain.displayName,
-      options,
     );
     return tx;
   } else if (chain.context === "Sui") {
@@ -128,6 +144,7 @@ export const signAndSendTransaction = async (
       wallet,
       sponsorAccount,
       dappNetwork,
+      crossChainCore,
     );
     return tx;
   } else {

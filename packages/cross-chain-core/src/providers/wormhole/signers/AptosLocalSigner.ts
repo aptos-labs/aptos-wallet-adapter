@@ -3,7 +3,6 @@ import {
   AnyRawTransaction,
   Aptos,
   AptosConfig,
-  Network as AptosNetwork,
   Account,
 } from "@aptos-labs/ts-sdk";
 
@@ -18,8 +17,11 @@ import {
   AptosUnsignedTransaction,
   AptosChains,
 } from "@wormhole-foundation/sdk-aptos";
-import { GasStationApiKey } from "../types";
-import { isAccount } from "./AptosSigner";
+import {
+  OnTransactionSigned,
+  validateExpireTimestamp,
+} from "../types";
+import { CrossChainCore } from "../../../CrossChainCore";
 
 export class AptosLocalSigner<
   N extends Network,
@@ -28,21 +30,24 @@ export class AptosLocalSigner<
   _chain: C;
   _options: any;
   _wallet: Account;
-  _sponsorAccount: Account | GasStationApiKey | undefined;
+  _sponsorAccount: Account | undefined;
+  _onTransactionSigned: OnTransactionSigned | undefined;
+  _crossChainCore: CrossChainCore;
   _claimedTransactionHashes: string[] = [];
-  _dappNetwork: AptosNetwork;
   constructor(
     chain: C,
     options: any,
     wallet: Account,
-    feePayerAccount: Account | GasStationApiKey | undefined,
-    dappNetwork: AptosNetwork,
+    feePayerAccount: Account | undefined,
+    crossChainCore: CrossChainCore,
+    onTransactionSigned?: OnTransactionSigned,
   ) {
     this._chain = chain;
     this._options = options;
     this._wallet = wallet;
     this._sponsorAccount = feePayerAccount;
-    this._dappNetwork = dappNetwork;
+    this._crossChainCore = crossChainCore;
+    this._onTransactionSigned = onTransactionSigned;
   }
 
   chain(): C {
@@ -61,12 +66,14 @@ export class AptosLocalSigner<
     this._claimedTransactionHashes = [];
 
     for (const tx of txs) {
+      this._onTransactionSigned?.(tx.description, null);
       const txId = await signAndSendTransaction(
         tx as AptosUnsignedTransaction<Network, AptosChains>,
         this._wallet,
         this._sponsorAccount,
-        this._dappNetwork,
+        this._crossChainCore,
       );
+      this._onTransactionSigned?.(tx.description, txId);
       txHashes.push(txId);
       this._claimedTransactionHashes.push(txId);
     }
@@ -77,8 +84,8 @@ export class AptosLocalSigner<
 export async function signAndSendTransaction(
   request: UnsignedTransaction<Network, AptosChains>,
   wallet: Account,
-  sponsorAccount: Account | GasStationApiKey | undefined,
-  dappNetwork: AptosNetwork,
+  sponsorAccount: Account | undefined,
+  crossChainCore: CrossChainCore,
 ) {
   if (!wallet) {
     throw new Error("Wallet is undefined");
@@ -96,15 +103,23 @@ export async function signAndSendTransaction(
     }
   });
 
+  const dappNetwork = crossChainCore._dappConfig.aptosNetwork;
   const aptosConfig = new AptosConfig({
     network: dappNetwork,
   });
   const aptos = new Aptos(aptosConfig);
 
+  const expireTimestamp = crossChainCore._dappConfig.getExpireTimestamp?.();
+  if (typeof expireTimestamp !== "undefined") {
+    validateExpireTimestamp(expireTimestamp);
+  }
   const txnToSign = await aptos.transaction.build.simple({
     data: payload,
     sender: wallet.accountAddress.toString(),
     withFeePayer: sponsorAccount ? true : false,
+    ...(typeof expireTimestamp !== "undefined"
+      ? { options: { expireTimestamp } }
+      : {}),
   });
 
   const senderAuthenticator = await aptos.transaction.sign({
@@ -122,10 +137,8 @@ export async function signAndSendTransaction(
   };
 
   if (sponsorAccount) {
-    // Gas station is currently impossible to use, since the transactino we get from 
-    // Wormhole is a script transaction and gas station only supports entry function transactions
     const feePayerSignerAuthenticator = aptos.transaction.signAsFeePayer({
-      signer: sponsorAccount as Account,
+      signer: sponsorAccount,
       transaction: txnToSign,
     });
     txnToSubmit.feePayerAuthenticator = feePayerSignerAuthenticator;

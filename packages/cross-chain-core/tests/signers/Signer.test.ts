@@ -216,6 +216,35 @@ describe("Signer", () => {
     });
   });
 
+  describe("_trackAsSourceChain", () => {
+    it("should default to true when not specified", () => {
+      const signer = new Signer(
+        mockChainConfig,
+        mockAddress,
+        mockOptions,
+        mockWallet,
+        {} as any, // crossChainCore
+      );
+
+      expect(signer._trackAsSourceChain).toBe(true);
+    });
+
+    it("should be false when explicitly set", () => {
+      const signer = new Signer(
+        mockChainConfig,
+        mockAddress,
+        mockOptions,
+        mockWallet,
+        {} as any,
+        undefined,
+        undefined,
+        false,
+      );
+
+      expect(signer._trackAsSourceChain).toBe(false);
+    });
+  });
+
   // Note: signAndSend tests require mocking chain-specific implementations
   // and are covered in integration tests
 });
