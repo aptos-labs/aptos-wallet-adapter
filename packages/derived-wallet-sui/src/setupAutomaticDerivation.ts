@@ -12,6 +12,7 @@ export function setupAutomaticSuiWalletDerivation(
 
   const deriveAndRegisterWallet = (wallet: Wallet) => {
     const derivedWallet = new SuiDerivedWallet(wallet, options);
+    registrations[wallet.name]?.(); // unregister old wallet first
     registrations[wallet.name] = api.register(derivedWallet);
   };
 

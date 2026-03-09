@@ -27,6 +27,7 @@ export function setupAutomaticSolanaWalletDerivation(
   ) => {
     const adapter = new StandardWalletAdapter({ wallet });
     const derivedWallet = new SolanaDerivedWallet(adapter, options);
+    registrations[wallet.name]?.(); // unregister old wallet first
     registrations[wallet.name] = api.register(derivedWallet);
   };
 
