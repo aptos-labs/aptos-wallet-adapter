@@ -17,6 +17,7 @@ export function setupAutomaticEthereumWalletDerivation(
 
   const deriveAndRegisterWallet = (detail: EIP6963ProviderDetail) => {
     const derivedWallet = new EIP1193DerivedWallet(detail, options);
+    registrations[detail.info.rdns]?.(); // unregister old wallet first
     registrations[detail.info.rdns] = walletsApi.register(derivedWallet);
   };
 
