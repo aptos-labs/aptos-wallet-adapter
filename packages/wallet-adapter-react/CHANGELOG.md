@@ -1,5 +1,12 @@
 # @aptos-labs/wallet-adapter-react
 
+## 8.3.1
+
+### Patch Changes
+
+- Updated dependencies [67b3d73]
+  - @aptos-labs/wallet-adapter-core@8.5.0
+
 ## 8.3.0
 
 ### Minor Changes

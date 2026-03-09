@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-ethereum
 
+## 0.9.1
+
+### Patch Changes
+
+- 4efd34e: Unregister old derived wallets before re-registering on provider re-announcement, preventing stale wallets from remaining in the registry.
+
 ## 0.9.0
 
 ### Minor Changes
