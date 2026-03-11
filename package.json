@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@aptos-labs/eslint-config-adapter": "workspace:*",
+    "@biomejs/biome": "^2.4.6",
     "@changesets/cli": "^2.29.7",
     "prettier": "latest",
     "turbo": "latest"
@@ -27,7 +28,6 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "dependencies": {},
   "packageManager": "pnpm@9.15.5",
   "pnpm": {
     "overrides": {
