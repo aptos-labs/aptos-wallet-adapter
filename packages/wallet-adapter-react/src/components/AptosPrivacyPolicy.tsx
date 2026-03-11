@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { SmallAptosLogo } from "../graphics/SmallAptosLogo";
-import { HeadlessComponentProps, createHeadlessComponent } from "./utils";
+import { createHeadlessComponent, type HeadlessComponentProps } from "./utils";
 
 export const APTOS_PRIVACY_POLICY_URL = "https://aptoslabs.com/privacy";
 

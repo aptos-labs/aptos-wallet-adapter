@@ -1,14 +1,14 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { UserResponseStatus } from "@aptos-labs/wallet-standard";
 import { Ed25519Signature } from "@aptos-labs/ts-sdk";
-import { signAptosMessageWithSolana } from "../src/signAptosMessage";
+import { UserResponseStatus } from "@aptos-labs/wallet-standard";
+import type { StandardWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
+import { beforeEach, describe, expect, it } from "vitest";
 import { defaultSolanaAuthenticationFunction } from "../src/shared";
+import { signAptosMessageWithSolana } from "../src/signAptosMessage";
 import {
   createConnectedMockSolanaWallet,
   createMockSolanaWallet,
   TEST_SOLANA_KEYPAIR,
 } from "./mocks/solanaWallet";
-import type { StandardWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 
 describe("signAptosMessage", () => {
   let mockWallet: StandardWalletAdapter;
@@ -149,7 +149,7 @@ describe("signAptosMessage", () => {
             nonce: "test",
           },
           domain: testDomain,
-        })
+        }),
       ).rejects.toThrow("solana:signMessage not available");
     });
 
@@ -168,9 +168,8 @@ describe("signAptosMessage", () => {
             nonce: "test",
           },
           domain: testDomain,
-        })
+        }),
       ).rejects.toThrow("Account not connected");
     });
   });
 });
-

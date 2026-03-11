@@ -1,43 +1,41 @@
+import {
+  type Chain,
+  type ChainConfig,
+  type CrossChainCore,
+  EthereumChainIdToMainnetChain,
+  EthereumChainIdToTestnetChain,
+  type GasStationApiKey,
+  WithdrawError,
+  type WithdrawPhase,
+  type WormholeQuoteResponse,
+  type WormholeTransferResponse,
+} from "@aptos-labs/cross-chain-core";
+import { type Account, Network } from "@aptos-labs/ts-sdk";
+import {
+  type AdapterWallet,
+  useWallet,
+} from "@aptos-labs/wallet-adapter-react";
+import { Loader2, MoveDown } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { chainToIcon } from "@/app/icons";
+import USDC from "@/app/icons/USDC";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardTitle,
   CardContent,
-  CardHeader,
   CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  ChainConfig,
-  CrossChainCore,
-  EthereumChainIdToMainnetChain,
-  EthereumChainIdToTestnetChain,
-  GasStationApiKey,
-  WithdrawError,
-  WithdrawPhase,
-} from "@aptos-labs/cross-chain-core";
-import {
-  Account,
-  Network,
-} from "@aptos-labs/ts-sdk";
-import {
-  Chain,
-  WormholeTransferResponse,
-  WormholeQuoteResponse,
-} from "@aptos-labs/cross-chain-core";
-import { Loader2, MoveDown } from "lucide-react";
-import USDC from "@/app/icons/USDC";
-import { chainToIcon } from "@/app/icons";
-import { AdapterWallet, useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useToast } from "@/components/ui/use-toast";
+import { useUSDCBalance } from "@/contexts/USDCBalanceContext";
 import {
   isEIP1193DerivedWallet,
+  isSolanaDerivedWallet,
   isSuiDerivedWallet,
-  OriginWalletDetails,
+  type OriginWalletDetails,
 } from "@/utils/derivedWallet";
-import { isSolanaDerivedWallet } from "@/utils/derivedWallet";
-import { useUSDCBalance } from "@/contexts/USDCBalanceContext";
-import { useToast } from "@/components/ui/use-toast";
 
 type UIPhase = "idle" | "in_progress" | "completed" | "error";
 
@@ -112,12 +110,12 @@ export function CCTPWithdraw({
     } else {
       setSourceChain("Aptos");
     }
-  }, [wallet]);
+  }, [wallet, network?.name]);
 
   useEffect(() => {
     if (!account?.address) return;
     fetchAptosBalance(account.address.toString());
-  }, [account?.address, network, fetchAptosBalance]);
+  }, [account?.address, fetchAptosBalance]);
 
   const humanReadableETA = (milliseconds: number): string => {
     if (milliseconds >= 60000) {
@@ -164,7 +162,7 @@ export function CCTPWithdraw({
 
       setDebounceTimeout(newTimeout);
     },
-    [sourceChain, debounceTimeout, aptosBalance],
+    [sourceChain, debounceTimeout, invalidateAmount, provider?.getQuote],
   );
 
   const invalidateAmount = (amount: string) => {
@@ -356,10 +354,7 @@ export function CCTPWithdraw({
 
         {/* Error state — only allow retry if the burn hasn't happened yet */}
         {phase === "error" && !burnInitiated && (
-          <Button
-            onClick={() => setPhase("idle")}
-            variant="outline"
-          >
+          <Button onClick={() => setPhase("idle")} variant="outline">
             Try Again
           </Button>
         )}

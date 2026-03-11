@@ -1,4 +1,4 @@
-import { Chain } from "../CrossChainCore";
+import type { Chain } from "../CrossChainCore";
 
 export enum Context {
   ETH = "Ethereum",

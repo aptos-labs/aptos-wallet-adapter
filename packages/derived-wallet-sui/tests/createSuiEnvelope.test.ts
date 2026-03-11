@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
 import { Hex } from "@aptos-labs/ts-sdk";
+import { describe, expect, it } from "vitest";
 import { createSuiEnvelopeForAptosTransaction } from "../src/createSuiEnvelope";
 import { TEST_SUI_ADDRESS } from "./mocks/suiWallet";
 

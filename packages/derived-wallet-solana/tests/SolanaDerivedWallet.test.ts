@@ -1,21 +1,18 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import {
-  APTOS_CHAINS,
-  UserResponseStatus,
-} from "@aptos-labs/wallet-standard";
 import {
   Network,
   NetworkToChainId,
   NetworkToNodeAPI,
 } from "@aptos-labs/ts-sdk";
-import { SolanaDerivedWallet } from "../src/SolanaDerivedWallet";
+import { APTOS_CHAINS, UserResponseStatus } from "@aptos-labs/wallet-standard";
+import type { StandardWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
+import { beforeEach, describe, expect, it } from "vitest";
 import { SolanaDerivedPublicKey } from "../src/SolanaDerivedPublicKey";
+import { SolanaDerivedWallet } from "../src/SolanaDerivedWallet";
 import { defaultSolanaAuthenticationFunction } from "../src/shared";
 import {
   createConnectedMockSolanaWallet,
   TEST_SOLANA_KEYPAIR,
 } from "./mocks/solanaWallet";
-import type { StandardWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 
 describe("SolanaDerivedWallet", () => {
   let mockSolanaWallet: StandardWalletAdapter;
@@ -68,7 +65,7 @@ describe("SolanaDerivedWallet", () => {
 
     it("should use default authentication function", () => {
       expect(wallet.authenticationFunction).toBe(
-        defaultSolanaAuthenticationFunction
+        defaultSolanaAuthenticationFunction,
       );
     });
 
@@ -195,7 +192,7 @@ describe("SolanaDerivedWallet", () => {
         wallet.changeNetwork({
           name: Network.CUSTOM,
           url: "https://custom.node.com",
-        })
+        }),
       ).rejects.toThrow("Custom network not currently supported");
     });
 
@@ -300,4 +297,3 @@ describe("SolanaDerivedWallet", () => {
   // Note: signTransaction tests require network access to build transactions.
   // These are tested via integration tests.
 });
-

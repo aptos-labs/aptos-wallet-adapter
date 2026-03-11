@@ -1,33 +1,33 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  WalletError,
-  WalletNotSelectedError,
-  WalletNotReadyError,
-  WalletLoadError,
+  WalletAccountChangeError,
+  WalletAccountError,
+  WalletChangeNetworkError,
   WalletConfigError,
   WalletConnectionError,
   WalletDisconnectedError,
   WalletDisconnectionError,
-  WalletAccountError,
+  WalletError,
   WalletGetNetworkError,
-  WalletAccountChangeError,
-  WalletNetworkChangeError,
-  WalletPublicKeyError,
   WalletKeypairError,
+  WalletLoadError,
+  WalletNetworkChangeError,
   WalletNotConnectedError,
+  WalletNotFoundError,
+  WalletNotReadyError,
+  WalletNotSelectedError,
+  WalletNotSupportedMethod,
+  WalletPublicKeyError,
+  WalletResponseError,
   WalletSendTransactionError,
-  WalletSignMessageError,
-  WalletSignMessageAndVerifyError,
   WalletSignAndSubmitMessageError,
+  WalletSignMessageAndVerifyError,
+  WalletSignMessageError,
   WalletSignTransactionError,
+  WalletSubmitTransactionError,
   WalletTimeoutError,
   WalletWindowBlockedError,
   WalletWindowClosedError,
-  WalletResponseError,
-  WalletNotSupportedMethod,
-  WalletChangeNetworkError,
-  WalletSubmitTransactionError,
-  WalletNotFoundError,
 } from "../src/error";
 
 describe("Error Classes", () => {
@@ -172,14 +172,18 @@ describe("Error Classes", () => {
 
   describe("WalletSignMessageAndVerifyError", () => {
     it("should have correct name", () => {
-      const error = new WalletSignMessageAndVerifyError("Sign and verify failed");
+      const error = new WalletSignMessageAndVerifyError(
+        "Sign and verify failed",
+      );
       expect(error.name).toBe("WalletSignMessageAndVerifyError");
     });
   });
 
   describe("WalletSignAndSubmitMessageError", () => {
     it("should have correct name", () => {
-      const error = new WalletSignAndSubmitMessageError("Sign and submit failed");
+      const error = new WalletSignAndSubmitMessageError(
+        "Sign and submit failed",
+      );
       expect(error.name).toBe("WalletSignAndSubmitMessageError");
     });
   });
@@ -235,7 +239,9 @@ describe("Error Classes", () => {
 
   describe("WalletSubmitTransactionError", () => {
     it("should have correct name", () => {
-      const error = new WalletSubmitTransactionError("Submit transaction failed");
+      const error = new WalletSubmitTransactionError(
+        "Submit transaction failed",
+      );
       expect(error.name).toBe("WalletSubmitTransactionError");
     });
   });
@@ -286,4 +292,3 @@ describe("Error Classes", () => {
     });
   });
 });
-

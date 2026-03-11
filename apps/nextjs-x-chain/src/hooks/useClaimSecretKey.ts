@@ -1,13 +1,12 @@
 import {
   Account,
-  AccountAddress,
+  type AccountAddress,
   Aptos,
   AptosConfig,
   Ed25519PrivateKey,
   Network,
 } from "@aptos-labs/ts-sdk";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
 
 const claimSecretKeyStorageKey = "@wallet-adapter-example-dapp/claimSecretKey";
@@ -76,14 +75,7 @@ export function useClaimSecretKey() {
     if (claimableBalance < 1e4 && !isFunded && !isFunding) {
       fundAccount(claimAccountAddress);
     }
-  }, [
-    claimAccountAddress,
-    claimSecretKey,
-    claimableBalance,
-    fundAccount,
-    isFunded,
-    isFunding,
-  ]);
+  }, [claimAccountAddress, claimableBalance, fundAccount, isFunded, isFunding]);
 
   return claimSecretKey;
 }

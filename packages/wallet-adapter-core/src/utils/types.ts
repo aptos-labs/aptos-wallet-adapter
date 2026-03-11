@@ -1,10 +1,10 @@
-import {
+import type {
   AccountAddressInput,
   InputGenerateTransactionOptions,
+  InputGenerateTransactionPayloadData,
   InputTransactionPluginData,
 } from "@aptos-labs/ts-sdk";
-import { InputGenerateTransactionPayloadData } from "@aptos-labs/ts-sdk";
-import { WalletReadyState } from "../constants";
+import type { WalletReadyState } from "../constants";
 
 export interface AptosStandardSupportedWallet {
   // The name of your wallet cast to WalletName (Ex. "Petra" as WalletName<"Petra">)

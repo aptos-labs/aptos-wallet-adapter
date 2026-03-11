@@ -13,7 +13,34 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noArrayIndexKey": "off",
+        "noUnknownAtRules": "off",
+        "useIterableCallbackReturn": "warn"
+      },
+      "style": {
+        "noNonNullAssertion": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "warn",
+        "noInvalidUseBeforeDeclaration": "warn",
+        "noUnusedFunctionParameters": "warn"
+      },
+      "complexity": {
+        "noBannedTypes": "warn"
+      },
+      "a11y": {
+        "useButtonType": "warn",
+        "noSvgWithoutTitle": "warn",
+        "useKeyWithClickEvents": "warn",
+        "noStaticElementInteractions": "warn",
+        "noLabelWithoutControl": "warn"
+      },
+      "performance": {
+        "noImgElement": "off"
+      }
     }
   },
   "assist": {
@@ -22,6 +49,12 @@
       "source": {
         "organizeImports": "on"
       }
+    }
+  },
+  "css": {
+    "parser": {
+      "cssModules": true,
+      "tailwindDirectives": true
     }
   },
   "files": {

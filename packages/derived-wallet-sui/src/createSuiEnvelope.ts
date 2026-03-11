@@ -1,5 +1,5 @@
 import { createTransactionStatement } from "@aptos-labs/derived-wallet-base";
-import { AnyRawTransaction, Hex, HexInput } from "@aptos-labs/ts-sdk";
+import { type AnyRawTransaction, Hex, type HexInput } from "@aptos-labs/ts-sdk";
 
 export interface createSuiEnvelopeInput {
   suiAddress: string;
@@ -17,7 +17,7 @@ function createSuiEnvelope(
 
   const prefix = `${domain} wants you to sign in with your Sui account:\n${suiAddress}\n\n${statement}`;
 
-  let suffix = `Nonce: ${digestHex}`;
+  const suffix = `Nonce: ${digestHex}`;
 
   return `${prefix}\n\n${suffix}`;
 }

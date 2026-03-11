@@ -1,22 +1,20 @@
-import { aptosClient, isSendableNetwork } from "@/utils";
 import {
   Account,
-  AccountAddress,
-  AccountAuthenticator,
-  AnyRawTransaction,
-  Ed25519Account,
-  parseTypeTag,
+  type AccountAuthenticator,
+  type AnyRawTransaction,
+  type Ed25519Account,
   U64,
 } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useState } from "react";
+import { aptosClient, isSendableNetwork } from "@/utils";
+import { LabelValueGrid } from "../LabelValueGrid";
 import { TransactionHash } from "../TransactionHash";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useToast } from "../ui/use-toast";
-import { LabelValueGrid } from "../LabelValueGrid";
 
-const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
+const _APTOS_COIN = "0x1::aptos_coin::AptosCoin";
 /*
 script {
     fun main(signer_1: &signer, _signer_2: &signer, to: address, amount: u64){
@@ -41,7 +39,7 @@ export function MultiAgent() {
   const [secondarySignerAuthenticator, setSecondarySignerAuthenticator] =
     useState<AccountAuthenticator>();
 
-  let sendable = isSendableNetwork(connected, network?.name);
+  const sendable = isSendableNetwork(connected, network?.name);
 
   const generateTransaction = async (): Promise<AnyRawTransaction> => {
     if (!account) {

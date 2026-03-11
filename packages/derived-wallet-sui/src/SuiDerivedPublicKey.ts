@@ -5,18 +5,18 @@ import {
 } from "@aptos-labs/derived-wallet-base";
 import {
   AccountPublicKey,
-  AptosConfig,
-  AuthenticationKey,
-  Deserializer,
-  hashValues,
+  type AptosConfig,
+  type AuthenticationKey,
+  type Deserializer,
   Hex,
-  HexInput,
-  Serializer,
-  Signature,
-  VerifySignatureArgs,
+  type HexInput,
+  hashValues,
+  type Serializer,
+  type Signature,
+  type VerifySignatureArgs,
 } from "@aptos-labs/ts-sdk";
-import { createSuiEnvelopeForAptosTransaction } from "./createSuiEnvelope";
 import { verifyPersonalMessageSignature } from "@mysten/sui/verify";
+import { createSuiEnvelopeForAptosTransaction } from "./createSuiEnvelope";
 import { SuiDerivedEd25519Signature } from "./SuiDerivedSignature";
 
 export interface SuiDerivedPublicKeyParams {
@@ -101,7 +101,7 @@ export class SuiDerivedPublicKey extends AccountPublicKey {
         signature.signatureBase64,
       );
       return true;
-    } catch (e) {
+    } catch (_e) {
       return false;
     }
   }

@@ -1,15 +1,15 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  WalletReadyState,
-  NetworkName,
-  ChainIdToAnsSupportedNetworkMap,
+  APTOS_CONNECT_ACCOUNT_URL,
   APTOS_CONNECT_BASE_URL,
+  ChainIdToAnsSupportedNetworkMap,
+  DEFAULT_WALLET_CONNECTION_FALLBACKS,
+  NetworkName,
+  PETRA_WALLET_NAME,
+  PETRA_WEB_ACCOUNT_URL,
   PETRA_WEB_BASE_URL,
   PETRA_WEB_GENERIC_WALLET_NAME,
-  PETRA_WALLET_NAME,
-  DEFAULT_WALLET_CONNECTION_FALLBACKS,
-  APTOS_CONNECT_ACCOUNT_URL,
-  PETRA_WEB_ACCOUNT_URL,
+  WalletReadyState,
 } from "../src/constants";
 
 describe("Constants", () => {
@@ -77,13 +77,13 @@ describe("Constants", () => {
 
     it("should have correct APTOS_CONNECT_ACCOUNT_URL (deprecated)", () => {
       expect(APTOS_CONNECT_ACCOUNT_URL).toBe(
-        "https://aptosconnect.app/dashboard/main-account"
+        "https://aptosconnect.app/dashboard/main-account",
       );
     });
 
     it("should have correct PETRA_WEB_ACCOUNT_URL", () => {
       expect(PETRA_WEB_ACCOUNT_URL).toBe(
-        "https://web.petra.app/dashboard/main-account"
+        "https://web.petra.app/dashboard/main-account",
       );
     });
   });
@@ -101,7 +101,7 @@ describe("Constants", () => {
   describe("DEFAULT_WALLET_CONNECTION_FALLBACKS", () => {
     it("should map Petra to Petra Web", () => {
       expect(DEFAULT_WALLET_CONNECTION_FALLBACKS[PETRA_WALLET_NAME]).toBe(
-        PETRA_WEB_GENERIC_WALLET_NAME
+        PETRA_WEB_GENERIC_WALLET_NAME,
       );
     });
 
@@ -112,4 +112,3 @@ describe("Constants", () => {
     });
   });
 });
-

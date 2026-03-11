@@ -2,7 +2,7 @@ import {
   makeUserApproval,
   makeUserRejection,
 } from "@aptos-labs/derived-wallet-base";
-import { UserResponse } from "@aptos-labs/wallet-standard";
+import type { UserResponse } from "@aptos-labs/wallet-standard";
 
 export const defaultAuthenticationFunction =
   "0x1::sui_derivable_account::authenticate";

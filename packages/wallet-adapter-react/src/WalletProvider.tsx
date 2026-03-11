@@ -1,26 +1,33 @@
 import {
-  AvailableWallets,
-  DappConfig,
-  AccountInfo,
-  AdapterWallet,
-  NetworkInfo,
-  InputTransactionData,
-  AptosSignAndSubmitTransactionOutput,
-  AnyRawTransaction,
-  InputGenerateTransactionOptions,
-  AccountAuthenticator,
-  AptosSignMessageInput,
-  AptosSignMessageOutput,
-  AdapterNotDetectedWallet,
+  type AccountAuthenticator,
+  type AccountInfo,
+  type AdapterNotDetectedWallet,
+  type AdapterWallet,
+  type AnyRawTransaction,
+  type AptosSignAndSubmitTransactionOutput,
+  type AptosSignInInput,
+  type AptosSignInOutput,
+  type AptosSignMessageInput,
+  type AptosSignMessageOutput,
+  type AvailableWallets,
+  type DappConfig,
+  type InputGenerateTransactionOptions,
+  type InputSubmitTransactionData,
+  type InputTransactionData,
+  type Network,
+  type NetworkInfo,
+  type PendingTransactionResponse,
   WalletCore,
-  Network,
-  InputSubmitTransactionData,
-  PendingTransactionResponse,
   WalletReadyState,
-  AptosSignInInput,
-  AptosSignInOutput,
 } from "@aptos-labs/wallet-adapter-core";
-import { ReactNode, FC, useState, useEffect, useCallback, useRef } from "react";
+import {
+  type FC,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { WalletContext } from "./useWallet";
 
 export interface AptosWalletProviderProps {
@@ -82,7 +89,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       hideWallets ? hideWallets : ["Petra Web"],
     );
     setWalletCore(walletCore);
-  }, []);
+  }, [dappConfig, disableTelemetry, hideWallets, optInWallets]);
 
   // Update initial Wallets state once WalletCore has been initialized
   useEffect(() => {
@@ -169,7 +176,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       initialLoadCompletedRef.current = true;
       setIsLoading(false);
     }
-  }, [autoConnect, wallets]);
+  }, [autoConnect, connect, connected, onError, walletCore]);
 
   const connect = async (walletName: string): Promise<void> => {
     try {
@@ -236,7 +243,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     authenticator: AccountAuthenticator;
     rawTransaction: Uint8Array;
   }> => {
-    const { transactionOrPayload, asFeePayer, options } = args;
+    const { transactionOrPayload, asFeePayer } = args;
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
     }
@@ -328,7 +335,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         account: walletCore?.account || null,
       };
     });
-  }, [connected]);
+  }, [connected, walletCore?.account, walletCore?.wallet]);
 
   // Handle the adapter's network event
   const handleNetworkChange = useCallback((): void => {
@@ -340,14 +347,14 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         network: walletCore?.network || null,
       };
     });
-  }, [connected]);
+  }, [connected, walletCore?.network, walletCore?.wallet]);
 
   useEffect(() => {
     if (connected) {
       walletCore?.onAccountChange();
       walletCore?.onNetworkChange();
     }
-  }, [connected]);
+  }, [connected, walletCore?.onAccountChange, walletCore?.onNetworkChange]);
 
   // Handle the adapter's disconnect event
   const handleDisconnect = (): void => {
@@ -367,7 +374,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
     const existingWalletIndex = wallets.findIndex(
-      (wallet) => wallet.name == standardWallet.name,
+      (wallet) => wallet.name === standardWallet.name,
     );
     if (existingWalletIndex !== -1) {
       // If wallet exists, replace it with the new wallet
@@ -409,7 +416,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     // Manage current wallet state by removing optional duplications
     // as new wallets are coming
     const existingWalletIndex = wallets.findIndex(
-      (wallet) => wallet.name == notDetectedWallet.name,
+      (wallet) => wallet.name === notDetectedWallet.name,
     );
     if (existingWalletIndex !== -1) {
       // If wallet exists, replace it with the new wallet
@@ -453,7 +460,17 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         handleStandardNotDetectedWalletsAdded,
       );
     };
-  }, [wallets, account]);
+  }, [
+    handleAccountChange,
+    handleConnect,
+    handleDisconnect,
+    handleNetworkChange,
+    handleStandardNotDetectedWalletsAdded,
+    handleStandardWalletsAdded,
+    handleStandardWalletsHiddenAdded,
+    walletCore?.off,
+    walletCore?.on,
+  ]);
 
   return (
     <WalletContext.Provider

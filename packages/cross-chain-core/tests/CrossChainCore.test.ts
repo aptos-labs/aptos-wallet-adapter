@@ -1,15 +1,15 @@
-import { describe, it, expect } from "vitest";
 import { Network } from "@aptos-labs/ts-sdk";
+import { describe, expect, it } from "vitest";
 import {
   CrossChainCore,
-  EthereumChainIdToTestnetChain,
   EthereumChainIdToMainnetChain,
+  EthereumChainIdToTestnetChain,
 } from "../src/CrossChainCore";
 import {
-  testnetChains,
-  testnetTokens,
   mainnetChains,
   mainnetTokens,
+  testnetChains,
+  testnetTokens,
 } from "../src/config";
 import { WormholeProvider } from "../src/providers/wormhole";
 

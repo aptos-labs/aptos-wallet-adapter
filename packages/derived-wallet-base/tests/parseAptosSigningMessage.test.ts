@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
 import { Hex } from "@aptos-labs/ts-sdk";
+import { describe, expect, it } from "vitest";
 import { parseAptosSigningMessage } from "../src/parseAptosSigningMessage";
 import { encodeStructuredMessage } from "../src/StructuredMessage";
 
@@ -95,7 +95,7 @@ describe("parseAptosSigningMessage", () => {
 
     it("should return undefined for invalid structured message prefix", () => {
       const invalidMessage = new TextEncoder().encode(
-        "INVALID\nmessage: test\nnonce: nonce"
+        "INVALID\nmessage: test\nnonce: nonce",
       );
 
       const result = parseAptosSigningMessage(invalidMessage);
@@ -147,4 +147,3 @@ describe("parseAptosSigningMessage", () => {
     });
   });
 });
-

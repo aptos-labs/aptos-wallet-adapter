@@ -1,27 +1,21 @@
-import { getAptBalanceQueryOptions } from "@/utils/getAptBalanceQueryOptions";
 import {
-  Account,
-  AccountAuthenticator,
-  Ed25519PrivateKey,
-  InputGenerateTransactionPayloadData,
+  type InputGenerateTransactionPayloadData,
   Network,
-  PrivateKey,
-  PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk";
 import {
-  InputTransactionData,
+  type AdapterWallet,
+  type InputTransactionData,
   useWallet,
-  AdapterWallet,
 } from "@aptos-labs/wallet-adapter-react";
-
-import { isSendableNetwork, aptosClient } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
-import { Button } from "../ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
-import { useToast } from "../ui/use-toast";
-import { TransactionHash } from "../TransactionHash";
 import { useUSDCBalance } from "@/contexts/USDCBalanceContext";
+import { aptosClient, isSendableNetwork } from "@/utils";
+import { getAptBalanceQueryOptions } from "@/utils/getAptBalanceQueryOptions";
 import { getTransactionSubmitter } from "@/utils/transactionSubmitter";
+import { TransactionHash } from "../TransactionHash";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { useToast } from "../ui/use-toast";
 
 /**
  * Generate a nonce with alphanumeric characters only.
@@ -50,7 +44,7 @@ export function SingleSigner({ dappNetwork, wallet }: SingleSignerProps) {
   const { globalTransactionInProgress, setGlobalTransactionInProgress } =
     useUSDCBalance();
 
-  let sendable = isSendableNetwork(connected, network?.name);
+  const sendable = isSendableNetwork(connected, network?.name);
 
   const onSignMessageAndVerify = async () => {
     if (!account) return;

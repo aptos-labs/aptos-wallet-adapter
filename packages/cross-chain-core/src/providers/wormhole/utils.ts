@@ -6,11 +6,11 @@
 import {
   chainToPlatform,
   routes,
+  type TokenId,
   Wormhole,
-  TokenId,
 } from "@wormhole-foundation/sdk";
-import { Chain } from "../../CrossChainCore";
-import { TokenConfig } from "../../config";
+import type { Chain } from "../../CrossChainCore";
+import type { TokenConfig } from "../../config";
 
 export interface CCTPRouteResult {
   route: routes.ManualRoute<"Mainnet" | "Testnet">;
@@ -69,4 +69,3 @@ export async function createCCTPRoute(
 
   return { route: cctpRoute, request };
 }
-

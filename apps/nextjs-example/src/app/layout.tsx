@@ -1,16 +1,16 @@
 import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 import "./globals.css";
 
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { WalletProvider } from "@/components/WalletProvider";
-import { Toaster } from "@/components/ui/toaster";
-import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import { AutoConnectProvider } from "@/components/AutoConnectProvider";
 import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { TransactionSubmitterProvider } from "@/components/TransactionSubmitterProvider";
+import { Toaster } from "@/components/ui/toaster";
+import { WalletProvider } from "@/components/WalletProvider";
+import { cn } from "@/lib/utils";
 
 const fontSans = FontSans({
   subsets: ["latin"],

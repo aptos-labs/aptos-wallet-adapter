@@ -4,16 +4,16 @@
  */
 
 import {
-  ComputeBudgetProgram,
-  Connection,
-  LAMPORTS_PER_SOL,
-  RpcResponseAndContext,
-  SignatureResult,
-  SimulatedTransactionResponse,
-  Transaction,
-  TransactionInstruction,
-  VersionedTransaction,
   type Commitment,
+  ComputeBudgetProgram,
+  type Connection,
+  LAMPORTS_PER_SOL,
+  type RpcResponseAndContext,
+  type SignatureResult,
+  type SimulatedTransactionResponse,
+  type Transaction,
+  type TransactionInstruction,
+  type VersionedTransaction,
 } from "@solana/web3.js";
 import {
   determinePriorityFee,
@@ -67,7 +67,12 @@ export async function sendAndConfirmTransaction(
   lastValidBlockHeight: number,
   config: SendAndConfirmConfig,
 ): Promise<string> {
-  const { connection, commitment, retryIntervalMs = 5000, verbose = false } = config;
+  const {
+    connection,
+    commitment,
+    retryIntervalMs = 5000,
+    verbose = false,
+  } = config;
 
   const sendOptions = {
     skipPreflight: true,
@@ -75,7 +80,10 @@ export async function sendAndConfirmTransaction(
     preflightCommitment: commitment,
   };
 
-  const signature = await connection.sendRawTransaction(serializedTx, sendOptions);
+  const signature = await connection.sendRawTransaction(
+    serializedTx,
+    sendOptions,
+  );
 
   const confirmTransactionPromise = connection.confirmTransaction(
     { signature, blockhash, lastValidBlockHeight },
@@ -150,9 +158,8 @@ export async function sendAndConfirmTransaction(
 export function formatTransactionError(err: unknown): string {
   if (typeof err === "object" && err !== null) {
     try {
-      return `Transaction failed: ${JSON.stringify(
-        err,
-        (_key, value) => (typeof value === "bigint" ? value.toString() : value),
+      return `Transaction failed: ${JSON.stringify(err, (_key, value) =>
+        typeof value === "bigint" ? value.toString() : value,
       )}`;
     } catch {
       // Circular reference or other stringify error
@@ -186,7 +193,9 @@ export async function addPriorityFeeInstructions(
     ix.programId.toString() !== "ComputeBudget111111111111111111111111111111";
 
   // Remove existing compute budget instructions if they were added by the SDK
-  transaction.instructions = transaction.instructions.filter(computeBudgetIxFilter);
+  transaction.instructions = transaction.instructions.filter(
+    computeBudgetIxFilter,
+  );
 
   const instructions = await createPriorityFeeInstructions(
     connection,
@@ -266,8 +275,10 @@ async function simulateAndGetComputeUnits(
   let unitsUsed = 200_000;
   let simulationAttempts = 0;
 
-  simulationLoop: while (true) {
-    const response = await connection.simulateTransaction(transaction as Transaction);
+  while (true) {
+    const response = await connection.simulateTransaction(
+      transaction as Transaction,
+    );
 
     if (response.value.err) {
       if (checkKnownSimulationError(response.value)) {
@@ -275,13 +286,13 @@ async function simulateAndGetComputeUnits(
         if (simulationAttempts < 5) {
           simulationAttempts++;
           await sleep(1000);
-          continue simulationLoop;
+          continue;
         }
       } else if (simulationAttempts < 3) {
         // Number of attempts will be at most 3 for unknown errors
         simulationAttempts++;
         await sleep(1000);
-        continue simulationLoop;
+        continue;
       }
 
       // Still failing after multiple attempts
@@ -358,12 +369,14 @@ async function calculatePriorityFee(
 /**
  * Checks response logs for known simulation errors that can be retried.
  */
-function checkKnownSimulationError(response: SimulatedTransactionResponse): boolean {
+function checkKnownSimulationError(
+  response: SimulatedTransactionResponse,
+): boolean {
   const errors: Record<string, string> = {};
 
   // This error occurs when the blockhash included in a transaction is not deemed to be valid
   if (response.err === "BlockhashNotFound") {
-    errors["BlockhashNotFound"] =
+    errors.BlockhashNotFound =
       "Blockhash not found during simulation. Trying again.";
   }
 
@@ -371,12 +384,12 @@ function checkKnownSimulationError(response: SimulatedTransactionResponse): bool
   if (response.logs) {
     for (const line of response.logs) {
       if (line.includes("SlippageToleranceExceeded")) {
-        errors["SlippageToleranceExceeded"] =
+        errors.SlippageToleranceExceeded =
           "Slippage failure during simulation. Trying again.";
       }
 
       if (line.includes("RequireGteViolated")) {
-        errors["RequireGteViolated"] =
+        errors.RequireGteViolated =
           "Swap instruction failure during simulation. Trying again.";
       }
     }
@@ -406,9 +419,15 @@ export function determineRpcProvider(endpoint: string): SolanaRpcProvider {
   try {
     const url = new URL(endpoint);
     const hostname = url.hostname;
-    if (isHostOrSubdomainOf(hostname, "rpcpool.com") || isHostOrSubdomainOf(hostname, "triton.one")) {
+    if (
+      isHostOrSubdomainOf(hostname, "rpcpool.com") ||
+      isHostOrSubdomainOf(hostname, "triton.one")
+    ) {
       return "triton";
-    } else if (isHostOrSubdomainOf(hostname, "helius-rpc.com") || isHostOrSubdomainOf(hostname, "helius.xyz")) {
+    } else if (
+      isHostOrSubdomainOf(hostname, "helius-rpc.com") ||
+      isHostOrSubdomainOf(hostname, "helius.xyz")
+    ) {
       return "helius";
     } else if (isHostOrSubdomainOf(hostname, "ankr.com")) {
       return "ankr";
@@ -436,11 +455,10 @@ export const isEmptyObject = (value: object | null | undefined): boolean => {
   }
 
   for (const key in value) {
-    if (Object.prototype.hasOwnProperty.call(value, key)) {
+    if (Object.hasOwn(value, key)) {
       return false;
     }
   }
 
   return true;
 };
-

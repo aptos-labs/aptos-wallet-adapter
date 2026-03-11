@@ -14,21 +14,21 @@
  * 6. Deserialize the receipt and complete the claim (USDC minted to address in receipt)
  */
 
-import { NextRequest, NextResponse } from "next/server";
-import { Connection, Keypair } from "@solana/web3.js";
-import bs58 from "bs58";
-import { Network } from "@aptos-labs/ts-sdk";
 import {
-  SolanaLocalSigner,
-  mainnetTokens,
-  testnetTokens,
+  type CCTPRouteResult,
   createCCTPRoute,
   deserializeReceipt,
-  CCTPRouteResult,
+  mainnetTokens,
+  SolanaLocalSigner,
+  testnetTokens,
 } from "@aptos-labs/cross-chain-core";
-import { wormhole, Wormhole } from "@wormhole-foundation/sdk";
+import { Network } from "@aptos-labs/ts-sdk";
+import { Connection, Keypair } from "@solana/web3.js";
+import { type Wormhole, wormhole } from "@wormhole-foundation/sdk";
 import aptos from "@wormhole-foundation/sdk/aptos";
 import solana from "@wormhole-foundation/sdk/solana";
+import bs58 from "bs58";
+import { type NextRequest, NextResponse } from "next/server";
 
 /** Server-only env var for the Solana claim signer private key (base58 encoded) */
 const SOLANA_CLAIM_SIGNER_KEY = process.env.SOLANA_CLAIM_SIGNER_KEY;
@@ -38,7 +38,8 @@ const SOLANA_RPC_URL = process.env.SOLANA_RPC_URL;
 
 /** Determines network (mainnet/testnet) from environment — consistent with config/index.ts */
 const DAPP_NETWORK: Network.MAINNET | Network.TESTNET =
-  (process.env.NEXT_PUBLIC_DAPP_NETWORK as Network.MAINNET | Network.TESTNET) || Network.TESTNET;
+  (process.env.NEXT_PUBLIC_DAPP_NETWORK as Network.MAINNET | Network.TESTNET) ||
+  Network.TESTNET;
 
 const IS_MAINNET = DAPP_NETWORK === Network.MAINNET;
 
@@ -47,9 +48,12 @@ const IS_MAINNET = DAPP_NETWORK === Network.MAINNET;
 // ============================================================================
 
 function getSolanaRpcUrl(): string {
-  return SOLANA_RPC_URL ?? (IS_MAINNET
-    ? "https://api.mainnet-beta.solana.com"
-    : "https://api.devnet.solana.com");
+  return (
+    SOLANA_RPC_URL ??
+    (IS_MAINNET
+      ? "https://api.mainnet-beta.solana.com"
+      : "https://api.devnet.solana.com")
+  );
 }
 
 // ============================================================================
@@ -74,7 +78,10 @@ function isRateLimited(identifier: string): boolean {
 
   const entry = rateLimitMap.get(identifier);
   if (!entry || now > entry.resetTime) {
-    rateLimitMap.set(identifier, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    rateLimitMap.set(identifier, {
+      count: 1,
+      resetTime: now + RATE_LIMIT_WINDOW_MS,
+    });
     return false;
   }
 
@@ -94,13 +101,17 @@ async function getOrCreateCCTPRoute(): Promise<CCTPRouteResult> {
     return cachedCCTPRoute;
   }
 
-  const wh = await wormhole(IS_MAINNET ? "Mainnet" : "Testnet", [aptos, solana], {
-    chains: {
-      Solana: {
-        rpc: getSolanaRpcUrl(),
+  const wh = await wormhole(
+    IS_MAINNET ? "Mainnet" : "Testnet",
+    [aptos, solana],
+    {
+      chains: {
+        Solana: {
+          rpc: getSolanaRpcUrl(),
+        },
       },
     },
-  });
+  );
   cachedWormholeContext = wh;
 
   const tokens = IS_MAINNET ? mainnetTokens : testnetTokens;
@@ -120,7 +131,7 @@ function getSolanaKeypair(): Keypair {
 
   try {
     return Keypair.fromSecretKey(bs58.decode(SOLANA_CLAIM_SIGNER_KEY));
-  } catch (error) {
+  } catch (_error) {
     throw new Error(
       "Invalid SOLANA_CLAIM_SIGNER_KEY format. Expected base58-encoded private key.",
     );
@@ -193,7 +204,10 @@ export async function POST(request: NextRequest) {
 
     if (!serializedReceipt || !destinationAddress || !claimChain) {
       return NextResponse.json(
-        { error: "Missing required fields: receipt, destinationAddress, claimChain" },
+        {
+          error:
+            "Missing required fields: receipt, destinationAddress, claimChain",
+        },
         { status: 400 },
       );
     }

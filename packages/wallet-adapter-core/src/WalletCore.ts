@@ -1,79 +1,85 @@
-import EventEmitter from "eventemitter3";
+import type { AptosConnectWalletConfig } from "@aptos-connect/wallet-adapter-plugin";
 import {
   AccountAddress,
-  AccountAuthenticator,
-  AnyRawTransaction,
+  type AccountAuthenticator,
+  type AnyRawTransaction,
   Aptos,
-  InputSubmitTransactionData,
+  type InputSubmitTransactionData,
   Network,
   NetworkToChainId,
-  PendingTransactionResponse,
-  TransactionSubmitter,
+  type PendingTransactionResponse,
+  type TransactionSubmitter,
 } from "@aptos-labs/ts-sdk";
 import {
-  AptosWallet,
+  type AccountInfo,
+  type AptosChangeNetworkOutput,
+  type AptosSignAndSubmitTransactionOutput,
+  type AptosSignInInput,
+  type AptosSignInOutput,
+  type AptosSignMessageInput,
+  type AptosSignMessageOutput,
+  type AptosSignTransactionInputV1_1,
+  type AptosSignTransactionMethod,
+  type AptosSignTransactionMethodV1_1,
+  type AptosSignTransactionOutputV1_1,
+  type AptosWallet,
   getAptosWallets,
   isWalletWithRequiredFeatureSet,
+  type NetworkInfo,
+  type UserResponse,
   UserResponseStatus,
-  AptosSignAndSubmitTransactionOutput,
-  UserResponse,
-  AptosSignTransactionOutputV1_1,
-  AptosSignTransactionInputV1_1,
-  AptosSignTransactionMethod,
-  AptosSignTransactionMethodV1_1,
-  NetworkInfo,
-  AccountInfo,
-  AptosSignMessageInput,
-  AptosSignMessageOutput,
-  AptosChangeNetworkOutput,
-  AptosSignInInput,
-  AptosSignInOutput,
 } from "@aptos-labs/wallet-standard";
-import { AptosConnectWalletConfig } from "@aptos-connect/wallet-adapter-plugin";
+import EventEmitter from "eventemitter3";
 
 export type {
-  NetworkInfo,
-  AccountInfo,
-  AptosSignAndSubmitTransactionOutput,
-  AptosSignTransactionOutputV1_1,
-  AptosSignMessageInput,
-  AptosSignMessageOutput,
-  AptosChangeNetworkOutput,
-} from "@aptos-labs/wallet-standard";
-export type {
+  AccountAddress,
   AccountAuthenticator,
+  AnyPublicKey,
   AnyRawTransaction,
   InputGenerateTransactionOptions,
-  PendingTransactionResponse,
   InputSubmitTransactionData,
   Network,
-  AnyPublicKey,
-  AccountAddress,
+  PendingTransactionResponse,
   TransactionSubmitter,
 } from "@aptos-labs/ts-sdk";
+export type {
+  AccountInfo,
+  AptosChangeNetworkOutput,
+  AptosSignAndSubmitTransactionOutput,
+  AptosSignMessageInput,
+  AptosSignMessageOutput,
+  AptosSignTransactionOutputV1_1,
+  NetworkInfo,
+} from "@aptos-labs/wallet-standard";
 
-import { GA4 } from "./ga";
+import { ChainIdToAnsSupportedNetworkMap, WalletReadyState } from "./constants";
 import {
-  WalletChangeNetworkError,
   WalletAccountChangeError,
   WalletAccountError,
+  WalletChangeNetworkError,
   WalletConnectionError,
+  WalletDisconnectionError,
   WalletGetNetworkError,
   WalletNetworkChangeError,
   WalletNotConnectedError,
+  WalletNotFoundError,
   WalletNotReadyError,
   WalletNotSelectedError,
+  WalletNotSupportedMethod,
   WalletSignAndSubmitMessageError,
+  WalletSignMessageAndVerifyError,
   WalletSignMessageError,
   WalletSignTransactionError,
-  WalletSignMessageAndVerifyError,
-  WalletDisconnectionError,
   WalletSubmitTransactionError,
-  WalletNotSupportedMethod,
-  WalletNotFoundError,
 } from "./error";
-import { ChainIdToAnsSupportedNetworkMap, WalletReadyState } from "./constants";
-import { WALLET_ADAPTER_CORE_VERSION } from "./version";
+import { GA4 } from "./ga";
+import {
+  aptosStandardSupportedWalletList,
+  ethereumStandardSupportedWalletList,
+  solanaStandardSupportedWalletList,
+  suiStandardSupportedWalletList,
+} from "./registry";
+import { getSDKWallets } from "./sdkWallets";
 import {
   fetchDevnetChainId,
   generalizedErrorMessage,
@@ -84,18 +90,12 @@ import {
   removeLocalStorage,
   setLocalStorage,
 } from "./utils";
-import {
-  aptosStandardSupportedWalletList,
-  ethereumStandardSupportedWalletList,
-  solanaStandardSupportedWalletList,
-  suiStandardSupportedWalletList,
-} from "./registry";
-import { getSDKWallets } from "./sdkWallets";
-import {
-  AvailableWallets,
+import type {
   AptosStandardSupportedWallet,
+  AvailableWallets,
   InputTransactionData,
 } from "./utils/types";
+import { WALLET_ADAPTER_CORE_VERSION } from "./version";
 
 // An adapter wallet types is a wallet that is compatible with the wallet standard and the wallet adapter properties
 export type AdapterWallet = AptosWallet & {
@@ -177,9 +177,6 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   // Local private variable to hold the wallet connected state
   private _connected: boolean = false;
 
-  // Local private variable to hold the connecting state
-  private _connecting: boolean = false;
-
   // Local private variable to hold the account that is currently connected
   private _account: AdapterAccountInfo | null = null;
 
@@ -226,21 +223,19 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   }
 
   private fetchExtensionAIP62AptosWallets(): void {
-    let { aptosWallets, on } = getAptosWallets();
+    const { aptosWallets, on } = getAptosWallets();
     this.setExtensionAIP62Wallets(aptosWallets);
 
     if (typeof window === "undefined") return;
-    // Adds an event listener for new wallets that get registered after the dapp has been loaded,
-    // receiving an unsubscribe function, which it can later use to remove the listener
-    const that = this;
-    const removeRegisterListener = on("register", function () {
-      let { aptosWallets } = getAptosWallets();
-      that.setExtensionAIP62Wallets(aptosWallets);
+
+    const _removeRegisterListener = on("register", () => {
+      const { aptosWallets } = getAptosWallets();
+      this.setExtensionAIP62Wallets(aptosWallets);
     });
 
-    const removeUnregisterListener = on("unregister", function () {
-      let { aptosWallets } = getAptosWallets();
-      that.setExtensionAIP62Wallets(aptosWallets);
+    const _removeUnregisterListener = on("unregister", () => {
+      const { aptosWallets } = getAptosWallets();
+      this.setExtensionAIP62Wallets(aptosWallets);
     });
   }
 
@@ -267,7 +262,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       if (isValid) {
         // check if we already have this wallet as a not detected wallet
         const index = this._standard_not_detected_wallets.findIndex(
-          (notDetctedWallet) => notDetctedWallet.name == wallet.name,
+          (notDetctedWallet) => notDetctedWallet.name === wallet.name,
         );
         // if we do, remove it from the not detected wallets array as it is now become detected
         if (index !== -1) {
@@ -580,7 +575,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
    *
    * @param walletName. The wallet name we want to connect with.
    */
-  async connect(walletName: string): Promise<void | string> {
+  async connect(walletName: string): Promise<undefined | string> {
     // First, handle mobile case
     // Check if we are in a redirectable view (i.e on mobile AND not in an in-app browser)
     if (isRedirectable()) {
@@ -596,8 +591,8 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           let parameter = "";
           if (uninstalledWallet.name.includes("Phantom")) {
             // Phantom required parameters https://docs.phantom.com/phantom-deeplinks/other-methods/browse#parameters
-            let url = encodeURIComponent(window.location.href);
-            let ref = encodeURIComponent(window.location.origin);
+            const url = encodeURIComponent(window.location.href);
+            const ref = encodeURIComponent(window.location.origin);
             parameter = `${url}?ref=${ref}`;
           } else if (uninstalledWallet.name.includes("MetaMask")) {
             // MetaMask expects the raw URL as a path parameter

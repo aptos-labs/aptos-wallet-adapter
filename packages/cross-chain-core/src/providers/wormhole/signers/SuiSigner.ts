@@ -1,14 +1,14 @@
-import { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
-import { Network } from "@wormhole-foundation/sdk";
-import {
-  SuiChains,
-  SuiUnsignedTransaction,
-} from "@wormhole-foundation/sdk-sui";
-import { SuiDerivedWallet } from "@aptos-labs/derived-wallet-sui";
-import {
+import type { SuiDerivedWallet } from "@aptos-labs/derived-wallet-sui";
+import type { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
+import type {
   SuiSignAndExecuteTransactionInput,
   SuiSignAndExecuteTransactionOutput,
 } from "@mysten/wallet-standard";
+import type { Network } from "@wormhole-foundation/sdk";
+import type {
+  SuiChains,
+  SuiUnsignedTransaction,
+} from "@wormhole-foundation/sdk-sui";
 
 export async function signAndSendTransaction(
   request: SuiUnsignedTransaction<Network, SuiChains>,

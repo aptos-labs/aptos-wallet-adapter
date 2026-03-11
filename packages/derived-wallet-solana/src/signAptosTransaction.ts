@@ -1,21 +1,21 @@
-import { createSignInMessage } from "@solana/wallet-standard-util";
 import {
-  mapUserResponse,
   DerivableAbstractPublicKey,
+  mapUserResponse,
 } from "@aptos-labs/derived-wallet-base";
 import {
-  AccountAuthenticator,
+  AbstractedAccount,
+  type AccountAuthenticator,
   AccountAuthenticatorAbstraction,
-  AnyRawTransaction,
+  type AnyRawTransaction,
   Ed25519Signature,
   generateSigningMessageForTransaction,
   hashValues,
   Serializer,
-  AbstractedAccount,
 } from "@aptos-labs/ts-sdk";
 import { WalletError } from "@solana/wallet-adapter-base";
-import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
-import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
+import { createSignInMessage } from "@solana/wallet-standard-util";
+import type { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
+import type { PublicKey as SolanaPublicKey } from "@solana/web3.js";
 import { createSiwsEnvelopeForAptosTransaction } from "./createSiwsEnvelope";
 import { wrapSolanaUserResponse } from "./shared";
 

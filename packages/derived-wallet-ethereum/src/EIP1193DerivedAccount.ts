@@ -1,14 +1,17 @@
 import {
   AbstractedAccount,
-  AccountAuthenticatorAbstraction,
-  AnyRawTransaction,
+  type AccountAuthenticatorAbstraction,
+  type AnyRawTransaction,
 } from "@aptos-labs/ts-sdk";
-import { hashMessage, Signature, Wallet } from "ethers";
+import { hashMessage, Signature, type Wallet } from "ethers";
 import { EIP1193DerivedPublicKey } from "./EIP1193DerivedPublicKey";
-import { defaultEthereumAuthenticationFunction, EthereumAddress } from "./shared";
 import {
-  createMessageForEthereumTransaction,
+  defaultEthereumAuthenticationFunction,
+  type EthereumAddress,
+} from "./shared";
+import {
   createAccountAuthenticatorForEthereumTransaction,
+  createMessageForEthereumTransaction,
 } from "./signAptosTransaction";
 
 export interface EIP1193DerivedAccountParams {

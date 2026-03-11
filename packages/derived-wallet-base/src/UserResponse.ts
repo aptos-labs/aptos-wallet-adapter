@@ -1,7 +1,7 @@
 import {
-  UserApproval,
-  UserRejection,
-  UserResponse,
+  type UserApproval,
+  type UserRejection,
+  type UserResponse,
   UserResponseStatus,
 } from "@aptos-labs/wallet-standard";
 

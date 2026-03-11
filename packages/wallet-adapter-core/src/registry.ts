@@ -1,5 +1,5 @@
 import { WalletReadyState } from "./constants";
-import { AptosStandardSupportedWallet } from "./utils/types";
+import type { AptosStandardSupportedWallet } from "./utils/types";
 
 /**
  * Registry of AIP-62 wallet standard supported wallets.

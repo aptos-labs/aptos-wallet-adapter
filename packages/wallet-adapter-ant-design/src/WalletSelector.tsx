@@ -6,16 +6,16 @@ import {
 } from "@ant-design/icons";
 import {
   AboutAptosConnect,
-  AboutAptosConnectEducationScreen,
-  AdapterNotDetectedWallet,
-  AdapterWallet,
+  type AboutAptosConnectEducationScreen,
+  type AdapterNotDetectedWallet,
+  type AdapterWallet,
   AptosPrivacyPolicy,
-  WalletItem,
-  WalletSortingOptions,
   groupAndSortWallets,
   isInstallRequired,
   truncateAddress,
   useWallet,
+  WalletItem,
+  type WalletSortingOptions,
 } from "@aptos-labs/wallet-adapter-react";
 import {
   Button,
@@ -23,13 +23,13 @@ import {
   Divider,
   Dropdown,
   Flex,
-  MenuProps,
+  type MenuProps,
   Modal,
-  ModalProps,
-  Typography,
+  type ModalProps,
   message,
+  Typography,
 } from "antd";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import "./styles.css";
 
 const { Text } = Typography;

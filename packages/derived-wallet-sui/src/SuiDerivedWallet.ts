@@ -4,30 +4,30 @@ import {
   isNullCallback,
 } from "@aptos-labs/derived-wallet-base";
 import {
-  AccountAuthenticator,
-  AnyRawTransaction,
+  type AccountAuthenticator,
+  type AnyRawTransaction,
   Network,
   NetworkToChainId,
   NetworkToNodeAPI,
 } from "@aptos-labs/ts-sdk";
 import {
-  AccountInfo,
+  type AccountInfo,
   APTOS_CHAINS,
-  AptosChangeNetworkOutput,
-  AptosConnectOutput,
-  AptosFeatures,
-  AptosSignMessageInput,
-  AptosSignMessageOutput,
-  AptosWallet,
-  NetworkInfo,
-  UserResponse,
+  type AptosChangeNetworkOutput,
+  type AptosConnectOutput,
+  type AptosFeatures,
+  type AptosSignMessageInput,
+  type AptosSignMessageOutput,
+  type AptosWallet,
+  type NetworkInfo,
+  type UserResponse,
   UserResponseStatus,
-  WalletIcon,
+  type WalletIcon,
 } from "@aptos-labs/wallet-standard";
 import type {
-  Wallet,
   StandardConnectMethod,
   StandardDisconnectMethod,
+  Wallet,
   WalletAccount,
 } from "@mysten/wallet-standard";
 import { SuiDerivedPublicKey } from "./SuiDerivedPublicKey";
@@ -160,7 +160,7 @@ export class SuiDerivedWallet implements AptosWallet {
     return accountInfoFromPublicKey(aptosPublicKey);
   }
 
-  onActiveAccountChange(callback: (newAccount: AccountInfo) => void) {
+  onActiveAccountChange(_callback: (newAccount: AccountInfo) => void) {
     throw new Error("Not implemented");
   }
 

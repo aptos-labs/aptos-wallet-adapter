@@ -1,8 +1,8 @@
-import { describe, it, expect } from "vitest";
 import { UniversalAddress } from "@wormhole-foundation/sdk";
+import { describe, expect, it } from "vitest";
 import {
-  serializeReceipt,
   deserializeReceipt,
+  serializeReceipt,
 } from "../../src/utils/receiptSerialization";
 
 describe("receiptSerialization", () => {
@@ -407,4 +407,3 @@ describe("receiptSerialization", () => {
     });
   });
 });
-

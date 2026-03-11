@@ -4,8 +4,8 @@ import {
   mapUserResponse,
 } from "@aptos-labs/derived-wallet-base";
 import {
-  AccountAuthenticator,
-  AnyRawTransaction,
+  type AccountAuthenticator,
+  type AnyRawTransaction,
   Network,
   NetworkToChainId,
   NetworkToNodeAPI,
@@ -13,21 +13,21 @@ import {
 import {
   AccountInfo,
   APTOS_CHAINS,
-  AptosChangeNetworkOutput,
-  AptosConnectOutput,
-  AptosFeatures,
-  AptosSignMessageInput,
-  AptosSignMessageOutput,
-  AptosWallet,
-  NetworkInfo,
-  UserResponse,
+  type AptosChangeNetworkOutput,
+  type AptosConnectOutput,
+  type AptosFeatures,
+  type AptosSignMessageInput,
+  type AptosSignMessageOutput,
+  type AptosWallet,
+  type NetworkInfo,
+  type UserResponse,
   UserResponseStatus,
-  WalletIcon,
+  type WalletIcon,
 } from "@aptos-labs/wallet-standard";
 import { BrowserProvider } from "ethers";
 import type { EIP1193Provider, EIP6963ProviderDetail } from "mipd";
 import { EIP1193DerivedPublicKey } from "./EIP1193DerivedPublicKey";
-import { EthereumAddress, wrapEthersUserResponse } from "./shared";
+import { type EthereumAddress, wrapEthersUserResponse } from "./shared";
 import { signAptosMessageWithEthereum } from "./signAptosMessage";
 import { signAptosTransactionWithEthereum } from "./signAptosTransaction";
 

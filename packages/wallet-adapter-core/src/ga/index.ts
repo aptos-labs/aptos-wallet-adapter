@@ -6,9 +6,9 @@ export class GA4 {
     this.injectGA(this.aptosGAID);
   }
 
-  gtag(a: string, b: string | object, c?: object) {
-    let dataLayer = (window as any).dataLayer || [];
-    dataLayer.push(arguments);
+  gtag(...args: [string, string | object, object?]) {
+    const dataLayer = (window as any).dataLayer || [];
+    dataLayer.push(...args);
   }
 
   private injectGA(gaID?: string) {
@@ -24,10 +24,9 @@ export class GA4 {
       `https://www.googletagmanager.com/gtag/js?id=${gaID}`,
     );
 
-    const that = this;
-    myScript.onload = function () {
-      that.gtag("js", new Date());
-      that.gtag("config", `${gaID}`, {
+    myScript.onload = () => {
+      this.gtag("js", new Date());
+      this.gtag("config", `${gaID}`, {
         send_page_view: false,
       });
     };

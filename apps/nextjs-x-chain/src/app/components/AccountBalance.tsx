@@ -1,3 +1,11 @@
+import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
+import type {
+  AccountInfo,
+  AdapterWallet,
+  NetworkInfo,
+} from "@aptos-labs/wallet-adapter-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,14 +15,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getAptBalanceQueryOptions } from "@/utils/getAptBalanceQueryOptions";
-import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
-import {
-  AccountInfo,
-  AdapterWallet,
-  NetworkInfo,
-} from "@aptos-labs/wallet-adapter-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
 
 interface AccountBalanceProps {
   account: AccountInfo;

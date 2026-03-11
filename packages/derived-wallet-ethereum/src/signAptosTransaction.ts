@@ -4,18 +4,18 @@ import {
 } from "@aptos-labs/derived-wallet-base";
 import {
   AbstractedAccount,
-  AccountAuthenticator,
+  type AccountAuthenticator,
   AccountAuthenticatorAbstraction,
-  AnyRawTransaction,
+  type AnyRawTransaction,
   generateSigningMessageForTransaction,
   hashValues,
   Serializer,
 } from "@aptos-labs/ts-sdk";
-import { UserResponse } from "@aptos-labs/wallet-standard";
-import { BrowserProvider, Eip1193Provider } from "ethers";
+import type { UserResponse } from "@aptos-labs/wallet-standard";
+import { BrowserProvider, type Eip1193Provider } from "ethers";
 import { createSiweEnvelopeForAptosTransaction } from "./createSiweEnvelope";
 import { EIP1193SiweSignature } from "./EIP1193DerivedSignature";
-import { EthereumAddress, wrapEthersUserResponse } from "./shared";
+import { type EthereumAddress, wrapEthersUserResponse } from "./shared";
 
 /**
  * A first byte of the signature that indicates the "message type", this is defined in the

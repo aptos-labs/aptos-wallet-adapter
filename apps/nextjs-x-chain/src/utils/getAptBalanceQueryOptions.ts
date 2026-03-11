@@ -1,9 +1,9 @@
 import {
-  AccountAddressInput,
+  type AccountAddressInput,
   Aptos,
   AptosConfig,
-  InputViewFunctionJsonData,
-  Network,
+  type InputViewFunctionJsonData,
+  type Network,
 } from "@aptos-labs/ts-sdk";
 import { queryOptions } from "@tanstack/react-query";
 

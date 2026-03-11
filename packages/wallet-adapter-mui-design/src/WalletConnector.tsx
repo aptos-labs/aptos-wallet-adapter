@@ -1,7 +1,7 @@
 import { useState } from "react";
+import type { WalletConnectorProps } from "./types";
 import WalletButton from "./WalletButton";
 import WalletsModal from "./WalletModel";
-import { WalletConnectorProps } from "./types";
 
 export function WalletConnector({
   networkSupport,

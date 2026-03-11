@@ -1,36 +1,34 @@
-import {
-  UnsignedTransaction,
-  Network,
+import type { Account } from "@aptos-labs/ts-sdk";
+import type { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
+import type {
   Chain,
-  TxHash,
+  Network,
   SignAndSendSigner,
+  TxHash,
+  UnsignedTransaction,
 } from "@wormhole-foundation/sdk";
-import { SolanaUnsignedTransaction } from "@wormhole-foundation/sdk-solana";
-import { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
-import {
-  EvmUnsignedTransaction,
+import type { AptosChains } from "@wormhole-foundation/sdk-aptos/dist/cjs/types";
+import type { AptosUnsignedTransaction } from "@wormhole-foundation/sdk-aptos/dist/cjs/unsignedTransaction";
+import type {
   EvmChains,
+  EvmUnsignedTransaction,
 } from "@wormhole-foundation/sdk-evm";
-import {
+import type { SolanaUnsignedTransaction } from "@wormhole-foundation/sdk-solana";
+import type {
   SuiChains,
   SuiUnsignedTransaction,
 } from "@wormhole-foundation/sdk-sui";
+import type { CrossChainCore } from "../../../CrossChainCore";
 
-import * as solanaSigner from "./SolanaSigner";
-import * as ethereumSigner from "./EthereumSigner";
+import type { ChainConfig } from "../../../config";
+import type { GasStationApiKey, OnTransactionSigned } from "../types";
 import * as aptosSigner from "./AptosSigner";
+import * as ethereumSigner from "./EthereumSigner";
+import * as solanaSigner from "./SolanaSigner";
 import * as suiSigner from "./SuiSigner";
-
-import { ChainConfig } from "../../../config";
-import { CrossChainCore } from "../../../CrossChainCore";
-import { AptosChains } from "@wormhole-foundation/sdk-aptos/dist/cjs/types";
-import { AptosUnsignedTransaction } from "@wormhole-foundation/sdk-aptos/dist/cjs/unsignedTransaction";
-import { GasStationApiKey, OnTransactionSigned } from "../types";
-import { Account } from "@aptos-labs/ts-sdk";
-export class Signer<
-  N extends Network,
-  C extends Chain,
-> implements SignAndSendSigner<N, C> {
+export class Signer<N extends Network, C extends Chain>
+  implements SignAndSendSigner<N, C>
+{
   _chain: ChainConfig;
   _address: string;
   _options: any;

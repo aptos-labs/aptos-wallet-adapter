@@ -1,11 +1,11 @@
 import {
   createStructuredMessageStatement,
   createTransactionStatement,
-  StructuredMessage,
+  type StructuredMessage,
 } from "@aptos-labs/derived-wallet-base";
-import { AnyRawTransaction, Hex, HexInput } from "@aptos-labs/ts-sdk";
+import { type AnyRawTransaction, Hex, type HexInput } from "@aptos-labs/ts-sdk";
 import { createSiweMessage } from "viem/siwe";
-import { EthereumAddress } from "./shared";
+import type { EthereumAddress } from "./shared";
 
 export interface CreateSiweEnvelopeInput {
   ethereumAddress: EthereumAddress;

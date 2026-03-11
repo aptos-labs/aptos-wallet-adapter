@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, type ReactNode, useContext, useState } from "react";
 
 interface TransactionSubmitterContextType {
   useCustomSubmitter: boolean;

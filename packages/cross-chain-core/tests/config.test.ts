@@ -1,10 +1,10 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  testnetChains,
-  testnetTokens,
+  Context,
   mainnetChains,
   mainnetTokens,
-  Context,
+  testnetChains,
+  testnetTokens,
 } from "../src/config";
 
 describe("Config", () => {

@@ -1,41 +1,39 @@
+import {
+  type Chain,
+  type ChainConfig,
+  type CrossChainCore,
+  EthereumChainIdToMainnetChain,
+  EthereumChainIdToTestnetChain,
+  type GasStationApiKey,
+  type WormholeQuoteResponse,
+  type WormholeTransferResponse,
+} from "@aptos-labs/cross-chain-core";
+import { type Account, Network } from "@aptos-labs/ts-sdk";
+import {
+  type AdapterWallet,
+  useWallet,
+} from "@aptos-labs/wallet-adapter-react";
+import { Loader2, MoveDown } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { chainToIcon } from "@/app/icons";
+import USDC from "@/app/icons/USDC";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardTitle,
   CardContent,
-  CardHeader,
   CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  ChainConfig,
-  EthereumChainIdToTestnetChain,
-  CrossChainCore,
-  EthereumChainIdToMainnetChain,
-  GasStationApiKey,
-} from "@aptos-labs/cross-chain-core";
-import {
-  Account,
-  Network,
-} from "@aptos-labs/ts-sdk";
-import {
-  Chain,
-  WormholeTransferResponse,
-  WormholeQuoteResponse,
-} from "@aptos-labs/cross-chain-core";
-import { Loader2, MoveDown } from "lucide-react";
-import USDC from "@/app/icons/USDC";
-import { chainToIcon } from "@/app/icons";
-import { AdapterWallet, useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useToast } from "@/components/ui/use-toast";
+import { useUSDCBalance } from "@/contexts/USDCBalanceContext";
 import {
   isEIP1193DerivedWallet,
+  isSolanaDerivedWallet,
   isSuiDerivedWallet,
-  OriginWalletDetails,
+  type OriginWalletDetails,
 } from "@/utils/derivedWallet";
-import { isSolanaDerivedWallet } from "@/utils/derivedWallet";
-import { useUSDCBalance } from "@/contexts/USDCBalanceContext";
-import { useToast } from "@/components/ui/use-toast";
 
 export function CCTPTransfer({
   wallet,
@@ -111,12 +109,12 @@ export function CCTPTransfer({
     } else {
       setSourceChain("Aptos");
     }
-  }, [wallet]);
+  }, [wallet, network?.name]);
 
   useEffect(() => {
     if (!sourceChain || !originWalletDetails) return;
     fetchOriginBalance(originWalletDetails.address.toString(), sourceChain);
-  }, [originWalletDetails, network, sourceChain, fetchOriginBalance]);
+  }, [originWalletDetails, sourceChain, fetchOriginBalance]);
 
   const humanReadableETA = (milliseconds: number): string => {
     if (milliseconds >= 60000) {
@@ -163,7 +161,7 @@ export function CCTPTransfer({
 
       setDebounceTimeout(newTimeout);
     },
-    [sourceChain, debounceTimeout, originBalance],
+    [sourceChain, debounceTimeout, invalidateAmount, provider?.getQuote],
   );
 
   const invalidateAmount = (amount: string) => {

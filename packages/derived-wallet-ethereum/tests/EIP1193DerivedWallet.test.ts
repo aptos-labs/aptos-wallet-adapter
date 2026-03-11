@@ -1,21 +1,21 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import {
-  AccountInfo,
-  APTOS_CHAINS,
-  UserResponseStatus,
-} from "@aptos-labs/wallet-standard";
 import {
   Network,
   NetworkToChainId,
   NetworkToNodeAPI,
 } from "@aptos-labs/ts-sdk";
-import { EIP1193DerivedWallet } from "../src/EIP1193DerivedWallet";
+import {
+  AccountInfo,
+  APTOS_CHAINS,
+  UserResponseStatus,
+} from "@aptos-labs/wallet-standard";
+import { beforeEach, describe, expect, it } from "vitest";
 import { EIP1193DerivedPublicKey } from "../src/EIP1193DerivedPublicKey";
+import { EIP1193DerivedWallet } from "../src/EIP1193DerivedWallet";
 import { defaultEthereumAuthenticationFunction } from "../src/shared";
 import {
   createMockEIP6963ProviderDetail,
-  TEST_PRIVATE_KEY,
   TEST_ETHEREUM_ADDRESS,
+  TEST_PRIVATE_KEY,
 } from "./mocks/eip1193Provider";
 
 describe("EIP1193DerivedWallet", () => {
@@ -70,7 +70,7 @@ describe("EIP1193DerivedWallet", () => {
 
     it("should use default authentication function", () => {
       expect(wallet.authenticationFunction).toBe(
-        defaultEthereumAuthenticationFunction
+        defaultEthereumAuthenticationFunction,
       );
     });
 
@@ -92,7 +92,7 @@ describe("EIP1193DerivedWallet", () => {
         icon: "  \n  data:image/svg+xml,<svg></svg>  \n  ",
       });
       const walletWithTrimmedIcon = new EIP1193DerivedWallet(
-        detailWithWhitespaceIcon
+        detailWithWhitespaceIcon,
       );
       expect(walletWithTrimmedIcon.icon).toBe("data:image/svg+xml,<svg></svg>");
     });
@@ -207,7 +207,7 @@ describe("EIP1193DerivedWallet", () => {
         wallet.changeNetwork({
           name: Network.CUSTOM,
           url: "https://custom.node.com",
-        })
+        }),
       ).rejects.toThrow("Custom network not currently supported");
     });
 
@@ -317,4 +317,3 @@ describe("EIP1193DerivedWallet", () => {
   // Note: signTransaction tests require network access to build transactions.
   // These are tested via integration tests.
 });
-

@@ -4,16 +4,15 @@ import {
   Hex,
   Network,
   NetworkToNodeAPI,
-  PluginSettings,
+  type PluginSettings,
 } from "@aptos-labs/ts-sdk";
-import {
+import type {
   NetworkInfo,
   NetworkInfo as StandardNetworkInfo,
 } from "@aptos-labs/wallet-standard";
-
-import { DappConfig } from "../WalletCore";
 import { WalletSignAndSubmitMessageError } from "../error";
-import { InputTransactionData } from "./types";
+import type { DappConfig } from "../WalletCore";
+import type { InputTransactionData } from "./types";
 
 export function isMobile(): boolean {
   return /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/i.test(

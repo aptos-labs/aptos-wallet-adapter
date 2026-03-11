@@ -1,14 +1,14 @@
 "use client";
 
-import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
 import { setupAutomaticEthereumWalletDerivation } from "@aptos-labs/derived-wallet-ethereum";
 import { setupAutomaticSolanaWalletDerivation } from "@aptos-labs/derived-wallet-solana";
 import { setupAutomaticSuiWalletDerivation } from "@aptos-labs/derived-wallet-sui";
-import { PropsWithChildren } from "react";
+import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
+import type { PropsWithChildren } from "react";
+import { DAPP_NETWORK } from "@/config";
 import { useClaimSecretKey } from "@/hooks/useClaimSecretKey";
 import { useAutoConnect } from "./AutoConnectProvider";
 import { useToast } from "./ui/use-toast";
-import { DAPP_NETWORK } from "@/config";
 
 setupAutomaticEthereumWalletDerivation({ defaultNetwork: DAPP_NETWORK });
 setupAutomaticSolanaWalletDerivation({ defaultNetwork: DAPP_NETWORK });

@@ -1,11 +1,11 @@
-import {
-  EvmUnsignedTransaction,
+import type { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
+import type { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
+import type { Network } from "@wormhole-foundation/sdk";
+import type {
   EvmChains,
+  EvmUnsignedTransaction,
 } from "@wormhole-foundation/sdk-evm";
-import { Network } from "@wormhole-foundation/sdk";
 import { ethers, getBigInt } from "ethers";
-import { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
-import { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
 
 export async function signAndSendTransaction(
   request: EvmUnsignedTransaction<Network, EvmChains>,
@@ -23,7 +23,7 @@ export async function signAndSendTransaction(
   });
   const actualChainId = parseInt(chainId, 16);
 
-  if (!actualChainId) throw new Error("No signer found for chain" + chainName);
+  if (!actualChainId) throw new Error(`No signer found for chain${chainName}`);
   const expectedChainId = request.transaction.chainId
     ? getBigInt(request.transaction.chainId)
     : undefined;

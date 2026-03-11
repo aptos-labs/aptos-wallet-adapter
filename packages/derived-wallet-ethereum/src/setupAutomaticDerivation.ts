@@ -1,9 +1,9 @@
 import { getWallets } from "@wallet-standard/app";
 import { createStore } from "mipd";
-import { EIP6963ProviderDetail } from "mipd/src/types";
+import type { EIP6963ProviderDetail } from "mipd/src/types";
 import {
   EIP1193DerivedWallet,
-  EIP1193DerivedWalletOptions,
+  type EIP1193DerivedWalletOptions,
 } from "./EIP1193DerivedWallet";
 
 export function setupAutomaticEthereumWalletDerivation(
@@ -13,7 +13,7 @@ export function setupAutomaticEthereumWalletDerivation(
   const eip6963Store = createStore();
 
   type UnsubscribeCallback = () => void;
-  let registrations: { [name: string]: UnsubscribeCallback } = {};
+  const registrations: { [name: string]: UnsubscribeCallback } = {};
 
   const deriveAndRegisterWallet = (detail: EIP6963ProviderDetail) => {
     const derivedWallet = new EIP1193DerivedWallet(detail, options);

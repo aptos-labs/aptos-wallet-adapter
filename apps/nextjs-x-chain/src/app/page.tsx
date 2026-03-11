@@ -1,41 +1,40 @@
 "use client";
 
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { SingleSigner } from "@/components/transactionFlows/SingleSigner";
-// Imports for registering a browser extension wallet plugin on page load
-import { MyWallet } from "@/utils/standardWallet";
 import { Network } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { registerWallet } from "@aptos-labs/wallet-standard";
 import { init as initTelegram } from "@telegram-apps/sdk";
+import { AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { SingleSigner } from "@/components/transactionFlows/SingleSigner";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  claimSponsorAccount,
+  crossChainCore,
+  crossChainProvider,
+  DAPP_NETWORK,
+  mainSigner,
+  sponsorAccount,
+} from "@/config";
+import {
+  getOriginWalletDetails,
+  type OriginWalletDetails,
+} from "@/utils/derivedWallet";
+// Imports for registering a browser extension wallet plugin on page load
+import { MyWallet } from "@/utils/standardWallet";
 import {
   AccountBalance,
   CCTPTransfer,
   WalletConnection,
   WalletSelection,
 } from "./components";
-import {
-  getOriginWalletDetails,
-  OriginWalletDetails,
-} from "@/utils/derivedWallet";
 import { CCTPWithdraw } from "./components/CCTPWithdraw";
-import {
-  DAPP_NETWORK,
-  claimSponsorAccount,
-  crossChainCore,
-  crossChainProvider,
-  mainSigner,
-  sponsorAccount,
-} from "@/config";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
 
 // Example of how to register a browser extension wallet plugin.
 // Browser extension wallets should call registerWallet once on page load.
 // When you click "Connect Wallet", you should see "Example Wallet"
-(function () {
+(() => {
   if (typeof window === "undefined") return;
   const myWallet = new MyWallet();
   registerWallet(myWallet);
@@ -66,7 +65,7 @@ export default function Home() {
       setOriginWalletDetails(details);
     };
     void fetchOriginWalletDetails();
-  }, [wallet, account]);
+  }, [wallet]);
 
   return (
     <main className="flex flex-col w-full md:w-1/2 p-6 pb-12 md:px-8 gap-6">
@@ -115,29 +114,27 @@ export default function Home() {
           )}
 
           {network?.name === Network.TESTNET && (
-              <>
-                <>
-                  <CCTPTransfer
-                    wallet={wallet}
-                    originWalletDetails={originWalletDetails}
-                    mainSigner={mainSigner}
-                    sponsorAccount={claimSponsorAccount}
-                    dappNetwork={DAPP_NETWORK}
-                    crossChainCore={crossChainCore}
-                    provider={crossChainProvider}
-                  />
-                  <CCTPWithdraw
-                    wallet={wallet}
-                    originWalletDetails={originWalletDetails}
-                    sponsorAccount={sponsorAccount}
-                    dappNetwork={DAPP_NETWORK}
-                    crossChainCore={crossChainCore}
-                    provider={crossChainProvider}
-                  />
-                </>
-                <SingleSigner dappNetwork={DAPP_NETWORK} wallet={wallet} />
-              </>
-            )}
+            <>
+              <CCTPTransfer
+                wallet={wallet}
+                originWalletDetails={originWalletDetails}
+                mainSigner={mainSigner}
+                sponsorAccount={claimSponsorAccount}
+                dappNetwork={DAPP_NETWORK}
+                crossChainCore={crossChainCore}
+                provider={crossChainProvider}
+              />
+              <CCTPWithdraw
+                wallet={wallet}
+                originWalletDetails={originWalletDetails}
+                sponsorAccount={sponsorAccount}
+                dappNetwork={DAPP_NETWORK}
+                crossChainCore={crossChainCore}
+                provider={crossChainProvider}
+              />
+              <SingleSigner dappNetwork={DAPP_NETWORK} wallet={wallet} />
+            </>
+          )}
           {(network?.name === Network.DEVNET ||
             network?.name === Network.LOCAL) && (
             <>

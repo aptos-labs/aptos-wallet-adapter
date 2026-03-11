@@ -1,12 +1,12 @@
 "use client";
 
-import { Chain } from "@aptos-labs/cross-chain-core";
+import type { Chain } from "@aptos-labs/cross-chain-core";
 import {
   createContext,
+  type ReactNode,
+  useCallback,
   useContext,
   useState,
-  useCallback,
-  ReactNode,
 } from "react";
 import { crossChainCore } from "@/config";
 

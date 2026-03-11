@@ -3,7 +3,7 @@
  * Configures happy-dom environment and global mocks
  */
 
-import { vi, beforeEach } from "vitest";
+import { beforeEach, vi } from "vitest";
 import "@testing-library/jest-dom/vitest";
 
 // Mock localStorage
@@ -37,4 +37,3 @@ beforeEach(() => {
   localStorageMock.clear();
   vi.clearAllMocks();
 });
-

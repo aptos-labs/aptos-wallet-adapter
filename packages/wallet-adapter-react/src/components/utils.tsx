@@ -1,6 +1,6 @@
 import { Slot } from "@radix-ui/react-slot";
-import { cloneElement, forwardRef, isValidElement } from "react";
 import type { ClassAttributes, JSX as ReactJSX, ReactNode } from "react";
+import { cloneElement, forwardRef, isValidElement } from "react";
 
 export interface HeadlessComponentProps {
   /** A class name for styling the element. */

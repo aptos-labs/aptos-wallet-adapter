@@ -1,17 +1,17 @@
 import {
   encodeStructuredMessage,
   mapUserResponse,
-  StructuredMessage,
-  StructuredMessageInput,
+  type StructuredMessage,
+  type StructuredMessageInput,
 } from "@aptos-labs/derived-wallet-base";
-import {
+import type {
   AptosSignMessageOutput,
   UserResponse,
 } from "@aptos-labs/wallet-standard";
-import { BrowserProvider, Eip1193Provider } from "ethers";
+import { BrowserProvider, type Eip1193Provider } from "ethers";
 import { EIP1193DerivedPublicKey } from "./EIP1193DerivedPublicKey";
 import { EIP1193PersonalSignature } from "./EIP1193DerivedSignature";
-import { EthereumAddress, wrapEthersUserResponse } from "./shared";
+import { type EthereumAddress, wrapEthersUserResponse } from "./shared";
 
 export interface SignAptosMessageWithEthereumInput {
   eip1193Provider: Eip1193Provider | BrowserProvider;

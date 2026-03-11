@@ -1,22 +1,22 @@
-import { useContext, createContext } from "react";
-import {
+import type {
   AccountAuthenticator,
   AccountInfo,
+  AdapterNotDetectedWallet,
   AdapterWallet,
   AnyRawTransaction,
-  AptosSignAndSubmitTransactionOutput,
-  InputTransactionData,
-  NetworkInfo,
-  AptosSignMessageInput,
-  AptosSignMessageOutput,
-  AdapterNotDetectedWallet,
-  Network,
   AptosChangeNetworkOutput,
-  PendingTransactionResponse,
-  InputSubmitTransactionData,
+  AptosSignAndSubmitTransactionOutput,
   AptosSignInInput,
   AptosSignInOutput,
+  AptosSignMessageInput,
+  AptosSignMessageOutput,
+  InputSubmitTransactionData,
+  InputTransactionData,
+  Network,
+  NetworkInfo,
+  PendingTransactionResponse,
 } from "@aptos-labs/wallet-adapter-core";
+import { createContext, useContext } from "react";
 
 export interface WalletContextState {
   connected: boolean;
@@ -27,7 +27,7 @@ export interface WalletContextState {
   signIn(args: {
     walletName: string;
     input: AptosSignInInput;
-  }): Promise<AptosSignInOutput | void>;
+  }): Promise<AptosSignInOutput | undefined>;
   signAndSubmitTransaction(
     transaction: InputTransactionData,
   ): Promise<AptosSignAndSubmitTransactionOutput>;

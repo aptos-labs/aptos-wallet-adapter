@@ -1,10 +1,10 @@
 import {
-  AnyRawTransaction,
+  type AnyRawTransaction,
   NetworkToChainId,
-  TransactionPayload,
+  type TransactionPayload,
   TransactionPayloadEntryFunction,
 } from "@aptos-labs/ts-sdk";
-import { StructuredMessage } from "./StructuredMessage";
+import type { StructuredMessage } from "./StructuredMessage";
 
 /**
  * Attempt to convert the specified chainId into a human-readable identifier.

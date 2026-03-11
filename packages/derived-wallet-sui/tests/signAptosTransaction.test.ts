@@ -1,7 +1,10 @@
-import { describe, it, expect, beforeEach } from "vitest";
 import type { Wallet } from "@mysten/wallet-standard";
-import { signAptosTransactionWithSui, SIGNATURE_TYPE } from "../src/signAptosTransaction";
+import { beforeEach, describe, expect, it } from "vitest";
 import { defaultAuthenticationFunction } from "../src/shared";
+import {
+  SIGNATURE_TYPE,
+  signAptosTransactionWithSui,
+} from "../src/signAptosTransaction";
 import {
   createConnectedMockSuiWallet,
   createMockSuiWallet,
@@ -10,11 +13,11 @@ import {
 } from "./mocks/suiWallet";
 
 describe("signAptosTransaction", () => {
-  let mockWallet: Wallet;
+  let _mockWallet: Wallet;
   const testDomain = "test.example.com";
 
   beforeEach(() => {
-    mockWallet = createConnectedMockSuiWallet({
+    _mockWallet = createConnectedMockSuiWallet({
       keypair: TEST_SUI_KEYPAIR,
     });
   });
@@ -44,7 +47,7 @@ describe("signAptosTransaction", () => {
           authenticationFunction: defaultAuthenticationFunction,
           rawTransaction: mockRawTransaction,
           domain: testDomain,
-        })
+        }),
       ).rejects.toThrow("sui:signPersonalMessage not available");
     });
 
@@ -63,7 +66,7 @@ describe("signAptosTransaction", () => {
           authenticationFunction: defaultAuthenticationFunction,
           rawTransaction: mockRawTransaction,
           domain: testDomain,
-        })
+        }),
       ).rejects.toThrow("Account not connected");
     });
 
@@ -86,7 +89,9 @@ describe("signAptosTransaction", () => {
         });
       } catch (e) {
         // Expected to throw, we're just testing the input is accepted
-        expect((e as Error).message).toBe("sui:signPersonalMessage not available");
+        expect((e as Error).message).toBe(
+          "sui:signPersonalMessage not available",
+        );
       }
     });
 
@@ -108,9 +113,10 @@ describe("signAptosTransaction", () => {
         });
       } catch (e) {
         // Expected to throw, we're just testing the input is accepted
-        expect((e as Error).message).toBe("sui:signPersonalMessage not available");
+        expect((e as Error).message).toBe(
+          "sui:signPersonalMessage not available",
+        );
       }
     });
   });
 });
-

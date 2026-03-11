@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
 import { UserResponseStatus } from "@aptos-labs/wallet-standard";
 import { WalletError } from "@solana/wallet-adapter-base";
+import { describe, expect, it } from "vitest";
 import {
   defaultSolanaAuthenticationFunction,
   wrapSolanaUserResponse,
@@ -10,13 +10,13 @@ describe("shared", () => {
   describe("defaultSolanaAuthenticationFunction", () => {
     it("should be the correct authentication function", () => {
       expect(defaultSolanaAuthenticationFunction).toBe(
-        "0x1::solana_derivable_account::authenticate"
+        "0x1::solana_derivable_account::authenticate",
       );
     });
 
     it("should be a valid Move function identifier format", () => {
       expect(defaultSolanaAuthenticationFunction).toMatch(
-        /^0x[a-f0-9]+::\w+::\w+$/i
+        /^0x[a-f0-9]+::\w+::\w+$/i,
       );
     });
   });
@@ -60,7 +60,7 @@ describe("shared", () => {
       const promise = Promise.reject(error);
 
       await expect(wrapSolanaUserResponse(promise)).rejects.toThrow(
-        "Connection failed"
+        "Connection failed",
       );
     });
 
@@ -69,7 +69,7 @@ describe("shared", () => {
       const promise = Promise.reject(error);
 
       await expect(wrapSolanaUserResponse(promise)).rejects.toThrow(
-        "Network error"
+        "Network error",
       );
     });
 
@@ -100,4 +100,3 @@ describe("shared", () => {
     });
   });
 });
-

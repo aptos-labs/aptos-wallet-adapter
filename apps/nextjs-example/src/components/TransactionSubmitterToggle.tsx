@@ -1,9 +1,9 @@
 "use client";
 
+import { Settings } from "lucide-react";
+import { useTransactionSubmitter } from "@/components/TransactionSubmitterProvider";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { useTransactionSubmitter } from "@/components/TransactionSubmitterProvider";
-import { Settings } from "lucide-react";
 
 export function TransactionSubmitterToggle() {
   const { useCustomSubmitter, setUseCustomSubmitter } =

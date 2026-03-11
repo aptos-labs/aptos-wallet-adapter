@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 // Mock the heavy Wormhole SDK dependency so we can import the real utility functions
 vi.mock("@wormhole-foundation/sdk-solana", () => ({
@@ -7,11 +7,11 @@ vi.mock("@wormhole-foundation/sdk-solana", () => ({
 }));
 
 import {
-  formatTransactionError,
   determineRpcProvider,
-  sleep,
+  formatTransactionError,
   isEmptyObject,
-  PriorityFeeConfig,
+  type PriorityFeeConfig,
+  sleep,
 } from "../../src/providers/wormhole/signers/solanaUtils";
 
 describe("solanaUtils", () => {
@@ -32,7 +32,9 @@ describe("solanaUtils", () => {
     it("should handle BigInt in error objects", () => {
       const error = { amount: BigInt("1000000000000000000") };
       const result = formatTransactionError(error);
-      expect(result).toBe('Transaction failed: {"amount":"1000000000000000000"}');
+      expect(result).toBe(
+        'Transaction failed: {"amount":"1000000000000000000"}',
+      );
     });
 
     it("should handle null errors", () => {

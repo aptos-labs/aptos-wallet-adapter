@@ -1,7 +1,7 @@
-import { describe, it, expect } from "vitest";
-import { Signer } from "../../src/providers/wormhole/signers/Signer";
-import { testnetChains, Context } from "../../src/config";
 import type { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
+import { describe, expect, it } from "vitest";
+import { Context, testnetChains } from "../../src/config";
+import { Signer } from "../../src/providers/wormhole/signers/Signer";
 
 describe("Signer", () => {
   const mockChainConfig = testnetChains.Solana!;

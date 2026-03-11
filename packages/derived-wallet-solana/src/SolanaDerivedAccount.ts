@@ -9,8 +9,8 @@ import nacl from "tweetnacl";
 import { SolanaDerivedPublicKey } from "./SolanaDerivedPublicKey";
 import { defaultSolanaAuthenticationFunction } from "./shared";
 import {
-  createMessageForSolanaTransaction,
   createAccountAuthenticatorForSolanaTransaction,
+  createMessageForSolanaTransaction,
 } from "./signAptosTransaction";
 
 export interface SolanaDerivedAccountParams {
@@ -114,4 +114,3 @@ export class SolanaDerivedAccount extends AbstractedAccount {
     );
   }
 }
-

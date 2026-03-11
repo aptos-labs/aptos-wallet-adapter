@@ -1,12 +1,12 @@
-import { AvailableWallets, WalletInfo } from "./types";
-import { AdapterNotDetectedWallet, AdapterWallet } from "../WalletCore";
 import {
   APTOS_CONNECT_BASE_URL,
   PETRA_WEB_BASE_URL,
   PETRA_WEB_GENERIC_WALLET_NAME,
   WalletReadyState,
 } from "../constants";
+import type { AdapterNotDetectedWallet, AdapterWallet } from "../WalletCore";
 import { isRedirectable } from "./helpers";
+import type { AvailableWallets, WalletInfo } from "./types";
 
 /**
  * A function that will partition the provided wallets into two list — `defaultWallets` and `moreWallets`.

@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
 import { Deserializer, Serializer } from "@aptos-labs/ts-sdk";
-import { toBase64, fromBase64 } from "@mysten/bcs";
+import { toBase64 } from "@mysten/bcs";
+import { describe, expect, it } from "vitest";
 import { SuiDerivedEd25519Signature } from "../src/SuiDerivedSignature";
 
 describe("SuiDerivedEd25519Signature", () => {
@@ -143,4 +143,3 @@ describe("SuiDerivedEd25519Signature", () => {
     });
   });
 });
-

@@ -4,30 +4,29 @@
  * and resending the transaction if it hasn't been confirmed after the specified interval.
  */
 
-import {
-  ConfirmOptions,
-  Transaction,
-  VersionedTransaction,
-} from "@solana/web3.js";
-
-import { Connection } from "@solana/web3.js";
-import { Network } from "@wormhole-foundation/sdk";
-import { SolanaUnsignedTransaction } from "@wormhole-foundation/sdk-solana";
-import { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
-import { CrossChainCore } from "../../../CrossChainCore";
 import { SolanaDerivedWallet } from "@aptos-labs/derived-wallet-solana";
+import type { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
+import {
+  type ConfirmOptions,
+  Connection,
+  Transaction,
+  type VersionedTransaction,
+} from "@solana/web3.js";
+import type { Network } from "@wormhole-foundation/sdk";
+import type { SolanaUnsignedTransaction } from "@wormhole-foundation/sdk-solana";
+import type { CrossChainCore } from "../../../CrossChainCore";
 import {
   addPriorityFeeInstructions,
+  type PriorityFeeConfig,
   sendAndConfirmTransaction,
-  PriorityFeeConfig,
 } from "./solanaUtils";
 
 // Re-export types for backwards compatibility
-export type { SolanaRpcProvider, PriorityFeeConfig } from "./solanaUtils";
+export type { PriorityFeeConfig, SolanaRpcProvider } from "./solanaUtils";
 export {
-  sleep,
-  isEmptyObject,
   determineRpcProvider,
+  isEmptyObject,
+  sleep,
 } from "./solanaUtils";
 
 // See https://docs.triton.one/chains/solana/sending-txs for more information
@@ -48,7 +47,7 @@ export async function signAndSendTransaction(
   // Solana rpc should come from dapp config
   const connection = new Connection(
     crossChainCore?._dappConfig?.solanaConfig?.rpc ??
-      crossChainCore?.CHAINS["Solana"]?.defaultRpc ??
+      crossChainCore?.CHAINS.Solana?.defaultRpc ??
       "https://api.devnet.solana.com", // Last resort fallback
   );
   const { blockhash, lastValidBlockHeight } =

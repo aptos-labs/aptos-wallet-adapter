@@ -1,12 +1,12 @@
 import {
   isWalletAdapterCompatibleStandardWallet,
-  WalletAdapterCompatibleStandardWallet,
+  type WalletAdapterCompatibleStandardWallet,
 } from "@solana/wallet-adapter-base";
 import { StandardWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 import { getWallets } from "@wallet-standard/app";
 import {
   SolanaDerivedWallet,
-  SolanaDomainWalletOptions,
+  type SolanaDomainWalletOptions,
 } from "./SolanaDerivedWallet";
 
 export function setupAutomaticSolanaWalletDerivation(
@@ -15,9 +15,9 @@ export function setupAutomaticSolanaWalletDerivation(
   const api = getWallets();
 
   type UnsubscribeCallback = () => void;
-  let registrations: { [name: string]: UnsubscribeCallback } = {};
+  const registrations: { [name: string]: UnsubscribeCallback } = {};
 
-  const isWhitelisted = (wallet: WalletAdapterCompatibleStandardWallet) => {
+  const isWhitelisted = (_wallet: WalletAdapterCompatibleStandardWallet) => {
     // For now, we whitelist all wallets
     return true;
   };

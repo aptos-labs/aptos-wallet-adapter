@@ -5,24 +5,24 @@ import {
 } from "@aptos-labs/derived-wallet-base";
 import {
   AccountPublicKey,
-  AptosConfig,
-  AuthenticationKey,
-  Deserializer,
-  hashValues,
+  type AptosConfig,
+  type AuthenticationKey,
+  type Deserializer,
   Hex,
-  HexInput,
-  Serializer,
-  Signature,
-  PublicKey,
-  VerifySignatureArgs,
+  type HexInput,
+  hashValues,
+  type PublicKey,
+  type Serializer,
+  type Signature,
+  type VerifySignatureArgs,
 } from "@aptos-labs/ts-sdk";
 import { verifyMessage as verifyEthereumMessage } from "ethers";
 import { createSiweEnvelopeForAptosTransaction } from "./createSiweEnvelope";
 import {
-  EIP1193SiweSignature,
   EIP1193PersonalSignature,
+  EIP1193SiweSignature,
 } from "./EIP1193DerivedSignature";
-import { EthereumAddress } from "./shared";
+import type { EthereumAddress } from "./shared";
 
 export interface EIP1193DerivedPublicKeyParams {
   domain: string;

@@ -1,18 +1,18 @@
 "use client";
 
-import {
-  AptosWalletAdapterProvider,
-  DappConfig,
-} from "@aptos-labs/wallet-adapter-react";
 import { setupAutomaticEthereumWalletDerivation } from "@aptos-labs/derived-wallet-ethereum";
 import { setupAutomaticSolanaWalletDerivation } from "@aptos-labs/derived-wallet-solana";
-import { PropsWithChildren } from "react";
 import { Network } from "@aptos-labs/ts-sdk";
+import {
+  AptosWalletAdapterProvider,
+  type DappConfig,
+} from "@aptos-labs/wallet-adapter-react";
+import type { PropsWithChildren } from "react";
 import { useClaimSecretKey } from "@/hooks/useClaimSecretKey";
-import { useAutoConnect } from "./AutoConnectProvider";
-import { useToast } from "./ui/use-toast";
 import { myTransactionSubmitter } from "@/utils/transactionSubmitter";
+import { useAutoConnect } from "./AutoConnectProvider";
 import { useTransactionSubmitter } from "./TransactionSubmitterProvider";
+import { useToast } from "./ui/use-toast";
 
 const searchParams =
   typeof window !== "undefined"
