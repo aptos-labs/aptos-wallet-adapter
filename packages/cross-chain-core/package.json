@@ -35,14 +35,12 @@
     "build": "pnpm run update-version && pnpm run build-package",
     "dev": "export $(cat .env | xargs) && tsup src/index.ts --format esm,cjs --watch --dts --env.GAID $GAID",
     "test": "vitest run",
-    "lint": "TIMING=1 eslint \"src/**/*.ts*\"",
+    "lint": "biome lint src",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "devDependencies": {
-    "@aptos-labs/eslint-config-adapter": "workspace:*",
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
     "@types/node": "^20.10.4",
-    "eslint": "^8.57.1",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
     "vitest": "^2.1.8"

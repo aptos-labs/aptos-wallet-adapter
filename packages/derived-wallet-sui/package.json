@@ -21,7 +21,7 @@
     "build:declarations": "tsc --emitDeclarationOnly --declaration --declarationMap",
     "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
     "test": "vitest run",
-    "lint": "TIMING=1 eslint \"src/**/*.ts*\""
+    "lint": "biome lint src"
   },
   "tsup": {
     "entryPoints": [
@@ -44,10 +44,8 @@
     "@aptos-labs/ts-sdk": "^5.1.1"
   },
   "devDependencies": {
-    "@aptos-labs/eslint-config-adapter": "workspace:*",
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
     "@types/node": "^20.10.4",
-    "eslint": "^8.15.0",
     "happy-dom": "^20.0.2",
     "tsup": "^8.4.0",
     "tweetnacl": "^1.0.3",
