@@ -1,5 +1,6 @@
 import { Slot } from "@radix-ui/react-slot";
-import { ReactNode, cloneElement, forwardRef, isValidElement } from "react";
+import { cloneElement, forwardRef, isValidElement } from "react";
+import type { ClassAttributes, JSX as ReactJSX, ReactNode } from "react";
 
 export interface HeadlessComponentProps {
   /** A class name for styling the element. */
@@ -17,19 +18,19 @@ export interface HeadlessComponentProps {
  * @example
  * HTMLElementFromTag<"img"> // resolved type: HTMLImageElement
  */
-type HTMLElementFromTag<T extends keyof JSX.IntrinsicElements> =
-  JSX.IntrinsicElements[T] extends React.ClassAttributes<infer Element>
+type HTMLElementFromTag<T extends keyof ReactJSX.IntrinsicElements> =
+  ReactJSX.IntrinsicElements[T] extends ClassAttributes<infer Element>
     ? Element
     : HTMLElement;
 
 export function createHeadlessComponent<
-  TElement extends keyof JSX.IntrinsicElements,
+  TElement extends keyof ReactJSX.IntrinsicElements,
 >(
   displayName: string,
   elementType: TElement,
   props?:
-    | JSX.IntrinsicElements[TElement]
-    | ((displayName: string) => JSX.IntrinsicElements[TElement]),
+    | ReactJSX.IntrinsicElements[TElement]
+    | ((displayName: string) => ReactJSX.IntrinsicElements[TElement]),
 ) {
   const component = forwardRef<
     HTMLElementFromTag<TElement>,
