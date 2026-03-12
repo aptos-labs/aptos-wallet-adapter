@@ -1,7 +1,4 @@
-import {
-  isAptosNetwork,
-  type NetworkInfo,
-} from "@aptos-labs/wallet-adapter-core";
+import { NetworkInfo, isAptosNetwork } from "@aptos-labs/wallet-adapter-core";
 
 export interface TransactionHashProps {
   hash: string;

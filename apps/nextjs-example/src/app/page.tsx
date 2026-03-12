@@ -1,24 +1,9 @@
 "use client";
 
-import { Network } from "@aptos-labs/ts-sdk";
-import { WalletSelector as AntdWalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
-import { WalletConnector as MuiWalletSelector } from "@aptos-labs/wallet-adapter-mui-design";
-import {
-  type AccountInfo,
-  type AdapterWallet,
-  type AptosChangeNetworkOutput,
-  isAptosNetwork,
-  type NetworkInfo,
-  useWallet,
-} from "@aptos-labs/wallet-adapter-react";
-import { registerWallet } from "@aptos-labs/wallet-standard";
-import { init as initTelegram } from "@telegram-apps/sdk";
-import { AlertCircle } from "lucide-react";
-import Image from "next/image";
 import { useAutoConnect } from "@/components/AutoConnectProvider";
 import { DisplayValue, LabelValueGrid } from "@/components/LabelValueGrid";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { TransactionSubmitterToggle } from "@/components/TransactionSubmitterToggle";
+import { WalletSelector as ShadcnWalletSelector } from "@/components/WalletSelector";
 import { MultiAgent } from "@/components/transactionFlows/MultiAgent";
 import { SingleSigner } from "@/components/transactionFlows/SingleSigner";
 import { Sponsor } from "@/components/transactionFlows/Sponsor";
@@ -34,15 +19,31 @@ import {
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
-import { WalletSelector as ShadcnWalletSelector } from "@/components/WalletSelector";
 import { isMainnet } from "@/utils";
+import { Network } from "@aptos-labs/ts-sdk";
+import { WalletSelector as AntdWalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
+import { WalletConnector as MuiWalletSelector } from "@aptos-labs/wallet-adapter-mui-design";
+import {
+  AccountInfo,
+  AdapterWallet,
+  AptosChangeNetworkOutput,
+  NetworkInfo,
+  isAptosNetwork,
+  useWallet,
+} from "@aptos-labs/wallet-adapter-react";
+import { init as initTelegram } from "@telegram-apps/sdk";
+import { AlertCircle } from "lucide-react";
+import Image from "next/image";
+
 // Imports for registering a browser extension wallet plugin on page load
 import { MyWallet } from "@/utils/standardWallet";
+import { registerWallet } from "@aptos-labs/wallet-standard";
+import { TransactionSubmitterToggle } from "@/components/TransactionSubmitterToggle";
 
 // Example of how to register a browser extension wallet plugin.
 // Browser extension wallets should call registerWallet once on page load.
 // When you click "Connect Wallet", you should see "Example Wallet"
-(() => {
+(function () {
   if (typeof window === "undefined") return;
   const myWallet = new MyWallet();
   registerWallet(myWallet);

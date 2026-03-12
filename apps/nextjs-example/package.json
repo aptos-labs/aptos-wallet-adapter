@@ -6,9 +6,7 @@
   "scripts": {
     "dev": "next dev --experimental-https --port 3000",
     "build": "next build",
-    "start": "next start",
-    "lint": "biome lint .",
-    "format": "biome format --write ."
+    "start": "next start"
   },
   "dependencies": {
     "@aptos-labs/ts-sdk": "^5.1.1",

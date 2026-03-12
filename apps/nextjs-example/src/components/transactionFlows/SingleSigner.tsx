@@ -1,11 +1,11 @@
-import { AccountAddress, parseTypeTag, U64 } from "@aptos-labs/ts-sdk";
-import type { InputTransactionData } from "@aptos-labs/wallet-adapter-core";
+import { isSendableNetwork, aptosClient } from "@/utils";
+import { parseTypeTag, AccountAddress, U64 } from "@aptos-labs/ts-sdk";
+import { InputTransactionData } from "@aptos-labs/wallet-adapter-core";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { aptosClient, isSendableNetwork } from "@/utils";
-import { TransactionHash } from "../TransactionHash";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { useToast } from "../ui/use-toast";
+import { TransactionHash } from "../TransactionHash";
 
 const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
 
@@ -30,7 +30,7 @@ export function SingleSigner() {
     signTransaction,
     signIn,
   } = useWallet();
-  const sendable = isSendableNetwork(connected, network?.name);
+  let sendable = isSendableNetwork(connected, network?.name);
 
   const onSignIn = async () => {
     if (!wallet) {

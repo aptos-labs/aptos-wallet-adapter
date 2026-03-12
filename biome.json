@@ -17,26 +17,24 @@
       "suspicious": {
         "noExplicitAny": "off",
         "noArrayIndexKey": "off",
-        "noUnknownAtRules": "off",
-        "useIterableCallbackReturn": "warn"
+        "noPrototypeBuiltins": "off",
+        "useIterableCallbackReturn": "off"
       },
       "style": {
         "noNonNullAssertion": "off"
       },
       "correctness": {
-        "useExhaustiveDependencies": "warn",
-        "noInvalidUseBeforeDeclaration": "warn",
-        "noUnusedFunctionParameters": "warn"
+        "useExhaustiveDependencies": "off",
+        "noInvalidUseBeforeDeclaration": "off",
+        "noUnusedFunctionParameters": "off",
+        "noUnusedPrivateClassMembers": "off"
       },
       "complexity": {
-        "noBannedTypes": "warn"
+        "noBannedTypes": "off"
       },
       "a11y": {
-        "useButtonType": "warn",
-        "noSvgWithoutTitle": "warn",
-        "useKeyWithClickEvents": "warn",
-        "noStaticElementInteractions": "warn",
-        "noLabelWithoutControl": "warn"
+        "noSvgWithoutTitle": "off",
+        "useButtonType": "off"
       },
       "performance": {
         "noImgElement": "off"
@@ -51,13 +49,8 @@
       }
     }
   },
-  "css": {
-    "parser": {
-      "cssModules": true,
-      "tailwindDirectives": true
-    }
-  },
   "files": {
-    "ignoreUnknown": true
+    "ignoreUnknown": true,
+    "includes": ["**", "!apps"]
   }
 }

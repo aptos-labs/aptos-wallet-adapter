@@ -1,2 +1,2 @@
-export * from "./chainToIcon";
 export * from "./USDC";
+export * from "./chainToIcon";

@@ -1,19 +1,19 @@
 "use client";
 
 import {
-  AboutAptosConnect,
-  type AboutAptosConnectEducationScreen,
-  type AdapterNotDetectedWallet,
-  type AdapterWallet,
   APTOS_CONNECT_ACCOUNT_URL,
+  AboutAptosConnect,
+  AboutAptosConnectEducationScreen,
+  AdapterNotDetectedWallet,
+  AdapterWallet,
   AptosPrivacyPolicy,
+  WalletItem,
+  WalletSortingOptions,
   groupAndSortWallets,
   isAptosConnectWallet,
   isInstallRequired,
   truncateAddress,
   useWallet,
-  WalletItem,
-  type WalletSortingOptions,
 } from "@aptos-labs/wallet-adapter-react";
 import {
   ArrowLeft,
@@ -43,8 +43,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { useToast } from "./ui/use-toast";
+import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import { TabsContent } from "./ui/tabs";
 
 export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
   const { account, connected, disconnect, wallet } = useWallet();
@@ -166,9 +167,9 @@ function ConnectWalletDialog({
         acc.evmInstallableWallets.push(wallet);
       } else if (wallet.name.includes("Solana")) {
         acc.solanaInstallableWallets.push(wallet);
-      } else if (wallet.name.includes("Sui")) {
+      } else if(wallet.name.includes("Sui")) {
         acc.suiInstallableWallets.push(wallet);
-      } else {
+      }else {
         acc.aptosInstallableWallets.push(wallet);
       }
       return acc;
@@ -327,7 +328,7 @@ function ConnectWalletDialog({
                   key={wallet.name}
                   wallet={wallet}
                   onConnect={close}
-                />
+                />  
               ))}
               {!!suiInstallableWallets.length && (
                 <Collapsible className="flex flex-col gap-3 pt-3">

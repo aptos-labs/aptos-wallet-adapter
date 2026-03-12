@@ -1,21 +1,21 @@
-import { Network } from "@aptos-labs/ts-sdk";
-import {
-  type AccountInfo,
-  type AdapterWallet,
-  type AptosChangeNetworkOutput,
-  isAptosNetwork,
-  type NetworkInfo,
-} from "@aptos-labs/wallet-adapter-react";
-import Image from "next/image";
 import { DisplayValue, LabelValueGrid } from "@/components/LabelValueGrid";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
-  isEIP1193DerivedWallet,
   isSolanaDerivedWallet,
-  type OriginWalletDetails,
+  OriginWalletDetails,
 } from "@/utils/derivedWallet";
+import { isEIP1193DerivedWallet } from "@/utils/derivedWallet";
+import { Network } from "@aptos-labs/ts-sdk";
+import {
+  AccountInfo,
+  AdapterWallet,
+  AptosChangeNetworkOutput,
+  isAptosNetwork,
+  NetworkInfo,
+} from "@aptos-labs/wallet-adapter-react";
+import Image from "next/image";
 
 interface WalletConnectionProps {
   account: AccountInfo | null;

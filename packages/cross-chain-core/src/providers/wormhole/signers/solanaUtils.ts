@@ -455,7 +455,7 @@ export const isEmptyObject = (value: object | null | undefined): boolean => {
   }
 
   for (const key in value) {
-    if (Object.hasOwn(value, key)) {
+    if (Object.prototype.hasOwnProperty.call(value, key)) {
       return false;
     }
   }

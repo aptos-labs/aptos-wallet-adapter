@@ -1,9 +1,9 @@
 import {
   Aptos,
-  type AptosConfig,
-  type InputSubmitTransactionData,
-  type PendingTransactionResponse,
-  type TransactionSubmitter,
+  AptosConfig,
+  InputSubmitTransactionData,
+  PendingTransactionResponse,
+  TransactionSubmitter,
 } from "@aptos-labs/ts-sdk";
 
 /**

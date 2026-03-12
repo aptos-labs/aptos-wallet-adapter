@@ -89,7 +89,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       hideWallets ? hideWallets : ["Petra Web"],
     );
     setWalletCore(walletCore);
-  }, [dappConfig, disableTelemetry, hideWallets, optInWallets]);
+  }, []);
 
   // Update initial Wallets state once WalletCore has been initialized
   useEffect(() => {
@@ -176,7 +176,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       initialLoadCompletedRef.current = true;
       setIsLoading(false);
     }
-  }, [autoConnect, connect, connected, onError, walletCore]);
+  }, [autoConnect, wallets]);
 
   const connect = async (walletName: string): Promise<void> => {
     try {
@@ -335,7 +335,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         account: walletCore?.account || null,
       };
     });
-  }, [connected, walletCore?.account, walletCore?.wallet]);
+  }, [connected]);
 
   // Handle the adapter's network event
   const handleNetworkChange = useCallback((): void => {
@@ -347,14 +347,14 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         network: walletCore?.network || null,
       };
     });
-  }, [connected, walletCore?.network, walletCore?.wallet]);
+  }, [connected]);
 
   useEffect(() => {
     if (connected) {
       walletCore?.onAccountChange();
       walletCore?.onNetworkChange();
     }
-  }, [connected, walletCore?.onAccountChange, walletCore?.onNetworkChange]);
+  }, [connected]);
 
   // Handle the adapter's disconnect event
   const handleDisconnect = (): void => {
@@ -460,17 +460,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         handleStandardNotDetectedWalletsAdded,
       );
     };
-  }, [
-    handleAccountChange,
-    handleConnect,
-    handleDisconnect,
-    handleNetworkChange,
-    handleStandardNotDetectedWalletsAdded,
-    handleStandardWalletsAdded,
-    handleStandardWalletsHiddenAdded,
-    walletCore?.off,
-    walletCore?.on,
-  ]);
+  }, [wallets, account]);
 
   return (
     <WalletContext.Provider

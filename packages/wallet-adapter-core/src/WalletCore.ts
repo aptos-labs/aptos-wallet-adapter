@@ -174,6 +174,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   // Local private variable to hold the network that is currently connected
   private _network: NetworkInfo | null = null;
 
+  // Local private variable to hold the connecting state
+  private _connecting: boolean = false;
+
   // Local private variable to hold the wallet connected state
   private _connected: boolean = false;
 

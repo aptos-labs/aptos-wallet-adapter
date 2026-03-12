@@ -1,12 +1,12 @@
+import { aptosClient, isSendableNetwork } from "@/utils";
 import {
   Account,
   AccountAddress,
-  type AccountAuthenticator,
-  type AnyRawTransaction,
+  AccountAuthenticator,
+  AnyRawTransaction,
 } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useState } from "react";
-import { aptosClient, isSendableNetwork } from "@/utils";
 import { TransactionHash } from "../TransactionHash";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -24,9 +24,9 @@ export function Sponsor() {
   const [feepayerAuthenticator, setFeepayerAuthenticator] =
     useState<AccountAuthenticator>();
 
-  const [_senderAccount, setSenderAccount] = useState<Account | null>();
+  const [senderAccount, setSenderAccount] = useState<Account | null>();
 
-  const sendable = isSendableNetwork(connected, network?.name);
+  let sendable = isSendableNetwork(connected, network?.name);
 
   // Generate a raw transaction using the SDK
   const generateTransaction = async (
@@ -54,7 +54,7 @@ export function Sponsor() {
   };
 
   const onSignTransaction = async () => {
-    const sender = Account.generate();
+    let sender = Account.generate();
     setSenderAccount(sender);
 
     const transaction = await generateTransaction(sender);

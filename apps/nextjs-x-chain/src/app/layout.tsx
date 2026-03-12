@@ -1,15 +1,15 @@
 import "./globals.css";
 
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { WalletProvider } from "@/components/WalletProvider";
+import { Toaster } from "@/components/ui/toaster";
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
-import type { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 import { AutoConnectProvider } from "@/components/AutoConnectProvider";
 import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { Toaster } from "@/components/ui/toaster";
-import { WalletProvider } from "@/components/WalletProvider";
 import { USDCBalanceProvider } from "@/contexts/USDCBalanceContext";
-import { cn } from "@/lib/utils";
 
 const fontSans = FontSans({
   subsets: ["latin"],

@@ -2,20 +2,20 @@
 
 import {
   AboutPetraWeb,
-  type AboutPetraWebEducationScreen,
-  type AdapterNotDetectedWallet,
-  type AdapterWallet,
+  AboutPetraWebEducationScreen,
+  AdapterNotDetectedWallet,
+  AdapterWallet,
   AptosPrivacyPolicy,
   DEFAULT_WALLET_CONNECTION_FALLBACKS,
   groupAndSortWallets,
+  shouldUseFallbackWallet,
   isInstallRequired,
   isPetraWebWallet,
   PETRA_WEB_ACCOUNT_URL,
-  shouldUseFallbackWallet,
   truncateAddress,
   useWallet,
   WalletItem,
-  type WalletSortingOptions,
+  WalletSortingOptions,
 } from "@aptos-labs/wallet-adapter-react";
 import {
   ArrowLeft,

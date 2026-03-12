@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from "react";
+import { Fragment, ReactNode } from "react";
 
 export interface LabelValueGridProps {
   items: Array<{ label: string; subLabel?: string; value: ReactNode }>;
