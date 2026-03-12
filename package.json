@@ -10,24 +10,23 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --no-cache --parallel --continue",
-    "lint": "turbo run lint",
+    "lint": "biome lint .",
     "test": "turbo run test",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
     "clean": "turbo run clean && rm -rf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "publish-packages": "changeset version && changeset publish"
   },
   "devDependencies": {
-    "@aptos-labs/eslint-config-adapter": "workspace:*",
+    "@biomejs/biome": "^2.4.6",
     "@changesets/cli": "^2.29.7",
-    "prettier": "latest",
     "turbo": "latest"
   },
   "engines": {
     "node": ">=20.0.0"
   },
-  "dependencies": {},
   "packageManager": "pnpm@9.15.5",
   "pnpm": {
     "overrides": {

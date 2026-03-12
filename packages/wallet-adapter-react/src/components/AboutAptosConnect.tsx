@@ -1,11 +1,11 @@
 import {
-  Dispatch,
-  ForwardRefExoticComponent,
-  ReactNode,
-  RefAttributes,
-  SVGProps,
-  SetStateAction,
   createContext,
+  type Dispatch,
+  type ForwardRefExoticComponent,
+  type ReactNode,
+  type RefAttributes,
+  type SetStateAction,
+  type SVGProps,
   useContext,
   useMemo,
   useState,
@@ -13,7 +13,7 @@ import {
 import { LinkGraphic } from "../graphics/LinkGraphic";
 import { WalletGraphic } from "../graphics/WalletGraphic";
 import { Web3Graphic } from "../graphics/Web3Graphic";
-import { HeadlessComponentProps, createHeadlessComponent } from "./utils";
+import { createHeadlessComponent, type HeadlessComponentProps } from "./utils";
 
 const EXPLORE_ECOSYSTEM_URL =
   "https://aptosnetwork.com/ecosystem/directory/category/defi";

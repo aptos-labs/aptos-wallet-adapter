@@ -1,4 +1,4 @@
-import { AccountAddressInput } from "@aptos-labs/ts-sdk";
+import type { AccountAddressInput } from "@aptos-labs/ts-sdk";
 
 export const structuredMessagePrefix = "APTOS" as const;
 

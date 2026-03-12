@@ -1,6 +1,9 @@
-import { getWallets } from "@mysten/wallet-standard";
 import type { Wallet } from "@mysten/wallet-standard";
-import { SuiDerivedWallet, SuiDomainWalletOptions } from "./SuiDerivedWallet";
+import { getWallets } from "@mysten/wallet-standard";
+import {
+  SuiDerivedWallet,
+  type SuiDomainWalletOptions,
+} from "./SuiDerivedWallet";
 
 export function setupAutomaticSuiWalletDerivation(
   options: SuiDomainWalletOptions = {},
@@ -8,7 +11,7 @@ export function setupAutomaticSuiWalletDerivation(
   const api = getWallets();
 
   type UnsubscribeCallback = () => void;
-  let registrations: { [name: string]: UnsubscribeCallback } = {};
+  const registrations: { [name: string]: UnsubscribeCallback } = {};
 
   const deriveAndRegisterWallet = (wallet: Wallet) => {
     const derivedWallet = new SuiDerivedWallet(wallet, options);

@@ -1,22 +1,22 @@
 import {
-  Connection,
-  Keypair,
-  Transaction,
   type Commitment,
+  type Connection,
+  type Keypair,
+  Transaction,
 } from "@solana/web3.js";
-import {
+import type {
   Chain,
   Network,
   SignAndSendSigner,
   TxHash,
   UnsignedTransaction,
 } from "@wormhole-foundation/sdk";
+import type { OnTransactionSigned } from "../types";
 import {
   addPriorityFeeInstructions,
-  PriorityFeeConfig,
+  type PriorityFeeConfig,
   sendAndConfirmTransaction,
 } from "./solanaUtils";
-import { OnTransactionSigned } from "../types";
 
 export interface SolanaLocalSignerConfig {
   /** The Solana keypair to sign transactions with */
@@ -162,7 +162,7 @@ export class SolanaLocalSigner<N extends Network, C extends Chain>
       if (this.verbose || this.priorityFeeConfig) {
         console.warn(
           "SolanaLocalSigner: Versioned transaction detected — priority fees are not applied. " +
-          "Consider using legacy transactions if priority fees are required.",
+            "Consider using legacy transactions if priority fees are required.",
         );
       }
       unsignedTx.sign([this.keypair]);

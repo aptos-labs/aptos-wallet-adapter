@@ -1,4 +1,4 @@
-import { TokenConfig } from "../types";
+import type { TokenConfig } from "../types";
 
 export const mainnetTokens: Record<string, TokenConfig> = {
   Ethereum: {

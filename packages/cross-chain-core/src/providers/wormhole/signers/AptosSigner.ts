@@ -1,25 +1,28 @@
 import {
-  Account,
+  GasStationClient,
+  GasStationTransactionSubmitter,
+} from "@aptos-labs/gas-station-client";
+import {
+  type Account,
   AccountAddress,
-  AccountAuthenticator,
-  AnyRawTransaction,
+  type AccountAuthenticator,
+  type AnyRawTransaction,
   Aptos,
   AptosConfig,
-  Network as AptosNetwork,
+  type Network as AptosNetwork,
   Deserializer,
-  InputGenerateTransactionPayloadData,
-  ScriptFunctionArgumentTypes,
+  type InputGenerateTransactionPayloadData,
+  type ScriptFunctionArgumentTypes,
 } from "@aptos-labs/ts-sdk";
-import { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
-import { Network } from "@wormhole-foundation/sdk";
-import {
+import type { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
+import { UserResponseStatus } from "@aptos-labs/wallet-standard";
+import type { Network } from "@wormhole-foundation/sdk";
+import type {
   AptosChains,
   AptosUnsignedTransaction,
 } from "@wormhole-foundation/sdk-aptos";
-import { GasStationApiKey, validateExpireTimestamp } from "..";
-import { UserResponseStatus } from "@aptos-labs/wallet-standard";
-import { GasStationClient, GasStationTransactionSubmitter } from "@aptos-labs/gas-station-client";
-import { CrossChainCore } from "../../../CrossChainCore";
+import type { CrossChainCore } from "../../../CrossChainCore";
+import { type GasStationApiKey, validateExpireTimestamp } from "..";
 
 export async function signAndSendTransaction(
   request: AptosUnsignedTransaction<Network, AptosChains>,
@@ -44,7 +47,6 @@ export async function signAndSendTransaction(
     }
   });
 
-
   // Configure Aptos client based on sponsor type
   let aptosConfig: AptosConfig;
   const useGasStation = sponsorAccount && !isAccount(sponsorAccount);
@@ -53,10 +55,15 @@ export async function signAndSendTransaction(
     // Gas station flow - configure with plugin upfront
     const gasStationClient = new GasStationClient({
       network: dappNetwork,
-      apiKey: sponsorAccount[dappNetwork as AptosNetwork.TESTNET | AptosNetwork.MAINNET],
+      apiKey:
+        sponsorAccount[
+          dappNetwork as AptosNetwork.TESTNET | AptosNetwork.MAINNET
+        ],
     });
-    const transactionSubmitter = new GasStationTransactionSubmitter(gasStationClient);
-    
+    const transactionSubmitter = new GasStationTransactionSubmitter(
+      gasStationClient,
+    );
+
     aptosConfig = new AptosConfig({
       network: dappNetwork,
       pluginSettings: {
@@ -99,9 +106,9 @@ export async function signAndSendTransaction(
   const txnToSign = await aptos.transaction.build.simple({
     data: transactionData,
     sender: (
-      await wallet.features["aptos:account"]?.account()
+      (await wallet.features["aptos:account"]?.account()) as any
     ).address.toString(),
-    withFeePayer: sponsorAccount ? true : false,
+    withFeePayer: !!sponsorAccount,
     ...(typeof expireTimestamp !== "undefined"
       ? { options: { expireTimestamp } }
       : {}),
@@ -123,8 +130,8 @@ export async function signAndSendTransaction(
     senderAuthenticator: response.args,
   };
 
-   // Only sign as fee payer if it's an Account (not gas station)
-   if (sponsorAccount && isAccount(sponsorAccount)) {
+  // Only sign as fee payer if it's an Account (not gas station)
+  if (sponsorAccount && isAccount(sponsorAccount)) {
     const feePayerSignerAuthenticator = aptos.transaction.signAsFeePayer({
       signer: sponsorAccount,
       transaction: txnToSign,
@@ -166,5 +173,5 @@ function extractFunctionArguments(
 }
 
 export function isAccount(obj: Account | GasStationApiKey): obj is Account {
-  return 'accountAddress' in obj;
+  return "accountAddress" in obj;
 }

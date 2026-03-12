@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach } from "vitest";
 import { Network } from "@aptos-labs/ts-sdk";
+import { beforeEach, describe, expect, it } from "vitest";
 import { CrossChainCore } from "../src/CrossChainCore";
+import { mainnetChains, testnetChains } from "../src/config";
 import { WormholeProvider } from "../src/providers/wormhole";
-import { testnetChains, mainnetChains } from "../src/config";
 
 describe("WormholeProvider", () => {
   describe("constructor", () => {

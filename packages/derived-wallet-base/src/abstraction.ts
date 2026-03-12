@@ -1,7 +1,7 @@
 import {
   AccountAddress,
   AuthenticationKey,
-  Deserializer,
+  type Deserializer,
   hashValues,
   isValidFunctionInfo,
   Serializable,

@@ -1,16 +1,13 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import {
-  APTOS_CHAINS,
-  UserResponseStatus,
-} from "@aptos-labs/wallet-standard";
 import {
   Network,
   NetworkToChainId,
   NetworkToNodeAPI,
 } from "@aptos-labs/ts-sdk";
+import { APTOS_CHAINS, UserResponseStatus } from "@aptos-labs/wallet-standard";
 import type { Wallet } from "@mysten/wallet-standard";
-import { SuiDerivedWallet } from "../src/SuiDerivedWallet";
+import { beforeEach, describe, expect, it } from "vitest";
 import { SuiDerivedPublicKey } from "../src/SuiDerivedPublicKey";
+import { SuiDerivedWallet } from "../src/SuiDerivedWallet";
 import { defaultAuthenticationFunction } from "../src/shared";
 import {
   createConnectedMockSuiWallet,
@@ -210,7 +207,7 @@ describe("SuiDerivedWallet", () => {
         wallet.changeNetwork({
           name: Network.CUSTOM,
           url: "https://custom.node.com",
-        })
+        }),
       ).rejects.toThrow("Custom network not currently supported");
     });
 
@@ -318,4 +315,3 @@ describe("SuiDerivedWallet", () => {
   // Note: signTransaction tests require network access to build transactions.
   // These are tested via integration tests.
 });
-

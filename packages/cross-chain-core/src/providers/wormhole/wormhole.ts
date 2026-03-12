@@ -1,62 +1,64 @@
+import type { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
+import type { SolanaDerivedWallet } from "@aptos-labs/derived-wallet-solana";
+import type { SuiDerivedWallet } from "@aptos-labs/derived-wallet-sui";
+import { Network, sleep } from "@aptos-labs/ts-sdk";
 import {
+  type PlatformLoader,
   routes,
+  TransferState,
   Wormhole,
   wormhole,
-  PlatformLoader,
-  TransferState,
 } from "@wormhole-foundation/sdk";
-import { Network, sleep } from "@aptos-labs/ts-sdk";
 import aptos from "@wormhole-foundation/sdk/aptos";
-import solana from "@wormhole-foundation/sdk/solana";
 import evm from "@wormhole-foundation/sdk/evm";
+import solana from "@wormhole-foundation/sdk/solana";
 import sui from "@wormhole-foundation/sdk/sui";
-
 import {
-  Chain,
-  CrossChainProvider,
-  CrossChainCore,
+  type Chain,
+  type CrossChainCore,
+  type CrossChainProvider,
   EVM_CHAIN_NAMES,
 } from "../../CrossChainCore";
+import type { ChainConfig } from "../../config";
 import { logger } from "../../utils/logger";
 import { serializeReceipt } from "../../utils/receiptSerialization";
 import { AptosLocalSigner } from "./signers/AptosLocalSigner";
 import { isAccount } from "./signers/AptosSigner";
 import { Signer } from "./signers/Signer";
-import { ChainConfig } from "../../config";
-import { createCCTPRoute } from "./utils";
 import {
-  WormholeQuoteRequest,
-  WormholeQuoteResponse,
-  WormholeTransferRequest,
-  WormholeTransferResponse,
-  WormholeRouteResponse,
-  WormholeRequest,
-  WormholeSubmitTransferRequest,
-  WormholeStartTransferResponse,
-  WormholeClaimTransferRequest,
-  WormholeWithdrawRequest,
-  WormholeWithdrawResponse,
-  WormholeInitiateWithdrawRequest,
-  WormholeInitiateWithdrawResponse,
-  WormholeClaimWithdrawRequest,
-  WormholeClaimWithdrawResponse,
-  RetryWithdrawClaimRequest,
-  RetryWithdrawClaimResponse,
-  WithdrawError,
+  type RetryWithdrawClaimRequest,
+  type RetryWithdrawClaimResponse,
   TransferError,
+  WithdrawError,
+  type WormholeClaimTransferRequest,
+  type WormholeClaimWithdrawRequest,
+  type WormholeClaimWithdrawResponse,
+  type WormholeInitiateWithdrawRequest,
+  type WormholeInitiateWithdrawResponse,
+  type WormholeQuoteRequest,
+  type WormholeQuoteResponse,
+  type WormholeRequest,
+  type WormholeRouteResponse,
+  type WormholeStartTransferResponse,
+  type WormholeSubmitTransferRequest,
+  type WormholeTransferRequest,
+  type WormholeTransferResponse,
+  type WormholeWithdrawRequest,
+  type WormholeWithdrawResponse,
 } from "./types";
-import { SolanaDerivedWallet } from "@aptos-labs/derived-wallet-solana";
-import { EIP1193DerivedWallet } from "@aptos-labs/derived-wallet-ethereum";
-import { SuiDerivedWallet } from "@aptos-labs/derived-wallet-sui";
+import { createCCTPRoute } from "./utils";
 
-export class WormholeProvider implements CrossChainProvider<
-  WormholeQuoteRequest,
-  WormholeQuoteResponse,
-  WormholeTransferRequest,
-  WormholeTransferResponse,
-  WormholeWithdrawRequest,
-  WormholeWithdrawResponse
-> {
+export class WormholeProvider
+  implements
+    CrossChainProvider<
+      WormholeQuoteRequest,
+      WormholeQuoteResponse,
+      WormholeTransferRequest,
+      WormholeTransferResponse,
+      WormholeWithdrawRequest,
+      WormholeWithdrawResponse
+    >
+{
   private crossChainCore: CrossChainCore;
 
   private _wormholeContext: Wormhole<"Mainnet" | "Testnet"> | undefined;
@@ -92,9 +94,9 @@ export class WormholeProvider implements CrossChainProvider<
     const chains = this.crossChainCore.CHAINS;
 
     const solanaRpc =
-      dappConfig?.solanaConfig?.rpc ?? chains["Solana"]?.defaultRpc;
+      dappConfig?.solanaConfig?.rpc ?? chains.Solana?.defaultRpc;
 
-    const suiRpc = dappConfig?.suiConfig?.rpc ?? chains["Sui"]?.defaultRpc;
+    const suiRpc = dappConfig?.suiConfig?.rpc ?? chains.Sui?.defaultRpc;
 
     const evmChainsConfig: Record<string, { rpc: string }> = {};
     for (const name of EVM_CHAIN_NAMES) {
@@ -212,7 +214,7 @@ export class WormholeProvider implements CrossChainProvider<
       signerAddress =
         (wallet as SuiDerivedWallet).suiWallet.accounts[0].address || "";
     } else {
-      throw new Error("Unsupported chain context: " + chainContext);
+      throw new Error(`Unsupported chain context: ${chainContext}`);
     }
     logger.log("signerAddress", signerAddress);
 
@@ -230,7 +232,7 @@ export class WormholeProvider implements CrossChainProvider<
     logger.log("wormholeRequest", this.wormholeRequest);
     logger.log("wormholeQuote", this.wormholeQuote);
 
-    let receipt = await this.wormholeRoute.initiate(
+    const receipt = await this.wormholeRoute.initiate(
       this.wormholeRequest,
       signer,
       this.wormholeQuote,
@@ -304,7 +306,7 @@ export class WormholeProvider implements CrossChainProvider<
           `Error tracking transfer (attempt ${retries + 1} / ${maxRetries}):`,
           e,
         );
-        const delay = baseDelay * Math.pow(2, retries); // Exponential backoff
+        const delay = baseDelay * 2 ** retries; // Exponential backoff
         await sleep(delay);
         retries++;
       }
@@ -334,7 +336,7 @@ export class WormholeProvider implements CrossChainProvider<
       });
     }
     // Submit transfer transaction from origin chain
-    let { originChainTxnId, receipt } = await this.submitCCTPTransfer(input);
+    const { originChainTxnId, receipt } = await this.submitCCTPTransfer(input);
     // Claim transfer transaction on destination chain
     try {
       const { destinationChainTxnId } = await this.claimCCTPTransfer({
@@ -430,7 +432,7 @@ export class WormholeProvider implements CrossChainProvider<
           `Error tracking withdraw (attempt ${retries + 1} / ${maxRetries}):`,
           e,
         );
-        const delay = baseDelay * Math.pow(2, retries);
+        const delay = baseDelay * 2 ** retries;
         await sleep(delay);
         retries++;
       }

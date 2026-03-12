@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach } from "vitest";
 import { UserResponseStatus } from "@aptos-labs/wallet-standard";
 import type { Wallet } from "@mysten/wallet-standard";
-import { signAptosMessageWithSui } from "../src/signAptosMessage";
-import { defaultAuthenticationFunction } from "../src/shared";
+import { beforeEach, describe, expect, it } from "vitest";
 import { SuiDerivedEd25519Signature } from "../src/SuiDerivedSignature";
+import { defaultAuthenticationFunction } from "../src/shared";
+import { signAptosMessageWithSui } from "../src/signAptosMessage";
 import {
   createConnectedMockSuiWallet,
   createMockSuiWallet,
@@ -57,7 +57,7 @@ describe("signAptosMessage", () => {
       expect(response.status).toBe(UserResponseStatus.APPROVED);
       if (response.status === UserResponseStatus.APPROVED) {
         expect(response.args.signature).toBeInstanceOf(
-          SuiDerivedEd25519Signature
+          SuiDerivedEd25519Signature,
         );
       }
     });
@@ -158,7 +158,7 @@ describe("signAptosMessage", () => {
             nonce: "test",
           },
           domain: testDomain,
-        })
+        }),
       ).rejects.toThrow("sui:signPersonalMessage not available");
     });
 
@@ -178,7 +178,7 @@ describe("signAptosMessage", () => {
             nonce: "test",
           },
           domain: testDomain,
-        })
+        }),
       ).rejects.toThrow("Account not connected");
     });
 
@@ -218,4 +218,3 @@ describe("signAptosMessage", () => {
     });
   });
 });
-

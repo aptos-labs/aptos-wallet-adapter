@@ -35,7 +35,7 @@
     "dev": "tsup src/index.tsx --format esm,cjs --watch",
     "test": "vitest run",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "lint": "TIMING=1 eslint \"src/**/*.ts*\""
+    "lint": "biome lint src"
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
@@ -44,7 +44,6 @@
     "@testing-library/user-event": "^14.0.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "eslint": "^8.57.1",
     "happy-dom": "^20.0.2",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",

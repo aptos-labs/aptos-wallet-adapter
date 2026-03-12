@@ -1,4 +1,4 @@
-import { Context, ChainsConfig } from "../types";
+import { type ChainsConfig, Context } from "../types";
 
 export const testnetChains: ChainsConfig = {
   Sepolia: {

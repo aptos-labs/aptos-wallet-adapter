@@ -4,32 +4,32 @@ import {
   isNullCallback,
 } from "@aptos-labs/derived-wallet-base";
 import {
-  AccountAuthenticator,
-  AnyRawTransaction,
+  type AccountAuthenticator,
+  type AnyRawTransaction,
   Network,
   NetworkToChainId,
   NetworkToNodeAPI,
 } from "@aptos-labs/ts-sdk";
 import {
-  AccountInfo,
+  type AccountInfo,
   APTOS_CHAINS,
-  AptosChangeNetworkOutput,
-  AptosConnectOutput,
-  AptosFeatures,
-  AptosSignMessageInput,
-  AptosSignMessageOutput,
-  AptosWallet,
-  NetworkInfo,
-  UserResponse,
+  type AptosChangeNetworkOutput,
+  type AptosConnectOutput,
+  type AptosFeatures,
+  type AptosSignMessageInput,
+  type AptosSignMessageOutput,
+  type AptosWallet,
+  type NetworkInfo,
+  type UserResponse,
   UserResponseStatus,
-  WalletIcon,
+  type WalletIcon,
 } from "@aptos-labs/wallet-standard";
-import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
-import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
+import type { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
+import type { PublicKey as SolanaPublicKey } from "@solana/web3.js";
+import { SolanaDerivedPublicKey } from "./SolanaDerivedPublicKey";
 import { defaultSolanaAuthenticationFunction } from "./shared";
 import { signAptosMessageWithSolana } from "./signAptosMessage";
 import { signAptosTransactionWithSolana } from "./signAptosTransaction";
-import { SolanaDerivedPublicKey } from "./SolanaDerivedPublicKey";
 
 export type { SolanaPublicKey };
 export interface SolanaDomainWalletOptions {

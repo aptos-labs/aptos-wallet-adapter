@@ -1,13 +1,13 @@
-import { describe, it, expect, vi } from "vitest";
-import { UserResponseStatus } from "@aptos-labs/wallet-standard";
 import {
-  AnyRawTransaction,
   AccountAuthenticatorAbstraction,
+  type AnyRawTransaction,
 } from "@aptos-labs/ts-sdk";
+import { UserResponseStatus } from "@aptos-labs/wallet-standard";
 import { WalletError } from "@solana/wallet-adapter-base";
 import type { StandardWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
-import { signAptosTransactionWithSolana } from "../src/signAptosTransaction";
+import { describe, expect, it, vi } from "vitest";
 import { defaultSolanaAuthenticationFunction } from "../src/shared";
+import { signAptosTransactionWithSolana } from "../src/signAptosTransaction";
 import {
   createConnectedMockSolanaWallet,
   TEST_SOLANA_KEYPAIR,
@@ -29,7 +29,7 @@ vi.mock("../src/createSiwsEnvelope", () => ({
   createSiwsEnvelopeForAptosTransaction: vi.fn(() => ({
     domain: "test.example.com",
     address: "test-address",
-    nonce: "0x" + "aa".repeat(32),
+    nonce: `0x${"aa".repeat(32)}`,
     statement: "Test transaction statement",
   })),
 }));

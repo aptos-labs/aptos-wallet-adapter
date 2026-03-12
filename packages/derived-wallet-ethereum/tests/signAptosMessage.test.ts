@@ -1,13 +1,13 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { BrowserProvider } from "ethers";
 import { UserResponseStatus } from "@aptos-labs/wallet-standard";
-import { signAptosMessageWithEthereum } from "../src/signAptosMessage";
+import { BrowserProvider } from "ethers";
+import { beforeEach, describe, expect, it } from "vitest";
 import { EIP1193PersonalSignature } from "../src/EIP1193DerivedSignature";
 import { defaultEthereumAuthenticationFunction } from "../src/shared";
+import { signAptosMessageWithEthereum } from "../src/signAptosMessage";
 import {
   createMockEIP1193Provider,
-  TEST_PRIVATE_KEY,
   TEST_ETHEREUM_ADDRESS,
+  TEST_PRIVATE_KEY,
 } from "./mocks/eip1193Provider";
 
 describe("signAptosMessage", () => {
@@ -50,7 +50,9 @@ describe("signAptosMessage", () => {
 
       expect(response.status).toBe(UserResponseStatus.APPROVED);
       if (response.status === UserResponseStatus.APPROVED) {
-        expect(response.args.signature).toBeInstanceOf(EIP1193PersonalSignature);
+        expect(response.args.signature).toBeInstanceOf(
+          EIP1193PersonalSignature,
+        );
       }
     });
 
@@ -176,7 +178,7 @@ describe("signAptosMessage", () => {
             message: "Test",
             nonce: "test",
           },
-        })
+        }),
       ).rejects.toThrow("Account not connected");
     });
 
@@ -190,9 +192,8 @@ describe("signAptosMessage", () => {
             message: "Test",
             nonce: "test",
           },
-        })
+        }),
       ).rejects.toThrow("Account not connected");
     });
   });
 });
-

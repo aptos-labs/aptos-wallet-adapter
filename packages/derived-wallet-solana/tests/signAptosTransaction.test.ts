@@ -1,10 +1,10 @@
-import { describe, it, expect } from "vitest";
 import { AccountAuthenticatorAbstraction } from "@aptos-labs/ts-sdk";
-import {
-  SIGNATURE_TYPE,
-  createAccountAuthenticatorForSolanaTransaction,
-} from "../src/signAptosTransaction";
+import { describe, expect, it } from "vitest";
 import { defaultSolanaAuthenticationFunction } from "../src/shared";
+import {
+  createAccountAuthenticatorForSolanaTransaction,
+  SIGNATURE_TYPE,
+} from "../src/signAptosTransaction";
 import { TEST_SOLANA_PUBLIC_KEY } from "./mocks/solanaWallet";
 
 describe("signAptosTransaction", () => {
@@ -29,7 +29,7 @@ describe("signAptosTransaction", () => {
         TEST_SOLANA_PUBLIC_KEY,
         testDomain,
         defaultSolanaAuthenticationFunction,
-        testSigningMessageDigest
+        testSigningMessageDigest,
       );
 
       expect(authenticator).toBeInstanceOf(AccountAuthenticatorAbstraction);
@@ -41,7 +41,7 @@ describe("signAptosTransaction", () => {
         TEST_SOLANA_PUBLIC_KEY,
         testDomain,
         defaultSolanaAuthenticationFunction,
-        testSigningMessageDigest
+        testSigningMessageDigest,
       );
 
       // Should be serializable to bytes
@@ -56,7 +56,7 @@ describe("signAptosTransaction", () => {
         TEST_SOLANA_PUBLIC_KEY,
         "domain1.com",
         defaultSolanaAuthenticationFunction,
-        testSigningMessageDigest
+        testSigningMessageDigest,
       );
 
       const auth2 = createAccountAuthenticatorForSolanaTransaction(
@@ -64,7 +64,7 @@ describe("signAptosTransaction", () => {
         TEST_SOLANA_PUBLIC_KEY,
         "domain2.com",
         defaultSolanaAuthenticationFunction,
-        testSigningMessageDigest
+        testSigningMessageDigest,
       );
 
       // Both should be valid authenticators
@@ -84,7 +84,7 @@ describe("signAptosTransaction", () => {
         TEST_SOLANA_PUBLIC_KEY,
         testDomain,
         defaultSolanaAuthenticationFunction,
-        testSigningMessageDigest
+        testSigningMessageDigest,
       );
 
       const auth2 = createAccountAuthenticatorForSolanaTransaction(
@@ -92,7 +92,7 @@ describe("signAptosTransaction", () => {
         TEST_SOLANA_PUBLIC_KEY,
         testDomain,
         defaultSolanaAuthenticationFunction,
-        testSigningMessageDigest
+        testSigningMessageDigest,
       );
 
       // Different signatures should produce different bytes
@@ -107,7 +107,7 @@ describe("signAptosTransaction", () => {
         TEST_SOLANA_PUBLIC_KEY,
         testDomain,
         customAuthFunction,
-        testSigningMessageDigest
+        testSigningMessageDigest,
       );
 
       expect(authenticator).toBeInstanceOf(AccountAuthenticatorAbstraction);
@@ -118,4 +118,3 @@ describe("signAptosTransaction", () => {
   // tests require network access to build transactions.
   // These are tested via integration tests.
 });
-

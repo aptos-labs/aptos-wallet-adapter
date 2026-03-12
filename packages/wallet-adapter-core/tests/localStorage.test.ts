@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  setLocalStorage,
-  removeLocalStorage,
   getLocalStorage,
+  removeLocalStorage,
+  setLocalStorage,
 } from "../src/utils/localStorage";
 
 describe("localStorage utilities", () => {
@@ -15,7 +15,10 @@ describe("localStorage utilities", () => {
   describe("setLocalStorage", () => {
     it("should store wallet name in localStorage", () => {
       setLocalStorage("Petra");
-      expect(localStorage.setItem).toHaveBeenCalledWith("AptosWalletName", "Petra");
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        "AptosWalletName",
+        "Petra",
+      );
     });
 
     it("should overwrite existing wallet name", () => {
@@ -24,7 +27,7 @@ describe("localStorage utilities", () => {
       expect(localStorage.setItem).toHaveBeenCalledTimes(2);
       expect(localStorage.setItem).toHaveBeenLastCalledWith(
         "AptosWalletName",
-        "Nightly"
+        "Nightly",
       );
     });
 
@@ -37,7 +40,7 @@ describe("localStorage utilities", () => {
       setLocalStorage("Wallet (Test) #1");
       expect(localStorage.setItem).toHaveBeenCalledWith(
         "AptosWalletName",
-        "Wallet (Test) #1"
+        "Wallet (Test) #1",
       );
     });
   });
@@ -79,4 +82,3 @@ describe("localStorage utilities", () => {
     });
   });
 });
-

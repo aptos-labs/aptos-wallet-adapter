@@ -1,11 +1,12 @@
 /**
  * Mock Solana Wallet Adapter for testing
  */
-import { Keypair, PublicKey } from "@solana/web3.js";
-import { createSignInMessage } from "@solana/wallet-standard-util";
-import type { SolanaSignInInputWithRequiredFields } from "@solana/wallet-standard-util";
-import type { StandardWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
+
 import type { WalletIcon } from "@aptos-labs/wallet-standard";
+import type { SolanaSignInInputWithRequiredFields } from "@solana/wallet-standard-util";
+import { createSignInMessage } from "@solana/wallet-standard-util";
+import type { StandardWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
+import { Keypair, type PublicKey } from "@solana/web3.js";
 import nacl from "tweetnacl";
 
 type EventCallback = (...args: unknown[]) => void;
@@ -21,8 +22,10 @@ export interface MockSolanaWalletOptions {
  * Creates a mock Solana wallet adapter that simulates wallet behavior
  */
 export function createMockSolanaWallet(
-  options: MockSolanaWalletOptions
-): StandardWalletAdapter & { emit: (event: string, ...args: unknown[]) => void } {
+  options: MockSolanaWalletOptions,
+): StandardWalletAdapter & {
+  emit: (event: string, ...args: unknown[]) => void;
+} {
   const {
     keypair,
     name = "Mock Solana Wallet",
@@ -125,7 +128,7 @@ export function createMockSolanaWallet(
  * Creates a pre-connected mock Solana wallet
  */
 export function createConnectedMockSolanaWallet(
-  options: MockSolanaWalletOptions
+  options: MockSolanaWalletOptions,
 ): StandardWalletAdapter {
   return createMockSolanaWallet({ ...options, initiallyConnected: true });
 }
@@ -135,7 +138,7 @@ export function createConnectedMockSolanaWallet(
  * Generated deterministically for testing purposes only
  */
 export const TEST_SOLANA_KEYPAIR = Keypair.fromSeed(
-  new Uint8Array(32).fill(1) // Deterministic seed for reproducible tests
+  new Uint8Array(32).fill(1), // Deterministic seed for reproducible tests
 );
 
 /**

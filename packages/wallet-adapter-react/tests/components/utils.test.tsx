@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import React, { createRef } from "react";
+import { createRef } from "react";
+import { describe, expect, it } from "vitest";
 import { createHeadlessComponent } from "../../src/components/utils";
 
 describe("createHeadlessComponent", () => {
@@ -74,14 +74,14 @@ describe("createHeadlessComponent", () => {
         (displayName) => ({
           "aria-label": `Button created by ${displayName}`,
           children: "Dynamic Button",
-        })
+        }),
       );
       render(<TestComponent />);
 
       const button = screen.getByRole("button");
       expect(button).toHaveAttribute(
         "aria-label",
-        "Button created by TestComponent"
+        "Button created by TestComponent",
       );
     });
   });
@@ -122,7 +122,7 @@ describe("createHeadlessComponent", () => {
       render(
         <TestComponent asChild>
           <button>Click me</button>
-        </TestComponent>
+        </TestComponent>,
       );
 
       // The Slot component merges props onto the child
@@ -135,7 +135,7 @@ describe("createHeadlessComponent", () => {
       render(
         <TestComponent asChild className="parent-class">
           <button className="child-class">Click me</button>
-        </TestComponent>
+        </TestComponent>,
       );
 
       const button = screen.getByRole("button");

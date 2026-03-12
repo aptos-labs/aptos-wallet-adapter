@@ -1,8 +1,8 @@
 import {
-  Deserializer,
+  type Deserializer,
   Hex,
-  HexInput,
-  Serializer,
+  type HexInput,
+  type Serializer,
   Signature,
 } from "@aptos-labs/ts-sdk";
 

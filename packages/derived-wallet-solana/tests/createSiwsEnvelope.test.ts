@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
+import type { StructuredMessage } from "@aptos-labs/derived-wallet-base";
 import { Hex } from "@aptos-labs/ts-sdk";
-import { StructuredMessage } from "@aptos-labs/derived-wallet-base";
+import { describe, expect, it } from "vitest";
 import {
   createSiwsEnvelope,
   createSiwsEnvelopeForAptosStructuredMessage,
@@ -169,4 +169,3 @@ describe("createSiwsEnvelope", () => {
   // Note: createSiwsEnvelopeForAptosTransaction tests require network access
   // to build transactions. These are tested via integration tests.
 });
-

@@ -1,14 +1,14 @@
 import {
-  AdapterNotDetectedWallet,
-  AdapterWallet,
-  WalletReadyState,
+  type AdapterNotDetectedWallet,
+  type AdapterWallet,
   isRedirectable,
   shouldUseFallbackWallet,
+  WalletReadyState,
 } from "@aptos-labs/wallet-adapter-core";
 import { Slot } from "@radix-ui/react-slot";
 import { createContext, forwardRef, useCallback, useContext } from "react";
 import { useWallet } from "../useWallet";
-import { HeadlessComponentProps, createHeadlessComponent } from "./utils";
+import { createHeadlessComponent, type HeadlessComponentProps } from "./utils";
 
 export interface WalletItemProps extends HeadlessComponentProps {
   /** The wallet option to be displayed. */
@@ -42,7 +42,14 @@ const WalletItemContext = createContext<{
 
 const Root = forwardRef<HTMLDivElement, WalletItemProps>(
   (
-    { wallet, onConnect, showAllOnMobile = false, className, asChild, children },
+    {
+      wallet,
+      onConnect,
+      showAllOnMobile = false,
+      className,
+      asChild,
+      children,
+    },
     ref,
   ) => {
     const { connect } = useWallet();

@@ -1,15 +1,9 @@
-import { describe, it, expect } from "vitest";
-import {
-  TransferError,
-  WithdrawError,
-} from "../src/providers/wormhole/types";
+import { describe, expect, it } from "vitest";
+import { TransferError, WithdrawError } from "../src/providers/wormhole/types";
 
 describe("TransferError", () => {
   it("should create an error with message and originChainTxnId", () => {
-    const error = new TransferError(
-      "Claim failed",
-      "0xsource123",
-    );
+    const error = new TransferError("Claim failed", "0xsource123");
 
     expect(error).toBeInstanceOf(Error);
     expect(error).toBeInstanceOf(TransferError);

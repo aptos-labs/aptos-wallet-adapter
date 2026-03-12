@@ -3,7 +3,7 @@ import {
   AptosConnectGenericWallet,
   AptosConnectGoogleWallet,
 } from "@aptos-connect/wallet-adapter-plugin";
-import { DappConfig, AdapterWallet } from "./WalletCore";
+import type { AdapterWallet, DappConfig } from "./WalletCore";
 
 export function getSDKWallets(dappConfig?: DappConfig) {
   const sdkWallets: AdapterWallet[] = [];

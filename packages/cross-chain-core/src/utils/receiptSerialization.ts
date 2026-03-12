@@ -1,6 +1,6 @@
 import {
-  routes,
-  AttestationReceipt,
+  type AttestationReceipt,
+  type routes,
   UniversalAddress,
 } from "@wormhole-foundation/sdk";
 
@@ -138,4 +138,3 @@ export function deserializeReceipt(
 
   return revive(obj) as routes.Receipt<AttestationReceipt>;
 }
-

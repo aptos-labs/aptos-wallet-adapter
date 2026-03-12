@@ -1,10 +1,10 @@
 import {
-  AnyRawTransaction,
+  type AnyRawTransaction,
   Deserializer,
   FeePayerRawTransaction,
-  hashValues,
   Hex,
-  HexInput,
+  type HexInput,
+  hashValues,
   MultiAgentRawTransaction,
   MultiAgentTransaction,
   RAW_TRANSACTION_SALT,
@@ -15,7 +15,7 @@ import {
 } from "@aptos-labs/ts-sdk";
 import {
   decodeStructuredMessage,
-  StructuredMessage,
+  type StructuredMessage,
 } from "./StructuredMessage";
 
 function bufferStartsWith(buffer: Uint8Array, search: Uint8Array) {
@@ -99,7 +99,7 @@ export function parseAptosSigningMessage(
       type: "structuredMessage",
       structuredMessage,
     };
-  } catch (err) {
+  } catch (_err) {
     return undefined;
   }
 }

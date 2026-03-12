@@ -1,8 +1,16 @@
-import { describe, it, expect, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
-import React from "react";
-import { useWallet, WalletContext, WalletContextState } from "../src/useWallet";
-import { TEST_ACCOUNT, TEST_NETWORK, createMockWallet } from "./mocks/walletCore";
+import type React from "react";
+import { describe, expect, it, vi } from "vitest";
+import {
+  useWallet,
+  WalletContext,
+  type WalletContextState,
+} from "../src/useWallet";
+import {
+  createMockWallet,
+  TEST_ACCOUNT,
+  TEST_NETWORK,
+} from "./mocks/walletCore";
 
 describe("useWallet", () => {
   describe("when used outside WalletProvider", () => {
@@ -105,7 +113,9 @@ describe("useWallet", () => {
         </WalletContext.Provider>
       );
 
-      const { result } = renderHook(() => useWallet(), { wrapper: defaultWrapper });
+      const { result } = renderHook(() => useWallet(), {
+        wrapper: defaultWrapper,
+      });
 
       expect(result.current.connected).toBe(false);
       expect(result.current.account).toBeNull();

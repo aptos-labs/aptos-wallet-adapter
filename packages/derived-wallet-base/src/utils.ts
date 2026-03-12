@@ -1,4 +1,4 @@
-import { AccountPublicKey, Aptos } from "@aptos-labs/ts-sdk";
+import { type AccountPublicKey, Aptos } from "@aptos-labs/ts-sdk";
 import { AccountInfo } from "@aptos-labs/wallet-standard";
 
 export function accountInfoFromPublicKey(publicKey: AccountPublicKey) {

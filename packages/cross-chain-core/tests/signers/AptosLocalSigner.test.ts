@@ -1,16 +1,16 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
 import {
   Account,
-  Ed25519PrivateKey,
   Network as AptosNetwork,
+  Ed25519PrivateKey,
   PrivateKey,
   PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { CrossChainCore } from "../../src/CrossChainCore";
 import {
   AptosLocalSigner,
   signAndSendTransaction,
 } from "../../src/providers/wormhole/signers/AptosLocalSigner";
-import { CrossChainCore } from "../../src/CrossChainCore";
 
 const mockBuildSimple = vi.fn();
 const mockSign = vi.fn();
@@ -97,7 +97,6 @@ describe("AptosLocalSigner", () => {
 
       expect(signer._sponsorAccount).toBe(sponsorAccount);
     });
-
   });
 
   describe("chain()", () => {
@@ -218,9 +217,7 @@ describe("AptosLocalSigner", () => {
       mockSign
         .mockReset()
         .mockResolvedValue({ toUint8Array: () => new Uint8Array() });
-      mockSubmitSimple
-        .mockReset()
-        .mockResolvedValue({ hash: "0xmocktxhash" });
+      mockSubmitSimple.mockReset().mockResolvedValue({ hash: "0xmocktxhash" });
       mockWaitForTransaction
         .mockReset()
         .mockResolvedValue({ hash: "0xmocktxhash" });

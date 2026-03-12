@@ -1,32 +1,28 @@
 import {
-  AccountAuthenticator,
-  AnyRawTransaction,
+  type Account,
+  type AccountAuthenticator,
+  type AnyRawTransaction,
   Aptos,
   AptosConfig,
-  Account,
 } from "@aptos-labs/ts-sdk";
 
-import {
+import type {
   Chain,
   Network,
   SignAndSendSigner,
   TxHash,
   UnsignedTransaction,
 } from "@wormhole-foundation/sdk";
-import {
-  AptosUnsignedTransaction,
+import type {
   AptosChains,
+  AptosUnsignedTransaction,
 } from "@wormhole-foundation/sdk-aptos";
-import {
-  OnTransactionSigned,
-  validateExpireTimestamp,
-} from "../types";
-import { CrossChainCore } from "../../../CrossChainCore";
+import type { CrossChainCore } from "../../../CrossChainCore";
+import { type OnTransactionSigned, validateExpireTimestamp } from "../types";
 
-export class AptosLocalSigner<
-  N extends Network,
-  C extends Chain,
-> implements SignAndSendSigner<N, C> {
+export class AptosLocalSigner<N extends Network, C extends Chain>
+  implements SignAndSendSigner<N, C>
+{
   _chain: C;
   _options: any;
   _wallet: Account;
@@ -116,7 +112,7 @@ export async function signAndSendTransaction(
   const txnToSign = await aptos.transaction.build.simple({
     data: payload,
     sender: wallet.accountAddress.toString(),
-    withFeePayer: sponsorAccount ? true : false,
+    withFeePayer: !!sponsorAccount,
     ...(typeof expireTimestamp !== "undefined"
       ? { options: { expireTimestamp } }
       : {}),

@@ -1,16 +1,17 @@
 import {
   encodeStructuredMessage,
   mapUserResponse,
-  StructuredMessage,
-  StructuredMessageInput,
+  type StructuredMessage,
+  type StructuredMessageInput,
 } from "@aptos-labs/derived-wallet-base";
 import { Ed25519Signature } from "@aptos-labs/ts-sdk";
-import { AptosSignMessageOutput } from "@aptos-labs/wallet-standard";
-import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
-import { wrapSolanaUserResponse } from "./shared";
+import type { AptosSignMessageOutput } from "@aptos-labs/wallet-standard";
+import type { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 import { SolanaDerivedPublicKey } from "./SolanaDerivedPublicKey";
+import { wrapSolanaUserResponse } from "./shared";
 
-export interface StructuredMessageInputWithChainId extends StructuredMessageInput {
+export interface StructuredMessageInputWithChainId
+  extends StructuredMessageInput {
   chainId?: number;
 }
 

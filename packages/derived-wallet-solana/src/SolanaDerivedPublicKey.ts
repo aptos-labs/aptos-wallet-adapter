@@ -5,17 +5,17 @@ import {
 } from "@aptos-labs/derived-wallet-base";
 import {
   AccountPublicKey,
-  AptosConfig,
-  AuthenticationKey,
-  Deserializer,
+  type AptosConfig,
+  type AuthenticationKey,
+  type Deserializer,
   Ed25519PublicKey,
   Ed25519Signature,
+  type HexInput,
   hashValues,
-  HexInput,
-  Serializer,
-  Signature,
-  VerifySignatureArgs,
-  PublicKey,
+  type PublicKey,
+  type Serializer,
+  type Signature,
+  type VerifySignatureArgs,
 } from "@aptos-labs/ts-sdk";
 import { createSignInMessage as createSolanaSignInMessage } from "@solana/wallet-standard-util";
 import { PublicKey as SolanaPublicKey } from "@solana/web3.js";

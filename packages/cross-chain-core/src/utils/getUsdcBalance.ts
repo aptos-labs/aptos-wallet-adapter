@@ -1,9 +1,9 @@
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
-import { Connection, PublicKey } from "@solana/web3.js";
-import { mainnetTokens, testnetTokens } from "../config";
-import { ethers, JsonRpcProvider } from "ethers";
-import { Chain } from "../CrossChainCore";
 import { SuiClient } from "@mysten/sui/client";
+import { Connection, PublicKey } from "@solana/web3.js";
+import { ethers, JsonRpcProvider } from "ethers";
+import type { Chain } from "../CrossChainCore";
+import { mainnetTokens, testnetTokens } from "../config";
 
 export const getSolanaWalletUSDCBalance = async (
   walletAddress: string,
@@ -13,8 +13,8 @@ export const getSolanaWalletUSDCBalance = async (
   const address = new PublicKey(walletAddress);
   const tokenAddress =
     aptosNetwork === Network.MAINNET
-      ? mainnetTokens["Solana"].tokenId.address
-      : testnetTokens["Solana"].tokenId.address;
+      ? mainnetTokens.Solana.tokenId.address
+      : testnetTokens.Solana.tokenId.address;
 
   const connection = new Connection(rpc);
   // Find the token account for USDC
@@ -62,8 +62,8 @@ export const getAptosWalletUSDCBalance = async (
 ): Promise<string> => {
   const token =
     aptosNetwork === Network.MAINNET
-      ? mainnetTokens["Aptos"]
-      : testnetTokens["Aptos"];
+      ? mainnetTokens.Aptos
+      : testnetTokens.Aptos;
   const tokenAddress = token.tokenId.address;
   const aptosConfig = new AptosConfig({ network: aptosNetwork });
   const connection = new Aptos(aptosConfig);
@@ -87,9 +87,7 @@ export const getSuiWalletUSDCBalance = async (
   rpc: string,
 ): Promise<string> => {
   const token =
-    aptosNetwork === Network.MAINNET
-      ? mainnetTokens["Sui"]
-      : testnetTokens["Sui"];
+    aptosNetwork === Network.MAINNET ? mainnetTokens.Sui : testnetTokens.Sui;
 
   const client = new SuiClient({
     url: rpc,

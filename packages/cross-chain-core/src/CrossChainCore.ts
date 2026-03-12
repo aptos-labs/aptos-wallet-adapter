@@ -1,24 +1,22 @@
-import { Account, Network } from "@aptos-labs/ts-sdk";
-
+import { type Account, Network } from "@aptos-labs/ts-sdk";
 import {
-  WormholeTransferRequest,
-  WormholeTransferResponse,
-  WormholeProvider,
-  WormholeQuoteRequest,
-  WormholeQuoteResponse,
-  WormholeWithdrawRequest,
-  WormholeWithdrawResponse,
-} from "./providers/wormhole";
-
-import {
-  ChainsConfig,
-  testnetChains,
-  testnetTokens,
+  type ChainConfig,
+  type ChainsConfig,
   mainnetChains,
   mainnetTokens,
-  TokenConfig,
-  ChainConfig,
+  type TokenConfig,
+  testnetChains,
+  testnetTokens,
 } from "./config";
+import {
+  WormholeProvider,
+  type WormholeQuoteRequest,
+  type WormholeQuoteResponse,
+  type WormholeTransferRequest,
+  type WormholeTransferResponse,
+  type WormholeWithdrawRequest,
+  type WormholeWithdrawResponse,
+} from "./providers/wormhole";
 import {
   getAptosWalletUSDCBalance,
   getEthereumWalletUSDCBalance,

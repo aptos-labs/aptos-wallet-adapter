@@ -1,15 +1,23 @@
 import {
   AboutAptosConnect,
-  AboutAptosConnectEducationScreen,
-  AdapterNotDetectedWallet,
-  AdapterWallet,
+  type AboutAptosConnectEducationScreen,
+  type AdapterNotDetectedWallet,
+  type AdapterWallet,
   AptosPrivacyPolicy,
-  WalletItem,
-  WalletSortingOptions,
   groupAndSortWallets,
   isInstallRequired,
   useWallet,
+  WalletItem,
+  type WalletSortingOptions,
 } from "@aptos-labs/wallet-adapter-react";
+// reported bug with loading mui icons with esm, therefore need to import like this https://github.com/mui/material-ui/issues/35233
+import {
+  ArrowBack,
+  ArrowForward,
+  Close as CloseIcon,
+  ExpandMore,
+  LanOutlined as LanOutlinedIcon,
+} from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -25,21 +33,12 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { type SyntheticEvent, useState } from "react";
 import { grey } from "./aptosColorPalette";
-// reported bug with loading mui icons with esm, therefore need to import like this https://github.com/mui/material-ui/issues/35233
-import {
-  ArrowBack,
-  ArrowForward,
-  Close as CloseIcon,
-  ExpandMore,
-  LanOutlined as LanOutlinedIcon,
-} from "@mui/icons-material";
-import { SyntheticEvent, useState } from "react";
-import { WalletConnectorProps } from "./types";
+import type { WalletConnectorProps } from "./types";
 
 interface WalletsModalProps
-  extends
-    Pick<WalletConnectorProps, "networkSupport" | "modalMaxWidth">,
+  extends Pick<WalletConnectorProps, "networkSupport" | "modalMaxWidth">,
     WalletSortingOptions {
   handleClose: () => void;
   modalOpen: boolean;
@@ -62,7 +61,7 @@ export default function WalletsModal({
   const [expanded, setExpanded] = useState(false);
   const [tabValue, setTabValue] = useState<number>(0);
 
-  const handleTabChange = (event: SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 

@@ -1,26 +1,27 @@
 import {
   encodeStructuredMessage,
   mapUserResponse,
-  StructuredMessage,
-  StructuredMessageInput,
+  type StructuredMessage,
+  type StructuredMessageInput,
 } from "@aptos-labs/derived-wallet-base";
-import {
+import type {
   AptosSignMessageOutput,
   UserResponse,
 } from "@aptos-labs/wallet-standard";
+import { fromBase64 } from "@mysten/bcs";
+import { parseSerializedSignature } from "@mysten/sui/cryptography";
 import type {
   SuiSignPersonalMessageInput,
   SuiSignPersonalMessageOutput,
   Wallet,
   WalletAccount,
 } from "@mysten/wallet-standard";
-import { parseSerializedSignature } from "@mysten/sui/cryptography";
-import { fromBase64 } from "@mysten/bcs";
 import { SuiDerivedPublicKey } from "./SuiDerivedPublicKey";
-import { wrapSuiUserResponse } from "./shared";
 import { SuiDerivedEd25519Signature } from "./SuiDerivedSignature";
+import { wrapSuiUserResponse } from "./shared";
 
-export interface StructuredMessageInputWithChainId extends StructuredMessageInput {
+export interface StructuredMessageInputWithChainId
+  extends StructuredMessageInput {
   chainId?: number;
 }
 

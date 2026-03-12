@@ -1,17 +1,20 @@
-import { AccountAuthenticator, AnyRawTransaction } from "@aptos-labs/ts-sdk";
-import {
+import type {
+  AccountAuthenticator,
+  AnyRawTransaction,
+} from "@aptos-labs/ts-sdk";
+import type {
   AptosSignMessageOutput,
   UserResponse,
 } from "@aptos-labs/wallet-standard";
-import { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
-import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
+import type { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
+import type { PublicKey as SolanaPublicKey } from "@solana/web3.js";
+import { SolanaDerivedPublicKey } from "./SolanaDerivedPublicKey";
 import { defaultSolanaAuthenticationFunction } from "./shared";
 import {
+  type StructuredMessageInputWithChainId,
   signAptosMessageWithSolana,
-  StructuredMessageInputWithChainId,
 } from "./signAptosMessage";
 import { signAptosTransactionWithSolana } from "./signAptosTransaction";
-import { SolanaDerivedPublicKey } from "./SolanaDerivedPublicKey";
 
 export type SolanaWalletAdapterWithAptosFeatures = SolanaWalletAdapter & {
   getAptosPublicKey: (

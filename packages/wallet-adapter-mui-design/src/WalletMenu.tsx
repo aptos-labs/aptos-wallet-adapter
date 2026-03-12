@@ -25,7 +25,7 @@ export default function WalletMenu({
   const id = popoverOpen ? "wallet-popover" : undefined;
 
   const onAccountOptionClicked = () => {
-    handleNavigate && handleNavigate();
+    handleNavigate?.();
     handlePopoverClose();
   };
 
@@ -37,7 +37,7 @@ export default function WalletMenu({
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
 
   const copyAddress = async () => {
-    await navigator.clipboard.writeText(account?.address?.toString()!);
+    await navigator.clipboard.writeText(account?.address?.toString() ?? "");
 
     setTooltipOpen(true);
 

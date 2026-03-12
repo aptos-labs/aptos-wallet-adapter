@@ -1,7 +1,10 @@
-import { AccountAddressInput, Account, Network } from "@aptos-labs/ts-sdk";
-import { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
-import { routes, AttestationReceipt } from "@wormhole-foundation/sdk/dist/cjs";
-import { Chain, AptosAccount } from "../..";
+import type { Account, AccountAddressInput, Network } from "@aptos-labs/ts-sdk";
+import type { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
+import type {
+  AttestationReceipt,
+  routes,
+} from "@wormhole-foundation/sdk/dist/cjs";
+import type { AptosAccount, Chain } from "../..";
 
 export type WormholeRouteResponse = routes.Route<
   "Mainnet" | "Testnet",
@@ -26,7 +29,9 @@ export interface WormholeQuoteRequest {
   type: "transfer" | "withdraw";
 }
 
-export type GasStationApiKey = Partial<Record<Network.TESTNET | Network.MAINNET, string>>;
+export type GasStationApiKey = Partial<
+  Record<Network.TESTNET | Network.MAINNET, string>
+>;
 
 export interface WormholeTransferRequest {
   sourceChain: Chain;
@@ -40,9 +45,9 @@ export interface WormholeTransferRequest {
 }
 
 export type WithdrawPhase =
-  | "initiating"  // User signing Aptos burn transaction
-  | "tracking"    // Waiting for Wormhole attestation (~60s)
-  | "claiming";   // Claiming on destination chain
+  | "initiating" // User signing Aptos burn transaction
+  | "tracking" // Waiting for Wormhole attestation (~60s)
+  | "claiming"; // Claiming on destination chain
 
 /**
  * Callback fired before and after each individual transaction is signed
@@ -54,7 +59,10 @@ export type WithdrawPhase =
  * @param txId - `null` when called *before* signing; the on-chain
  *   transaction hash when called *after* signing.
  */
-export type OnTransactionSigned = (description: string, txId: string | null) => void;
+export type OnTransactionSigned = (
+  description: string,
+  txId: string | null,
+) => void;
 
 export interface WormholeWithdrawRequest {
   /**
@@ -143,7 +151,8 @@ export interface WormholeClaimWithdrawResponse {
   destinationChainTxnId: string;
 }
 
-export interface RetryWithdrawClaimRequest extends WormholeClaimWithdrawRequest {
+export interface RetryWithdrawClaimRequest
+  extends WormholeClaimWithdrawRequest {
   /** Maximum number of retry attempts (default: 5). */
   maxRetries?: number;
   /** Initial delay in ms before the first retry (default: 2000). */
@@ -152,7 +161,8 @@ export interface RetryWithdrawClaimRequest extends WormholeClaimWithdrawRequest 
   backoffMultiplier?: number;
 }
 
-export interface RetryWithdrawClaimResponse extends WormholeClaimWithdrawResponse {
+export interface RetryWithdrawClaimResponse
+  extends WormholeClaimWithdrawResponse {
   /** Number of retry attempts that were needed (0 means first attempt succeeded). */
   retriesUsed: number;
 }
@@ -191,11 +201,7 @@ export class TransferError extends Error {
    */
   readonly cause?: unknown;
 
-  constructor(
-    message: string,
-    originChainTxnId: string,
-    cause?: unknown,
-  ) {
+  constructor(message: string, originChainTxnId: string, cause?: unknown) {
     super(message);
     this.name = "TransferError";
     this.originChainTxnId = originChainTxnId;
