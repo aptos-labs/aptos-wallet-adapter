@@ -1,5 +1,11 @@
 # @aptos-labs/wallet-adapter-react
 
+## 8.3.2
+
+### Patch Changes
+
+- b19c8c2: Fix React JSX intrinsic element typing by importing `JSX` and `ClassAttributes` types directly from React to avoid namespace resolution issues across TypeScript/React setups.
+
 ## 8.3.1
 
 ### Patch Changes
@@ -32,10 +38,12 @@
 - 0379135: fix: support async autoConnect and late wallet injection
 
   Previously, autoConnect had two issues:
+
   1. If `autoConnect` started as `false` and later became `true` (e.g., after fetching user preferences), auto-connect would never trigger
   2. If a wallet extension injected after the initial render, auto-connect would fail even though the wallet was eventually available
 
   Now, the auto-connect attempt is only marked as complete when we actually find and connect to the wallet, allowing:
+
   - dApps to set `autoConnect` asynchronously
   - Wallet extensions that register late to still trigger auto-connect
 
