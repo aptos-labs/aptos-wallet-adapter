@@ -459,7 +459,7 @@ export class WormholeProvider
     const serverClaimUrl =
       this.crossChainCore._dappConfig?.solanaConfig?.serverClaimUrl;
 
-    if (claimChain === "Solana" && serverClaimUrl) {
+    if (claimChain === "Solana" && serverClaimUrl && !input.skipServerClaim) {
       logger.log("claimWithdraw: using server-side claim via", serverClaimUrl);
 
       const response = await fetch(serverClaimUrl, {

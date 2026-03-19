@@ -1,5 +1,5 @@
 import { Network } from "@aptos-labs/ts-sdk";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CrossChainCore } from "../src/CrossChainCore";
 import { mainnetChains, testnetChains } from "../src/config";
 import { WormholeProvider } from "../src/providers/wormhole";
@@ -106,6 +106,119 @@ describe("WormholeProvider", () => {
       expect(() => {
         testnetProvider.getChainConfig("Ethereum");
       }).toThrow("Chain config not found");
+    });
+  });
+
+  describe("claimWithdraw", () => {
+    const mockReceipt = { state: 3 } as any;
+
+    it("should use server-side claim for Solana when serverClaimUrl is configured", async () => {
+      const core = new CrossChainCore({
+        dappConfig: {
+          aptosNetwork: Network.TESTNET,
+          solanaConfig: { serverClaimUrl: "https://example.com/api/claim" },
+        },
+      });
+      const provider = new WormholeProvider(core);
+
+      const mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: () =>
+          Promise.resolve({ destinationChainTxnId: "server-tx-123" }),
+      });
+      vi.stubGlobal("fetch", mockFetch);
+
+      const result = await provider.claimWithdraw({
+        claimChain: "Solana",
+        destinationAddress: "SolAddr123",
+        receipt: mockReceipt,
+      });
+
+      expect(mockFetch).toHaveBeenCalledOnce();
+      expect(result.destinationChainTxnId).toBe("server-tx-123");
+
+      vi.unstubAllGlobals();
+    });
+
+    it("should skip server-side claim when skipServerClaim is true", async () => {
+      const core = new CrossChainCore({
+        dappConfig: {
+          aptosNetwork: Network.TESTNET,
+          solanaConfig: { serverClaimUrl: "https://example.com/api/claim" },
+        },
+      });
+      const provider = new WormholeProvider(core);
+
+      const mockFetch = vi.fn();
+      vi.stubGlobal("fetch", mockFetch);
+
+      // Without a wormholeRoute initialized, the wallet-based path throws
+      await expect(
+        provider.claimWithdraw({
+          claimChain: "Solana",
+          destinationAddress: "SolAddr123",
+          receipt: mockReceipt,
+          skipServerClaim: true,
+        }),
+      ).rejects.toThrow("Wormhole route not initialized");
+
+      // fetch should never have been called — server path was skipped
+      expect(mockFetch).not.toHaveBeenCalled();
+
+      vi.unstubAllGlobals();
+    });
+
+    it("should require wallet when skipServerClaim bypasses server path", async () => {
+      const core = new CrossChainCore({
+        dappConfig: {
+          aptosNetwork: Network.TESTNET,
+          solanaConfig: { serverClaimUrl: "https://example.com/api/claim" },
+        },
+      });
+      const provider = new WormholeProvider(core);
+
+      // Inject a mock route so we get past the route check
+      (provider as any).wormholeRoute = {};
+
+      await expect(
+        provider.claimWithdraw({
+          claimChain: "Solana",
+          destinationAddress: "SolAddr123",
+          receipt: mockReceipt,
+          skipServerClaim: true,
+        }),
+      ).rejects.toThrow("Wallet is required");
+
+      vi.unstubAllGlobals();
+    });
+
+    it("should still use server path when skipServerClaim is false", async () => {
+      const core = new CrossChainCore({
+        dappConfig: {
+          aptosNetwork: Network.TESTNET,
+          solanaConfig: { serverClaimUrl: "https://example.com/api/claim" },
+        },
+      });
+      const provider = new WormholeProvider(core);
+
+      const mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: () =>
+          Promise.resolve({ destinationChainTxnId: "server-tx-456" }),
+      });
+      vi.stubGlobal("fetch", mockFetch);
+
+      const result = await provider.claimWithdraw({
+        claimChain: "Solana",
+        destinationAddress: "SolAddr123",
+        receipt: mockReceipt,
+        skipServerClaim: false,
+      });
+
+      expect(mockFetch).toHaveBeenCalledOnce();
+      expect(result.destinationChainTxnId).toBe("server-tx-456");
+
+      vi.unstubAllGlobals();
     });
   });
 
