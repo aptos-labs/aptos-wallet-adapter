@@ -145,6 +145,12 @@ export interface WormholeClaimWithdrawRequest {
   wallet?: AdapterWallet;
   /** Optional callback fired before and after each individual transaction is signed. */
   onTransactionSigned?: OnTransactionSigned;
+  /**
+   * When true, skip the server-side claim path (serverClaimUrl) and instead
+   * perform a client-side wallet-signed claim. Useful as a fallback when the
+   * server endpoint is unreachable. Requires `wallet` to be provided.
+   */
+  skipServerClaim?: boolean;
 }
 
 export interface WormholeClaimWithdrawResponse {
