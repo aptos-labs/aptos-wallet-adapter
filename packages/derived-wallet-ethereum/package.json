@@ -34,22 +34,22 @@
   },
   "dependencies": {
     "@aptos-labs/derived-wallet-base": "workspace:^",
-    "@aptos-labs/wallet-standard": "^0.5.2",
+    "@aptos-labs/wallet-standard": "^1.0.0",
     "@wallet-standard/app": "^1.1.0",
     "ethers": "^6.13.5",
     "mipd": "^0.0.7",
     "viem": "^2.23.12"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^5.1.1"
+    "@aptos-labs/ts-sdk": "^6.1.0"
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@types/node": "^20.10.4",
+    "@types/node": "^22.19.15",
     "happy-dom": "^20.0.2",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3",
-    "vitest": "^2.1.8"
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
   },
   "files": [
     "dist",
