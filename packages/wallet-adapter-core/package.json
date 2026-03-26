@@ -50,9 +50,7 @@
   "dependencies": {
     "@aptos-connect/wallet-adapter-plugin": "^3.0.2",
     "@aptos-labs/wallet-standard": "^0.5.2",
-    "buffer": "^6.0.3",
-    "eventemitter3": "^4.0.7",
-    "tweetnacl": "^1.0.3"
+    "eventemitter3": "^5.0.1"
   },
   "peerDependencies": {
     "@aptos-labs/ts-sdk": "^5.1.1"
