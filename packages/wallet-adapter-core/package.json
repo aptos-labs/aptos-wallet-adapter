@@ -48,7 +48,7 @@
     "vitest": "^2.1.8"
   },
   "dependencies": {
-    "@aptos-connect/wallet-adapter-plugin": "^3.0.2",
+    "@aptos-connect/wallet-adapter-plugin": "^3.0.4",
     "@aptos-labs/wallet-standard": "^0.5.2",
     "eventemitter3": "^5.0.1"
   },
