@@ -1,5 +1,12 @@
 # @aptos-labs/wallet-adapter-core
 
+## 8.5.1
+
+### Patch Changes
+
+- 34244ae: Upgrade eventemitter3 from v4 to v5 for proper ESM compatibility and remove unused buffer and tweetnacl dependencies
+- 8f1b638: Bump @aptos-connect/wallet-adapter-plugin
+
 ## 8.5.0
 
 ### Minor Changes
