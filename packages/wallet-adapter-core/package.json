@@ -42,7 +42,7 @@
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
     "@swc/core": "^1.11.16",
     "@types/node": "^20.10.4",
-    "happy-dom": "^20.0.2",
+    "happy-dom": "^20.8.9",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
     "vitest": "^2.1.8"
