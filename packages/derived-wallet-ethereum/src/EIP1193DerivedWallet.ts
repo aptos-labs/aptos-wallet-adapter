@@ -37,12 +37,17 @@ const defaultAuthenticationFunction =
 export interface EIP1193DerivedWalletOptions {
   authenticationFunction?: string;
   defaultNetwork?: Network;
+  /** When set, address derivation uses this domain instead of window.location.host (delegation mode) */
+  masterDomain?: string;
 }
 
 export class EIP1193DerivedWallet implements AptosWallet {
   readonly eip1193Provider: EIP1193Provider;
   readonly eip1193Ethers: BrowserProvider;
-  readonly domain: string;
+  /** Domain used for address derivation and abstractPublicKey */
+  readonly accountDomain: string;
+  /** Domain used for SIWE signing envelope (always window.location.host) */
+  readonly signingDomain: string;
   readonly authenticationFunction: string;
   defaultNetwork: Network;
 
@@ -61,12 +66,14 @@ export class EIP1193DerivedWallet implements AptosWallet {
     const {
       authenticationFunction = defaultAuthenticationFunction,
       defaultNetwork = Network.MAINNET,
+      masterDomain,
     } = options;
 
     this.eip1193Provider = provider;
     this.eip1193Ethers = new BrowserProvider(provider);
 
-    this.domain = window.location.host;
+    this.accountDomain = masterDomain ?? window.location.host;
+    this.signingDomain = window.location.host;
     this.authenticationFunction = authenticationFunction;
     this.defaultNetwork = defaultNetwork;
     this.name = `${info.name} (Ethereum)`;
@@ -116,10 +123,25 @@ export class EIP1193DerivedWallet implements AptosWallet {
 
   private derivePublicKey(ethereumAddress: EthereumAddress) {
     return new EIP1193DerivedPublicKey({
-      domain: this.domain,
+      domain: this.accountDomain,
       ethereumAddress,
       authenticationFunction: this.authenticationFunction,
     });
+  }
+
+  get isDelegated(): boolean {
+    return this.accountDomain !== this.signingDomain;
+  }
+
+  async deriveAddressForDomain(domain: string) {
+    const [activeAccount] = await this.eip1193Ethers.listAccounts();
+    if (!activeAccount) throw new Error("Account not connected");
+    const publicKey = new EIP1193DerivedPublicKey({
+      domain,
+      ethereumAddress: activeAccount.address as EthereumAddress,
+      authenticationFunction: this.authenticationFunction,
+    });
+    return publicKey.authKey().derivedAddress();
   }
 
   // region Connection
@@ -255,11 +277,15 @@ export class EIP1193DerivedWallet implements AptosWallet {
   async signTransaction(
     rawTransaction: AnyRawTransaction,
     _asFeePayer?: boolean,
+    options?: { masterDomain?: string },
   ): Promise<UserResponse<AccountAuthenticator>> {
+    const accountDomain = options?.masterDomain ?? this.accountDomain;
     return signAptosTransactionWithEthereum({
       eip1193Provider: this.eip1193Provider,
       authenticationFunction: this.authenticationFunction,
       rawTransaction,
+      accountDomain,
+      signingDomain: this.signingDomain,
     });
   }
 

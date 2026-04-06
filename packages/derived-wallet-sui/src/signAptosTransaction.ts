@@ -29,24 +29,31 @@ import { wrapSuiUserResponse } from "./shared";
  * changes in the future if needed.
  */
 export const SIGNATURE_TYPE = 0;
+
+/**
+ * Signature type for delegated signing (cross-domain).
+ * The abstractSignature includes the delegated_domain used for signing.
+ */
+export const DELEGATED_SIGNATURE_TYPE = 1;
+
 export interface SignAptosTransactionWithSuiInput {
   suiWallet: Wallet;
   suiAccount: WalletAccount;
   authenticationFunction: string;
   rawTransaction: AnyRawTransaction;
-  domain: string;
+  /** Domain used for address derivation / abstractPublicKey. Defaults to window.location.host. */
+  accountDomain?: string;
+  /** Domain used for Sui signing envelope. Defaults to window.location.host. */
+  signingDomain?: string;
+  /** @deprecated Use accountDomain instead */
+  domain?: string;
 }
 
 export async function signAptosTransactionWithSui(
   input: SignAptosTransactionWithSuiInput,
 ): Promise<UserResponse<AccountAuthenticator>> {
-  const {
-    suiWallet,
-    suiAccount,
-    authenticationFunction,
-    rawTransaction,
-    domain,
-  } = input;
+  const { suiWallet, suiAccount, authenticationFunction, rawTransaction } =
+    input;
 
   const signPersonalMessageFeature = suiWallet.features[
     "sui:signPersonalMessage"
@@ -64,6 +71,10 @@ export async function signAptosTransactionWithSui(
     throw new Error("Account not connected");
   }
 
+  const signingDomain =
+    input.signingDomain ?? input.domain ?? window.location.host;
+  const accountDomain = input.accountDomain ?? signingDomain;
+
   const signingMessage = generateSigningMessageForTransaction(rawTransaction);
   const message = AbstractedAccount.generateAccountAbstractionMessage(
     signingMessage,
@@ -75,7 +86,7 @@ export async function signAptosTransactionWithSui(
     suiAddress,
     rawTransaction,
     signingMessageDigest,
-    domain,
+    domain: signingDomain,
   });
 
   const response = await wrapSuiUserResponse(
@@ -85,9 +96,6 @@ export async function signAptosTransactionWithSui(
     }),
   );
   return mapUserResponse(response, (output): AccountAuthenticator => {
-    // The signature is returned as a serialized base64 signature
-    // represents `1 byte (scheme flag) + 64 bytes (signature) + 32 bytes (public key)` as base64 string
-    // so we need to parse it
     const parsedSignature = parseSerializedSignature(output.signature);
     const { signatureScheme } = parsedSignature;
 
@@ -97,23 +105,47 @@ export async function signAptosTransactionWithSui(
     }
     const signature = new SuiDerivedEd25519Signature(output.signature);
 
-    // Serialize the signature with the signature type as the first byte.
-    const serializer = new Serializer();
-    serializer.serializeU8(SIGNATURE_TYPE);
-    serializer.serializeBytes(signature.toUint8Array());
-    const abstractSignature = serializer.toUint8Array();
-
-    // Serialize the abstract public key.
-    const abstractPublicKey = new DerivableAbstractPublicKey(
+    return createAccountAuthenticatorForSuiTransaction(
+      signature,
       suiAccount.address,
-      domain,
-    );
-
-    return new AccountAuthenticatorAbstraction(
+      accountDomain,
       authenticationFunction,
       signingMessageDigest,
-      abstractSignature,
-      abstractPublicKey.bcsToBytes(),
+      signingDomain,
     );
   });
+}
+
+export function createAccountAuthenticatorForSuiTransaction(
+  signature: SuiDerivedEd25519Signature,
+  suiAddress: string,
+  accountDomain: string,
+  authenticationFunction: string,
+  signingMessageDigest: Uint8Array,
+  signingDomain?: string,
+): AccountAuthenticatorAbstraction {
+  const isDelegated =
+    signingDomain !== undefined && signingDomain !== accountDomain;
+
+  const serializer = new Serializer();
+  if (isDelegated) {
+    serializer.serializeU8(DELEGATED_SIGNATURE_TYPE);
+    serializer.serializeStr(signingDomain);
+  } else {
+    serializer.serializeU8(SIGNATURE_TYPE);
+  }
+  serializer.serializeBytes(signature.toUint8Array());
+  const abstractSignature = serializer.toUint8Array();
+
+  const abstractPublicKey = new DerivableAbstractPublicKey(
+    suiAddress,
+    accountDomain,
+  );
+
+  return new AccountAuthenticatorAbstraction(
+    authenticationFunction,
+    signingMessageDigest,
+    abstractSignature,
+    abstractPublicKey.bcsToBytes(),
+  );
 }

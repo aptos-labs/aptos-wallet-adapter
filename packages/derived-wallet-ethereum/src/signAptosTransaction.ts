@@ -24,6 +24,12 @@ import { type EthereumAddress, wrapEthersUserResponse } from "./shared";
  */
 export const SIGNATURE_TYPE = 1;
 
+/**
+ * Signature type for delegated signing (cross-domain).
+ * The abstractSignature includes the delegated_domain used for SIWE signing.
+ */
+export const DELEGATED_SIGNATURE_TYPE = 2;
+
 export interface CreateMessageForEthereumTransactionInput {
   rawTransaction: AnyRawTransaction;
   authenticationFunction: string;
@@ -78,21 +84,29 @@ export function createMessageForEthereumTransaction(
 export function createAccountAuthenticatorForEthereumTransaction(
   siweSignature: string,
   ethereumAddress: EthereumAddress,
-  domain: string,
+  accountDomain: string,
   scheme: string,
   authenticationFunction: string,
   signingMessageDigest: Uint8Array,
   issuedAt: Date,
+  signingDomain?: string,
 ): AccountAuthenticatorAbstraction {
+  const isDelegated =
+    signingDomain !== undefined && signingDomain !== accountDomain;
   const serializer = new Serializer();
-  serializer.serializeU8(SIGNATURE_TYPE);
+  if (isDelegated) {
+    serializer.serializeU8(DELEGATED_SIGNATURE_TYPE);
+    serializer.serializeStr(signingDomain);
+  } else {
+    serializer.serializeU8(SIGNATURE_TYPE);
+  }
   const signature = new EIP1193SiweSignature(scheme, issuedAt, siweSignature);
   signature.serialize(serializer);
   const abstractSignature = serializer.toUint8Array();
 
   const abstractPublicKey = new DerivableAbstractPublicKey(
     ethereumAddress,
-    domain,
+    accountDomain,
   );
 
   return new AccountAuthenticatorAbstraction(
@@ -108,6 +122,10 @@ export interface SignAptosTransactionWithEthereumInput {
   ethereumAddress?: EthereumAddress;
   authenticationFunction: string;
   rawTransaction: AnyRawTransaction;
+  /** Domain used for address derivation / abstractPublicKey. Defaults to window.location.host. */
+  accountDomain?: string;
+  /** Domain used for SIWE signing envelope. Defaults to window.location.host. */
+  signingDomain?: string;
 }
 
 export async function signAptosTransactionWithEthereum(
@@ -128,10 +146,10 @@ export async function signAptosTransactionWithEthereum(
   }
   const ethereumAddress = ethereumAccount.address as EthereumAddress;
 
-  // We need to provide `issuedAt` externally so that we can match it with the signature
   const issuedAt = new Date();
-  const domain = window.location.host;
-  const uri = window.location.origin;
+  const signingDomain = input.signingDomain ?? window.location.host;
+  const accountDomain = input.accountDomain ?? signingDomain;
+  const uri = `${window.location.protocol}//${signingDomain}`;
   const scheme = window.location.protocol.slice(0, -1);
 
   const { siweMessage, signingMessageDigest } =
@@ -139,7 +157,7 @@ export async function signAptosTransactionWithEthereum(
       rawTransaction,
       authenticationFunction,
       ethereumAddress,
-      domain,
+      domain: signingDomain,
       uri,
       issuedAt,
     });
@@ -152,11 +170,12 @@ export async function signAptosTransactionWithEthereum(
     return createAccountAuthenticatorForEthereumTransaction(
       siweSignature,
       ethereumAddress,
-      domain,
+      accountDomain,
       scheme,
       authenticationFunction,
       signingMessageDigest,
       issuedAt,
+      signingDomain,
     );
   });
 }

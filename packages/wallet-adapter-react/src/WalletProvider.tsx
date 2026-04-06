@@ -235,6 +235,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   const signTransaction = async (args: {
     transactionOrPayload: AnyRawTransaction | InputTransactionData;
     asFeePayer?: boolean;
+    masterDomain?: string;
     options?: InputGenerateTransactionOptions & {
       expirationSecondsFromNow?: number;
       expirationTimestamp?: number;
@@ -243,7 +244,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     authenticator: AccountAuthenticator;
     rawTransaction: Uint8Array;
   }> => {
-    const { transactionOrPayload, asFeePayer } = args;
+    const { transactionOrPayload, asFeePayer, masterDomain } = args;
     if (!walletCore) {
       throw new Error("WalletCore is not initialized");
     }
@@ -251,6 +252,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
       return await walletCore.signTransaction({
         transactionOrPayload,
         asFeePayer,
+        masterDomain,
       });
     } catch (error: any) {
       if (onError) onError(error);

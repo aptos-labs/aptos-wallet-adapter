@@ -25,30 +25,45 @@ import { wrapSolanaUserResponse } from "./shared";
  * changes in the future if needed.
  */
 export const SIGNATURE_TYPE = 0;
+
+/**
+ * Signature type for delegated signing (cross-domain).
+ * The abstractSignature includes the delegated_domain used for SIWS signing.
+ */
+export const DELEGATED_SIGNATURE_TYPE = 1;
+
 export interface SignAptosTransactionWithSolanaInput {
   solanaWallet: SolanaWalletAdapter;
   authenticationFunction: string;
   rawTransaction: AnyRawTransaction;
-  domain: string;
+  /** Domain used for address derivation / abstractPublicKey. Defaults to window.location.host. */
+  accountDomain?: string;
+  /** Domain used for SIWS signing envelope. Defaults to window.location.host. */
+  signingDomain?: string;
+  /** @deprecated Use accountDomain instead */
+  domain?: string;
 }
 
 export async function signAptosTransactionWithSolana(
   input: SignAptosTransactionWithSolanaInput,
 ) {
-  const { solanaWallet, authenticationFunction, rawTransaction, domain } =
-    input;
+  const { solanaWallet, authenticationFunction, rawTransaction } = input;
 
   const solanaPublicKey = solanaWallet.publicKey;
   if (!solanaPublicKey) {
     throw new Error("Account not connected");
   }
 
+  const signingDomain =
+    input.signingDomain ?? input.domain ?? window.location.host;
+  const accountDomain = input.accountDomain ?? signingDomain;
+
   const { siwsInput, signingMessageDigest } = createMessageForSolanaTransaction(
     {
       rawTransaction,
       authenticationFunction,
       solanaPublicKey,
-      domain,
+      domain: signingDomain,
     },
   );
 
@@ -79,9 +94,10 @@ export async function signAptosTransactionWithSolana(
         return createAccountAuthenticatorForSolanaTransaction(
           output.signature,
           solanaPublicKey,
-          domain,
+          accountDomain,
           authenticationFunction,
           signingMessageDigest,
+          signingDomain,
         );
       });
     }
@@ -95,9 +111,10 @@ export async function signAptosTransactionWithSolana(
       return createAccountAuthenticatorForSolanaTransaction(
         output,
         solanaPublicKey,
-        domain,
+        accountDomain,
         authenticationFunction,
         signingMessageDigest,
+        signingDomain,
       );
     });
   }
@@ -105,26 +122,31 @@ export async function signAptosTransactionWithSolana(
   throw new Error(`${solanaWallet.name} does not support SIWS or signMessage`);
 }
 
-// A helper function to create an AccountAuthenticator from a Solana signature
 export function createAccountAuthenticatorForSolanaTransaction(
   signatureBytes: Uint8Array<ArrayBufferLike>,
   solanaPublicKey: SolanaPublicKey,
-  domain: string,
+  accountDomain: string,
   authenticationFunction: string,
   signingMessageDigest: Uint8Array,
+  signingDomain?: string,
 ): AccountAuthenticatorAbstraction {
-  // Solana signMessage standard always returns a Ed25519 signature type
+  const isDelegated =
+    signingDomain !== undefined && signingDomain !== accountDomain;
+
   const signature = new Ed25519Signature(signatureBytes);
-  // Serialize the signature with the signature type as the first byte.
   const serializer = new Serializer();
-  serializer.serializeU8(SIGNATURE_TYPE);
+  if (isDelegated) {
+    serializer.serializeU8(DELEGATED_SIGNATURE_TYPE);
+    serializer.serializeStr(signingDomain);
+  } else {
+    serializer.serializeU8(SIGNATURE_TYPE);
+  }
   serializer.serializeBytes(signature.toUint8Array());
   const abstractSignature = serializer.toUint8Array();
 
-  // Serialize the abstract public key.
   const abstractPublicKey = new DerivableAbstractPublicKey(
     solanaPublicKey.toBase58(),
-    domain,
+    accountDomain,
   );
 
   return new AccountAuthenticatorAbstraction(
