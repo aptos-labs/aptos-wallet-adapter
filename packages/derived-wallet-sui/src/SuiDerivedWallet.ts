@@ -37,11 +37,16 @@ import { signAptosTransactionWithSui } from "./signAptosTransaction";
 export interface SuiDomainWalletOptions {
   authenticationFunction?: string;
   defaultNetwork?: Network;
+  /** When set, address derivation uses this domain instead of window.location.host (delegation mode) */
+  masterDomain?: string;
 }
 
 export class SuiDerivedWallet implements AptosWallet {
   readonly suiWallet: Wallet;
-  readonly domain: string;
+  /** Domain used for address derivation and abstractPublicKey */
+  readonly accountDomain: string;
+  /** Domain used for Sui signing envelope (always window.location.host) */
+  readonly signingDomain: string;
   readonly authenticationFunction: string;
   defaultNetwork: Network;
   private _activeAccount: WalletAccount;
@@ -57,11 +62,13 @@ export class SuiDerivedWallet implements AptosWallet {
     const {
       authenticationFunction = "0x1::sui_derivable_account::authenticate",
       defaultNetwork = Network.MAINNET,
+      masterDomain,
     } = options;
 
     this._activeAccount = suiWallet.accounts[0];
     this.suiWallet = suiWallet;
-    this.domain = window.location.host;
+    this.accountDomain = masterDomain ?? window.location.host;
+    this.signingDomain = window.location.host;
     this.authenticationFunction = authenticationFunction;
     this.defaultNetwork = defaultNetwork;
     this.name = `${suiWallet.name} (Sui)`;
@@ -110,10 +117,24 @@ export class SuiDerivedWallet implements AptosWallet {
 
   private derivePublicKey(suiAccountAddress: string) {
     return new SuiDerivedPublicKey({
-      domain: this.domain,
+      domain: this.accountDomain,
       suiAccountAddress,
       authenticationFunction: this.authenticationFunction,
     });
+  }
+
+  get isDelegated(): boolean {
+    return this.accountDomain !== this.signingDomain;
+  }
+
+  async deriveAddressForDomain(domain: string) {
+    if (!this._activeAccount) throw new Error("Account not connected");
+    const publicKey = new SuiDerivedPublicKey({
+      domain,
+      suiAccountAddress: this._activeAccount.address,
+      authenticationFunction: this.authenticationFunction,
+    });
+    return publicKey.authKey().derivedAddress();
   }
 
   // region Connection
@@ -231,20 +252,23 @@ export class SuiDerivedWallet implements AptosWallet {
         ...input,
         chainId,
       },
-      domain: this.domain,
+      domain: this.signingDomain,
     });
   }
 
   async signTransaction(
     rawTransaction: AnyRawTransaction,
     _asFeePayer?: boolean,
+    options?: { masterDomain?: string },
   ): Promise<UserResponse<AccountAuthenticator>> {
+    const accountDomain = options?.masterDomain ?? this.accountDomain;
     return signAptosTransactionWithSui({
       suiWallet: this.suiWallet,
       suiAccount: this._activeAccount,
       authenticationFunction: this.authenticationFunction,
       rawTransaction,
-      domain: this.domain,
+      accountDomain,
+      signingDomain: this.signingDomain,
     });
   }
 

@@ -50,6 +50,12 @@ type InputTransactionDataInner = {
   };
   /** This will always be set to true if a custom transaction submitter is provided. */
   withFeePayer?: boolean;
+  /**
+   * When set, the transaction is signed using the master domain's derived account
+   * instead of the locally connected account (cross-domain delegation).
+   * The dapp must also provide the correct `sender` address derived from this domain.
+   */
+  masterDomain?: string;
 };
 
 /**

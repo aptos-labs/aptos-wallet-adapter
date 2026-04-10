@@ -78,7 +78,8 @@ describe("SolanaDerivedWallet", () => {
     });
 
     it("should set domain from window.location.host", () => {
-      expect(wallet.domain).toBe("test.example.com");
+      expect(wallet.accountDomain).toBe("test.example.com");
+      expect(wallet.signingDomain).toBe("test.example.com");
     });
   });
 

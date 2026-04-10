@@ -138,6 +138,11 @@ export interface DappConfig {
     appUrl?: string;
   };
   crossChainWallets?: boolean;
+  /**
+   * When set, all transactions are signed using the master domain's derived account
+   * (cross-domain delegation). Can be overridden per-transaction via InputTransactionData.masterDomain.
+   */
+  masterDomain?: string;
 }
 
 export declare interface WalletCoreEvents {
@@ -840,11 +845,25 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       }
 
       // If wallet does not support signAndSubmitTransaction or a transaction submitter
-      // is provided, the adapter will sign and submit it for the dapp.
+      // is provided or it is a derived wallet, the adapter will sign and submit it for the dapp.
       const aptosConfig = getAptosConfig(this._network, this._dappConfig);
       const aptos = new Aptos(aptosConfig);
+      const effectiveMasterDomain =
+        transactionInput.masterDomain ?? this._dappConfig?.masterDomain;
+      let senderAddress = transactionInput.sender
+        ? transactionInput.sender.toString()
+        : this._account.address.toString();
+      if (
+        effectiveMasterDomain &&
+        typeof (this._wallet as any)?.deriveAddressForDomain === "function"
+      ) {
+        const derived = await (this._wallet as any).deriveAddressForDomain(
+          effectiveMasterDomain,
+        );
+        senderAddress = derived.toString();
+      }
       const transaction = await aptos.transaction.build.simple({
-        sender: this._account.address.toString(),
+        sender: senderAddress,
         data: transactionInput.data,
         options: transactionInput.options,
         withFeePayer: shouldUseTxnSubmitter,
@@ -852,6 +871,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
       const signTransactionResponse = await this.signTransaction({
         transactionOrPayload: transaction,
+        masterDomain: effectiveMasterDomain,
       });
       const response = await this.submitTransaction({
         transaction,
@@ -882,11 +902,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   async signTransaction(args: {
     transactionOrPayload: AnyRawTransaction | InputTransactionData;
     asFeePayer?: boolean;
+    masterDomain?: string;
   }): Promise<{
     authenticator: AccountAuthenticator;
     rawTransaction: Uint8Array;
   }> {
     const { transactionOrPayload, asFeePayer } = args;
+    const masterDomain = args.masterDomain ?? this._dappConfig?.masterDomain;
     /**
      * All standard compatible wallets should support AnyRawTransaction for signTransaction version 1.0.0
      * For standard signTransaction version 1.1.0, the standard expects a transaction input
@@ -906,11 +928,16 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
 
       // dapp sends a generated transaction (i.e AnyRawTransaction), which is supported by the wallet standard at signTransaction version 1.0.0
       if ("rawTransaction" in transactionOrPayload) {
-        const response = (await this._wallet?.features[
-          "aptos:signTransaction"
-        ].signTransaction(
+        const signMethod = this._wallet?.features["aptos:signTransaction"]
+          .signTransaction as (
+          transaction: AnyRawTransaction,
+          asFeePayer?: boolean,
+          options?: { masterDomain?: string },
+        ) => Promise<UserResponse<AccountAuthenticator>>;
+        const response = (await signMethod(
           transactionOrPayload,
           asFeePayer,
+          masterDomain ? { masterDomain } : undefined,
         )) as UserResponse<AccountAuthenticator>;
         if (response.status === UserResponseStatus.REJECTED) {
           throw new WalletConnectionError("User has rejected the request")
@@ -968,11 +995,18 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
           withFeePayer: transactionOrPayload.withFeePayer,
         });
 
-        const response = (await this._wallet?.features[
-          "aptos:signTransaction"
-        ].signTransaction(
+        const fallbackMasterDomain =
+          masterDomain ?? transactionOrPayload.masterDomain;
+        const signMethod2 = this._wallet?.features["aptos:signTransaction"]
+          .signTransaction as (
+          transaction: AnyRawTransaction,
+          asFeePayer?: boolean,
+          options?: { masterDomain?: string },
+        ) => Promise<UserResponse<AccountAuthenticator>>;
+        const response = (await signMethod2(
           transaction,
           asFeePayer,
+          fallbackMasterDomain ? { masterDomain: fallbackMasterDomain } : undefined,
         )) as UserResponse<AccountAuthenticator>;
         if (response.status === UserResponseStatus.REJECTED) {
           throw new WalletConnectionError("User has rejected the request")

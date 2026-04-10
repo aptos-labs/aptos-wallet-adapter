@@ -34,6 +34,7 @@ export interface WalletContextState {
   signTransaction(args: {
     transactionOrPayload: AnyRawTransaction | InputTransactionData;
     asFeePayer?: boolean;
+    masterDomain?: string;
   }): Promise<{
     authenticator: AccountAuthenticator;
     rawTransaction: Uint8Array;
