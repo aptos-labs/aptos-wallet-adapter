@@ -10,22 +10,16 @@ export function getSDKWallets(dappConfig?: DappConfig) {
 
   // Need to check window is defined for AptosConnect
   if (typeof window !== "undefined") {
+    const aptosConnectConfig = {
+      network: dappConfig?.network,
+      dappId: dappConfig?.aptosConnectDappId,
+      ...dappConfig?.aptosConnect,
+    };
+
     sdkWallets.push(
-      new AptosConnectGoogleWallet({
-        network: dappConfig?.network,
-        dappId: dappConfig?.aptosConnectDappId,
-        ...dappConfig?.aptosConnect,
-      }),
-      new AptosConnectAppleWallet({
-        network: dappConfig?.network,
-        dappId: dappConfig?.aptosConnectDappId,
-        ...dappConfig?.aptosConnect,
-      }),
-      new AptosConnectGenericWallet({
-        network: dappConfig?.network,
-        dappId: dappConfig?.aptosConnectDappId,
-        ...dappConfig?.aptosConnect,
-      }),
+      new AptosConnectGoogleWallet(aptosConnectConfig),
+      new AptosConnectAppleWallet(aptosConnectConfig),
+      new AptosConnectGenericWallet(aptosConnectConfig),
     );
   }
 
