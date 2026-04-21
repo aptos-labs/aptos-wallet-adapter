@@ -31,7 +31,7 @@
     "@solana/wallet-standard-wallet-adapter-base": "^1.1.4",
     "@wallet-standard/app": "^1.1.0",
     "tweetnacl": "^1.0.3",
-    "@solana/web3.js": "^1.95.8"
+    "@solana/web3.js": "^1.98.4"
   },
   "peerDependencies": {
     "@aptos-labs/ts-sdk": "^5.1.1"

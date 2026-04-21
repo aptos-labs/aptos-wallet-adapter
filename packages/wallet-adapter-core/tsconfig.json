@@ -10,7 +10,7 @@
     "vite.config.ts"
   ],
   "compilerOptions": {
-    "target": "es2022",
+    "target": "ES2022",
     "lib": ["es2022", "dom"],
     "types": ["node"],
     "rootDir": "src",

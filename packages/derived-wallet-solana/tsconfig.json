@@ -3,7 +3,7 @@
   "include": ["src"],
   "exclude": ["dist", "build", "node_modules", "tests", "vite.config.ts"],
   "compilerOptions": {
-    "target": "es2022",
+    "target": "ES2022",
     "lib": ["es2022", "dom"],
     "rootDir": "src",
     "outDir": "dist"
