@@ -2,14 +2,16 @@
   "name": "@aptos-labs/wallet-adapter-react",
   "version": "8.3.3",
   "description": "Aptos Wallet Adapter React Provider",
+  "type": "module",
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "license": "Apache-2.0",
   "exports": {
-    "types": "./dist/index.d.ts",
-    "require": "./dist/index.js",
-    "import": "./dist/index.mjs"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
   },
   "repository": {
     "type": "git",
@@ -29,10 +31,8 @@
     "React"
   ],
   "scripts": {
-    "build:bundle": "tsup src/index.tsx --format esm,cjs --sourcemap",
-    "build:declarations": "tsc --emitDeclarationOnly --declaration --declarationMap",
-    "build": "pnpm build:bundle && pnpm build:declarations",
-    "dev": "tsup src/index.tsx --format esm,cjs --watch",
+    "build": "vite build",
+    "dev": "vite build --watch",
     "test": "vitest run",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "lint": "biome lint src"
@@ -45,8 +45,9 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "happy-dom": "^20.0.2",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3",
+    "typescript": "6.0.2",
+    "vite": "^6.3.6",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "^2.1.8"
   },
   "dependencies": {

@@ -1,10 +1,18 @@
 {
   "extends": "@aptos-labs/wallet-adapter-tsconfig/base.json",
-  "include": ["."],
-  "exclude": ["dist", "build", "node_modules", "tests", "vitest.config.ts"],
+  "include": ["src"],
+  "exclude": [
+    "dist",
+    "build",
+    "node_modules",
+    "tests",
+    "vitest.config.ts",
+    "vite.config.ts"
+  ],
   "compilerOptions": {
     "target": "es2022",
     "lib": ["es2022", "dom"],
+    "types": ["node"],
     "rootDir": "src",
     "outDir": "dist"
   }

@@ -2,20 +2,17 @@
   "name": "@aptos-labs/wallet-adapter-ant-design",
   "version": "5.3.19",
   "description": "Aptos Wallet Adapter ant-design",
+  "type": "module",
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "license": "Apache-2.0",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
-    "./dist/index.css": {
-      "import": "./dist/index.css",
-      "require": "./dist/index.css"
-    }
+    "./dist/index.css": "./dist/index.css"
   },
   "repository": {
     "type": "git",
@@ -35,8 +32,8 @@
     "React"
   ],
   "scripts": {
-    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
-    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
+    "build": "vite build",
+    "dev": "vite build --watch",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "lint": "biome lint src"
   },
@@ -44,8 +41,9 @@
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3"
+    "typescript": "6.0.2",
+    "vite": "^6.3.6",
+    "vite-plugin-dts": "^4.5.4"
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
