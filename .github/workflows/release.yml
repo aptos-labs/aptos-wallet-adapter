@@ -40,7 +40,7 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 9.15.5
+          version: 10.33.0
 
       - name: Install global dependencies
         run: pnpm install --frozen-lockfile
