@@ -75,7 +75,7 @@ aptos-wallet-adapter/
 
 ### Requirements
 
-- Node.js 20.18.0+
+- Node.js 22.0.0+
 - pnpm 9.15.5
 
 ### Common Commands
@@ -175,7 +175,7 @@ The adapter implements the Aptos Wallet Standard (AIP-62):
 - `turbo.json` - Turbo build pipeline and caching
 - `pnpm-workspace.yaml` - Workspace package definitions
 - `.changeset/` - Version change tracking (uses changesets)
-- `.node-version` - Node.js version requirement (20.18.0)
+- `.node-version` - Node.js version requirement (22.x)
 - `.tool-versions` - Tool versions (pnpm 9.15.5)
 
 ### Package Structure
