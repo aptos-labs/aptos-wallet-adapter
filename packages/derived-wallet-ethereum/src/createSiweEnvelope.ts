@@ -56,7 +56,7 @@ export function createSiweEnvelopeForAptosTransaction(
     rawTransaction: AnyRawTransaction;
   },
 ) {
-  const { rawTransaction, ...rest } = input;
-  const statement = createTransactionStatement(rawTransaction);
-  return createSiweEnvelope({ ...rest, statement });
+  const { rawTransaction, domain, ...rest } = input;
+  const statement = createTransactionStatement(rawTransaction, domain);
+  return createSiweEnvelope({ ...rest, statement, domain });
 }
