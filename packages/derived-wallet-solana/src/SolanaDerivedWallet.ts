@@ -35,11 +35,16 @@ export type { SolanaPublicKey };
 export interface SolanaDomainWalletOptions {
   authenticationFunction?: string;
   defaultNetwork?: Network;
+  /** When set, address derivation uses this domain instead of window.location.host (delegation mode) */
+  masterDomain?: string;
 }
 
 export class SolanaDerivedWallet implements AptosWallet {
   readonly solanaWallet: SolanaWalletAdapter;
-  readonly domain: string;
+  /** Domain used for address derivation and abstractPublicKey */
+  readonly accountDomain: string;
+  /** Domain used for SIWS signing envelope (always window.location.host) */
+  readonly signingDomain: string;
   readonly authenticationFunction: string;
   defaultNetwork: Network;
 
@@ -57,10 +62,12 @@ export class SolanaDerivedWallet implements AptosWallet {
     const {
       authenticationFunction = defaultSolanaAuthenticationFunction,
       defaultNetwork = Network.MAINNET,
+      masterDomain,
     } = options;
 
     this.solanaWallet = solanaWallet;
-    this.domain = window.location.host;
+    this.accountDomain = masterDomain ?? window.location.host;
+    this.signingDomain = window.location.host;
     this.authenticationFunction = authenticationFunction;
     this.defaultNetwork = defaultNetwork;
     this.name = `${solanaWallet.name} (Solana)`;
@@ -109,10 +116,24 @@ export class SolanaDerivedWallet implements AptosWallet {
 
   private derivePublicKey(solanaPublicKey: SolanaPublicKey) {
     return new SolanaDerivedPublicKey({
-      domain: this.domain,
+      domain: this.accountDomain,
       solanaPublicKey,
       authenticationFunction: this.authenticationFunction,
     });
+  }
+
+  get isDelegated(): boolean {
+    return this.accountDomain !== this.signingDomain;
+  }
+
+  async deriveAddressForDomain(domain: string) {
+    if (!this.solanaWallet.publicKey) throw new Error("Account not connected");
+    const publicKey = new SolanaDerivedPublicKey({
+      domain,
+      solanaPublicKey: this.solanaWallet.publicKey,
+      authenticationFunction: this.authenticationFunction,
+    });
+    return publicKey.authKey().derivedAddress();
   }
 
   // region Connection
@@ -228,19 +249,22 @@ export class SolanaDerivedWallet implements AptosWallet {
         ...input,
         chainId,
       },
-      domain: this.domain,
+      domain: this.signingDomain,
     });
   }
 
   async signTransaction(
     rawTransaction: AnyRawTransaction,
     _asFeePayer?: boolean,
+    options?: { masterDomain?: string },
   ): Promise<UserResponse<AccountAuthenticator>> {
+    const accountDomain = options?.masterDomain ?? this.accountDomain;
     return signAptosTransactionWithSolana({
       solanaWallet: this.solanaWallet,
       authenticationFunction: this.authenticationFunction,
       rawTransaction,
-      domain: this.domain,
+      accountDomain,
+      signingDomain: this.signingDomain,
     });
   }
 

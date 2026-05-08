@@ -38,3 +38,6 @@ yarn-error.log*
 
 # turbo
 .turbo
+
+# local test apps
+apps/nextjs-delegate/
