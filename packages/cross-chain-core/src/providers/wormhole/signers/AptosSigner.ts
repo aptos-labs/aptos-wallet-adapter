@@ -24,6 +24,14 @@ import type {
 import type { CrossChainCore } from "../../../CrossChainCore";
 import { type GasStationApiKey, validateExpireTimestamp } from "..";
 
+// Cast required because @aptos-labs/gas-station-client still bundles ts-sdk v5
+// types, which differ structurally from v7's TransactionSubmitter. Remove this
+// alias and the cast once `@aptos-labs/gas-station-client` publishes
+// v7-compatible types.
+type V7TransactionSubmitter = NonNullable<
+  NonNullable<ConstructorParameters<typeof AptosConfig>[0]>["pluginSettings"]
+>["TRANSACTION_SUBMITTER"];
+
 export async function signAndSendTransaction(
   request: AptosUnsignedTransaction<Network, AptosChains>,
   wallet: AdapterWallet,
@@ -67,7 +75,8 @@ export async function signAndSendTransaction(
     aptosConfig = new AptosConfig({
       network: dappNetwork,
       pluginSettings: {
-        TRANSACTION_SUBMITTER: transactionSubmitter,
+        TRANSACTION_SUBMITTER:
+          transactionSubmitter as unknown as V7TransactionSubmitter,
       },
     });
   } else {
