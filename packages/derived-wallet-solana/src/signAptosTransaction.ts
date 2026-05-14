@@ -7,11 +7,11 @@ import {
   type AccountAuthenticator,
   AccountAuthenticatorAbstraction,
   type AnyRawTransaction,
-  Ed25519Signature,
   generateSigningMessageForTransaction,
   hashValues,
-  Serializer,
 } from "@aptos-labs/ts-sdk";
+import { Serializer } from "@aptos-labs/ts-sdk/bcs";
+import { Ed25519Signature } from "@aptos-labs/ts-sdk/crypto";
 import { WalletError } from "@solana/wallet-adapter-base";
 import { createSignInMessage } from "@solana/wallet-standard-util";
 import type { StandardWalletAdapter as SolanaWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";

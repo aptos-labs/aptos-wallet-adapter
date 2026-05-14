@@ -4,19 +4,20 @@ import {
   parseAptosSigningMessage,
 } from "@aptos-labs/derived-wallet-base";
 import {
-  AccountPublicKey,
   type AptosConfig,
   type AuthenticationKey,
-  type Deserializer,
-  Ed25519PublicKey,
-  Ed25519Signature,
   type HexInput,
   hashValues,
+} from "@aptos-labs/ts-sdk";
+import type { Deserializer, Serializer } from "@aptos-labs/ts-sdk/bcs";
+import {
+  AccountPublicKey,
+  Ed25519PublicKey,
+  Ed25519Signature,
   type PublicKey,
-  type Serializer,
   type Signature,
   type VerifySignatureArgs,
-} from "@aptos-labs/ts-sdk";
+} from "@aptos-labs/ts-sdk/crypto";
 import { createSignInMessage as createSolanaSignInMessage } from "@solana/wallet-standard-util";
 import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
 import { createSiwsEnvelopeForAptosTransaction } from "./createSiwsEnvelope";

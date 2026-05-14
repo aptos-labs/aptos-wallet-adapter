@@ -1,4 +1,4 @@
-import { Deserializer, Serializer } from "@aptos-labs/ts-sdk";
+import { Deserializer, Serializer } from "@aptos-labs/ts-sdk/bcs";
 import { describe, expect, it } from "vitest";
 import { EIP1193DerivedPublicKey } from "../src/EIP1193DerivedPublicKey";
 import type { EthereumAddress } from "../src/shared";

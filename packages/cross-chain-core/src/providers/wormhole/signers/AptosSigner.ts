@@ -10,10 +10,10 @@ import {
   Aptos,
   AptosConfig,
   type Network as AptosNetwork,
-  Deserializer,
   type InputGenerateTransactionPayloadData,
   type ScriptFunctionArgumentTypes,
 } from "@aptos-labs/ts-sdk";
+import { Deserializer } from "@aptos-labs/ts-sdk/bcs";
 import type { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
 import { UserResponseStatus } from "@aptos-labs/wallet-standard";
 import type { Network } from "@wormhole-foundation/sdk";

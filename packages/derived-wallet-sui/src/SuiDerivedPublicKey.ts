@@ -4,17 +4,18 @@ import {
   parseAptosSigningMessage,
 } from "@aptos-labs/derived-wallet-base";
 import {
-  AccountPublicKey,
   type AptosConfig,
   type AuthenticationKey,
-  type Deserializer,
   Hex,
   type HexInput,
   hashValues,
-  type Serializer,
+} from "@aptos-labs/ts-sdk";
+import type { Deserializer, Serializer } from "@aptos-labs/ts-sdk/bcs";
+import {
+  AccountPublicKey,
   type Signature,
   type VerifySignatureArgs,
-} from "@aptos-labs/ts-sdk";
+} from "@aptos-labs/ts-sdk/crypto";
 import { verifyPersonalMessageSignature } from "@mysten/sui/verify";
 import { createSuiEnvelopeForAptosTransaction } from "./createSuiEnvelope";
 import { SuiDerivedEd25519Signature } from "./SuiDerivedSignature";

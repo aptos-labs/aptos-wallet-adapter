@@ -1,10 +1,6 @@
-import {
-  type Deserializer,
-  Hex,
-  type HexInput,
-  type Serializer,
-  Signature,
-} from "@aptos-labs/ts-sdk";
+import { Hex, type HexInput } from "@aptos-labs/ts-sdk";
+import type { Deserializer, Serializer } from "@aptos-labs/ts-sdk/bcs";
+import { Signature } from "@aptos-labs/ts-sdk/crypto";
 
 /**
  * A classs representing a signature of a message signed with EIP1193
