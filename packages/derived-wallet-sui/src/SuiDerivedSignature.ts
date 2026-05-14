@@ -1,9 +1,6 @@
-import {
-  type Deserializer,
-  Hex,
-  type Serializer,
-  Signature,
-} from "@aptos-labs/ts-sdk";
+import { Hex } from "@aptos-labs/ts-sdk";
+import type { Deserializer, Serializer } from "@aptos-labs/ts-sdk/bcs";
+import { Signature } from "@aptos-labs/ts-sdk/crypto";
 import { fromBase64, toBase64 } from "@mysten/bcs";
 
 /**

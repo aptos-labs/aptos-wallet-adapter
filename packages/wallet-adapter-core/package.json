@@ -2,14 +2,16 @@
   "name": "@aptos-labs/wallet-adapter-core",
   "version": "8.5.1",
   "description": "Aptos Wallet Adapter Core",
+  "type": "module",
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "license": "Apache-2.0",
   "exports": {
-    "types": "./dist/index.d.ts",
-    "require": "./dist/index.js",
-    "import": "./dist/index.mjs"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
   },
   "repository": {
     "type": "git",
@@ -28,23 +30,21 @@
     "Aptos Wallet"
   ],
   "scripts": {
-    "update-version": "node -p \"'export const WALLET_ADAPTER_CORE_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
-    "build-package": "export $(cat .env | xargs) && pnpm build:bundle && pnpm build:declarations",
-    "build:bundle": "tsup src/index.ts --format cjs,esm --sourcemap --env.GAID $GAID",
-    "build:declarations": "tsc --emitDeclarationOnly --declaration --declarationMap",
+    "update-version": "node ../../scripts/write-version.mjs WALLET_ADAPTER_CORE_VERSION",
+    "build-package": "vite build",
     "build": "pnpm run update-version && pnpm run build-package",
-    "dev": "export $(cat .env | xargs) && tsup src/index.ts --format esm,cjs --watch --dts --env.GAID $GAID",
+    "dev": "vite build --watch",
     "test": "vitest run",
     "lint": "biome lint src",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@swc/core": "^1.11.16",
-    "@types/node": "^20.10.4",
+    "@types/node": "^22.15.3",
     "happy-dom": "^20.0.2",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3",
+    "typescript": "6.0.2",
+    "vite": "^6.3.6",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "^2.1.8"
   },
   "dependencies": {
@@ -53,7 +53,7 @@
     "eventemitter3": "^5.0.1"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^5.1.1"
+    "@aptos-labs/ts-sdk": "^7.0.0"
   },
   "files": [
     "dist",

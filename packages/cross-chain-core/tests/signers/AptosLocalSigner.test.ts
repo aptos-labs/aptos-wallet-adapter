@@ -1,10 +1,9 @@
 import {
   Account,
   Network as AptosNetwork,
-  Ed25519PrivateKey,
-  PrivateKey,
   PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk";
+import { Ed25519PrivateKey, PrivateKey } from "@aptos-labs/ts-sdk/crypto";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { CrossChainCore } from "../../src/CrossChainCore";
 import {

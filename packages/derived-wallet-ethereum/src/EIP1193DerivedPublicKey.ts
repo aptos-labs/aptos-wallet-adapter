@@ -4,18 +4,19 @@ import {
   parseAptosSigningMessage,
 } from "@aptos-labs/derived-wallet-base";
 import {
-  AccountPublicKey,
   type AptosConfig,
   type AuthenticationKey,
-  type Deserializer,
   Hex,
   type HexInput,
   hashValues,
+} from "@aptos-labs/ts-sdk";
+import type { Deserializer, Serializer } from "@aptos-labs/ts-sdk/bcs";
+import {
+  AccountPublicKey,
   type PublicKey,
-  type Serializer,
   type Signature,
   type VerifySignatureArgs,
-} from "@aptos-labs/ts-sdk";
+} from "@aptos-labs/ts-sdk/crypto";
 import { verifyMessage as verifyEthereumMessage } from "ethers";
 import { createSiweEnvelopeForAptosTransaction } from "./createSiweEnvelope";
 import {

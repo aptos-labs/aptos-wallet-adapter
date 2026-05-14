@@ -1,4 +1,4 @@
-import { Deserializer, Serializer } from "@aptos-labs/ts-sdk";
+import { Deserializer, Serializer } from "@aptos-labs/ts-sdk/bcs";
 import { toBase64 } from "@mysten/bcs";
 import { describe, expect, it } from "vitest";
 import { SuiDerivedEd25519Signature } from "../src/SuiDerivedSignature";

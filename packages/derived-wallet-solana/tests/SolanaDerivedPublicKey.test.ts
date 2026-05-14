@@ -1,4 +1,4 @@
-import { Deserializer, Serializer } from "@aptos-labs/ts-sdk";
+import { Deserializer, Serializer } from "@aptos-labs/ts-sdk/bcs";
 import { PublicKey as SolanaPublicKey } from "@solana/web3.js";
 import { describe, expect, it } from "vitest";
 import { SolanaDerivedPublicKey } from "../src/SolanaDerivedPublicKey";

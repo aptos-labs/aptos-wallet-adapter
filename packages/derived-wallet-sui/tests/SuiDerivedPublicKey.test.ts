@@ -1,4 +1,4 @@
-import { Deserializer, Serializer } from "@aptos-labs/ts-sdk";
+import { Deserializer, Serializer } from "@aptos-labs/ts-sdk/bcs";
 import { describe, expect, it } from "vitest";
 import { SuiDerivedPublicKey } from "../src/SuiDerivedPublicKey";
 import { defaultAuthenticationFunction } from "../src/shared";

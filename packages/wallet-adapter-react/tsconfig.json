@@ -1,7 +1,14 @@
 {
   "extends": "@aptos-labs/wallet-adapter-tsconfig/react-library.json",
   "include": ["."],
-  "exclude": ["dist", "build", "node_modules", "tests", "vitest.config.ts"],
+  "exclude": [
+    "dist",
+    "build",
+    "node_modules",
+    "tests",
+    "vitest.config.ts",
+    "vite.config.ts"
+  ],
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist"

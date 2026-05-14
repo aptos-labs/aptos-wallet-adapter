@@ -123,8 +123,7 @@ describe("WormholeProvider", () => {
 
       const mockFetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: () =>
-          Promise.resolve({ destinationChainTxnId: "server-tx-123" }),
+        json: () => Promise.resolve({ destinationChainTxnId: "server-tx-123" }),
       });
       vi.stubGlobal("fetch", mockFetch);
 
@@ -203,8 +202,7 @@ describe("WormholeProvider", () => {
 
       const mockFetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: () =>
-          Promise.resolve({ destinationChainTxnId: "server-tx-456" }),
+        json: () => Promise.resolve({ destinationChainTxnId: "server-tx-456" }),
       });
       vi.stubGlobal("fetch", mockFetch);
 

@@ -1,12 +1,14 @@
 import {
   AccountAddress,
   AuthenticationKey,
-  type Deserializer,
   hashValues,
   isValidFunctionInfo,
+} from "@aptos-labs/ts-sdk";
+import {
+  type Deserializer,
   Serializable,
   Serializer,
-} from "@aptos-labs/ts-sdk";
+} from "@aptos-labs/ts-sdk/bcs";
 
 /**
  * The domain separator used to calculate the DAA account address.

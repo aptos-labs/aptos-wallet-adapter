@@ -1,4 +1,4 @@
-import { Ed25519Signature } from "@aptos-labs/ts-sdk";
+import { Ed25519Signature } from "@aptos-labs/ts-sdk/crypto";
 import { UserResponseStatus } from "@aptos-labs/wallet-standard";
 import type { StandardWalletAdapter } from "@solana/wallet-standard-wallet-adapter-base";
 import { beforeEach, describe, expect, it } from "vitest";

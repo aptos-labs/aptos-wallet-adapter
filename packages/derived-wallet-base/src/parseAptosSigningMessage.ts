@@ -1,6 +1,5 @@
 import {
   type AnyRawTransaction,
-  Deserializer,
   FeePayerRawTransaction,
   Hex,
   type HexInput,
@@ -13,6 +12,7 @@ import {
   RawTransactionWithData,
   SimpleTransaction,
 } from "@aptos-labs/ts-sdk";
+import { Deserializer } from "@aptos-labs/ts-sdk/bcs";
 import {
   decodeStructuredMessage,
   type StructuredMessage,

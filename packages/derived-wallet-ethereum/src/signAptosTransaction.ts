@@ -9,8 +9,8 @@ import {
   type AnyRawTransaction,
   generateSigningMessageForTransaction,
   hashValues,
-  Serializer,
 } from "@aptos-labs/ts-sdk";
+import { Serializer } from "@aptos-labs/ts-sdk/bcs";
 import type { UserResponse } from "@aptos-labs/wallet-standard";
 import { BrowserProvider, type Eip1193Provider } from "ethers";
 import { createSiweEnvelopeForAptosTransaction } from "./createSiweEnvelope";

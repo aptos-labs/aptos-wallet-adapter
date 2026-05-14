@@ -1,1 +1,1 @@
-export * from "./WalletSelector";
+export { WalletSelector } from "./WalletSelector";
