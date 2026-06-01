@@ -50,7 +50,7 @@
     "tsup": "^8.4.0",
     "tweetnacl": "^1.0.3",
     "typescript": "^5.4.5",
-    "vitest": "^2.1.8"
+    "vitest": "^4.1.0"
   },
   "files": [
     "dist",
