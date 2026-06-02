@@ -21,6 +21,15 @@ vi.mock("@aptos-labs/ts-sdk", () => {
 vi.mock("@aptos-connect/wallet-adapter-plugin", async () => {
   const { Aptos, Network } = await import("@aptos-labs/ts-sdk");
 
+  function networkToChainId(network?: string) {
+    switch (network) {
+      case Network.MAINNET:
+        return 1;
+      default:
+        return undefined;
+    }
+  }
+
   class MockAptosConnectWallet {
     readonly version = "1.0.0";
     readonly chains: string[] = [];
@@ -33,8 +42,8 @@ vi.mock("@aptos-connect/wallet-adapter-plugin", async () => {
     constructor(config: { network?: string }, name: string) {
       this.name = name;
 
-      if (config.network === Network.DEVNET) {
-        void new Aptos().getChainId();
+      if (networkToChainId(config.network) === undefined) {
+        void new Aptos().getChainId().catch(() => undefined);
       }
     }
   }
@@ -65,6 +74,7 @@ describe("getSDKWallets", () => {
   const originalWindow = globalThis.window;
 
   beforeEach(() => {
+    getChainIdMock.mockReset();
     getChainIdMock.mockResolvedValue(148);
     Object.defineProperty(globalThis, "window", {
       configurable: true,
@@ -88,8 +98,29 @@ describe("getSDKWallets", () => {
     expect(getChainIdMock).toHaveBeenCalledTimes(1);
   });
 
+  it("preserves the plugin fast path for known networks", () => {
+    const wallets = getSDKWallets({ network: Network.MAINNET } as any);
+
+    expect(wallets).toHaveLength(3);
+    expect(getChainIdMock).not.toHaveBeenCalled();
+  });
+
   it("restores Aptos.getChainId after wallet construction", async () => {
     getSDKWallets({ network: Network.DEVNET } as any);
+
+    const { Aptos } = await import("@aptos-labs/ts-sdk");
+    await new Aptos().getChainId();
+
+    expect(getChainIdMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("allows retries after a failed constructor-time chain id prefetch", async () => {
+    getChainIdMock
+      .mockRejectedValueOnce(new Error("boom"))
+      .mockResolvedValueOnce(148);
+
+    getSDKWallets({ network: Network.DEVNET } as any);
+    await Promise.resolve();
 
     const { Aptos } = await import("@aptos-labs/ts-sdk");
     await new Aptos().getChainId();
