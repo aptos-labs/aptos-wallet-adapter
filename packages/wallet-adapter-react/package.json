@@ -47,7 +47,7 @@
     "happy-dom": "^20.0.2",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
-    "vitest": "^2.1.8"
+    "vitest": "^3.2.6"
   },
   "dependencies": {
     "@aptos-labs/wallet-adapter-core": "workspace:*",
