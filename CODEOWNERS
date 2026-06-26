@@ -1,1 +1,9 @@
-* @0xmaayan @kaw2k @hardsetting @kent-white
+# **Please** keep this file ordered alphabetically by directory paths.
+
+# Owners for the `.github` directory and all its subdirectories.
+
+/.github/ @aptos-labs/developer-platform @aptos-labs/security
+
+# Auto-reviewers for all code
+
+* @aptos-labs/developer-platform
