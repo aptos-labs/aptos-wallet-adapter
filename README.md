@@ -61,7 +61,7 @@ A comprehensive monorepo developed and maintained by Aptos for wallet and dapp b
 
 ### Requirements
 
-- Node.js 20.18.0 or higher
+- Node.js 22.13.0 or higher
 - pnpm 11.8.0
 
 ### Setup
