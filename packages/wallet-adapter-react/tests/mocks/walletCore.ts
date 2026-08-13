@@ -58,7 +58,7 @@ export const createMockWalletCore = () => {
 
     // Methods
     connect: vi.fn(),
-    disconnect: vi.fn(),
+    disconnect: vi.fn().mockResolvedValue(undefined),
     signMessage: vi.fn(),
     signMessageAndVerify: vi.fn(),
     signTransaction: vi.fn(),

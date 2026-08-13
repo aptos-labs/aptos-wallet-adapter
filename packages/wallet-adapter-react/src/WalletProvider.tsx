@@ -40,7 +40,10 @@ export interface AptosWalletProviderProps {
   dappConfig?: DappConfig;
   disableTelemetry?: boolean;
   onError?: (error: any) => void;
+  disconnectOnAccountChange?: boolean | ((newAccount: AccountInfo | null, previousAccount: AccountInfo | null) => DisconnectOnAccountChangeResult);
 }
+
+export type DisconnectOnAccountChangeResult = 'disconnect' | 'update';
 
 const initialState: {
   account: AccountInfo | null;
@@ -62,13 +65,22 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   dappConfig,
   disableTelemetry = false,
   onError,
+  disconnectOnAccountChange = false,
 }: AptosWalletProviderProps) => {
   const didAttemptAutoConnectRef = useRef(false);
   // Track whether initial loading phase is complete to avoid interfering with user-initiated connections
   const initialLoadCompletedRef = useRef(false);
+  const onErrorRef = useRef(onError);
+  onErrorRef.current = onError;
+  const disconnectOnAccountChangeRef = useRef(disconnectOnAccountChange);
+  disconnectOnAccountChangeRef.current = disconnectOnAccountChange;
 
   const [{ account, network, connected, wallet }, setState] =
     useState(initialState);
+
+  const accountRef = useRef(account);
+  accountRef.current = account;
+  const isDisconnectingRef = useRef(false);
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [walletCore, setWalletCore] = useState<WalletCore>();
@@ -210,6 +222,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
   };
 
   const disconnect = async (): Promise<void> => {
+    if (isDisconnectingRef.current) return;
     try {
       await walletCore?.disconnect();
     } catch (error) {
@@ -325,14 +338,44 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
     });
   };
 
-  // Handle the adapter's account change event
   const handleAccountChange = useCallback((): void => {
     if (!connected) return;
     if (!walletCore?.wallet) return;
+    if (isDisconnectingRef.current) return;
+    const newAccount = walletCore?.account || null;
+    if (disconnectOnAccountChangeRef.current) {
+      let shouldDisconnect: boolean;
+      try {
+        shouldDisconnect = typeof disconnectOnAccountChangeRef.current === 'function'
+          ? disconnectOnAccountChangeRef.current(newAccount, accountRef.current) === 'disconnect'
+          : true;
+      } catch (error) {
+        if (onErrorRef.current) onErrorRef.current(error);
+        shouldDisconnect = true;
+      }
+      if (shouldDisconnect) {
+        isDisconnectingRef.current = true;
+        walletCore.disconnect()
+          .catch((error) => {
+            if (onErrorRef.current) onErrorRef.current(error);
+            setState(() => ({
+              connected: false,
+              account: null,
+              network: null,
+              wallet: null,
+            }));
+          })
+          .finally(() => {
+            isDisconnectingRef.current = false;
+          });
+        return;
+      }
+    }
+    accountRef.current = newAccount;
     setState((state) => {
       return {
         ...state,
-        account: walletCore?.account || null,
+        account: newAccount,
       };
     });
   }, [connected]);
@@ -460,7 +503,7 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
         handleStandardNotDetectedWalletsAdded,
       );
     };
-  }, [wallets, account]);
+  }, [wallets, handleAccountChange, handleNetworkChange]);
 
   return (
     <WalletContext.Provider

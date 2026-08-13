@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useWallet } from "../src/useWallet";
 import { AptosWalletAdapterProvider } from "../src/WalletProvider";
 import type { MockWalletCore } from "./mocks/walletCore";
-import { createMockWallet, createMockWalletCore } from "./mocks/walletCore";
+import { createMockWallet, createMockWalletCore, TEST_ACCOUNT, TEST_NETWORK } from "./mocks/walletCore";
 
 // Mock the wallet-adapter-core module
 let mockWalletCore: MockWalletCore;
@@ -436,6 +436,451 @@ describe("AptosWalletAdapterProvider", () => {
           </AptosWalletAdapterProvider>,
         ),
       ).not.toThrow();
+    });
+  });
+
+  describe("disconnectOnAccountChange", () => {
+    const TEST_ACCOUNT_B = {
+      address: "0xabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd",
+      publicKey: new Uint8Array(32).fill(2),
+    };
+
+    it("should update account on accountChange when disconnectOnAccountChange is not set", async () => {
+      render(
+        <AptosWalletAdapterProvider disableTelemetry autoConnect={false}>
+          <TestConsumer />
+        </AptosWalletAdapterProvider>,
+      );
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
+        },
+        { timeout: 3000 },
+      );
+
+      mockWalletCore.account = TEST_ACCOUNT;
+      mockWalletCore.network = TEST_NETWORK;
+      mockWalletCore.wallet = createMockWallet();
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("connect");
+      });
+
+      expect(screen.getByTestId("connected")).toHaveTextContent("true");
+
+      mockWalletCore.account = TEST_ACCOUNT_B;
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("accountChange");
+      });
+
+      expect(screen.getByTestId("connected")).toHaveTextContent("true");
+      expect(screen.getByTestId("account")).toHaveTextContent(
+        TEST_ACCOUNT_B.address,
+      );
+      expect(mockWalletCore.disconnect).not.toHaveBeenCalled();
+    });
+
+    it("should call disconnect on accountChange when disconnectOnAccountChange is true", async () => {
+      render(
+        <AptosWalletAdapterProvider
+          disableTelemetry
+          autoConnect={false}
+          disconnectOnAccountChange
+        >
+          <TestConsumer />
+        </AptosWalletAdapterProvider>,
+      );
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
+        },
+        { timeout: 3000 },
+      );
+
+      mockWalletCore.account = TEST_ACCOUNT;
+      mockWalletCore.network = TEST_NETWORK;
+      mockWalletCore.wallet = createMockWallet();
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("connect");
+      });
+
+      expect(screen.getByTestId("connected")).toHaveTextContent("true");
+
+      mockWalletCore.account = TEST_ACCOUNT_B;
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("accountChange");
+      });
+
+      expect(mockWalletCore.disconnect).toHaveBeenCalled();
+
+      mockWalletCore.account = null;
+      mockWalletCore.network = null;
+      mockWalletCore.wallet = null;
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("disconnect");
+      });
+
+      expect(screen.getByTestId("connected")).toHaveTextContent("false");
+    });
+
+    it("should not call disconnect on accountChange when not connected", async () => {
+      render(
+        <AptosWalletAdapterProvider
+          disableTelemetry
+          autoConnect={false}
+          disconnectOnAccountChange
+        >
+          <TestConsumer />
+        </AptosWalletAdapterProvider>,
+      );
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
+        },
+        { timeout: 3000 },
+      );
+
+      expect(screen.getByTestId("connected")).toHaveTextContent("false");
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("accountChange");
+      });
+
+      expect(mockWalletCore.disconnect).not.toHaveBeenCalled();
+    });
+
+    it("should route disconnect errors to onError", async () => {
+      const onError = vi.fn();
+
+      render(
+        <AptosWalletAdapterProvider
+          disableTelemetry
+          autoConnect={false}
+          disconnectOnAccountChange
+          onError={onError}
+        >
+          <TestConsumer />
+        </AptosWalletAdapterProvider>,
+      );
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
+        },
+        { timeout: 3000 },
+      );
+
+      mockWalletCore.account = TEST_ACCOUNT;
+      mockWalletCore.network = TEST_NETWORK;
+      mockWalletCore.wallet = createMockWallet();
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("connect");
+      });
+
+      const error = new Error("disconnect failed");
+      mockWalletCore.disconnect.mockRejectedValueOnce(error);
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("accountChange");
+      });
+
+      await waitFor(() => {
+        expect(onError).toHaveBeenCalledWith(error);
+      });
+    });
+
+    it("should not update account to new value when disconnecting", async () => {
+      render(
+        <AptosWalletAdapterProvider
+          disableTelemetry
+          autoConnect={false}
+          disconnectOnAccountChange
+        >
+          <TestConsumer />
+        </AptosWalletAdapterProvider>,
+      );
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
+        },
+        { timeout: 3000 },
+      );
+
+      mockWalletCore.account = TEST_ACCOUNT;
+      mockWalletCore.network = TEST_NETWORK;
+      mockWalletCore.wallet = createMockWallet();
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("connect");
+      });
+
+      expect(screen.getByTestId("account")).toHaveTextContent(
+        TEST_ACCOUNT.address,
+      );
+
+      mockWalletCore.account = TEST_ACCOUNT_B;
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("accountChange");
+      });
+
+      expect(screen.getByTestId("account")).not.toHaveTextContent(
+        TEST_ACCOUNT_B.address,
+      );
+    });
+
+    it("should disconnect when function returns 'disconnect'", async () => {
+      const decideFn = vi.fn().mockReturnValue("disconnect");
+
+      render(
+        <AptosWalletAdapterProvider
+          disableTelemetry
+          autoConnect={false}
+          disconnectOnAccountChange={decideFn}
+        >
+          <TestConsumer />
+        </AptosWalletAdapterProvider>,
+      );
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
+        },
+        { timeout: 3000 },
+      );
+
+      mockWalletCore.account = TEST_ACCOUNT;
+      mockWalletCore.network = TEST_NETWORK;
+      mockWalletCore.wallet = createMockWallet();
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("connect");
+      });
+
+      expect(screen.getByTestId("connected")).toHaveTextContent("true");
+
+      mockWalletCore.account = TEST_ACCOUNT_B;
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("accountChange");
+      });
+
+      expect(decideFn).toHaveBeenCalledWith(TEST_ACCOUNT_B, TEST_ACCOUNT);
+      expect(mockWalletCore.disconnect).toHaveBeenCalled();
+    });
+
+    it("should update account when function returns 'update'", async () => {
+      const decideFn = vi.fn().mockReturnValue("update");
+
+      render(
+        <AptosWalletAdapterProvider
+          disableTelemetry
+          autoConnect={false}
+          disconnectOnAccountChange={decideFn}
+        >
+          <TestConsumer />
+        </AptosWalletAdapterProvider>,
+      );
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
+        },
+        { timeout: 3000 },
+      );
+
+      mockWalletCore.account = TEST_ACCOUNT;
+      mockWalletCore.network = TEST_NETWORK;
+      mockWalletCore.wallet = createMockWallet();
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("connect");
+      });
+
+      expect(screen.getByTestId("connected")).toHaveTextContent("true");
+
+      mockWalletCore.account = TEST_ACCOUNT_B;
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("accountChange");
+      });
+
+      expect(decideFn).toHaveBeenCalledWith(TEST_ACCOUNT_B, TEST_ACCOUNT);
+      expect(mockWalletCore.disconnect).not.toHaveBeenCalled();
+      expect(screen.getByTestId("connected")).toHaveTextContent("true");
+      expect(screen.getByTestId("account")).toHaveTextContent(
+        TEST_ACCOUNT_B.address,
+      );
+    });
+
+    it("should disconnect when callback throws (fail-closed)", async () => {
+      const onError = vi.fn();
+      const decideFn = vi.fn().mockImplementation(() => {
+        throw new Error("callback crashed");
+      });
+
+      render(
+        <AptosWalletAdapterProvider
+          disableTelemetry
+          autoConnect={false}
+          disconnectOnAccountChange={decideFn}
+          onError={onError}
+        >
+          <TestConsumer />
+        </AptosWalletAdapterProvider>,
+      );
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
+        },
+        { timeout: 3000 },
+      );
+
+      mockWalletCore.account = TEST_ACCOUNT;
+      mockWalletCore.network = TEST_NETWORK;
+      mockWalletCore.wallet = createMockWallet();
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("connect");
+      });
+
+      expect(screen.getByTestId("connected")).toHaveTextContent("true");
+
+      mockWalletCore.account = TEST_ACCOUNT_B;
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("accountChange");
+      });
+
+      expect(onError).toHaveBeenCalledWith(expect.any(Error));
+      expect(mockWalletCore.disconnect).toHaveBeenCalled();
+
+      mockWalletCore.account = null;
+      mockWalletCore.network = null;
+      mockWalletCore.wallet = null;
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("disconnect");
+      });
+
+      expect(screen.getByTestId("connected")).toHaveTextContent("false");
+    });
+
+    it("should force disconnected state when disconnect fails", async () => {
+      const onError = vi.fn();
+
+      render(
+        <AptosWalletAdapterProvider
+          disableTelemetry
+          autoConnect={false}
+          disconnectOnAccountChange
+          onError={onError}
+        >
+          <TestConsumer />
+        </AptosWalletAdapterProvider>,
+      );
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
+        },
+        { timeout: 3000 },
+      );
+
+      mockWalletCore.account = TEST_ACCOUNT;
+      mockWalletCore.network = TEST_NETWORK;
+      mockWalletCore.wallet = createMockWallet();
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("connect");
+      });
+
+      expect(screen.getByTestId("connected")).toHaveTextContent("true");
+
+      const error = new Error("disconnect failed");
+      mockWalletCore.disconnect.mockRejectedValueOnce(error);
+      mockWalletCore.account = TEST_ACCOUNT_B;
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("accountChange");
+      });
+
+      await waitFor(() => {
+        expect(onError).toHaveBeenCalledWith(error);
+      });
+
+      expect(screen.getByTestId("connected")).toHaveTextContent("false");
+    });
+
+    it("should ignore rapid account changes while disconnect is in-flight", async () => {
+      const TEST_ACCOUNT_C = {
+        address: "0x9999999999999999999999999999999999999999999999999999999999999999",
+        publicKey: new Uint8Array(32).fill(3),
+      };
+
+      render(
+        <AptosWalletAdapterProvider
+          disableTelemetry
+          autoConnect={false}
+          disconnectOnAccountChange
+        >
+          <TestConsumer />
+        </AptosWalletAdapterProvider>,
+      );
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
+        },
+        { timeout: 3000 },
+      );
+
+      mockWalletCore.account = TEST_ACCOUNT;
+      mockWalletCore.network = TEST_NETWORK;
+      mockWalletCore.wallet = createMockWallet();
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("connect");
+      });
+
+      expect(screen.getByTestId("connected")).toHaveTextContent("true");
+
+      let resolveDisconnect!: () => void;
+      mockWalletCore.disconnect.mockReturnValueOnce(
+        new Promise<void>((resolve) => {
+          resolveDisconnect = resolve;
+        }),
+      );
+
+      mockWalletCore.account = TEST_ACCOUNT_B;
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("accountChange");
+      });
+
+      expect(mockWalletCore.disconnect).toHaveBeenCalledTimes(1);
+
+      mockWalletCore.account = TEST_ACCOUNT_C;
+
+      await act(async () => {
+        mockWalletCore.__triggerEvent("accountChange");
+      });
+
+      expect(mockWalletCore.disconnect).toHaveBeenCalledTimes(1);
+
+      await act(async () => {
+        resolveDisconnect();
+      });
     });
   });
 });
