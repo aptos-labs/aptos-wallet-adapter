@@ -355,6 +355,6 @@ try {
 
 ## Requirements
 
-- Node.js 18+
-- `@aptos-labs/ts-sdk` ^5.1.1 (peer dependency)
+- Node.js 22+
+- `@aptos-labs/ts-sdk` ^7.1.0 (peer dependency)
 - `@aptos-labs/wallet-adapter-react` - This package is designed to work with the Aptos Wallet Adapter ecosystem, specifically using the derived wallet adapters (`@aptos-labs/derived-wallet-solana`, `@aptos-labs/derived-wallet-ethereum`, `@aptos-labs/derived-wallet-sui`) that are part of this project

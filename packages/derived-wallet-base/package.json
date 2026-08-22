@@ -33,10 +33,10 @@
     ]
   },
   "dependencies": {
-    "@aptos-labs/wallet-standard": "^0.5.2"
+    "@aptos-labs/wallet-standard": "^2.0.0"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^5.1.1"
+    "@aptos-labs/ts-sdk": "^7.1.0"
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",

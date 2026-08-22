@@ -35,13 +35,13 @@
   "dependencies": {
     "@aptos-labs/derived-wallet-base": "workspace:^",
     "@aptos-labs/siwa": "^0.4.0",
-    "@aptos-labs/wallet-standard": "^0.5.2",
+    "@aptos-labs/wallet-standard": "^2.0.0",
     "@mysten/bcs": "^1.6.1",
     "@mysten/sui": "1.24.0",
     "@mysten/wallet-standard": "^0.13.29"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^5.1.1"
+    "@aptos-labs/ts-sdk": "^7.1.0"
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
