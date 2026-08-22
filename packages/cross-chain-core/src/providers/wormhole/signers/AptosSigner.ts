@@ -36,16 +36,20 @@ export async function signAndSendTransaction(
   }
 
   const payload = request.transaction;
-  // The wallets do not handle Uint8Array serialization
-  payload.functionArguments = payload.functionArguments.map((a: any) => {
-    if (a instanceof Uint8Array) {
-      return Array.from(a);
-    } else if (typeof a === "bigint") {
-      return a.toString();
-    } else {
-      return a;
-    }
-  });
+  // The wallets do not handle Uint8Array serialization.
+  // functionArguments is optional on entry-function payloads in ts-sdk 6+.
+  const serializedFunctionArguments = (payload.functionArguments ?? []).map(
+    (a: any) => {
+      if (a instanceof Uint8Array) {
+        return Array.from(a);
+      } else if (typeof a === "bigint") {
+        return a.toString();
+      } else {
+        return a;
+      }
+    },
+  );
+  payload.functionArguments = serializedFunctionArguments;
 
   // Configure Aptos client based on sponsor type
   let aptosConfig: AptosConfig;
@@ -84,7 +88,7 @@ export async function signAndSendTransaction(
   // Also, tranfering the arguments as it brings some errors (which not sure if bug or not), so we first extract them
   // and then tranform them into the functionArguments.
   const functionArguments = extractFunctionArguments(
-    payload.functionArguments as unknown as ScriptFunctionArgumentTypes[],
+    serializedFunctionArguments as unknown as ScriptFunctionArgumentTypes[],
   );
 
   // a custom function to withdraw tokens from the aptos chain,

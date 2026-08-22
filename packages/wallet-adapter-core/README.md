@@ -26,7 +26,7 @@ yarn add @aptos-labs/wallet-adapter-core
 **Peer Dependencies:**
 
 ```bash
-npm install @aptos-labs/ts-sdk
+npm install @aptos-labs/ts-sdk@^7.1.0
 ```
 
 ## Usage

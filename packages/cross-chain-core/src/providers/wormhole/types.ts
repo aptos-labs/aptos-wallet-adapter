@@ -3,7 +3,7 @@ import type { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
 import type {
   AttestationReceipt,
   routes,
-} from "@wormhole-foundation/sdk/dist/cjs";
+} from "@wormhole-foundation/sdk";
 import type { AptosAccount, Chain } from "../..";
 
 export type WormholeRouteResponse = routes.Route<

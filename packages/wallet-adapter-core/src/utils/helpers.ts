@@ -147,14 +147,28 @@ export const fetchDevnetChainId = async (): Promise<number> => {
 export const handlePublishPackageTransaction = (
   transactionInput: InputTransactionData,
 ) => {
+  if (!("function" in transactionInput.data)) {
+    throw new WalletSignAndSubmitMessageError(
+      "The bytecode argument must be an array.",
+    ).message;
+  }
+
+  // functionArguments became optional in ts-sdk 6+ for entry function payloads.
+  const functionArguments = transactionInput.data.functionArguments;
+  if (!functionArguments) {
+    throw new WalletSignAndSubmitMessageError(
+      "The bytecode argument must be an array.",
+    ).message;
+  }
+
   // convert the first argument, metadataBytes, to uint8array if is a string
-  let metadataBytes = transactionInput.data.functionArguments[0];
+  let metadataBytes = functionArguments[0];
   if (typeof metadataBytes === "string") {
     metadataBytes = Hex.fromHexInput(metadataBytes).toUint8Array();
   }
 
   // convert the second argument, byteCode, to uint8array if is a string
-  let byteCode = transactionInput.data.functionArguments[1];
+  let byteCode = functionArguments[1];
   if (Array.isArray(byteCode)) {
     byteCode = byteCode.map((byte) => {
       if (typeof byte === "string") {

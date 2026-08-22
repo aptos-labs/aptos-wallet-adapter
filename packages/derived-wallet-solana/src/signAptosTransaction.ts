@@ -10,6 +10,7 @@ import {
   Ed25519Signature,
   generateSigningMessageForTransaction,
   hashValues,
+  type MoveFunctionId,
   Serializer,
 } from "@aptos-labs/ts-sdk";
 import { WalletError } from "@solana/wallet-adapter-base";
@@ -128,7 +129,7 @@ export function createAccountAuthenticatorForSolanaTransaction(
   );
 
   return new AccountAuthenticatorAbstraction(
-    authenticationFunction,
+    authenticationFunction as MoveFunctionId,
     signingMessageDigest,
     abstractSignature,
     abstractPublicKey.bcsToBytes(),

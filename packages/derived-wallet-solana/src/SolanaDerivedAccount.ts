@@ -2,6 +2,7 @@ import {
   AbstractedAccount,
   type AccountAuthenticatorAbstraction,
   type AnyRawTransaction,
+  type MoveFunctionId,
 } from "@aptos-labs/ts-sdk";
 import { createSignInMessage } from "@solana/wallet-standard-util";
 import type { Keypair } from "@solana/web3.js";
@@ -19,7 +20,7 @@ export interface SolanaDerivedAccountParams {
   /** The domain (e.g., "my-dapp.com") */
   domain: string;
   /** Optional custom authentication function */
-  authenticationFunction?: string;
+  authenticationFunction?: MoveFunctionId;
 }
 
 /**
@@ -52,7 +53,7 @@ export interface SolanaDerivedAccountParams {
 export class SolanaDerivedAccount extends AbstractedAccount {
   readonly solanaKeypair: Keypair;
   readonly domain: string;
-  readonly authenticationFunction: string;
+  readonly authenticationFunction: MoveFunctionId;
   readonly derivedPublicKey: SolanaDerivedPublicKey;
 
   constructor(params: SolanaDerivedAccountParams) {

@@ -13,3 +13,5 @@
 Support `@aptos-labs/ts-sdk` 7.x and `@aptos-labs/wallet-standard` 2.x.
 
 Consumers must upgrade to ts-sdk `^7.1.0` (Node 22+, ESM-only). See the [ts-sdk 7.0 upgrade guide](https://github.com/aptos-labs/aptos-ts-sdk/blob/main/upgrade-guides/UPGRADE_GUIDE_7.0.0.md).
+
+Package TypeScript configs now use `moduleResolution: "bundler"` so they can resolve the ESM-only SDK and wallet-standard export maps.

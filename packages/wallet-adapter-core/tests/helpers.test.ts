@@ -5,6 +5,7 @@ import {
   convertNetwork,
   generalizedErrorMessage,
   getAptosConfig,
+  handlePublishPackageTransaction,
   isAptosLiveNetwork,
   isAptosNetwork,
   isInAppBrowser,
@@ -253,6 +254,30 @@ describe("Helper Functions", () => {
       expect(() => getAptosConfig(networkInfo, undefined)).toThrow(
         /Invalid network/,
       );
+    });
+  });
+
+  describe("handlePublishPackageTransaction", () => {
+    it("should convert hex string metadata and bytecode to Uint8Array", () => {
+      const result = handlePublishPackageTransaction({
+        data: {
+          function: "0x1::code::publish_package_txn",
+          functionArguments: ["0xaa", ["0xbb"]],
+        },
+      } as any);
+
+      expect(result.metadataBytes).toEqual(new Uint8Array([0xaa]));
+      expect(result.byteCode).toEqual([new Uint8Array([0xbb])]);
+    });
+
+    it("should throw when functionArguments are omitted", () => {
+      expect(() =>
+        handlePublishPackageTransaction({
+          data: {
+            function: "0x1::code::publish_package_txn",
+          },
+        } as any),
+      ).toThrow("The bytecode argument must be an array.");
     });
   });
 });

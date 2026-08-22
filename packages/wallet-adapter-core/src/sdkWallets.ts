@@ -10,22 +10,24 @@ export function getSDKWallets(dappConfig?: DappConfig) {
 
   // Need to check window is defined for AptosConnect
   if (typeof window !== "undefined") {
+    // Aptos Connect is still typed against wallet-standard 0.5.x. Runtime AIP-62
+    // behavior is compatible; WalletCore already branches on feature versions.
     sdkWallets.push(
       new AptosConnectGoogleWallet({
         network: dappConfig?.network,
         dappId: dappConfig?.aptosConnectDappId,
         ...dappConfig?.aptosConnect,
-      }),
+      }) as AdapterWallet,
       new AptosConnectAppleWallet({
         network: dappConfig?.network,
         dappId: dappConfig?.aptosConnectDappId,
         ...dappConfig?.aptosConnect,
-      }),
+      }) as AdapterWallet,
       new AptosConnectGenericWallet({
         network: dappConfig?.network,
         dappId: dappConfig?.aptosConnectDappId,
         ...dappConfig?.aptosConnect,
-      }),
+      }) as AdapterWallet,
     );
   }
 

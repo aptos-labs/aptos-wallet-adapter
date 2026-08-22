@@ -88,16 +88,19 @@ export async function signAndSendTransaction(
   }
 
   const payload = request.transaction;
-  // The wallets do not handle Uint8Array serialization
-  payload.functionArguments = payload.functionArguments.map((a: any) => {
-    if (a instanceof Uint8Array) {
-      return Array.from(a);
-    } else if (typeof a === "bigint") {
-      return a.toString();
-    } else {
-      return a;
-    }
-  });
+  // The wallets do not handle Uint8Array serialization.
+  // functionArguments is optional on entry-function payloads in ts-sdk 6+.
+  payload.functionArguments = (payload.functionArguments ?? []).map(
+    (a: any) => {
+      if (a instanceof Uint8Array) {
+        return Array.from(a);
+      } else if (typeof a === "bigint") {
+        return a.toString();
+      } else {
+        return a;
+      }
+    },
+  );
 
   const dappNetwork = crossChainCore._dappConfig.aptosNetwork;
   const aptosConfig = new AptosConfig({

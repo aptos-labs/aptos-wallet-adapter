@@ -9,6 +9,7 @@ import {
   type AnyRawTransaction,
   generateSigningMessageForTransaction,
   hashValues,
+  type MoveFunctionId,
   Serializer,
 } from "@aptos-labs/ts-sdk";
 import type { UserResponse } from "@aptos-labs/wallet-standard";
@@ -96,7 +97,7 @@ export function createAccountAuthenticatorForEthereumTransaction(
   );
 
   return new AccountAuthenticatorAbstraction(
-    authenticationFunction,
+    authenticationFunction as MoveFunctionId,
     signingMessageDigest,
     abstractSignature,
     abstractPublicKey.bcsToBytes(),

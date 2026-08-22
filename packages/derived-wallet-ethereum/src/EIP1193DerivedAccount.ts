@@ -2,6 +2,7 @@ import {
   AbstractedAccount,
   type AccountAuthenticatorAbstraction,
   type AnyRawTransaction,
+  type MoveFunctionId,
 } from "@aptos-labs/ts-sdk";
 import { hashMessage, Signature, type Wallet } from "ethers";
 import { EIP1193DerivedPublicKey } from "./EIP1193DerivedPublicKey";
@@ -22,7 +23,7 @@ export interface EIP1193DerivedAccountParams {
   /** The URI scheme (e.g., "https") - defaults to "https" */
   scheme?: string;
   /** Optional custom authentication function */
-  authenticationFunction?: string;
+  authenticationFunction?: MoveFunctionId;
 }
 
 /**
@@ -67,7 +68,7 @@ export class EIP1193DerivedAccount extends AbstractedAccount {
   readonly ethereumWallet: Wallet;
   readonly domain: string;
   readonly scheme: string;
-  readonly authenticationFunction: string;
+  readonly authenticationFunction: MoveFunctionId;
   readonly derivedPublicKey: EIP1193DerivedPublicKey;
 
   constructor(params: EIP1193DerivedAccountParams) {

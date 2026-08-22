@@ -2,10 +2,11 @@ import {
   makeUserApproval,
   makeUserRejection,
 } from "@aptos-labs/derived-wallet-base";
+import type { MoveFunctionId } from "@aptos-labs/ts-sdk";
 import type { UserResponse } from "@aptos-labs/wallet-standard";
 import { WalletError } from "@solana/wallet-adapter-base";
 
-export const defaultSolanaAuthenticationFunction =
+export const defaultSolanaAuthenticationFunction: MoveFunctionId =
   "0x1::solana_derivable_account::authenticate";
 
 /**

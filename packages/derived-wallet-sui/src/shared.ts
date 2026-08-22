@@ -2,9 +2,10 @@ import {
   makeUserApproval,
   makeUserRejection,
 } from "@aptos-labs/derived-wallet-base";
+import type { MoveFunctionId } from "@aptos-labs/ts-sdk";
 import type { UserResponse } from "@aptos-labs/wallet-standard";
 
-export const defaultAuthenticationFunction =
+export const defaultAuthenticationFunction: MoveFunctionId =
   "0x1::sui_derivable_account::authenticate";
 
 /**

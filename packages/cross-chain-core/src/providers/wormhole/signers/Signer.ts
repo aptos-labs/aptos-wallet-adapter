@@ -7,8 +7,10 @@ import type {
   TxHash,
   UnsignedTransaction,
 } from "@wormhole-foundation/sdk";
-import type { AptosChains } from "@wormhole-foundation/sdk-aptos/dist/cjs/types";
-import type { AptosUnsignedTransaction } from "@wormhole-foundation/sdk-aptos/dist/cjs/unsignedTransaction";
+import type {
+  AptosChains,
+  AptosUnsignedTransaction,
+} from "@wormhole-foundation/sdk-aptos";
 import type {
   EvmChains,
   EvmUnsignedTransaction,

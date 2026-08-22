@@ -2,12 +2,13 @@ import {
   makeUserApproval,
   makeUserRejection,
 } from "@aptos-labs/derived-wallet-base";
+import type { MoveFunctionId } from "@aptos-labs/ts-sdk";
 import type { UserResponse } from "@aptos-labs/wallet-standard";
 import { isError as isEthersError } from "ethers";
 
 export type EthereumAddress = `0x${string}`;
 
-export const defaultEthereumAuthenticationFunction =
+export const defaultEthereumAuthenticationFunction: MoveFunctionId =
   "0x1::ethereum_derivable_account::authenticate";
 
 /**

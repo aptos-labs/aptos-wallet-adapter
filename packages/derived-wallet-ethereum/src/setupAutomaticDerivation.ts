@@ -1,6 +1,5 @@
 import { getWallets } from "@wallet-standard/app";
-import { createStore } from "mipd";
-import type { EIP6963ProviderDetail } from "mipd/src/types";
+import { createStore, type EIP6963ProviderDetail } from "mipd";
 import {
   EIP1193DerivedWallet,
   type EIP1193DerivedWalletOptions,

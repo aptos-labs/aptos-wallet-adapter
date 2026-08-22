@@ -769,10 +769,9 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         if (
           transactionInput.data.function === "0x1::code::publish_package_txn"
         ) {
-          ({
-            metadataBytes: transactionInput.data.functionArguments[0],
-            byteCode: transactionInput.data.functionArguments[1],
-          } = handlePublishPackageTransaction(transactionInput));
+          const { metadataBytes, byteCode } =
+            handlePublishPackageTransaction(transactionInput);
+          transactionInput.data.functionArguments = [metadataBytes, byteCode];
         }
       }
       this.ensureWalletExists(this._wallet);
@@ -859,7 +858,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
         transactionSubmitter: transactionInput.transactionSubmitter,
         pluginParams: transactionInput.pluginParams,
       });
-      return { hash: response.hash };
+      return { hash: response.hash as `0x${string}` };
     } catch (error: any) {
       const errMsg = generalizedErrorMessage(error);
       throw new WalletSignAndSubmitMessageError(errMsg).message;
