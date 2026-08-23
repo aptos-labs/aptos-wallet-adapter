@@ -277,7 +277,9 @@ describe("Helper Functions", () => {
             bytecode: "0xaa",
           },
         } as any),
-      ).toThrow("Expected an entry function payload with a function identifier.");
+      ).toThrow(
+        "Expected an entry function payload with a function identifier.",
+      );
     });
 
     it("should throw when functionArguments are omitted", () => {
@@ -287,7 +289,9 @@ describe("Helper Functions", () => {
             function: "0x1::code::publish_package_txn",
           },
         } as any),
-      ).toThrow("The function arguments are required for a publish_package_txn.");
+      ).toThrow(
+        "The function arguments are required for a publish_package_txn.",
+      );
     });
 
     it("should throw when bytecode is not an array", () => {
