@@ -149,7 +149,7 @@ export const handlePublishPackageTransaction = (
 ) => {
   if (!("function" in transactionInput.data)) {
     throw new WalletSignAndSubmitMessageError(
-      "The bytecode argument must be an array.",
+      "Expected an entry function payload with a function identifier.",
     ).message;
   }
 
@@ -157,7 +157,7 @@ export const handlePublishPackageTransaction = (
   const functionArguments = transactionInput.data.functionArguments;
   if (!functionArguments) {
     throw new WalletSignAndSubmitMessageError(
-      "The bytecode argument must be an array.",
+      "The function arguments are required for a publish_package_txn.",
     ).message;
   }
 

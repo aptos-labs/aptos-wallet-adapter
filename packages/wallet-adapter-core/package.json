@@ -27,8 +27,7 @@
     "Aptos Labs",
     "Wallet",
     "Wallet Adapter",
-    "Wallet Adapter Provider",
-    "React"
+    "Aptos Wallet"
   ],
   "scripts": {
     "update-version": "node ../../scripts/write-version.mjs WALLET_ADAPTER_CORE_VERSION",
