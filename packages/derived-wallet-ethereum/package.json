@@ -1,8 +1,8 @@
 {
   "name": "@aptos-labs/derived-wallet-ethereum",
   "version": "0.9.2",
+  "type": "module",
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
   "types": "./dist/types/index.d.ts",
   "license": "Apache-2.0",
   "repository": {
@@ -10,16 +10,18 @@
     "url": "https://github.com/aptos-labs/aptos-wallet-adapter.git"
   },
   "exports": {
-    "types": "./dist/types/index.d.ts",
-    "require": "./dist/index.js",
-    "import": "./dist/index.mjs"
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
   },
   "author": "aptoslabs.com",
   "scripts": {
     "build": "pnpm build:bundle && pnpm build:declarations",
     "build:bundle": "tsup --sourcemap",
     "build:declarations": "tsc --emitDeclarationOnly --declaration --declarationMap",
-    "dev": "tsup src/index.ts --format esm,cjs --watch",
+    "dev": "tsup src/index.ts --format esm --watch",
     "test": "vitest run",
     "lint": "biome lint src"
   },
@@ -28,7 +30,6 @@
       "src/index.ts"
     ],
     "format": [
-      "cjs",
       "esm"
     ]
   },
@@ -45,10 +46,10 @@
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@types/node": "^20.10.4",
+    "@types/node": "^22.15.3",
     "happy-dom": "^20.0.2",
     "tsup": "^8.4.0",
-    "typescript": "^5.8.3",
+    "typescript": "^7.0.2",
     "vitest": "^3.2.6"
   },
   "files": [

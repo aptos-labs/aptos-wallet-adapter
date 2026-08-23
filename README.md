@@ -63,6 +63,7 @@ A comprehensive monorepo developed and maintained by Aptos for wallet and dapp b
 
 - Node.js 22.13.0 or higher
 - pnpm 11.8.0
+- TypeScript 7.0 or higher (native `tsc`). Next.js 15 demos also install `@typescript/typescript6` because Next still needs the TypeScript 6 programmatic API.
 
 ### Setup
 

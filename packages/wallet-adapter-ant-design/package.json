@@ -2,19 +2,20 @@
   "name": "@aptos-labs/wallet-adapter-ant-design",
   "version": "5.3.19",
   "description": "Aptos Wallet Adapter ant-design",
+  "type": "module",
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "license": "Apache-2.0",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./dist/index.css": {
+      "types": "./index.css.d.ts",
       "import": "./dist/index.css",
-      "require": "./dist/index.css"
+      "default": "./dist/index.css"
     }
   },
   "repository": {
@@ -35,8 +36,10 @@
     "React"
   ],
   "scripts": {
-    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
-    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
+    "build:bundle": "tsup src/index.tsx --format esm --external react",
+    "build:declarations": "tsc --emitDeclarationOnly --declaration --declarationMap",
+    "build": "pnpm build:bundle && pnpm build:declarations",
+    "dev": "tsup src/index.tsx --format esm --watch --external react",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "lint": "biome lint src"
   },
@@ -45,7 +48,7 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "tsup": "^8.4.0",
-    "typescript": "^5.8.3"
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
