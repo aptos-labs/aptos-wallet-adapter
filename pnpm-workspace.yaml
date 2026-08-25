@@ -49,18 +49,19 @@ overrides:
   # --- pnpm audit remediation ---
   form-data: "^4.0.6"
   esbuild: ">=0.28.1"
-  protobufjs: "^7.6.4"
+  protobufjs: "^7.6.5"
   "@protobufjs/utf8": "^1.1.1"
-  valibot: "^1.2.0"
+  valibot: "^1.4.2"
   rollup: "^4.59.0"
   happy-dom: "^20.8.9"
   lodash: "^4.17.24"
   turbo-stream: "^3.0.0"
   ajv: "^6.14.0"
-  postcss: "^8.5.10"
+  postcss: "^8.5.23"
   uuid: "^11.1.1"
+  sharp: "^0.35.3"
   "glob@>=10.2.0 <10.5.0": "^10.5.0"
-  "react-router@7": "^7.15.0"
+  "react-router@7": "^7.18.2"
   "minimatch@3": "^3.1.4"
   "minimatch@9": "^9.0.7"
   "ws@7": "^7.5.11"
@@ -69,9 +70,10 @@ overrides:
   "bn.js@5": "^5.2.3"
   "yaml@1": "^1.10.3"
   "yaml@2": "^2.8.3"
-  "brace-expansion@1": "^1.1.13"
-  "brace-expansion@2": "^2.0.3"
-  "js-yaml@3": "^3.15.0"
+  "brace-expansion@1": "^1.1.18"
+  "brace-expansion@2": "^2.1.4"
+  "js-yaml@3": "^3.15.1"
+  "nanoid@3": "^3.3.18"
   "picomatch@2": "^2.3.2"
 
 # `pnpm audit` suppressions. Both advisories below have NO published fix — the
@@ -85,3 +87,20 @@ auditConfig:
   ignoreGhsas:
     - GHSA-3gc7-fjrx-p6mg # bigint-buffer <=1.1.5, no fix published
     - GHSA-848j-6mx2-7j84 # elliptic <=6.6.1, no fix published
+
+# Next 15.5.24 is the patched release that closes the current Next.js
+# advisories. pnpm's minimum-release-age gate would otherwise block it
+# until the window elapses; these excludes are the allow-list pnpm wrote
+# when we installed the security bump. Remove once a later Next patch is
+# old enough to pass the age check on its own.
+minimumReleaseAgeExclude:
+  - '@next/env@15.5.24'
+  - '@next/swc-darwin-arm64@15.5.24'
+  - '@next/swc-darwin-x64@15.5.24'
+  - '@next/swc-linux-arm64-gnu@15.5.24'
+  - '@next/swc-linux-arm64-musl@15.5.24'
+  - '@next/swc-linux-x64-gnu@15.5.24'
+  - '@next/swc-linux-x64-musl@15.5.24'
+  - '@next/swc-win32-arm64-msvc@15.5.24'
+  - '@next/swc-win32-x64-msvc@15.5.24'
+  - next@15.5.24

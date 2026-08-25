@@ -46,7 +46,7 @@
     "@testing-library/user-event": "^14.0.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "happy-dom": "^20.0.2",
+    "happy-dom": "^20.8.9",
     "tsup": "^8.4.0",
     "typescript": "^7.0.2",
     "vitest": "^3.2.6"
