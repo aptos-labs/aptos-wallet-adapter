@@ -20,13 +20,13 @@
     "publish-packages": "changeset version && changeset publish"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.6",
-    "@changesets/cli": "^2.29.7",
-    "turbo": "latest",
+    "@biomejs/biome": "^2.5.15",
+    "@changesets/cli": "^2.31.1",
+    "turbo": "^2.11.7",
     "typescript": "^7.0.2"
   },
   "engines": {
     "node": ">=22.13.0"
   },
-  "packageManager": "pnpm@11.8.0"
+  "packageManager": "pnpm@11.28.5"
 }

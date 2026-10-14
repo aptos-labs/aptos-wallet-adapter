@@ -45,15 +45,15 @@
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "tsup": "^8.4.0",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "tsup": "^8.5.1",
     "typescript": "^7.0.2"
   },
   "dependencies": {
-    "@ant-design/icons": "^5.3.7",
+    "@ant-design/icons": "^5.6.1",
     "@aptos-labs/wallet-adapter-react": "workspace:*",
-    "antd": "^5.18.3"
+    "antd": "^5.29.3"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

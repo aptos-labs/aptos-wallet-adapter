@@ -36,21 +36,21 @@
   "dependencies": {
     "@aptos-labs/derived-wallet-base": "workspace:^",
     "@aptos-labs/wallet-standard": "^2.0.0",
-    "@wallet-standard/app": "^1.1.0",
-    "ethers": "^6.13.5",
+    "@wallet-standard/app": "^1.1.1",
+    "ethers": "^6.17.0",
     "mipd": "^0.0.7",
-    "viem": "^2.23.12"
+    "viem": "^2.57.4"
   },
   "peerDependencies": {
     "@aptos-labs/ts-sdk": "^7.1.0"
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@types/node": "^22.15.3",
+    "@types/node": "^22.20.5",
     "happy-dom": "^20.8.9",
-    "tsup": "^8.4.0",
+    "tsup": "^8.5.1",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.4"
   },
   "files": [
     "dist",
