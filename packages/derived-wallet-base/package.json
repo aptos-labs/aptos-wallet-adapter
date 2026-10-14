@@ -41,10 +41,10 @@
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@types/node": "^22.15.3",
-    "tsup": "^8.4.0",
+    "@types/node": "^22.20.5",
+    "tsup": "^8.5.1",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.4"
   },
   "files": [
     "dist",

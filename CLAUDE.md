@@ -76,7 +76,7 @@ aptos-wallet-adapter/
 ### Requirements
 
 - Node.js 22.13.0+
-- pnpm 11.8.0
+- pnpm 11.28.5
 
 ### Common Commands
 
@@ -176,7 +176,7 @@ The adapter implements the Aptos Wallet Standard (AIP-62):
 - `pnpm-workspace.yaml` - Workspace package definitions
 - `.changeset/` - Version change tracking (uses changesets)
 - `.node-version` - Node.js version requirement (22.23.1)
-- `.tool-versions` - Tool versions (pnpm 11.8.0)
+- `.tool-versions` - Tool versions (pnpm 11.28.5)
 
 ### Package Structure
 

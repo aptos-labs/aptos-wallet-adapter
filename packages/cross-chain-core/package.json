@@ -42,10 +42,10 @@
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@types/node": "^22.15.3",
-    "tsup": "^8.4.0",
+    "@types/node": "^22.20.5",
+    "tsup": "^8.5.1",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.4"
   },
   "dependencies": {
     "@aptos-labs/derived-wallet-ethereum": "workspace:*",
@@ -56,11 +56,11 @@
     "@aptos-labs/wallet-standard": "^2.0.0",
     "@mysten/sui": "1.24.0",
     "@mysten/wallet-standard": "^0.13.29",
-    "@solana/spl-token": "^0.4.12",
-    "@solana/wallet-adapter-base": "^0.9.23",
-    "@solana/wallet-standard-wallet-adapter-base": "^1.1.4",
-    "@solana/web3.js": "^1.95.8",
-    "@wallet-standard/app": "^1.1.0",
+    "@solana/spl-token": "^0.4.15",
+    "@solana/wallet-adapter-base": "^0.9.28",
+    "@solana/wallet-standard-wallet-adapter-base": "^1.1.7",
+    "@solana/web3.js": "^1.99.0",
+    "@wallet-standard/app": "^1.1.1",
     "@wormhole-foundation/sdk": "4.7.1",
     "@wormhole-foundation/sdk-aptos": "4.7.1",
     "@wormhole-foundation/sdk-evm": "4.7.1",
@@ -68,7 +68,7 @@
     "@wormhole-foundation/sdk-sui": "4.7.1",
     "bs58": "^6.0.0",
     "buffer": "^6.0.3",
-    "ethers": "^6.13.5",
+    "ethers": "^6.17.0",
     "eventemitter3": "^4.0.7",
     "tweetnacl": "^1.0.3"
   },

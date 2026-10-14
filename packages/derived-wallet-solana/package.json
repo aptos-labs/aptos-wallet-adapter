@@ -36,23 +36,23 @@
   "dependencies": {
     "@aptos-labs/derived-wallet-base": "workspace:^",
     "@aptos-labs/wallet-standard": "^2.0.0",
-    "@solana/wallet-adapter-base": "^0.9.23",
-    "@solana/wallet-standard-util": "^1.1.2",
-    "@solana/wallet-standard-wallet-adapter-base": "^1.1.4",
-    "@wallet-standard/app": "^1.1.0",
-    "tweetnacl": "^1.0.3",
-    "@solana/web3.js": "^1.95.8"
+    "@solana/wallet-adapter-base": "^0.9.28",
+    "@solana/wallet-standard-util": "^1.2.0",
+    "@solana/wallet-standard-wallet-adapter-base": "^1.1.7",
+    "@solana/web3.js": "^1.99.0",
+    "@wallet-standard/app": "^1.1.1",
+    "tweetnacl": "^1.0.3"
   },
   "peerDependencies": {
     "@aptos-labs/ts-sdk": "^7.1.0"
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@types/node": "^22.15.3",
+    "@types/node": "^22.20.5",
     "happy-dom": "^20.8.9",
-    "tsup": "^8.4.0",
+    "tsup": "^8.5.1",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.4"
   },
   "files": [
     "dist",

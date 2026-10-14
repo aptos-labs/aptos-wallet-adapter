@@ -110,7 +110,7 @@ export async function signAndSendTransaction(
   const txnToSign = await aptos.transaction.build.simple({
     data: transactionData,
     sender: (
-      (await wallet.features["aptos:account"]?.account()) as any
+      (await wallet.features["aptos:account"].account()) as any
     ).address.toString(),
     withFeePayer: !!sponsorAccount,
     ...(typeof expireTimestamp !== "undefined"

@@ -37,7 +37,7 @@
     "@aptos-labs/derived-wallet-base": "workspace:^",
     "@aptos-labs/siwa": "^0.4.0",
     "@aptos-labs/wallet-standard": "^2.0.0",
-    "@mysten/bcs": "^1.6.1",
+    "@mysten/bcs": "^1.9.2",
     "@mysten/sui": "1.24.0",
     "@mysten/wallet-standard": "^0.13.29"
   },
@@ -46,12 +46,12 @@
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@types/node": "^22.15.3",
+    "@types/node": "^22.20.5",
     "happy-dom": "^20.8.9",
-    "tsup": "^8.4.0",
+    "tsup": "^8.5.1",
     "tweetnacl": "^1.0.3",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.4"
   },
   "files": [
     "dist",
