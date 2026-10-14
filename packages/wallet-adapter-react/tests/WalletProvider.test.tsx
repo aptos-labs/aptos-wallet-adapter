@@ -15,7 +15,7 @@ vi.mock("@aptos-labs/wallet-adapter-core", async () => {
   const actual = await vi.importActual("@aptos-labs/wallet-adapter-core");
   return {
     ...actual,
-    WalletCore: vi.fn().mockImplementation(() => {
+    WalletCore: vi.fn().mockImplementation(function () {
       mockWalletCore = createMockWalletCore();
       // Set up wallets array so auto-connect can proceed
       // Having at least one wallet triggers the isLoading = false path

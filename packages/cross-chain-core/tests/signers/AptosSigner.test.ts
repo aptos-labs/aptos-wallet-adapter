@@ -12,15 +12,17 @@ vi.mock("@aptos-labs/ts-sdk", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@aptos-labs/ts-sdk")>();
   return {
     ...actual,
-    Aptos: vi.fn().mockImplementation(() => ({
-      transaction: {
-        build: { simple: mockBuildSimple },
-        sign: vi.fn(),
-        submit: { simple: mockSubmitSimple },
-        signAsFeePayer: vi.fn(),
-      },
-      waitForTransaction: mockWaitForTransaction,
-    })),
+    Aptos: vi.fn().mockImplementation(function () {
+      return {
+        transaction: {
+          build: { simple: mockBuildSimple },
+          sign: vi.fn(),
+          submit: { simple: mockSubmitSimple },
+          signAsFeePayer: vi.fn(),
+        },
+        waitForTransaction: mockWaitForTransaction,
+      };
+    }),
   };
 });
 
