@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/cross-chain-core",
-  "version": "6.1.2",
+  "version": "7.0.0",
   "description": "Aptos Cross Chain Core",
   "type": "module",
   "main": "./dist/index.js",
