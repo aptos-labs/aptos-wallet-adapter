@@ -21,7 +21,9 @@ vi.mock("@aptos-labs/ts-sdk", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@aptos-labs/ts-sdk")>();
   return {
     ...actual,
-    Aptos: vi.fn().mockImplementation(function () {
+    // Vitest 5 constructs `new Aptos()` with the mock implementation, so it
+    // must be a regular function. Arrow functions cannot be constructed.
+    Aptos: vi.fn().mockImplementation(function Aptos() {
       return {
         transaction: {
           build: { simple: mockBuildSimple },
