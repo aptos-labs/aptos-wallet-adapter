@@ -397,7 +397,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: ^5.0.4
-        version: 5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@5.0.10))(vite@6.4.4(@types/node@22.20.5)(jiti@1.21.7))
+        version: 5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@5.0.10))(vite@6.4.5(@types/node@22.20.5)(jiti@1.21.7))
 
   packages/derived-wallet-base:
     dependencies:
@@ -422,7 +422,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: ^5.0.4
-        version: 5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@6.0.6))(vite@6.4.4(@types/node@22.20.5)(jiti@1.21.7))
+        version: 5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@6.0.6))(vite@6.4.5(@types/node@22.20.5)(jiti@1.21.7))
 
   packages/derived-wallet-ethereum:
     dependencies:
@@ -465,7 +465,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: ^5.0.4
-        version: 5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@6.0.6))(vite@6.4.4(@types/node@22.20.5)(jiti@1.21.7))
+        version: 5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@6.0.6))(vite@6.4.5(@types/node@22.20.5)(jiti@1.21.7))
 
   packages/derived-wallet-solana:
     dependencies:
@@ -514,7 +514,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: ^5.0.4
-        version: 5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@5.0.10))(vite@6.4.4(@types/node@22.20.5)(jiti@1.21.7))
+        version: 5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@5.0.10))(vite@6.4.5(@types/node@22.20.5)(jiti@1.21.7))
 
   packages/derived-wallet-sui:
     dependencies:
@@ -560,7 +560,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: ^5.0.4
-        version: 5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@6.0.6))(vite@6.4.4(@types/node@22.20.5)(jiti@1.21.7))
+        version: 5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@6.0.6))(vite@6.4.5(@types/node@22.20.5)(jiti@1.21.7))
 
   packages/tsconfig: {}
 
@@ -633,7 +633,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: ^5.0.4
-        version: 5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@6.0.6))(vite@6.4.4(@types/node@22.20.5)(jiti@1.21.7))
+        version: 5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@6.0.6))(vite@6.4.5(@types/node@22.20.5)(jiti@1.21.7))
 
   packages/wallet-adapter-mui-design:
     dependencies:
@@ -719,7 +719,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: ^5.0.4
-        version: 5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@6.0.6))(vite@6.4.4(@types/node@22.20.5)(jiti@1.21.7))
+        version: 5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@6.0.6))(vite@6.4.5(@types/node@22.20.5)(jiti@1.21.7))
 
 packages:
 
@@ -5252,8 +5252,8 @@ packages:
       typescript:
         optional: true
 
-  vite@6.4.4:
-    resolution: {integrity: sha512-xGjU/SyjeNyb0E4KxXBvYz/1C+3JXuujvf2hXNOtnlcE+58o5ajd9N2/n2VhkiJvpCP2qQasnUpx5PXNeI+p1Q==}
+  vite@6.4.5:
+    resolution: {integrity: sha512-4enwjFfi4IwtEh0w+jPzpLVOFQiPHmmzPxcHXQOyEur47o6u0jE573DmGpjA+7irXoMLYRZD5ZaFUEneS3abPg==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
@@ -8043,14 +8043,14 @@ snapshots:
     dependencies:
       '@typescript/old': typescript@6.0.3
 
-  '@vitest/mocker@5.0.4(vite@6.4.4(@types/node@22.20.5)(jiti@1.21.7))':
+  '@vitest/mocker@5.0.4(vite@6.4.5(@types/node@22.20.5)(jiti@1.21.7))':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       '@vitest/spy': 5.0.4
       estree-walker: 3.0.3
       magic-string: 1.4.3
     optionalDependencies:
-      vite: 6.4.4(@types/node@22.20.5)(jiti@1.21.7)
+      vite: 6.4.5(@types/node@22.20.5)(jiti@1.21.7)
 
   '@vitest/spy@5.0.4': {}
 
@@ -11092,7 +11092,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  vite@6.4.4(@types/node@22.20.5)(jiti@1.21.7):
+  vite@6.4.5(@types/node@22.20.5)(jiti@1.21.7):
     dependencies:
       esbuild: 0.28.2
       fdir: 6.5.0(picomatch@4.0.7)
@@ -11105,10 +11105,10 @@ snapshots:
       fsevents: 2.3.3
       jiti: 1.21.7
 
-  vitest@5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@5.0.10))(vite@6.4.4(@types/node@22.20.5)(jiti@1.21.7)):
+  vitest@5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@5.0.10))(vite@6.4.5(@types/node@22.20.5)(jiti@1.21.7)):
     dependencies:
       '@types/chai': 5.2.3
-      '@vitest/mocker': 5.0.4(vite@6.4.4(@types/node@22.20.5)(jiti@1.21.7))
+      '@vitest/mocker': 5.0.4(vite@6.4.5(@types/node@22.20.5)(jiti@1.21.7))
       chai: 6.3.0
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
@@ -11119,7 +11119,7 @@ snapshots:
       tinybench: 6.2.2
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
-      vite: 6.4.4(@types/node@22.20.5)(jiti@1.21.7)
+      vite: 6.4.5(@types/node@22.20.5)(jiti@1.21.7)
       why-is-node-running: 3.2.1
     optionalDependencies:
       '@types/node': 22.20.5
@@ -11127,10 +11127,10 @@ snapshots:
     transitivePeerDependencies:
       - msw
 
-  vitest@5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@6.0.6))(vite@6.4.4(@types/node@22.20.5)(jiti@1.21.7)):
+  vitest@5.0.4(@types/node@22.20.5)(happy-dom@20.14.6(bufferutil@4.1.0)(utf-8-validate@6.0.6))(vite@6.4.5(@types/node@22.20.5)(jiti@1.21.7)):
     dependencies:
       '@types/chai': 5.2.3
-      '@vitest/mocker': 5.0.4(vite@6.4.4(@types/node@22.20.5)(jiti@1.21.7))
+      '@vitest/mocker': 5.0.4(vite@6.4.5(@types/node@22.20.5)(jiti@1.21.7))
       chai: 6.3.0
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
@@ -11141,7 +11141,7 @@ snapshots:
       tinybench: 6.2.2
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
-      vite: 6.4.4(@types/node@22.20.5)(jiti@1.21.7)
+      vite: 6.4.5(@types/node@22.20.5)(jiti@1.21.7)
       why-is-node-running: 3.2.1
     optionalDependencies:
       '@types/node': 22.20.5
