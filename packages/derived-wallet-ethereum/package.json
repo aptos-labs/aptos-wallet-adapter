@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/derived-wallet-ethereum",
-  "version": "0.9.2",
+  "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
