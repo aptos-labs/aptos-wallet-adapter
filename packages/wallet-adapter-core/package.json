@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-core",
-  "version": "8.5.1",
+  "version": "9.0.0",
   "description": "Aptos Wallet Adapter Core",
   "type": "module",
   "main": "./dist/index.js",
