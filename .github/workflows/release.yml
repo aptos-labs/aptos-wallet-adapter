@@ -44,8 +44,9 @@ jobs:
 
       - name: Setup safe-chain (supply-chain guard)
         uses: aptos-labs/actions/aikidosec-safe-chain@a4b79b914b919a798ff102ae39e2a5e9d67dd946 # main
-        with:
-          minimum-package-age-exclude: "@aptos-labs/*"
+
+      - name: Allow first-party @aptos-labs/* through safe-chain age gate
+        run: echo "SAFE_CHAIN_MINIMUM_PACKAGE_AGE_EXCLUSIONS=@aptos-labs/*" >> "$GITHUB_ENV"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -131,8 +132,9 @@ jobs:
 
       - name: Setup safe-chain (supply-chain guard)
         uses: aptos-labs/actions/aikidosec-safe-chain@a4b79b914b919a798ff102ae39e2a5e9d67dd946 # main
-        with:
-          minimum-package-age-exclude: "@aptos-labs/*"
+
+      - name: Allow first-party @aptos-labs/* through safe-chain age gate
+        run: echo "SAFE_CHAIN_MINIMUM_PACKAGE_AGE_EXCLUSIONS=@aptos-labs/*" >> "$GITHUB_ENV"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
