@@ -2,6 +2,10 @@ packages:
   - "apps/*"
   - "packages/*"
 
+# pnpm 12 otherwise prepends an environment document to pnpm-lock.yaml that
+# GitHub's dependency graph currently reads as an empty project graph.
+pmOnFail: ignore
+
 # Peer dependency behavior (migrated from .npmrc; pnpm 11 reads it here).
 autoInstallPeers: true
 
@@ -91,8 +95,8 @@ overrides:
 #     native toBigIntLE binding never loads (falls back to pure JS at runtime).
 #   - elliptic (GHSA-848j-6mx2-7j84): low-severity transitive dependency.
 # Revisit and remove these once upstream ships patched releases.
-auditConfig:
-  ignoreGhsas:
+audit:
+  ignore:
     - GHSA-3gc7-fjrx-p6mg # bigint-buffer <=1.1.5, no fix published
     - GHSA-848j-6mx2-7j84 # elliptic <=6.6.1, no fix published
 
