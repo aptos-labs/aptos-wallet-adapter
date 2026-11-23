@@ -6,7 +6,7 @@ settings:
 
 overrides:
   '@aptos-labs/aptos-client': ^4.1.0
-  '@aptos-labs/ts-sdk': ^7.1.0
+  '@aptos-labs/ts-sdk': ^7.5.0
   pbkdf2: ^3.1.7
   sha.js: ^2.4.12
   devalue: ^5.3.2
@@ -72,7 +72,7 @@ importers:
         specifier: workspace:^
         version: link:../../packages/derived-wallet-solana
       '@aptos-labs/ts-sdk':
-        specifier: ^7.1.0
+        specifier: ^7.5.0
         version: 7.5.0
       '@aptos-labs/wallet-adapter-ant-design':
         specifier: workspace:*
@@ -116,9 +116,6 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.104.2
         version: 5.104.2(react@18.3.1)
-      '@telegram-apps/sdk':
-        specifier: ^2.11.3
-        version: 2.11.3
       antd:
         specifier: ^5.29.3
         version: 5.29.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -193,7 +190,7 @@ importers:
         specifier: ^2.0.3
         version: 2.0.3
       '@aptos-labs/ts-sdk':
-        specifier: ^7.1.0
+        specifier: ^7.5.0
         version: 7.5.0
       '@aptos-labs/wallet-adapter-core':
         specifier: workspace:*
@@ -240,9 +237,6 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.104.2
         version: 5.104.2(react@18.3.1)
-      '@telegram-apps/sdk':
-        specifier: ^2.11.3
-        version: 2.11.3
       '@wormhole-foundation/sdk':
         specifier: 4.7.1
         version: 4.7.1(@typescript/typescript6@6.0.2)(bufferutil@4.1.0)(debug@4.4.3(supports-color@7.2.0))(google-protobuf@3.21.4)(supports-color@7.2.0)(utf-8-validate@6.0.6)
@@ -323,7 +317,7 @@ importers:
         specifier: ^2.0.3
         version: 2.0.3
       '@aptos-labs/ts-sdk':
-        specifier: ^7.1.0
+        specifier: ^7.5.0
         version: 7.5.0
       '@aptos-labs/wallet-adapter-core':
         specifier: workspace:*
@@ -402,7 +396,7 @@ importers:
   packages/derived-wallet-base:
     dependencies:
       '@aptos-labs/ts-sdk':
-        specifier: ^7.1.0
+        specifier: ^7.5.0
         version: 7.5.0
       '@aptos-labs/wallet-standard':
         specifier: ^2.0.0
@@ -430,7 +424,7 @@ importers:
         specifier: workspace:^
         version: link:../derived-wallet-base
       '@aptos-labs/ts-sdk':
-        specifier: ^7.1.0
+        specifier: ^7.5.0
         version: 7.5.0
       '@aptos-labs/wallet-standard':
         specifier: ^2.0.0
@@ -473,7 +467,7 @@ importers:
         specifier: workspace:^
         version: link:../derived-wallet-base
       '@aptos-labs/ts-sdk':
-        specifier: ^7.1.0
+        specifier: ^7.5.0
         version: 7.5.0
       '@aptos-labs/wallet-standard':
         specifier: ^2.0.0
@@ -525,7 +519,7 @@ importers:
         specifier: ^0.4.0
         version: 0.4.0(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)
       '@aptos-labs/ts-sdk':
-        specifier: ^7.1.0
+        specifier: ^7.5.0
         version: 7.5.0
       '@aptos-labs/wallet-standard':
         specifier: ^2.0.0
@@ -600,15 +594,15 @@ importers:
 
   packages/wallet-adapter-core:
     dependencies:
-      '@aptos-connect/wallet-adapter-plugin':
-        specifier: ^3.0.4
-        version: 3.0.4(@aptos-labs/ts-sdk@7.5.0)(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       '@aptos-labs/ts-sdk':
-        specifier: ^7.1.0
+        specifier: ^7.5.0
         version: 7.5.0
       '@aptos-labs/wallet-standard':
         specifier: ^2.0.0
         version: 2.0.0(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)
+      '@petra-app/wallet-adapter-plugin':
+        specifier: ^1.0.0
+        version: 1.0.0(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)
       eventemitter3:
         specifier: ^5.0.4
         version: 5.0.4
@@ -781,23 +775,6 @@ packages:
     peerDependencies:
       react: '>=16.9.0'
 
-  '@aptos-connect/wallet-adapter-plugin@3.0.4':
-    resolution: {integrity: sha512-E10XgQ1CU0zpKKPD9hHh2mM4kbLc52QDgShLxL8Qe8On7LN2Wuc1dJdcRqrbIS9J5yqSgVGJ/G+T+hdpoI09Jg==}
-    peerDependencies:
-      '@aptos-labs/ts-sdk': ^7.1.0
-
-  '@aptos-connect/wallet-api@0.6.1':
-    resolution: {integrity: sha512-ai9Xw5Nu+wcWleK6hsMBMCBNGnat3wYiXXlTMUIoKcwcnk/AdMBdDk69r7PeZD8JqwBYLTRGCAI87XrtR+8zig==}
-    peerDependencies:
-      '@aptos-labs/ts-sdk': ^7.1.0
-
-  '@aptos-connect/web-transport@0.6.2':
-    resolution: {integrity: sha512-HWmMJ8FS3/gueTi5RBV22/gAFXJuL08Fefc8qbuTgdYxxoxSPRWnc3OGMfXQl00x8z+LvdVyyyong0V7Z8PvUg==}
-    peerDependencies:
-      '@aptos-labs/ts-sdk': ^7.1.0
-      '@aptos-labs/wallet-standard': ^0.5.0
-      '@telegram-apps/bridge': ^1.0.0
-
   '@aptos-labs/aptos-cli@3.0.0':
     resolution: {integrity: sha512-fw9Ph6pe9l/RW6LMqjpxrHiWo2T/gtYWZsRxgl4PqVroavGF13YEQWlUnjJfWgVi1wQHpQcoJ1eYbYsPFu2sVg==}
     engines: {node: '>=22'}
@@ -815,23 +792,17 @@ packages:
   '@aptos-labs/siwa@0.4.0':
     resolution: {integrity: sha512-BpDD7/PP7IqSvJx6gFR4CgoIIBBS9AcaquJ5HMhU/2cl22E073FzU/O7jYLy+p/dL3aZLmkAFpWoDYjAPz040g==}
     peerDependencies:
-      '@aptos-labs/ts-sdk': ^7.1.0
+      '@aptos-labs/ts-sdk': ^7.5.0
 
   '@aptos-labs/ts-sdk@7.5.0':
     resolution: {integrity: sha512-Q0rwVFOrRMY1uSJQlCKqxAwr8HDkvvnXWtJJHEqntAgJNu6RwyyTRccgQ8nM4F8fN9dgixzUYPZhK/lOc8gXqQ==}
     engines: {node: '>=22.0.0'}
 
-  '@aptos-labs/wallet-standard@0.5.2':
-    resolution: {integrity: sha512-aFQOMLLRSmEYXHBGzhLGSOICoQRKqrtRyaMR7kDdyKtEI+4Ocgf2QeW+5yNZEUKoeWlydcBZGIuO7xAQpWU7dw==}
-    peerDependencies:
-      '@aptos-labs/ts-sdk': ^7.1.0
-      '@wallet-standard/core': ^1.0.3
-
   '@aptos-labs/wallet-standard@2.0.0':
     resolution: {integrity: sha512-A5bEyaUzb0w1rSzllkfcTycN/5V+9RlWbJmDkBnzaUcSngGFCH2p6i2UXBFQRG1GsJk5RnvE4YW5QYkYDwtAGA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
-      '@aptos-labs/ts-sdk': ^7.1.0
+      '@aptos-labs/ts-sdk': ^7.5.0
       '@wallet-standard/core': ^1.0.3
 
   '@babel/code-frame@7.29.7':
@@ -1334,25 +1305,6 @@ packages:
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
-  '@identity-connect/api@0.8.0':
-    resolution: {integrity: sha512-BZQxaJnm3hkpwMGUio35ik28I8JomWIzPZn/lBl3ErrvUo02+2ixaYtVwD4MvC9RMY54AZvQaHfyFjuCaaM9+g==}
-
-  '@identity-connect/crypto@0.3.1':
-    resolution: {integrity: sha512-Y4sZf6gKqJpuRIIpiFFPKfxO/Fg8Nth3Svnue5Z6IDeQDszf9RgQDvimKKz+4OsHzEniyLkjRxwjjmzx6WRN3g==}
-    peerDependencies:
-      '@aptos-labs/ts-sdk': ^7.1.0
-
-  '@identity-connect/dapp-sdk@0.16.2':
-    resolution: {integrity: sha512-11SaXsvMqZzT/oBOfpq/fuQN1hb7IkWDbFdHxUMY9g1Rvj49madaaSeJ7gzi9nVeMOON+7NioBfIyFcfV+730w==}
-    peerDependencies:
-      '@aptos-labs/ts-sdk': ^7.1.0
-      '@aptos-labs/wallet-standard': ^0.5.0
-
-  '@identity-connect/wallet-api@0.2.0':
-    resolution: {integrity: sha512-23Toe3bxeUN/DLsbBVYbt7gmG+msxxzAh19nXYjj32ybz0mKLLsdQWTf/nzqesmMD7r2u8QCF1ZYclm8Oie2Kg==}
-    peerDependencies:
-      '@aptos-labs/ts-sdk': ^7.1.0
-
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
     engines: {node: '>=18'}
@@ -1826,6 +1778,12 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@petra-app/wallet-adapter-plugin@1.0.0':
+    resolution: {integrity: sha512-Z2pQM131f2eU9VXwP4EKz4pMmqKz1unZLGkNioY+WaLW7OZdsfgVEbOOIVQCMvEA3FgHXsWlDwzni13ZpgFTLw==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      '@aptos-labs/ts-sdk': ^7.5.0
 
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
@@ -2766,30 +2724,6 @@ packages:
     peerDependencies:
       react: ^18 || ^19
 
-  '@telegram-apps/bridge@1.9.2':
-    resolution: {integrity: sha512-SJLcNWLXhbbZr9MiqFH/g2ceuitSJKMxUIZysK4zUNyTUNuonrQG80Q/yrO+XiNbKUj8WdDNM86NBARhuyyinQ==}
-    deprecated: This package is not supported anymore. Use @tma.js/bridge instead
-
-  '@telegram-apps/navigation@1.0.14':
-    resolution: {integrity: sha512-bqNgF/J8Po7ZtsELm3E1a6aPr7awwxO3sIqD8J6u12urOlGoW5+1KxKKbkPa58mgXuQdsltd8apI+OVy0IYiUA==}
-
-  '@telegram-apps/sdk@2.11.3':
-    resolution: {integrity: sha512-KdULzgRe1gcR8B3Z/t3hQrEaDmLGrfsL2IePtPP6ehtMn5tT0uPfnjtDLjDNQMyI7D4Tv2ZOzvDx45wOhhreXg==}
-
-  '@telegram-apps/signals@1.1.2':
-    resolution: {integrity: sha512-1P1kdCLX7MfETGPxH7f3UZKIsdE7Tz5S7QmN4Km1sbYQMakD5Bi1NecSMR7/wnHp50gWMI1JzENcMtCEmouhSg==}
-
-  '@telegram-apps/toolkit@1.1.1':
-    resolution: {integrity: sha512-+vhKx6ngfvjyTE6Xagl3z1TPVbfx5s7xAkcYzCdHYUo6T60jLIqLgyZMcI1UPoIAMuMu1pHoO+p8QNCj/+tFmw==}
-
-  '@telegram-apps/transformers@1.2.2':
-    resolution: {integrity: sha512-vvMwXckd1D7Ozc0h66PSUwF5QLrRV9HlGJFFeBuUex8QEk5mSPtsJkLiqB8aBbwuFDa91+TUSM/CxqPZO/e9YQ==}
-    deprecated: This package is not supported anymore. Use @tma.js/transfomers instead
-
-  '@telegram-apps/types@1.2.1':
-    resolution: {integrity: sha512-so4HLh7clur0YyMthi9KVIgWoGpZdXlFOuQjk3+Q5NAvJZ11nAheBSwPlGw/Ko92+zwvrSBE/lQyN2+p17RP+w==}
-    deprecated: This package is not supported anymore. Use @tma.js/types instead
-
   '@testing-library/dom@9.3.4':
     resolution: {integrity: sha512-FlS4ZWlp97iiNWig0Muq8p+3rVDjRiYE+YKGbAqXOu9nwJFFOdL00kFpz42M+4huzYi86vAK1sOOfyOG45muIQ==}
     engines: {node: '>=14'}
@@ -3647,9 +3581,6 @@ packages:
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
     engines: {node: '>= 0.4'}
-
-  ed2curve@0.3.0:
-    resolution: {integrity: sha512-8w2fmmq3hv9rCrcI7g9hms2pMunQr1JINfcjwR9tAyZqhtyaMN991lF/ZfHfr5tzZQ8c7y7aBgZbjfbd0fjFwQ==}
 
   electron-to-chromium@1.5.452:
     resolution: {integrity: sha512-cVvk1YBSj6571VmV6hdJTqj94Y79xSu8cj6Y9t6ae4Y4431z8/7EJFvu3rVp90xhfuv9BpPKUmaLfTo4+FOGBg==}
@@ -5472,37 +5403,6 @@ snapshots:
       resize-observer-polyfill: 1.5.1
       throttle-debounce: 5.0.2
 
-  '@aptos-connect/wallet-adapter-plugin@3.0.4(@aptos-labs/ts-sdk@7.5.0)(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
-    dependencies:
-      '@aptos-connect/wallet-api': 0.6.1(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)
-      '@aptos-labs/ts-sdk': 7.5.0
-      '@aptos-labs/wallet-standard': 0.5.2(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)
-      '@identity-connect/crypto': 0.3.1(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)
-      '@identity-connect/dapp-sdk': 0.16.2(@aptos-labs/ts-sdk@7.5.0)(@aptos-labs/wallet-standard@0.5.2(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - '@telegram-apps/bridge'
-      - '@wallet-standard/core'
-      - debug
-      - supports-color
-
-  '@aptos-connect/wallet-api@0.6.1(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)':
-    dependencies:
-      '@aptos-labs/ts-sdk': 7.5.0
-      '@aptos-labs/wallet-standard': 0.5.2(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)
-      '@identity-connect/api': 0.8.0
-    transitivePeerDependencies:
-      - '@wallet-standard/core'
-
-  '@aptos-connect/web-transport@0.6.2(@aptos-labs/ts-sdk@7.5.0)(@aptos-labs/wallet-standard@0.5.2(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)':
-    dependencies:
-      '@aptos-connect/wallet-api': 0.6.1(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)
-      '@aptos-labs/ts-sdk': 7.5.0
-      '@aptos-labs/wallet-standard': 0.5.2(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)
-      '@telegram-apps/bridge': 1.9.2
-      uuid: 11.1.1
-    transitivePeerDependencies:
-      - '@wallet-standard/core'
-
   '@aptos-labs/aptos-cli@3.0.0':
     dependencies:
       commander: 14.0.3
@@ -5535,11 +5435,6 @@ snapshots:
       eventemitter3: 5.0.4
       jwt-decode: 4.0.0
       poseidon-lite: 0.3.0
-
-  '@aptos-labs/wallet-standard@0.5.2(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)':
-    dependencies:
-      '@aptos-labs/ts-sdk': 7.5.0
-      '@wallet-standard/core': 1.1.0
 
   '@aptos-labs/wallet-standard@2.0.0(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)':
     dependencies:
@@ -6356,39 +6251,6 @@ snapshots:
     dependencies:
       graphql: 16.14.2
 
-  '@identity-connect/api@0.8.0': {}
-
-  '@identity-connect/crypto@0.3.1(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)':
-    dependencies:
-      '@aptos-connect/wallet-api': 0.6.1(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)
-      '@aptos-labs/ts-sdk': 7.5.0
-      '@noble/hashes': 1.8.0
-      ed2curve: 0.3.0
-      tweetnacl: 1.0.3
-    transitivePeerDependencies:
-      - '@wallet-standard/core'
-
-  '@identity-connect/dapp-sdk@0.16.2(@aptos-labs/ts-sdk@7.5.0)(@aptos-labs/wallet-standard@0.5.2(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
-    dependencies:
-      '@aptos-connect/wallet-api': 0.6.1(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)
-      '@aptos-connect/web-transport': 0.6.2(@aptos-labs/ts-sdk@7.5.0)(@aptos-labs/wallet-standard@0.5.2(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.0)
-      '@aptos-labs/ts-sdk': 7.5.0
-      '@aptos-labs/wallet-standard': 0.5.2(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)
-      '@identity-connect/api': 0.8.0
-      '@identity-connect/crypto': 0.3.1(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)
-      '@identity-connect/wallet-api': 0.2.0(@aptos-labs/ts-sdk@7.5.0)
-      axios: 1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
-      uuid: 11.1.1
-    transitivePeerDependencies:
-      - '@telegram-apps/bridge'
-      - '@wallet-standard/core'
-      - debug
-      - supports-color
-
-  '@identity-connect/wallet-api@0.2.0(@aptos-labs/ts-sdk@7.5.0)':
-    dependencies:
-      '@aptos-labs/ts-sdk': 7.5.0
-
   '@img/colour@1.1.0':
     optional: true
 
@@ -6949,6 +6811,13 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.3
+
+  '@petra-app/wallet-adapter-plugin@1.0.0(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)':
+    dependencies:
+      '@aptos-labs/ts-sdk': 7.5.0
+      '@aptos-labs/wallet-standard': 2.0.0(@aptos-labs/ts-sdk@7.5.0)(@wallet-standard/core@1.1.0)
+    transitivePeerDependencies:
+      - '@wallet-standard/core'
 
   '@popperjs/core@2.11.8': {}
 
@@ -7945,34 +7814,6 @@ snapshots:
     dependencies:
       '@tanstack/query-core': 5.104.2
       react: 18.3.1
-
-  '@telegram-apps/bridge@1.9.2':
-    dependencies:
-      '@telegram-apps/signals': 1.1.2
-      '@telegram-apps/toolkit': 1.1.1
-      '@telegram-apps/transformers': 1.2.2
-      '@telegram-apps/types': 1.2.1
-
-  '@telegram-apps/navigation@1.0.14': {}
-
-  '@telegram-apps/sdk@2.11.3':
-    dependencies:
-      '@telegram-apps/bridge': 1.9.2
-      '@telegram-apps/navigation': 1.0.14
-      '@telegram-apps/signals': 1.1.2
-      '@telegram-apps/toolkit': 1.1.1
-      '@telegram-apps/transformers': 1.2.2
-
-  '@telegram-apps/signals@1.1.2': {}
-
-  '@telegram-apps/toolkit@1.1.1': {}
-
-  '@telegram-apps/transformers@1.2.2':
-    dependencies:
-      '@telegram-apps/toolkit': 1.1.1
-      '@telegram-apps/types': 1.2.1
-
-  '@telegram-apps/types@1.2.1': {}
 
   '@testing-library/dom@9.3.4':
     dependencies:
@@ -9391,10 +9232,6 @@ snapshots:
       call-bind-apply-helpers: 1.0.2
       es-errors: 1.3.0
       gopd: 1.2.0
-
-  ed2curve@0.3.0:
-    dependencies:
-      tweetnacl: 1.0.3
 
   electron-to-chromium@1.5.452: {}
 

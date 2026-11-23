@@ -36,9 +36,8 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
           devnet: process.env.NEXT_PUBLIC_APTOS_API_KEY_DEVNET,
           mainnet: process.env.NEXT_PUBLIC_APTOS_API_KEY_MAINNET,
         },
-        aptosConnect: {
+        petraWeb: {
           claimSecretKey,
-          dappId: "57fa42a9-29c6-4f1e-939c-4eefa36d9ff5",
           dappImageURI,
         },
         crossChainWallets: true,

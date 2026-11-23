@@ -31,7 +31,6 @@ import {
   isAptosNetwork,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
-import { init as initTelegram } from "@telegram-apps/sdk";
 import { AlertCircle } from "lucide-react";
 import Image from "next/image";
 
@@ -48,13 +47,6 @@ import { TransactionSubmitterToggle } from "@/components/TransactionSubmitterTog
   const myWallet = new MyWallet();
   registerWallet(myWallet);
 })();
-
-const isTelegramMiniApp =
-  typeof window !== "undefined" &&
-  (window as any).TelegramWebviewProxy !== undefined;
-if (isTelegramMiniApp) {
-  initTelegram();
-}
 
 export default function Home() {
   const { account, connected, network, wallet, changeNetwork } = useWallet();

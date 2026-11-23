@@ -1,33 +1,22 @@
 import {
-  AptosConnectAppleWallet,
-  AptosConnectGenericWallet,
-  AptosConnectGoogleWallet,
-} from "@aptos-connect/wallet-adapter-plugin";
+  PetraWebWallet,
+  type PetraWebWalletConfig,
+} from "@petra-app/wallet-adapter-plugin";
 import type { AdapterWallet, DappConfig } from "./WalletCore";
 
-export function getSDKWallets(dappConfig?: DappConfig) {
+export function getSDKWallets(dappConfig?: DappConfig): AdapterWallet[] {
   const sdkWallets: AdapterWallet[] = [];
 
-  // Need to check window is defined for AptosConnect
+  // Petra Web opens its prompt in a browser popup, so it needs a window
   if (typeof window !== "undefined") {
-    // Aptos Connect is still typed against wallet-standard 0.5.x. Runtime AIP-62
-    // behavior is compatible; WalletCore already branches on feature versions.
+    const config: PetraWebWalletConfig = {
+      ...dappConfig?.petraWeb,
+      network: dappConfig?.network,
+    };
     sdkWallets.push(
-      new AptosConnectGoogleWallet({
-        network: dappConfig?.network,
-        dappId: dappConfig?.aptosConnectDappId,
-        ...dappConfig?.aptosConnect,
-      }) as AdapterWallet,
-      new AptosConnectAppleWallet({
-        network: dappConfig?.network,
-        dappId: dappConfig?.aptosConnectDappId,
-        ...dappConfig?.aptosConnect,
-      }) as AdapterWallet,
-      new AptosConnectGenericWallet({
-        network: dappConfig?.network,
-        dappId: dappConfig?.aptosConnectDappId,
-        ...dappConfig?.aptosConnect,
-      }) as AdapterWallet,
+      new PetraWebWallet("google", config),
+      new PetraWebWallet("apple", config),
+      new PetraWebWallet("generic", config),
     );
   }
 

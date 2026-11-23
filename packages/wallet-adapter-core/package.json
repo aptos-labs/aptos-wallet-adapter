@@ -50,12 +50,12 @@
     "vitest": "^5.0.4"
   },
   "dependencies": {
-    "@aptos-connect/wallet-adapter-plugin": "^3.0.4",
     "@aptos-labs/wallet-standard": "^2.0.0",
+    "@petra-app/wallet-adapter-plugin": "^1.0.0",
     "eventemitter3": "^5.0.4"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": "^7.1.0"
+    "@aptos-labs/ts-sdk": "^7.5.0"
   },
   "files": [
     "dist",

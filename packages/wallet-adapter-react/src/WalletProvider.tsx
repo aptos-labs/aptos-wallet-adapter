@@ -14,9 +14,11 @@ import {
   type InputGenerateTransactionOptions,
   type InputSubmitTransactionData,
   type InputTransactionData,
+  isPetraWebWallet,
   type Network,
   type NetworkInfo,
   type PendingTransactionResponse,
+  removeLocalStorage,
   WalletCore,
   WalletReadyState,
 } from "@aptos-labs/wallet-adapter-core";
@@ -159,6 +161,15 @@ export const AptosWalletAdapterProvider: FC<AptosWalletProviderProps> = ({
           // return `false` and skip the `connect` method.
           if (typeof autoConnect === "function") {
             shouldConnect = await autoConnect(walletCore, selectedWallet);
+          } else if (
+            isPetraWebWallet(selectedWallet, false) &&
+            selectedWallet.accounts.length === 0
+          ) {
+            // Petra Web has no session to restore, so connecting would open
+            // its popup without a user gesture. Forget the wallet instead;
+            // the user reconnects with a click.
+            removeLocalStorage();
+            shouldConnect = false;
           } else {
             shouldConnect = autoConnect;
           }

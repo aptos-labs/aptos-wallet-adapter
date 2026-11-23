@@ -16,32 +16,32 @@
   margin-bottom: 32px;
 }
 
-.aptos-connect-button {
+.petra-web-button {
   color: #3f67ff;
   border-color: #3f67ff;
 }
 
-.aptos-connect-privacy-policy-wrapper {
+.petra-web-privacy-policy-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.aptos-connect-privacy-policy-text {
+.petra-web-privacy-policy-text {
   font-size: 12px;
   line-height: 20px;
 }
 
-.aptos-connect-privacy-policy-link {
+.petra-web-privacy-policy-link {
   color: rgba(0, 0, 0, 0.5);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
-.aptos-connect-privacy-policy-link:hover {
+.petra-web-privacy-policy-link:hover {
   text-decoration: underline;
 }
 
-.aptos-connect-powered-by {
+.petra-web-powered-by {
   display: flex;
   gap: 6px;
   align-items: center;
@@ -91,7 +91,7 @@
   line-height: 32px;
 }
 
-.about-aptos-connect-trigger-wrapper {
+.about-petra-web-trigger-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -100,7 +100,7 @@
   font-size: 14px;
 }
 
-.about-aptos-connect-trigger {
+.about-petra-web-trigger {
   background: none;
   border: none;
   font-family: inherit;
@@ -114,18 +114,18 @@
   color: black;
 }
 
-.about-aptos-connect-header {
+.about-petra-web-header {
   display: grid;
   grid-template-columns: 1fr 4fr 1fr;
   align-items: center;
   margin-bottom: 16px;
 }
-.about-aptos-connect-header > div {
+.about-petra-web-header > div {
   margin: 0;
   font-size: 18px;
 }
 
-.about-aptos-connect-graphic-wrapper {
+.about-petra-web-graphic-wrapper {
   display: flex;
   height: 162px;
   padding-bottom: 12px;
@@ -133,7 +133,7 @@
   justify-content: center;
 }
 
-.about-aptos-connect-text-wrapper {
+.about-petra-web-text-wrapper {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -141,47 +141,47 @@
   padding-bottom: 4px;
 }
 
-.about-aptos-connect-title {
+.about-petra-web-title {
   font-size: 22px;
 }
 
-.about-aptos-connect-description {
+.about-petra-web-description {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.5);
 }
-.about-aptos-connect-description > a {
+.about-petra-web-description > a {
   color: black;
   text-decoration: underline;
   text-underline-offset: 4px;
 }
 
-.about-aptos-connect-footer-wrapper {
+.about-petra-web-footer-wrapper {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: center;
 }
 
-.about-aptos-connect-screen-indicators-wrapper {
+.about-petra-web-screen-indicators-wrapper {
   display: flex;
   align-items: center;
   gap: 8px;
   place-self: center;
 }
 
-.about-aptos-connect-screen-indicator {
+.about-petra-web-screen-indicator {
   background: none;
   border: none;
   padding-inline: 0;
   padding-block: 16px;
   cursor: pointer;
 }
-.about-aptos-connect-screen-indicator > div {
+.about-petra-web-screen-indicator > div {
   height: 2px;
   width: 24px;
   background-color: rgba(0, 0, 0, 0.2);
   transition: background-color 0.2s ease;
 }
-.about-aptos-connect-screen-indicator[data-active] > div {
+.about-petra-web-screen-indicator[data-active] > div {
   background-color: black;
 }
 

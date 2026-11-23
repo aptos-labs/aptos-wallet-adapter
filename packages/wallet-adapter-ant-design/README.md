@@ -47,21 +47,21 @@ You can override these classes
 .wallet-connect-install
 .wallet-button
 .wallet-modal-title
-.aptos-connect-button
-.aptos-connect-privacy-policy-wrapper
-.aptos-connect-privacy-policy-text
-.aptos-connect-privacy-policy-link
-.aptos-connect-powered-by
-.about-aptos-connect-trigger-wrapper
-.about-aptos-connect-trigger
-.about-aptos-connect-header
-.about-aptos-connect-graphic-wrapper
-.about-aptos-connect-text-wrapper
-.about-aptos-connect-title
-.about-aptos-connect-description
-.about-aptos-connect-footer-wrapper
-.about-aptos-connect-screen-indicators-wrapper
-.about-aptos-connect-screen-indicator
+.petra-web-button
+.petra-web-privacy-policy-wrapper
+.petra-web-privacy-policy-text
+.petra-web-privacy-policy-link
+.petra-web-powered-by
+.about-petra-web-trigger-wrapper
+.about-petra-web-trigger
+.about-petra-web-header
+.about-petra-web-graphic-wrapper
+.about-petra-web-text-wrapper
+.about-petra-web-title
+.about-petra-web-description
+.about-petra-web-footer-wrapper
+.about-petra-web-screen-indicators-wrapper
+.about-petra-web-screen-indicator
 ```
 
 For example, to override the `connect wallet` button background color, you can use the `.wallet-button` class in your local `.css` file
