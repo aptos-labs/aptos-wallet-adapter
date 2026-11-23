@@ -1,5 +1,5 @@
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
-import { SuiClient } from "@mysten/sui/client";
+import { SuiGrpcClient } from "@mysten/sui/grpc";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { ethers, JsonRpcProvider } from "ethers";
 import type { Chain } from "../CrossChainCore";
@@ -89,13 +89,14 @@ export const getSuiWalletUSDCBalance = async (
   const token =
     aptosNetwork === Network.MAINNET ? mainnetTokens.Sui : testnetTokens.Sui;
 
-  const client = new SuiClient({
-    url: rpc,
+  const client = new SuiGrpcClient({
+    network: aptosNetwork === Network.MAINNET ? "mainnet" : "testnet",
+    baseUrl: rpc,
   });
-  const balance = await client.getBalance({
+  const { balance } = await client.getBalance({
     owner: walletAddress,
     coinType: token.tokenId.address,
   });
   // Reuse ethers' formatter for precise decimal formatting of large integers.
-  return ethers.formatUnits(BigInt(balance.totalBalance), token.decimals);
+  return ethers.formatUnits(BigInt(balance.balance), token.decimals);
 };

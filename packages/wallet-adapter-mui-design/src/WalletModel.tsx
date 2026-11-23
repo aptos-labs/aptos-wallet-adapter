@@ -33,7 +33,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { type SyntheticEvent, useState } from "react";
+import { type JSX, type SyntheticEvent, useState } from "react";
 import { grey } from "./aptosColorPalette";
 import type { WalletConnectorProps } from "./types";
 
