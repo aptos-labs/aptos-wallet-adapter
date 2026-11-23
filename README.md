@@ -46,7 +46,6 @@ A comprehensive monorepo developed and maintained by Aptos for wallet and dapp b
 
 ## Supported Wallets
 
-- [AptosConnect](https://aptosconnect.app/)
 - [Backpack Wallet](https://backpack.app/)
 - [Bitget Wallet](https://web3.bitget.com)
 - [Cosmostation Wallet](https://chromewebstore.google.com/detail/cosmostation-wallet/fpkhgmpbidmiogeglndfbkegfdlnajnf)
@@ -54,6 +53,7 @@ A comprehensive monorepo developed and maintained by Aptos for wallet and dapp b
 - [Nightly](https://chromewebstore.google.com/detail/nightly/fiikommddbeccaoicoejoniammnalkfa)
 - [OKX](https://www.npmjs.com/package/@okwallet/aptos-wallet-adapter)
 - [Petra](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
+- [Petra Web](https://web.petra.app/)
 - [RimoSafe](https://chromewebstore.google.com/detail/rimo-safe-wallet/kiicddjcakdmobjkcpppkgcjbpakcagp)
 - [Watchee](https://watcheetv.com)
 
