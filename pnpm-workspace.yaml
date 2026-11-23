@@ -51,7 +51,9 @@ overrides:
   "@protobufjs/utf8": "^1.1.1"
   valibot: "^1.4.2"
   rollup: "^4.59.0"
-  happy-dom: "^20.8.9"
+  # GHSA-834v-8h66-3h79 / GHSA-c8p4-j97h-3vg8: happy-dom <=21.0.3 / <=20.14.6;
+  # 21.0.4 is the first release clearing both (major from 20, required).
+  happy-dom: "^21.0.4"
   lodash: "^4.17.24"
   turbo-stream: "^3.0.0"
   ajv: "^6.14.0"
@@ -79,6 +81,18 @@ overrides:
   "js-yaml@3": "^3.15.2"
   "nanoid@3": "^3.3.18"
   "picomatch@2": "^2.3.2"
+  # GHSA-82x6-q7mm-w9cf / GHSA-v5mp-jgw5-2x6j / GHSA-4qx8-w7c3-pj3p /
+  # GHSA-9j65-hcg3-gc64 / GHSA-9qmh-m7c6-f92p / GHSA-h895-cgqg-jf52:
+  # toml (via @coral-xyz/anchor@0.29, which still pins ^3.0.0 even in its
+  # latest release) is vulnerable through 5.0.0; 5.0.1 is patched. This is a
+  # major from 3, but toml.parse(input[, options]) is backward-compatible.
+  toml: "^5.0.1"
+  # GHSA-528h-pc64-c93x / GHSA-hqr4-qq8f-hg3x / GHSA-mjw6-4jj6-33hc:
+  # stream-json (via jayson@4 > @solana/web3.js) is vulnerable through 3.5.0.
+  # Forcing stream-json@3 alone would break jayson@4 (ESM-only, renamed
+  # subpaths vs its CJS requires); jayson@5 drops stream-json entirely and
+  # keeps the lib/client/browser API @solana/web3.js@1 uses, so take that major.
+  "jayson@4": "^5.0.0"
 
 # `pnpm audit` suppressions. Both advisories below have NO published fix — the
 # packages are effectively unmaintained and their latest release is still below
