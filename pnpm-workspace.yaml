@@ -51,7 +51,24 @@ overrides:
   "@protobufjs/utf8": "^1.1.1"
   valibot: "^1.4.2"
   rollup: "^4.59.0"
-  happy-dom: "^20.8.9"
+  # GHSA-834v-8h66-3h79 / GHSA-c8p4-j97h-3vg8: happy-dom <=21.0.3 host code
+  # execution / SSRF. 21.0.4 is the first fully patched release; this is a
+  # test-only (vitest environment) dependency, so the major bump is contained.
+  happy-dom: "^21.0.4"
+  # GHSA-528h-pc64-c93x / GHSA-hqr4-qq8f-hg3x / GHSA-mjw6-4jj6-33hc:
+  # stream-json <=3.4.0 (via jayson 4, via @solana/web3.js 1.x). Forcing
+  # stream-json 3.x would break jayson 4 (it requires the stream-json 1.x
+  # CommonJS paths `stream-json/streamers/StreamValues` and
+  # `stream-json/utils/Verifier`, which no longer exist in the ESM-only 3.x).
+  # jayson 5 drops stream-json entirely and keeps the
+  # `jayson/lib/client/browser` constructor/request API that
+  # @solana/web3.js 1.99 calls, so force that major instead.
+  "jayson@4": "^5.0.0"
+  # GHSA-82x6-q7mm-w9cf / GHSA-v5mp-jgw5-2x6j / GHSA-4qx8-w7c3-pj3p /
+  # GHSA-9j65-hcg3-gc64 / GHSA-9qmh-m7c6-f92p / GHSA-h895-cgqg-jf52:
+  # toml (toml-node) <=5.0.0 via @coral-xyz/anchor, which only calls
+  # `toml.parse` — an API toml 5.0.1 retains.
+  toml: "^5.0.1"
   lodash: "^4.17.24"
   turbo-stream: "^3.0.0"
   ajv: "^6.14.0"
