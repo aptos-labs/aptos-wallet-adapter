@@ -50,11 +50,13 @@ jobs:
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
-        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
+        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
-          publish: pnpm run publish-packages
+          publish-script: pnpm run publish-packages
+          github-token: ${{ steps.authenticate.outputs.token }}
+          # Keep the v1 push mechanism (git CLI) instead of v2's API default.
+          push-with-git-cli: true
         env:
-          GITHUB_TOKEN: ${{ steps.authenticate.outputs.token }}
           NPM_CONFIG_PROVENANCE: true
           NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY: ${{ secrets.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY }}
           NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY: ${{ secrets.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY }}
