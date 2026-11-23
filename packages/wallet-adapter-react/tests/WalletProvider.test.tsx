@@ -197,6 +197,7 @@ describe("AptosWalletAdapterProvider", () => {
       localStorage.setItem("AptosWalletName", "TestWallet");
 
       // Component that simulates async autoConnect prop
+      // biome-ignore lint/correctness/noComponentHookFactories: test wrapper is defined per-test to isolate state
       function AsyncAutoConnectWrapper() {
         const [autoConnect, setAutoConnect] = React.useState(false);
 
@@ -235,6 +236,7 @@ describe("AptosWalletAdapterProvider", () => {
     it("should only attempt auto-connect once when autoConnect becomes true", async () => {
       localStorage.setItem("AptosWalletName", "TestWallet");
 
+      // biome-ignore lint/correctness/noComponentHookFactories: test wrapper is defined per-test to isolate state
       function MultipleUpdateWrapper() {
         const [autoConnect, setAutoConnect] = React.useState(false);
         const [, forceUpdate] = React.useState(0);
@@ -381,6 +383,7 @@ describe("AptosWalletAdapterProvider", () => {
       const walletName = "Continue with Google";
       const legacySessionKey = "@aptos-connect/connectedAccount";
 
+      // biome-ignore lint/correctness/noComponentHookFactories: test consumer captures the suite's wallet name
       function PetraWebConsumer() {
         const wallet = useWallet();
         return (

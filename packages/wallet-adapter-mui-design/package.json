@@ -40,17 +40,17 @@
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@types/react": "^18.3.31",
-    "@types/react-dom": "^18.3.7",
-    "tsup": "^8.5.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tsup": "^9.0.0",
     "typescript": "^7.0.2"
   },
   "dependencies": {
     "@aptos-labs/wallet-adapter-react": "workspace:*",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^5.18.0",
-    "@mui/material": "^5.18.0"
+    "@mui/icons-material": "^9.5.0",
+    "@mui/material": "^9.5.0"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

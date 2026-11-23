@@ -33,7 +33,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { type SyntheticEvent, useState } from "react";
+import { type JSX, type SyntheticEvent, useState } from "react";
 import { grey } from "./aptosColorPalette";
 import type { WalletConnectorProps } from "./types";
 
@@ -215,10 +215,10 @@ export default function WalletsModal({
             align="center"
             variant="h5"
             component="h2"
-            pt={2}
             sx={{
               display: "flex",
               flexDirection: "column",
+              pt: 2,
             }}
           >
             {hasPetraWebWallets ? (
@@ -260,7 +260,7 @@ export default function WalletsModal({
           )}
 
           {hasPetraWebWallets && (
-            <Stack gap={1}>
+            <Stack sx={{ gap: 1 }}>
               {petraWebWallets.map((wallet) => (
                 <PetraWebWalletRow
                   key={wallet.name}
@@ -270,13 +270,13 @@ export default function WalletsModal({
               ))}
               <Typography
                 component="p"
-                fontSize="14px"
                 sx={{
                   display: "flex",
                   gap: 0.5,
                   justifyContent: "center",
                   alignItems: "center",
                   color: grey[400],
+                  fontSize: "14px",
                 }}
               >
                 Learn more about{" "}
@@ -303,10 +303,12 @@ export default function WalletsModal({
 
               <Stack
                 component={AptosPrivacyPolicy}
-                alignItems="center"
-                py={0.5}
+                sx={{ alignItems: "center", py: 0.5 }}
               >
-                <Typography component="p" fontSize="12px" lineHeight="20px">
+                <Typography
+                  component="p"
+                  sx={{ fontSize: "12px", lineHeight: "20px" }}
+                >
                   <AptosPrivacyPolicy.Disclaimer />{" "}
                   <Box
                     component={AptosPrivacyPolicy.Link}
@@ -404,7 +406,9 @@ function WalletRow({ wallet, onConnect }: WalletRowProps) {
           <Box component={WalletItem.Icon} sx={{ width: 32, height: 32 }} />
           <ListItemText
             primary={wallet.name}
-            primaryTypographyProps={{ fontSize: "1.125rem" }}
+            slotProps={{
+              primary: { sx: { fontSize: "1.125rem" } },
+            }}
           />
           {isInstallRequired(wallet) ? (
             <WalletItem.InstallLink asChild>
@@ -464,7 +468,12 @@ function renderEducationScreen(screen: AboutPetraWebEducationScreen) {
         <IconButton onClick={screen.cancel}>
           <ArrowBack />
         </IconButton>
-        <Typography variant="body1" component="h2" width="100%" align="center">
+        <Typography
+          variant="body1"
+          component="h2"
+          align="center"
+          sx={{ width: "100%" }}
+        >
           About Petra Web
         </Typography>
       </Box>
@@ -485,8 +494,8 @@ function renderEducationScreen(screen: AboutPetraWebEducationScreen) {
         <Typography
           component={screen.Description}
           variant="body2"
-          color={(theme) => theme.palette.text.secondary}
           sx={{
+            color: (theme) => theme.palette.text.secondary,
             "&>a": {
               color: (theme) => theme.palette.text.primary,
               textDecoration: "underline",

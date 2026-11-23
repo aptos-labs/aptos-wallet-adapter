@@ -2,7 +2,7 @@ import { truncateAddress, useWallet } from "@aptos-labs/wallet-adapter-react";
 import { AccountBalanceWalletOutlined as AccountBalanceWalletOutlinedIcon } from "@mui/icons-material";
 import { Avatar, Button, Typography } from "@mui/material";
 import type React from "react";
-import { useState } from "react";
+import { type JSX, useState } from "react";
 import WalletMenu from "./WalletMenu";
 
 type WalletButtonProps = {
@@ -48,7 +48,7 @@ export default function WalletButton({
               src={wallet?.icon}
               sx={{ width: 24, height: 24 }}
             />
-            <Typography noWrap ml={2}>
+            <Typography noWrap sx={{ ml: 2 }}>
               {account?.ansName ||
                 truncateAddress(account?.address?.toString()) ||
                 "Unknown"}
