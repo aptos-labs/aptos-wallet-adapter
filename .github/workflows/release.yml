@@ -54,8 +54,6 @@ jobs:
         with:
           publish-script: pnpm run publish-packages
           github-token: ${{ steps.authenticate.outputs.token }}
-          # Keep the v1 push mechanism (git CLI) instead of v2's API default.
-          push-with-git-cli: true
         env:
           NPM_CONFIG_PROVENANCE: true
           NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY: ${{ secrets.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY }}
