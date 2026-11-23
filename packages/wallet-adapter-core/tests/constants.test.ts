@@ -1,7 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  APTOS_CONNECT_ACCOUNT_URL,
-  APTOS_CONNECT_BASE_URL,
   ChainIdToAnsSupportedNetworkMap,
   DEFAULT_WALLET_CONNECTION_FALLBACKS,
   NetworkName,
@@ -67,18 +65,8 @@ describe("Constants", () => {
   });
 
   describe("URL constants", () => {
-    it("should have correct APTOS_CONNECT_BASE_URL (deprecated)", () => {
-      expect(APTOS_CONNECT_BASE_URL).toBe("https://aptosconnect.app");
-    });
-
     it("should have correct PETRA_WEB_BASE_URL", () => {
       expect(PETRA_WEB_BASE_URL).toBe("https://web.petra.app");
-    });
-
-    it("should have correct APTOS_CONNECT_ACCOUNT_URL (deprecated)", () => {
-      expect(APTOS_CONNECT_ACCOUNT_URL).toBe(
-        "https://aptosconnect.app/dashboard/main-account",
-      );
     });
 
     it("should have correct PETRA_WEB_ACCOUNT_URL", () => {

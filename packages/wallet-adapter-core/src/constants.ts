@@ -19,13 +19,6 @@ export const ChainIdToAnsSupportedNetworkMap: Record<string, string> = {
   "2": "testnet", // testnet
 };
 
-/**
- * The base URL for all Aptos Connect wallets.
- *
- * @deprecated Use {@link PETRA_WEB_BASE_URL} instead.
- */
-export const APTOS_CONNECT_BASE_URL = "https://aptosconnect.app";
-
 /** The base URL for all Petra Web wallets. */
 export const PETRA_WEB_BASE_URL = "https://web.petra.app";
 
@@ -39,14 +32,6 @@ export const PETRA_WALLET_NAME = "Petra";
 export const DEFAULT_WALLET_CONNECTION_FALLBACKS = {
   [PETRA_WALLET_NAME]: PETRA_WEB_GENERIC_WALLET_NAME,
 };
-
-/**
- * The URL to the Aptos Connect account page if the user is signed in to Aptos Connect.
- *
- * @deprecated Use {@link PETRA_WEB_ACCOUNT_URL} instead.
- */
-export const APTOS_CONNECT_ACCOUNT_URL =
-  "https://aptosconnect.app/dashboard/main-account";
 
 /** The URL to the Petra Web account page if the user is signed in to Petra Web. */
 export const PETRA_WEB_ACCOUNT_URL =
