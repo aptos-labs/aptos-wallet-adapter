@@ -1,6 +1,7 @@
 import type { Account, AccountAddressInput, Network } from "@aptos-labs/ts-sdk";
 import type { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
-import type { AttestationReceipt, routes } from "@wormhole-foundation/sdk";
+import type { AttestationReceipt } from "@wormhole-foundation/sdk";
+import type * as routes from "@wormhole-foundation/sdk-connect/routes";
 import type { AptosAccount, Chain } from "../..";
 
 export type WormholeRouteResponse = routes.Route<

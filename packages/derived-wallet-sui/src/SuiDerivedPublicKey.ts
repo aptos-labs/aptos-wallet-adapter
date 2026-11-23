@@ -99,6 +99,7 @@ export class SuiDerivedPublicKey extends AccountPublicKey {
       await verifyPersonalMessageSignature(
         messageBytes,
         signature.signatureBase64,
+        { offline: true },
       );
       return true;
     } catch (_e) {

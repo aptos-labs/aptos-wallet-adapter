@@ -51,7 +51,7 @@ overrides:
   "@protobufjs/utf8": "^1.1.1"
   valibot: "^1.4.2"
   rollup: "^4.59.0"
-  happy-dom: "^20.8.9"
+  happy-dom: "^21.0.4"
   lodash: "^4.17.24"
   turbo-stream: "^3.0.0"
   ajv: "^6.14.0"

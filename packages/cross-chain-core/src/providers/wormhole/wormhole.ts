@@ -4,11 +4,11 @@ import type { SuiDerivedWallet } from "@aptos-labs/derived-wallet-sui";
 import { Network, sleep } from "@aptos-labs/ts-sdk";
 import {
   type PlatformLoader,
-  routes,
   TransferState,
   Wormhole,
   wormhole,
 } from "@wormhole-foundation/sdk";
+import * as routes from "@wormhole-foundation/sdk-connect/routes";
 import aptos from "@wormhole-foundation/sdk/aptos";
 import evm from "@wormhole-foundation/sdk/evm";
 import solana from "@wormhole-foundation/sdk/solana";
