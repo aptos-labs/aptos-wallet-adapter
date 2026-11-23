@@ -7,7 +7,6 @@ import { MyWallet } from "@/utils/standardWallet";
 import { Network } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { registerWallet } from "@aptos-labs/wallet-standard";
-import { init as initTelegram } from "@telegram-apps/sdk";
 import { useEffect, useState } from "react";
 
 import {
@@ -40,13 +39,6 @@ import { AlertCircle } from "lucide-react";
   const myWallet = new MyWallet();
   registerWallet(myWallet);
 })();
-
-const isTelegramMiniApp =
-  typeof window !== "undefined" &&
-  (window as any).TelegramWebviewProxy !== undefined;
-if (isTelegramMiniApp) {
-  initTelegram();
-}
 
 export default function Home() {
   const { account, connected, network, wallet, changeNetwork } = useWallet();
