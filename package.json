@@ -22,7 +22,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
     "@changesets/cli": "^2.31.1",
-    "turbo": "^2.11.7",
+    "turbo": "^2.11.13",
     "typescript": "^7.0.2"
   },
   "engines": {
