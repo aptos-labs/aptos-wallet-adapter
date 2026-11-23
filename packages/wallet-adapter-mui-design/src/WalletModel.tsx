@@ -1,6 +1,6 @@
 import {
-  AboutAptosConnect,
-  type AboutAptosConnectEducationScreen,
+  AboutPetraWeb,
+  type AboutPetraWebEducationScreen,
   type AdapterNotDetectedWallet,
   type AdapterWallet,
   AptosPrivacyPolicy,
@@ -67,13 +67,13 @@ export default function WalletsModal({
 
   const { wallets = [], notDetectedWallets = [] } = useWallet();
 
-  const { aptosConnectWallets, availableWallets, installableWallets } =
+  const { petraWebWallets, availableWallets, installableWallets } =
     groupAndSortWallets(
       [...wallets, ...notDetectedWallets],
       walletSortingOptions,
     );
 
-  const hasAptosConnectWallets = !!aptosConnectWallets.length;
+  const hasPetraWebWallets = !!petraWebWallets.length;
 
   // Determine if we should show tabs (cross-chain mode)
   const crossChainMode =
@@ -210,7 +210,7 @@ export default function WalletsModal({
           <CloseIcon />
         </IconButton>
 
-        <AboutAptosConnect renderEducationScreen={renderEducationScreen}>
+        <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
           <Typography
             align="center"
             variant="h5"
@@ -221,7 +221,7 @@ export default function WalletsModal({
               flexDirection: "column",
             }}
           >
-            {hasAptosConnectWallets ? (
+            {hasPetraWebWallets ? (
               <>
                 <span>Log in or sign up</span>
                 <span>with Social + Petra Web</span>
@@ -259,10 +259,10 @@ export default function WalletsModal({
             </Box>
           )}
 
-          {hasAptosConnectWallets && (
+          {hasPetraWebWallets && (
             <Stack gap={1}>
-              {aptosConnectWallets.map((wallet) => (
-                <AptosConnectWalletRow
+              {petraWebWallets.map((wallet) => (
+                <PetraWebWalletRow
                   key={wallet.name}
                   wallet={wallet}
                   onConnect={handleClose}
@@ -281,7 +281,7 @@ export default function WalletsModal({
               >
                 Learn more about{" "}
                 <Box
-                  component={AboutAptosConnect.Trigger}
+                  component={AboutPetraWeb.Trigger}
                   sx={{
                     background: "none",
                     border: "none",
@@ -372,7 +372,7 @@ export default function WalletsModal({
               {renderWalletList(availableWallets, installableWallets)}
             </Stack>
           )}
-        </AboutAptosConnect>
+        </AboutPetraWeb>
       </Stack>
     </Dialog>
   );
@@ -433,7 +433,7 @@ function WalletRow({ wallet, onConnect }: WalletRowProps) {
   );
 }
 
-function AptosConnectWalletRow({ wallet, onConnect }: WalletRowProps) {
+function PetraWebWalletRow({ wallet, onConnect }: WalletRowProps) {
   return (
     <WalletItem wallet={wallet} onConnect={onConnect} asChild>
       <WalletItem.ConnectButton asChild>
@@ -450,7 +450,7 @@ function AptosConnectWalletRow({ wallet, onConnect }: WalletRowProps) {
   );
 }
 
-function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
+function renderEducationScreen(screen: AboutPetraWebEducationScreen) {
   return (
     <>
       <Box

@@ -5,8 +5,8 @@ import {
   DisconnectOutlined,
 } from "@ant-design/icons";
 import {
-  AboutAptosConnect,
-  type AboutAptosConnectEducationScreen,
+  AboutPetraWeb,
+  type AboutPetraWebEducationScreen,
   type AdapterNotDetectedWallet,
   type AdapterWallet,
   AptosPrivacyPolicy,
@@ -62,13 +62,13 @@ export function WalletSelector({
     notDetectedWallets = [],
   } = useWallet();
 
-  const { aptosConnectWallets, availableWallets, installableWallets } =
+  const { petraWebWallets, availableWallets, installableWallets } =
     groupAndSortWallets(
       [...wallets, ...notDetectedWallets],
       walletSortingOptions,
     );
 
-  const hasAptosConnectWallets = !!aptosConnectWallets.length;
+  const hasPetraWebWallets = !!petraWebWallets.length;
 
   const onWalletButtonClick = () => {
     if (connected) {
@@ -125,7 +125,7 @@ export function WalletSelector({
     className: "wallet-selector-modal",
   };
 
-  const renderEducationScreens = (screen: AboutAptosConnectEducationScreen) => (
+  const renderEducationScreens = (screen: AboutPetraWebEducationScreen) => (
     <Modal
       {...modalProps}
       afterClose={screen.cancel}
@@ -189,12 +189,12 @@ export function WalletSelector({
           Connect Wallet
         </Button>
       )}
-      <AboutAptosConnect renderEducationScreen={renderEducationScreens}>
+      <AboutPetraWeb renderEducationScreen={renderEducationScreens}>
         <Modal
           {...modalProps}
           title={
             <div className="wallet-modal-title">
-              {hasAptosConnectWallets ? (
+              {hasPetraWebWallets ? (
                 <>
                   <span>Log in or sign up</span>
                   <span>with Social + Petra Web</span>
@@ -207,10 +207,10 @@ export function WalletSelector({
         >
           {!connected && (
             <>
-              {hasAptosConnectWallets && (
+              {hasPetraWebWallets && (
                 <Flex vertical gap={12}>
-                  {aptosConnectWallets.map((wallet) => (
-                    <AptosConnectWalletRow
+                  {petraWebWallets.map((wallet) => (
+                    <PetraWebWalletRow
                       key={wallet.name}
                       wallet={wallet}
                       onConnect={closeModal}
@@ -218,10 +218,10 @@ export function WalletSelector({
                   ))}
                   <p className="about-aptos-connect-trigger-wrapper">
                     Learn more about{" "}
-                    <AboutAptosConnect.Trigger className="about-aptos-connect-trigger">
+                    <AboutPetraWeb.Trigger className="about-aptos-connect-trigger">
                       Petra Web
                       <ArrowRightOutlined />
-                    </AboutAptosConnect.Trigger>
+                    </AboutPetraWeb.Trigger>
                   </p>
                   <AptosPrivacyPolicy className="aptos-connect-privacy-policy-wrapper">
                     <p className="aptos-connect-privacy-policy-text">
@@ -269,7 +269,7 @@ export function WalletSelector({
             </>
           )}
         </Modal>
-      </AboutAptosConnect>
+      </AboutPetraWeb>
     </>
   );
 }
@@ -301,7 +301,7 @@ function WalletRow({ wallet, onConnect }: WalletRowProps) {
   );
 }
 
-function AptosConnectWalletRow({ wallet, onConnect }: WalletRowProps) {
+function PetraWebWalletRow({ wallet, onConnect }: WalletRowProps) {
   return (
     <WalletItem wallet={wallet} onConnect={onConnect} asChild>
       <WalletItem.ConnectButton asChild>
