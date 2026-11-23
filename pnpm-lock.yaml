@@ -141,8 +141,8 @@ importers:
         specifier: ^19.3.1
         version: 19.3.1(react@19.3.1)
       tailwind-merge:
-        specifier: ^3.7.1
-        version: 3.7.1
+        specifier: ^2.6.2
+        version: 2.6.2
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.19(yaml@2.9.1))
@@ -271,8 +271,8 @@ importers:
         specifier: ^19.3.1
         version: 19.3.1(react@19.3.1)
       tailwind-merge:
-        specifier: ^3.7.1
-        version: 3.7.1
+        specifier: ^2.6.2
+        version: 2.6.2
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.19(yaml@2.9.1))
@@ -4763,8 +4763,8 @@ packages:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
     engines: {node: '>=20'}
 
-  tailwind-merge@3.7.1:
-    resolution: {integrity: sha512-v7y4BV4FUlO8exj/4M5UXKeoowDiuugVUg3tkMNIyOUCOHy5xp8+5aWQeXCtZ2491sUV1YPsVeM9EveZ6/xuZQ==}
+  tailwind-merge@2.6.2:
+    resolution: {integrity: sha512-o2TX9QB8K2cfaJYgMwv96uAUQK5SqpRJHD2vGDK5nyF/tk9PQTZFpwgsDsySQjlIbYdZ6ZDkk5W+bSuWSe92AA==}
 
   tailwindcss-animate@1.0.7:
     resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
@@ -10409,7 +10409,7 @@ snapshots:
 
   tagged-tag@1.0.0: {}
 
-  tailwind-merge@3.7.1: {}
+  tailwind-merge@2.6.2: {}
 
   tailwindcss-animate@1.0.7(tailwindcss@3.4.19(yaml@2.9.1)):
     dependencies:
