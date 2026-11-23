@@ -1,8 +1,9 @@
 /// <reference types="@testing-library/jest-dom" />
 
+import type { AdapterWallet } from "@aptos-labs/wallet-adapter-core";
 import { act, render, screen, waitFor } from "@testing-library/react";
 import React from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useWallet } from "../src/useWallet";
 import { AptosWalletAdapterProvider } from "../src/WalletProvider";
 import type { MockWalletCore } from "./mocks/walletCore";
@@ -10,6 +11,8 @@ import { createMockWallet, createMockWalletCore } from "./mocks/walletCore";
 
 // Mock the wallet-adapter-core module
 let mockWalletCore: MockWalletCore;
+// Wallets the next WalletCore starts with, instead of the default TestWallet
+let initialWallets: AdapterWallet[] | undefined;
 
 vi.mock("@aptos-labs/wallet-adapter-core", async () => {
   const actual = await vi.importActual("@aptos-labs/wallet-adapter-core");
@@ -20,7 +23,9 @@ vi.mock("@aptos-labs/wallet-adapter-core", async () => {
       mockWalletCore = createMockWalletCore();
       // Set up wallets array so auto-connect can proceed
       // Having at least one wallet triggers the isLoading = false path
-      mockWalletCore.wallets = [createMockWallet("TestWallet")];
+      mockWalletCore.wallets = initialWallets ?? [
+        createMockWallet("TestWallet"),
+      ];
       return mockWalletCore;
     }),
   };
@@ -369,6 +374,128 @@ describe("AptosWalletAdapterProvider", () => {
           expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
         },
         { timeout: 3000 },
+      );
+    });
+
+    describe("with a remembered Petra Web wallet", () => {
+      const walletName = "Continue with Google";
+      const legacySessionKey = "@aptos-connect/connectedAccount";
+
+      function PetraWebConsumer() {
+        const wallet = useWallet();
+        return (
+          <div>
+            <span data-testid="isLoading">{String(wallet.isLoading)}</span>
+            <button
+              data-testid="connect-btn"
+              onClick={() => wallet.connect(walletName)}
+            >
+              Connect
+            </button>
+          </div>
+        );
+      }
+
+      function rememberPetraWeb(accounts: AdapterWallet["accounts"]) {
+        const wallet: AdapterWallet = {
+          ...createMockWallet(walletName),
+          url: "https://web.petra.app",
+          accounts,
+        };
+        initialWallets = [wallet];
+        localStorage.setItem("AptosWalletName", walletName);
+        return wallet;
+      }
+
+      async function waitUntilLoaded() {
+        await waitFor(
+          () => {
+            expect(screen.getByTestId("isLoading")).toHaveTextContent("false");
+          },
+          { timeout: 3000 },
+        );
+      }
+
+      afterEach(() => {
+        initialWallets = undefined;
+        vi.restoreAllMocks();
+      });
+
+      it("should forget a wallet that has no session instead of connecting", async () => {
+        rememberPetraWeb([]);
+        localStorage.setItem(legacySessionKey, "legacy-session");
+        const open = vi.spyOn(window, "open");
+        const onError = vi.fn();
+
+        render(
+          <AptosWalletAdapterProvider
+            autoConnect={true}
+            disableTelemetry
+            onError={onError}
+          >
+            <PetraWebConsumer />
+          </AptosWalletAdapterProvider>,
+        );
+        await waitUntilLoaded();
+
+        expect(mockWalletCore.connect).not.toHaveBeenCalled();
+        expect(open).not.toHaveBeenCalled();
+        expect(onError).not.toHaveBeenCalled();
+        expect(localStorage.getItem("AptosWalletName")).toBeNull();
+        expect(localStorage.getItem(legacySessionKey)).toBe("legacy-session");
+
+        // The user can still connect with a click
+        await act(async () => {
+          screen.getByTestId("connect-btn").click();
+        });
+        expect(mockWalletCore.connect).toHaveBeenCalledExactlyOnceWith(
+          walletName,
+        );
+      });
+
+      it("should restore a wallet that has a session", async () => {
+        const wallet = rememberPetraWeb(createMockWallet().accounts);
+        expect(wallet.accounts).toHaveLength(1);
+
+        render(
+          <AptosWalletAdapterProvider autoConnect={true} disableTelemetry>
+            <PetraWebConsumer />
+          </AptosWalletAdapterProvider>,
+        );
+
+        await waitFor(() => {
+          expect(mockWalletCore.connect).toHaveBeenCalledExactlyOnceWith(
+            walletName,
+          );
+        });
+        expect(localStorage.getItem("AptosWalletName")).toBe(walletName);
+      });
+
+      it.each([true, false])(
+        "should let an autoConnect function decide for a wallet that has no session (%s)",
+        async (shouldConnect) => {
+          const wallet = rememberPetraWeb([]);
+          const autoConnect = vi.fn().mockResolvedValue(shouldConnect);
+
+          render(
+            <AptosWalletAdapterProvider
+              autoConnect={autoConnect}
+              disableTelemetry
+            >
+              <PetraWebConsumer />
+            </AptosWalletAdapterProvider>,
+          );
+          await waitUntilLoaded();
+
+          expect(autoConnect).toHaveBeenCalledExactlyOnceWith(
+            mockWalletCore,
+            wallet,
+          );
+          expect(mockWalletCore.connect).toHaveBeenCalledTimes(
+            shouldConnect ? 1 : 0,
+          );
+          expect(localStorage.getItem("AptosWalletName")).toBe(walletName);
+        },
       );
     });
   });
