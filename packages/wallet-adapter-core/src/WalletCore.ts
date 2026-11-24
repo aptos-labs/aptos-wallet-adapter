@@ -1,4 +1,3 @@
-import type { AptosConnectWalletConfig } from "@aptos-connect/wallet-adapter-plugin";
 import {
   AccountAddress,
   type AccountAuthenticator,
@@ -29,6 +28,7 @@ import {
   type UserResponse,
   UserResponseStatus,
 } from "@aptos-labs/wallet-standard";
+import type { PetraWebWalletConfig } from "@petra-app/wallet-adapter-plugin";
 import EventEmitter from "eventemitter3";
 
 export type {
@@ -121,8 +121,8 @@ export interface DappConfig {
    */
   transactionSubmitter?: TransactionSubmitter;
   aptosApiKeys?: Partial<Record<Network, string>>;
-  aptosConnectDappId?: string;
-  aptosConnect?: Omit<AptosConnectWalletConfig, "network">;
+  /** Options for the built-in Petra Web wallets. */
+  petraWeb?: Omit<PetraWebWalletConfig, "network">;
   /**
    * @deprecated will be removed in a future version
    */
@@ -183,7 +183,7 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
   // Local private variable to hold the account that is currently connected
   private _account: AdapterAccountInfo | null = null;
 
-  // JSON configuration for AptosConnect
+  // Configuration the dapp passed to the adapter
   private _dappConfig: DappConfig | undefined;
 
   // Private array that holds all the Wallets a dapp decided to opt-in to
@@ -302,6 +302,13 @@ export class WalletCore extends EventEmitter<WalletCoreEvents> {
       const isValid = isWalletWithRequiredFeatureSet(wallet);
 
       if (isValid) {
+        // A wallet the dapp registered itself under the same name wins
+        const alreadyExists =
+          this._standard_wallets.some((w) => w.name === wallet.name) ||
+          this._standard_wallets_hidden.some((w) => w.name === wallet.name);
+        if (alreadyExists) {
+          return;
+        }
         wallet.readyState = WalletReadyState.Installed;
         wallet.isAptosNativeWallet = this.isAptosNativeWallet(wallet);
         if (!this.hideWallet(wallet)) {

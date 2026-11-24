@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/wallet-adapter-mui-design",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "Aptos Wallet Adapter mui design",
   "type": "module",
   "main": "./dist/index.js",
@@ -40,9 +40,9 @@
   },
   "devDependencies": {
     "@aptos-labs/wallet-adapter-tsconfig": "workspace:*",
-    "@types/react": "^18.3.31",
-    "@types/react-dom": "^18.3.7",
-    "tsup": "^8.5.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tsup": "^9.0.0",
     "typescript": "^7.0.2"
   },
   "dependencies": {

@@ -1,8 +1,8 @@
 import {
   type AttestationReceipt,
-  type routes,
   UniversalAddress,
 } from "@wormhole-foundation/sdk";
+import type * as routes from "@wormhole-foundation/sdk-connect/routes";
 
 // Cross-platform base64 helpers (no Node.js Buffer dependency)
 function uint8ArrayToBase64(bytes: Uint8Array): string {

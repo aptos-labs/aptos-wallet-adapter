@@ -2,16 +2,12 @@ packages:
   - "apps/*"
   - "packages/*"
 
+# pnpm 12 otherwise prepends an environment document to pnpm-lock.yaml that
+# GitHub's dependency graph currently reads as an empty project graph.
+pmOnFail: ignore
+
 # Peer dependency behavior (migrated from .npmrc; pnpm 11 reads it here).
 autoInstallPeers: true
-
-# Transitive packages that have not yet declared ts-sdk 7 / wallet-standard 2
-# peers (Aptos Connect plugin, gas-station-client). Their runtime APIs still
-# work against the versions we pin; without this, pnpm reports unmet peers.
-peerDependencyRules:
-  allowedVersions:
-    "@aptos-labs/ts-sdk": ">=5"
-    "@aptos-labs/wallet-standard": ">=0.5.0"
 
 # Lifecycle-script permissions. pnpm 10+ blocks dependency build scripts by
 # default; pnpm 11 uses `allowBuilds` (replacing onlyBuiltDependencies). These
@@ -39,7 +35,7 @@ overrides:
   # Long-standing pins (predate the pnpm 11 upgrade).
   # ts-sdk 7.x requires aptos-client ^4.1.0 (HTTP/2 + brotli fix).
   "@aptos-labs/aptos-client": "^4.1.0"
-  "@aptos-labs/ts-sdk": "^7.1.0"
+  "@aptos-labs/ts-sdk": "^7.5.0"
   pbkdf2: "^3.1.7"
   sha.js: "^2.4.12"
   devalue: "^5.3.2"
@@ -55,7 +51,7 @@ overrides:
   "@protobufjs/utf8": "^1.1.1"
   valibot: "^1.4.2"
   rollup: "^4.59.0"
-  happy-dom: "^20.8.9"
+  happy-dom: "^21.0.4"
   lodash: "^4.17.24"
   turbo-stream: "^3.0.0"
   ajv: "^6.14.0"
@@ -83,6 +79,10 @@ overrides:
   "js-yaml@3": "^3.15.2"
   "nanoid@3": "^3.3.18"
   "picomatch@2": "^2.3.2"
+  # jayson 5.0.0 drops stream-json (GHSA-528h-pc64-c93x, GHSA-hqr4-qq8f-hg3x,
+  # GHSA-mjw6-4jj6-33hc); @solana/web3.js only uses jayson/lib/client/browser.
+  jayson: "^5.0.0"
+  toml: "^5.0.1"
 
 # `pnpm audit` suppressions. Both advisories below have NO published fix — the
 # packages are effectively unmaintained and their latest release is still below
@@ -91,8 +91,8 @@ overrides:
 #     native toBigIntLE binding never loads (falls back to pure JS at runtime).
 #   - elliptic (GHSA-848j-6mx2-7j84): low-severity transitive dependency.
 # Revisit and remove these once upstream ships patched releases.
-auditConfig:
-  ignoreGhsas:
+audit:
+  ignore:
     - GHSA-3gc7-fjrx-p6mg # bigint-buffer <=1.1.5, no fix published
     - GHSA-848j-6mx2-7j84 # elliptic <=6.6.1, no fix published
 

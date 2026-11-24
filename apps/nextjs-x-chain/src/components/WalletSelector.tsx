@@ -1,17 +1,17 @@
 "use client";
 
 import {
-  APTOS_CONNECT_ACCOUNT_URL,
-  AboutAptosConnect,
-  AboutAptosConnectEducationScreen,
+  AboutPetraWeb,
+  AboutPetraWebEducationScreen,
   AdapterNotDetectedWallet,
   AdapterWallet,
   AptosPrivacyPolicy,
   WalletItem,
   WalletSortingOptions,
   groupAndSortWallets,
-  isAptosConnectWallet,
   isInstallRequired,
+  isPetraWebWallet,
+  PETRA_WEB_ACCOUNT_URL,
   truncateAddress,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
@@ -84,10 +84,10 @@ export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
         <DropdownMenuItem onSelect={copyAddress} className="gap-2">
           <Copy className="h-4 w-4" /> Copy address
         </DropdownMenuItem>
-        {wallet && isAptosConnectWallet(wallet) && (
+        {wallet && isPetraWebWallet(wallet) && (
           <DropdownMenuItem asChild>
             <a
-              href={APTOS_CONNECT_ACCOUNT_URL}
+              href={PETRA_WEB_ACCOUNT_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="flex gap-2"
@@ -121,13 +121,13 @@ function ConnectWalletDialog({
 }: ConnectWalletDialogProps) {
   const { wallets = [], notDetectedWallets = [] } = useWallet();
 
-  const { aptosConnectWallets, availableWallets, installableWallets } =
+  const { petraWebWallets, availableWallets, installableWallets } =
     groupAndSortWallets(
       [...wallets, ...notDetectedWallets],
       walletSortingOptions,
     );
 
-  const hasAptosConnectWallets = !!aptosConnectWallets.length;
+  const hasPetraWebWallets = !!petraWebWallets.length;
 
   const { evmWallets, solanaWallets, aptosWallets, suiWallets } =
     availableWallets.reduce<{
@@ -184,10 +184,10 @@ function ConnectWalletDialog({
 
   return (
     <DialogContent className="max-h-screen overflow-auto">
-      <AboutAptosConnect renderEducationScreen={renderEducationScreen}>
+      <AboutPetraWeb renderEducationScreen={renderEducationScreen}>
         <DialogHeader>
           <DialogTitle className="flex flex-col text-center leading-snug">
-            {hasAptosConnectWallets ? (
+            {hasPetraWebWallets ? (
               <>
                 <span>Log in or sign up</span>
                 <span>with Social + Petra Web</span>
@@ -198,10 +198,10 @@ function ConnectWalletDialog({
           </DialogTitle>
         </DialogHeader>
 
-        {hasAptosConnectWallets && (
+        {hasPetraWebWallets && (
           <div className="flex flex-col gap-2 pt-3">
-            {aptosConnectWallets.map((wallet) => (
-              <AptosConnectWalletRow
+            {petraWebWallets.map((wallet) => (
+              <PetraWebWalletRow
                 key={wallet.name}
                 wallet={wallet}
                 onConnect={close}
@@ -209,9 +209,9 @@ function ConnectWalletDialog({
             ))}
             <p className="flex gap-1 justify-center items-center text-muted-foreground text-sm">
               Learn more about{" "}
-              <AboutAptosConnect.Trigger className="flex gap-1 py-3 items-center text-foreground">
+              <AboutPetraWeb.Trigger className="flex gap-1 py-3 items-center text-foreground">
                 Petra Web <ArrowRight size={16} />
-              </AboutAptosConnect.Trigger>
+              </AboutPetraWeb.Trigger>
             </p>
             <AptosPrivacyPolicy className="flex flex-col items-center py-1">
               <p className="text-xs leading-5">
@@ -351,7 +351,7 @@ function ConnectWalletDialog({
             </TabsContent>
           </Tabs>
         </div>
-      </AboutAptosConnect>
+      </AboutPetraWeb>
     </DialogContent>
   );
 }
@@ -386,7 +386,7 @@ function WalletRow({ wallet, onConnect }: WalletRowProps) {
   );
 }
 
-function AptosConnectWalletRow({ wallet, onConnect }: WalletRowProps) {
+function PetraWebWalletRow({ wallet, onConnect }: WalletRowProps) {
   return (
     <WalletItem wallet={wallet} onConnect={onConnect}>
       <WalletItem.ConnectButton asChild>
@@ -399,7 +399,7 @@ function AptosConnectWalletRow({ wallet, onConnect }: WalletRowProps) {
   );
 }
 
-function renderEducationScreen(screen: AboutAptosConnectEducationScreen) {
+function renderEducationScreen(screen: AboutPetraWebEducationScreen) {
   return (
     <>
       <DialogHeader className="grid grid-cols-[1fr_4fr_1fr] items-center space-y-0">

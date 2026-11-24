@@ -5,8 +5,8 @@ import {
   DisconnectOutlined,
 } from "@ant-design/icons";
 import {
-  AboutAptosConnect,
-  type AboutAptosConnectEducationScreen,
+  AboutPetraWeb,
+  type AboutPetraWebEducationScreen,
   type AdapterNotDetectedWallet,
   type AdapterWallet,
   AptosPrivacyPolicy,
@@ -62,13 +62,13 @@ export function WalletSelector({
     notDetectedWallets = [],
   } = useWallet();
 
-  const { aptosConnectWallets, availableWallets, installableWallets } =
+  const { petraWebWallets, availableWallets, installableWallets } =
     groupAndSortWallets(
       [...wallets, ...notDetectedWallets],
       walletSortingOptions,
     );
 
-  const hasAptosConnectWallets = !!aptosConnectWallets.length;
+  const hasPetraWebWallets = !!petraWebWallets.length;
 
   const onWalletButtonClick = () => {
     if (connected) {
@@ -125,12 +125,12 @@ export function WalletSelector({
     className: "wallet-selector-modal",
   };
 
-  const renderEducationScreens = (screen: AboutAptosConnectEducationScreen) => (
+  const renderEducationScreens = (screen: AboutPetraWebEducationScreen) => (
     <Modal
       {...modalProps}
       afterClose={screen.cancel}
       title={
-        <div className="about-aptos-connect-header">
+        <div className="about-petra-web-header">
           <Button
             type="text"
             icon={<ArrowLeftOutlined />}
@@ -140,14 +140,14 @@ export function WalletSelector({
         </div>
       }
     >
-      <div className="about-aptos-connect-graphic-wrapper">
+      <div className="about-petra-web-graphic-wrapper">
         <screen.Graphic />
       </div>
-      <div className="about-aptos-connect-text-wrapper">
-        <screen.Title className="about-aptos-connect-title" />
-        <screen.Description className="about-aptos-connect-description" />
+      <div className="about-petra-web-text-wrapper">
+        <screen.Title className="about-petra-web-title" />
+        <screen.Description className="about-petra-web-description" />
       </div>
-      <div className="about-aptos-connect-footer-wrapper">
+      <div className="about-petra-web-footer-wrapper">
         <Button
           type="text"
           style={{ justifySelf: "start" }}
@@ -155,11 +155,11 @@ export function WalletSelector({
         >
           Back
         </Button>
-        <div className="about-aptos-connect-screen-indicators-wrapper">
+        <div className="about-petra-web-screen-indicators-wrapper">
           {screen.screenIndicators.map((ScreenIndicator, i) => (
             <ScreenIndicator
               key={i}
-              className="about-aptos-connect-screen-indicator"
+              className="about-petra-web-screen-indicator"
             >
               <div />
             </ScreenIndicator>
@@ -189,12 +189,12 @@ export function WalletSelector({
           Connect Wallet
         </Button>
       )}
-      <AboutAptosConnect renderEducationScreen={renderEducationScreens}>
+      <AboutPetraWeb renderEducationScreen={renderEducationScreens}>
         <Modal
           {...modalProps}
           title={
             <div className="wallet-modal-title">
-              {hasAptosConnectWallets ? (
+              {hasPetraWebWallets ? (
                 <>
                   <span>Log in or sign up</span>
                   <span>with Social + Petra Web</span>
@@ -207,29 +207,29 @@ export function WalletSelector({
         >
           {!connected && (
             <>
-              {hasAptosConnectWallets && (
+              {hasPetraWebWallets && (
                 <Flex vertical gap={12}>
-                  {aptosConnectWallets.map((wallet) => (
-                    <AptosConnectWalletRow
+                  {petraWebWallets.map((wallet) => (
+                    <PetraWebWalletRow
                       key={wallet.name}
                       wallet={wallet}
                       onConnect={closeModal}
                     />
                   ))}
-                  <p className="about-aptos-connect-trigger-wrapper">
+                  <p className="about-petra-web-trigger-wrapper">
                     Learn more about{" "}
-                    <AboutAptosConnect.Trigger className="about-aptos-connect-trigger">
+                    <AboutPetraWeb.Trigger className="about-petra-web-trigger">
                       Petra Web
                       <ArrowRightOutlined />
-                    </AboutAptosConnect.Trigger>
+                    </AboutPetraWeb.Trigger>
                   </p>
-                  <AptosPrivacyPolicy className="aptos-connect-privacy-policy-wrapper">
-                    <p className="aptos-connect-privacy-policy-text">
+                  <AptosPrivacyPolicy className="petra-web-privacy-policy-wrapper">
+                    <p className="petra-web-privacy-policy-text">
                       <AptosPrivacyPolicy.Disclaimer />{" "}
-                      <AptosPrivacyPolicy.Link className="aptos-connect-privacy-policy-link" />
+                      <AptosPrivacyPolicy.Link className="petra-web-privacy-policy-link" />
                       <span>.</span>
                     </p>
-                    <AptosPrivacyPolicy.PoweredBy className="aptos-connect-powered-by" />
+                    <AptosPrivacyPolicy.PoweredBy className="petra-web-powered-by" />
                   </AptosPrivacyPolicy>
                   <Divider>Or</Divider>
                 </Flex>
@@ -269,7 +269,7 @@ export function WalletSelector({
             </>
           )}
         </Modal>
-      </AboutAptosConnect>
+      </AboutPetraWeb>
     </>
   );
 }
@@ -301,11 +301,11 @@ function WalletRow({ wallet, onConnect }: WalletRowProps) {
   );
 }
 
-function AptosConnectWalletRow({ wallet, onConnect }: WalletRowProps) {
+function PetraWebWalletRow({ wallet, onConnect }: WalletRowProps) {
   return (
     <WalletItem wallet={wallet} onConnect={onConnect} asChild>
       <WalletItem.ConnectButton asChild>
-        <Button size="large" className="aptos-connect-button">
+        <Button size="large" className="petra-web-button">
           <WalletItem.Icon className="wallet-selector-icon" />
           <WalletItem.Name />
         </Button>

@@ -173,8 +173,7 @@ interface DappConfig {
   network: Network;
   transactionSubmitter?: TransactionSubmitter;
   aptosApiKeys?: Partial<Record<Network, string>>;
-  aptosConnectDappId?: string;
-  aptosConnect?: AptosConnectWalletConfig;
+  petraWeb?: Omit<PetraWebWalletConfig, "network">;
   crossChainWallets?: boolean;
 }
 ```

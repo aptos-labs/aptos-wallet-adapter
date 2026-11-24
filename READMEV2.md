@@ -17,7 +17,7 @@ A monorepo modular wallet adapter developed and maintained by Aptos for wallet a
 [AIP-62](https://github.com/aptos-foundation/AIPs/blob/main/aips/aip-62.md) standard compatible
 
 - [OKX](https://www.npmjs.com/package/@okwallet/aptos-wallet-adapter)
-- [AptosConnect](https://aptosconnect.app/)
+- [Petra Web](https://web.petra.app/)
 - [Petra](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?hl=en)
 - [Nightly](https://chromewebstore.google.com/detail/nightly/fiikommddbeccaoicoejoniammnalkfa)
 - [MSafe](https://www.npmjs.com/package/@msafe/aptos-wallet-adapter)

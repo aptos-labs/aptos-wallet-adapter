@@ -5,10 +5,10 @@
 
 import {
   chainToPlatform,
-  routes,
   type TokenId,
   Wormhole,
 } from "@wormhole-foundation/sdk";
+import * as routes from "@wormhole-foundation/sdk-connect/routes";
 import type { Chain } from "../../CrossChainCore";
 import type { TokenConfig } from "../../config";
 
