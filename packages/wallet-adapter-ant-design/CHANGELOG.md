@@ -1,5 +1,13 @@
 # @aptos-labs/wallet-adapter-ant-design
 
+## 7.0.1
+
+### Patch Changes
+
+- 25f61e4: Update dependencies to their latest versions, including Wormhole SDK 6, `@mysten/sui` 3, antd 6, and React 19 type compatibility.
+- Updated dependencies [25f61e4]
+  - @aptos-labs/wallet-adapter-react@10.0.1
+
 ## 7.0.0
 
 ### Major Changes
