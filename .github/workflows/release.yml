@@ -6,17 +6,22 @@ on:
       - main
   workflow_dispatch: # Allows manual triggering from GitHub Actions UI
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  build:
-    name: Build
-    permissions:
-      id-token: write # Required for npm OIDC trusted publishers
-      actions: write
-      pull-requests: write
-      contents: write
+  version-pr:
+    name: Update Version Packages PR
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      has_changesets: ${{ steps.changesets.outputs.hasChangesets }}
+      has_unpublished: ${{ steps.unpublished.outputs.has_unpublished }}
     steps:
       - name: Authenticate as Aptos Labs Bot
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
@@ -27,36 +32,251 @@ jobs:
 
       - name: Checkout Repo
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .node-version
-          registry-url: "https://registry.npmjs.org"
-
-      - name: Upgrade npm for OIDC support
-        run: npm install -g npm@latest
 
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-        name: Install pnpm
-        id: pnpm-install
 
-      - name: Install global dependencies
+      - name: Setup safe-chain (supply-chain guard)
+        uses: aptos-labs/actions/aikidosec-safe-chain@a4b79b914b919a798ff102ae39e2a5e9d67dd946 # main
+
+      - name: Allow first-party @aptos-labs/* through safe-chain age gate
+        run: echo "SAFE_CHAIN_MINIMUM_PACKAGE_AGE_EXCLUSIONS=@aptos-labs/*" >> "$GITHUB_ENV"
+
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build global project
-        env:
-          GAID: ${{ vars.APTOS_WALLET_ADAPTER_GAID }}
-        run: pnpm run build
-
-      - name: Create Release Pull Request or Publish to npm
+      # Only manages the "Version Packages" PR; actual builds and staged npm
+      # publishes are isolated in downstream jobs so write tokens and OIDC
+      # tokens are never held in the same job.
+      - name: Create or Update Version Packages PR
         id: changesets
         uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
-        with:
-          publish: pnpm run publish-packages
         env:
           GITHUB_TOKEN: ${{ steps.authenticate.outputs.token }}
-          NPM_CONFIG_PROVENANCE: true
-          NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY: ${{ secrets.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_PRIVATE_KEY }}
-          NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY: ${{ secrets.NEXT_PUBLIC_SWAP_CCTP_MAIN_SIGNER_PRIVATE_KEY }}
-          NEXT_PUBLIC_GAS_STATION_API_KEY: ${{ secrets.NEXT_PUBLIC_GAS_STATION_API_KEY }}
-          NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_GAS_STATION_API_KEY_TESTNET: ${{ secrets.NEXT_PUBLIC_SWAP_CCTP_SPONSOR_ACCOUNT_GAS_STATION_API_KEY_TESTNET }}
+
+      - name: Detect unpublished workspace packages
+        id: unpublished
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          # On push, only stage when a publishable package manifest actually
+          # changed (e.g. a Version Packages PR merged) so unrelated commits to
+          # main don't queue duplicate approvals while a release sits in staging.
+          if [[ "$EVENT_NAME" == "push" && -n "$BEFORE_SHA" && "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]]; then
+            if [ -z "$(git diff --name-only "$BEFORE_SHA" "$HEAD_SHA" -- 'packages/*/package.json')" ]; then
+              echo "No packages/*/package.json changes in this push; skipping publish check."
+              echo "has_unpublished=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+
+          node <<'EOF'
+          const fs = require("node:fs");
+          const path = require("node:path");
+
+          async function main() {
+            const packagesDir = path.resolve("packages");
+            const dirs = fs.readdirSync(packagesDir, { withFileTypes: true }).filter((d) => d.isDirectory());
+            const unpublished = [];
+            for (const dir of dirs) {
+              const pkgPath = path.join(packagesDir, dir.name, "package.json");
+              if (!fs.existsSync(pkgPath)) continue;
+              const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+              if (pkg.private || !pkg.name || !pkg.version) continue;
+              const url = `https://registry.npmjs.org/${encodeURIComponent(pkg.name)}/${encodeURIComponent(pkg.version)}`;
+              const res = await fetch(url);
+              if (res.status === 404) {
+                unpublished.push(`${pkg.name}@${pkg.version}`);
+              } else if (!res.ok) {
+                throw new Error(`Unexpected npm registry status ${res.status} for ${url}`);
+              }
+            }
+            console.log("Unpublished packages:", unpublished);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `has_unpublished=${unpublished.length > 0}\n`);
+          }
+
+          main().catch((err) => {
+            console.error(err);
+            process.exit(1);
+          });
+          EOF
+
+  build-packages:
+    name: Build & pack unpublished packages
+    needs: version-pr
+    if: needs.version-pr.outputs.has_changesets == 'false' && needs.version-pr.outputs.has_unpublished == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup safe-chain (supply-chain guard)
+        uses: aptos-labs/actions/aikidosec-safe-chain@a4b79b914b919a798ff102ae39e2a5e9d67dd946 # main
+
+      - name: Allow first-party @aptos-labs/* through safe-chain age gate
+        run: echo "SAFE_CHAIN_MINIMUM_PACKAGE_AGE_EXCLUSIONS=@aptos-labs/*" >> "$GITHUB_ENV"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Build only publishable library packages, excluding demo apps under apps/*
+      # so no app runtime secrets are needed in the release workflow.
+      - name: Build publishable packages
+        run: pnpm turbo run build --filter='./packages/*'
+
+      - name: Pack unpublished packages
+        run: |
+          set -euo pipefail
+          mkdir -p "${RUNNER_TEMP}/pack"
+          node <<'EOF'
+          const fs = require("node:fs");
+          const path = require("node:path");
+          const { execFileSync } = require("node:child_process");
+
+          async function main() {
+            const packagesDir = path.resolve("packages");
+            const packDir = path.join(process.env.RUNNER_TEMP, "pack");
+            const dirs = fs.readdirSync(packagesDir, { withFileTypes: true }).filter((d) => d.isDirectory());
+            const manifest = [];
+
+            for (const dir of dirs) {
+              const pkgDir = path.join(packagesDir, dir.name);
+              const pkgPath = path.join(pkgDir, "package.json");
+              if (!fs.existsSync(pkgPath)) continue;
+              const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+              if (pkg.private || !pkg.name || !pkg.version) continue;
+
+              const url = `https://registry.npmjs.org/${encodeURIComponent(pkg.name)}/${encodeURIComponent(pkg.version)}`;
+              const res = await fetch(url);
+              if (res.status !== 404) {
+                if (!res.ok) throw new Error(`Unexpected npm status ${res.status} for ${url}`);
+                continue;
+              }
+
+              const before = new Set(fs.readdirSync(packDir));
+              execFileSync("pnpm", ["--dir", pkgDir, "pack", "--pack-destination", packDir], { stdio: "inherit" });
+              const created = fs.readdirSync(packDir).filter((f) => f.endsWith(".tgz") && !before.has(f));
+              if (created.length !== 1) {
+                throw new Error(`Expected 1 packed tarball for ${pkg.name}, found ${created.length}`);
+              }
+              manifest.push({
+                name: pkg.name,
+                version: pkg.version,
+                tarball: created[0],
+                distTag: pkg.version.includes("-") ? "next" : "latest",
+              });
+            }
+
+            if (manifest.length === 0) {
+              throw new Error("No unpublished packages found to pack.");
+            }
+            fs.writeFileSync(path.join(packDir, "manifest.json"), JSON.stringify(manifest, null, 2));
+            console.log("Packed packages:", manifest);
+          }
+
+          main().catch((err) => {
+            console.error(err);
+            process.exit(1);
+          });
+          EOF
+
+      - name: Upload packed tarballs
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: npm-pack
+          path: ${{ runner.temp }}/pack
+          if-no-files-found: error
+          retention-days: 7
+
+  stage-publish:
+    name: Stage packages on npm
+    needs: build-packages
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    permissions:
+      contents: read
+      id-token: write # Required for npm OIDC trusted publishers + provenance
+    steps:
+      - name: Download packed tarballs
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: npm-pack
+          path: ./pack
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: "12.21.0"
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22.23.1"
+          registry-url: "https://registry.npmjs.org"
+
+      # Stages each pre-built tarball via npm OIDC trusted publishing. Maintainers
+      # finalize publication in dependency order with 2FA via `pnpm stage approve`.
+      - name: Stage tarballs on npm (OIDC trusted publishing)
+        run: |
+          set -euo pipefail
+          node <<'EOF'
+          const fs = require("node:fs");
+          const path = require("node:path");
+          const { execFileSync } = require("node:child_process");
+
+          async function main() {
+            const manifest = JSON.parse(fs.readFileSync(path.resolve("pack/manifest.json"), "utf8"));
+            for (const entry of manifest) {
+              const url = `https://registry.npmjs.org/${encodeURIComponent(entry.name)}/${encodeURIComponent(entry.version)}`;
+              const res = await fetch(url);
+              if (res.status === 200) {
+                console.log(`Skipping ${entry.name}@${entry.version}: already published on npm.`);
+                continue;
+              }
+              if (res.status !== 404) {
+                throw new Error(`Unexpected npm status ${res.status} for ${url}`);
+              }
+
+              const tarballPath = `./pack/${entry.tarball}`;
+              console.log(`Staging ${entry.name}@${entry.version} (${tarballPath}) with dist-tag=${entry.distTag}...`);
+              execFileSync(
+                "pnpm",
+                [
+                  "stage",
+                  "publish",
+                  tarballPath,
+                  "--provenance",
+                  "--access",
+                  "public",
+                  "--tag",
+                  entry.distTag,
+                  "--no-git-checks",
+                ],
+                { stdio: "inherit" },
+              );
+            }
+          }
+
+          main().catch((err) => {
+            console.error(err);
+            process.exit(1);
+          });
+          EOF
