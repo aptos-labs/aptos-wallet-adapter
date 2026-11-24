@@ -1,5 +1,13 @@
 # @aptos-labs/cross-chain-core
 
+## 7.0.2
+
+### Patch Changes
+
+- 25f61e4: Update dependencies to their latest versions, including Wormhole SDK 6, `@mysten/sui` 3, antd 6, and React 19 type compatibility.
+- Updated dependencies [25f61e4]
+  - @aptos-labs/derived-wallet-sui@1.0.1
+
 ## 7.0.1
 
 ### Patch Changes

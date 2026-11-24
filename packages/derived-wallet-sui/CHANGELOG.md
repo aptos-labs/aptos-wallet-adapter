@@ -1,5 +1,11 @@
 # @aptos-labs/derived-wallet-sui
 
+## 1.0.1
+
+### Patch Changes
+
+- 25f61e4: Update dependencies to their latest versions, including Wormhole SDK 6, `@mysten/sui` 3, antd 6, and React 19 type compatibility.
+
 ## 1.0.0
 
 ### Major Changes
